@@ -30,7 +30,6 @@ public class PlayerMovementController : MonoBehaviour {
         rb = GetComponent<Rigidbody>();
         jumpChecker = GetComponentInChildren<PlayerJumpChecker>();
     }
-    public float vel;
     void FixedUpdate() {
 
         // Horizontal movement
@@ -42,7 +41,6 @@ public class PlayerMovementController : MonoBehaviour {
         movement = transform.TransformDirection(movement);
 
         Vector3 velocityInDirectionOfMovement = Vector3.Project(rb.velocity, movement.normalized);
-        vel = velocityInDirectionOfMovement.magnitude;
         if (IsGrounded) {
             
             if (movement.magnitude > 0) {

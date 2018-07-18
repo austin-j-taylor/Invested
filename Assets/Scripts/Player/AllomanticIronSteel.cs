@@ -23,13 +23,12 @@ public class AllomanticIronSteel : MonoBehaviour {
     private const float verticalMax = .8f;
     private const float gMaxLines = .15f;
     private const float bMaxLines = 1;
-    public float luminosityFactor = .5f;
+    private const float luminosityFactor = .4f;
     private const float MetalLinesLerpConstant = burnRateMeterLerpConstant;//.05f;
     private const float verticalImportanceFactor = 100f;
     private const float lightSaberConstant = 200f;
     // Constants for Burn Rate Meter
     private const float burnRateMeterLerpConstant = .30f;
-
     private const float minAngle = .12f;
     private const float maxAngle = 1f - 2 * minAngle;
     
@@ -75,17 +74,6 @@ public class AllomanticIronSteel : MonoBehaviour {
             return transform.TransformPoint(rb.centerOfMass);
         }
     }
-    public float ironBurnRate;
-    public float steelBurnRate;
-
-    public bool IronPulling { get; private set; }
-    public bool SteelPushing { get; private set; }
-    public bool IsBurningIronSteel { get; private set; }
-    public float Mass {
-        get {
-            return rb.mass;
-        }
-    }
     // Button held-down times
     private float timeToStopBurning = 0f;
     private float timeToSwapBurning = 0f;
@@ -104,6 +92,19 @@ public class AllomanticIronSteel : MonoBehaviour {
     private Vector3 lastAllomancerVelocity = Vector3.zero;
     private Vector3 lastExpectedAllomancerAcceleration = Vector3.zero;
     private Vector3 currentExpectedAllomancerAcceleration = Vector3.zero;
+
+    // Used for burning metals
+    private float ironBurnRate;
+    private float steelBurnRate;
+
+    public bool IronPulling { get; private set; }
+    public bool SteelPushing { get; private set; }
+    public bool IsBurningIronSteel { get; private set; }
+    public float Mass {
+        get {
+            return rb.mass;
+        }
+    }
 
     void Start() {
         rb = GetComponent<Rigidbody>();
