@@ -71,7 +71,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     }
     private Vector3 CenterOfMass {
         get {
-            return transform.TransformPoint(rb.centerOfMass);
+            return centerOfMass.position;
         }
     }
     // Button held-down times
