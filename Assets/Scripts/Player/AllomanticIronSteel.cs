@@ -148,7 +148,7 @@ public class AllomanticIronSteel : MonoBehaviour {
 
         if (IsBurningIronSteel) {
             // Check scrollwheel for changing the max number of targets and burn rate
-            if(!GamepadController.UsingGamepad) {
+            if (!GamepadController.UsingGamepad) {
                 if (Keybinds.ScrollWheelButton()) {
                     if (Keybinds.ScrollWheelAxis() != 0) {
                         if (Keybinds.ScrollWheelAxis() > 0) {
@@ -159,6 +159,13 @@ public class AllomanticIronSteel : MonoBehaviour {
                     }
                 } else {
                     ChangeBurnRate(Keybinds.ScrollWheelAxis());
+                }
+            } else {
+                float scrollValue = Keybinds.ScrollWheelAxis();
+                if (scrollValue > 0) {
+                    IncrementNumberOfTargets();
+                } if (scrollValue < 0) {
+                    DecrementNumberOfTargets();
                 }
             }
             IronPulling = Keybinds.IronPulling();

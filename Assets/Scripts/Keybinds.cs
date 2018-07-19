@@ -5,6 +5,8 @@ using UnityEngine;
  */
 
 public static class Keybinds {
+    
+    private static float timeToHold = 0f;
 
     public static float Horizontal() {
         if (GamepadController.UsingGamepad)
@@ -63,27 +65,35 @@ public static class Keybinds {
     public static bool SelectDown() {
         if (GamepadController.UsingGamepad)
             return Input.GetButtonDown("RightBumper");
-        else
+        else if (GamepadController.UsingMB45)
             return Input.GetButtonDown("Mouse4");
+        else
+            return Input.GetKeyDown(KeyCode.E);
     }
     public static bool Select() {
         if (GamepadController.UsingGamepad)
             return Input.GetButton("RightBumper");
-        else
+        else if (GamepadController.UsingMB45)
             return Input.GetButton("Mouse4");
+        else
+            return Input.GetKey(KeyCode.E);
     }
 
     public static bool SelectAlternate() {
         if (GamepadController.UsingGamepad)
             return Input.GetButton("LeftBumper");
-        else
+        else if (GamepadController.UsingMB45)
             return Input.GetButton("Mouse3");
+        else
+            return Input.GetKey(KeyCode.Q);
     }
     public static bool SelectAlternateDown() {
         if (GamepadController.UsingGamepad)
             return Input.GetButtonDown("LeftBumper");
-        else
+        else if (GamepadController.UsingMB45)
             return Input.GetButtonDown("Mouse3");
+        else
+            return Input.GetKeyDown(KeyCode.Q);
     }
 
     public static float LeftBurnRate() {
@@ -107,17 +117,14 @@ public static class Keybinds {
             return Input.GetKeyDown(KeyCode.LeftControl);
     }
 
-    public static bool ToggleControllerSchemeDown() {
-        return Input.GetKeyDown(KeyCode.P);
-    }
-
-    public static bool ToggleControllerRumbleDown() {
-        return Input.GetKeyDown(KeyCode.O);
-    }
-
     public static float ScrollWheelAxis() {
         if(GamepadController.UsingGamepad) {
-            return 0;
+            if (timeToHold < Time.time) {
+                timeToHold = Time.time + .1f;
+                return Input.GetAxis("GamepadDPadY");
+            } else {
+                return 0f;
+            }
         } else {
             return Input.GetAxis("Mouse ScrollWheel");
         }
@@ -129,6 +136,14 @@ public static class Keybinds {
         } else {
             return Input.GetButton("Mouse2");
         }
+    }
+
+    public static bool Pause() {
+        //if (GamepadController.UsingGamepad) {
+            return Input.GetKeyDown(KeyCode.Escape) || Input.GetButtonDown("GamepadStart");
+        //} else {
+        //    return Input.GetKeyDown(KeyCode.Escape);
+        //}
     }
 
 }

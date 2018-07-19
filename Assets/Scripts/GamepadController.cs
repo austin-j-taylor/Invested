@@ -4,8 +4,10 @@ using UnityEngine;
 using XInputDotNetPure;
 
 public class GamepadController : MonoBehaviour {
+    
+    public static bool UsingMB45 { get; set; }
 
-    private bool updateRumble;
+    private static bool updateRumble;
     private bool shaking;
     private static bool usingGamepad;
     private static bool usingRumble;
@@ -15,6 +17,19 @@ public class GamepadController : MonoBehaviour {
     public static bool UsingGamepad {
         get {
             return usingGamepad;
+        }
+        set {
+            usingGamepad = value;
+            updateRumble = true;
+        }
+    }
+    public static bool UsingRumble {
+        get {
+            return usingRumble;
+        }
+        set {
+            usingRumble = value;
+            updateRumble = true;
         }
     }
     public float LeftRumble {
@@ -38,6 +53,7 @@ public class GamepadController : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
+        UsingMB45 = true;
         usingGamepad = false;
         usingRumble = true;
         updateRumble = false;
@@ -47,14 +63,6 @@ public class GamepadController : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        if (Keybinds.ToggleControllerSchemeDown()) {
-            usingGamepad = !usingGamepad;
-            updateRumble = true;
-        }
-        if (Keybinds.ToggleControllerRumbleDown()) {
-            usingRumble = !usingRumble;
-            updateRumble = true;
-        }
         if (usingGamepad) {
             if ((usingRumble && updateRumble && !shaking)) {
                 GamePad.SetVibration(0, leftRumble, rightRumble);
@@ -64,7 +72,7 @@ public class GamepadController : MonoBehaviour {
             }
         }
     }
-
+    
     public void SetRumble(float left, float right) {
         leftRumble = left;
         rightRumble = right;

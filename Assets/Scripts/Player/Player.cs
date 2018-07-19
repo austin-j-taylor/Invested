@@ -9,12 +9,14 @@ public class Player : MonoBehaviour {
 
     private Animator animator;
     private Hand hand;
+    [SerializeField]
+    private PausedMenu pauseMenu;
+
     public AllomanticIronSteel IronSteel { get; private set; }
     public CoinPouch Pouch { get; private set; }
 
     private float lastCoinThrowTime = 0;
-
-    // Use this for initialization
+    
     void Start () {
         animator = GetComponent<Animator>();
         IronSteel = GetComponent<AllomanticIronSteel>();
@@ -23,8 +25,11 @@ public class Player : MonoBehaviour {
 
     }
 	
-	// Update is called once per frame
 	void Update () {
+        // Pausing
+        if (Keybinds.Pause()) {
+            pauseMenu.TogglePaused();
+        }
         // On pressing COIN button
         if (Keybinds.WithdrawCoinDown() && lastCoinThrowTime + coinCooldown < Time.time) {
             lastCoinThrowTime = Time.time;
