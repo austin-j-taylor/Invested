@@ -13,7 +13,9 @@ public class BurnRateMeter : MonoBehaviour {
     [SerializeField]
     private Text metalLineText;
     [SerializeField]
-    private Text burnRateMeterPercent;
+    private Text forceMagnitudeTargetText;
+    [SerializeField]
+    private Text maximumForceMagnitudeText;
     private Image burnRateImage;
 
     public string MetalLineText {
@@ -27,21 +29,44 @@ public class BurnRateMeter : MonoBehaviour {
         metalLineText.text = "";
         burnRateImage.color = new Color(0, .5f, 1, .75f);
         burnRateImage.fillAmount = minAngle;
-        burnRateMeterPercent.text = "";
+        forceMagnitudeTargetText.text = "";
+        maximumForceMagnitudeText.text = "";
     }
 
-    public void RefreshBurnRateMeter(float ironBurnRate, float steelBurnRate) {
-        float rate = Mathf.Max(ironBurnRate, steelBurnRate);
-        int percent = (int)Mathf.Round(rate * 100);
-        if (percent == 0) {
-            burnRateMeterPercent.text = "";
+    public void SetBurnRateMeterForceMagnitude(float forceMagnitudeTarget, float maximumForceMagnitude) {
+        float percent = 0;
+        if (maximumForceMagnitude != 0) {
+            percent = forceMagnitudeTarget / maximumForceMagnitude;
+        }
+        if (forceMagnitudeTarget < .01f) {
+            forceMagnitudeTargetText.text = "";
+            maximumForceMagnitudeText.text = "";
             burnRateImage.fillAmount = Mathf.Lerp(burnRateImage.fillAmount, 0, burnRateMeterLerpConstant);
-        } else if (percent > 99) {
-            burnRateMeterPercent.text = "MAX";
+        } else if (percent > .99f) {
+            forceMagnitudeTargetText.text = ((int)forceMagnitudeTarget).ToString() + "N";
+            maximumForceMagnitudeText.text = ((int)maximumForceMagnitude).ToString() + "N";
             //burnRateMeterPercent.color = Color.Lerp(burnRateMeterPercent.color, new Color(1 - rate * rMaxMeter, 1f - gMaxMeter * rate, bMaxMeter, 1f), burnRateMeterLerpConstant);
             burnRateImage.fillAmount = Mathf.Lerp(burnRateImage.fillAmount, 1, burnRateMeterLerpConstant);
         } else {
-            burnRateMeterPercent.text = percent + "%";
+            forceMagnitudeTargetText.text = ((int)forceMagnitudeTarget).ToString() + "N";
+            maximumForceMagnitudeText.text = ((int)maximumForceMagnitude).ToString() + "N";
+            //burnRateMeterPercent.color = Color.Lerp(burnRateMeterPercent.color, new Color(1 - rate * rMaxMeter, 1f - gMaxMeter * rate, bMaxMeter, 1f), burnRateMeterLerpConstant);
+            burnRateImage.fillAmount = Mathf.Lerp(burnRateImage.fillAmount, minAngle + (percent) * (maxAngle), burnRateMeterLerpConstant);
+        }
+    }
+    public void SetBurnRateMeterPercentage(float ironBurnRate, float steelBurnRate) {
+        maximumForceMagnitudeText.text = "";
+        float rate = Mathf.Max(ironBurnRate, steelBurnRate);
+        int percent = (int)Mathf.Round(rate * 100);
+        if (percent == 0) {
+            forceMagnitudeTargetText.text = "";
+            burnRateImage.fillAmount = Mathf.Lerp(burnRateImage.fillAmount, 0, burnRateMeterLerpConstant);
+        } else if (percent > 99) {
+            forceMagnitudeTargetText.text = "MAX";
+            //burnRateMeterPercent.color = Color.Lerp(burnRateMeterPercent.color, new Color(1 - rate * rMaxMeter, 1f - gMaxMeter * rate, bMaxMeter, 1f), burnRateMeterLerpConstant);
+            burnRateImage.fillAmount = Mathf.Lerp(burnRateImage.fillAmount, 1, burnRateMeterLerpConstant);
+        } else {
+            forceMagnitudeTargetText.text = percent + "%";
             //burnRateMeterPercent.color = Color.Lerp(burnRateMeterPercent.color, new Color(1 - rate * rMaxMeter, 1f - gMaxMeter * rate, bMaxMeter, 1f), burnRateMeterLerpConstant);
             burnRateImage.fillAmount = Mathf.Lerp(burnRateImage.fillAmount, minAngle + (rate) * (maxAngle), burnRateMeterLerpConstant);
         }

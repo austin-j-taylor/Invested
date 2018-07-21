@@ -89,6 +89,9 @@ public class AllomanticIronSteel : MonoBehaviour {
     private float ironBurnRate;
     private float steelBurnRate;
 
+    public float forceMagnitudeTarget;
+    public float maximumForceMagnitude;
+
     public bool IronPulling { get; private set; }
     public bool SteelPushing { get; private set; }
     public bool IsBurningIronSteel { get; private set; }
@@ -119,6 +122,8 @@ public class AllomanticIronSteel : MonoBehaviour {
         SteelPushing = false;
         ironBurnRate = .2f;
         steelBurnRate = .2f;
+        forceMagnitudeTarget = 600f;
+        maximumForceMagnitude = 0f;
         lastHoveredOverTarget = null;
     }
 
@@ -145,7 +150,10 @@ public class AllomanticIronSteel : MonoBehaviour {
                         }
                     }
                 } else {
-                    ChangeBurnRate(Keybinds.ScrollWheelAxis());
+                    if (GamepadController.currentForceStyle == ForceStyle.Percentage)
+                        ChangeTargePercent(Keybinds.ScrollWheelAxis());
+                    else
+                        ChangeTargetForceMagnitude(Keybinds.ScrollWheelAxis());
                 }
             } else {
                 float scrollValue = Keybinds.ScrollWheelAxis();
@@ -232,15 +240,21 @@ public class AllomanticIronSteel : MonoBehaviour {
             }
         }
 
-        // Apply pushing/pulling force
+        // Set burn rates
         if (IsBurningIronSteel) {
-            if (GamepadController.UsingGamepad) {
-                ironBurnRate = Keybinds.RightBurnRate();
-                steelBurnRate = Keybinds.LeftBurnRate();
+            if (GamepadController.currentForceStyle == ForceStyle.Percentage) {
+                if (GamepadController.UsingGamepad) {
+                    ironBurnRate = Keybinds.RightBurnRate();
+                    steelBurnRate = Keybinds.LeftBurnRate();
+                }
+                SetPullRate(ironBurnRate);
+                SetPushRate(steelBurnRate);
+                burnRateMeter.SetBurnRateMeterPercentage(ironBurnRate, steelBurnRate);
+            } else {
+                SetPullRate(forceMagnitudeTarget / maximumForceMagnitude);
+                SetPushRate(forceMagnitudeTarget / maximumForceMagnitude);
+                burnRateMeter.SetBurnRateMeterForceMagnitude(forceMagnitudeTarget, maximumForceMagnitude);
             }
-            SetPullRate(ironBurnRate);
-            SetPushRate(steelBurnRate);
-            burnRateMeter.RefreshBurnRateMeter(ironBurnRate, steelBurnRate);
         }
 
         if (IsBurningIronSteel && !searchingForTarget) { // not searching for a new target but still burning passively, show lines
@@ -326,7 +340,7 @@ public class AllomanticIronSteel : MonoBehaviour {
 
     // Debug
     public float charge;
-    public Vector3 allomanticsForce;
+    public float allomanticsForce;
     public float netAllomancersForce;
     public float netTargetsForce;
     public Vector3 resititutionFromTargetsForce;
@@ -346,7 +360,14 @@ public class AllomanticIronSteel : MonoBehaviour {
         // If the target is extremely close to the player, prevent the distance from being so low that the force approaches infinity
         float distance = Mathf.Max(positionDifference.magnitude, closenessThreshold);
 
-        Vector3 allomanticForce = AllomanticConstant * (target.LastWasPulled ? ironBurnRate : steelBurnRate) * Mathf.Pow(target.Mass * rb.mass, chargePower) * (positionDifference / distance / distance) / (usingIronTargets ? pullCount : pushCount);
+        Vector3 allomanticForce;
+        if (GamepadController.currentForceStyle == ForceStyle.ForceMagnitude) {
+            target.LastMaximumAllomanticForce = AllomanticConstant * Mathf.Pow(target.Mass * rb.mass, chargePower) * (positionDifference / distance / distance) / (usingIronTargets ? pullCount : pushCount);
+
+            allomanticForce = target.LastMaximumAllomanticForce;// * (target.LastWasPulled ? ironBurnRate : steelBurnRate);
+        } else {
+            allomanticForce = AllomanticConstant * (target.LastWasPulled ? ironBurnRate : steelBurnRate) * Mathf.Pow(target.Mass * rb.mass, chargePower) * (positionDifference / distance / distance) / (usingIronTargets ? pullCount : pushCount);
+        }
         Vector3 restitutionForceFromTarget;
         Vector3 restitutionForceFromAllomancer;
         if (addNormals) {
@@ -389,6 +410,16 @@ public class AllomanticIronSteel : MonoBehaviour {
             restitutionForceFromTarget = Vector3.zero;
             restitutionForceFromAllomancer = Vector3.zero;
         }
+        if (GamepadController.currentForceStyle == ForceStyle.ForceMagnitude) {
+            float percent = forceMagnitudeTarget / (target.LastMaximumAllomanticForce + restitutionForceFromTarget).magnitude;
+            if (percent < 1f) {
+                allomanticForce *= percent;
+                restitutionForceFromTarget *= percent;
+                restitutionForceFromAllomancer *= percent;
+            }
+        maximumForceMagnitude = (target.LastMaximumAllomanticForce + restitutionForceFromTarget).magnitude;
+        }
+
         target.LastAllomanticForce = allomanticForce;
         target.LastAllomanticNormalForceFromAllomancer = restitutionForceFromAllomancer;
         target.LastAllomanticNormalForceFromTarget = restitutionForceFromTarget;
@@ -415,7 +446,6 @@ public class AllomanticIronSteel : MonoBehaviour {
         Vector3 netForceOnTarget = target.LastNetAllomanticForceOnTarget;
         Vector3 netForceOnAllomancer = target.LastNetAllomanticForceOnAllomancer;
 
-
         target.AddForce(netForceOnTarget, ForceMode.Force);
 
         // apply force to player
@@ -433,12 +463,12 @@ public class AllomanticIronSteel : MonoBehaviour {
         //lastExpectedNormalAllomancerAcceleration = restitutionForceFromTarget / rb.mass * Time.fixedDeltaTime;
 
         // Debug
-        allomanticsForce = target.LastAllomanticForce;
+        allomanticsForce = target.LastAllomanticForce.magnitude;
         netAllomancersForce = netForceOnAllomancer.magnitude;
         resititutionFromTargetsForce = target.LastAllomanticNormalForceFromTarget;
         resititutionFromPlayersForce = target.LastAllomanticNormalForceFromAllomancer;
-        percentOfTargetForceReturned = resititutionFromTargetsForce.magnitude / allomanticsForce.magnitude;
-        percentOfAllomancerForceReturned = resititutionFromPlayersForce.magnitude / allomanticsForce.magnitude;
+        percentOfTargetForceReturned = resititutionFromTargetsForce.magnitude / allomanticsForce;
+        percentOfAllomancerForceReturned = resititutionFromPlayersForce.magnitude / allomanticsForce;
         netTargetsForce = netForceOnTarget.magnitude;
     }
 
@@ -738,7 +768,10 @@ public class AllomanticIronSteel : MonoBehaviour {
         if (!IsBurningIronSteel) { // just started burning metal
             gamepad.Shake(.1f, .1f, .3f);
             IsBurningIronSteel = true;
-            burnRateMeter.RefreshBurnRateMeter(ironBurnRate, steelBurnRate);
+            if(GamepadController.currentForceStyle == ForceStyle.Percentage)
+                burnRateMeter.SetBurnRateMeterPercentage(ironBurnRate, steelBurnRate);
+            else
+                burnRateMeter.SetBurnRateMeterForceMagnitude(forceMagnitudeTarget, maximumForceMagnitude);
             burnRateMeter.MetalLineText = availableNumberOfTargets.ToString();
         }
     }
@@ -748,7 +781,8 @@ public class AllomanticIronSteel : MonoBehaviour {
         RemoveTargetGlow(lastHoveredOverTarget);
         IsBurningIronSteel = false;
         burnRateMeter.MetalLineText = "";
-        burnRateMeter.RefreshBurnRateMeter(0, 0);
+        burnRateMeter.SetBurnRateMeterForceMagnitude(0, 0);
+        burnRateMeter.SetBurnRateMeterForceMagnitude(0, 0);
         RemoveAllTargets();
 
         gamepad.SetRumble(0, 0);
@@ -762,7 +796,11 @@ public class AllomanticIronSteel : MonoBehaviour {
 
     private void SetPullRate(float rate) {
         if(rate > .01f) {
-            ironBurnRate = rate;
+            if (GamepadController.currentForceStyle == ForceStyle.Percentage)
+                ironBurnRate = rate;
+            else
+                ironBurnRate = Mathf.Min(1, rate);
+            steelBurnRate = rate;
             if (HasPullTarget || HasPushTarget)
                 gamepad.SetRumble(steelBurnRate, ironBurnRate);
         } else {
@@ -774,7 +812,10 @@ public class AllomanticIronSteel : MonoBehaviour {
 
     private void SetPushRate(float rate) {
         if (rate > .01f) {
-            steelBurnRate = rate;
+            if(GamepadController.currentForceStyle == ForceStyle.Percentage)
+                steelBurnRate = rate;
+            else
+                steelBurnRate = Mathf.Min(1, rate);
             if (HasPullTarget || HasPushTarget)
                 gamepad.SetRumble(steelBurnRate, ironBurnRate);
         } else {
@@ -871,7 +912,16 @@ public class AllomanticIronSteel : MonoBehaviour {
         }
     }
 
-    private void ChangeBurnRate(float change) {
+    private void ChangeTargetForceMagnitude(float change) {
+        if(change > 0) {
+            change = Mathf.Max(10, maximumForceMagnitude / 10f);
+        } else if(change < 0) {
+            change = -Mathf.Max(10, maximumForceMagnitude / 10f);
+        }
+        forceMagnitudeTarget = Mathf.Max(0, forceMagnitudeTarget + change);
+    }
+
+    private void ChangeTargePercent(float change) {
         if(change > 0) {
             change = .1f;
         } else if(change < 0) {

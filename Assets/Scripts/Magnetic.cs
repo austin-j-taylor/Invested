@@ -20,6 +20,7 @@ public class Magnetic : MonoBehaviour {
     public virtual Vector3 LastExpectedAcceleration { get; set; }
 
     public Vector3 LastAllomanticForce { get; set; }
+    public Vector3 LastMaximumAllomanticForce { get; set; }
     public Vector3 LastAllomanticNormalForceFromAllomancer { get; set; }
     public Vector3 LastAllomanticNormalForceFromTarget { get; set; }
 
@@ -91,6 +92,7 @@ public class Magnetic : MonoBehaviour {
         LastVelocity = Vector3.zero;
         LastExpectedAcceleration = Vector3.zero;
         LastAllomanticForce = Vector3.zero;
+        LastMaximumAllomanticForce = Vector3.zero;
         LastAllomanticNormalForceFromAllomancer = Vector3.zero;
         LastAllomanticNormalForceFromTarget = Vector3.zero;
         LightSaberFactor = 1;
@@ -109,6 +111,7 @@ public class Magnetic : MonoBehaviour {
         LastVelocity = Vector3.zero;
         LastExpectedAcceleration = Vector3.zero;
         LastAllomanticForce = Vector3.zero;
+        LastMaximumAllomanticForce = Vector3.zero;
         LastAllomanticNormalForceFromAllomancer = Vector3.zero;
         LastAllomanticNormalForceFromTarget = Vector3.zero;
         Allomancer = null;
