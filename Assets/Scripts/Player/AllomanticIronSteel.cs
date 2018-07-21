@@ -24,13 +24,9 @@ public class AllomanticIronSteel : MonoBehaviour {
     private const float gMaxLines = .15f;
     private const float bMaxLines = 1;
     private const float luminosityFactor = .4f;
-    private const float MetalLinesLerpConstant = burnRateMeterLerpConstant;//.05f;
+    private const float MetalLinesLerpConstant = .30f;
     private const float verticalImportanceFactor = 100f;
     private const float lightSaberConstant = 200f;
-    // Constants for Burn Rate Meter
-    private const float burnRateMeterLerpConstant = .30f;
-    private const float minAngle = .12f;
-    private const float maxAngle = 1f - 2 * minAngle;
     
     // Button-press time constants
     private const float timeToHoldDown = .5f;
@@ -53,11 +49,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     [SerializeField]
     private Transform centerOfMass;
     [SerializeField]
-    private Text metalLineText;
-    [SerializeField]
-    private Text burnRateMeterPercent;
-    [SerializeField]
-    private Image burnRateImage;
+    private BurnRateMeter burnRateMeter;
 
     private bool HasPullTarget {
         get {
@@ -128,11 +120,6 @@ public class AllomanticIronSteel : MonoBehaviour {
         ironBurnRate = .2f;
         steelBurnRate = .2f;
         lastHoveredOverTarget = null;
-
-        metalLineText.text = "";
-        burnRateImage.color = new Color(0, .5f, 1, .75f);
-        burnRateImage.fillAmount = minAngle;
-        burnRateMeterPercent.text = "";
     }
 
 
@@ -253,7 +240,7 @@ public class AllomanticIronSteel : MonoBehaviour {
             }
             SetPullRate(ironBurnRate);
             SetPushRate(steelBurnRate);
-            RefreshBurnRateMeter();
+            burnRateMeter.RefreshBurnRateMeter(ironBurnRate, steelBurnRate);
         }
 
         if (IsBurningIronSteel && !searchingForTarget) { // not searching for a new target but still burning passively, show lines
@@ -751,8 +738,8 @@ public class AllomanticIronSteel : MonoBehaviour {
         if (!IsBurningIronSteel) { // just started burning metal
             gamepad.Shake(.1f, .1f, .3f);
             IsBurningIronSteel = true;
-            RefreshBurnRateMeter();
-            metalLineText.text = availableNumberOfTargets.ToString();
+            burnRateMeter.RefreshBurnRateMeter(ironBurnRate, steelBurnRate);
+            burnRateMeter.MetalLineText = availableNumberOfTargets.ToString();
         }
     }
 
@@ -760,9 +747,8 @@ public class AllomanticIronSteel : MonoBehaviour {
         //if (IsBurningIronSteel) {
         RemoveTargetGlow(lastHoveredOverTarget);
         IsBurningIronSteel = false;
-        metalLineText.text = "";
-        burnRateMeterPercent.text = "";
-        burnRateImage.fillAmount = 0;
+        burnRateMeter.MetalLineText = "";
+        burnRateMeter.RefreshBurnRateMeter(0, 0);
         RemoveAllTargets();
 
         gamepad.SetRumble(0, 0);
@@ -864,7 +850,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     private void IncrementNumberOfTargets() {
         if (availableNumberOfTargets < maxNumberOfTargets) {
             availableNumberOfTargets++;
-            metalLineText.text = availableNumberOfTargets.ToString();
+            burnRateMeter.MetalLineText = availableNumberOfTargets.ToString();
         }
     }
 
@@ -879,7 +865,7 @@ public class AllomanticIronSteel : MonoBehaviour {
             if (availableNumberOfTargets == 0) {
                 availableNumberOfTargets++;
             } else {
-                metalLineText.text = availableNumberOfTargets.ToString();
+                burnRateMeter.MetalLineText = availableNumberOfTargets.ToString();
             }
 
         }
@@ -893,22 +879,5 @@ public class AllomanticIronSteel : MonoBehaviour {
         }
         ironBurnRate = Mathf.Clamp(ironBurnRate + change, 0, 1);
         steelBurnRate = Mathf.Clamp(steelBurnRate + change, 0, 1);
-    }
-
-    private void RefreshBurnRateMeter() {
-        float rate = Mathf.Max(ironBurnRate, steelBurnRate);
-        int percent = (int) Mathf.Round(rate * 100);
-        if(percent == 0) {
-            burnRateMeterPercent.text = "";
-            burnRateImage.fillAmount = Mathf.Lerp(burnRateImage.fillAmount, 0, burnRateMeterLerpConstant);
-        } else if(percent > 99) {
-            burnRateMeterPercent.text = "MAX";
-            //burnRateMeterPercent.color = Color.Lerp(burnRateMeterPercent.color, new Color(1 - rate * rMaxMeter, 1f - gMaxMeter * rate, bMaxMeter, 1f), burnRateMeterLerpConstant);
-            burnRateImage.fillAmount = Mathf.Lerp(burnRateImage.fillAmount, 1, burnRateMeterLerpConstant);
-        } else {
-            burnRateMeterPercent.text = percent + "%";
-            //burnRateMeterPercent.color = Color.Lerp(burnRateMeterPercent.color, new Color(1 - rate * rMaxMeter, 1f - gMaxMeter * rate, bMaxMeter, 1f), burnRateMeterLerpConstant);
-            burnRateImage.fillAmount = Mathf.Lerp(burnRateImage.fillAmount, minAngle + (rate) * (maxAngle), burnRateMeterLerpConstant); 
-        }
     }
 }
