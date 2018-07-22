@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,6 +12,8 @@ public class PausedMenu : MonoBehaviour {
     private const string enab = "Enabled";
     private const string forc = "Set force magnitude. While pushing, pushes will always have that magnitude (if possible).";
     private const string perc = "Set percentage of maximum possible force. Cannot directly modify force magnitude.";
+    private const string inve = "F ∝ 1 / d² where d = distance between Allomancer and target\n(Inverse square law)";
+    private const string line = "F ∝ 1 - d / R where d = distance between Allomancer and target;\nR = maximum range of push (Linear)";
 
     [SerializeField]
     private Image pauseMenu;
@@ -24,16 +26,24 @@ public class PausedMenu : MonoBehaviour {
     [SerializeField]
     private Slider smoothing;
     [SerializeField]
+    private Slider forceConstant;
+    [SerializeField]
     private Button quitButton;
     [SerializeField]
     private Button resetButton;
     [SerializeField]
     private Button forceStyleButton;
+    [SerializeField]
+    private Button forceModeButton;
 
+    private Button rumbleButton;
     private Text rumbleText;
     private Text controlSchemeText;
-    private Button rumbleButton;
     private Text forceStyleText;
+    private Text forceModeText;
+    private Text sensitivityText;
+    private Text smoothingText;
+    private Text forceConstantText;
 
     private bool paused;
 
@@ -43,10 +53,19 @@ public class PausedMenu : MonoBehaviour {
         rumbleButton = rumbleControl.GetComponentInChildren<Button>();
         rumbleText = rumbleButton.GetComponentInChildren<Text>();
         forceStyleText = forceStyleButton.GetComponentInChildren<Text>();
+        forceModeText = forceModeButton.GetComponentInChildren<Text>();
+
+        sensitivityText = sensitivity.GetComponentInChildren<Text>();
+        smoothingText = smoothing.GetComponentInChildren<Text>();
+        forceConstantText = forceConstant.GetComponentInChildren<Text>();
+
         sensitivity.onValueChanged.AddListener(OnSensitivityChanged);
+        smoothing.onValueChanged.AddListener(OnSmoothingChanged);
+        forceConstant.onValueChanged.AddListener(OnForceConstantChanged);
         quitButton.onClick.AddListener(Quit);
         resetButton.onClick.AddListener(ClickReset);
         forceStyleButton.onClick.AddListener(ClickForceStyle);
+        forceModeButton.onClick.AddListener(ClickForceButton);
 
         pauseMenu.gameObject.SetActive(false);
         rumbleControl.gameObject.SetActive(false);
@@ -54,7 +73,15 @@ public class PausedMenu : MonoBehaviour {
         controlSchemeButton.onClick.AddListener(OnClickControlScheme);
         rumbleButton.onClick.AddListener(OnClickRumble);
         controlSchemeText.text = mk45;
-        forceStyleText.text = forc;
+        forceStyleText.text = perc;
+
+        sensitivity.value = FPVCameraLock.Sensitivity;
+        smoothing.value = FPVCameraLock.Smoothing;
+        forceConstant.value = AllomanticIronSteel.AllomanticConstant;
+
+        sensitivityText.text = sensitivity.value.ToString();
+        smoothingText.text = smoothing.value.ToString();
+        forceConstantText.text = forceConstant.value.ToString();
     }
 
     public void TogglePaused() {
@@ -120,11 +147,18 @@ public class PausedMenu : MonoBehaviour {
     }
 
     private void OnSensitivityChanged(float value) {
+        sensitivityText.text = sensitivity.value.ToString();
         FPVCameraLock.Sensitivity = value;
     }
 
     private void OnSmoothingChanged(float value) {
         FPVCameraLock.Smoothing = value;
+        smoothingText.text = smoothing.value.ToString();
+    }
+
+    private void OnForceConstantChanged(float value) {
+        AllomanticIronSteel.AllomanticConstant = value;
+        forceConstantText.text = value.ToString();
     }
 
     private void Quit() {
@@ -146,6 +180,23 @@ public class PausedMenu : MonoBehaviour {
             default: {
                     forceStyleText.text = forc;
                     GamepadController.currentForceStyle = ForceStyle.ForceMagnitude;
+                    break;
+                }
+        }
+    }
+
+    private void ClickForceButton() {
+        switch(PhysicsController.calculationMode) {
+            case ForceCalculationMode.InverseSquareLaw: {
+                    forceModeText.text = line;
+                    PhysicsController.calculationMode = ForceCalculationMode.Linear;
+                    forceConstant.value /= 10;
+                    break;
+                }
+            default: {
+                    forceModeText.text = inve;
+                    PhysicsController.calculationMode = ForceCalculationMode.InverseSquareLaw;
+                    forceConstant.value *= 10;
                     break;
                 }
         }

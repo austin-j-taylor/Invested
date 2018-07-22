@@ -60,7 +60,7 @@ public class GamepadController : MonoBehaviour {
     void Start() {
         UsingMB45 = true;
         currentControlScheme = ControlScheme.MouseKeyboard45;
-        currentForceStyle = ForceStyle.ForceMagnitude;
+        currentForceStyle = ForceStyle.Percentage;
 
         usingGamepad = false;
         usingRumble = true;
