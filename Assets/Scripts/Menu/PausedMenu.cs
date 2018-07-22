@@ -10,8 +10,8 @@ public class PausedMenu : MonoBehaviour {
     private const string game = "Gamepad";
     private const string disa = "Disabled";
     private const string enab = "Enabled";
-    private const string forc = "Set force magnitude. While pushing, pushes will always have that magnitude (if possible).";
-    private const string perc = "Set percentage of maximum possible force. Cannot directly modify force magnitude.";
+    private const string forc = "Control force magnitude. Pushes will always\ntry to have that magnitude.";
+    private const string perc = "Control percentage of maximum possible force.\nCannot directly control force magnitude.";
     private const string inve = "F ∝ 1 / d² where d = distance between Allomancer and target\n(Inverse square law)";
     private const string line = "F ∝ 1 - d / R where d = distance between Allomancer and target;\nR = maximum range of push (Linear)";
 
@@ -27,6 +27,8 @@ public class PausedMenu : MonoBehaviour {
     private Slider smoothing;
     [SerializeField]
     private Slider forceConstant;
+    [SerializeField]
+    private Slider maxRange;
     [SerializeField]
     private Button quitButton;
     [SerializeField]
@@ -44,13 +46,14 @@ public class PausedMenu : MonoBehaviour {
     private Text sensitivityText;
     private Text smoothingText;
     private Text forceConstantText;
+    private Text maxRangeText;
 
     private bool paused;
 
     // Use this for initialization
     void Start() {
-        controlSchemeText = controlSchemeButton.GetComponentInChildren<Text>();
         rumbleButton = rumbleControl.GetComponentInChildren<Button>();
+        controlSchemeText = controlSchemeButton.GetComponentInChildren<Text>();
         rumbleText = rumbleButton.GetComponentInChildren<Text>();
         forceStyleText = forceStyleButton.GetComponentInChildren<Text>();
         forceModeText = forceModeButton.GetComponentInChildren<Text>();
@@ -58,10 +61,13 @@ public class PausedMenu : MonoBehaviour {
         sensitivityText = sensitivity.GetComponentInChildren<Text>();
         smoothingText = smoothing.GetComponentInChildren<Text>();
         forceConstantText = forceConstant.GetComponentInChildren<Text>();
+        maxRangeText = maxRange.GetComponentInChildren<Text>();
 
         sensitivity.onValueChanged.AddListener(OnSensitivityChanged);
         smoothing.onValueChanged.AddListener(OnSmoothingChanged);
         forceConstant.onValueChanged.AddListener(OnForceConstantChanged);
+        maxRange.onValueChanged.AddListener(OnMaxRangeChanged);
+
         quitButton.onClick.AddListener(Quit);
         resetButton.onClick.AddListener(ClickReset);
         forceStyleButton.onClick.AddListener(ClickForceStyle);
@@ -74,14 +80,17 @@ public class PausedMenu : MonoBehaviour {
         rumbleButton.onClick.AddListener(OnClickRumble);
         controlSchemeText.text = mk45;
         forceStyleText.text = perc;
+        forceModeText.text = line;
 
         sensitivity.value = FPVCameraLock.Sensitivity;
         smoothing.value = FPVCameraLock.Smoothing;
         forceConstant.value = AllomanticIronSteel.AllomanticConstant;
+        maxRange.value = AllomanticIronSteel.maxRange;
 
         sensitivityText.text = sensitivity.value.ToString();
         smoothingText.text = smoothing.value.ToString();
         forceConstantText.text = forceConstant.value.ToString();
+        maxRangeText.text = maxRange.value.ToString();
     }
 
     public void TogglePaused() {
@@ -161,6 +170,11 @@ public class PausedMenu : MonoBehaviour {
         forceConstantText.text = value.ToString();
     }
 
+    private void OnMaxRangeChanged(float value) {
+        AllomanticIronSteel.maxRange = value;
+        maxRangeText.text = value.ToString();
+    }
+
     private void Quit() {
         Application.Quit();
     }
@@ -186,17 +200,17 @@ public class PausedMenu : MonoBehaviour {
     }
 
     private void ClickForceButton() {
-        switch(PhysicsController.calculationMode) {
+        switch (PhysicsController.calculationMode) {
             case ForceCalculationMode.InverseSquareLaw: {
                     forceModeText.text = line;
                     PhysicsController.calculationMode = ForceCalculationMode.Linear;
-                    forceConstant.value /= 10;
+                    forceConstant.value /= 40f / 6f;
                     break;
                 }
             default: {
                     forceModeText.text = inve;
                     PhysicsController.calculationMode = ForceCalculationMode.InverseSquareLaw;
-                    forceConstant.value *= 10;
+                    forceConstant.value *= 40f / 6f;
                     break;
                 }
         }

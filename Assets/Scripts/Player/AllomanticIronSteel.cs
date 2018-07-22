@@ -10,7 +10,6 @@ public class AllomanticIronSteel : MonoBehaviour {
 
     // Constants
     private const int maxNumberOfTargets = 10;
-    private const float maxRange = 50f;
     private const float closenessThreshold = .01f;
     private const float chargePower = 1f / 8f;
     private readonly Vector3 centerOfScreen = new Vector3(.5f, .5f, 0);
@@ -84,6 +83,8 @@ public class AllomanticIronSteel : MonoBehaviour {
     private Vector3 lastExpectedAllomancerAcceleration = Vector3.zero;
     private Vector3 currentExpectedAllomancerAcceleration = Vector3.zero;
 
+    private Vector3 currentMaximumForce = Vector3.zero;
+
     // Used for burning metals
     private float ironBurnRate;
     private float steelBurnRate;
@@ -92,6 +93,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     public float maximumForceMagnitude;
 
     public static float AllomanticConstant { get; set; }
+    public static float maxRange = 100f;
     public bool IronPulling { get; private set; }
     public bool SteelPushing { get; private set; }
     public bool IsBurningIronSteel { get; private set; }
@@ -122,7 +124,7 @@ public class AllomanticIronSteel : MonoBehaviour {
         SteelPushing = false;
         ironBurnRate = .2f;
         steelBurnRate = .2f;
-        AllomanticConstant = 4000f;
+        AllomanticConstant = 600f;
         forceMagnitudeTarget = 600f;
         maximumForceMagnitude = 0f;
         lastHoveredOverTarget = null;
@@ -302,6 +304,8 @@ public class AllomanticIronSteel : MonoBehaviour {
             lastAllomancerVelocity = rb.velocity;
             lastExpectedAllomancerAcceleration = currentExpectedAllomancerAcceleration;
             currentExpectedAllomancerAcceleration = Vector3.zero;
+            maximumForceMagnitude = currentMaximumForce.magnitude;
+            currentMaximumForce = Vector3.zero;
         }
     }
 
@@ -432,7 +436,8 @@ public class AllomanticIronSteel : MonoBehaviour {
                 restitutionForceFromAllomancer *= percent;
             }
         }
-        maximumForceMagnitude = (target.LastMaximumAllomanticForce + restitutionForceFromTarget).magnitude;
+        //maximumForceMagnitude = (target.LastMaximumAllomanticForce + restitutionForceFromTarget).magnitude;
+        currentMaximumForce += target.LastMaximumAllomanticForce + restitutionForceFromTarget;
 
         target.LastAllomanticForce = allomanticForce;
         target.LastAllomanticNormalForceFromAllomancer = restitutionForceFromAllomancer;

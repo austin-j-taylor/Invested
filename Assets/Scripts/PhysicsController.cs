@@ -9,7 +9,7 @@ public class PhysicsController : MonoBehaviour {
     public static ForceCalculationMode calculationMode;
 
     private void Start() {
-        calculationMode = ForceCalculationMode.InverseSquareLaw;
+        calculationMode = ForceCalculationMode.Linear;
     }
 
 }
