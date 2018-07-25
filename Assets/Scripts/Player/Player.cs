@@ -1,15 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour {
     
     private const float coinCooldown = 0.1f;
     private readonly Vector3 feet = Vector3.zero;
 
-    private Animator animator;
-    private Hand hand;
+    //private Animator animator;
     private PauseMenu pauseMenu;
+    private PlayerMovementController movementController;
+    private FPVCameraLock cameraController;
 
     public AllomanticIronSteel IronSteel { get; private set; }
     public CoinPouch Pouch { get; private set; }
@@ -18,12 +20,12 @@ public class Player : MonoBehaviour {
     
     void Awake () {
         pauseMenu = GameObject.FindGameObjectWithTag("PauseMenu").GetComponent<PauseMenu>();
+        movementController = GetComponent<PlayerMovementController>();
+        cameraController = GetComponentInChildren<FPVCameraLock>();
 
-        animator = GetComponent<Animator>();
+        //animator = GetComponent<Animator>();
         IronSteel = GetComponent<AllomanticIronSteel>();
-        hand = GetComponentInChildren<Hand>();
         Pouch = GetComponentInChildren<CoinPouch>();
-
     }
 	
 	void Update () {
@@ -31,6 +33,7 @@ public class Player : MonoBehaviour {
         if (Keybinds.Pause()) {
             pauseMenu.TogglePaused();
         }
+
         // On pressing COIN button
         if (Keybinds.WithdrawCoinDown() && lastCoinThrowTime + coinCooldown < Time.time) {
             lastCoinThrowTime = Time.time;
@@ -45,4 +48,19 @@ public class Player : MonoBehaviour {
             }
         }
 	}
+
+    public void ReloadPlayerIntoNewScene(int scene) {
+        movementController.EnterNewScene();
+        GetComponentInChildren<Camera>().enabled = true;
+        IronSteel.Clear();
+        Pouch.Clear();
+
+        SceneManager.LoadScene(scene);
+    }
+
+    public void ResetPosition(PlayerSpawn spawn) {
+        transform.position = spawn.transform.position;
+        transform.rotation = spawn.transform.rotation;
+        cameraController.Clear();
+    }
 }

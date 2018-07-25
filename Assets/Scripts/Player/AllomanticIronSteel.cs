@@ -12,7 +12,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     private const int maxNumberOfTargets = 10;
     private const float closenessThreshold = .01f;
     private const float chargePower = 1f / 8f;
-    private readonly Vector3 centerOfScreen = new Vector3(.5f, .5f, 0);
+    //private readonly Vector3 centerOfScreen = new Vector3(.5f, .5f, 0);
     // Constants for Metal Lines
     private const float startWidth = .05f;
     private const float horizontalMin = .45f;
@@ -34,20 +34,18 @@ public class AllomanticIronSteel : MonoBehaviour {
     private const bool steel = false;
     private const bool iron = true;
 
-    private LayerMask ignorePlayerLayer;
+    //private LayerMask ignorePlayerLayer;
     private GamepadController gamepad;
-    private PlayerMovementController movementController;
     private Rigidbody rb;
     private List<VolumetricLineBehavior> metalLines;
     private VolumetricLineBehavior metalLineTemplate;
+    private BurnRateMeter burnRateMeter;
     [SerializeField]
     private Material ironpullTargetedMaterial;
     [SerializeField]
     private Transform metalLinesAnchor;
     [SerializeField]
     private Transform centerOfMass;
-    [SerializeField]
-    private BurnRateMeter burnRateMeter;
 
     private bool HasPullTarget {
         get {
@@ -72,7 +70,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     private Magnetic lastHoveredOverTarget;
 
     // Magnetic variables
-    private int availableNumberOfTargets;
+    private int availableNumberOfTargets = 1;
     private int pullCount;
     private int pushCount;
     private Magnetic[] pullTargets;
@@ -89,10 +87,10 @@ public class AllomanticIronSteel : MonoBehaviour {
     private float ironBurnRate;
     private float steelBurnRate;
 
-    public float forceMagnitudeTarget;
-    public float maximumForceMagnitude;
+    public float forceMagnitudeTarget = 600;
+    public float maximumForceMagnitude = 0;
 
-    public static float AllomanticConstant { get; set; }
+    public static float AllomanticConstant { get; set; } = 600;
     public static float maxRange = 100f;
     public bool IronPulling { get; private set; }
     public bool SteelPushing { get; private set; }
@@ -103,33 +101,36 @@ public class AllomanticIronSteel : MonoBehaviour {
         }
     }
 
-    void Awake() {
+    private void Awake() {
+        //ignorePlayerLayer = ~(1 << LayerMask.NameToLayer("Player"));
+        Clear();
+    }
+
+    private void Start() {
         rb = GetComponent<Rigidbody>();
-        gamepad = GetComponent<GamepadController>();
-        movementController = GetComponent<PlayerMovementController>();
+        gamepad = GameObject.FindGameObjectWithTag("GameController").GetComponent<GamepadController>();
         metalLines = new List<VolumetricLineBehavior>();
         metalLineTemplate = GetComponentInChildren<VolumetricLineBehavior>();
         centerOfMass.localPosition = Vector3.zero;
         metalLinesAnchor.localPosition = centerOfMass.localPosition;
+        burnRateMeter = HUD.BurnRateMeter;
+    }
 
-        ignorePlayerLayer = ~(1 << LayerMask.NameToLayer("Player"));
-
-        availableNumberOfTargets = 1;
+    public void Clear() {
+        IsBurningIronSteel = false;
+        IronPulling = false;
+        SteelPushing = false;
+        ironBurnRate = 0;
+        steelBurnRate = 0;
         pullCount = 0;
         pushCount = 0;
         pullTargets = new Magnetic[maxNumberOfTargets];
         pushTargets = new Magnetic[maxNumberOfTargets];
-
-        IronPulling = false;
-        SteelPushing = false;
-        ironBurnRate = .2f;
-        steelBurnRate = .2f;
-        AllomanticConstant = 600f;
-        forceMagnitudeTarget = 600f;
+        metalLines = new List<VolumetricLineBehavior>();
+        forceMagnitudeTarget = 600;
         maximumForceMagnitude = 0f;
         lastHoveredOverTarget = null;
     }
-
 
     private void Update() {
         bool searchingForTarget = true;
@@ -507,7 +508,6 @@ public class AllomanticIronSteel : MonoBehaviour {
         Camera sight = Camera.main;
         float centerestDistanceFromCenter = 1f;
         Magnetic centerestObject = null;
-        int centerestObjectIndex = 0;
         Collider[] nearbyMetals = Physics.OverlapSphere(sight.transform.position, maxRange);
 
         int lines = 0;
@@ -524,7 +524,6 @@ public class AllomanticIronSteel : MonoBehaviour {
                         float distanceFromCenter = verticalImportanceFactor * Mathf.Pow(screenPosition.x - .5f, 2) + Mathf.Pow(screenPosition.y - .5f, 2);
                         if (distanceFromCenter < centerestDistanceFromCenter) {
                             centerestDistanceFromCenter = distanceFromCenter;
-                            centerestObjectIndex = lines;
                             centerestObject = objectToTarget;
                         }
                     }
@@ -535,7 +534,6 @@ public class AllomanticIronSteel : MonoBehaviour {
                     VolumetricLineBehavior newLine = Instantiate(metalLineTemplate);
                     metalLines.Add(newLine);
                 }
-
                 // Set line properties
                 metalLines[lines].GetComponent<MeshRenderer>().enabled = true;
                 //float closeness = Mathf.Pow(1f / (Mathf.Clamp((transform.position - objectToTarget.transform.position).magnitude, 0, 50) + 1) - additive, .5f);
@@ -795,16 +793,18 @@ public class AllomanticIronSteel : MonoBehaviour {
         }
     }
 
-    private void StopBurningIronSteel() {
+    public void StopBurningIronSteel() {
         //if (IsBurningIronSteel) {
         RemoveTargetGlow(lastHoveredOverTarget);
         IsBurningIronSteel = false;
-        burnRateMeter.MetalLineText = "";
-        burnRateMeter.SetBurnRateMeterForceMagnitude(0, 0);
-        burnRateMeter.SetBurnRateMeterForceMagnitude(0, 0);
+        if (burnRateMeter) {
+            burnRateMeter.MetalLineText = "";
+            burnRateMeter.SetBurnRateMeterForceMagnitude(0, 0);
+            burnRateMeter.SetBurnRateMeterForceMagnitude(0, 0);
+        }
         RemoveAllTargets();
-
-        gamepad.SetRumble(0, 0);
+        if(gamepad)
+            gamepad.SetRumble(0, 0);
 
         // make blue lines disappear
         for (int i = 0; i < metalLines.Count; i++) {

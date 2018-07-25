@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour {
 
     private SettingsMenu settingsMenu;
-
-    private Image pauseMenu;
+    
     private Button settingsButton;
     private Button unpauseButton;
     private Button resetButton;
@@ -18,8 +18,6 @@ public class PauseMenu : MonoBehaviour {
     // Use this for initialization
     void Start () {
         settingsMenu = transform.parent.GetComponentInChildren<SettingsMenu>();
-
-        pauseMenu = GetComponent<Image>();
 
         Button[] buttons = GetComponentsInChildren<Button>();
         settingsButton = buttons[0];
@@ -32,7 +30,7 @@ public class PauseMenu : MonoBehaviour {
         resetButton.onClick.AddListener(ClickReset);
         quitButton.onClick.AddListener(ClickQuit);
 
-        pauseMenu.gameObject.SetActive(false);
+        gameObject.SetActive(false);
         paused = false;
     }
 
@@ -47,15 +45,17 @@ public class PauseMenu : MonoBehaviour {
         //Cursor.visible = true;
         FPVCameraLock.UnlockCamera();
         Time.timeScale = 0f;
-        pauseMenu.gameObject.SetActive(true);
+        gameObject.SetActive(true);
         paused = true;
     }
 
     private void UnPause() {
+        settingsMenu.CloseSettings();
+
         //Cursor.visible = false;
         FPVCameraLock.LockCamera();
         Time.timeScale = 1f;
-        pauseMenu.gameObject.SetActive(false);
+        gameObject.SetActive(false);
         paused = false;
     }
 
@@ -69,7 +69,7 @@ public class PauseMenu : MonoBehaviour {
 
     private void ClickReset() {
         UnPause();
-        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+        MainMenu.LoadScene(SceneManager.GetActiveScene());
     }
 
     private void ClickQuit() {

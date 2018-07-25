@@ -7,8 +7,6 @@ public class CoinPouch : MonoBehaviour {
 
     [SerializeField]
     private Coin coinPrefab;
-    [SerializeField]
-    private Text coinCountText;
 
     private AllomanticIronSteel parentIronSteel;
     private Rigidbody parentRigidbody;
@@ -16,11 +14,12 @@ public class CoinPouch : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        coinCount = 50;
-        UpdateUI();
         parentIronSteel = GetComponentInParent<AllomanticIronSteel>();
         parentRigidbody = GetComponentInParent<Rigidbody>();
-	}
+
+        coinCount = 50;
+        UpdateUI();
+    }
 
     public void AddCoin(Coin coin) {
         if (coin.Allomancer || parentIronSteel.IsTarget(coin))
@@ -53,8 +52,10 @@ public class CoinPouch : MonoBehaviour {
     }
 
     private void UpdateUI() {
-        coinCountText.text = coinCount.ToString();
+        HUD.CoinCountText = coinCount.ToString();
     }
 
-
+    public void Clear() {
+        coinCount = 50;
+    }
 }

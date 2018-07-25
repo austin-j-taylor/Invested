@@ -11,11 +11,8 @@ public class BurnRateMeter : MonoBehaviour {
     private const float maxAngle = 1f - 2 * minAngle;
     
     private AllomanticIronSteel playerIronSteel;
-    [SerializeField]
     private Text metalLineText;
-    [SerializeField]
     private Text forceMagnitudeTargetText;
-    [SerializeField]
     private Text maximumForceMagnitudeText;
     private Image burnRateImage;
 
@@ -27,12 +24,14 @@ public class BurnRateMeter : MonoBehaviour {
 
     void Start() {
         playerIronSteel = GameObject.FindGameObjectWithTag("Player").GetComponent<AllomanticIronSteel>();
+        Text[] texts = GetComponentsInChildren<Text>();
+        metalLineText = texts[0];
+        forceMagnitudeTargetText = texts[1];
+        maximumForceMagnitudeText = texts[2];
+
         burnRateImage = GetComponent<Image>();
-        metalLineText.text = "";
         burnRateImage.color = new Color(0, .5f, 1, .75f);
-        burnRateImage.fillAmount = minAngle;
-        forceMagnitudeTargetText.text = "";
-        maximumForceMagnitudeText.text = "";
+        Clear();
     }
 
     public void SetBurnRateMeterForceMagnitude(float forceMagnitudeTarget, float maximumForceMagnitude) {
@@ -59,6 +58,7 @@ public class BurnRateMeter : MonoBehaviour {
             }
         }
     }
+
     public void SetBurnRateMeterPercentage(float ironBurnRate, float steelBurnRate, float maximumForceMagnitude) {
         float rate = Mathf.Max(ironBurnRate, steelBurnRate);
         int percent = (int)Mathf.Round(rate * 100);
@@ -69,20 +69,27 @@ public class BurnRateMeter : MonoBehaviour {
         } else {
 
             if (PhysicsController.displayUnits == ForceDisplayUnits.Newtons) {
-                maximumForceMagnitudeText.text = ((int)maximumForceMagnitude).ToString() + "N";
+                forceMagnitudeTargetText.text = ((int)maximumForceMagnitude).ToString() + "N";
             } else {
-                maximumForceMagnitudeText.text = (System.Math.Round(maximumForceMagnitude / playerIronSteel.Mass / 9.81, 2).ToString() + "G's");
+                forceMagnitudeTargetText.text = (System.Math.Round(maximumForceMagnitude / playerIronSteel.Mass / 9.81, 2).ToString() + "G's");
             }
 
             if (percent > 99) {
-                forceMagnitudeTargetText.text = "MAX";
+                maximumForceMagnitudeText.text = "MAX";
                 
                 burnRateImage.fillAmount = Mathf.Lerp(burnRateImage.fillAmount, 1, burnRateMeterLerpConstant);
             } else {
-                forceMagnitudeTargetText.text = percent + "%";
+                maximumForceMagnitudeText.text = percent + "%";
                 
                 burnRateImage.fillAmount = Mathf.Lerp(burnRateImage.fillAmount, minAngle + (rate) * (maxAngle), burnRateMeterLerpConstant);
             }
         }
+    }
+
+    public void Clear() {
+        metalLineText.text = "";
+        burnRateImage.fillAmount = minAngle;
+        forceMagnitudeTargetText.text = "";
+        maximumForceMagnitudeText.text = "";
     }
 }

@@ -16,8 +16,7 @@ public class SettingsMenu : MonoBehaviour {
     private const string line = "F ∝ 1 - d / R where d = distance between Allomancer and target;\nR = maximum range of push (Linear)";
     private const string newt = "Newtons (a force)";
     private const string gs = "G's (an acceleration)";
-
-    private Image settingsMenuImage;
+    
     private Button controlSchemeButton;
     private Text rumbleControl;
     private Slider sensitivity;
@@ -40,12 +39,8 @@ public class SettingsMenu : MonoBehaviour {
     private Text forceConstantText;
     private Text maxRangeText;
 
-    private bool settingsOpen;
-
     // Use this for initialization
     void Start() {
-        settingsMenuImage = GetComponent<Image>();
-
         Button[] buttons = GetComponentsInChildren<Button>();
         Slider[] sliders = GetComponentsInChildren<Slider>();
         Text[] texts = GetComponentsInChildren<Text>();
@@ -107,13 +102,11 @@ public class SettingsMenu : MonoBehaviour {
     }
 
     public void OpenSettings() {
-        settingsMenuImage.gameObject.SetActive(true);
-        settingsOpen = true;
+        gameObject.SetActive(true);
     }
 
     public void CloseSettings() {
-        settingsMenuImage.gameObject.SetActive(false);
-        settingsOpen = false;
+        gameObject.SetActive(false);
     }
 
     private void OnClickControlScheme() {

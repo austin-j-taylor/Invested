@@ -71,4 +71,9 @@ public class PlayerMovementController : MonoBehaviour {
             }
         }
     }
+
+    public void EnterNewScene() {
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+    }
 }
