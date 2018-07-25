@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PausedMenu : MonoBehaviour {
+public class SettingsMenu : MonoBehaviour {
 
     private const string mk45 = "Mouse and Keyboard (MB 4 & 5)";
     private const string mkQE = "Mouse and Keyboard (Keys Q & E)";
@@ -17,29 +17,16 @@ public class PausedMenu : MonoBehaviour {
     private const string newt = "Newtons (a force)";
     private const string gs = "G's (an acceleration)";
 
-    [SerializeField]
-    private Image pauseMenu;
-    [SerializeField]
+    private Image settingsMenuImage;
     private Button controlSchemeButton;
-    [SerializeField]
     private Text rumbleControl;
-    [SerializeField]
     private Slider sensitivity;
-    [SerializeField]
     private Slider smoothing;
-    [SerializeField]
     private Slider forceConstant;
-    [SerializeField]
     private Slider maxRange;
-    [SerializeField]
-    private Button quitButton;
-    [SerializeField]
-    private Button resetButton;
-    [SerializeField]
+    private Button closeButton;
     private Button forceStyleButton;
-    [SerializeField]
     private Button forceModeButton;
-    [SerializeField]
     private Button forceUnitsButton;
 
     private Button rumbleButton;
@@ -53,10 +40,29 @@ public class PausedMenu : MonoBehaviour {
     private Text forceConstantText;
     private Text maxRangeText;
 
-    private bool paused;
+    private bool settingsOpen;
 
     // Use this for initialization
     void Start() {
+        settingsMenuImage = GetComponent<Image>();
+
+        Button[] buttons = GetComponentsInChildren<Button>();
+        Slider[] sliders = GetComponentsInChildren<Slider>();
+        Text[] texts = GetComponentsInChildren<Text>();
+        controlSchemeButton = buttons[0];
+        rumbleButton = buttons[1];
+        forceStyleButton = buttons[2];
+        forceModeButton = buttons[3];
+        forceUnitsButton = buttons[4];
+        closeButton = buttons[5];
+
+        sensitivity = sliders[0];
+        smoothing = sliders[1];
+        forceConstant = sliders[2];
+        maxRange = sliders[3];
+
+        rumbleControl = texts[5];
+        
         rumbleButton = rumbleControl.GetComponentInChildren<Button>();
         controlSchemeText = controlSchemeButton.GetComponentInChildren<Text>();
         rumbleText = rumbleButton.GetComponentInChildren<Text>();
@@ -74,15 +80,12 @@ public class PausedMenu : MonoBehaviour {
         forceConstant.onValueChanged.AddListener(OnForceConstantChanged);
         maxRange.onValueChanged.AddListener(OnMaxRangeChanged);
 
-        quitButton.onClick.AddListener(Quit);
-        resetButton.onClick.AddListener(ClickReset);
+        closeButton.onClick.AddListener(ClickClose);
         forceStyleButton.onClick.AddListener(ClickForceStyle);
         forceModeButton.onClick.AddListener(ClickForceButton);
         forceUnitsButton.onClick.AddListener(ClickForceUnitsButton);
 
-        pauseMenu.gameObject.SetActive(false);
         rumbleControl.gameObject.SetActive(false);
-        paused = false;
         controlSchemeButton.onClick.AddListener(OnClickControlScheme);
         rumbleButton.onClick.AddListener(OnClickRumble);
         controlSchemeText.text = mk45;
@@ -99,29 +102,18 @@ public class PausedMenu : MonoBehaviour {
         smoothingText.text = smoothing.value.ToString();
         forceConstantText.text = forceConstant.value.ToString();
         maxRangeText.text = maxRange.value.ToString();
+
+        CloseSettings();
     }
 
-    public void TogglePaused() {
-        if (paused)
-            UnPause();
-        else
-            Pause();
+    public void OpenSettings() {
+        settingsMenuImage.gameObject.SetActive(true);
+        settingsOpen = true;
     }
 
-    private void Pause() {
-        //Cursor.visible = true;
-        FPVCameraLock.UnlockCamera();
-        Time.timeScale = 0f;
-        pauseMenu.gameObject.SetActive(true);
-        paused = true;
-    }
-
-    private void UnPause() {
-        //Cursor.visible = false;
-        FPVCameraLock.LockCamera();
-        Time.timeScale = 1f;
-        pauseMenu.gameObject.SetActive(false);
-        paused = false;
+    public void CloseSettings() {
+        settingsMenuImage.gameObject.SetActive(false);
+        settingsOpen = false;
     }
 
     private void OnClickControlScheme() {
@@ -183,13 +175,8 @@ public class PausedMenu : MonoBehaviour {
         maxRangeText.text = value.ToString();
     }
 
-    private void Quit() {
-        Application.Quit();
-    }
-
-    private void ClickReset() {
-        UnPause();
-        UnityEngine.SceneManagement.SceneManager.LoadScene(0);
+    private void ClickClose() {
+        CloseSettings();
     }
 
     private void ClickForceStyle() {

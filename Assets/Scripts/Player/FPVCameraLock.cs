@@ -18,12 +18,12 @@ public class FPVCameraLock : MonoBehaviour {
     public static float Smoothing { get; set; }
 
     // Use this for initialization
-    void Start() {
+    void Awake() {
         GameObject thePlayer = GameObject.FindGameObjectWithTag("Player");
         player = thePlayer.transform;
         cameraPosition.x = player.transform.eulerAngles.y;
         cameraPosition.y = player.transform.eulerAngles.x;
-        LockCamera();
+        UnlockCamera();
         Sensitivity = 2f;
         Smoothing = 1f;
     }

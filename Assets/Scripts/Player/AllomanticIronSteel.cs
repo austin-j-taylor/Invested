@@ -103,7 +103,7 @@ public class AllomanticIronSteel : MonoBehaviour {
         }
     }
 
-    void Start() {
+    void Awake() {
         rb = GetComponent<Rigidbody>();
         gamepad = GetComponent<GamepadController>();
         movementController = GetComponent<PlayerMovementController>();

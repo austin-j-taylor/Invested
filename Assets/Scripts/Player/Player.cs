@@ -9,15 +9,16 @@ public class Player : MonoBehaviour {
 
     private Animator animator;
     private Hand hand;
-    [SerializeField]
-    private PausedMenu pauseMenu;
+    private PauseMenu pauseMenu;
 
     public AllomanticIronSteel IronSteel { get; private set; }
     public CoinPouch Pouch { get; private set; }
 
     private float lastCoinThrowTime = 0;
     
-    void Start () {
+    void Awake () {
+        pauseMenu = GameObject.FindGameObjectWithTag("PauseMenu").GetComponent<PauseMenu>();
+
         animator = GetComponent<Animator>();
         IronSteel = GetComponent<AllomanticIronSteel>();
         hand = GetComponentInChildren<Hand>();
