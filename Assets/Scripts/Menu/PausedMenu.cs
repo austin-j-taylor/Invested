@@ -14,6 +14,8 @@ public class PausedMenu : MonoBehaviour {
     private const string perc = "Control percentage of maximum possible force.\nCannot directly control force magnitude.";
     private const string inve = "F ∝ 1 / d² where d = distance between Allomancer and target\n(Inverse square law)";
     private const string line = "F ∝ 1 - d / R where d = distance between Allomancer and target;\nR = maximum range of push (Linear)";
+    private const string newt = "Newtons (a force)";
+    private const string gs = "G's (an acceleration)";
 
     [SerializeField]
     private Image pauseMenu;
@@ -37,12 +39,15 @@ public class PausedMenu : MonoBehaviour {
     private Button forceStyleButton;
     [SerializeField]
     private Button forceModeButton;
+    [SerializeField]
+    private Button forceUnitsButton;
 
     private Button rumbleButton;
     private Text rumbleText;
     private Text controlSchemeText;
     private Text forceStyleText;
     private Text forceModeText;
+    private Text forceUnitsText;
     private Text sensitivityText;
     private Text smoothingText;
     private Text forceConstantText;
@@ -57,6 +62,7 @@ public class PausedMenu : MonoBehaviour {
         rumbleText = rumbleButton.GetComponentInChildren<Text>();
         forceStyleText = forceStyleButton.GetComponentInChildren<Text>();
         forceModeText = forceModeButton.GetComponentInChildren<Text>();
+        forceUnitsText = forceUnitsButton.GetComponentInChildren<Text>();
 
         sensitivityText = sensitivity.GetComponentInChildren<Text>();
         smoothingText = smoothing.GetComponentInChildren<Text>();
@@ -72,6 +78,7 @@ public class PausedMenu : MonoBehaviour {
         resetButton.onClick.AddListener(ClickReset);
         forceStyleButton.onClick.AddListener(ClickForceStyle);
         forceModeButton.onClick.AddListener(ClickForceButton);
+        forceUnitsButton.onClick.AddListener(ClickForceUnitsButton);
 
         pauseMenu.gameObject.SetActive(false);
         rumbleControl.gameObject.SetActive(false);
@@ -81,6 +88,7 @@ public class PausedMenu : MonoBehaviour {
         controlSchemeText.text = mk45;
         forceStyleText.text = perc;
         forceModeText.text = line;
+        forceUnitsText.text = newt;
 
         sensitivity.value = FPVCameraLock.Sensitivity;
         smoothing.value = FPVCameraLock.Smoothing;
@@ -211,6 +219,21 @@ public class PausedMenu : MonoBehaviour {
                     forceModeText.text = inve;
                     PhysicsController.calculationMode = ForceCalculationMode.InverseSquareLaw;
                     forceConstant.value *= 40f / 6f;
+                    break;
+                }
+        }
+    }
+
+    private void ClickForceUnitsButton() {
+        switch (PhysicsController.displayUnits) {
+            case ForceDisplayUnits.Newtons: {
+                    forceUnitsText.text = gs;
+                    PhysicsController.displayUnits = ForceDisplayUnits.Gs;
+                    break;
+                }
+            default: {
+                    forceUnitsText.text = newt;
+                    PhysicsController.displayUnits = ForceDisplayUnits.Newtons;
                     break;
                 }
         }
