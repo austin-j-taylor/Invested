@@ -9,6 +9,7 @@ using UnityEngine;
 public class FPVCameraLock : MonoBehaviour {
     
     private static Player player;
+    private static Camera firstPersonCamera;
     private static Vector2 cameraPosition;
     private static Vector2 cameraVelocity;
     private readonly Vector2 gamepadSpeed = new Vector3(80, 64);
@@ -19,9 +20,9 @@ public class FPVCameraLock : MonoBehaviour {
 
     // Use this for initialization
     void Awake() {
-        player = transform.parent.gameObject.GetComponent<Player>();
-        cameraPosition.x = player.transform.eulerAngles.y;
-        cameraPosition.y = player.transform.eulerAngles.x;
+        player = GetComponentInParent<Player>();
+        firstPersonCamera = player.GetComponentInChildren<Camera>();
+        Clear();
         UnlockCamera();
     }
 
@@ -65,7 +66,7 @@ public class FPVCameraLock : MonoBehaviour {
 
     public static void Clear() {
         cameraPosition.x = player.transform.eulerAngles.y;
-        cameraPosition.y = player.transform.eulerAngles.x;
+        cameraPosition.y = player.transform.eulerAngles.x - Mathf.Rad2Deg * Mathf.Atan2(firstPersonCamera.transform.localPosition.y, -firstPersonCamera.transform.localPosition.z);
     }
 
 }
