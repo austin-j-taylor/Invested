@@ -35,6 +35,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     private const bool iron = true;
 
     //private LayerMask ignorePlayerLayer;
+    private Camera firstPersonView;
     private GamepadController gamepad;
     private Rigidbody rb;
     private List<VolumetricLineBehavior> metalLines;
@@ -107,6 +108,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     }
 
     private void Start() {
+        firstPersonView = GetComponentInChildren<Camera>();
         rb = GetComponent<Rigidbody>();
         gamepad = GameObject.FindGameObjectWithTag("GameController").GetComponent<GamepadController>();
         metalLines = new List<VolumetricLineBehavior>();
@@ -504,11 +506,9 @@ public class AllomanticIronSteel : MonoBehaviour {
      * 
      */
     private Magnetic SearchForMetals(bool searchingForTargets) {
-
-        Camera sight = Camera.main;
         float centerestDistanceFromCenter = 1f;
         Magnetic centerestObject = null;
-        Collider[] nearbyMetals = Physics.OverlapSphere(sight.transform.position, maxRange);
+        Collider[] nearbyMetals = Physics.OverlapSphere(CenterOfMass, maxRange);
 
         int lines = 0;
         int colIndex = 0;
@@ -518,7 +518,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                 objectToTarget.InRange = true;
                 if (searchingForTargets) {
                     // If searching for a pullTarget, calculate the object's position on screen.
-                    Vector3 screenPosition = sight.WorldToViewportPoint(objectToTarget.transform.position);
+                    Vector3 screenPosition = firstPersonView.WorldToViewportPoint(objectToTarget.transform.position);
                     if (screenPosition.z > 0 && screenPosition.x > horizontalMin && screenPosition.x < horizontalMax && screenPosition.y > verticalMin && screenPosition.y < verticalMax) {
                         // Test if the new object is the more ideal pullTarget than the last most ideal pullTarget
                         float distanceFromCenter = verticalImportanceFactor * Mathf.Pow(screenPosition.x - .5f, 2) + Mathf.Pow(screenPosition.y - .5f, 2);

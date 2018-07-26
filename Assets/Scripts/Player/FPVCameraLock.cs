@@ -8,9 +8,9 @@ using UnityEngine;
 
 public class FPVCameraLock : MonoBehaviour {
     
-    private Transform player;
-    private Vector2 cameraPosition;
-    private Vector2 cameraVelocity;
+    private static Player player;
+    private static Vector2 cameraPosition;
+    private static Vector2 cameraVelocity;
     private readonly Vector2 gamepadSpeed = new Vector3(80, 64);
     
     public static bool CameraIsLocked { get; private set; }
@@ -18,12 +18,11 @@ public class FPVCameraLock : MonoBehaviour {
     public static float Smoothing { get; set; } = 1f;
 
     // Use this for initialization
-    void Start() {
-        GameObject thePlayer = transform.parent.gameObject;
-        player = thePlayer.transform;
+    void Awake() {
+        player = transform.parent.gameObject.GetComponent<Player>();
         cameraPosition.x = player.transform.eulerAngles.y;
         cameraPosition.y = player.transform.eulerAngles.x;
-        LockCamera();
+        UnlockCamera();
     }
 
     // Update is called once per frame
@@ -64,7 +63,7 @@ public class FPVCameraLock : MonoBehaviour {
         Cursor.visible = true;
     }
 
-    public void Clear() {
+    public static void Clear() {
         cameraPosition.x = player.transform.eulerAngles.y;
         cameraPosition.y = player.transform.eulerAngles.x;
     }

@@ -9,29 +9,26 @@ public class Player : MonoBehaviour {
     private readonly Vector3 feet = Vector3.zero;
 
     //private Animator animator;
-    private PauseMenu pauseMenu;
     private PlayerMovementController movementController;
-    private FPVCameraLock cameraController;
 
     public AllomanticIronSteel IronSteel { get; private set; }
     public CoinPouch Pouch { get; private set; }
 
     private float lastCoinThrowTime = 0;
     
-    void Awake () {
-        pauseMenu = GameObject.FindGameObjectWithTag("PauseMenu").GetComponent<PauseMenu>();
+    void Awake() {
         movementController = GetComponent<PlayerMovementController>();
-        cameraController = GetComponentInChildren<FPVCameraLock>();
 
         //animator = GetComponent<Animator>();
         IronSteel = GetComponent<AllomanticIronSteel>();
         Pouch = GetComponentInChildren<CoinPouch>();
+        SceneManager.sceneLoaded += ResetPosition;
     }
 	
 	void Update () {
         // Pausing
         if (Keybinds.Pause()) {
-            pauseMenu.TogglePaused();
+            PauseMenu.TogglePaused();
         }
 
         // On pressing COIN button
@@ -51,16 +48,19 @@ public class Player : MonoBehaviour {
 
     public void ReloadPlayerIntoNewScene(int scene) {
         movementController.EnterNewScene();
-        GetComponentInChildren<Camera>().enabled = true;
         IronSteel.Clear();
         Pouch.Clear();
 
         SceneManager.LoadScene(scene);
     }
 
-    public void ResetPosition(PlayerSpawn spawn) {
-        transform.position = spawn.transform.position;
-        transform.rotation = spawn.transform.rotation;
-        cameraController.Clear();
+    private void ResetPosition(Scene scene, LoadSceneMode mode) {
+        GameObject spawn = GameObject.FindGameObjectWithTag("PlayerSpawn");
+        if (spawn) {
+            transform.position = spawn.transform.position;
+            transform.rotation = spawn.transform.rotation;
+            FPVCameraLock.Clear();
+        }
     }
+    
 }

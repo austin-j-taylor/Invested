@@ -6,22 +6,19 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour {
 
-    public const int sceneMain = 0;
-    public const int sceneLuthadel = 1;
-    
     private Button playButton;
     private Button settingsButton;
     private Button quitButton;
 
+    private Image titleScreenBG;
     private SettingsMenu settingsMenu;
-    private static HUD hud;
-    private static GameObject player;
+    private SceneSelectMenu sceneSelectMenu;
 
     // Use this for initialization
-    private void Awake () {
-        settingsMenu = transform.parent.GetComponentInChildren<SettingsMenu>();
-        hud = transform.parent.GetComponentInChildren<HUD>();
-        player = GameObject.FindGameObjectWithTag("Player");
+    private void Start () {
+        titleScreenBG = transform.parent.GetComponent<Image>();
+        settingsMenu = transform.parent.parent.GetComponentInChildren<SettingsMenu>();
+        sceneSelectMenu = transform.parent.GetComponentInChildren<SceneSelectMenu>();
 
         Button[] buttons = GetComponentsInChildren<Button>();
         playButton = buttons[0];
@@ -32,22 +29,24 @@ public class MainMenu : MonoBehaviour {
         settingsButton.onClick.AddListener(OnClickedSettings);
         quitButton.onClick.AddListener(OnClickedQuit);
 
-        DontDestroyOnLoad(transform.parent.gameObject);
-        DontDestroyOnLoad(player);
+        DontDestroyOnLoad(transform.parent.parent.gameObject);
         DontDestroyOnLoad(GameObject.FindGameObjectWithTag("GameController"));
-        
-        player.SetActive(false);
-        hud.DisableHUD();
+        DontDestroyOnLoad(GameObject.FindGameObjectWithTag("Player"));
+
+    }
+
+    public void OpenMenu() {
+        titleScreenBG.gameObject.SetActive(true);
+        gameObject.SetActive(true);
+    }
+
+    public void CloseMenu() {
+        gameObject.SetActive(false);
     }
 
     private void OnClickedPlay() {
-        hud.EnableHUD();
-        player.SetActive(true);
-
-        LoadScene(SceneManager.GetSceneByBuildIndex(sceneLuthadel));
-
-        Camera.main.gameObject.SetActive(false);
-        gameObject.SetActive(false);
+        sceneSelectMenu.OpenMenu();
+        CloseMenu();
     }
 
     private void OnClickedSettings() {
@@ -56,10 +55,5 @@ public class MainMenu : MonoBehaviour {
 
     private void OnClickedQuit() {
         Application.Quit();
-    }
-
-    public static void LoadScene(Scene scene) {
-        player.GetComponent<Player>().ReloadPlayerIntoNewScene(sceneLuthadel);
-        hud.ResetHUD();
     }
 }

@@ -16,7 +16,7 @@ public class HUD : MonoBehaviour {
         get; private set;
     }
 
-    void Start() {
+    void Awake() {
         coinCountText = GetComponentsInChildren<Text>()[0];
         BurnRateMeter = GetComponentInChildren<BurnRateMeter>();
     }
@@ -30,6 +30,7 @@ public class HUD : MonoBehaviour {
     }
 
     public void ResetHUD() {
+        EnableHUD();
         if (BurnRateMeter) {
             BurnRateMeter.Clear();
             coinCountText.text = "50";

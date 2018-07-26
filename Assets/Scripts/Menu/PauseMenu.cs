@@ -6,18 +6,23 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour {
 
-    private SettingsMenu settingsMenu;
+    private static SettingsMenu settingsMenu;
+    private SceneSelectMenu sceneSelectMenu;
+    private MainMenu mainMenu;
     
     private Button settingsButton;
     private Button unpauseButton;
     private Button resetButton;
     private Button quitButton;
 
-    private bool paused;
+    private static GameObject pauseMenu;
+    private static bool paused;
 
     // Use this for initialization
     void Start () {
         settingsMenu = transform.parent.GetComponentInChildren<SettingsMenu>();
+        sceneSelectMenu = transform.parent.GetComponentInChildren<SceneSelectMenu>();
+        mainMenu = transform.parent.GetComponentInChildren<MainMenu>();
 
         Button[] buttons = GetComponentsInChildren<Button>();
         settingsButton = buttons[0];
@@ -30,32 +35,33 @@ public class PauseMenu : MonoBehaviour {
         resetButton.onClick.AddListener(ClickReset);
         quitButton.onClick.AddListener(ClickQuit);
 
+        pauseMenu = gameObject;
         gameObject.SetActive(false);
         paused = false;
     }
 
-    public void TogglePaused() {
+    public static void TogglePaused() {
         if (paused)
             UnPause();
         else
             Pause();
     }
 
-    private void Pause() {
+    private static void Pause() {
         //Cursor.visible = true;
         FPVCameraLock.UnlockCamera();
         Time.timeScale = 0f;
-        gameObject.SetActive(true);
+        pauseMenu.SetActive(true);
         paused = true;
     }
 
-    private void UnPause() {
+    private static void UnPause() {
         settingsMenu.CloseSettings();
 
         //Cursor.visible = false;
         FPVCameraLock.LockCamera();
         Time.timeScale = 1f;
-        gameObject.SetActive(false);
+        pauseMenu.SetActive(false);
         paused = false;
     }
 
@@ -69,10 +75,13 @@ public class PauseMenu : MonoBehaviour {
 
     private void ClickReset() {
         UnPause();
-        MainMenu.LoadScene(SceneManager.GetActiveScene());
+        sceneSelectMenu.LoadScene(SceneManager.GetActiveScene());
     }
 
     private void ClickQuit() {
-        Application.Quit();
+        UnPause();
+        FPVCameraLock.UnlockCamera();
+        mainMenu.OpenMenu();
+        sceneSelectMenu.LoadScene(SceneSelectMenu.sceneTitleScreen);
     }
 }

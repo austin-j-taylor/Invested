@@ -22,7 +22,7 @@ public class BurnRateMeter : MonoBehaviour {
         }
     }
 
-    void Start() {
+    void Awake() {
         playerIronSteel = GameObject.FindGameObjectWithTag("Player").GetComponent<AllomanticIronSteel>();
         Text[] texts = GetComponentsInChildren<Text>();
         metalLineText = texts[0];

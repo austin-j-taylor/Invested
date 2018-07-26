@@ -1,0 +1,101 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
+public class SceneSelectMenu : MonoBehaviour {
+
+    public const int sceneMain = 0;
+    public const int sceneTitleScreen = 1;
+    public const int sceneTutorial = 2;
+    public const int sceneSandbox = 3;
+    public const int sceneLuthadel = 4;
+
+    private Image titleScreenBG;
+    private Button tutorialButton;
+    private Button sandboxButton;
+    private Button luthadelButton;
+    private Button backButton;
+
+    private MainMenu mainMenu;
+    private static HUD hud;
+    private static GameObject player;
+
+    // Use this for initialization
+    void Start () {
+        titleScreenBG = transform.parent.GetComponent<Image>();
+        mainMenu = transform.parent.GetComponentInChildren<MainMenu>();
+        hud = transform.parent.parent.GetComponentInChildren<HUD>();
+        player = GameObject.FindGameObjectWithTag("Player");
+
+        Button[] buttons = GetComponentsInChildren<Button>();
+        tutorialButton = buttons[0];
+        sandboxButton = buttons[1];
+        luthadelButton = buttons[2];
+        backButton = buttons[3];
+
+        SceneManager.sceneLoaded += ExitMainMenu;
+        tutorialButton.onClick.AddListener(OnClickedTutorial);
+        sandboxButton.onClick.AddListener(OnClickedSandbox);
+        luthadelButton.onClick.AddListener(OnClickedLuthadel);
+        backButton.onClick.AddListener(OnClickedBack);
+        
+        player.SetActive(false);
+        gameObject.SetActive(false);
+        hud.DisableHUD();
+    }
+
+    private void CloseMenu() {
+        gameObject.SetActive(false);
+    }
+
+    public void OpenMenu() {
+        gameObject.SetActive(true);
+    }
+
+    private void OnClickedTutorial() {
+        LoadScene(sceneTutorial);
+    }
+
+    private void OnClickedSandbox() {
+        LoadScene(sceneSandbox);
+    }
+
+    private void OnClickedLuthadel() {
+        LoadScene(sceneLuthadel);
+
+    }
+
+    private void OnClickedBack() {
+        mainMenu.OpenMenu();
+        CloseMenu();
+    }
+
+    private void ExitMainMenu(Scene scene, LoadSceneMode mode) {
+        if (scene.buildIndex != sceneTitleScreen) {
+            titleScreenBG.gameObject.SetActive(false);
+            CloseMenu();
+        }
+    }
+
+    public void LoadScene(Scene scene) {
+        hud.ResetHUD();
+        player.GetComponent<Player>().ReloadPlayerIntoNewScene(scene.buildIndex);
+    }
+
+    public void LoadScene(int scene) {
+        if (scene == sceneTitleScreen) {
+            player.gameObject.SetActive(false);
+            FPVCameraLock.UnlockCamera();
+        } else {
+            player.gameObject.SetActive(true);
+            FPVCameraLock.LockCamera();
+        }
+        hud.ResetHUD();
+        player.GetComponent<Player>().ReloadPlayerIntoNewScene(scene);
+    }
+
+
+
+}

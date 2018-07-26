@@ -16,7 +16,7 @@ public class Hand : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
-        firstPersonCamera = Camera.main;
+        firstPersonCamera = transform.parent.parent.parent.GetComponentInChildren<Camera>();
         centerOfMass = transform.parent;
         movementController = GetComponentInParent<PlayerMovementController>();
     }
