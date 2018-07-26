@@ -46,14 +46,14 @@ public class Player : MonoBehaviour {
         }
 	}
 
+    // Reset certain values as the player enters a new scene
     public void ReloadPlayerIntoNewScene(int scene) {
-        movementController.EnterNewScene();
+        movementController.Clear();
         IronSteel.Clear();
         Pouch.Clear();
-
-        SceneManager.LoadScene(scene);
     }
 
+    // Reset position to SpawnPosition at beginning of each scene
     private void ResetPosition(Scene scene, LoadSceneMode mode) {
         GameObject spawn = GameObject.FindGameObjectWithTag("PlayerSpawn");
         if (spawn) {

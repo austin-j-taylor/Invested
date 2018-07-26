@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour {
 
@@ -13,8 +12,7 @@ public class MainMenu : MonoBehaviour {
     private Image titleScreenBG;
     private SettingsMenu settingsMenu;
     private SceneSelectMenu sceneSelectMenu;
-
-    // Use this for initialization
+    
     private void Start () {
         titleScreenBG = transform.parent.GetComponent<Image>();
         settingsMenu = transform.parent.parent.GetComponentInChildren<SettingsMenu>();
@@ -29,10 +27,10 @@ public class MainMenu : MonoBehaviour {
         settingsButton.onClick.AddListener(OnClickedSettings);
         quitButton.onClick.AddListener(OnClickedQuit);
 
+        // Set up the Player, Canvas, and EventSystem to persist between scenes
+        DontDestroyOnLoad(GameObject.FindGameObjectWithTag("Player"));
         DontDestroyOnLoad(transform.parent.parent.gameObject);
         DontDestroyOnLoad(GameObject.FindGameObjectWithTag("GameController"));
-        DontDestroyOnLoad(GameObject.FindGameObjectWithTag("Player"));
-
     }
 
     public void OpenMenu() {

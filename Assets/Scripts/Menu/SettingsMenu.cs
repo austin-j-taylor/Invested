@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class SettingsMenu : MonoBehaviour {
 
+    // String constants for button text
     private const string mk45 = "Mouse and Keyboard (MB 4 & 5)";
     private const string mkQE = "Mouse and Keyboard (Keys Q & E)";
     private const string game = "Gamepad";
@@ -218,5 +219,4 @@ public class SettingsMenu : MonoBehaviour {
                 }
         }
     }
-
 }

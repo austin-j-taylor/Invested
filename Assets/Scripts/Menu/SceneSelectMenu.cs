@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class SceneSelectMenu : MonoBehaviour {
 
+    // Scene build indices
     public const int sceneMain = 0;
     public const int sceneTitleScreen = 1;
     public const int sceneTutorial = 2;
@@ -22,8 +23,7 @@ public class SceneSelectMenu : MonoBehaviour {
     private static HUD hud;
     private static GameObject player;
 
-    // Use this for initialization
-    void Start () {
+    void Start() {
         titleScreenBG = transform.parent.GetComponent<Image>();
         mainMenu = transform.parent.GetComponentInChildren<MainMenu>();
         hud = transform.parent.parent.GetComponentInChildren<HUD>();
@@ -35,12 +35,14 @@ public class SceneSelectMenu : MonoBehaviour {
         luthadelButton = buttons[2];
         backButton = buttons[3];
 
-        SceneManager.sceneLoaded += ExitMainMenu;
         tutorialButton.onClick.AddListener(OnClickedTutorial);
         sandboxButton.onClick.AddListener(OnClickedSandbox);
         luthadelButton.onClick.AddListener(OnClickedLuthadel);
         backButton.onClick.AddListener(OnClickedBack);
-        
+
+        // Only close the main menu after the scene loads to prevent jarring camera transitions
+        SceneManager.sceneLoaded += ExitMainMenu;
+
         player.SetActive(false);
         gameObject.SetActive(false);
         hud.DisableHUD();
@@ -54,34 +56,11 @@ public class SceneSelectMenu : MonoBehaviour {
         gameObject.SetActive(true);
     }
 
-    private void OnClickedTutorial() {
-        LoadScene(sceneTutorial);
-    }
-
-    private void OnClickedSandbox() {
-        LoadScene(sceneSandbox);
-    }
-
-    private void OnClickedLuthadel() {
-        LoadScene(sceneLuthadel);
-
-    }
-
-    private void OnClickedBack() {
-        mainMenu.OpenMenu();
-        CloseMenu();
-    }
-
     private void ExitMainMenu(Scene scene, LoadSceneMode mode) {
         if (scene.buildIndex != sceneTitleScreen) {
             titleScreenBG.gameObject.SetActive(false);
             CloseMenu();
         }
-    }
-
-    public void LoadScene(Scene scene) {
-        hud.ResetHUD();
-        player.GetComponent<Player>().ReloadPlayerIntoNewScene(scene.buildIndex);
     }
 
     public void LoadScene(int scene) {
@@ -94,8 +73,24 @@ public class SceneSelectMenu : MonoBehaviour {
         }
         hud.ResetHUD();
         player.GetComponent<Player>().ReloadPlayerIntoNewScene(scene);
+
+        SceneManager.LoadScene(scene);
     }
 
+    private void OnClickedTutorial() {
+        LoadScene(sceneTutorial);
+    }
 
+    private void OnClickedSandbox() {
+        LoadScene(sceneSandbox);
+    }
 
+    private void OnClickedLuthadel() {
+        LoadScene(sceneLuthadel);
+    }
+
+    private void OnClickedBack() {
+        mainMenu.OpenMenu();
+        CloseMenu();
+    }
 }

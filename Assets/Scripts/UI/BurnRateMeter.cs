@@ -1,8 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/*
+ * Controls the circular Burn Rate Meter.
+ */
 public class BurnRateMeter : MonoBehaviour {
 
     // Constants for Burn Rate Meter
@@ -34,6 +35,7 @@ public class BurnRateMeter : MonoBehaviour {
         Clear();
     }
 
+    // Set the meter using the Force Magnitude display configuration.
     public void SetBurnRateMeterForceMagnitude(float forceMagnitudeTarget, float maximumForceMagnitude) {
         float percent = 0;
         if (maximumForceMagnitude != 0) {
@@ -59,6 +61,7 @@ public class BurnRateMeter : MonoBehaviour {
         }
     }
 
+    // Set the meter using the Percentage display configuration.
     public void SetBurnRateMeterPercentage(float ironBurnRate, float steelBurnRate, float maximumForceMagnitude) {
         float rate = Mathf.Max(ironBurnRate, steelBurnRate);
         int percent = (int)Mathf.Round(rate * 100);

@@ -75,7 +75,7 @@ public class PauseMenu : MonoBehaviour {
 
     private void ClickReset() {
         UnPause();
-        sceneSelectMenu.LoadScene(SceneManager.GetActiveScene());
+        sceneSelectMenu.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
     private void ClickQuit() {

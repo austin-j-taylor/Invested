@@ -1,8 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/*
+ * Controls the heads-up display
+ */
 public class HUD : MonoBehaviour {
 
     private static Text coinCountText;
@@ -12,6 +13,7 @@ public class HUD : MonoBehaviour {
             coinCountText.text = value;
         }
     }
+
     public static BurnRateMeter BurnRateMeter {
         get; private set;
     }
@@ -29,6 +31,7 @@ public class HUD : MonoBehaviour {
         gameObject.SetActive(false);
     }
 
+    // Clears the values currently on the HUD
     public void ResetHUD() {
         EnableHUD();
         if (BurnRateMeter) {
