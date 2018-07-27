@@ -19,6 +19,11 @@ public class SettingsMenu : MonoBehaviour {
     private const string newt = "Newtons (a force)";
     private const string gs = "G's (an acceleration)";
     
+    private Button gameplayButton;
+    private Button physicsButton;
+    private Text gameplayHeader;
+    private Text physicsHeader;
+
     private Button controlSchemeButton;
     private Text rumbleLabel;
     private Slider sensitivity;
@@ -28,6 +33,7 @@ public class SettingsMenu : MonoBehaviour {
     private Slider forceConstant;
     private Slider maxRange;
     private Button closeButton;
+    private Button normalForceButton;
     private Button forceStyleButton;
     private Button forceModeButton;
     private Button forceUnitsButton;
@@ -35,6 +41,7 @@ public class SettingsMenu : MonoBehaviour {
     private Button rumbleButton;
     private Text rumbleText;
     private Text controlSchemeText;
+    private Text normalForceText;
     private Text forceStyleText;
     private Text forceModeText;
     private Text forceUnitsText;
@@ -43,18 +50,21 @@ public class SettingsMenu : MonoBehaviour {
     private Text exponentialConstantText;
     private Text forceConstantText;
     private Text maxRangeText;
-
+    
     // Use this for initialization
     void Start() {
         Button[] buttons = GetComponentsInChildren<Button>();
         Slider[] sliders = GetComponentsInChildren<Slider>();
         Text[] texts = GetComponentsInChildren<Text>();
-        controlSchemeButton = buttons[0];
-        rumbleButton = buttons[1];
-        forceStyleButton = buttons[2];
-        forceModeButton = buttons[3];
-        forceUnitsButton = buttons[4];
-        closeButton = buttons[5];
+        gameplayButton = buttons[0];
+        physicsButton = buttons[1];
+        controlSchemeButton = buttons[2];
+        rumbleButton = buttons[3];
+        normalForceButton = buttons[4];
+        forceStyleButton = buttons[5];
+        forceModeButton = buttons[6];
+        forceUnitsButton = buttons[7];
+        closeButton = buttons[8];
 
         sensitivity = sliders[0];
         smoothing = sliders[1];
@@ -62,12 +72,15 @@ public class SettingsMenu : MonoBehaviour {
         forceConstant = sliders[3];
         maxRange = sliders[4];
 
-        rumbleLabel = texts[5];
-        exponentialConstantLabel = texts[16];
-        
+        gameplayHeader = texts[4];
+        physicsHeader = texts[13];
+        rumbleLabel = texts[7];
+        exponentialConstantLabel = texts[20];
+
         rumbleButton = rumbleLabel.GetComponentInChildren<Button>();
         controlSchemeText = controlSchemeButton.GetComponentInChildren<Text>();
         rumbleText = rumbleButton.GetComponentInChildren<Text>();
+        normalForceText = normalForceButton.GetComponentInChildren<Text>();
         forceStyleText = forceStyleButton.GetComponentInChildren<Text>();
         forceModeText = forceModeButton.GetComponentInChildren<Text>();
         forceUnitsText = forceUnitsButton.GetComponentInChildren<Text>();
@@ -84,15 +97,19 @@ public class SettingsMenu : MonoBehaviour {
         forceConstant.onValueChanged.AddListener(OnForceConstantChanged);
         maxRange.onValueChanged.AddListener(OnMaxRangeChanged);
 
-        closeButton.onClick.AddListener(ClickClose);
-        forceStyleButton.onClick.AddListener(ClickForceStyle);
-        forceModeButton.onClick.AddListener(ClickForceButton);
-        forceUnitsButton.onClick.AddListener(ClickForceUnitsButton);
+        normalForceButton.onClick.AddListener(OnClickNormalForce);
+        forceStyleButton.onClick.AddListener(OnClickForceStyle);
+        forceModeButton.onClick.AddListener(OnClickForceButton);
+        forceUnitsButton.onClick.AddListener(OnClickForceUnitsButton);
 
+        gameplayButton.onClick.AddListener(OpenGameplay);
+        physicsButton.onClick.AddListener(OpenPhysics);
         controlSchemeButton.onClick.AddListener(OnClickControlScheme);
         rumbleButton.onClick.AddListener(OnClickRumble);
+        closeButton.onClick.AddListener(OnClickClose);
 
         controlSchemeText.text = mk45;
+        normalForceText.text = enab;
         forceStyleText.text = perc;
         forceModeText.text = line;
         forceUnitsText.text = newt;
@@ -111,6 +128,10 @@ public class SettingsMenu : MonoBehaviour {
 
         rumbleLabel.gameObject.SetActive(false);
         exponentialConstantLabel.gameObject.SetActive(false);
+        gameplayButton.gameObject.SetActive(true);
+        physicsButton.gameObject.SetActive(true);
+        gameplayHeader.gameObject.SetActive(false);
+        physicsHeader.gameObject.SetActive(false);
         CloseSettings();
     }
 
@@ -120,6 +141,45 @@ public class SettingsMenu : MonoBehaviour {
 
     public void CloseSettings() {
         gameObject.SetActive(false);
+    }
+
+    private void OpenGameplay() {
+        gameplayButton.gameObject.SetActive(false);
+        physicsButton.gameObject.SetActive(false);
+        gameplayHeader.gameObject.SetActive(true);
+    }
+
+    private void CloseGameplay() {
+        gameplayButton.gameObject.SetActive(true);
+        physicsButton.gameObject.SetActive(true);
+        gameplayHeader.gameObject.SetActive(false);
+    }
+
+    private void OpenPhysics() {
+        gameplayButton.gameObject.SetActive(false);
+        physicsButton.gameObject.SetActive(false);
+        physicsHeader.gameObject.SetActive(true);
+    }
+
+    private void ClosePhysics() {
+        gameplayButton.gameObject.SetActive(true);
+        physicsButton.gameObject.SetActive(true);
+        physicsHeader.gameObject.SetActive(false);
+    }
+
+    private void OnClickNormalForce() {
+        switch(PhysicsController.normalForceMode) {
+            case NormalForceMode.Enabled: {
+                    PhysicsController.normalForceMode = NormalForceMode.Disabled;
+                    normalForceText.text = disa;
+                    break;
+                }
+            default: {
+                    PhysicsController.normalForceMode = NormalForceMode.Enabled;
+                    normalForceText.text = enab;
+                    break;
+                }
+        }
     }
 
     private void OnClickControlScheme() {
@@ -186,11 +246,16 @@ public class SettingsMenu : MonoBehaviour {
         maxRangeText.text = value.ToString();
     }
 
-    private void ClickClose() {
-        CloseSettings();
+    private void OnClickClose() {
+        if (gameplayHeader.gameObject.activeSelf)
+            CloseGameplay();
+        else if (physicsHeader.gameObject.activeSelf)
+            ClosePhysics();
+        else
+            CloseSettings();
     }
 
-    private void ClickForceStyle() {
+    private void OnClickForceStyle() {
         switch(GamepadController.currentForceStyle) {
             case ForceStyle.ForceMagnitude: {
                     forceStyleText.text = perc;
@@ -205,7 +270,7 @@ public class SettingsMenu : MonoBehaviour {
         }
     }
 
-    private void ClickForceButton() {
+    private void OnClickForceButton() {
         switch (PhysicsController.calculationMode) {
             case ForceCalculationMode.InverseSquareLaw: {
                     forceModeText.text = line;
@@ -229,7 +294,7 @@ public class SettingsMenu : MonoBehaviour {
         }
     }
 
-    private void ClickForceUnitsButton() {
+    private void OnClickForceUnitsButton() {
         switch (PhysicsController.displayUnits) {
             case ForceDisplayUnits.Newtons: {
                     forceUnitsText.text = gs;

@@ -12,6 +12,15 @@ This Unity project makes use of [Volumetric Lines by Johannes Unterguggenberger]
 
 Changelog:
 
+--Version 1.0.5--
+
+-Added option to enable/disable Allomantic Normal Force
+-Added new Force-Distance Relationship: Exponential
+-Altered Settings menu to distinguish Gameplay and Physics settings
+-Added a few new blocks to the Tutorial
+-Added a zero-grav zone to the Sandbox, just for fun.
+-Added version number on title screen
+	
 --Version 1.0.4--
 
 -Added Main menu, title screen, scene selection menu, and discrete settings menu

@@ -402,7 +402,7 @@ public class AllomanticIronSteel : MonoBehaviour {
 
         Vector3 restitutionForceFromTarget;
         Vector3 restitutionForceFromAllomancer;
-        if (addNormals) {
+        if (addNormals && PhysicsController.normalForceMode == NormalForceMode.Enabled) {
             if (target.IsStatic) {
                 // If the target has no rigidbody, let the let the restitution force equal the allomantic force. It's a perfect anchor.
                 // Thus:
@@ -413,9 +413,6 @@ public class AllomanticIronSteel : MonoBehaviour {
                 // Calculate Allomantic Normal Forces
 
                 if (target.IsPerfectlyAnchored) { // If target is perfectly anchored, its ANF = AF.
-
-
-
                     restitutionForceFromTarget = allomanticForce;
                 } else { // Target is partially anchored
                          //calculate changes from the last frame
