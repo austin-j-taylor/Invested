@@ -25,7 +25,9 @@ public class AllomanticIronSteel : MonoBehaviour {
     private const float MetalLinesLerpConstant = .30f;
     private const float verticalImportanceFactor = 100f;
     private const float lightSaberConstant = 200f;
-    
+    public static float AllomanticConstant { get; set; } = 1200;
+    public static float maxRange = 50f;
+
     // Button-press time constants
     private const float timeToHoldDown = .5f;
     private const float timeDoubleTapWindow = .5f;
@@ -91,8 +93,6 @@ public class AllomanticIronSteel : MonoBehaviour {
     public float forceMagnitudeTarget = 600;
     public float maximumForceMagnitude = 0;
 
-    public static float AllomanticConstant { get; set; } = 600;
-    public static float maxRange = 100f;
     public bool IronPulling { get; private set; }
     public bool SteelPushing { get; private set; }
     public bool IsBurningIronSteel { get; private set; }
