@@ -20,6 +20,7 @@ Changelog:
 -Added a few new blocks to the Tutorial
 -Added a zero-grav zone to the Sandbox, just for fun.
 -Added version number on title screen
+-Fixed bug in which the ANF was calculated wrong when quickly pulling and pushing in sequence
 	
 --Version 1.0.4--
 
