@@ -40,21 +40,21 @@ public class Magnetic : MonoBehaviour {
 
     public Vector3 LastNetAllomanticForceOnAllomancer {
         get {
-            if (LastWasPulled) {
-                return LastAllomanticForce + LastAllomanticNormalForceFromTarget;
-            } else {
-                return (-LastAllomanticForce - LastAllomanticNormalForceFromTarget);
-            }
+            //if (LastWasPulled) {
+            return LastAllomanticForce + LastAllomanticNormalForceFromTarget;
+            //} else {
+            //    return -LastAllomanticForce + LastAllomanticNormalForceFromTarget;
+            //}
         }
     }
 
     public Vector3 LastNetAllomanticForceOnTarget {
         get {
-            if (LastWasPulled) {
-                return -LastAllomanticForce + LastAllomanticNormalForceFromAllomancer;
-            } else {
-                return -(-LastAllomanticForce - LastAllomanticNormalForceFromAllomancer);
-            }
+            //if (LastWasPulled) {
+            return -LastAllomanticForce + LastAllomanticNormalForceFromAllomancer;
+            //} else {
+            //    return LastAllomanticForce + LastAllomanticNormalForceFromAllomancer;
+            //}
         }
     }
 
@@ -120,9 +120,12 @@ public class Magnetic : MonoBehaviour {
     }
 
     public void SoftClear() {
+        Debug.Log("soft clear");
         LastExpectedAcceleration = Vector3.zero;
         LastAllomanticNormalForceFromAllomancer = Vector3.zero;
         LastAllomanticNormalForceFromTarget = Vector3.zero;
+        LastMaximumAllomanticForce = Vector3.zero;
+        //LightSaberFactor = 1;
     }
 
     public virtual void AddForce(Vector3 force, ForceMode forceMode) {

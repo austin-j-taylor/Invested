@@ -15,13 +15,16 @@ public class SettingsMenu : MonoBehaviour {
     private const string perc = "Control percentage of maximum possible force.\nCannot directly control force magnitude.";
     private const string inve = "F ∝ 1 / d² where d = distance between Allomancer and target\n(Inverse square law)";
     private const string line = "F ∝ 1 - d / R where d = distance between Allomancer and target;\nR = maximum range of push (Linear)";
+    private const string expo = "F ∝ e ^ -d/C where d = distance between Allomancer and target;\nC = Exponential Constant (Exponential)";
     private const string newt = "Newtons (a force)";
     private const string gs = "G's (an acceleration)";
     
     private Button controlSchemeButton;
-    private Text rumbleControl;
+    private Text rumbleLabel;
     private Slider sensitivity;
     private Slider smoothing;
+    private Text exponentialConstantLabel;
+    private Slider exponentialConstant;
     private Slider forceConstant;
     private Slider maxRange;
     private Button closeButton;
@@ -37,6 +40,7 @@ public class SettingsMenu : MonoBehaviour {
     private Text forceUnitsText;
     private Text sensitivityText;
     private Text smoothingText;
+    private Text exponentialConstantText;
     private Text forceConstantText;
     private Text maxRangeText;
 
@@ -54,12 +58,14 @@ public class SettingsMenu : MonoBehaviour {
 
         sensitivity = sliders[0];
         smoothing = sliders[1];
-        forceConstant = sliders[2];
-        maxRange = sliders[3];
+        exponentialConstant = sliders[2];
+        forceConstant = sliders[3];
+        maxRange = sliders[4];
 
-        rumbleControl = texts[5];
+        rumbleLabel = texts[5];
+        exponentialConstantLabel = texts[16];
         
-        rumbleButton = rumbleControl.GetComponentInChildren<Button>();
+        rumbleButton = rumbleLabel.GetComponentInChildren<Button>();
         controlSchemeText = controlSchemeButton.GetComponentInChildren<Text>();
         rumbleText = rumbleButton.GetComponentInChildren<Text>();
         forceStyleText = forceStyleButton.GetComponentInChildren<Text>();
@@ -68,11 +74,13 @@ public class SettingsMenu : MonoBehaviour {
 
         sensitivityText = sensitivity.GetComponentInChildren<Text>();
         smoothingText = smoothing.GetComponentInChildren<Text>();
+        exponentialConstantText = exponentialConstant.GetComponentInChildren<Text>();
         forceConstantText = forceConstant.GetComponentInChildren<Text>();
         maxRangeText = maxRange.GetComponentInChildren<Text>();
 
         sensitivity.onValueChanged.AddListener(OnSensitivityChanged);
         smoothing.onValueChanged.AddListener(OnSmoothingChanged);
+        exponentialConstant.onValueChanged.AddListener(OnExponentialConstantChanged);
         forceConstant.onValueChanged.AddListener(OnForceConstantChanged);
         maxRange.onValueChanged.AddListener(OnMaxRangeChanged);
 
@@ -81,9 +89,9 @@ public class SettingsMenu : MonoBehaviour {
         forceModeButton.onClick.AddListener(ClickForceButton);
         forceUnitsButton.onClick.AddListener(ClickForceUnitsButton);
 
-        rumbleControl.gameObject.SetActive(false);
         controlSchemeButton.onClick.AddListener(OnClickControlScheme);
         rumbleButton.onClick.AddListener(OnClickRumble);
+
         controlSchemeText.text = mk45;
         forceStyleText.text = perc;
         forceModeText.text = line;
@@ -91,14 +99,18 @@ public class SettingsMenu : MonoBehaviour {
 
         sensitivity.value = FPVCameraLock.Sensitivity;
         smoothing.value = FPVCameraLock.Smoothing;
+        exponentialConstant.value = PhysicsController.exponentialConstantC;
         forceConstant.value = AllomanticIronSteel.AllomanticConstant;
         maxRange.value = AllomanticIronSteel.maxRange;
 
         sensitivityText.text = sensitivity.value.ToString();
         smoothingText.text = smoothing.value.ToString();
+        exponentialConstantText.text = exponentialConstant.value.ToString();
         forceConstantText.text = forceConstant.value.ToString();
         maxRangeText.text = maxRange.value.ToString();
 
+        rumbleLabel.gameObject.SetActive(false);
+        exponentialConstantLabel.gameObject.SetActive(false);
         CloseSettings();
     }
 
@@ -122,7 +134,7 @@ public class SettingsMenu : MonoBehaviour {
                     GamepadController.currentControlScheme = ControlScheme.Gamepad;
                     controlSchemeText.text = game;
                     GamepadController.UsingGamepad = true;
-                    rumbleControl.gameObject.SetActive(true);
+                    rumbleLabel.gameObject.SetActive(true);
                     break;
                     //currentControlScheme = ControlScheme.MouseKeyboard45;
                     //controlSchemeText.text = "Mouse and Keyboard (MB 4 & 5)";
@@ -133,7 +145,7 @@ public class SettingsMenu : MonoBehaviour {
                     controlSchemeText.text = mk45;
                     GamepadController.UsingMB45 = true;
                     GamepadController.UsingGamepad = false;
-                    rumbleControl.gameObject.SetActive(false);
+                    rumbleLabel.gameObject.SetActive(false);
                     break;
                 }
         }
@@ -150,13 +162,18 @@ public class SettingsMenu : MonoBehaviour {
     }
 
     private void OnSensitivityChanged(float value) {
-        sensitivityText.text = sensitivity.value.ToString();
         FPVCameraLock.Sensitivity = value;
+        sensitivityText.text = value.ToString();
     }
 
     private void OnSmoothingChanged(float value) {
         FPVCameraLock.Smoothing = value;
-        smoothingText.text = smoothing.value.ToString();
+        smoothingText.text = value.ToString();
+    }
+
+    private void OnExponentialConstantChanged(float value) {
+        PhysicsController.exponentialConstantC = value;
+        exponentialConstantText.text = value.ToString();
     }
 
     private void OnForceConstantChanged(float value) {
@@ -193,13 +210,20 @@ public class SettingsMenu : MonoBehaviour {
             case ForceCalculationMode.InverseSquareLaw: {
                     forceModeText.text = line;
                     PhysicsController.calculationMode = ForceCalculationMode.Linear;
-                    forceConstant.value /= 40f / 6f;
+                    forceConstant.value /= 40f / 12f;
                     break;
                 }
-            default: {
+            case ForceCalculationMode.Linear: {
+                    exponentialConstantLabel.gameObject.SetActive(true);
+                    forceModeText.text = expo;
+                    PhysicsController.calculationMode = ForceCalculationMode.Exponential;
+                    break;
+                }
+            case ForceCalculationMode.Exponential: {
+                    exponentialConstantLabel.gameObject.SetActive(false);
                     forceModeText.text = inve;
                     PhysicsController.calculationMode = ForceCalculationMode.InverseSquareLaw;
-                    forceConstant.value *= 40f / 6f;
+                    forceConstant.value *= 40f / 12f;
                     break;
                 }
         }

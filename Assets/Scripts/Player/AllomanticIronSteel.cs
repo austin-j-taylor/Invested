@@ -90,8 +90,8 @@ public class AllomanticIronSteel : MonoBehaviour {
     private float ironBurnRate;
     private float steelBurnRate;
 
-    public float forceMagnitudeTarget = 600;
-    public float maximumForceMagnitude = 0;
+    private float forceMagnitudeTarget = 600;
+    private float maximumForceMagnitude = 0;
 
     public bool IronPulling { get; private set; }
     public bool SteelPushing { get; private set; }
@@ -347,10 +347,10 @@ public class AllomanticIronSteel : MonoBehaviour {
     //}
 
     // Debug
-    public float charge;
     public float allomanticsForce;
     public float netAllomancersForce;
     public float netTargetsForce;
+    public Vector3 allomanticsForces;
     public Vector3 resititutionFromTargetsForce;
     public Vector3 resititutionFromPlayersForce;
     public float percentOfTargetForceReturned;
@@ -369,24 +369,35 @@ public class AllomanticIronSteel : MonoBehaviour {
         float distance = Mathf.Max(positionDifference.magnitude, closenessThreshold);
 
         Vector3 allomanticForce;
+        Vector3 distanceFactor;
+
+        switch(PhysicsController.calculationMode) {
+            case ForceCalculationMode.InverseSquareLaw: {
+                    distanceFactor = (positionDifference / distance / distance);
+                    break;
+                }
+            case ForceCalculationMode.Linear: {
+                    distanceFactor = positionDifference.normalized * (1 - positionDifference.magnitude / maxRange);
+                    break;
+                }
+            default: {
+                    distanceFactor = positionDifference.normalized * Mathf.Exp(-distance / PhysicsController.exponentialConstantC);
+                    break;
+                }
+        }
+
         // If controlling the strength of the push by Magnitude
         if (GamepadController.currentForceStyle == ForceStyle.ForceMagnitude) {
-
-            if(PhysicsController.calculationMode == ForceCalculationMode.InverseSquareLaw) {
-                allomanticForce = AllomanticConstant * Mathf.Pow(target.Mass * rb.mass, chargePower) * (positionDifference / distance / distance) / (usingIronTargets ? pullCount : pushCount);
-            } else {
-                Vector3 distanceFactor = positionDifference.normalized * (1 - positionDifference.magnitude / maxRange);
-                allomanticForce = AllomanticConstant * Mathf.Pow(target.Mass * rb.mass, chargePower) * distanceFactor / (usingIronTargets ? pullCount : pushCount);
-            }
+            allomanticForce = AllomanticConstant * Mathf.Pow(target.Mass * rb.mass, chargePower) * distanceFactor / (usingIronTargets ? pullCount : pushCount);
         } else {
             // If controlling the strength of the push by Percentage of the maximum possible push
-            if (PhysicsController.calculationMode == ForceCalculationMode.InverseSquareLaw) {
-                allomanticForce = AllomanticConstant * (target.LastWasPulled ? ironBurnRate : steelBurnRate) * Mathf.Pow(target.Mass * rb.mass, chargePower) * (positionDifference / distance / distance) / (usingIronTargets ? pullCount : pushCount);
-            } else {
-                Vector3 distanceFactor = positionDifference.normalized * (1 - positionDifference.magnitude / maxRange);
-                allomanticForce = AllomanticConstant * (target.LastWasPulled ? ironBurnRate : steelBurnRate) * Mathf.Pow(target.Mass * rb.mass, chargePower) * distanceFactor / (usingIronTargets ? pullCount : pushCount);
-            }
+            allomanticForce = AllomanticConstant * (target.LastWasPulled ? ironBurnRate : steelBurnRate) * Mathf.Pow(target.Mass * rb.mass, chargePower) * distanceFactor / (usingIronTargets ? pullCount : pushCount);
         }
+
+        // Signage
+        allomanticForce *= target.LastWasPulled ? 1 : -1;
+
+
         target.LastMaximumAllomanticForce = allomanticForce;
 
         Vector3 restitutionForceFromTarget;
@@ -446,8 +457,6 @@ public class AllomanticIronSteel : MonoBehaviour {
         target.LastAllomanticNormalForceFromAllomancer = restitutionForceFromAllomancer;
         target.LastAllomanticNormalForceFromTarget = restitutionForceFromTarget;
 
-        // Debug
-        charge = Mathf.Pow(target.Mass, chargePower) * Mathf.Pow(rb.mass, chargePower);
     }
 
     private void AddForce(Magnetic target, bool pulling) {
@@ -486,6 +495,7 @@ public class AllomanticIronSteel : MonoBehaviour {
 
         // Debug
         allomanticsForce = target.LastAllomanticForce.magnitude;
+        allomanticsForces = target.LastAllomanticForce;
         netAllomancersForce = netForceOnAllomancer.magnitude;
         resititutionFromTargetsForce = target.LastAllomanticNormalForceFromTarget;
         resititutionFromPlayersForce = target.LastAllomanticNormalForceFromAllomancer;
