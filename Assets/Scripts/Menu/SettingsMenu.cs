@@ -8,7 +8,7 @@ public class SettingsMenu : MonoBehaviour {
     // String constants for button text
     private const string mk45 = "Mouse and Keyboard (MB 4 & 5)";
     private const string mkQE = "Mouse and Keyboard (Keys Q & E)";
-    private const string game = "Gamepad";
+    private const string game = "Gamepad (Disconnect and reconnect gamepad if not working)";
     private const string disa = "Disabled";
     private const string enab = "Enabled";
     private const string forc = "Control force magnitude. Pushes will always\ntry to have that magnitude.";

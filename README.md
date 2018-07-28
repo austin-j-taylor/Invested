@@ -10,7 +10,12 @@ Here are some short videos of the game:
 
 This Unity project makes use of [Volumetric Lines by Johannes Unterguggenberger](https://assetstore.unity.com/packages/tools/particles-effects/volumetric-lines-29160) and a modified shader from [Shrimpy's Outlined Diffuse Shader Fixed](https://github.com/Shrimpey/Outlined-Diffuse-Shader-Fixed).
 
+
 Changelog:
+
+Version 1.0.6
+
+- Added clarification to gamepad control scheme button text
 
 Version 1.0.5
 
