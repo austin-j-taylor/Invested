@@ -15,6 +15,14 @@ public class Magnetic : MonoBehaviour {
     }
 
     // Used for calculating Allomantic Normal Force
+    public Vector3 Velocity { get
+            {
+            if (IsStatic)
+                return Vector3.zero;
+            else
+                return Rb.velocity;
+        }
+    }
     public Vector3 LastPosition { get; set; }
     public Vector3 LastVelocity { get; set; }
     public virtual Vector3 LastExpectedAcceleration { get; set; }
@@ -120,7 +128,6 @@ public class Magnetic : MonoBehaviour {
     }
 
     public void SoftClear() {
-        Debug.Log("soft clear");
         LastExpectedAcceleration = Vector3.zero;
         LastAllomanticNormalForceFromAllomancer = Vector3.zero;
         LastAllomanticNormalForceFromTarget = Vector3.zero;

@@ -15,10 +15,12 @@ public class SettingsMenu : MonoBehaviour {
     private const string perc = "Control percentage of maximum possible force.\nCannot directly control force magnitude.";
     private const string inve = "F ∝ 1 / d² where d = distance between Allomancer and target\n(Inverse square law)";
     private const string line = "F ∝ 1 - d / R where d = distance between Allomancer and target;\nR = maximum range of push (Linear)";
-    private const string expo = "F ∝ e ^ -d/C where d = distance between Allomancer and target;\nC = Exponential Constant (Exponential)";
+    private const string expD = "F ∝ e ^ -d/D where d = distance between Allomancer and target;\nD = Exponential Constant (Exponential)";
     private const string newt = "Newtons (a force)";
     private const string gs = "G's (an acceleration)";
-    
+    private const string norm = "If an anchored target is Pushed, the player experiences the resistance the target gets from that Push (Allomantic Normal Force)";
+    private const string expV = "F ∝ e ^ -v/V where v = velocity of Allomancor or target;\nV = Exponential Constant (Exponential with Velocity)";
+
     private Button gameplayButton;
     private Button physicsButton;
     private Text gameplayHeader;
@@ -28,31 +30,40 @@ public class SettingsMenu : MonoBehaviour {
     private Text rumbleLabel;
     private Slider sensitivity;
     private Slider smoothing;
-    private Text exponentialConstantLabel;
-    private Slider exponentialConstant;
+    private Text distanceConstantLabel;
+    private Text velocityConstantLabel;
+    private Slider distanceConstant;
+    private Slider velocityConstant;
     private Slider forceConstant;
     private Slider maxRange;
     private Button closeButton;
-    private Button normalForceButton;
+    private Button anchoredBoostButton;
     private Button forceStyleButton;
-    private Button forceModeButton;
+    private Button distanceRelationshipButton;
     private Button forceUnitsButton;
 
     private Button rumbleButton;
     private Text rumbleText;
     private Text controlSchemeText;
-    private Text normalForceText;
+    private Text anchoredBoostText;
     private Text forceStyleText;
-    private Text forceModeText;
+    private Text distanceRelationshipText;
     private Text forceUnitsText;
     private Text sensitivityText;
     private Text smoothingText;
-    private Text exponentialConstantText;
+    private Text distanceConstantText;
+    private Text velocityConstantText;
     private Text forceConstantText;
     private Text maxRangeText;
-    
+
+    //public Button[] buttons;
+    //public Text[] texts;
+
     // Use this for initialization
     void Start() {
+        //buttons = GetComponentsInChildren<Button>();
+        //sliders = GetComponentsInChildren<Slider>();
+        //texts = GetComponentsInChildren<Text>();
         Button[] buttons = GetComponentsInChildren<Button>();
         Slider[] sliders = GetComponentsInChildren<Slider>();
         Text[] texts = GetComponentsInChildren<Text>();
@@ -60,46 +71,50 @@ public class SettingsMenu : MonoBehaviour {
         physicsButton = buttons[1];
         controlSchemeButton = buttons[2];
         rumbleButton = buttons[3];
-        normalForceButton = buttons[4];
-        forceStyleButton = buttons[5];
-        forceModeButton = buttons[6];
+        forceStyleButton = buttons[4];
+        anchoredBoostButton = buttons[5];
+        distanceRelationshipButton = buttons[6];
         forceUnitsButton = buttons[7];
         closeButton = buttons[8];
 
         sensitivity = sliders[0];
         smoothing = sliders[1];
-        exponentialConstant = sliders[2];
-        forceConstant = sliders[3];
-        maxRange = sliders[4];
+        distanceConstant = sliders[2];
+        velocityConstant = sliders[3];
+        forceConstant = sliders[4];
+        maxRange = sliders[5];
 
         gameplayHeader = texts[4];
         physicsHeader = texts[13];
         rumbleLabel = texts[7];
-        exponentialConstantLabel = texts[20];
+        distanceConstantLabel = texts[20];
+        velocityConstantLabel = texts[22];
 
         rumbleButton = rumbleLabel.GetComponentInChildren<Button>();
         controlSchemeText = controlSchemeButton.GetComponentInChildren<Text>();
         rumbleText = rumbleButton.GetComponentInChildren<Text>();
-        normalForceText = normalForceButton.GetComponentInChildren<Text>();
+        anchoredBoostText = anchoredBoostButton.GetComponentInChildren<Text>();
         forceStyleText = forceStyleButton.GetComponentInChildren<Text>();
-        forceModeText = forceModeButton.GetComponentInChildren<Text>();
+        distanceRelationshipText = distanceRelationshipButton.GetComponentInChildren<Text>();
         forceUnitsText = forceUnitsButton.GetComponentInChildren<Text>();
 
         sensitivityText = sensitivity.GetComponentInChildren<Text>();
         smoothingText = smoothing.GetComponentInChildren<Text>();
-        exponentialConstantText = exponentialConstant.GetComponentInChildren<Text>();
+        distanceConstantText = distanceConstant.GetComponentInChildren<Text>();
+        velocityConstantText = velocityConstant.GetComponentInChildren<Text>();
         forceConstantText = forceConstant.GetComponentInChildren<Text>();
         maxRangeText = maxRange.GetComponentInChildren<Text>();
 
         sensitivity.onValueChanged.AddListener(OnSensitivityChanged);
         smoothing.onValueChanged.AddListener(OnSmoothingChanged);
-        exponentialConstant.onValueChanged.AddListener(OnExponentialConstantChanged);
+        distanceConstant.onValueChanged.AddListener(OnDistanceConstantChanged);
+        velocityConstant.onValueChanged.AddListener(OnVelocityConstantChanged);
         forceConstant.onValueChanged.AddListener(OnForceConstantChanged);
         maxRange.onValueChanged.AddListener(OnMaxRangeChanged);
 
-        normalForceButton.onClick.AddListener(OnClickNormalForce);
+        anchoredBoostButton.onClick.AddListener(OnClickAnchoredBoost);
         forceStyleButton.onClick.AddListener(OnClickForceStyle);
-        forceModeButton.onClick.AddListener(OnClickForceButton);
+        distanceRelationshipButton.onClick.AddListener(OnClickDistanceRelationshipButton);
         forceUnitsButton.onClick.AddListener(OnClickForceUnitsButton);
 
         gameplayButton.onClick.AddListener(OpenGameplay);
@@ -109,25 +124,28 @@ public class SettingsMenu : MonoBehaviour {
         closeButton.onClick.AddListener(OnClickClose);
 
         controlSchemeText.text = mk45;
-        normalForceText.text = enab;
+        anchoredBoostText.text = norm;
         forceStyleText.text = perc;
-        forceModeText.text = line;
+        distanceRelationshipText.text = expD;
         forceUnitsText.text = newt;
 
         sensitivity.value = FPVCameraLock.Sensitivity;
         smoothing.value = FPVCameraLock.Smoothing;
-        exponentialConstant.value = PhysicsController.exponentialConstantC;
+        distanceConstant.value = PhysicsController.distanceConstant;
+        velocityConstant.value = PhysicsController.velocityConstant;
         forceConstant.value = AllomanticIronSteel.AllomanticConstant;
         maxRange.value = AllomanticIronSteel.maxRange;
 
         sensitivityText.text = sensitivity.value.ToString();
         smoothingText.text = smoothing.value.ToString();
-        exponentialConstantText.text = exponentialConstant.value.ToString();
+        distanceConstantText.text = distanceConstant.value.ToString();
+        velocityConstantText.text = velocityConstant.value.ToString();
         forceConstantText.text = forceConstant.value.ToString();
         maxRangeText.text = maxRange.value.ToString();
 
         rumbleLabel.gameObject.SetActive(false);
-        exponentialConstantLabel.gameObject.SetActive(false);
+        distanceConstantLabel.gameObject.SetActive(false);
+        velocityConstantLabel.gameObject.SetActive(false);
         gameplayButton.gameObject.SetActive(true);
         physicsButton.gameObject.SetActive(true);
         gameplayHeader.gameObject.SetActive(false);
@@ -167,16 +185,18 @@ public class SettingsMenu : MonoBehaviour {
         physicsHeader.gameObject.SetActive(false);
     }
 
-    private void OnClickNormalForce() {
-        switch(PhysicsController.normalForceMode) {
-            case NormalForceMode.Enabled: {
-                    PhysicsController.normalForceMode = NormalForceMode.Disabled;
-                    normalForceText.text = disa;
+    private void OnClickAnchoredBoost() {
+        switch(PhysicsController.anchorBoostMode) {
+            case AnchorBoostMode.AllomanticNormalForce: {
+                    velocityConstantLabel.gameObject.SetActive(true);
+                    PhysicsController.anchorBoostMode = AnchorBoostMode.ExponentialWithVelocity;
+                    anchoredBoostText.text = expV;
                     break;
                 }
             default: {
-                    PhysicsController.normalForceMode = NormalForceMode.Enabled;
-                    normalForceText.text = enab;
+                    velocityConstantLabel.gameObject.SetActive(false);
+                    PhysicsController.anchorBoostMode = AnchorBoostMode.AllomanticNormalForce;
+                    anchoredBoostText.text = norm;
                     break;
                 }
         }
@@ -231,9 +251,14 @@ public class SettingsMenu : MonoBehaviour {
         smoothingText.text = value.ToString();
     }
 
-    private void OnExponentialConstantChanged(float value) {
-        PhysicsController.exponentialConstantC = value;
-        exponentialConstantText.text = value.ToString();
+    private void OnDistanceConstantChanged(float value) {
+        PhysicsController.distanceConstant = value;
+        distanceConstantText.text = value.ToString();
+    }
+
+    private void OnVelocityConstantChanged(float value) {
+        PhysicsController.velocityConstant = value;
+        velocityConstantText.text = value.ToString();
     }
 
     private void OnForceConstantChanged(float value) {
@@ -270,24 +295,24 @@ public class SettingsMenu : MonoBehaviour {
         }
     }
 
-    private void OnClickForceButton() {
-        switch (PhysicsController.calculationMode) {
-            case ForceCalculationMode.InverseSquareLaw: {
-                    forceModeText.text = line;
-                    PhysicsController.calculationMode = ForceCalculationMode.Linear;
+    private void OnClickDistanceRelationshipButton() {
+        switch (PhysicsController.distanceRelationshipMode) {
+            case ForceDistanceRelationship.InverseSquareLaw: {
+                    distanceRelationshipText.text = line;
+                    PhysicsController.distanceRelationshipMode = ForceDistanceRelationship.Linear;
                     forceConstant.value /= 40f / 12f;
                     break;
                 }
-            case ForceCalculationMode.Linear: {
-                    exponentialConstantLabel.gameObject.SetActive(true);
-                    forceModeText.text = expo;
-                    PhysicsController.calculationMode = ForceCalculationMode.Exponential;
+            case ForceDistanceRelationship.Linear: {
+                    distanceConstantLabel.gameObject.SetActive(true);
+                    distanceRelationshipText.text = expD;
+                    PhysicsController.distanceRelationshipMode = ForceDistanceRelationship.Exponential;
                     break;
                 }
-            case ForceCalculationMode.Exponential: {
-                    exponentialConstantLabel.gameObject.SetActive(false);
-                    forceModeText.text = inve;
-                    PhysicsController.calculationMode = ForceCalculationMode.InverseSquareLaw;
+            case ForceDistanceRelationship.Exponential: {
+                    distanceConstantLabel.gameObject.SetActive(false);
+                    distanceRelationshipText.text = inve;
+                    PhysicsController.distanceRelationshipMode = ForceDistanceRelationship.InverseSquareLaw;
                     forceConstant.value *= 40f / 12f;
                     break;
                 }

@@ -1,10 +1,11 @@
-public enum ForceCalculationMode { InverseSquareLaw, Linear, Exponential }
-public enum NormalForceMode { Disabled, Enabled }
+public enum ForceDistanceRelationship { InverseSquareLaw, Linear, Exponential }
+public enum AnchorBoostMode { AllomanticNormalForce, ExponentialWithVelocity }
 public enum ForceDisplayUnits { Newtons, Gs }
 
 public static class PhysicsController {
-    public static ForceCalculationMode calculationMode = ForceCalculationMode.Linear;
+    public static ForceDistanceRelationship distanceRelationshipMode = ForceDistanceRelationship.Exponential;
     public static ForceDisplayUnits displayUnits = ForceDisplayUnits.Newtons;
-    public static NormalForceMode normalForceMode = NormalForceMode.Enabled;
-    public static float exponentialConstantC = 16f;
+    public static AnchorBoostMode anchorBoostMode = AnchorBoostMode.AllomanticNormalForce;
+    public static float distanceConstant = 16f;
+    public static float velocityConstant = 16f;
 }

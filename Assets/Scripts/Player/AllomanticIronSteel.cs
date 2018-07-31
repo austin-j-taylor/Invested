@@ -282,11 +282,11 @@ public class AllomanticIronSteel : MonoBehaviour {
                         PullPushOnTargets(steel, iron);
                     } else { // neither pushing nor pulling on ironTargets
                         //ResetPullStatus(iron);
-                        CalculatePushPullForces(iron, false);
+                        CalculatePushPullForces(iron);
                     }
                 } else {
-                    CalculatePushPullForces(iron, false);
-                    CalculatePushPullForces(steel, false);
+                    CalculatePushPullForces(iron);
+                    CalculatePushPullForces(steel);
                 }
             }
             if (HasPushTarget) {
@@ -300,7 +300,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                         PullPushOnTargets(iron, steel);
                     } else {
                         //ResetPullStatus(steel);
-                        CalculatePushPullForces(steel, true);
+                        CalculatePushPullForces(steel);
                     }
                 }
             }
@@ -312,13 +312,13 @@ public class AllomanticIronSteel : MonoBehaviour {
         }
     }
 
-    private void CalculatePushPullForces(bool usingIronTargets, bool addNormals = true) {
+    private void CalculatePushPullForces(bool usingIronTargets) {
         if (usingIronTargets)
             for (int i = 0; i < pullCount; i++) {
-                CalculateForce(pullTargets[i], iron, addNormals);
+                CalculateForce(pullTargets[i], iron);
             } else
             for (int i = 0; i < pushCount; i++) {
-                CalculateForce(pushTargets[i], steel, addNormals);
+                CalculateForce(pushTargets[i], steel);
             }
     }
 
@@ -355,6 +355,8 @@ public class AllomanticIronSteel : MonoBehaviour {
     public Vector3 resititutionFromPlayersForce;
     public float percentOfTargetForceReturned;
     public float percentOfAllomancerForceReturned;
+    public float velocityFactorAllomancer;
+    public float velocityFactorTarget;
 
     /* Pushing and Pulling
      * 
@@ -363,46 +365,43 @@ public class AllomanticIronSteel : MonoBehaviour {
      *      / number of targets currently being pushed on (push on one target => 100% of the push going to them, push on three targets => 33% of each push going to each, etc. Not thought out very in-depth.)
      *  C: an Allomantic Constant. I chose a value that felt right.
      */
-    private void CalculateForce(Magnetic target, bool usingIronTargets, bool addNormals = true) {
+    private void CalculateForce(Magnetic target, bool usingIronTargets) {
         Vector3 positionDifference = target.CenterOfMass - CenterOfMass;
         // If the target is extremely close to the player, prevent the distance from being so low that the force approaches infinity
         float distance = Mathf.Max(positionDifference.magnitude, closenessThreshold);
 
-        Vector3 allomanticForce;
-        Vector3 distanceFactor;
 
-        switch(PhysicsController.calculationMode) {
-            case ForceCalculationMode.InverseSquareLaw: {
+        Vector3 distanceFactor;
+        switch (PhysicsController.distanceRelationshipMode) {
+            case ForceDistanceRelationship.InverseSquareLaw: {
                     distanceFactor = (positionDifference / distance / distance);
                     break;
                 }
-            case ForceCalculationMode.Linear: {
+            case ForceDistanceRelationship.Linear: {
                     distanceFactor = positionDifference.normalized * (1 - positionDifference.magnitude / maxRange);
                     break;
                 }
             default: {
-                    distanceFactor = positionDifference.normalized * Mathf.Exp(-distance / PhysicsController.exponentialConstantC);
+                    distanceFactor = positionDifference.normalized * Mathf.Exp(-distance / PhysicsController.distanceConstant);
                     break;
                 }
         }
 
-        // If controlling the strength of the push by Magnitude
-        if (GamepadController.currentForceStyle == ForceStyle.ForceMagnitude) {
-            allomanticForce = AllomanticConstant * Mathf.Pow(target.Mass * rb.mass, chargePower) * distanceFactor / (usingIronTargets ? pullCount : pushCount);
-        } else {
-            // If controlling the strength of the push by Percentage of the maximum possible push
-            allomanticForce = AllomanticConstant * (target.LastWasPulled ? ironBurnRate : steelBurnRate) * Mathf.Pow(target.Mass * rb.mass, chargePower) * distanceFactor / (usingIronTargets ? pullCount : pushCount);
+        Vector3 allomanticForce = AllomanticConstant * Mathf.Pow(target.Mass * rb.mass, chargePower) * distanceFactor / (usingIronTargets ? pullCount : pushCount);
+
+        // If controlling the strength of the push by Percentage of the maximum possible push
+        if (GamepadController.currentForceStyle == ForceStyle.Percentage) {
+            allomanticForce *= (target.LastWasPulled ? ironBurnRate : steelBurnRate);
         }
 
         // Signage
         allomanticForce *= target.LastWasPulled ? 1 : -1;
-
-
+        
         target.LastMaximumAllomanticForce = allomanticForce;
 
         Vector3 restitutionForceFromTarget;
         Vector3 restitutionForceFromAllomancer;
-        if (addNormals && PhysicsController.normalForceMode == NormalForceMode.Enabled) {
+        if (PhysicsController.anchorBoostMode == AnchorBoostMode.AllomanticNormalForce) {
             if (target.IsStatic) {
                 // If the target has no rigidbody, let the let the restitution force equal the allomantic force. It's a perfect anchor.
                 // Thus:
@@ -435,10 +434,20 @@ public class AllomanticIronSteel : MonoBehaviour {
                 target.LastPosition = target.transform.position;
                 target.LastVelocity = target.Rb.velocity;
             }
-        } else {
-            restitutionForceFromTarget = Vector3.zero;
-            restitutionForceFromAllomancer = Vector3.zero;
+        } else { // Exponential with Velocity mode
+            // The restitutionForceFromTarget is actually negative, rather than positive, unlike in ANF mode. It contains the percentage of the AF that is subtracted from the AF to get the net AF.
+            if(target.IsStatic) {
+                velocityFactorTarget = 0;
+                velocityFactorAllomancer = 0;
+            } else {
+                velocityFactorTarget = 1 - Mathf.Exp(-(Vector3.Project(target.Velocity, positionDifference.normalized).magnitude / PhysicsController.velocityConstant));
+                velocityFactorAllomancer = 1 - Mathf.Exp(-(Vector3.Project(rb.velocity, positionDifference.normalized).magnitude / PhysicsController.velocityConstant));
+            }
+
+            restitutionForceFromTarget = -velocityFactorTarget * allomanticForce;
+            restitutionForceFromAllomancer = velocityFactorAllomancer * allomanticForce;
         }
+
         if (GamepadController.currentForceStyle == ForceStyle.ForceMagnitude) {
             float percent = forceMagnitudeTarget / (target.LastMaximumAllomanticForce + restitutionForceFromTarget).magnitude;
             if (percent < 1f) {
@@ -447,13 +456,12 @@ public class AllomanticIronSteel : MonoBehaviour {
                 restitutionForceFromAllomancer *= percent;
             }
         }
-        //maximumForceMagnitude = (target.LastMaximumAllomanticForce + restitutionForceFromTarget).magnitude;
         currentMaximumForce += target.LastMaximumAllomanticForce + restitutionForceFromTarget;
 
         target.LastAllomanticForce = allomanticForce;
         target.LastAllomanticNormalForceFromAllomancer = restitutionForceFromAllomancer;
         target.LastAllomanticNormalForceFromTarget = restitutionForceFromTarget;
-
+        
     }
 
     private void AddForce(Magnetic target, bool pulling) {
