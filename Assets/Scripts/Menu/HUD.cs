@@ -17,10 +17,14 @@ public class HUD : MonoBehaviour {
     public static BurnRateMeter BurnRateMeter {
         get; private set;
     }
+    public static TargetOverlayController TargetOverlayController {
+        get; private set;
+    }
 
     void Awake() {
         coinCountText = GetComponentsInChildren<Text>()[0];
         BurnRateMeter = GetComponentInChildren<BurnRateMeter>();
+        TargetOverlayController = GetComponentInChildren<TargetOverlayController>();
     }
 
     public void EnableHUD() {
@@ -36,6 +40,7 @@ public class HUD : MonoBehaviour {
         EnableHUD();
         if (BurnRateMeter) {
             BurnRateMeter.Clear();
+            TargetOverlayController.Clear();
             coinCountText.text = "50";
         }
     }

@@ -144,7 +144,7 @@ public class SettingsMenu : MonoBehaviour {
         maxRangeText.text = maxRange.value.ToString();
 
         rumbleLabel.gameObject.SetActive(false);
-        distanceConstantLabel.gameObject.SetActive(false);
+        distanceConstantLabel.gameObject.SetActive(true);
         velocityConstantLabel.gameObject.SetActive(false);
         gameplayButton.gameObject.SetActive(true);
         physicsButton.gameObject.SetActive(true);
@@ -191,10 +191,17 @@ public class SettingsMenu : MonoBehaviour {
                     velocityConstantLabel.gameObject.SetActive(true);
                     PhysicsController.anchorBoostMode = AnchorBoostMode.ExponentialWithVelocity;
                     anchoredBoostText.text = expV;
+                    forceConstant.value *= 2f;
+                    break;
+                }
+            case AnchorBoostMode.ExponentialWithVelocity: {
+                    velocityConstantLabel.gameObject.SetActive(false);
+                    PhysicsController.anchorBoostMode = AnchorBoostMode.None;
+                    anchoredBoostText.text = disa;
+                    forceConstant.value /= 2f;
                     break;
                 }
             default: {
-                    velocityConstantLabel.gameObject.SetActive(false);
                     PhysicsController.anchorBoostMode = AnchorBoostMode.AllomanticNormalForce;
                     anchoredBoostText.text = norm;
                     break;

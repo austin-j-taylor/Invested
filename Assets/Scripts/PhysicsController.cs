@@ -1,5 +1,5 @@
 public enum ForceDistanceRelationship { InverseSquareLaw, Linear, Exponential }
-public enum AnchorBoostMode { AllomanticNormalForce, ExponentialWithVelocity }
+public enum AnchorBoostMode { AllomanticNormalForce, ExponentialWithVelocity, None }
 public enum ForceDisplayUnits { Newtons, Gs }
 
 public static class PhysicsController {

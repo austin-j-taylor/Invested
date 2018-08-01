@@ -13,6 +13,14 @@ This Unity project makes use of [Volumetric Lines by Johannes Unterguggenberger]
 
 Changelog:
 
+Version 1.0.7
+
+- Added mass labels above targets
+- Added Anchored Push Boost option (Allomantic Normal Force was moved here)
+	- Added Allomantic Normal Force mode
+	- Added Exponential with Velocity mode
+- Added a zero-grav zone to the Sandbox, just for fun.
+
 Version 1.0.6
 
 - Added clarification to gamepad control scheme button text
@@ -23,7 +31,6 @@ Version 1.0.5
 - Added new Force-Distance Relationship: Exponential
 - Altered Settings menu to distinguish Gameplay and Physics settings
 - Added a few new blocks to the Tutorial
-- Added a zero-grav zone to the Sandbox, just for fun.
 - Added version number on title screen
 - Fixed bug in which the ANF was calculated wrong when quickly pulling and pushing in sequence
 	
@@ -40,11 +47,11 @@ Version 1.0.3
 Version 1.0.2
 
 - Added new Push Control Style: Player can choose one of two methods to control their push:
-	-by the percentage of the maximum possible force
-	-by a constant target force magnitude.
+	- by the percentage of the maximum possible force
+	- by a constant target force magnitude.
 - Added new Force-Distance Relationship: Player can choose one of two possible formulas for the Allomantic Force:
-	-Inverse square relationship between Force and Distance
-	-Linear relationship between Force and Distance
+	- Inverse square relationship between Force and Distance
+	- Linear relationship between Force and Distance
 - Added option to control Allomantic Force Constant
 - Added option to control Max Range
 

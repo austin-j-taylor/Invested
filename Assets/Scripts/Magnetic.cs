@@ -6,9 +6,10 @@ public class Magnetic : MonoBehaviour {
 
     private const float equalMagnitudeConstant = .01f;
 
-    private bool lastWasPulled;
     [SerializeField]
     private float mass;
+
+    private bool lastWasPulled;
     public AllomanticIronSteel Allomancer {
         get;
         set;
