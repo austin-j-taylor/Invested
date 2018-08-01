@@ -56,23 +56,22 @@ public class TargetOverlayController : MonoBehaviour {
     // Update number of targets
     public void HardRefresh() {
         SoftRefresh();
-        int i;
-        for (i = 0; i < playerIronSteel.PullCount; i++) {
-            pullTargetsText[i].text = pullTargets[i].Mass.ToString() + "kg";
-        }
-        while (i < AllomanticIronSteel.maxNumberOfTargets) {
-            pullTargetsText[i].text = "";
-            i++;
-        }
+        //int i;
+        //for (i = 0; i < playerIronSteel.PullCount; i++) {
+        //    pullTargetsText[i].text = pullTargets[i].Mass.ToString() + "kg";
+        //}
+        //while (i < AllomanticIronSteel.maxNumberOfTargets) {
+        //    pullTargetsText[i].text = "";
+        //    i++;
+        //}
 
-        for (i = 0; i < playerIronSteel.PushCount; i++) {
-            pushTargetsText[i].text = pushTargets[i].Mass.ToString() + "kg";
-        }
-        while (i < AllomanticIronSteel.maxNumberOfTargets) {
-            pushTargetsText[i].text = "";
-            i++;
-        }
-
+        //for (i = 0; i < playerIronSteel.PushCount; i++) {
+        //    pushTargetsText[i].text = pushTargets[i].Mass.ToString() + "kg";
+        //}
+        //while (i < AllomanticIronSteel.maxNumberOfTargets) {
+        //    pushTargetsText[i].text = "";
+        //    i++;
+        //}
     }
 
     public void Clear() {

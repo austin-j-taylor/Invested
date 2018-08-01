@@ -926,7 +926,7 @@ public class AllomanticIronSteel : MonoBehaviour {
             pushTargets[i].LastWasPulled = false;
         }
 
-        overlays.HardRefresh();
+        overlays.SetTargets(pullTargets, pushTargets);
     }
 
     private void SetAllTargetsOutOfRange() {
