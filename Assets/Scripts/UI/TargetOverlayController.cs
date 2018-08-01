@@ -55,6 +55,7 @@ public class TargetOverlayController : MonoBehaviour {
 
     // Update number of targets
     public void HardRefresh() {
+        SoftRefresh();
         int i;
         for (i = 0; i < playerIronSteel.PullCount; i++) {
             pullTargetsText[i].text = pullTargets[i].Mass.ToString() + "kg";
