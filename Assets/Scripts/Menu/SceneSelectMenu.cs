@@ -47,7 +47,6 @@ public class SceneSelectMenu : MonoBehaviour {
         gameObject.SetActive(false);
         hud.DisableHUD();
     }
-
     private void CloseMenu() {
         gameObject.SetActive(false);
     }

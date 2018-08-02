@@ -30,7 +30,12 @@ public class TargetOverlayController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        SoftRefresh();
+        if (playerIronSteel.IsBurningIronSteel) {
+            SoftRefresh();
+        } else {
+
+        }
+
     }
 
     // Update forces, positions on screen

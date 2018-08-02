@@ -218,22 +218,18 @@ public class AllomanticIronSteel : MonoBehaviour {
                     }
                 }
             }
-        }
-
-        // Stop burning altogether, hide metal lines
-        if (Keybinds.Negate()) {
-            if (Keybinds.Select() && Keybinds.SelectAlternate() && Time.time > timeToStopBurning) {
-                StopBurningIronSteel();
+            // Stop burning altogether, hide metal lines
+            if (Keybinds.Negate()) {
+                timeToStopBurning += Time.deltaTime;
+                if (Keybinds.Select() && Keybinds.SelectAlternate() && timeToStopBurning > timeToHoldDown) {
+                    StopBurningIronSteel();
+                    timeToStopBurning = 0;
+                }
+            } else {
                 timeToStopBurning = 0;
             }
-        } else {
-            timeToStopBurning = 0;
         }
 
-        // Stop burning altogether, hide metal lines
-        if (Keybinds.NegateDown()) {
-            timeToStopBurning = Time.time + timeToHoldDown;
-        }
 
         // Swap pull- and push- targets
         if (Keybinds.NegateDown() && timeToSwapBurning > Time.time) {
@@ -735,12 +731,12 @@ public class AllomanticIronSteel : MonoBehaviour {
         for (int i = 0; i < PushCount; i++) {
             pushTargets[i].Clear();
         }
-        pullTargets = new Magnetic[maxNumberOfTargets];
-        pushTargets = new Magnetic[maxNumberOfTargets];
         PullCount = 0;
         PushCount = 0;
+        pullTargets = new Magnetic[maxNumberOfTargets];
+        pushTargets = new Magnetic[maxNumberOfTargets];
 
-        overlays.HardRefresh();
+        overlays.SetTargets(pullTargets, pushTargets);
     }
 
     public void AddTarget(Magnetic newTarget, bool usingIron) {
@@ -836,15 +832,13 @@ public class AllomanticIronSteel : MonoBehaviour {
     }
 
     public void StopBurningIronSteel() {
+        RemoveAllTargets();
         //if (IsBurningIronSteel) {
         RemoveTargetGlow(lastHoveredOverTarget);
         IsBurningIronSteel = false;
         if (burnRateMeter) {
-            burnRateMeter.MetalLineText = "";
-            burnRateMeter.SetBurnRateMeterForceMagnitude(0, 0);
-            burnRateMeter.SetBurnRateMeterForceMagnitude(0, 0);
+            burnRateMeter.Clear();
         }
-        RemoveAllTargets();
         if(gamepad)
             gamepad.SetRumble(0, 0);
 

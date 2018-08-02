@@ -13,6 +13,12 @@ This Unity project makes use of [Volumetric Lines by Johannes Unterguggenberger]
 
 Changelog:
 
+Version 1.0.8
+
+- Improved lighting and colors of Luthadel
+	- Added two snazzy lamps to Luthadel and Sandbox
+- Fixed bug with the burn rate meter when stopping burning metals
+
 Version 1.0.7
 
 - Added mass labels above targets
