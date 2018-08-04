@@ -329,7 +329,6 @@ public class AllomanticIronSteel : MonoBehaviour {
                     }
                 }
             }
-
             lastAllomancerVelocity = rb.velocity;
 
             // Debug
@@ -949,7 +948,6 @@ public class AllomanticIronSteel : MonoBehaviour {
                 ironBurnRate = rate;
             else
                 ironBurnRate = Mathf.Min(1, rate);
-            steelBurnRate = rate;
             if (HasPullTarget || HasPushTarget)
                 gamepad.SetRumble(steelBurnRate, ironBurnRate);
         } else {
