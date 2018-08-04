@@ -138,11 +138,11 @@ public static class Keybinds {
         }
     }
 
-    public static bool Pause() {
+    public static bool EscapeDown() {
         //if (GamepadController.UsingGamepad) {
             return Input.GetKeyDown(KeyCode.Escape) || Input.GetButtonDown("GamepadStart");
         //} else {
-        //    return Input.GetKeyDown(KeyCode.Escape);
+        //    return Input.GetKeyDown(KeyCode.EscapeDown);
         //}
     }
 

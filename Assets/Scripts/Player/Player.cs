@@ -27,8 +27,8 @@ public class Player : MonoBehaviour {
 	
 	void Update () {
         // Pausing
-        if (Keybinds.Pause()) {
-            PauseMenu.TogglePaused();
+        if (Keybinds.EscapeDown() && !PauseMenu.IsPaused) {
+            PauseMenu.Pause();
         }
 
         // On pressing COIN button

@@ -13,6 +13,12 @@ public class SceneSelectMenu : MonoBehaviour {
     public const int sceneSandbox = 3;
     public const int sceneLuthadel = 4;
 
+    public bool IsOpen {
+        get {
+            return gameObject.activeSelf;
+        }
+    }
+
     private Image titleScreenBG;
     private Button tutorialButton;
     private Button sandboxButton;
@@ -47,18 +53,19 @@ public class SceneSelectMenu : MonoBehaviour {
         gameObject.SetActive(false);
         hud.DisableHUD();
     }
-    private void CloseMenu() {
-        gameObject.SetActive(false);
+
+    public void OpenSceneSelect() {
+        gameObject.SetActive(true);
     }
 
-    public void OpenMenu() {
-        gameObject.SetActive(true);
+    public void CloseSceneSelect() {
+        gameObject.SetActive(false);
     }
 
     private void ExitMainMenu(Scene scene, LoadSceneMode mode) {
         if (scene.buildIndex != sceneTitleScreen) {
             titleScreenBG.gameObject.SetActive(false);
-            CloseMenu();
+            CloseSceneSelect();
         }
     }
 
@@ -89,7 +96,7 @@ public class SceneSelectMenu : MonoBehaviour {
     }
 
     private void OnClickedBack() {
-        mainMenu.OpenMenu();
-        CloseMenu();
+        mainMenu.OpenMainMenu();
+        CloseSceneSelect();
     }
 }

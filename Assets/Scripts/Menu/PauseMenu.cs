@@ -6,17 +6,18 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour {
 
+    public static bool IsPaused { get; private set; }
+
     private static SettingsMenu settingsMenu;
     private SceneSelectMenu sceneSelectMenu;
     private MainMenu mainMenu;
     
-    private Button settingsButton;
     private Button unpauseButton;
+    private Button settingsButton;
     private Button resetButton;
     private Button quitButton;
 
     private static GameObject pauseMenu;
-    private static bool paused;
 
     // Use this for initialization
     void Start () {
@@ -25,52 +26,54 @@ public class PauseMenu : MonoBehaviour {
         mainMenu = transform.parent.GetComponentInChildren<MainMenu>();
 
         Button[] buttons = GetComponentsInChildren<Button>();
-        settingsButton = buttons[0];
-        unpauseButton = buttons[1];
+        unpauseButton = buttons[0];
+        settingsButton = buttons[1];
         resetButton = buttons[2];
         quitButton = buttons[3];
 
-        settingsButton.onClick.AddListener(ClickSettings);
         unpauseButton.onClick.AddListener(ClickUnpause);
+        settingsButton.onClick.AddListener(ClickSettings);
         resetButton.onClick.AddListener(ClickReset);
         quitButton.onClick.AddListener(ClickQuit);
 
         pauseMenu = gameObject;
         gameObject.SetActive(false);
-        paused = false;
+        IsPaused = false;
+    }
+    private void Update() {
+        if (Keybinds.EscapeDown()) {
+            if(settingsMenu.IsOpen) {
+                settingsMenu.BackSettings();
+            } else {
+                UnPause();
+            }
+        }
     }
 
-    public static void TogglePaused() {
-        if (paused)
-            UnPause();
-        else
-            Pause();
-    }
-
-    private static void Pause() {
+    public static void Pause() {
         //Cursor.visible = true;
         FPVCameraLock.UnlockCamera();
         Time.timeScale = 0f;
         pauseMenu.SetActive(true);
-        paused = true;
+        IsPaused = true;
     }
 
-    private static void UnPause() {
+    public static void UnPause() {
         settingsMenu.CloseSettings();
 
         //Cursor.visible = false;
         FPVCameraLock.LockCamera();
         Time.timeScale = 1f;
         pauseMenu.SetActive(false);
-        paused = false;
-    }
-
-    private void ClickSettings() {
-        settingsMenu.OpenSettings();
+        IsPaused = false;
     }
 
     private void ClickUnpause() {
         UnPause();
+    }
+
+    private void ClickSettings() {
+        settingsMenu.OpenSettings();
     }
 
     private void ClickReset() {
@@ -81,7 +84,7 @@ public class PauseMenu : MonoBehaviour {
     private void ClickQuit() {
         UnPause();
         FPVCameraLock.UnlockCamera();
-        mainMenu.OpenMenu();
+        mainMenu.OpenMainMenu();
         sceneSelectMenu.LoadScene(SceneSelectMenu.sceneTitleScreen);
     }
 }

@@ -33,18 +33,29 @@ public class MainMenu : MonoBehaviour {
         DontDestroyOnLoad(GameObject.FindGameObjectWithTag("GameController"));
     }
 
-    public void OpenMenu() {
+    private void Update() {
+        if(Keybinds.EscapeDown()) {
+            if(sceneSelectMenu.IsOpen) {
+                sceneSelectMenu.CloseSceneSelect();
+                OpenMainMenu();
+            } else if(settingsMenu.IsOpen) {
+                settingsMenu.BackSettings();
+            }
+        }
+    }
+
+    public void OpenMainMenu() {
         titleScreenBG.gameObject.SetActive(true);
         gameObject.SetActive(true);
     }
 
-    public void CloseMenu() {
+    public void CloseMainMenu() {
         gameObject.SetActive(false);
     }
 
     private void OnClickedPlay() {
-        sceneSelectMenu.OpenMenu();
-        CloseMenu();
+        sceneSelectMenu.OpenSceneSelect();
+        CloseMainMenu();
     }
 
     private void OnClickedSettings() {

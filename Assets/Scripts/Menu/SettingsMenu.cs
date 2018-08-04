@@ -21,6 +21,22 @@ public class SettingsMenu : MonoBehaviour {
     private const string norm = "If an anchored target is Pushed, the player experiences the resistance the target gets from that Push (Allomantic Normal Force)";
     private const string expV = "F ∝ e ^ -v/V where v = velocity of Allomancor or target;\nV = Exponential Constant (Exponential with Velocity)";
 
+    public bool IsOpen {
+        get {
+            return gameObject.activeSelf;
+        }
+    }
+    public bool IsGameplayOpen {
+        get {
+            return gameplayHeader.gameObject.activeSelf;
+        }
+    }
+    public bool IsPhysicsOpen {
+        get {
+            return physicsHeader.gameObject.activeSelf;
+        }
+    }
+
     private Button gameplayButton;
     private Button physicsButton;
     private Text gameplayHeader;
@@ -158,7 +174,18 @@ public class SettingsMenu : MonoBehaviour {
     }
 
     public void CloseSettings() {
+        CloseGameplay();
+        ClosePhysics();
         gameObject.SetActive(false);
+    }
+
+    public void BackSettings() {
+        if (IsGameplayOpen)
+            CloseGameplay();
+        else if (IsPhysicsOpen)
+            ClosePhysics();
+        else
+            CloseSettings();
     }
 
     private void OpenGameplay() {
@@ -279,12 +306,7 @@ public class SettingsMenu : MonoBehaviour {
     }
 
     private void OnClickClose() {
-        if (gameplayHeader.gameObject.activeSelf)
-            CloseGameplay();
-        else if (physicsHeader.gameObject.activeSelf)
-            ClosePhysics();
-        else
-            CloseSettings();
+        BackSettings();
     }
 
     private void OnClickForceStyle() {
