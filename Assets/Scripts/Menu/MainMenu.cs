@@ -37,9 +37,11 @@ public class MainMenu : MonoBehaviour {
         if(Keybinds.EscapeDown()) {
             if(sceneSelectMenu.IsOpen) {
                 sceneSelectMenu.CloseSceneSelect();
-                OpenMainMenu();
+                //OpenMainMenu();
             } else if(settingsMenu.IsOpen) {
                 settingsMenu.BackSettings();
+            } else {
+                settingsMenu.OpenSettings();
             }
         }
     }
@@ -55,7 +57,7 @@ public class MainMenu : MonoBehaviour {
 
     private void OnClickedPlay() {
         sceneSelectMenu.OpenSceneSelect();
-        CloseMainMenu();
+        //CloseMainMenu();
     }
 
     private void OnClickedSettings() {

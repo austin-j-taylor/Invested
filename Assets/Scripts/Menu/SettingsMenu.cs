@@ -39,97 +39,141 @@ public class SettingsMenu : MonoBehaviour {
 
     private Button gameplayButton;
     private Button physicsButton;
-    private Text gameplayHeader;
-    private Text physicsHeader;
+    private Transform gameplayHeader;
+    private Transform physicsHeader;
 
     private Button controlSchemeButton;
     private Text rumbleLabel;
+    private Button rumbleButton;
+    private Text rumbleButtonText;
     private Slider sensitivity;
+    private Text sensitivityValueText;
     private Slider smoothing;
-    private Text distanceConstantLabel;
-    private Text velocityConstantLabel;
-    private Slider distanceConstant;
-    private Slider velocityConstant;
-    private Slider forceConstant;
-    private Slider maxRange;
+    private Text smoothingValueText;
+    private Slider distanceConstantSlider;
+    private Text distanceConstantValueText;
+    private Slider velocityConstantSlider;
+    private Text velocityConstantValueText;
+    private Slider forceConstantSlider;
+    private Text forceConstantValueText;
+    private Slider maxRangeSlider;
+    private Text maxRangeValueText;
+
     private Button closeButton;
     private Button anchoredBoostButton;
-    private Button forceStyleButton;
+    private Text anchoredBoostButtonText;
+    private Button pushControlStyleButton;
+    private Text pushControlStyleButtonText;
     private Button distanceRelationshipButton;
+    private Text distanceRelationshipButtonText;
     private Button forceUnitsButton;
+    private Text forceUnitsButtonText;
 
-    private Button rumbleButton;
-    private Text rumbleText;
-    private Text controlSchemeText;
-    private Text anchoredBoostText;
-    private Text forceStyleText;
-    private Text distanceRelationshipText;
-    private Text forceUnitsText;
-    private Text sensitivityText;
-    private Text smoothingText;
-    private Text distanceConstantText;
-    private Text velocityConstantText;
-    private Text forceConstantText;
-    private Text maxRangeText;
+    private Text controlSchemeButtonText;
 
-    //public Button[] buttons;
-    //public Text[] texts;
-
-    // Use this for initialization
+    private Text distanceConstantLabel;
+    private Text velocityConstantLabel;
+    
     void Start() {
-        //buttons = GetComponentsInChildren<Button>();
-        //sliders = GetComponentsInChildren<Slider>();
-        //texts = GetComponentsInChildren<Text>();
-        Button[] buttons = GetComponentsInChildren<Button>();
-        Slider[] sliders = GetComponentsInChildren<Slider>();
-        Text[] texts = GetComponentsInChildren<Text>();
-        gameplayButton = buttons[0];
-        physicsButton = buttons[1];
-        controlSchemeButton = buttons[2];
-        rumbleButton = buttons[3];
-        forceStyleButton = buttons[4];
-        anchoredBoostButton = buttons[5];
-        distanceRelationshipButton = buttons[6];
-        forceUnitsButton = buttons[7];
-        closeButton = buttons[8];
+        
+        // Settings Header
+        Button[] settingsHeaderButtons = transform.GetChild(1).GetComponentsInChildren<Button>();
+        gameplayButton = settingsHeaderButtons[0];
+        physicsButton = settingsHeaderButtons[1];
+        closeButton = settingsHeaderButtons[2];
 
-        sensitivity = sliders[0];
-        smoothing = sliders[1];
-        distanceConstant = sliders[2];
-        velocityConstant = sliders[3];
-        forceConstant = sliders[4];
-        maxRange = sliders[5];
+        // Gameplay Header
+        gameplayHeader = transform.GetChild(2);
+        controlSchemeButton = gameplayHeader.GetChild(0).GetChild(0).GetComponent<Button>();
+        controlSchemeButtonText = controlSchemeButton.GetComponentInChildren<Text>();
 
-        gameplayHeader = texts[4];
-        physicsHeader = texts[13];
-        rumbleLabel = texts[7];
-        distanceConstantLabel = texts[20];
-        velocityConstantLabel = texts[22];
-
+        rumbleLabel = gameplayHeader.GetChild(1).GetComponent<Text>();
         rumbleButton = rumbleLabel.GetComponentInChildren<Button>();
-        controlSchemeText = controlSchemeButton.GetComponentInChildren<Text>();
-        rumbleText = rumbleButton.GetComponentInChildren<Text>();
-        anchoredBoostText = anchoredBoostButton.GetComponentInChildren<Text>();
-        forceStyleText = forceStyleButton.GetComponentInChildren<Text>();
-        distanceRelationshipText = distanceRelationshipButton.GetComponentInChildren<Text>();
-        forceUnitsText = forceUnitsButton.GetComponentInChildren<Text>();
+        rumbleButtonText = rumbleButton.GetComponentInChildren<Text>();
 
-        sensitivityText = sensitivity.GetComponentInChildren<Text>();
-        smoothingText = smoothing.GetComponentInChildren<Text>();
-        distanceConstantText = distanceConstant.GetComponentInChildren<Text>();
-        velocityConstantText = velocityConstant.GetComponentInChildren<Text>();
-        forceConstantText = forceConstant.GetComponentInChildren<Text>();
-        maxRangeText = maxRange.GetComponentInChildren<Text>();
+        pushControlStyleButton = gameplayHeader.GetChild(2).GetChild(0).GetComponent<Button>();
+        pushControlStyleButtonText = pushControlStyleButton.GetComponentInChildren<Text>();
+
+        sensitivity = gameplayHeader.GetChild(3).GetComponentInChildren<Slider>();
+        sensitivityValueText = sensitivity.GetComponentInChildren<Text>();
+        smoothing = gameplayHeader.GetChild(4).GetComponentInChildren<Slider>();
+        smoothingValueText = smoothing.GetComponentInChildren<Text>();
+
+        // Physics Header
+        physicsHeader = transform.GetChild(3);
+        anchoredBoostButton = physicsHeader.GetChild(0).GetChild(0).GetComponent<Button>();
+        anchoredBoostButtonText = anchoredBoostButton.GetComponentInChildren<Text>();
+
+        velocityConstantLabel = physicsHeader.GetChild(1).GetComponent<Text>();
+        velocityConstantSlider = velocityConstantLabel.GetComponentInChildren<Slider>();
+        velocityConstantValueText = velocityConstantSlider.GetComponentInChildren<Text>();
+
+        distanceRelationshipButton = physicsHeader.GetChild(2).GetChild(0).GetComponent<Button>();
+        distanceRelationshipButtonText = distanceRelationshipButton.GetComponentInChildren<Text>();
+
+        distanceConstantLabel = physicsHeader.GetChild(3).GetComponent<Text>();
+        distanceConstantSlider = distanceConstantLabel.GetComponentInChildren<Slider>();
+        distanceConstantValueText = distanceConstantSlider.GetComponentInChildren<Text>();
+
+        forceUnitsButton = physicsHeader.GetChild(4).GetChild(0).GetComponent<Button>();
+        forceUnitsButtonText = forceUnitsButton.GetComponentInChildren<Text>();
+
+        forceConstantSlider = physicsHeader.GetChild(5).GetComponentInChildren<Slider>();
+        forceConstantValueText = forceConstantSlider.GetComponentInChildren<Text>();
+        maxRangeSlider = physicsHeader.GetChild(6).GetComponentInChildren<Slider>();
+        maxRangeValueText = maxRangeSlider.GetComponentInChildren<Text>();
+
+
+
+        // old hardcoded indexing
+        //buttons = GetComponentsInChildren<Button>();
+
+        ////gameplayButton = buttons[0];
+        ////physicsButton = buttons[1];
+        ////closeButton = buttons[2];
+        //controlSchemeButton = buttons[3];
+        //rumbleButton = buttons[4];
+        //pushControlStyleButton = buttons[5];
+        //anchoredBoostButton = buttons[6];
+        //distanceRelationshipButton = buttons[7];
+        //forceUnitsButton = buttons[8];
+
+        //sensitivity = sliders[0];
+        //smoothing = sliders[1];
+        //distanceConstantSlider = sliders[2];
+        //velocityConstantSlider = sliders[3];
+        //forceConstantSlider = sliders[4];
+        //maxRangeSlider = sliders[5];
+
+        //gameplayHeader = texts[5];
+        //physicsHeader = texts[16];
+        //rumbleLabel = texts[8];
+        //distanceConstantValueText = texts[21];
+        //velocityConstantValueText = texts[23];
+
+        //controlSchemeButtonText = controlSchemeButton.GetComponentInChildren<Text>();
+        //rumbleButtonText = rumbleButton.GetComponentInChildren<Text>();
+        //anchoredBoostButtonText = anchoredBoostButton.GetComponentInChildren<Text>();
+        //pushControlStyleButtonText = pushControlStyleButton.GetComponentInChildren<Text>();
+        //distanceRelationshipButtonText = distanceRelationshipButton.GetComponentInChildren<Text>();
+        //forceUnitsButtonText = forceUnitsButton.GetComponentInChildren<Text>();
+
+        //sensitivityValueText = sensitivity.GetComponentInChildren<Text>();
+        //smoothingValueText = smoothing.GetComponentInChildren<Text>();
+        //distanceConstantLabel = distanceConstantSlider.GetComponentInChildren<Text>();
+        //velocityConstantLabel = velocityConstantSlider.GetComponentInChildren<Text>();
+        //forceConstantValueText = forceConstantSlider.GetComponentInChildren<Text>();
+        //maxRangeValueText = maxRangeSlider.GetComponentInChildren<Text>();
 
         sensitivity.onValueChanged.AddListener(OnSensitivityChanged);
         smoothing.onValueChanged.AddListener(OnSmoothingChanged);
-        distanceConstant.onValueChanged.AddListener(OnDistanceConstantChanged);
-        velocityConstant.onValueChanged.AddListener(OnVelocityConstantChanged);
-        forceConstant.onValueChanged.AddListener(OnForceConstantChanged);
-        maxRange.onValueChanged.AddListener(OnMaxRangeChanged);
+        distanceConstantSlider.onValueChanged.AddListener(OnDistanceConstantChanged);
+        velocityConstantSlider.onValueChanged.AddListener(OnVelocityConstantChanged);
+        forceConstantSlider.onValueChanged.AddListener(OnForceConstantChanged);
+        maxRangeSlider.onValueChanged.AddListener(OnMaxRangeChanged);
 
         anchoredBoostButton.onClick.AddListener(OnClickAnchoredBoost);
-        forceStyleButton.onClick.AddListener(OnClickForceStyle);
+        pushControlStyleButton.onClick.AddListener(OnClickForceStyle);
         distanceRelationshipButton.onClick.AddListener(OnClickDistanceRelationshipButton);
         forceUnitsButton.onClick.AddListener(OnClickForceUnitsButton);
 
@@ -139,25 +183,25 @@ public class SettingsMenu : MonoBehaviour {
         rumbleButton.onClick.AddListener(OnClickRumble);
         closeButton.onClick.AddListener(OnClickClose);
 
-        controlSchemeText.text = mk45;
-        anchoredBoostText.text = norm;
-        forceStyleText.text = perc;
-        distanceRelationshipText.text = expD;
-        forceUnitsText.text = newt;
+        controlSchemeButtonText.text = mk45;
+        anchoredBoostButtonText.text = norm;
+        pushControlStyleButtonText.text = perc;
+        distanceRelationshipButtonText.text = expD;
+        forceUnitsButtonText.text = newt;
 
         sensitivity.value = FPVCameraLock.Sensitivity;
         smoothing.value = FPVCameraLock.Smoothing;
-        distanceConstant.value = PhysicsController.distanceConstant;
-        velocityConstant.value = PhysicsController.velocityConstant;
-        forceConstant.value = AllomanticIronSteel.AllomanticConstant;
-        maxRange.value = AllomanticIronSteel.maxRange;
+        distanceConstantSlider.value = PhysicsController.distanceConstant;
+        velocityConstantSlider.value = PhysicsController.velocityConstant;
+        forceConstantSlider.value = AllomanticIronSteel.AllomanticConstant;
+        maxRangeSlider.value = AllomanticIronSteel.maxRange;
 
-        sensitivityText.text = sensitivity.value.ToString();
-        smoothingText.text = smoothing.value.ToString();
-        distanceConstantText.text = distanceConstant.value.ToString();
-        velocityConstantText.text = velocityConstant.value.ToString();
-        forceConstantText.text = forceConstant.value.ToString();
-        maxRangeText.text = maxRange.value.ToString();
+        sensitivityValueText.text = sensitivity.value.ToString();
+        smoothingValueText.text = smoothing.value.ToString();
+        distanceConstantValueText.text = distanceConstantSlider.value.ToString();
+        velocityConstantValueText.text = velocityConstantSlider.value.ToString();
+        forceConstantValueText.text = forceConstantSlider.value.ToString();
+        maxRangeValueText.text = maxRangeSlider.value.ToString();
 
         rumbleLabel.gameObject.SetActive(false);
         distanceConstantLabel.gameObject.SetActive(true);
@@ -177,15 +221,6 @@ public class SettingsMenu : MonoBehaviour {
         CloseGameplay();
         ClosePhysics();
         gameObject.SetActive(false);
-    }
-
-    public void BackSettings() {
-        if (IsGameplayOpen)
-            CloseGameplay();
-        else if (IsPhysicsOpen)
-            ClosePhysics();
-        else
-            CloseSettings();
     }
 
     private void OpenGameplay() {
@@ -212,51 +247,42 @@ public class SettingsMenu : MonoBehaviour {
         physicsHeader.gameObject.SetActive(false);
     }
 
-    private void OnClickAnchoredBoost() {
-        switch(PhysicsController.anchorBoostMode) {
-            case AnchorBoostMode.AllomanticNormalForce: {
-                    velocityConstantLabel.gameObject.SetActive(true);
-                    PhysicsController.anchorBoostMode = AnchorBoostMode.ExponentialWithVelocity;
-                    anchoredBoostText.text = expV;
-                    forceConstant.value *= 2f;
-                    break;
-                }
-            case AnchorBoostMode.ExponentialWithVelocity: {
-                    velocityConstantLabel.gameObject.SetActive(false);
-                    PhysicsController.anchorBoostMode = AnchorBoostMode.None;
-                    anchoredBoostText.text = disa;
-                    forceConstant.value /= 2f;
-                    break;
-                }
-            default: {
-                    PhysicsController.anchorBoostMode = AnchorBoostMode.AllomanticNormalForce;
-                    anchoredBoostText.text = norm;
-                    break;
-                }
-        }
+    public void BackSettings() {
+        if (IsGameplayOpen)
+            CloseGameplay();
+        else if (IsPhysicsOpen)
+            ClosePhysics();
+        else
+            CloseSettings();
+    }
+
+    // On Button Click methods
+
+    private void OnClickClose() {
+        BackSettings();
     }
 
     private void OnClickControlScheme() {
         switch (GamepadController.currentControlScheme) {
             case ControlScheme.MouseKeyboard45: {
                     GamepadController.currentControlScheme = ControlScheme.MouseKeyboardQE;
-                    controlSchemeText.text = mkQE;
+                    controlSchemeButtonText.text = mkQE;
                     GamepadController.UsingMB45 = false;
                     break;
                 }
             case ControlScheme.MouseKeyboardQE: {
                     GamepadController.currentControlScheme = ControlScheme.Gamepad;
-                    controlSchemeText.text = game;
+                    controlSchemeButtonText.text = game;
                     GamepadController.UsingGamepad = true;
                     rumbleLabel.gameObject.SetActive(true);
                     break;
                     //currentControlScheme = ControlScheme.MouseKeyboard45;
-                    //controlSchemeText.text = "Mouse and Keyboard (MB 4 & 5)";
+                    //controlSchemeButtonText.text = "Mouse and Keyboard (MB 4 & 5)";
                     //break;
                 }
             default: {
                     GamepadController.currentControlScheme = ControlScheme.MouseKeyboard45;
-                    controlSchemeText.text = mk45;
+                    controlSchemeButtonText.text = mk45;
                     GamepadController.UsingMB45 = true;
                     GamepadController.UsingGamepad = false;
                     rumbleLabel.gameObject.SetActive(false);
@@ -266,83 +292,91 @@ public class SettingsMenu : MonoBehaviour {
     }
 
     private void OnClickRumble() {
-        if(GamepadController.UsingRumble) {
-            rumbleText.text = disa;
+        if (GamepadController.UsingRumble) {
+            rumbleButtonText.text = disa;
             GamepadController.UsingRumble = false;
         } else {
-            rumbleText.text = enab;
+            rumbleButtonText.text = enab;
             GamepadController.UsingRumble = true;
         }
     }
 
     private void OnSensitivityChanged(float value) {
         FPVCameraLock.Sensitivity = value;
-        sensitivityText.text = value.ToString();
+        sensitivityValueText.text = value.ToString();
     }
 
     private void OnSmoothingChanged(float value) {
         FPVCameraLock.Smoothing = value;
-        smoothingText.text = value.ToString();
+        smoothingValueText.text = value.ToString();
     }
 
-    private void OnDistanceConstantChanged(float value) {
-        PhysicsController.distanceConstant = value;
-        distanceConstantText.text = value.ToString();
-    }
-
-    private void OnVelocityConstantChanged(float value) {
-        PhysicsController.velocityConstant = value;
-        velocityConstantText.text = value.ToString();
-    }
-
-    private void OnForceConstantChanged(float value) {
-        AllomanticIronSteel.AllomanticConstant = value;
-        forceConstantText.text = value.ToString();
-    }
-
-    private void OnMaxRangeChanged(float value) {
-        AllomanticIronSteel.maxRange = value;
-        maxRangeText.text = value.ToString();
-    }
-
-    private void OnClickClose() {
-        BackSettings();
-    }
-
-    private void OnClickForceStyle() {
-        switch(GamepadController.currentForceStyle) {
-            case ForceStyle.ForceMagnitude: {
-                    forceStyleText.text = perc;
-                    GamepadController.currentForceStyle = ForceStyle.Percentage;
+    private void OnClickAnchoredBoost() {
+        switch(PhysicsController.anchorBoostMode) {
+            case AnchorBoostMode.AllomanticNormalForce: {
+                    velocityConstantLabel.gameObject.SetActive(true);
+                    PhysicsController.anchorBoostMode = AnchorBoostMode.ExponentialWithVelocity;
+                    anchoredBoostButtonText.text = expV;
+                    break;
+                }
+            case AnchorBoostMode.ExponentialWithVelocity: {
+                    velocityConstantLabel.gameObject.SetActive(false);
+                    PhysicsController.anchorBoostMode = AnchorBoostMode.None;
+                    anchoredBoostButtonText.text = disa;
                     break;
                 }
             default: {
-                    forceStyleText.text = forc;
-                    GamepadController.currentForceStyle = ForceStyle.ForceMagnitude;
+                    PhysicsController.anchorBoostMode = AnchorBoostMode.AllomanticNormalForce;
+                    anchoredBoostButtonText.text = norm;
                     break;
                 }
         }
     }
 
+    private void OnVelocityConstantChanged(float value) {
+        PhysicsController.velocityConstant = value;
+        velocityConstantValueText.text = value.ToString();
+    }
+
     private void OnClickDistanceRelationshipButton() {
         switch (PhysicsController.distanceRelationshipMode) {
             case ForceDistanceRelationship.InverseSquareLaw: {
-                    distanceRelationshipText.text = line;
+                    distanceRelationshipButtonText.text = line;
                     PhysicsController.distanceRelationshipMode = ForceDistanceRelationship.Linear;
-                    forceConstant.value /= 40f / 12f;
+                    forceConstantSlider.value /= 40f / 12f;
                     break;
                 }
             case ForceDistanceRelationship.Linear: {
                     distanceConstantLabel.gameObject.SetActive(true);
-                    distanceRelationshipText.text = expD;
+                    distanceRelationshipButtonText.text = expD;
                     PhysicsController.distanceRelationshipMode = ForceDistanceRelationship.Exponential;
                     break;
                 }
             case ForceDistanceRelationship.Exponential: {
                     distanceConstantLabel.gameObject.SetActive(false);
-                    distanceRelationshipText.text = inve;
+                    distanceRelationshipButtonText.text = inve;
                     PhysicsController.distanceRelationshipMode = ForceDistanceRelationship.InverseSquareLaw;
-                    forceConstant.value *= 40f / 12f;
+                    forceConstantSlider.value *= 40f / 12f;
+                    break;
+                }
+        }
+    }
+
+    private void OnDistanceConstantChanged(float value) {
+        PhysicsController.distanceConstant = value;
+        distanceConstantValueText.text = value.ToString();
+    }
+
+    private void OnClickForceStyle() {
+        switch(GamepadController.currentForceStyle) {
+            case ForceStyle.ForceMagnitude: {
+                    pushControlStyleButtonText.text = perc;
+                    GamepadController.currentForceStyle = ForceStyle.Percentage;
+                    break;
+                }
+            default: {
+                    pushControlStyleButtonText.text = forc;
+                    GamepadController.currentForceStyle = ForceStyle.ForceMagnitude;
                     break;
                 }
         }
@@ -351,15 +385,25 @@ public class SettingsMenu : MonoBehaviour {
     private void OnClickForceUnitsButton() {
         switch (PhysicsController.displayUnits) {
             case ForceDisplayUnits.Newtons: {
-                    forceUnitsText.text = gs;
+                    forceUnitsButtonText.text = gs;
                     PhysicsController.displayUnits = ForceDisplayUnits.Gs;
                     break;
                 }
             default: {
-                    forceUnitsText.text = newt;
+                    forceUnitsButtonText.text = newt;
                     PhysicsController.displayUnits = ForceDisplayUnits.Newtons;
                     break;
                 }
         }
+    }
+
+    private void OnForceConstantChanged(float value) {
+        AllomanticIronSteel.AllomanticConstant = value;
+        forceConstantValueText.text = value.ToString();
+    }
+
+    private void OnMaxRangeChanged(float value) {
+        AllomanticIronSteel.maxRange = value;
+        maxRangeValueText.text = value.ToString();
     }
 }

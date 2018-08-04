@@ -25,13 +25,13 @@ public class SceneSelectMenu : MonoBehaviour {
     private Button luthadelButton;
     private Button backButton;
 
-    private MainMenu mainMenu;
+    //private MainMenu mainMenu;
     private static HUD hud;
     private static GameObject player;
 
     void Start() {
         titleScreenBG = transform.parent.GetComponent<Image>();
-        mainMenu = transform.parent.GetComponentInChildren<MainMenu>();
+        //mainMenu = transform.parent.GetComponentInChildren<MainMenu>();
         hud = transform.parent.parent.GetComponentInChildren<HUD>();
         player = GameObject.FindGameObjectWithTag("Player");
 
@@ -96,7 +96,7 @@ public class SceneSelectMenu : MonoBehaviour {
     }
 
     private void OnClickedBack() {
-        mainMenu.OpenMainMenu();
+        //mainMenu.OpenMainMenu();
         CloseSceneSelect();
     }
 }

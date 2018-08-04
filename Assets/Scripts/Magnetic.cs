@@ -139,10 +139,10 @@ public class Magnetic : MonoBehaviour {
     }
 
     public void SoftClear() {
-        LastExpectedAcceleration = Vector3.zero;
-        LastAllomanticForce = Vector3.zero;
-        LastAllomanticNormalForceFromAllomancer = Vector3.zero;
-        LastAllomanticNormalForceFromTarget = Vector3.zero;
+        //LastExpectedAcceleration = Vector3.zero;
+        //LastAllomanticForce = Vector3.zero;
+        //LastAllomanticNormalForceFromAllomancer = Vector3.zero;
+        //LastAllomanticNormalForceFromTarget = Vector3.zero;
         //LastVelocity = Vector3.zero;
         //LightSaberFactor = 1;
     }

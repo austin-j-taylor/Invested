@@ -436,7 +436,6 @@ public class AllomanticIronSteel : MonoBehaviour {
                             // Thus:
                             // a push against a perfectly anchored metal structure is exactly twice as powerful as a push against a completely unanchored, freely-moving metal structure
                             restitutionForceFromTarget = allomanticForce;
-                            restitutionForceFromAllomancer = Vector3.zero; // irrelevant
                         } else {
                             // Calculate Allomantic Normal Forces
 
@@ -445,36 +444,29 @@ public class AllomanticIronSteel : MonoBehaviour {
                             } else { // Target is partially anchored
                                      //calculate changes from the last frame
 
-                                // sign is swapping when pushing/pulling. good?.
-
                                 Vector3 newTargetVelocity = target.Rb.velocity;
                                 Vector3 lastTargetAcceleration = (newTargetVelocity - target.LastVelocity) / Time.fixedDeltaTime;
                                 Vector3 unaccountedForTargetAcceleration = lastTargetAcceleration - target.LastExpectedAcceleration;// + Physics.gravity;
                                 restitutionForceFromTarget = Vector3.Project(unaccountedForTargetAcceleration * target.Mass, positionDifference.normalized);
-                                //Debug.Log(lastTargetAcceleration);
+                                Debug.Log("last targeacc: " + lastTargetAcceleration);
                             }
-
-                            // sign is not swapping when pushing/pulling. it should. BAD.
-
-                            Vector3 newAllomancerVelocity = rb.velocity;
-                            Vector3 lastAllomancerAcceleration = (newAllomancerVelocity - lastAllomancerVelocity) / Time.fixedDeltaTime;
-                            Vector3 unaccountedForAllomancerAcceleration = lastAllomancerAcceleration - lastExpectedAllomancerAcceleration;
-                            //Debug.Log(lastAllomancerAcceleration);
-                            //if (!movementController.IsGrounded) {
-                            //    unaccountedForAllomancerAcceleration += Physics.gravity;
-                            //}
-                            restitutionForceFromAllomancer = Vector3.Project(unaccountedForAllomancerAcceleration * rb.mass, positionDifference.normalized);
-
-                            if (PhysicsController.normalForceMaximum == NormalForceMaximum.AllomanticForce) {
-                                restitutionForceFromTarget = Vector3.ClampMagnitude(restitutionForceFromTarget, allomanticForce.magnitude);
-                                restitutionForceFromAllomancer = Vector3.ClampMagnitude(restitutionForceFromAllomancer, allomanticForce.magnitude);
-                            }
-
                             // using Impulse strategy
                             //restitutionForceFromTarget = Vector3.ClampMagnitude(Vector3.Project(target.forceFromCollisionTotal, positionDifference.normalized), allomanticForce.magnitude);
-
+                            
                             target.LastPosition = target.transform.position;
                             target.LastVelocity = target.Rb.velocity;
+                        }
+
+                        Vector3 newAllomancerVelocity = rb.velocity;
+                        Vector3 lastAllomancerAcceleration = (newAllomancerVelocity - lastAllomancerVelocity) / Time.fixedDeltaTime;
+                        Vector3 unaccountedForAllomancerAcceleration = lastAllomancerAcceleration - lastExpectedAllomancerAcceleration;
+                        restitutionForceFromAllomancer = Vector3.Project(unaccountedForAllomancerAcceleration * rb.mass, positionDifference.normalized);
+                        Debug.Log("last alloacc: " + lastAllomancerAcceleration);
+
+
+                        if (PhysicsController.normalForceMaximum == NormalForceMaximum.AllomanticForce) {
+                            restitutionForceFromTarget = Vector3.ClampMagnitude(restitutionForceFromTarget, allomanticForce.magnitude);
+                            restitutionForceFromAllomancer = Vector3.ClampMagnitude(restitutionForceFromAllomancer, allomanticForce.magnitude);
                         }
 
                         // Prevents the ANF from being negative relative to the AF and prevents the ANF from ever decreasing the AF below its original value
@@ -542,9 +534,8 @@ public class AllomanticIronSteel : MonoBehaviour {
                     }
             }
         } else {
-            // Not pushing or pulling, do not try to add any force modifications
-            restitutionForceFromAllomancer = Vector3.zero;
-            restitutionForceFromTarget = Vector3.zero;
+                restitutionForceFromAllomancer = Vector3.zero;
+                restitutionForceFromTarget = Vector3.zero;
         }
         thisFrameMaximumNormalForce += restitutionForceFromTarget;
 
@@ -554,7 +545,8 @@ public class AllomanticIronSteel : MonoBehaviour {
             if (percent < 1f) {
                 allomanticForce *= percent;
                 restitutionForceFromTarget *= percent;
-                restitutionForceFromAllomancer *= percent;
+                Debug.Log("BEFORE: " + restitutionForceFromAllomancer);
+                //restitutionForceFromAllomancer *= percent;
             }
         }
         target.LastAllomanticForce = allomanticForce;
@@ -590,6 +582,7 @@ public class AllomanticIronSteel : MonoBehaviour {
         //lastExpectedNormalTargetAcceleration = -restitutionForceFromAllomancer / target.Mass * Time.fixedDeltaTime;
         //lastAllomancerVelocity = rb.velocity;
         thisFrameExpectedAllomancerAcceleration += target.LastAllomanticForceOnAllomancer / rb.mass;
+        Debug.Log(lastExpectedAllomancerAcceleration);
         //thisFrameNormalForce += target.LastAllomanticNormalForceFromTarget;
         //thisFrameAllomanticForce += target.LastAllomanticForce;
 
