@@ -24,15 +24,22 @@ public static class Keybinds {
 
     public static bool Jump() {
         if (GamepadController.UsingGamepad)
-            return Input.GetButton("GamepadX");
+            return Input.GetButton("GamepadA");
         else
             return Input.GetKey(KeyCode.Space);
     }
     public static bool JumpDown() {
         if (GamepadController.UsingGamepad)
-            return Input.GetButtonDown("GamepadX");
+            return Input.GetButtonDown("GamepadA");
         else
             return Input.GetKeyDown(KeyCode.Space);
+    }
+
+    public static bool WithdrawCoinDown() {
+        if (GamepadController.UsingGamepad)
+            return Input.GetButtonDown("GamepadX");
+        else
+            return Input.GetKeyDown(KeyCode.LeftControl);
     }
 
     public static bool IronPulling() {
@@ -108,13 +115,6 @@ public static class Keybinds {
             return Input.GetAxis("RightTrigger");
         else
             return Input.GetButton("Mouse0") ? 1 : 0;
-    }
-
-    public static bool WithdrawCoinDown() {
-        if (GamepadController.UsingGamepad)
-            return Input.GetButtonDown("GamepadA");
-        else
-            return Input.GetKeyDown(KeyCode.LeftControl);
     }
 
     public static float ScrollWheelAxis() {

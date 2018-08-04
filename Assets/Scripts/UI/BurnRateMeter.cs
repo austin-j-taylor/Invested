@@ -11,88 +11,79 @@ public class BurnRateMeter : MonoBehaviour {
     private const float minAngle = .12f;
     private const float maxAngle = 1f - 2 * minAngle;
     
-    private AllomanticIronSteel playerIronSteel;
-    private Text metalLineText;
-    private Text forceMagnitudeTargetText;
-    private Text maximumForceMagnitudeText;
+    private Text actualForceText;
+    private Text sumForceText;
+    private Text playerInputText;
+    private Text metalLineCountText;
     private Image burnRateImage;
 
     public string MetalLineText {
         set {
-            metalLineText.text = value;
+            metalLineCountText.text = value;
         }
     }
 
     void Awake() {
-        playerIronSteel = GameObject.FindGameObjectWithTag("Player").GetComponent<AllomanticIronSteel>();
         Text[] texts = GetComponentsInChildren<Text>();
-        metalLineText = texts[0];
-        forceMagnitudeTargetText = texts[1];
-        maximumForceMagnitudeText = texts[2];
+        actualForceText = texts[0];
+        playerInputText = texts[1];
+        sumForceText = texts[2];
+        metalLineCountText = texts[3];
 
         burnRateImage = GetComponent<Image>();
-        burnRateImage.color = new Color(0, .5f, 1, .75f);
+        burnRateImage.color = burnRateImage.color;
         Clear();
     }
 
     // Set the meter using the Force Magnitude display configuration.
-    public void SetBurnRateMeterForceMagnitude(float forceMagnitudeTarget, float maximumForceMagnitude) {
+    public void SetBurnRateMeterForceMagnitude(Vector3 allomanticForce, Vector3 normalForce, float targetForce) {
+        float netForce = (allomanticForce + normalForce).magnitude;
         float percent = 0;
-        if (maximumForceMagnitude != 0) {
-            percent = forceMagnitudeTarget / maximumForceMagnitude;
+        if (netForce != 0) {
+            percent = targetForce / (netForce);
         }
-        if (forceMagnitudeTarget < .01f) {
-            forceMagnitudeTargetText.text = "";
-            maximumForceMagnitudeText.text = "";
-            burnRateImage.fillAmount = Mathf.Lerp(burnRateImage.fillAmount, 0, burnRateMeterLerpConstant);
-        } else {
-            if (PhysicsController.displayUnits == ForceDisplayUnits.Newtons) {
-                forceMagnitudeTargetText.text = ((int)forceMagnitudeTarget).ToString() + "N";
-                maximumForceMagnitudeText.text = ((int)maximumForceMagnitude).ToString() + "N";
-            } else {
-                forceMagnitudeTargetText.text = (System.Math.Round(forceMagnitudeTarget / playerIronSteel.Mass / 9.81, 2).ToString() + "G's");
-                maximumForceMagnitudeText.text = (System.Math.Round(maximumForceMagnitude / playerIronSteel.Mass / 9.81, 2).ToString() + "G's");
-            }
-            if (percent > .99f) {
-                burnRateImage.fillAmount = Mathf.Lerp(burnRateImage.fillAmount, 1, burnRateMeterLerpConstant);
-            } else {
-                burnRateImage.fillAmount = Mathf.Lerp(burnRateImage.fillAmount, minAngle + (percent) * (maxAngle), burnRateMeterLerpConstant);
-            }
+        if(percent < 1f) {
+            SetActualForceText(targetForce);
+            SetSumForceText(allomanticForce * percent, normalForce * percent);
+        } else { // trying to push at a magnitude you can't reach
+            SetActualForceText(netForce);
+            SetSumForceText(allomanticForce, normalForce);
         }
+
+        playerInputText.text = HUD.ForceString(targetForce);
+        LerpToPercent(percent);
     }
 
     // Set the meter using the Percentage display configuration.
-    public void SetBurnRateMeterPercentage(float ironBurnRate, float steelBurnRate, float maximumForceMagnitude) {
-        float rate = Mathf.Max(ironBurnRate, steelBurnRate);
+    public void SetBurnRateMeterPercentage(Vector3 allomanticForce, Vector3 normalForce, float rate) {
+        float netForce = (allomanticForce + normalForce).magnitude;
         int percent = (int)Mathf.Round(rate * 100);
-        if (percent == 0) {
-            forceMagnitudeTargetText.text = "";
-            maximumForceMagnitudeText.text = "";
-            burnRateImage.fillAmount = Mathf.Lerp(burnRateImage.fillAmount, 0, burnRateMeterLerpConstant);
-        } else {
+        playerInputText.text = percent + "%";
 
-            if (PhysicsController.displayUnits == ForceDisplayUnits.Newtons) {
-                forceMagnitudeTargetText.text = ((int)maximumForceMagnitude).ToString() + "N";
-            } else {
-                forceMagnitudeTargetText.text = (System.Math.Round(maximumForceMagnitude / playerIronSteel.Mass / 9.81, 2).ToString() + "G's");
-            }
+        LerpToPercent(rate);
+        SetActualForceText(netForce);
+        SetSumForceText(allomanticForce, normalForce);
+    }
 
-            if (percent > 99) {
-                maximumForceMagnitudeText.text = "MAX";
-                
-                burnRateImage.fillAmount = Mathf.Lerp(burnRateImage.fillAmount, 1, burnRateMeterLerpConstant);
-            } else {
-                maximumForceMagnitudeText.text = percent + "%";
-                
-                burnRateImage.fillAmount = Mathf.Lerp(burnRateImage.fillAmount, minAngle + (rate) * (maxAngle), burnRateMeterLerpConstant);
-            }
-        }
+    private void SetActualForceText(float forceActual) {
+        actualForceText.text = HUD.ForceString(forceActual);
+    }
+
+    private void SetSumForceText(Vector3 allomanticForce, Vector3 normalForce) {
+        float allomanticMagnitude = allomanticForce.magnitude;
+        float normalMagnitude = normalForce.magnitude;
+        sumForceText.text = HUD.AllomanticSumString(allomanticForce, normalForce);
+    }
+
+    private void LerpToPercent(float percent) {
+        burnRateImage.fillAmount = Mathf.Lerp(burnRateImage.fillAmount, minAngle + (percent) * (maxAngle), burnRateMeterLerpConstant);
     }
 
     public void Clear() {
-        metalLineText.text = "";
+        actualForceText.text = "";
+        playerInputText.text = "";
+        sumForceText.text = "";
+        metalLineCountText.text = "";
         burnRateImage.fillAmount = minAngle;
-        forceMagnitudeTargetText.text = "";
-        maximumForceMagnitudeText.text = "";
     }
 }

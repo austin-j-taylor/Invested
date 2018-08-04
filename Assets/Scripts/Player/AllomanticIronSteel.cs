@@ -10,7 +10,6 @@ public class AllomanticIronSteel : MonoBehaviour {
 
     // Constants
     private const float closenessThreshold = .01f;
-    private const float chargePower = 1f / 8f;
     //private readonly Vector3 centerOfScreen = new Vector3(.5f, .5f, 0);
     // Constants for Metal Lines
     private const float startWidth = .05f;
@@ -23,10 +22,11 @@ public class AllomanticIronSteel : MonoBehaviour {
     private const float luminosityFactor = .4f;
     private const float MetalLinesLerpConstant = .30f;
     private const float verticalImportanceFactor = 100f;
-    private const float lightSaberConstant = 200f;
+    private const float lightSaberConstant = 1000f;
     public const int maxNumberOfTargets = 10;
     public static float AllomanticConstant { get; set; } = 1200;
-    public static float maxRange = 50f;
+    public static float maxRange = 75;
+    public const float chargePower = 1f / 8f;
 
     // Button-press time constants
     private const float timeToHoldDown = .5f;
@@ -42,8 +42,6 @@ public class AllomanticIronSteel : MonoBehaviour {
     private Rigidbody rb;
     private List<VolumetricLineBehavior> metalLines;
     private VolumetricLineBehavior metalLineTemplate;
-    private BurnRateMeter burnRateMeter;
-    private TargetOverlayController overlays;
     [SerializeField]
     private Material ironpullTargetedMaterial;
     [SerializeField]
@@ -73,6 +71,10 @@ public class AllomanticIronSteel : MonoBehaviour {
     // Currently hovered-over Magnetic
     private Magnetic lastHoveredOverTarget = null;
 
+    // Checks if targets were cleared after stopping pulling/pushing
+    //private bool justClearedIron = false;
+    //private bool justClearedSteel = false;
+
     // Magnetic variables
     public int AvailableNumberOfTargets { get; private set; } = 1;
     public int PullCount { get; private set; } = 0;
@@ -81,19 +83,26 @@ public class AllomanticIronSteel : MonoBehaviour {
     private Magnetic[] pullTargets;
     private Magnetic[] pushTargets;
 
-    // Used for calculated the acceleration over the last frame for pushing/pulling
+    // Used for calculating the acceleration over the last frame for pushing/pulling
     private Vector3 lastAllomancerVelocity = Vector3.zero;
-    private Vector3 lastExpectedAllomancerAcceleration = Vector3.zero;
-    private Vector3 currentExpectedAllomancerAcceleration = Vector3.zero;
 
-    private Vector3 currentMaximumForce = Vector3.zero;
+    private Vector3 lastExpectedAllomancerAcceleration = Vector3.zero;
+    private Vector3 thisFrameExpectedAllomancerAcceleration = Vector3.zero;
+    //private Vector3 lastNormalForce = Vector3.zero;
+    //private Vector3 thisFrameNormalForce = Vector3.zero;
+    //private Vector3 lastAllomanticForce = Vector3.zero;
+    //private Vector3 thisFrameAllomanticForce = Vector3.zero;
+
+    private Vector3 thisFrameMaximumAllomanticForce = Vector3.zero;
+    private Vector3 lastMaximumAllomanticForce = Vector3.zero;
+    private Vector3 thisFrameMaximumNormalForce = Vector3.zero;
+    private Vector3 lastMaximumNormalForce = Vector3.zero;
 
     // Used for burning metals
     private float ironBurnRate = 0;
     private float steelBurnRate = 0;
 
     private float forceMagnitudeTarget = 600;
-    private float maximumForceMagnitude = 0;
 
     public bool IronPulling { get; private set; } = false;
     public bool SteelPushing { get; private set; } = false;
@@ -113,8 +122,6 @@ public class AllomanticIronSteel : MonoBehaviour {
         metalLineTemplate = GetComponentInChildren<VolumetricLineBehavior>();
         centerOfMass.localPosition = Vector3.zero;
         metalLinesAnchor.localPosition = centerOfMass.localPosition;
-        burnRateMeter = HUD.BurnRateMeter;
-        overlays = HUD.TargetOverlayController;
     }
 
     public void Clear() {
@@ -127,10 +134,14 @@ public class AllomanticIronSteel : MonoBehaviour {
         PushCount = 0;
         pullTargets = new Magnetic[maxNumberOfTargets];
         pushTargets = new Magnetic[maxNumberOfTargets];
-        overlays.SetTargets(pullTargets, pushTargets);
+        HUD.TargetOverlayController.SetTargets(pullTargets, pushTargets);
         metalLines = new List<VolumetricLineBehavior>();
-        maximumForceMagnitude = 0f;
         lastHoveredOverTarget = null;
+        lastExpectedAllomancerAcceleration = Vector3.zero;
+        //lastAllomanticForce = Vector3.zero;
+        //lastNormalForce = Vector3.zero;
+        lastMaximumAllomanticForce = Vector3.zero;
+        lastMaximumNormalForce = Vector3.zero;
     }
 
     private void Update() {
@@ -164,13 +175,35 @@ public class AllomanticIronSteel : MonoBehaviour {
                 float scrollValue = Keybinds.ScrollWheelAxis();
                 if (scrollValue > 0) {
                     IncrementNumberOfTargets();
-                } if (scrollValue < 0) {
+                }
+                if (scrollValue < 0) {
                     DecrementNumberOfTargets();
                 }
             }
+
             IronPulling = Keybinds.IronPulling();
             SteelPushing = Keybinds.SteelPushing();
 
+            // If just stopped pulling/pushing on targets, clear their values
+            //if (IronPulling)
+            //    justClearedIron = false;
+            //else if(!justClearedIron) {
+            //    for (int i = 0; i < PullCount; i++)
+            //        pullTargets[i].SoftClear();
+            //    Debug.Log("Cleared iroon");
+            //    justClearedIron = true;
+            //}
+            //if (SteelPushing)
+            //    justClearedSteel = false;
+            //else if (!justClearedSteel) {
+            //    for (int i = 0; i < PushCount; i++)
+            //        pushTargets[i].SoftClear();
+            //    Debug.Log("Cleared steel");
+            //    justClearedSteel = true;
+            //}
+
+
+            // Check input for target selection
             selecting = (Keybinds.Select() || Keybinds.SelectAlternate()) && !Keybinds.Negate();
             // Assume that targets are now out of range. SearchForTargets will mark all targets within maxRange to still be in range.
             SetAllTargetsOutOfRange();
@@ -250,60 +283,66 @@ public class AllomanticIronSteel : MonoBehaviour {
                 }
                 SetPullRate(ironBurnRate);
                 SetPushRate(steelBurnRate);
-                burnRateMeter.SetBurnRateMeterPercentage(ironBurnRate, steelBurnRate, maximumForceMagnitude);
             } else {
-                SetPullRate(forceMagnitudeTarget / maximumForceMagnitude);
-                SetPushRate(forceMagnitudeTarget / maximumForceMagnitude);
-                burnRateMeter.SetBurnRateMeterForceMagnitude(forceMagnitudeTarget, maximumForceMagnitude);
+                float maxNetForce = (lastMaximumAllomanticForce + lastMaximumNormalForce).magnitude;
+                SetPullRate(forceMagnitudeTarget / maxNetForce);
+                SetPushRate(forceMagnitudeTarget / maxNetForce);
             }
+            UpdateBurnRateMeter();
         }
 
         if (IsBurningIronSteel && !searchingForTarget) { // not searching for a new target but still burning passively, show lines
             SearchForMetals(searchingForTarget);
         }
-
     }
 
     private void FixedUpdate() {
         if (IsBurningIronSteel) {
+            CalculatePushPullForces(iron);
+            CalculatePushPullForces(steel);
+
             if (HasPullTarget) { // if has pull targets...
-                if (IronPulling) {
-                    CalculatePushPullForces(iron);
-                    PullPushOnTargets(iron, iron);
-                } else // cannot push and pull on the same targets at once
-                if (!HasPushTarget) {
-                    if (SteelPushing) {
-                        CalculatePushPullForces(iron);
-                        PullPushOnTargets(steel, iron);
-                    } else { // neither pushing nor pulling on ironTargets
-                        //ResetPullStatus(iron);
-                        CalculatePushPullForces(iron);
-                    }
-                } else {
-                    CalculatePushPullForces(iron);
-                    CalculatePushPullForces(steel);
-                }
-            }
-            if (HasPushTarget) {
-                if (SteelPushing) {
-                    CalculatePushPullForces(steel);
-                    PullPushOnTargets(steel, steel);
-                } else
-                if (!HasPullTarget) {
+                if (HasPushTarget) { // has push targets AND pull targets
                     if (IronPulling) {
-                        CalculatePushPullForces(steel);
+                        PullPushOnTargets(iron, iron);
+                    }
+                    if (SteelPushing) {
+                        PullPushOnTargets(steel, steel);
+                    }
+                } else { // has pull targets and NO push targets
+                    if (IronPulling) {
+                        PullPushOnTargets(iron, iron);
+                    } else {
+                        if (SteelPushing) {
+                            PullPushOnTargets(steel, iron);
+                        }
+                    }
+                }
+            } else { // has no pull targets
+                if (HasPushTarget) { // has push targets and NO pull targets
+                    if (IronPulling) {
                         PullPushOnTargets(iron, steel);
                     } else {
-                        //ResetPullStatus(steel);
-                        CalculatePushPullForces(steel);
+                        if (SteelPushing) {
+                            PullPushOnTargets(steel, steel);
+                        }
                     }
                 }
             }
+
             lastAllomancerVelocity = rb.velocity;
-            lastExpectedAllomancerAcceleration = currentExpectedAllomancerAcceleration;
-            currentExpectedAllomancerAcceleration = Vector3.zero;
-            maximumForceMagnitude = currentMaximumForce.magnitude;
-            currentMaximumForce = Vector3.zero;
+
+            // Debug
+            lastExpectedAllomancerAcceleration = thisFrameExpectedAllomancerAcceleration;
+            //lastAllomanticForce = thisFrameAllomanticForce;
+            //lastNormalForce = thisFrameNormalForce;
+            lastMaximumAllomanticForce = thisFrameMaximumAllomanticForce;
+            lastMaximumNormalForce = thisFrameMaximumNormalForce;
+            thisFrameExpectedAllomancerAcceleration = Vector3.zero;
+            //thisFrameAllomanticForce = Vector3.zero;
+            //thisFrameNormalForce = Vector3.zero;
+            thisFrameMaximumAllomanticForce = Vector3.zero;
+            thisFrameMaximumNormalForce = Vector3.zero;
         }
     }
 
@@ -350,8 +389,6 @@ public class AllomanticIronSteel : MonoBehaviour {
     public Vector3 resititutionFromPlayersForce;
     public float percentOfTargetForceReturned;
     public float percentOfAllomancerForceReturned;
-    public float velocityFactorAllomancer;
-    public float velocityFactorTarget;
 
     /* Pushing and Pulling
      * 
@@ -382,91 +419,149 @@ public class AllomanticIronSteel : MonoBehaviour {
                 }
         }
 
-        Vector3 allomanticForce = AllomanticConstant * Mathf.Pow(target.Mass * rb.mass, chargePower) * distanceFactor / (usingIronTargets ? PullCount : PushCount);
+        Vector3 allomanticForce = AllomanticConstant * Mathf.Pow(target.Mass * rb.mass, chargePower) * distanceFactor / (usingIronTargets ? PullCount : PushCount) * (target.LastWasPulled ? 1 : -1);
 
         // If controlling the strength of the push by Percentage of the maximum possible push
         if (GamepadController.currentForceStyle == ForceStyle.Percentage) {
             allomanticForce *= (target.LastWasPulled ? ironBurnRate : steelBurnRate);
         }
-
-        // Signage
-        allomanticForce *= target.LastWasPulled ? 1 : -1;
-        
-        target.LastMaximumAllomanticForce = allomanticForce;
+        thisFrameMaximumAllomanticForce += allomanticForce;
 
         Vector3 restitutionForceFromTarget;
         Vector3 restitutionForceFromAllomancer;
-        switch(PhysicsController.anchorBoostMode) {
-            case AnchorBoostMode.AllomanticNormalForce: {
-                    if (target.IsStatic) {
-                        // If the target has no rigidbody, let the let the restitution force equal the allomantic force. It's a perfect anchor.
-                        // Thus:
-                        // a push against a perfectly anchored metal structure is exactly twice as powerful as a push against a completely unanchored, freely-moving metal structure
-                        restitutionForceFromTarget = allomanticForce;
-                        restitutionForceFromAllomancer = Vector3.zero; // irrelevant
-                    } else {
-                        // Calculate Allomantic Normal Forces
-
-                        if (target.IsPerfectlyAnchored) { // If target is perfectly anchored, its ANF = AF.
+        if ((IronPulling && target.LastWasPulled) || (SteelPushing && !target.LastWasPulled)) { //If pushing or pulling, ANF should be added to calculation
+            switch (PhysicsController.anchorBoostMode) {
+                case AnchorBoostMode.AllomanticNormalForce: {
+                        if (target.IsStatic) {
+                            // If the target has no rigidbody, let the let the restitution force equal the allomantic force. It's a perfect anchor.
+                            // Thus:
+                            // a push against a perfectly anchored metal structure is exactly twice as powerful as a push against a completely unanchored, freely-moving metal structure
                             restitutionForceFromTarget = allomanticForce;
-                        } else { // Target is partially anchored
-                                 //calculate changes from the last frame
-                            Vector3 newTargetVelocity = target.Rb.velocity;
-                            Vector3 lastTargetAcceleration = (newTargetVelocity - target.LastVelocity) / Time.fixedDeltaTime;
-                            Vector3 unaccountedForTargetAcceleration = target.LastExpectedAcceleration - lastTargetAcceleration;// + Physics.gravity;
-                            restitutionForceFromTarget = Vector3.ClampMagnitude(Vector3.Project(-unaccountedForTargetAcceleration * target.Mass, positionDifference.normalized), allomanticForce.magnitude);
+                            restitutionForceFromAllomancer = Vector3.zero; // irrelevant
+                        } else {
+                            // Calculate Allomantic Normal Forces
+
+                            if (target.IsPerfectlyAnchored) { // If target is perfectly anchored, its ANF = AF.
+                                restitutionForceFromTarget = allomanticForce;
+                            } else { // Target is partially anchored
+                                     //calculate changes from the last frame
+
+                                // sign is swapping when pushing/pulling. good?.
+
+                                Vector3 newTargetVelocity = target.Rb.velocity;
+                                Vector3 lastTargetAcceleration = (newTargetVelocity - target.LastVelocity) / Time.fixedDeltaTime;
+                                Vector3 unaccountedForTargetAcceleration = lastTargetAcceleration - target.LastExpectedAcceleration;// + Physics.gravity;
+                                restitutionForceFromTarget = Vector3.Project(unaccountedForTargetAcceleration * target.Mass, positionDifference.normalized);
+                                //Debug.Log(lastTargetAcceleration);
+                            }
+
+                            // sign is not swapping when pushing/pulling. it should. BAD.
+
+                            Vector3 newAllomancerVelocity = rb.velocity;
+                            Vector3 lastAllomancerAcceleration = (newAllomancerVelocity - lastAllomancerVelocity) / Time.fixedDeltaTime;
+                            Vector3 unaccountedForAllomancerAcceleration = lastAllomancerAcceleration - lastExpectedAllomancerAcceleration;
+                            //Debug.Log(lastAllomancerAcceleration);
+                            //if (!movementController.IsGrounded) {
+                            //    unaccountedForAllomancerAcceleration += Physics.gravity;
+                            //}
+                            restitutionForceFromAllomancer = Vector3.Project(unaccountedForAllomancerAcceleration * rb.mass, positionDifference.normalized);
+
+                            if (PhysicsController.normalForceMaximum == NormalForceMaximum.AllomanticForce) {
+                                restitutionForceFromTarget = Vector3.ClampMagnitude(restitutionForceFromTarget, allomanticForce.magnitude);
+                                restitutionForceFromAllomancer = Vector3.ClampMagnitude(restitutionForceFromAllomancer, allomanticForce.magnitude);
+                            }
+
+                            // using Impulse strategy
+                            //restitutionForceFromTarget = Vector3.ClampMagnitude(Vector3.Project(target.forceFromCollisionTotal, positionDifference.normalized), allomanticForce.magnitude);
+
+                            target.LastPosition = target.transform.position;
+                            target.LastVelocity = target.Rb.velocity;
                         }
-                        Vector3 newAllomancerVelocity = rb.velocity;
-                        Vector3 lastAllomancerAcceleration = (newAllomancerVelocity - lastAllomancerVelocity) / Time.fixedDeltaTime;
-                        Vector3 unaccountedForAllomancerAcceleration = lastExpectedAllomancerAcceleration - lastAllomancerAcceleration;
-                        //if (!movementController.IsGrounded) {
-                        //    unaccountedForAllomancerAcceleration += Physics.gravity;
-                        //}
-                        restitutionForceFromAllomancer = Vector3.ClampMagnitude(Vector3.Project(-unaccountedForAllomancerAcceleration * rb.mass, positionDifference.normalized), allomanticForce.magnitude);
 
-                        // using Impulse strategy
-                        //restitutionForceFromTarget = Vector3.ClampMagnitude(Vector3.Project(target.forceFromCollisionTotal, positionDifference.normalized), allomanticForce.magnitude);
+                        // Prevents the ANF from being negative relative to the AF and prevents the ANF from ever decreasing the AF below its original value
+                        switch (PhysicsController.normalForceMinimum) {
+                            case NormalForceMinimum.Zero: {
+                                    if (Vector3.Dot(restitutionForceFromAllomancer, allomanticForce) > 0) {
+                                        restitutionForceFromAllomancer = Vector3.zero;
+                                    }
+                                    if (Vector3.Dot(restitutionForceFromTarget, allomanticForce) < 0) {
+                                        restitutionForceFromTarget = Vector3.zero;
+                                    }
+                                    break;
+                                }
+                            case NormalForceMinimum.ZeroButNegate: {
+                                    if (Vector3.Dot(restitutionForceFromAllomancer, allomanticForce) > 0) {
+                                        restitutionForceFromAllomancer = -restitutionForceFromAllomancer;
+                                    }
+                                    if (Vector3.Dot(restitutionForceFromTarget, allomanticForce) < 0) {
+                                        restitutionForceFromTarget = -restitutionForceFromTarget;
+                                    }
+                                    break;
+                                }
+                            default: break;
+                        }
 
-                        target.LastPosition = target.transform.position;
-                        target.LastVelocity = target.Rb.velocity;
+                        break;
                     }
-                    break;
-                }
-            case AnchorBoostMode.ExponentialWithVelocity: {
-                    // The restitutionForceFromTarget is actually negative, rather than positive, unlike in ANF mode. It contains the percentage of the AF that is subtracted from the AF to get the net AF.
-                    if (target.IsStatic) {
-                        velocityFactorTarget = 0;
-                        velocityFactorAllomancer = 0;
-                    } else {
-                        velocityFactorTarget = 1 - Mathf.Exp(-(Vector3.Project(target.Velocity, positionDifference.normalized).magnitude / PhysicsController.velocityConstant));
-                        velocityFactorAllomancer = 1 - Mathf.Exp(-(Vector3.Project(rb.velocity, positionDifference.normalized).magnitude / PhysicsController.velocityConstant));
-                    }
+                case AnchorBoostMode.ExponentialWithVelocity: {
+                        // The restitutionForceFromTarget is actually negative, rather than positive, unlike in ANF mode. It contains the percentage of the AF that is subtracted from the AF to get the net AF.
+                        float velocityFactorTarget;
+                        float velocityFactorAllomancer;
+                        if (target.IsStatic) {
+                            velocityFactorTarget = 0;
+                            velocityFactorAllomancer = 0;
+                        } else {
+                            velocityFactorTarget = 1 - Mathf.Exp(-(Vector3.Project(target.Velocity, positionDifference.normalized).magnitude / PhysicsController.velocityConstant));
+                            velocityFactorAllomancer = 1 - Mathf.Exp(-(Vector3.Project(rb.velocity, positionDifference.normalized).magnitude / PhysicsController.velocityConstant));
 
-                    restitutionForceFromTarget = -velocityFactorTarget * allomanticForce;
-                    restitutionForceFromAllomancer = velocityFactorAllomancer * allomanticForce;
-                    break;
-                }
-            default: {
-                    restitutionForceFromTarget = Vector3.zero;
-                    restitutionForceFromAllomancer = Vector3.zero;
-                    break;
-                }
+                            if (PhysicsController.exponentialWithVelocityMinimum == ExponentialWithVelocityMinimum.BackwardsDecreasesAndForwardsIncreasesForce) {
+                                if (Vector3.Dot(rb.velocity, positionDifference) > 0) {
+                                    velocityFactorTarget *= -1;
+                                }
+                                if (Vector3.Dot(target.Velocity, positionDifference) < 0) {
+                                    velocityFactorAllomancer *= -1;
+                                }
+                            } else if (PhysicsController.exponentialWithVelocityMinimum == ExponentialWithVelocityMinimum.OnlyBackwardsDecreasesForce) {
+                                if (Vector3.Dot(rb.velocity, positionDifference) > 0) {
+                                    velocityFactorTarget *= 0;
+                                }
+                                if (Vector3.Dot(target.Velocity, positionDifference) < 0) {
+                                    velocityFactorAllomancer *= 0;
+                                }
+                            }
+                        }
+
+                        restitutionForceFromAllomancer = allomanticForce * velocityFactorAllomancer;
+                        restitutionForceFromTarget = allomanticForce * -velocityFactorTarget;
+
+                        break;
+                    }
+                default: {
+                        restitutionForceFromTarget = Vector3.zero;
+                        restitutionForceFromAllomancer = Vector3.zero;
+                        break;
+                    }
+            }
+        } else {
+            // Not pushing or pulling, do not try to add any force modifications
+            restitutionForceFromAllomancer = Vector3.zero;
+            restitutionForceFromTarget = Vector3.zero;
         }
+        thisFrameMaximumNormalForce += restitutionForceFromTarget;
 
+        // If controlling the push strength by using a target force to push with
         if (GamepadController.currentForceStyle == ForceStyle.ForceMagnitude) {
-            float percent = forceMagnitudeTarget / (target.LastMaximumAllomanticForce + restitutionForceFromTarget).magnitude;
+            float percent = forceMagnitudeTarget / (allomanticForce + restitutionForceFromTarget).magnitude;
             if (percent < 1f) {
                 allomanticForce *= percent;
                 restitutionForceFromTarget *= percent;
                 restitutionForceFromAllomancer *= percent;
             }
         }
-        currentMaximumForce += target.LastMaximumAllomanticForce + restitutionForceFromTarget;
-
         target.LastAllomanticForce = allomanticForce;
         target.LastAllomanticNormalForceFromAllomancer = restitutionForceFromAllomancer;
         target.LastAllomanticNormalForceFromTarget = restitutionForceFromTarget;
-        
+
     }
 
     private void AddForce(Magnetic target, bool pulling) {
@@ -484,13 +579,9 @@ public class AllomanticIronSteel : MonoBehaviour {
         //    netForceOnAllomancer = steelBurnRate * (target.LastNetAllomanticForceOnAllomancer);
         //}
 
-        Vector3 netForceOnTarget = target.LastNetAllomanticForceOnTarget;
-        Vector3 netForceOnAllomancer = target.LastNetAllomanticForceOnAllomancer;
-
-        target.AddForce(netForceOnTarget, ForceMode.Force);
-
+        target.AddForce(target.LastNetAllomanticForceOnTarget, target.LastAllomanticForceOnTarget, ForceMode.Force);
         // apply force to player
-        rb.AddForce(netForceOnAllomancer, ForceMode.Force);
+        rb.AddForce(target.LastNetAllomanticForceOnAllomancer, ForceMode.Force);
 
         //target.Rb.AddForce(targetVelocity, ForceMode.VelocityChange);
 
@@ -499,19 +590,21 @@ public class AllomanticIronSteel : MonoBehaviour {
         // set up for next frame
         //lastExpectedNormalTargetAcceleration = -restitutionForceFromAllomancer / target.Mass * Time.fixedDeltaTime;
         //lastAllomancerVelocity = rb.velocity;
-        currentExpectedAllomancerAcceleration += netForceOnAllomancer / rb.mass;
+        thisFrameExpectedAllomancerAcceleration += target.LastAllomanticForceOnAllomancer / rb.mass;
+        //thisFrameNormalForce += target.LastAllomanticNormalForceFromTarget;
+        //thisFrameAllomanticForce += target.LastAllomanticForce;
 
         //lastExpectedNormalAllomancerAcceleration = restitutionForceFromTarget / rb.mass * Time.fixedDeltaTime;
 
         // Debug
         allomanticsForce = target.LastAllomanticForce.magnitude;
         allomanticsForces = target.LastAllomanticForce;
-        netAllomancersForce = netForceOnAllomancer.magnitude;
+        netAllomancersForce = target.LastNetAllomanticForceOnAllomancer.magnitude;
         resititutionFromTargetsForce = target.LastAllomanticNormalForceFromTarget;
         resititutionFromPlayersForce = target.LastAllomanticNormalForceFromAllomancer;
         percentOfTargetForceReturned = resititutionFromTargetsForce.magnitude / allomanticsForce;
         percentOfAllomancerForceReturned = resititutionFromPlayersForce.magnitude / allomanticsForce;
-        netTargetsForce = netForceOnTarget.magnitude;
+        netTargetsForce = target.LastNetAllomanticForceOnTarget.magnitude;
     }
 
     //private const float additive = 1f / (maxRange + 1f);
@@ -578,16 +671,15 @@ public class AllomanticIronSteel : MonoBehaviour {
                     //}
                     objectToTarget.LightSaberFactor = Mathf.Lerp(objectToTarget.LightSaberFactor, lightSaberConstant / (lightSaberConstant + (objectToTarget.LastNetAllomanticForceOnAllomancer).magnitude), MetalLinesLerpConstant);
                     metalLines[lines].LightSaberFactor = objectToTarget.LightSaberFactor;
-                    
-                    metalLines[lines].LineColor = new Color(0, closeness * gMaxLines, 255);
-                } else if(IsTarget(objectToTarget, steel)) { // if this line is being pushed on
-                                                             // Metal is a steel target
-                    metalLines[lines].LineColor = new Color(255, closeness * gMaxLines, 0);
+                    metalLines[lines].LineColor = new Color(0, 1, gMaxLines, 1);
+                } else if (IsTarget(objectToTarget, steel)) { // if this line is being pushed on
+                                                              // Metal is a steel target
+                    metalLines[lines].LineColor = new Color(1, gMaxLines, 0, 1);
                     objectToTarget.LightSaberFactor = Mathf.Lerp(objectToTarget.LightSaberFactor, lightSaberConstant / (lightSaberConstant + (objectToTarget.LastNetAllomanticForceOnAllomancer).magnitude), MetalLinesLerpConstant);
                     metalLines[lines].LightSaberFactor = objectToTarget.LightSaberFactor;
                 } else {
                     // Metal is not a target
-                    metalLines[lines].LineColor = new Color(0, closeness * gMaxLines, closeness * bMaxLines);
+                    metalLines[lines].LineColor = new Color(0, closeness * gMaxLines, closeness * bMaxLines, 1);
                     metalLines[lines].LightSaberFactor = 1;
                 }
 
@@ -681,7 +773,7 @@ public class AllomanticIronSteel : MonoBehaviour {
             }
         }
 
-        overlays.HardRefresh();
+        HUD.TargetOverlayController.HardRefresh();
     }
 
     public void RemoveTarget(Magnetic target, bool ironTarget, bool searchBoth = false) {
@@ -699,6 +791,11 @@ public class AllomanticIronSteel : MonoBehaviour {
                         PullCount--;
                         pullTargets[PullCount].Clear();
                         pullTargets[PullCount] = null;
+
+                        if (!searchBoth) {
+                            HUD.TargetOverlayController.HardRefresh();
+                            return;
+                        }
                         break;
                     }
                 }
@@ -716,7 +813,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                         pushTargets[PushCount].Clear();
                         pushTargets[PushCount] = null;
 
-                        overlays.HardRefresh();
+                        HUD.TargetOverlayController.HardRefresh();
                         return;
                     }
                 }
@@ -736,7 +833,7 @@ public class AllomanticIronSteel : MonoBehaviour {
         pullTargets = new Magnetic[maxNumberOfTargets];
         pushTargets = new Magnetic[maxNumberOfTargets];
 
-        overlays.SetTargets(pullTargets, pushTargets);
+        HUD.TargetOverlayController.SetTargets(pullTargets, pushTargets);
     }
 
     public void AddTarget(Magnetic newTarget, bool usingIron) {
@@ -755,7 +852,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                             pullTargets[i] = newTarget;
                             PullCount++;
 
-                            overlays.HardRefresh();
+                            HUD.TargetOverlayController.HardRefresh();
                             return;
                         }
                         // this space in the array is taken.
@@ -765,7 +862,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                             }
                             pullTargets[PullCount - 1] = newTarget;
 
-                            overlays.HardRefresh();
+                            HUD.TargetOverlayController.HardRefresh();
                             return;
                         }
                         // An irrelevant target was iterated through.
@@ -777,7 +874,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                     }
                     pullTargets[AvailableNumberOfTargets - 1] = newTarget;
 
-                    overlays.HardRefresh();
+                    HUD.TargetOverlayController.HardRefresh();
                     return;
 
                 } else {
@@ -790,7 +887,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                             pushTargets[i] = newTarget;
                             PushCount++;
 
-                            overlays.HardRefresh();
+                            HUD.TargetOverlayController.HardRefresh();
                             return;
                         }
                         // this space in the array is taken.
@@ -800,7 +897,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                             }
                             pushTargets[PushCount - 1] = newTarget;
 
-                            overlays.HardRefresh();
+                            HUD.TargetOverlayController.HardRefresh();
                             return;
                         }
                         // An irrelevant target was iterated through.
@@ -812,7 +909,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                     }
                     pushTargets[AvailableNumberOfTargets - 1] = newTarget;
 
-                    overlays.HardRefresh();
+                    HUD.TargetOverlayController.HardRefresh();
                     return;
                 }
             }
@@ -823,11 +920,8 @@ public class AllomanticIronSteel : MonoBehaviour {
         if (!IsBurningIronSteel) { // just started burning metal
             gamepad.Shake(.1f, .1f, .3f);
             IsBurningIronSteel = true;
-            if(GamepadController.currentForceStyle == ForceStyle.Percentage)
-                burnRateMeter.SetBurnRateMeterPercentage(ironBurnRate, steelBurnRate, maximumForceMagnitude);
-            else
-                burnRateMeter.SetBurnRateMeterForceMagnitude(forceMagnitudeTarget, maximumForceMagnitude);
-            burnRateMeter.MetalLineText = AvailableNumberOfTargets.ToString();
+            UpdateBurnRateMeter();
+            HUD.BurnRateMeter.MetalLineText = AvailableNumberOfTargets.ToString();
         }
     }
 
@@ -836,10 +930,10 @@ public class AllomanticIronSteel : MonoBehaviour {
         //if (IsBurningIronSteel) {
         RemoveTargetGlow(lastHoveredOverTarget);
         IsBurningIronSteel = false;
-        if (burnRateMeter) {
-            burnRateMeter.Clear();
+        if (HUD.BurnRateMeter) {
+            HUD.BurnRateMeter.Clear();
         }
-        if(gamepad)
+        if (gamepad)
             gamepad.SetRumble(0, 0);
 
         // make blue lines disappear
@@ -850,7 +944,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     }
 
     private void SetPullRate(float rate) {
-        if(rate > .01f) {
+        if (rate > .01f) {
             if (GamepadController.currentForceStyle == ForceStyle.Percentage)
                 ironBurnRate = rate;
             else
@@ -867,7 +961,7 @@ public class AllomanticIronSteel : MonoBehaviour {
 
     private void SetPushRate(float rate) {
         if (rate > .01f) {
-            if(GamepadController.currentForceStyle == ForceStyle.Percentage)
+            if (GamepadController.currentForceStyle == ForceStyle.Percentage)
                 steelBurnRate = rate;
             else
                 steelBurnRate = Mathf.Min(1, rate);
@@ -920,7 +1014,7 @@ public class AllomanticIronSteel : MonoBehaviour {
             pushTargets[i].LastWasPulled = false;
         }
 
-        overlays.SetTargets(pullTargets, pushTargets);
+        HUD.TargetOverlayController.SetTargets(pullTargets, pushTargets);
     }
 
     private void SetAllTargetsOutOfRange() {
@@ -948,7 +1042,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     private void IncrementNumberOfTargets() {
         if (AvailableNumberOfTargets < maxNumberOfTargets) {
             AvailableNumberOfTargets++;
-            burnRateMeter.MetalLineText = AvailableNumberOfTargets.ToString();
+            HUD.BurnRateMeter.MetalLineText = AvailableNumberOfTargets.ToString();
         }
     }
 
@@ -963,29 +1057,39 @@ public class AllomanticIronSteel : MonoBehaviour {
             if (AvailableNumberOfTargets == 0) {
                 AvailableNumberOfTargets++;
             } else {
-                burnRateMeter.MetalLineText = AvailableNumberOfTargets.ToString();
+                HUD.BurnRateMeter.MetalLineText = AvailableNumberOfTargets.ToString();
             }
         }
 
-        overlays.HardRefresh();
+        HUD.TargetOverlayController.HardRefresh();
     }
 
     private void ChangeTargetForceMagnitude(float change) {
-        if(change > 0) {
-            change = Mathf.Max(10, maximumForceMagnitude / 10f);
-        } else if(change < 0) {
-            change = -Mathf.Max(10, maximumForceMagnitude / 10f);
+        if (change > 0) {
+            //change = Mathf.Max(10, (lastMaximumAllomanticForce + lastMaximumNormalForce).magnitude / 10f);
+            change = 100;
+        } else if (change < 0) {
+            //change = -Mathf.Max(10, (lastMaximumAllomanticForce + lastMaximumNormalForce).magnitude / 10f);
+            change = -100;
         }
         forceMagnitudeTarget = Mathf.Max(0, forceMagnitudeTarget + change);
     }
 
     private void ChangeTargePercent(float change) {
-        if(change > 0) {
+        if (change > 0) {
             change = .1f;
-        } else if(change < 0) {
+        } else if (change < 0) {
             change = -.1f;
         }
         ironBurnRate = Mathf.Clamp(ironBurnRate + change, 0, 1);
         steelBurnRate = Mathf.Clamp(steelBurnRate + change, 0, 1);
+    }
+
+    private void UpdateBurnRateMeter() {
+        if (GamepadController.currentForceStyle == ForceStyle.Percentage)
+            HUD.BurnRateMeter.SetBurnRateMeterPercentage(lastMaximumAllomanticForce, lastMaximumNormalForce, Mathf.Max(ironBurnRate, steelBurnRate));
+        else
+            HUD.BurnRateMeter.SetBurnRateMeterForceMagnitude(lastMaximumAllomanticForce, lastMaximumNormalForce, forceMagnitudeTarget);
+        //HUD.BurnRateMeter.SetBurnRateMeterForceMagnitude(lastAllomanticForce, lastNormalForce, forceMagnitudeTarget, lastMaximumAllomanticForce, lastMaximumNormalForce);
     }
 }

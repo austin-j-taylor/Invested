@@ -19,22 +19,6 @@ public class Coin : Magnetic {
     //            base.LastVelocity = value;
     //    }
     //}
-    public override Vector3 LastExpectedAcceleration {
-        get {
-            return base.LastExpectedAcceleration;
-        }
-        set {
-            //if (value.magnitude > maxAcceleration) {
-            //    Debug.Log(" ... " + value.magnitude);
-            //    //base.LastExpectedAcceleration = value.normalized * maxAcceleration;
-            //    base.LastExpectedAcceleration = value;
-            //    Debug.Log(" new expected acceleration: " + base.LastExpectedAcceleration.magnitude);
-            //} else {
-            //    Debug.Log(value.magnitude);
-                base.LastExpectedAcceleration = value;
-            //}
-        }
-    }
 
     /*
      * Prevents coins from flying away at extremely high, supersonic speeds. Unrealistic, but more like what appears in the books.
@@ -70,8 +54,10 @@ public class Coin : Magnetic {
         if (other.CompareTag("Player")) {
             Player player = other.GetComponent<Player>();
             //if (player.IronSteel.IronPulling)
-            if (Keybinds.IronPulling())
+            if (Keybinds.IronPulling()) {
                 player.Pouch.AddCoin(this);
+                HUD.TargetOverlayController.HardRefresh();
+            }
         }
     }
     //private void OnCollisionEnter(Collision collision) {
@@ -80,19 +66,21 @@ public class Coin : Magnetic {
     //    }
     //}
 
-    public override void AddForce(Vector3 force, ForceMode forceMode) {
+    // Effectively caps the max velocity of the coin without affecting the ANF
+    public override void AddForce(Vector3 netForce, Vector3 allomanticForce, ForceMode forceMode) {
         // If the force would accelerate this Coin past its maxSpeed, don't accelerate it any more!
         if (forceMode == ForceMode.Force) {
-            Vector3 newVelocity = Rb.velocity + force / Mass * Time.fixedDeltaTime;
+            Vector3 newVelocity = Rb.velocity + netForce / Mass * Time.fixedDeltaTime;
             if ((newVelocity).magnitude > maxSpeed) {
                 // Apply the force that would push it to the maxSpeed, but no further
                 Vector3 changeInVelocityThatWillBringMeToTopSpeed = Vector3.ClampMagnitude(newVelocity, maxSpeed) - Rb.velocity;
 
                 LastExpectedAcceleration = changeInVelocityThatWillBringMeToTopSpeed / Time.fixedDeltaTime;
+                //LastExpectedAcceleration = force / Mass;
                 Rb.AddForce(changeInVelocityThatWillBringMeToTopSpeed, ForceMode.VelocityChange);
             } else {
-                LastExpectedAcceleration = force / Mass;
-                Rb.AddForce(force, ForceMode.Force);
+                LastExpectedAcceleration = allomanticForce / Mass;
+                Rb.AddForce(netForce, ForceMode.Force);
             }
         } else {
             Debug.Log("You shouldn't be adding a force to a Coin with anything other than ForceMode.Force");

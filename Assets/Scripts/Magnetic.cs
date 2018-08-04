@@ -26,12 +26,12 @@ public class Magnetic : MonoBehaviour {
     }
     public Vector3 LastPosition { get; set; }
     public Vector3 LastVelocity { get; set; }
-    public virtual Vector3 LastExpectedAcceleration { get; set; }
+    public Vector3 LastExpectedAcceleration;// { get; set; }
 
-    public Vector3 LastAllomanticForce { get; set; }
-    public Vector3 LastMaximumAllomanticForce { get; set; }
-    public Vector3 LastAllomanticNormalForceFromAllomancer { get; set; }
-    public Vector3 LastAllomanticNormalForceFromTarget { get; set; }
+    // These keep track of each Magnetic's participation to the net force on the Allomancer
+    public Vector3 LastAllomanticForce;// { get; set; }
+    public Vector3 LastAllomanticNormalForceFromAllomancer;// { get; set; }
+    public Vector3 LastAllomanticNormalForceFromTarget;// { get; set; }
 
     public float LightSaberFactor { get; set; }
 
@@ -49,26 +49,31 @@ public class Magnetic : MonoBehaviour {
 
     public Vector3 LastNetAllomanticForceOnAllomancer {
         get {
-            //if (LastWasPulled) {
             return LastAllomanticForce + LastAllomanticNormalForceFromTarget;
-            //} else {
-            //    return -LastAllomanticForce + LastAllomanticNormalForceFromTarget;
-            //}
         }
     }
 
     public Vector3 LastNetAllomanticForceOnTarget {
         get {
-            //if (LastWasPulled) {
             return -LastAllomanticForce + LastAllomanticNormalForceFromAllomancer;
-            //} else {
-            //    return LastAllomanticForce + LastAllomanticNormalForceFromAllomancer;
-            //}
+        }
+    }
+
+    public Vector3 LastAllomanticForceOnAllomancer {
+        get {
+            return LastAllomanticForce;
+        }
+    }
+
+    public Vector3 LastAllomanticForceOnTarget {
+        get {
+            return -LastAllomanticForce;
         }
     }
 
     // If the object has a Rigidbody, this is the real centerOfMass. Otherwise, it is just the transform local position.
     public Vector3 LocalCenterOfMass { get; private set; }
+    public Collider ColliderBody { get; private set; }
     // Global center of mass
     public Vector3 CenterOfMass {
         get {
@@ -78,6 +83,11 @@ public class Magnetic : MonoBehaviour {
     public float Mass {
         get {
             return mass;
+        }
+    }
+    public float Charge {
+        get {
+            return Mathf.Pow(mass, AllomanticIronSteel.chargePower);
         }
     }
     public bool InRange {
@@ -97,11 +107,11 @@ public class Magnetic : MonoBehaviour {
     void Awake () {
         Allomancer = null;// = GameObject.FindGameObjectWithTag("Player").GetComponent<AllomanticIronSteel>();
         Rb = GetComponent<Rigidbody>();
+        ColliderBody = GetComponent<Collider>();
         LastPosition = Vector3.zero;
         LastVelocity = Vector3.zero;
         LastExpectedAcceleration = Vector3.zero;
         LastAllomanticForce = Vector3.zero;
-        LastMaximumAllomanticForce = Vector3.zero;
         LastAllomanticNormalForceFromAllomancer = Vector3.zero;
         LastAllomanticNormalForceFromTarget = Vector3.zero;
         LightSaberFactor = 1;
@@ -116,11 +126,11 @@ public class Magnetic : MonoBehaviour {
         InRange = false;
     }
 
+    // If the Magnetic is untargeted
     public void Clear() {
         LastVelocity = Vector3.zero;
         LastExpectedAcceleration = Vector3.zero;
         LastAllomanticForce = Vector3.zero;
-        LastMaximumAllomanticForce = Vector3.zero;
         LastAllomanticNormalForceFromAllomancer = Vector3.zero;
         LastAllomanticNormalForceFromTarget = Vector3.zero;
         Allomancer = null;
@@ -130,17 +140,18 @@ public class Magnetic : MonoBehaviour {
 
     public void SoftClear() {
         LastExpectedAcceleration = Vector3.zero;
+        LastAllomanticForce = Vector3.zero;
         LastAllomanticNormalForceFromAllomancer = Vector3.zero;
         LastAllomanticNormalForceFromTarget = Vector3.zero;
-        LastMaximumAllomanticForce = Vector3.zero;
+        //LastVelocity = Vector3.zero;
         //LightSaberFactor = 1;
     }
 
-    public virtual void AddForce(Vector3 force, ForceMode forceMode) {
+    public virtual void AddForce(Vector3 netForce, Vector3 allomanticForce, ForceMode forceMode) {
         if (!IsStatic) {
-            LastExpectedAcceleration = force / mass;
+            LastExpectedAcceleration = allomanticForce / mass;
 
-            Rb.AddForce(force, forceMode);
+            Rb.AddForce(netForce, forceMode);
         }
     }
 
