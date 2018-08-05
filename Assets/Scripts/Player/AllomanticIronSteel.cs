@@ -448,7 +448,6 @@ public class AllomanticIronSteel : MonoBehaviour {
                                 Vector3 lastTargetAcceleration = (newTargetVelocity - target.LastVelocity) / Time.fixedDeltaTime;
                                 Vector3 unaccountedForTargetAcceleration = lastTargetAcceleration - target.LastExpectedAcceleration;// + Physics.gravity;
                                 restitutionForceFromTarget = Vector3.Project(unaccountedForTargetAcceleration * target.Mass, positionDifference.normalized);
-                                Debug.Log("last targeacc: " + lastTargetAcceleration);
                             }
                             // using Impulse strategy
                             //restitutionForceFromTarget = Vector3.ClampMagnitude(Vector3.Project(target.forceFromCollisionTotal, positionDifference.normalized), allomanticForce.magnitude);
@@ -461,7 +460,6 @@ public class AllomanticIronSteel : MonoBehaviour {
                         Vector3 lastAllomancerAcceleration = (newAllomancerVelocity - lastAllomancerVelocity) / Time.fixedDeltaTime;
                         Vector3 unaccountedForAllomancerAcceleration = lastAllomancerAcceleration - lastExpectedAllomancerAcceleration;
                         restitutionForceFromAllomancer = Vector3.Project(unaccountedForAllomancerAcceleration * rb.mass, positionDifference.normalized);
-                        Debug.Log("last alloacc: " + lastAllomancerAcceleration);
 
 
                         if (PhysicsController.normalForceMaximum == NormalForceMaximum.AllomanticForce) {
@@ -480,7 +478,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                                     }
                                     break;
                                 }
-                            case NormalForceMinimum.ZeroButNegate: {
+                            case NormalForceMinimum.ZeroAndNegate: {
                                     if (Vector3.Dot(restitutionForceFromAllomancer, allomanticForce) > 0) {
                                         restitutionForceFromAllomancer = -restitutionForceFromAllomancer;
                                     }
@@ -502,17 +500,21 @@ public class AllomanticIronSteel : MonoBehaviour {
                             velocityFactorTarget = 0;
                             velocityFactorAllomancer = 0;
                         } else {
-                            velocityFactorTarget = 1 - Mathf.Exp(-(Vector3.Project(target.Velocity, positionDifference.normalized).magnitude / PhysicsController.velocityConstant));
-                            velocityFactorAllomancer = 1 - Mathf.Exp(-(Vector3.Project(rb.velocity, positionDifference.normalized).magnitude / PhysicsController.velocityConstant));
-
-                            if (PhysicsController.exponentialWithVelocityMinimum == ExponentialWithVelocityMinimum.BackwardsDecreasesAndForwardsIncreasesForce) {
+                            if (PhysicsController.exponentialWithVelocityRelativity == ExponentialWithVelocityRelativity.Absolute) {
+                                velocityFactorTarget = 1 - Mathf.Exp(-(Vector3.Project(target.Velocity, positionDifference.normalized).magnitude / PhysicsController.velocityConstant));
+                                velocityFactorAllomancer = 1 - Mathf.Exp(-(Vector3.Project(rb.velocity, positionDifference.normalized).magnitude / PhysicsController.velocityConstant));
+                            } else {
+                                velocityFactorTarget = 1 - Mathf.Exp(-(Vector3.Project(rb.velocity - target.Velocity, positionDifference.normalized).magnitude / PhysicsController.velocityConstant));
+                                velocityFactorAllomancer = 1 - Mathf.Exp(-(Vector3.Project(target.Velocity - rb.velocity, positionDifference.normalized).magnitude / PhysicsController.velocityConstant));
+                            }
+                            if (PhysicsController.exponentialWithVelocitySignage == ExponentialWithVelocitySignage.BackwardsDecreasesAndForwardsIncreasesForce) {
                                 if (Vector3.Dot(rb.velocity, positionDifference) > 0) {
                                     velocityFactorTarget *= -1;
                                 }
                                 if (Vector3.Dot(target.Velocity, positionDifference) < 0) {
                                     velocityFactorAllomancer *= -1;
                                 }
-                            } else if (PhysicsController.exponentialWithVelocityMinimum == ExponentialWithVelocityMinimum.OnlyBackwardsDecreasesForce) {
+                            } else if (PhysicsController.exponentialWithVelocitySignage == ExponentialWithVelocitySignage.OnlyBackwardsDecreasesForce) {
                                 if (Vector3.Dot(rb.velocity, positionDifference) > 0) {
                                     velocityFactorTarget *= 0;
                                 }
@@ -545,7 +547,6 @@ public class AllomanticIronSteel : MonoBehaviour {
             if (percent < 1f) {
                 allomanticForce *= percent;
                 restitutionForceFromTarget *= percent;
-                Debug.Log("BEFORE: " + restitutionForceFromAllomancer);
                 //restitutionForceFromAllomancer *= percent;
             }
         }
@@ -582,7 +583,6 @@ public class AllomanticIronSteel : MonoBehaviour {
         //lastExpectedNormalTargetAcceleration = -restitutionForceFromAllomancer / target.Mass * Time.fixedDeltaTime;
         //lastAllomancerVelocity = rb.velocity;
         thisFrameExpectedAllomancerAcceleration += target.LastAllomanticForceOnAllomancer / rb.mass;
-        Debug.Log(lastExpectedAllomancerAcceleration);
         //thisFrameNormalForce += target.LastAllomanticNormalForceFromTarget;
         //thisFrameAllomanticForce += target.LastAllomanticForce;
 
