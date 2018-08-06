@@ -21,6 +21,7 @@ Version 1.0.9
 - Improved visual highlight of potential targets
 - Improved menu navigation with the Escape key
 - Improved Tutorial slightly
+- Improved Sandbox slightly
 - Swapped Jump and Throw-coin controls on gamepad
 - Fixed several bugs with the calculation of the ANF
 - Fixed visual bug with target metal lines when using gamepad
