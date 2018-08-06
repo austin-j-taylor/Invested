@@ -1,12 +1,12 @@
 # Invested
 Invested is a physics simulation and game made in the Unity engine. It is a personal interpretation and emulation of the physics of Allomancy, a magic system from the novel "Mistborn" by Brandon Sanderson.
 
-Download the current build from [here.](https://www.dropbox.com/s/j9jscf4xf8pf04i/Invested%201.0.4.zip?dl=1)
+Download the current build from [here.](https://www.dropbox.com/s/6o152qparaoede7/Invested.zip?dl=1)
 
 Here are some short videos of the game:
 - [Pushing and Pulling on metal targets](https://gfycat.com/PowerfulPaleAuk)
 - [Pull targets vs. Push targets](https://gfycat.com/FoolishUnderstatedBackswimmer)
-- [Flying around the scene](https://gfycat.com/SpecificInferiorCaracal)
+- [Some recent developments to the HUD](https://gfycat.com/ChubbySelfishBoutu)
 
 This Unity project makes use of [Volumetric Lines by Johannes Unterguggenberger](https://assetstore.unity.com/packages/tools/particles-effects/volumetric-lines-29160) and [Cakeslice's Outline Effect](https://github.com/cakeslice/Outline-Effect).
 
