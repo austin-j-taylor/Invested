@@ -16,6 +16,10 @@ public class SettingsMenu : MonoBehaviour {
     private const string forcDetails = "Player sets a target force magnitude. Pushes will always try to have that magnitude.";
     private const string perc = "Control Force Percentage";
     private const string percDetails = "Player sets a percentage of their maximum possible force to push with.";
+    private const string newt = "Newtons";
+    private const string newtDetails = "Pushes/pulls will be expressed as forces in units of Newtons.";
+    private const string grav = "G's";
+    private const string gravDetails = "Pushes/pulls will be expressed as accelerations in units of G's.";
     private const string norm = "Allomantic Normal Force\n(ANF)";
     private const string normDetails = "Push on an anchored coin. The coin pushes on the ground. The ground pushes back on the coin. That force with which the ground resists your push is returned to you.";
     private const string expV = "Exponential with Velocity\n(EWV)";
@@ -35,7 +39,7 @@ public class SettingsMenu : MonoBehaviour {
     private const string eWVAlwaysDecreasing = "No Changes";
     private const string eWVAlwaysDecreasingDetails = "The higher the speed of the target, the weaker the push or pull. Period. Realistic behavior.";
     private const string eWVOnlyBackwardsDecreases = "Only When Moving Away";
-    private const string eWVOnlyBackwardsDecreasesDetails = "If a target is moving away from you, the force is weaker. If a target is moving towards you, the force is unaffected by the factor.";
+    private const string eWVOnlyBackwardsDecreasesDetails = "If a target is moving away from you, the force is weaker. If a target is moving towards you, the force is unaffected.";
     private const string eWVChangesWithSign = "Symmetrical";
     private const string eWVChangesWithSignDetails = "The faster a target is moving away from you, the weaker the push/pull. The faster a targed is moving towards you, the stronger the push/pull.";
     private const string eWVRelative = "Relative";
@@ -46,13 +50,9 @@ public class SettingsMenu : MonoBehaviour {
     private const string inverseDetails = "AF ∝ 1 / d² where d = distance between Allomancer and target";
     private const string linear = "Linear";
     private const string linearDetails = "AF ∝ 1 - d / R where d = distance between Allomancer and target; R = maximum range of push";
-    private const string eWD = "Exponential With Distance";
-    private const string eWDDetails = "AF ∝ e ^ -d/Dd = distance between Allomancer and target; D = Exponential Constant";
-    private const string newt = "Newtons";
-    private const string newtDetails = "Pushes/pulls will be expressed as forces in units of Newtons.";
-    private const string grav = "G's";
-    private const string gravDetails = "Pushes/pulls will be expressed as accelerations in units of G's.";
-    private const string forcConstantDetails = "All pushes/pulls are proportional to this constant.";
+    private const string eWD = "Exponential with Distance";
+    private const string eWDDetails = "AF ∝ e ^ -d/D where d = distance between Allomancer and target; D = Exponential Constant";
+    private const string alloConstantDetails = "All pushes/pulls are proportional to this constant.";
     private const string maxRDetails = "Nearby metals can be detected within this range.";
 
     public bool IsOpen {
@@ -89,6 +89,9 @@ public class SettingsMenu : MonoBehaviour {
     private Text sensitivityValueText;
     private Slider smoothing;
     private Text smoothingValueText;
+    private Button forceUnitsButton;
+    private Text forceUnitsButtonText;
+    private Text forceUnitsDetails;
 
     private Button closeButton;
     private Button anchoredBoostButton;
@@ -119,9 +122,6 @@ public class SettingsMenu : MonoBehaviour {
     private Text distanceConstantLabel;
     private Slider distanceConstantSlider;
     private Text distanceConstantValueText;
-    private Button forceUnitsButton;
-    private Text forceUnitsButtonText;
-    private Text forceUnitsDetails;
     private Slider forceConstantSlider;
     private Text forceConstantValueText;
     private Text forceConstantDetails;
@@ -153,9 +153,14 @@ public class SettingsMenu : MonoBehaviour {
         pushControlStyleButtonText = pushControlStyleButton.transform.GetChild(0).GetComponent<Text>();
         pushControlStyleDetails = pushControlStyleButton.transform.GetChild(1).GetComponent<Text>();
 
-        sensitivity = gameplayHeader.GetChild(3).GetComponentInChildren<Slider>();
+        forceUnitsButton = gameplayHeader.GetChild(3).GetChild(0).GetComponent<Button>();
+        forceUnitsButtonText = forceUnitsButton.GetComponentInChildren<Text>();
+        forceUnitsDetails = forceUnitsButton.transform.GetChild(1).GetComponent<Text>();
+
+        sensitivity = gameplayHeader.GetChild(4).GetComponentInChildren<Slider>();
         sensitivityValueText = sensitivity.GetComponentInChildren<Text>();
-        smoothing = gameplayHeader.GetChild(4).GetComponentInChildren<Slider>();
+
+        smoothing = gameplayHeader.GetChild(5).GetComponentInChildren<Slider>();
         smoothingValueText = smoothing.GetComponentInChildren<Text>();
 
         // Physics Header
@@ -196,14 +201,10 @@ public class SettingsMenu : MonoBehaviour {
         distanceConstantSlider = distanceConstantLabel.GetComponentInChildren<Slider>();
         distanceConstantValueText = distanceConstantSlider.GetComponentInChildren<Text>();
 
-        forceUnitsButton = physicsHeader.GetChild(8).GetChild(0).GetComponent<Button>();
-        forceUnitsButtonText = forceUnitsButton.GetComponentInChildren<Text>();
-        forceUnitsDetails = forceUnitsButton.transform.GetChild(1).GetComponent<Text>();
-
-        forceConstantSlider = physicsHeader.GetChild(9).GetComponentInChildren<Slider>();
+        forceConstantSlider = physicsHeader.GetChild(8).GetComponentInChildren<Slider>();
         forceConstantValueText = forceConstantSlider.GetComponentInChildren<Text>();
         forceConstantDetails = forceConstantSlider.transform.GetChild(4).GetComponent<Text>();
-        maxRangeSlider = physicsHeader.GetChild(10).GetComponentInChildren<Slider>();
+        maxRangeSlider = physicsHeader.GetChild(9).GetComponentInChildren<Slider>();
         maxRangeValueText = maxRangeSlider.GetComponentInChildren<Text>();
         maxRangeDetails = maxRangeSlider.transform.GetChild(4).GetComponent<Text>();
 
@@ -275,6 +276,8 @@ public class SettingsMenu : MonoBehaviour {
         controlSchemeButtonText.text = mk45;
         pushControlStyleButtonText.text = perc;
         pushControlStyleDetails.text = percDetails;
+        forceUnitsButtonText.text = newt;
+        forceUnitsDetails.text = newtDetails;
         anchoredBoostButtonText.text = norm;
         anchoredBoostDetails.text = normDetails;
         aNFMinimumButtonText.text = aNFMinZero;
@@ -287,9 +290,7 @@ public class SettingsMenu : MonoBehaviour {
         eWVRelativityDetails.text = eWVRelativeDetails;
         distanceRelationshipButtonText.text = eWD;
         distanceRelationshipDetails.text = eWDDetails;
-        forceUnitsButtonText.text = newt;
-        forceUnitsDetails.text = newtDetails;
-        forceConstantDetails.text = forcDetails;
+        forceConstantDetails.text = alloConstantDetails;
         maxRangeDetails.text = maxRDetails;
 
         sensitivity.value = FPVCameraLock.Sensitivity;
@@ -306,6 +307,10 @@ public class SettingsMenu : MonoBehaviour {
         forceConstantValueText.text = forceConstantSlider.value.ToString();
         maxRangeValueText.text = maxRangeSlider.value.ToString();
 
+        gameplayButton.gameObject.SetActive(true);
+        physicsButton.gameObject.SetActive(true);
+        gameplayHeader.gameObject.SetActive(false);
+        physicsHeader.gameObject.SetActive(false);
         rumbleLabel.gameObject.SetActive(false);
         aNFMinimumLabel.gameObject.SetActive(true);
         aNFMaximumLabel.gameObject.SetActive(true);
@@ -313,10 +318,6 @@ public class SettingsMenu : MonoBehaviour {
         eWVSignageLabel.gameObject.SetActive(false);
         distanceConstantLabel.gameObject.SetActive(true);
         velocityConstantLabel.gameObject.SetActive(false);
-        gameplayButton.gameObject.SetActive(true);
-        physicsButton.gameObject.SetActive(true);
-        gameplayHeader.gameObject.SetActive(false);
-        physicsHeader.gameObject.SetActive(false);
         CloseSettings();
     }
 
@@ -407,6 +408,40 @@ public class SettingsMenu : MonoBehaviour {
         } else {
             rumbleButtonText.text = enab;
             GamepadController.UsingRumble = true;
+        }
+    }
+
+    private void OnClickPushControlStyle() {
+        switch (GamepadController.currentForceStyle) {
+            case ForceStyle.ForceMagnitude: {
+                    pushControlStyleButtonText.text = perc;
+                    pushControlStyleDetails.text = percDetails;
+                    GamepadController.currentForceStyle = ForceStyle.Percentage;
+                    break;
+                }
+            default: {
+                    pushControlStyleButtonText.text = forc;
+                    pushControlStyleDetails.text = forcDetails;
+                    GamepadController.currentForceStyle = ForceStyle.ForceMagnitude;
+                    break;
+                }
+        }
+    }
+
+    private void OnClickForceUnitsButton() {
+        switch (PhysicsController.displayUnits) {
+            case ForceDisplayUnits.Newtons: {
+                    forceUnitsButtonText.text = grav;
+                    forceUnitsDetails.text = gravDetails;
+                    PhysicsController.displayUnits = ForceDisplayUnits.Gs;
+                    break;
+                }
+            default: {
+                    forceUnitsButtonText.text = newt;
+                    forceUnitsDetails.text = newtDetails;
+                    PhysicsController.displayUnits = ForceDisplayUnits.Newtons;
+                    break;
+                }
         }
     }
 
@@ -537,8 +572,8 @@ public class SettingsMenu : MonoBehaviour {
     }
     
     private void OnVelocityConstantChanged(float value) {
-        PhysicsController.velocityConstant = value;
-        velocityConstantValueText.text = value.ToString();
+        PhysicsController.velocityConstant = ((int)value);
+        velocityConstantValueText.text = ((int)value).ToString();
     }
 
     private void OnClickDistanceRelationshipButton() {
@@ -569,51 +604,17 @@ public class SettingsMenu : MonoBehaviour {
     }
 
     private void OnDistanceConstantChanged(float value) {
-        PhysicsController.distanceConstant = value;
-        distanceConstantValueText.text = value.ToString();
-    }
-
-    private void OnClickPushControlStyle() {
-        switch(GamepadController.currentForceStyle) {
-            case ForceStyle.ForceMagnitude: {
-                    pushControlStyleButtonText.text = perc;
-                    pushControlStyleDetails.text = percDetails;
-                    GamepadController.currentForceStyle = ForceStyle.Percentage;
-                    break;
-                }
-            default: {
-                    pushControlStyleButtonText.text = forc;
-                    pushControlStyleDetails.text = forcDetails;
-                    GamepadController.currentForceStyle = ForceStyle.ForceMagnitude;
-                    break;
-                }
-        }
-    }
-
-    private void OnClickForceUnitsButton() {
-        switch (PhysicsController.displayUnits) {
-            case ForceDisplayUnits.Newtons: {
-                    forceUnitsButtonText.text = grav;
-                    forceUnitsDetails.text = gravDetails;
-                    PhysicsController.displayUnits = ForceDisplayUnits.Gs;
-                    break;
-                }
-            default: {
-                    forceUnitsButtonText.text = newt;
-                    forceUnitsDetails.text = newtDetails;
-                    PhysicsController.displayUnits = ForceDisplayUnits.Newtons;
-                    break;
-                }
-        }
+        PhysicsController.distanceConstant = ((int)value);
+        distanceConstantValueText.text = ((int)value).ToString();
     }
 
     private void OnForceConstantChanged(float value) {
-        AllomanticIronSteel.AllomanticConstant = value;
+        AllomanticIronSteel.AllomanticConstant = ((int)value);
         forceConstantValueText.text = ((int)value).ToString();
     }
 
     private void OnMaxRangeChanged(float value) {
-        AllomanticIronSteel.maxRange = value;
+        AllomanticIronSteel.maxRange = ((int)value);
         maxRangeValueText.text = ((int)value).ToString();
     }
 }

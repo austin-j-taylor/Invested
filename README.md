@@ -8,16 +8,31 @@ Here are some short videos of the game:
 - [Pull targets vs. Push targets](https://gfycat.com/FoolishUnderstatedBackswimmer)
 - [Flying around the scene](https://gfycat.com/SpecificInferiorCaracal)
 
-This Unity project makes use of [Volumetric Lines by Johannes Unterguggenberger](https://assetstore.unity.com/packages/tools/particles-effects/volumetric-lines-29160) and a modified shader from [Shrimpy's Outlined Diffuse Shader Fixed](https://github.com/Shrimpey/Outlined-Diffuse-Shader-Fixed).
+This Unity project makes use of [Volumetric Lines by Johannes Unterguggenberger](https://assetstore.unity.com/packages/tools/particles-effects/volumetric-lines-29160) and [Cakeslice's Outline Effect](https://github.com/cakeslice/Outline-Effect).
 
 
 Changelog:
+
+Version 1.0.9
+
+- Added HUD element: Mass, Force, and AF + ANF indicators that follow targets
+- Added several physics options for calculation of Anchored Push Boosts
+- Changed color of metal lines to Pull targets to be green
+- Improved visual highlight of potential targets
+- Improved menu navigation with the Escape key
+- Improved Tutorial slightly
+- Swapped Jump and Throw-coin controls on gamepad
+- Fixed several bugs with the calculation of the ANF
+- Fixed visual bug with target metal lines when using gamepad
+
+
 
 Version 1.0.8
 
 - Improved lighting and colors of Luthadel
 	- Added two snazzy lamps to Luthadel and Sandbox
 - Fixed bug with the burn rate meter when stopping burning metals
+
 
 Version 1.0.7
 

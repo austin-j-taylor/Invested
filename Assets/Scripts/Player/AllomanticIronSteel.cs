@@ -43,8 +43,6 @@ public class AllomanticIronSteel : MonoBehaviour {
     private List<VolumetricLineBehavior> metalLines;
     private VolumetricLineBehavior metalLineTemplate;
     [SerializeField]
-    private Material ironpullTargetedMaterial;
-    [SerializeField]
     private Transform metalLinesAnchor;
     [SerializeField]
     private Transform centerOfMass;
@@ -68,8 +66,6 @@ public class AllomanticIronSteel : MonoBehaviour {
     private float timeToStopBurning = 0f;
     private float timeToSwapBurning = 0f;
 
-    // Currently hovered-over Magnetic
-    private Magnetic lastHoveredOverTarget = null;
 
     // Checks if targets were cleared after stopping pulling/pushing
     //private bool justClearedIron = false;
@@ -104,12 +100,19 @@ public class AllomanticIronSteel : MonoBehaviour {
 
     private float forceMagnitudeTarget = 600;
 
+    // Currently hovered-over Magnetic
+    public Magnetic HighlightedTarget { get; private set; } = null;
     public bool IronPulling { get; private set; } = false;
     public bool SteelPushing { get; private set; } = false;
     public bool IsBurningIronSteel { get; private set; } = false;
     public float Mass {
         get {
             return rb.mass;
+        }
+    }
+    public bool HasHighlightedTarget {
+        get {
+            return HighlightedTarget != null;
         }
     }
 
@@ -135,8 +138,9 @@ public class AllomanticIronSteel : MonoBehaviour {
         pullTargets = new Magnetic[maxNumberOfTargets];
         pushTargets = new Magnetic[maxNumberOfTargets];
         HUD.TargetOverlayController.SetTargets(pullTargets, pushTargets);
+        HUD.TargetOverlayController.Clear();
         metalLines = new List<VolumetricLineBehavior>();
-        lastHoveredOverTarget = null;
+        HighlightedTarget = null;
         lastExpectedAllomancerAcceleration = Vector3.zero;
         //lastAllomanticForce = Vector3.zero;
         //lastNormalForce = Vector3.zero;
@@ -212,13 +216,15 @@ public class AllomanticIronSteel : MonoBehaviour {
             RemoveAllOutOfRangeTargets();
 
             // highlight the potential target you would select, if you targeted it
-            if (target != null && target != lastHoveredOverTarget) {
-                RemoveTargetGlow(lastHoveredOverTarget);
-                AddTargetGlow(target);
-                lastHoveredOverTarget = target;
+            if (target != null && target != HighlightedTarget) {
+                if(HasHighlightedTarget)
+                    HighlightedTarget.RemoveTargetGlow();
+                target.AddTargetGlow();
+                HighlightedTarget = target;
             } else if (target == null) {
-                RemoveTargetGlow(lastHoveredOverTarget);
-                lastHoveredOverTarget = null;
+                if(HasHighlightedTarget)
+                    HighlightedTarget.RemoveTargetGlow();
+                HighlightedTarget = null;
             }
 
 
@@ -230,7 +236,10 @@ public class AllomanticIronSteel : MonoBehaviour {
                     } else {
                         if (Keybinds.SelectDown()) {
                             if (IsTarget(target, iron)) {
+                                // Remove the target, but keep it highlighted
                                 RemoveTarget(target, iron);
+                                target.AddTargetGlow();
+                                Debug.Log("HIGHLINGINT");
                             } else {
                                 RemoveTarget(0, iron);
                             }
@@ -243,7 +252,9 @@ public class AllomanticIronSteel : MonoBehaviour {
                     } else {
                         if (Keybinds.SelectAlternateDown()) {
                             if (IsTarget(target, steel)) {
+                                // Remove the target, but keep it highlighted
                                 RemoveTarget(target, steel);
+                                target.AddTargetGlow();
                             } else {
                                 RemoveTarget(0, steel);
                             }
@@ -694,51 +705,6 @@ public class AllomanticIronSteel : MonoBehaviour {
         return centerestObject;
     }
 
-    private void AddTargetGlow(Magnetic target) {
-        if (target != null) {
-            Renderer targetRenderer;
-            Material[] mats;
-            Material[] temp;
-            // add glowing of new pullTarget
-            targetRenderer = target.GetComponent<Renderer>();
-            temp = targetRenderer.materials;
-            mats = new Material[temp.Length + 1];
-            for (int i = 0; i < temp.Length; i++) {
-                mats[i] = temp[i];
-            }
-
-            mats[mats.Length - 1] = ironpullTargetedMaterial;
-            targetRenderer.materials = mats;
-        }
-    }
-
-    private void RemoveTargetGlow(Magnetic target) {
-        if (target != null) {
-            Renderer targetRenderer;
-            Material[] mats;
-            Material[] temp;
-
-            // remove glowing of old target
-            targetRenderer = target.GetComponent<Renderer>();
-            temp = targetRenderer.materials;
-            if (temp.Length > 1) {
-                mats = new Material[temp.Length - 1];
-                mats[0] = temp[0];
-                for (int i = 1; i < mats.Length; i++) {
-                    if (temp[i].name == "IronpullOutline (Instance)") {
-                        for (int j = i; j < mats.Length; j++) {
-                            mats[j] = temp[j + 1];
-                        }
-                        break;
-                    } else {
-                        mats[i] = temp[i];
-                    }
-                }
-                targetRenderer.materials = mats;
-            }
-        }
-    }
-
     private void RemoveTarget(int index, bool ironTarget) {
         lastAllomancerVelocity = Vector3.zero;
         lastExpectedAllomancerAcceleration = Vector3.zero;
@@ -826,6 +792,7 @@ public class AllomanticIronSteel : MonoBehaviour {
         pushTargets = new Magnetic[maxNumberOfTargets];
 
         HUD.TargetOverlayController.SetTargets(pullTargets, pushTargets);
+        HUD.TargetOverlayController.Clear();
     }
 
     public void AddTarget(Magnetic newTarget, bool usingIron) {
@@ -920,7 +887,8 @@ public class AllomanticIronSteel : MonoBehaviour {
     public void StopBurningIronSteel() {
         RemoveAllTargets();
         //if (IsBurningIronSteel) {
-        RemoveTargetGlow(lastHoveredOverTarget);
+        if(HasHighlightedTarget)
+            HighlightedTarget.RemoveTargetGlow();
         IsBurningIronSteel = false;
         if (HUD.BurnRateMeter) {
             HUD.BurnRateMeter.Clear();

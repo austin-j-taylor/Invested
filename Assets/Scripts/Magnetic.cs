@@ -1,3 +1,4 @@
+using cakeslice;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,6 +11,8 @@ public class Magnetic : MonoBehaviour {
     private float mass;
 
     private bool lastWasPulled;
+    private Outline highlightedTargetOutline;
+
     public AllomanticIronSteel Allomancer {
         get;
         set;
@@ -74,6 +77,8 @@ public class Magnetic : MonoBehaviour {
     // If the object has a Rigidbody, this is the real centerOfMass. Otherwise, it is just the transform local position.
     public Vector3 LocalCenterOfMass { get; private set; }
     public Collider ColliderBody { get; private set; }
+    // If this Magnetic is at the center of the screen, highlighted, ready to be targeted.
+    public bool IsHighlighted { get; private set; }
     // Global center of mass
     public Vector3 CenterOfMass {
         get {
@@ -105,7 +110,8 @@ public class Magnetic : MonoBehaviour {
 
     // Use this for initialization
     void Awake () {
-        Allomancer = null;// = GameObject.FindGameObjectWithTag("Player").GetComponent<AllomanticIronSteel>();
+        Allomancer = null;
+        highlightedTargetOutline = gameObject.AddComponent<Outline>();
         Rb = GetComponent<Rigidbody>();
         ColliderBody = GetComponent<Collider>();
         LastPosition = Vector3.zero;
@@ -116,6 +122,7 @@ public class Magnetic : MonoBehaviour {
         LastAllomanticNormalForceFromTarget = Vector3.zero;
         LightSaberFactor = 1;
         lastWasPulled = false;
+        IsHighlighted = false;
         IsStatic = Rb == null;
         if(!IsStatic) {
             mass = Rb.mass;
@@ -136,6 +143,7 @@ public class Magnetic : MonoBehaviour {
         Allomancer = null;
         LightSaberFactor = 1;
         InRange = false;
+        RemoveTargetGlow();
     }
 
     public void SoftClear() {
@@ -154,6 +162,60 @@ public class Magnetic : MonoBehaviour {
             Rb.AddForce(netForce, forceMode);
         }
     }
+    public void AddTargetGlow() {
+        highlightedTargetOutline.Enable();
+    }
+
+    public void RemoveTargetGlow() {
+        highlightedTargetOutline.Disable();
+    }
+
+    //public void AddTargetGlow() {
+    //    Renderer targetRenderer;
+    //    Material[] mats;
+    //    Material[] temp;
+    //    // add glowing of new pullTarget
+    //    targetRenderer = GetComponent<Renderer>();
+    //    temp = targetRenderer.materials;
+    //    mats = new Material[temp.Length + 1];
+    //    for (int i = 0; i < temp.Length; i++) {
+    //        mats[i] = temp[i];
+    //    }
+
+    //    mats[mats.Length - 1] = GameManager.Instance.TargetHighlightMaterial;
+    //    targetRenderer.materials = mats;
+    //    IsHighlighted = true;
+    //}
+
+    //public void RemoveTargetGlow() {
+    //    if (IsHighlighted) {
+    //        Renderer targetRenderer;
+    //        Material[] mats;
+    //        Material[] temp;
+
+    //        // remove glowing of old target
+    //        targetRenderer = GetComponent<Renderer>();
+    //        temp = targetRenderer.materials;
+    //        if (temp.Length > 1) {
+    //            mats = new Material[temp.Length - 1];
+    //            mats[0] = temp[0];
+    //            for (int i = 1; i < mats.Length; i++) {
+    //                if (temp[i].name == "targetHighlightMaterial (Instance)") {
+    //                    for (int j = i; j < mats.Length; j++) {
+    //                        mats[j] = temp[j + 1];
+    //                    }
+    //                    break;
+    //                } else {
+    //                    mats[i] = temp[i];
+    //                }
+    //            }
+    //            targetRenderer.materials = mats;
+    //            IsHighlighted = false;
+    //            HUD.TargetOverlayController.RemoveHighlightedTargetLabel();
+
+    //        }
+    //    }
+    //}
 
     //private void OnCollisionStay(Collision collision) {
     //    if (allomancer != null) {
