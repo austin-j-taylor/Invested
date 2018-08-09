@@ -49,7 +49,7 @@ public class HUD : MonoBehaviour {
 
     // Returns a string reading a single Force in Newtons or G's
     public static string ForceString(float force) {
-        switch (PhysicsController.displayUnits) {
+        switch (SettingsMenu.displayUnits) {
             case ForceDisplayUnits.Newtons: {
                     return ((int)force).ToString() + "N";
                 }
@@ -65,7 +65,7 @@ public class HUD : MonoBehaviour {
         string plusSign;
         plusSign = DecideSignColor(allomanticForce, normalForce, invert);
 
-        switch(PhysicsController.displayUnits) {
+        switch(SettingsMenu.displayUnits) {
             case ForceDisplayUnits.Newtons: {
                     return ((int)allomanticForce.magnitude).ToString() + " " + plusSign + " " + ((int)normalForce.magnitude).ToString() + "N";
                 }

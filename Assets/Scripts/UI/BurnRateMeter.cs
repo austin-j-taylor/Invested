@@ -70,13 +70,21 @@ public class BurnRateMeter : MonoBehaviour {
     }
 
     private void SetSumForceText(Vector3 allomanticForce, Vector3 normalForce) {
-        float allomanticMagnitude = allomanticForce.magnitude;
-        float normalMagnitude = normalForce.magnitude;
-        sumForceText.text = HUD.AllomanticSumString(allomanticForce, normalForce);
+        if (SettingsMenu.interfaceComplexity == InterfaceComplexity.Sums) {
+            float allomanticMagnitude = allomanticForce.magnitude;
+            float normalMagnitude = normalForce.magnitude;
+            sumForceText.text = HUD.AllomanticSumString(allomanticForce, normalForce);
+        }
     }
 
     private void LerpToPercent(float percent) {
         burnRateImage.fillAmount = Mathf.Lerp(burnRateImage.fillAmount, minAngle + (percent) * (maxAngle), burnRateMeterLerpConstant);
+    }
+
+    public void InterfaceRefresh() {
+        if (SettingsMenu.interfaceComplexity == InterfaceComplexity.Simple) {
+            sumForceText.text = "";
+        }
     }
 
     public void Clear() {
@@ -86,4 +94,5 @@ public class BurnRateMeter : MonoBehaviour {
         metalLineCountText.text = "";
         burnRateImage.fillAmount = minAngle;
     }
+
 }

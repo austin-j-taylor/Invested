@@ -3,57 +3,84 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Enumerations for settings
+public enum ForceDisplayUnits { Newtons, Gs }
+public enum InterfaceComplexity { Simple, Sums }
+
+
 public class SettingsMenu : MonoBehaviour {
 
     // String constants for button text
-    private const string mk45 = "Mouse and Keyboard\n(MB 4 & 5)";
-    private const string mkQE = "Mouse and Keyboard\n(Keys Q & E)";
-    private const string game = "Gamepad";
-    private const string gameDetails = "Disconnect and reconnect gamepad if not working.";
-    private const string disa = "Disabled";
-    private const string enab = "Enabled";
-    private const string forc = "Control Force Magntitude";
-    private const string forcDetails = "Player sets a target force magnitude. Pushes will always try to have that magnitude.";
-    private const string perc = "Control Force Percentage";
-    private const string percDetails = "Player sets a percentage of their maximum possible force to push with.";
-    private const string newt = "Newtons";
-    private const string newtDetails = "Pushes/pulls will be expressed as forces in units of Newtons.";
-    private const string grav = "G's";
-    private const string gravDetails = "Pushes/pulls will be expressed as accelerations in units of G's.";
-    private const string norm = "Allomantic Normal Force\n(ANF)";
-    private const string normDetails = "Push on an anchored coin. The coin pushes on the ground. The ground pushes back on the coin. That force with which the ground resists your push is returned to you.";
-    private const string expV = "Exponential with Velocity\n(EWV)";
-    private const string expVDetails = "AF ∝ e ^ -v/V where v = velocity of Allomancor or target; V = Exponential Constant";
-    private const string anchorDisabled = "Disabled";
-    private const string anchorDisabledDetails = "Anchors will provide no stronger push than unanchored targets.";
-    private const string aNFMinZero = "Zero";
-    private const string aNFMinZeroDetails = "ANF will never be negative relative to the AF. Realistic behavior.";
-    private const string aNFMinZeroNegate = "Zero & Negate";
-    private const string aNFMinZeroNegateDetails = "ANF cannot be negative, but values that would be negative have their sign swapped and improve your push instead. Unrealistic behavior.";
-    private const string aNFMinDisabled = "Disabled";
-    private const string aNFMinDisabledDetails = "ANF can be negative. Unrealistic behavior. You can push but actually move towards your target, if your target resists you really well.";
-    private const string aNFMaxAF = "Allomantic Force";
-    private const string aNFMaxAFDetails = "ANF will never be higher than the AF. Realistic behavior. You cannot be resisted harder than you can push.";
-    private const string aNFMaxDisabled = "Disabled";
-    private const string aNFMaxDisabledDetails = "ANF is uncapped. You can be resisted more than you can push. Extremely glitchy and causes feedback loops. Bad idea.";
-    private const string eWVAlwaysDecreasing = "No Changes";
-    private const string eWVAlwaysDecreasingDetails = "The higher the speed of the target, the weaker the push or pull. Period. Realistic behavior.";
-    private const string eWVOnlyBackwardsDecreases = "Only When Moving Away";
-    private const string eWVOnlyBackwardsDecreasesDetails = "If a target is moving away from you, the force is weaker. If a target is moving towards you, the force is unaffected.";
-    private const string eWVChangesWithSign = "Symmetrical";
-    private const string eWVChangesWithSignDetails = "The faster a target is moving away from you, the weaker the push/pull. The faster a targed is moving towards you, the stronger the push/pull.";
-    private const string eWVRelative = "Relative";
-    private const string eWVRelativeDetails = "v = Relative velocity of the target and Allomancer. The net forces on the target and Allomancer are equal.";
-    private const string eWVAbsolute = "Absolute";
-    private const string eWVAbsoluteDetails = "v = Absolute velocities of the target and Allomancer. The net forces on the target and Allomancer will be unequal and dependent on their individual velocities.";
-    private const string inverse = "Inverse Square";
-    private const string inverseDetails = "AF ∝ 1 / d² where d = distance between Allomancer and target";
-    private const string linear = "Linear";
-    private const string linearDetails = "AF ∝ 1 - d / R where d = distance between Allomancer and target; R = maximum range of push";
-    private const string eWD = "Exponential with Distance";
-    private const string eWDDetails = "AF ∝ e ^ -d/D where d = distance between Allomancer and target; D = Exponential Constant";
-    private const string alloConstantDetails = "All pushes/pulls are proportional to this constant.";
-    private const string maxRDetails = "Nearby metals can be detected within this range.";
+    // Gameplay
+    private const string s_mk45 = "Mouse and Keyboard\n(MB 4 & 5)";
+    private const string s_mkQE = "Mouse and Keyboard\n(Keys Q & E)";
+    private const string s_game = "Gamepad";
+    private const string s_gameDetails = "Disconnect and reconnect gamepad if not working.";
+    private const string s_disabled = "Disabled";
+    private const string s_enabled = "Enabled";
+    private const string s_forc = "Control Force Magntitude";
+    private const string s_forcDetails = "Player sets a target force magnitude. Pushes will always try to have that magnitude.";
+    private const string s_perc = "Control Force Percentage";
+    private const string s_percDetails = "Player sets a percentage of their maximum possible force to push with.";
+
+    // Interface
+    private const string s_newt = "Newtons";
+    private const string s_newtDetails = "Pushes/pulls will be expressed as forces in units of Newtons.";
+    private const string s_grav = "G's";
+    private const string s_gravDetails = "Pushes/pulls will be expressed as accelerations in units of G's.";
+    private const string s_interfaceSimple = "Only Net";
+    private const string s_interfaceSimpleDetails = "HUD will only display net forces on the player and targets.";
+    private const string s_interfaceSums = "Sums";
+    private const string s_interfaceSumsDetails = "HUD will display net forces as well as each individual Allomantic Force and Anchor Push Boost.";
+    private const string s_targetForcesEnabled = "Enabled";
+    private const string s_targetForcesEnabledDetails = "Targets will display force(s) acting on them.";
+    private const string s_targetForcesDisabled = "Disabled";
+    private const string s_targetForcesDisabledDetails = "Targets will not display force(s) acting on them.";
+    private const string s_targetMassesEnabled = "Enabled";
+    private const string s_targetMassesEnabledDetails = "Highlighted metals will display their mass.";
+    private const string s_targetMassesDisabled = "Disabled";
+    private const string s_targetMassesDisabledDetails = "Highlighted metals will not display their mass.";
+
+    // Physics
+    private const string s_norm = "Allomantic Normal Force\n(ANF)";
+    private const string s_normDetails = "Push on an anchored coin. The coin pushes on the ground. The ground pushes back on the coin. That force with which the ground resists your push is returned to you.";
+    private const string s_expV = "Exponential with Velocity\n(EWV)";
+    private const string s_expVDetails = "AF ∝ e ^ -v/V where v = velocity of Allomancor or target; V = Exponential Constant";
+    private const string s_anchorDisabled = "Disabled";
+    private const string s_anchorDisabledDetails = "Anchors will provide no stronger push than unanchored targets.";
+    private const string s_aNFMinZero = "Zero";
+    private const string s_aNFMinZeroDetails = "ANF will never be negative relative to the AF. Realistic behavior.";
+    private const string s_aNFMinZeroNegate = "Zero & Negate";
+    private const string s_aNFMinZeroNegateDetails = "ANF cannot be negative, but values that would be negative have their sign swapped and improve your push instead. Unrealistic behavior.";
+    private const string s_aNFMinDisabled = "Disabled";
+    private const string s_aNFMinDisabledDetails = "ANF can be negative. Unrealistic behavior. You can push but actually move towards your target, if your target resists you really well.";
+    private const string s_aNFMaxAF = "Allomantic Force";
+    private const string s_aNFMaxAFDetails = "ANF will never be higher than the AF. Realistic behavior. You cannot be resisted harder than you can push.";
+    private const string s_aNFMaxDisabled = "Disabled";
+    private const string s_aNFMaxDisabledDetails = "ANF is uncapped. You can be resisted more than you can push. Extremely glitchy and causes feedback loops. Bad idea.";
+    private const string s_eWVAlwaysDecreasing = "No Changes";
+    private const string s_eWVAlwaysDecreasingDetails = "The higher the speed of the target, the weaker the push or pull. Period. Realistic behavior.";
+    private const string s_eWVOnlyBackwardsDecreases = "Only When Moving Away";
+    private const string s_eWVOnlyBackwardsDecreasesDetails = "If a target is moving away from you, the force is weaker. If a target is moving towards you, the force is unaffected.";
+    private const string s_eWVChangesWithSign = "Symmetrical";
+    private const string s_eWVChangesWithSignDetails = "The faster a target is moving away from you, the weaker the push/pull. The faster a targed is moving towards you, the stronger the push/pull.";
+    private const string s_eWVRelative = "Relative";
+    private const string s_eWVRelativeDetails = "v = Relative velocity of the target and Allomancer. The net forces on the target and Allomancer are equal.";
+    private const string s_eWVAbsolute = "Absolute";
+    private const string s_eWVAbsoluteDetails = "v = Absolute velocities of the target and Allomancer. The net forces on the target and Allomancer will be unequal and dependent on their individual velocities.";
+    private const string s_inverse = "Inverse Square";
+    private const string s_inverseDetails = "AF ∝ 1 / d² where d = distance between Allomancer and target";
+    private const string s_linear = "Linear";
+    private const string s_linearDetails = "AF ∝ 1 - d / R where d = distance between Allomancer and target; R = maximum range of push";
+    private const string s_eWD = "Exponential with Distance";
+    private const string s_eWDDetails = "AF ∝ e ^ -d/D where d = distance between Allomancer and target; D = Exponential Constant";
+    private const string s_alloConstantDetails = "All pushes/pulls are proportional to this constant.";
+    private const string s_maxRDetails = "Nearby metals can be detected within this range.";
+
+    public static ForceDisplayUnits displayUnits = ForceDisplayUnits.Newtons;
+    public static InterfaceComplexity interfaceComplexity = InterfaceComplexity.Sums;
+    public static bool interfaceTargetForces = true;
+    public static bool interfaceTargetMasses = true;
 
     public bool IsOpen {
         get {
@@ -70,11 +97,19 @@ public class SettingsMenu : MonoBehaviour {
             return physicsHeader.gameObject.activeSelf;
         }
     }
+    public bool IsInterfaceOpen {
+        get {
+            return interfaceHeader.gameObject.activeSelf;
+        }
+    }
 
     private Button gameplayButton;
     private Button physicsButton;
+    private Button interfaceButton;
+    private Transform settingsHeader;
     private Transform gameplayHeader;
     private Transform physicsHeader;
+    private Transform interfaceHeader;
 
     private Button controlSchemeButton;
     private Text controlSchemeButtonText;
@@ -89,9 +124,19 @@ public class SettingsMenu : MonoBehaviour {
     private Text sensitivityValueText;
     private Slider smoothing;
     private Text smoothingValueText;
+
     private Button forceUnitsButton;
     private Text forceUnitsButtonText;
     private Text forceUnitsDetails;
+    private Button interfaceComplexityButton;
+    private Text interfaceComplexityButtonText;
+    private Text interfaceComplexityDetails;
+    private Button targetForcesButton;
+    private Text targetForcesButtonText;
+    private Text targetForcesDetails;
+    private Button targetMassesButton;
+    private Text targetMassesButtonText;
+    private Text targetMassesDetails;
 
     private Button closeButton;
     private Button anchoredBoostButton;
@@ -132,39 +177,17 @@ public class SettingsMenu : MonoBehaviour {
 
 
     void Start() {
-        
+
         // Settings Header
-        Button[] settingsHeaderButtons = transform.GetChild(1).GetComponentsInChildren<Button>();
-        gameplayButton = settingsHeaderButtons[0];
-        physicsButton = settingsHeaderButtons[1];
-        closeButton = settingsHeaderButtons[2];
-
-        // Gameplay Header
-        gameplayHeader = transform.GetChild(2);
-        controlSchemeButton = gameplayHeader.GetChild(0).GetChild(0).GetComponent<Button>();
-        controlSchemeButtonText = controlSchemeButton.GetComponentInChildren<Text>();
-        controlSchemeDetails = controlSchemeButton.transform.GetChild(1).GetComponent<Text>();
-
-        rumbleLabel = gameplayHeader.GetChild(1).GetComponent<Text>();
-        rumbleButton = rumbleLabel.GetComponentInChildren<Button>();
-        rumbleButtonText = rumbleButton.GetComponentInChildren<Text>();
-
-        pushControlStyleButton = gameplayHeader.GetChild(2).GetChild(0).GetComponent<Button>();
-        pushControlStyleButtonText = pushControlStyleButton.transform.GetChild(0).GetComponent<Text>();
-        pushControlStyleDetails = pushControlStyleButton.transform.GetChild(1).GetComponent<Text>();
-
-        forceUnitsButton = gameplayHeader.GetChild(3).GetChild(0).GetComponent<Button>();
-        forceUnitsButtonText = forceUnitsButton.GetComponentInChildren<Text>();
-        forceUnitsDetails = forceUnitsButton.transform.GetChild(1).GetComponent<Text>();
-
-        sensitivity = gameplayHeader.GetChild(4).GetComponentInChildren<Slider>();
-        sensitivityValueText = sensitivity.GetComponentInChildren<Text>();
-
-        smoothing = gameplayHeader.GetChild(5).GetComponentInChildren<Slider>();
-        smoothingValueText = smoothing.GetComponentInChildren<Text>();
+        settingsHeader = transform.GetChild(1);
+        Button[] settingsHeaderButtons = settingsHeader.GetComponentsInChildren<Button>();
+        physicsButton = settingsHeaderButtons[0];
+        gameplayButton = settingsHeaderButtons[1];
+        interfaceButton = settingsHeaderButtons[2];
+        closeButton = settingsHeaderButtons[3];
 
         // Physics Header
-        physicsHeader = transform.GetChild(3);
+        physicsHeader = transform.GetChild(2);
         anchoredBoostButton = physicsHeader.GetChild(0).GetChild(0).GetComponent<Button>();
         anchoredBoostButtonText = anchoredBoostButton.transform.GetChild(0).GetComponent<Text>();
         anchoredBoostDetails = anchoredBoostButton.transform.GetChild(1).GetComponent<Text>();
@@ -208,47 +231,46 @@ public class SettingsMenu : MonoBehaviour {
         maxRangeValueText = maxRangeSlider.GetComponentInChildren<Text>();
         maxRangeDetails = maxRangeSlider.transform.GetChild(4).GetComponent<Text>();
 
+        // Gameplay Header
+        gameplayHeader = transform.GetChild(3);
+        controlSchemeButton = gameplayHeader.GetChild(0).GetChild(0).GetComponent<Button>();
+        controlSchemeButtonText = controlSchemeButton.GetComponentInChildren<Text>();
+        controlSchemeDetails = controlSchemeButton.transform.GetChild(1).GetComponent<Text>();
+
+        rumbleLabel = gameplayHeader.GetChild(1).GetComponent<Text>();
+        rumbleButton = rumbleLabel.GetComponentInChildren<Button>();
+        rumbleButtonText = rumbleButton.GetComponentInChildren<Text>();
+
+        pushControlStyleButton = gameplayHeader.GetChild(2).GetChild(0).GetComponent<Button>();
+        pushControlStyleButtonText = pushControlStyleButton.transform.GetChild(0).GetComponent<Text>();
+        pushControlStyleDetails = pushControlStyleButton.transform.GetChild(1).GetComponent<Text>();
+
+        sensitivity = gameplayHeader.GetChild(3).GetComponentInChildren<Slider>();
+        sensitivityValueText = sensitivity.GetComponentInChildren<Text>();
+
+        smoothing = gameplayHeader.GetChild(4).GetComponentInChildren<Slider>();
+        smoothingValueText = smoothing.GetComponentInChildren<Text>();
+
+        // Interface Header
+        interfaceHeader = transform.GetChild(4);
+        forceUnitsButton = interfaceHeader.GetChild(0).GetChild(0).GetComponent<Button>();
+        forceUnitsButtonText = forceUnitsButton.GetComponentInChildren<Text>();
+        forceUnitsDetails = forceUnitsButton.transform.GetChild(1).GetComponent<Text>();
+
+        interfaceComplexityButton = interfaceHeader.GetChild(1).GetChild(0).GetComponent<Button>();
+        interfaceComplexityButtonText = interfaceComplexityButton.GetComponentInChildren<Text>();
+        interfaceComplexityDetails = interfaceComplexityButton.transform.GetChild(1).GetComponent<Text>();
+
+        targetForcesButton = interfaceHeader.GetChild(3).GetChild(0).GetComponent<Button>();
+        targetForcesButtonText = targetForcesButton.GetComponentInChildren<Text>();
+        targetForcesDetails = targetForcesButton.transform.GetChild(1).GetComponent<Text>();
+
+        targetMassesButton = interfaceHeader.GetChild(4).GetChild(0).GetComponent<Button>();
+        targetMassesButtonText = targetMassesButton.GetComponentInChildren<Text>();
+        targetMassesDetails = targetMassesButton.transform.GetChild(1).GetComponent<Text>();
 
 
-        // old hardcoded indexing
-        //buttons = GetComponentsInChildren<Button>();
-
-        ////gameplayButton = buttons[0];
-        ////physicsButton = buttons[1];
-        ////closeButton = buttons[2];
-        //controlSchemeButton = buttons[3];
-        //rumbleButton = buttons[4];
-        //pushControlStyleButton = buttons[5];
-        //anchoredBoostButton = buttons[6];
-        //distanceRelationshipButton = buttons[7];
-        //forceUnitsButton = buttons[8];
-
-        //sensitivity = sliders[0];
-        //smoothing = sliders[1];
-        //distanceConstantSlider = sliders[2];
-        //velocityConstantSlider = sliders[3];
-        //forceConstantSlider = sliders[4];
-        //maxRangeSlider = sliders[5];
-
-        //gameplayHeader = texts[5];
-        //physicsHeader = texts[16];
-        //rumbleLabel = texts[8];
-        //distanceConstantValueText = texts[21];
-        //velocityConstantValueText = texts[23];
-
-        //controlSchemeButtonText = controlSchemeButton.GetComponentInChildren<Text>();
-        //rumbleButtonText = rumbleButton.GetComponentInChildren<Text>();
-        //anchoredBoostButtonText = anchoredBoostButton.GetComponentInChildren<Text>();
-        //pushControlStyleButtonText = pushControlStyleButton.GetComponentInChildren<Text>();
-        //distanceRelationshipButtonText = distanceRelationshipButton.GetComponentInChildren<Text>();
-        //forceUnitsButtonText = forceUnitsButton.GetComponentInChildren<Text>();
-
-        //sensitivityValueText = sensitivity.GetComponentInChildren<Text>();
-        //smoothingValueText = smoothing.GetComponentInChildren<Text>();
-        //distanceConstantLabel = distanceConstantSlider.GetComponentInChildren<Text>();
-        //velocityConstantLabel = velocityConstantSlider.GetComponentInChildren<Text>();
-        //forceConstantValueText = forceConstantSlider.GetComponentInChildren<Text>();
-        //maxRangeValueText = maxRangeSlider.GetComponentInChildren<Text>();
+        // Command listeners assignment
         pushControlStyleButton.onClick.AddListener(OnClickPushControlStyle);
         sensitivity.onValueChanged.AddListener(OnSensitivityChanged);
         smoothing.onValueChanged.AddListener(OnSmoothingChanged);
@@ -262,36 +284,49 @@ public class SettingsMenu : MonoBehaviour {
         aNFMaximumButton.onClick.AddListener(OnClickANFMaximum);
         eWVSignageButton.onClick.AddListener(OnClickEWVSignage);
         eWVRelativityButton.onClick.AddListener(OnClickEWVRelativity);
-
         distanceRelationshipButton.onClick.AddListener(OnClickDistanceRelationshipButton);
-        forceUnitsButton.onClick.AddListener(OnClickForceUnitsButton);
+
+        forceUnitsButton.onClick.AddListener(OnClickForceUnits);
+        interfaceComplexityButton.onClick.AddListener(OnClickInterfaceComplexity);
+        targetForcesButton.onClick.AddListener(OnClickTargetForces);
+        targetMassesButton.onClick.AddListener(OnClickTargetMasses);
 
         gameplayButton.onClick.AddListener(OpenGameplay);
         physicsButton.onClick.AddListener(OpenPhysics);
+        interfaceButton.onClick.AddListener(OpenInterface);
         controlSchemeButton.onClick.AddListener(OnClickControlScheme);
         rumbleButton.onClick.AddListener(OnClickRumble);
         closeButton.onClick.AddListener(OnClickClose);
 
+        // Initial text field assignment
         controlSchemeDetails.text = "";
-        controlSchemeButtonText.text = mk45;
-        pushControlStyleButtonText.text = perc;
-        pushControlStyleDetails.text = percDetails;
-        forceUnitsButtonText.text = newt;
-        forceUnitsDetails.text = newtDetails;
-        anchoredBoostButtonText.text = norm;
-        anchoredBoostDetails.text = normDetails;
-        aNFMinimumButtonText.text = aNFMinZero;
-        aNFMinimumDetails.text = aNFMinZeroDetails;
-        aNFMaximumButtonText.text = aNFMaxAF;
-        aNFMaximumDetails.text = aNFMaxAFDetails;
-        eWVSignageButtonText.text = eWVAlwaysDecreasing;
-        eWVSignageDetails.text = eWVAlwaysDecreasingDetails;
-        eWVRelativityButtonText.text = eWVRelative;
-        eWVRelativityDetails.text = eWVRelativeDetails;
-        distanceRelationshipButtonText.text = eWD;
-        distanceRelationshipDetails.text = eWDDetails;
-        forceConstantDetails.text = alloConstantDetails;
-        maxRangeDetails.text = maxRDetails;
+        controlSchemeButtonText.text = s_mk45;
+        pushControlStyleButtonText.text = s_perc;
+        pushControlStyleDetails.text = s_percDetails;
+
+        forceUnitsButtonText.text = s_newt;
+        forceUnitsDetails.text = s_newtDetails;
+        interfaceComplexityButtonText.text = s_interfaceSums;
+        interfaceComplexityDetails.text = s_interfaceSumsDetails;
+        targetForcesButtonText.text = s_targetForcesEnabled;
+        targetForcesDetails.text = s_targetForcesEnabledDetails;
+        targetMassesButtonText.text = s_targetMassesEnabled;
+        targetMassesDetails.text = s_targetMassesEnabledDetails;
+
+        anchoredBoostButtonText.text = s_norm;
+        anchoredBoostDetails.text = s_normDetails;
+        aNFMinimumButtonText.text = s_aNFMinZero;
+        aNFMinimumDetails.text = s_aNFMinZeroDetails;
+        aNFMaximumButtonText.text = s_aNFMaxAF;
+        aNFMaximumDetails.text = s_aNFMaxAFDetails;
+        eWVSignageButtonText.text = s_eWVAlwaysDecreasing;
+        eWVSignageDetails.text = s_eWVAlwaysDecreasingDetails;
+        eWVRelativityButtonText.text = s_eWVRelative;
+        eWVRelativityDetails.text = s_eWVRelativeDetails;
+        distanceRelationshipButtonText.text = s_eWD;
+        distanceRelationshipDetails.text = s_eWDDetails;
+        forceConstantDetails.text = s_alloConstantDetails;
+        maxRangeDetails.text = s_maxRDetails;
 
         sensitivity.value = FPVCameraLock.Sensitivity;
         smoothing.value = FPVCameraLock.Smoothing;
@@ -307,10 +342,11 @@ public class SettingsMenu : MonoBehaviour {
         forceConstantValueText.text = forceConstantSlider.value.ToString();
         maxRangeValueText.text = maxRangeSlider.value.ToString();
 
-        gameplayButton.gameObject.SetActive(true);
-        physicsButton.gameObject.SetActive(true);
-        gameplayHeader.gameObject.SetActive(false);
+        // Now, set up the scene to start with only the Title Screen visible
+        settingsHeader.gameObject.SetActive(false);
         physicsHeader.gameObject.SetActive(false);
+        gameplayHeader.gameObject.SetActive(false);
+        interfaceHeader.gameObject.SetActive(false);
         rumbleLabel.gameObject.SetActive(false);
         aNFMinimumLabel.gameObject.SetActive(true);
         aNFMaximumLabel.gameObject.SetActive(true);
@@ -332,27 +368,33 @@ public class SettingsMenu : MonoBehaviour {
     }
 
     private void OpenGameplay() {
-        gameplayButton.gameObject.SetActive(false);
-        physicsButton.gameObject.SetActive(false);
+        settingsHeader.gameObject.SetActive(false);
         gameplayHeader.gameObject.SetActive(true);
     }
 
     private void CloseGameplay() {
-        gameplayButton.gameObject.SetActive(true);
-        physicsButton.gameObject.SetActive(true);
+        settingsHeader.gameObject.SetActive(true);
         gameplayHeader.gameObject.SetActive(false);
     }
 
     private void OpenPhysics() {
-        gameplayButton.gameObject.SetActive(false);
-        physicsButton.gameObject.SetActive(false);
+        settingsHeader.gameObject.SetActive(false);
         physicsHeader.gameObject.SetActive(true);
     }
 
     private void ClosePhysics() {
-        gameplayButton.gameObject.SetActive(true);
-        physicsButton.gameObject.SetActive(true);
+        settingsHeader.gameObject.SetActive(true);
         physicsHeader.gameObject.SetActive(false);
+    }
+
+    private void OpenInterface() {
+        settingsHeader.gameObject.SetActive(false);
+        interfaceHeader.gameObject.SetActive(true);
+    }
+
+    private void CloseInterface() {
+        settingsHeader.gameObject.SetActive(true);
+        interfaceHeader.gameObject.SetActive(false);
     }
 
     public void BackSettings() {
@@ -360,6 +402,8 @@ public class SettingsMenu : MonoBehaviour {
             CloseGameplay();
         else if (IsPhysicsOpen)
             ClosePhysics();
+        else if (IsInterfaceOpen)
+            CloseInterface();
         else
             CloseSettings();
     }
@@ -374,14 +418,14 @@ public class SettingsMenu : MonoBehaviour {
         switch (GamepadController.currentControlScheme) {
             case ControlScheme.MouseKeyboard45: {
                     GamepadController.currentControlScheme = ControlScheme.MouseKeyboardQE;
-                    controlSchemeButtonText.text = mkQE;
+                    controlSchemeButtonText.text = s_mkQE;
                     GamepadController.UsingMB45 = false;
                     break;
                 }
             case ControlScheme.MouseKeyboardQE: {
                     GamepadController.currentControlScheme = ControlScheme.Gamepad;
-                    controlSchemeButtonText.text = game;
-                    controlSchemeDetails.text = gameDetails;
+                    controlSchemeButtonText.text = s_game;
+                    controlSchemeDetails.text = s_gameDetails;
                     GamepadController.UsingGamepad = true;
                     rumbleLabel.gameObject.SetActive(true);
                     break;
@@ -391,7 +435,7 @@ public class SettingsMenu : MonoBehaviour {
                 }
             default: {
                     GamepadController.currentControlScheme = ControlScheme.MouseKeyboard45;
-                    controlSchemeButtonText.text = mk45;
+                    controlSchemeButtonText.text = s_mk45;
                     controlSchemeDetails.text = "";
                     GamepadController.UsingMB45 = true;
                     GamepadController.UsingGamepad = false;
@@ -403,10 +447,10 @@ public class SettingsMenu : MonoBehaviour {
 
     private void OnClickRumble() {
         if (GamepadController.UsingRumble) {
-            rumbleButtonText.text = disa;
+            rumbleButtonText.text = s_disabled;
             GamepadController.UsingRumble = false;
         } else {
-            rumbleButtonText.text = enab;
+            rumbleButtonText.text = s_enabled;
             GamepadController.UsingRumble = true;
         }
     }
@@ -414,45 +458,90 @@ public class SettingsMenu : MonoBehaviour {
     private void OnClickPushControlStyle() {
         switch (GamepadController.currentForceStyle) {
             case ForceStyle.ForceMagnitude: {
-                    pushControlStyleButtonText.text = perc;
-                    pushControlStyleDetails.text = percDetails;
+                    pushControlStyleButtonText.text = s_perc;
+                    pushControlStyleDetails.text = s_percDetails;
                     GamepadController.currentForceStyle = ForceStyle.Percentage;
                     break;
                 }
             default: {
-                    pushControlStyleButtonText.text = forc;
-                    pushControlStyleDetails.text = forcDetails;
+                    pushControlStyleButtonText.text = s_forc;
+                    pushControlStyleDetails.text = s_forcDetails;
                     GamepadController.currentForceStyle = ForceStyle.ForceMagnitude;
                     break;
                 }
         }
     }
 
-    private void OnClickForceUnitsButton() {
-        switch (PhysicsController.displayUnits) {
+    private void OnClickForceUnits() {
+        switch (displayUnits) {
             case ForceDisplayUnits.Newtons: {
-                    forceUnitsButtonText.text = grav;
-                    forceUnitsDetails.text = gravDetails;
-                    PhysicsController.displayUnits = ForceDisplayUnits.Gs;
+                    forceUnitsButtonText.text = s_grav;
+                    forceUnitsDetails.text = s_gravDetails;
+                    displayUnits = ForceDisplayUnits.Gs;
                     break;
                 }
             default: {
-                    forceUnitsButtonText.text = newt;
-                    forceUnitsDetails.text = newtDetails;
-                    PhysicsController.displayUnits = ForceDisplayUnits.Newtons;
+                    forceUnitsButtonText.text = s_newt;
+                    forceUnitsDetails.text = s_newtDetails;
+                    displayUnits = ForceDisplayUnits.Newtons;
                     break;
                 }
         }
     }
 
+    private void OnClickInterfaceComplexity() {
+        switch (interfaceComplexity) {
+            case InterfaceComplexity.Simple: {
+                    interfaceComplexityButtonText.text = s_interfaceSums;
+                    interfaceComplexityDetails.text = s_interfaceSumsDetails;
+                    interfaceComplexity = InterfaceComplexity.Sums;
+                    break;
+                }
+            default: {
+                    interfaceComplexityButtonText.text = s_interfaceSimple;
+                    interfaceComplexityDetails.text = s_interfaceSimpleDetails;
+                    interfaceComplexity = InterfaceComplexity.Simple;
+                    HUD.BurnRateMeter.InterfaceRefresh();
+                    HUD.TargetOverlayController.InterfaceRefresh();
+                    break;
+                }
+        }
+    }
+
+    private void OnClickTargetForces() {
+        if (interfaceTargetForces) {
+            targetForcesButtonText.text = s_targetForcesDisabled;
+            targetForcesDetails.text = s_targetForcesDisabledDetails;
+            interfaceTargetForces = false;
+            HUD.TargetOverlayController.InterfaceRefresh();
+        } else {
+            targetForcesButtonText.text = s_targetForcesEnabled;
+            targetForcesDetails.text = s_targetForcesEnabledDetails;
+            interfaceTargetForces = true;
+        }
+    }
+
+    private void OnClickTargetMasses() {
+        if (interfaceTargetMasses) {
+            targetMassesButtonText.text = s_targetMassesDisabled;
+            targetMassesDetails.text = s_targetMassesDisabledDetails;
+            interfaceTargetMasses = false;
+            HUD.TargetOverlayController.InterfaceRefresh();
+        } else {
+            targetMassesButtonText.text = s_targetMassesEnabled;
+            targetMassesDetails.text = s_targetMassesEnabledDetails;
+            interfaceTargetMasses = true;
+        }
+    }
+
     private void OnSensitivityChanged(float value) {
         FPVCameraLock.Sensitivity = value;
-        sensitivityValueText.text = value.ToString();
+        sensitivityValueText.text = ((int)(100 * value) / 100f).ToString();
     }
 
     private void OnSmoothingChanged(float value) {
         FPVCameraLock.Smoothing = value;
-        smoothingValueText.text = value.ToString();
+        smoothingValueText.text = ((int)(100 * value) / 100f).ToString();
     }
 
     private void OnClickAnchoredBoost() {
@@ -465,8 +554,8 @@ public class SettingsMenu : MonoBehaviour {
                     eWVRelativityLabel.gameObject.SetActive(true);
 
                     PhysicsController.anchorBoostMode = AnchorBoostMode.ExponentialWithVelocity;
-                    anchoredBoostButtonText.text = expV;
-                    anchoredBoostDetails.text = expVDetails;
+                    anchoredBoostButtonText.text = s_expV;
+                    anchoredBoostDetails.text = s_expVDetails;
                     forceConstantSlider.value *= 2;
                     break;
                 }
@@ -475,8 +564,8 @@ public class SettingsMenu : MonoBehaviour {
                     eWVSignageLabel.gameObject.SetActive(false);
                     eWVRelativityLabel.gameObject.SetActive(false);
                     PhysicsController.anchorBoostMode = AnchorBoostMode.None;
-                    anchoredBoostButtonText.text = anchorDisabled;
-                    anchoredBoostDetails.text = anchorDisabledDetails;
+                    anchoredBoostButtonText.text = s_anchorDisabled;
+                    anchoredBoostDetails.text = s_anchorDisabledDetails;
                     forceConstantSlider.value /= 2;
                     break;
                 }
@@ -484,8 +573,8 @@ public class SettingsMenu : MonoBehaviour {
                     aNFMaximumLabel.gameObject.SetActive(true);
                     aNFMinimumLabel.gameObject.SetActive(true);
                     PhysicsController.anchorBoostMode = AnchorBoostMode.AllomanticNormalForce;
-                    anchoredBoostButtonText.text = norm;
-                    anchoredBoostDetails.text = normDetails;
+                    anchoredBoostButtonText.text = s_norm;
+                    anchoredBoostDetails.text = s_normDetails;
                     break;
                 }
         }
@@ -495,20 +584,20 @@ public class SettingsMenu : MonoBehaviour {
         switch (PhysicsController.normalForceMinimum) {
             case NormalForceMinimum.Zero: {
                     PhysicsController.normalForceMinimum = NormalForceMinimum.ZeroAndNegate;
-                    aNFMinimumButtonText.text = aNFMinZeroNegate;
-                    aNFMinimumDetails.text = aNFMinZeroNegateDetails;
+                    aNFMinimumButtonText.text = s_aNFMinZeroNegate;
+                    aNFMinimumDetails.text = s_aNFMinZeroNegateDetails;
                     break;
                 }
             case NormalForceMinimum.ZeroAndNegate: {
                     PhysicsController.normalForceMinimum = NormalForceMinimum.Disabled;
-                    aNFMinimumButtonText.text = aNFMinDisabled;
-                    aNFMinimumDetails.text = aNFMinDisabledDetails;
+                    aNFMinimumButtonText.text = s_aNFMinDisabled;
+                    aNFMinimumDetails.text = s_aNFMinDisabledDetails;
                     break;
                 }
             default: { // Disabled
                     PhysicsController.normalForceMinimum = NormalForceMinimum.Zero;
-                    aNFMinimumButtonText.text = aNFMinZero;
-                    aNFMinimumDetails.text = aNFMinZeroDetails;
+                    aNFMinimumButtonText.text = s_aNFMinZero;
+                    aNFMinimumDetails.text = s_aNFMinZeroDetails;
                     break;
                 }
         }
@@ -518,14 +607,14 @@ public class SettingsMenu : MonoBehaviour {
         switch (PhysicsController.normalForceMaximum) {
             case NormalForceMaximum.AllomanticForce: {
                     PhysicsController.normalForceMaximum = NormalForceMaximum.Disabled;
-                    aNFMaximumButtonText.text = aNFMaxDisabled;
-                    aNFMaximumDetails.text = aNFMaxDisabledDetails;
+                    aNFMaximumButtonText.text = s_aNFMaxDisabled;
+                    aNFMaximumDetails.text = s_aNFMaxDisabledDetails;
                     break;
                 }
             default: { // Disabled
                     PhysicsController.normalForceMaximum = NormalForceMaximum.AllomanticForce;
-                    aNFMaximumButtonText.text = aNFMaxAF;
-                    aNFMaximumDetails.text = aNFMaxAFDetails;
+                    aNFMaximumButtonText.text = s_aNFMaxAF;
+                    aNFMaximumDetails.text = s_aNFMaxAFDetails;
                     break;
                 }
         }
@@ -535,20 +624,20 @@ public class SettingsMenu : MonoBehaviour {
         switch (PhysicsController.exponentialWithVelocitySignage) {
             case ExponentialWithVelocitySignage.AllVelocityDecreasesForce: {
                     PhysicsController.exponentialWithVelocitySignage = ExponentialWithVelocitySignage.BackwardsDecreasesAndForwardsIncreasesForce;
-                    eWVSignageButtonText.text = eWVChangesWithSign;
-                    eWVSignageDetails.text = eWVChangesWithSignDetails;
+                    eWVSignageButtonText.text = s_eWVChangesWithSign;
+                    eWVSignageDetails.text = s_eWVChangesWithSignDetails;
                     break;
                 }
             case ExponentialWithVelocitySignage.BackwardsDecreasesAndForwardsIncreasesForce: {
                     PhysicsController.exponentialWithVelocitySignage = ExponentialWithVelocitySignage.OnlyBackwardsDecreasesForce;
-                    eWVSignageButtonText.text = eWVOnlyBackwardsDecreases;
-                    eWVSignageDetails.text = eWVOnlyBackwardsDecreasesDetails;
+                    eWVSignageButtonText.text = s_eWVOnlyBackwardsDecreases;
+                    eWVSignageDetails.text = s_eWVOnlyBackwardsDecreasesDetails;
                     break;
                 }
             default: { // Disabled
                     PhysicsController.exponentialWithVelocitySignage = ExponentialWithVelocitySignage.AllVelocityDecreasesForce;
-                    eWVSignageButtonText.text = eWVAlwaysDecreasing;
-                    eWVSignageDetails.text = eWVAlwaysDecreasingDetails;
+                    eWVSignageButtonText.text = s_eWVAlwaysDecreasing;
+                    eWVSignageDetails.text = s_eWVAlwaysDecreasingDetails;
                     break;
                 }
         }
@@ -558,19 +647,19 @@ public class SettingsMenu : MonoBehaviour {
         switch (PhysicsController.exponentialWithVelocityRelativity) {
             case ExponentialWithVelocityRelativity.Absolute: {
                     PhysicsController.exponentialWithVelocityRelativity = ExponentialWithVelocityRelativity.Relative;
-                    eWVRelativityButtonText.text = eWVRelative;
-                    eWVRelativityDetails.text = eWVRelativeDetails;
+                    eWVRelativityButtonText.text = s_eWVRelative;
+                    eWVRelativityDetails.text = s_eWVRelativeDetails;
                     break;
                 }
             default: { // Relative
                     PhysicsController.exponentialWithVelocityRelativity = ExponentialWithVelocityRelativity.Absolute;
-                    eWVRelativityButtonText.text = eWVAbsolute;
-                    eWVRelativityDetails.text = eWVAbsoluteDetails;
+                    eWVRelativityButtonText.text = s_eWVAbsolute;
+                    eWVRelativityDetails.text = s_eWVAbsoluteDetails;
                     break;
                 }
         }
     }
-    
+
     private void OnVelocityConstantChanged(float value) {
         PhysicsController.velocityConstant = ((int)value);
         velocityConstantValueText.text = ((int)value).ToString();
@@ -579,23 +668,23 @@ public class SettingsMenu : MonoBehaviour {
     private void OnClickDistanceRelationshipButton() {
         switch (PhysicsController.distanceRelationshipMode) {
             case ForceDistanceRelationship.InverseSquareLaw: {
-                    distanceRelationshipButtonText.text = linear;
-                    distanceRelationshipDetails.text = linearDetails;
+                    distanceRelationshipButtonText.text = s_linear;
+                    distanceRelationshipDetails.text = s_linearDetails;
                     PhysicsController.distanceRelationshipMode = ForceDistanceRelationship.Linear;
                     forceConstantSlider.value /= 40f / 12f;
                     break;
                 }
             case ForceDistanceRelationship.Linear: {
                     distanceConstantLabel.gameObject.SetActive(true);
-                    distanceRelationshipButtonText.text = eWD;
-                    distanceRelationshipDetails.text = eWDDetails;
+                    distanceRelationshipButtonText.text = s_eWD;
+                    distanceRelationshipDetails.text = s_eWDDetails;
                     PhysicsController.distanceRelationshipMode = ForceDistanceRelationship.Exponential;
                     break;
                 }
             case ForceDistanceRelationship.Exponential: {
                     distanceConstantLabel.gameObject.SetActive(false);
-                    distanceRelationshipButtonText.text = inverse;
-                    distanceRelationshipDetails.text = inverseDetails;
+                    distanceRelationshipButtonText.text = s_inverse;
+                    distanceRelationshipDetails.text = s_inverseDetails;
                     PhysicsController.distanceRelationshipMode = ForceDistanceRelationship.InverseSquareLaw;
                     forceConstantSlider.value *= 40f / 12f;
                     break;
