@@ -65,12 +65,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     // Button held-down times
     private float timeToStopBurning = 0f;
     private float timeToSwapBurning = 0f;
-
-
-    // Checks if targets were cleared after stopping pulling/pushing
-    //private bool justClearedIron = false;
-    //private bool justClearedSteel = false;
-
+    
     // Magnetic variables
     public int AvailableNumberOfTargets { get; private set; } = 1;
     public int PullCount { get; private set; } = 0;
@@ -93,6 +88,10 @@ public class AllomanticIronSteel : MonoBehaviour {
     private Vector3 lastMaximumAllomanticForce = Vector3.zero;
     private Vector3 thisFrameMaximumNormalForce = Vector3.zero;
     private Vector3 lastMaximumNormalForce = Vector3.zero;
+
+    // Determines if the player just toggled between pushing/pulling and not pushing/pulling
+    private bool lastWasPulling = false;
+    private bool lastWasPushing = false;
 
     // Used for burning metals
     private float ironBurnRate = 0;
@@ -188,24 +187,38 @@ public class AllomanticIronSteel : MonoBehaviour {
             IronPulling = Keybinds.IronPulling();
             SteelPushing = Keybinds.SteelPushing();
 
-            // If just stopped pulling/pushing on targets, clear their values
-            //if (IronPulling)
-            //    justClearedIron = false;
-            //else if(!justClearedIron) {
-            //    for (int i = 0; i < PullCount; i++)
-            //        pullTargets[i].SoftClear();
-            //    Debug.Log("Cleared iroon");
-            //    justClearedIron = true;
-            //}
-            //if (SteelPushing)
-            //    justClearedSteel = false;
-            //else if (!justClearedSteel) {
-            //    for (int i = 0; i < PushCount; i++)
-            //        pushTargets[i].SoftClear();
-            //    Debug.Log("Cleared steel");
-            //    justClearedSteel = true;
-            //}
-
+            if(IronPulling) {
+                if(!lastWasPulling) {
+                    // Toggling on pulling
+                    HUD.TargetOverlayController.SetPullTextColorStrong();
+                    HUD.BurnRateMeter.SetForceTextColorStrong();
+                    lastWasPulling = true;
+                }
+            } else {
+                if (lastWasPulling) {
+                    // Toggling off pulling
+                    HUD.TargetOverlayController.SetPullTextColorWeak();
+                    if(!SteelPushing)
+                        HUD.BurnRateMeter.SetForceTextColorWeak();
+                    lastWasPulling = false;
+                }
+            }
+            if (SteelPushing) {
+                if (!lastWasPushing) {
+                    HUD.TargetOverlayController.SetPushTextColorStrong();
+                    HUD.BurnRateMeter.SetForceTextColorStrong();
+                    // Toggling on pushing
+                    lastWasPushing = true;
+                }
+            } else {
+                if(lastWasPushing) {
+                    HUD.TargetOverlayController.SetPushTextColorWeak();
+                    if(!IronPulling)
+                        HUD.BurnRateMeter.SetForceTextColorWeak();
+                    // Toggling off pushing
+                    lastWasPushing = false;
+                }
+            }
 
             // Check input for target selection
             selecting = (Keybinds.Select() || Keybinds.SelectAlternate()) && !Keybinds.Negate();
@@ -456,7 +469,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                         } else { // Target is partially anchored
                                  //calculate changes from the last frame
 
-                            Vector3 newTargetVelocity = target.Rb.velocity;
+                            Vector3 newTargetVelocity = target.Velocity;
                             Vector3 lastTargetAcceleration = (newTargetVelocity - target.LastVelocity) / Time.fixedDeltaTime;
                             Vector3 unaccountedForTargetAcceleration = lastTargetAcceleration - target.LastExpectedAcceleration;// + Physics.gravity;
                             restitutionForceFromTarget = Vector3.Project(unaccountedForTargetAcceleration * target.Mass, positionDifference.normalized);
@@ -465,7 +478,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                         //restitutionForceFromTarget = Vector3.ClampMagnitude(Vector3.Project(target.forceFromCollisionTotal, positionDifference.normalized), allomanticForce.magnitude);
 
                         target.LastPosition = target.transform.position;
-                        target.LastVelocity = target.Rb.velocity;
+                        target.LastVelocity = target.Velocity;
                     }
 
                     Vector3 newAllomancerVelocity = rb.velocity;
@@ -508,31 +521,26 @@ public class AllomanticIronSteel : MonoBehaviour {
                     // The restitutionForceFromTarget is actually negative, rather than positive, unlike in ANF mode. It contains the percentage of the AF that is subtracted from the AF to get the net AF.
                     float velocityFactorTarget;
                     float velocityFactorAllomancer;
-                    if (target.IsStatic) {
-                        velocityFactorTarget = 0;
-                        velocityFactorAllomancer = 0;
+                    if (PhysicsController.exponentialWithVelocityRelativity == ExponentialWithVelocityRelativity.Absolute) {
+                        velocityFactorTarget = 1 - Mathf.Exp(-(Vector3.Project(target.Velocity, positionDifference.normalized).magnitude / PhysicsController.velocityConstant));
+                        velocityFactorAllomancer = 1 - Mathf.Exp(-(Vector3.Project(rb.velocity, positionDifference.normalized).magnitude / PhysicsController.velocityConstant));
                     } else {
-                        if (PhysicsController.exponentialWithVelocityRelativity == ExponentialWithVelocityRelativity.Absolute) {
-                            velocityFactorTarget = 1 - Mathf.Exp(-(Vector3.Project(target.Velocity, positionDifference.normalized).magnitude / PhysicsController.velocityConstant));
-                            velocityFactorAllomancer = 1 - Mathf.Exp(-(Vector3.Project(rb.velocity, positionDifference.normalized).magnitude / PhysicsController.velocityConstant));
-                        } else {
-                            velocityFactorTarget = 1 - Mathf.Exp(-(Vector3.Project(rb.velocity - target.Velocity, positionDifference.normalized).magnitude / PhysicsController.velocityConstant));
-                            velocityFactorAllomancer = 1 - Mathf.Exp(-(Vector3.Project(target.Velocity - rb.velocity, positionDifference.normalized).magnitude / PhysicsController.velocityConstant));
+                        velocityFactorTarget = 1 - Mathf.Exp(-(Vector3.Project(rb.velocity - target.Velocity, positionDifference.normalized).magnitude / PhysicsController.velocityConstant));
+                        velocityFactorAllomancer = 1 - Mathf.Exp(-(Vector3.Project(target.Velocity - rb.velocity, positionDifference.normalized).magnitude / PhysicsController.velocityConstant));
+                    }
+                    if (PhysicsController.exponentialWithVelocitySignage == ExponentialWithVelocitySignage.BackwardsDecreasesAndForwardsIncreasesForce) {
+                        if (Vector3.Dot(rb.velocity, positionDifference) > 0) {
+                            velocityFactorTarget *= -1;
                         }
-                        if (PhysicsController.exponentialWithVelocitySignage == ExponentialWithVelocitySignage.BackwardsDecreasesAndForwardsIncreasesForce) {
-                            if (Vector3.Dot(rb.velocity, positionDifference) > 0) {
-                                velocityFactorTarget *= -1;
-                            }
-                            if (Vector3.Dot(target.Velocity, positionDifference) < 0) {
-                                velocityFactorAllomancer *= -1;
-                            }
-                        } else if (PhysicsController.exponentialWithVelocitySignage == ExponentialWithVelocitySignage.OnlyBackwardsDecreasesForce) {
-                            if (Vector3.Dot(rb.velocity, positionDifference) > 0) {
-                                velocityFactorTarget *= 0;
-                            }
-                            if (Vector3.Dot(target.Velocity, positionDifference) < 0) {
-                                velocityFactorAllomancer *= 0;
-                            }
+                        if (Vector3.Dot(target.Velocity, positionDifference) < 0) {
+                            velocityFactorAllomancer *= -1;
+                        }
+                    } else if (PhysicsController.exponentialWithVelocitySignage == ExponentialWithVelocitySignage.OnlyBackwardsDecreasesForce) {
+                        if (Vector3.Dot(rb.velocity, positionDifference) > 0) {
+                            velocityFactorTarget *= 0;
+                        }
+                        if (Vector3.Dot(target.Velocity, positionDifference) < 0) {
+                            velocityFactorAllomancer *= 0;
                         }
                     }
 

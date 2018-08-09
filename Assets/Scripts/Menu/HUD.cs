@@ -6,9 +6,13 @@ using UnityEngine.UI;
  */
 public class HUD : MonoBehaviour {
 
+    public static readonly Color weakBlue = new Color(0, .75f, 1, 1);
+    public static readonly Color strongBlue = new Color(0, 1f, 1, 1);
+
     private static Text coinCountText;
     private static AllomanticIronSteel playerIronSteel;
 
+    
     public static string CoinCountText {
         set {
             coinCountText.text = value;

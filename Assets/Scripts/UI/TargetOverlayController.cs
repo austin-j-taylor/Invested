@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class TargetOverlayController : MonoBehaviour {
 
+    private const float pixelDelta = 20;
+    //private const float voxelDelta = .3f;
+
     [SerializeField]
     private Text templateMass;
     [SerializeField]
@@ -18,9 +21,6 @@ public class TargetOverlayController : MonoBehaviour {
     private Text[] pullTargetsActualForce;
     private Text[] pushTargetsActualForce;
     private Text highlightedTargetMass;
-
-    //private readonly Color blue = new Color(0, .4392f, 1, 1);
-    //private readonly Color red = new Color(1, 0, 0, 1);
 
     // Use this for initialization
     void Awake() {
@@ -38,6 +38,8 @@ public class TargetOverlayController : MonoBehaviour {
             pushTargetsActualForce[i] = Instantiate(templateActualForce, transform, false);
             pullTargetsActualForce[i].text = "";
             pushTargetsActualForce[i].text = "";
+            pullTargetsActualForce[i].color = HUD.weakBlue;
+            pushTargetsActualForce[i].color = HUD.weakBlue;
 
             pullTargetsSumForce[i] = pullTargetsActualForce[i].GetComponentsInChildren<Text>()[1];
             pushTargetsSumForce[i] = pushTargetsActualForce[i].GetComponentsInChildren<Text>()[1];
@@ -45,15 +47,11 @@ public class TargetOverlayController : MonoBehaviour {
             pushTargetsSumForce[i].text = "";
         }
     }
-
-    // Update is called once per frame
-    void Update() {
+    private void Update() {
         if (playerIronSteel.IsBurningIronSteel) {
             SoftRefresh();
         }
     }
-    private const float pixelDelta = 20;
-    //private const float voxelDelta = .3f;
 
     // Update forces, positions on screen
     private void SoftRefresh() {
@@ -188,12 +186,31 @@ public class TargetOverlayController : MonoBehaviour {
     }
 
     public void Clear() {
+        HardRefresh();
+        highlightedTargetMass.text = "";
+    }
+
+    public void SetPullTextColorStrong() {
         for (int i = 0; i < AllomanticIronSteel.maxNumberOfTargets; i++) {
-            highlightedTargetMass.text = "";
-            pullTargetsSumForce[i].text = "";
-            pushTargetsSumForce[i].text = "";
-            pullTargetsActualForce[i].text = "";
-            pushTargetsActualForce[i].text = "";
+            pullTargetsActualForce[i].color = HUD.strongBlue;
+        }
+    }
+
+    public void SetPushTextColorStrong() {
+        for (int i = 0; i < AllomanticIronSteel.maxNumberOfTargets; i++) {
+            pushTargetsActualForce[i].color = HUD.strongBlue;
+        }
+    }
+
+    public void SetPullTextColorWeak() {
+        for (int i = 0; i < AllomanticIronSteel.maxNumberOfTargets; i++) {
+            pullTargetsActualForce[i].color = HUD.weakBlue;
+        }
+    }
+
+    public void SetPushTextColorWeak() {
+        for (int i = 0; i < AllomanticIronSteel.maxNumberOfTargets; i++) {
+            pushTargetsActualForce[i].color = HUD.weakBlue;
         }
     }
 

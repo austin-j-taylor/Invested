@@ -95,4 +95,11 @@ public class BurnRateMeter : MonoBehaviour {
         burnRateImage.fillAmount = minAngle;
     }
 
+    public void SetForceTextColorStrong() {
+        actualForceText.color = HUD.strongBlue;
+    }
+
+    public void SetForceTextColorWeak() {
+        actualForceText.color = HUD.weakBlue;
+    }
 }
