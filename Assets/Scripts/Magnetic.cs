@@ -29,12 +29,12 @@ public class Magnetic : MonoBehaviour {
     }
     public Vector3 LastPosition { get; set; }
     public Vector3 LastVelocity { get; set; }
-    public Vector3 LastExpectedAcceleration { get; set; }
+    public Vector3 LastExpectedAcceleration;// { get; set; }
 
     // These keep track of each Magnetic's participation to the net force on the Allomancer
-    public Vector3 LastAllomanticForce { get; set; }
-    public Vector3 LastAllomanticNormalForceFromAllomancer { get; set; }
-    public Vector3 LastAllomanticNormalForceFromTarget { get; set; }
+    public Vector3 LastAllomanticForce;// { get; set; }
+    public Vector3 LastAllomanticNormalForceFromAllomancer;// { get; set; }
+    public Vector3 LastAllomanticNormalForceFromTarget;// { get; set; }
 
     public float LightSaberFactor { get; set; }
 
@@ -155,10 +155,8 @@ public class Magnetic : MonoBehaviour {
         //LightSaberFactor = 1;
     }
 
-    public virtual void AddForce(Vector3 netForce, Vector3 allomanticForce, ForceMode forceMode) {
+    public virtual void AddForce(Vector3 netForce, ForceMode forceMode) {
         if (!IsStatic) {
-            LastExpectedAcceleration = allomanticForce / mass;
-
             Rb.AddForce(netForce, forceMode);
         }
     }

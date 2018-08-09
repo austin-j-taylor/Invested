@@ -67,7 +67,7 @@ public class Coin : Magnetic {
     //}
 
     // Effectively caps the max velocity of the coin without affecting the ANF
-    public override void AddForce(Vector3 netForce, Vector3 allomanticForce, ForceMode forceMode) {
+    public override void AddForce(Vector3 netForce, ForceMode forceMode) {
         // If the force would accelerate this Coin past its maxSpeed, don't accelerate it any more!
         if (forceMode == ForceMode.Force) {
             Vector3 newVelocity = Rb.velocity + netForce / Mass * Time.fixedDeltaTime;
@@ -79,7 +79,7 @@ public class Coin : Magnetic {
                 //LastExpectedAcceleration = force / Mass;
                 Rb.AddForce(changeInVelocityThatWillBringMeToTopSpeed, ForceMode.VelocityChange);
             } else {
-                LastExpectedAcceleration = allomanticForce / Mass;
+                //LastExpectedAcceleration = allomanticForce / Mass;
                 Rb.AddForce(netForce, ForceMode.Force);
             }
         } else {
