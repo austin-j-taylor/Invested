@@ -188,6 +188,8 @@ public class TargetOverlayController : MonoBehaviour {
     public void Clear() {
         HardRefresh();
         highlightedTargetMass.text = "";
+        SetPullTextColorWeak();
+        SetPushTextColorWeak();
     }
 
     public void SetPullTextColorStrong() {

@@ -24,7 +24,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     private const float verticalImportanceFactor = 100f;
     private const float lightSaberConstant = 1000f;
     public const int maxNumberOfTargets = 10;
-    public static float AllomanticConstant { get; set; } = 1200;
+    public static float AllomanticConstant { get; set; } = 600;
     public static float maxRange = 75;
     public const float chargePower = 1f / 8f;
 
@@ -126,27 +126,6 @@ public class AllomanticIronSteel : MonoBehaviour {
         metalLinesAnchor.localPosition = centerOfMass.localPosition;
     }
 
-    public void Clear() {
-        IsBurningIronSteel = false;
-        IronPulling = false;
-        SteelPushing = false;
-        ironBurnRate = 0;
-        steelBurnRate = 0;
-        PullCount = 0;
-        PushCount = 0;
-        pullTargets = new Magnetic[maxNumberOfTargets];
-        pushTargets = new Magnetic[maxNumberOfTargets];
-        HUD.TargetOverlayController.SetTargets(pullTargets, pushTargets);
-        HUD.TargetOverlayController.Clear();
-        metalLines = new List<VolumetricLineBehavior>();
-        HighlightedTarget = null;
-        lastExpectedAllomancerAcceleration = Vector3.zero;
-        //lastAllomanticForce = Vector3.zero;
-        //lastNormalForce = Vector3.zero;
-        lastMaximumAllomanticForce = Vector3.zero;
-        lastMaximumNormalForce = Vector3.zero;
-    }
-
     private void Update() {
         bool searchingForTarget = true;
         bool selecting;
@@ -187,35 +166,26 @@ public class AllomanticIronSteel : MonoBehaviour {
             IronPulling = Keybinds.IronPulling();
             SteelPushing = Keybinds.SteelPushing();
 
-            if(IronPulling) {
-                if(!lastWasPulling) {
-                    // Toggling on pulling
-                    HUD.TargetOverlayController.SetPullTextColorStrong();
-                    HUD.BurnRateMeter.SetForceTextColorStrong();
+            // Change colors of target labels when toggling pushing/pulling
+            if (IronPulling) {
+                if (!lastWasPulling) { // first frame of pulling
+                    RefreshHUDColorsOnly();
                     lastWasPulling = true;
                 }
             } else {
                 if (lastWasPulling) {
-                    // Toggling off pulling
-                    HUD.TargetOverlayController.SetPullTextColorWeak();
-                    if(!SteelPushing)
-                        HUD.BurnRateMeter.SetForceTextColorWeak();
+                    RefreshHUDColorsOnly();
                     lastWasPulling = false;
                 }
             }
             if (SteelPushing) {
-                if (!lastWasPushing) {
-                    HUD.TargetOverlayController.SetPushTextColorStrong();
-                    HUD.BurnRateMeter.SetForceTextColorStrong();
-                    // Toggling on pushing
+                if (!lastWasPushing) { // first frame of pushing
+                    RefreshHUDColorsOnly();
                     lastWasPushing = true;
                 }
             } else {
-                if(lastWasPushing) {
-                    HUD.TargetOverlayController.SetPushTextColorWeak();
-                    if(!IronPulling)
-                        HUD.BurnRateMeter.SetForceTextColorWeak();
-                    // Toggling off pushing
+                if (lastWasPushing) {
+                    RefreshHUDColorsOnly();
                     lastWasPushing = false;
                 }
             }
@@ -252,7 +222,6 @@ public class AllomanticIronSteel : MonoBehaviour {
                                 // Remove the target, but keep it highlighted
                                 RemoveTarget(target, iron);
                                 target.AddTargetGlow();
-                                Debug.Log("HIGHLINGINT");
                             } else {
                                 RemoveTarget(0, iron);
                             }
@@ -367,6 +336,64 @@ public class AllomanticIronSteel : MonoBehaviour {
             thisFrameMaximumAllomanticForce = Vector3.zero;
             thisFrameMaximumNormalForce = Vector3.zero;
         }
+    }
+
+    public void Clear() {
+        IsBurningIronSteel = false;
+        IronPulling = false;
+        SteelPushing = false;
+        ironBurnRate = 0;
+        steelBurnRate = 0;
+        PullCount = 0;
+        PushCount = 0;
+        pullTargets = new Magnetic[maxNumberOfTargets];
+        pushTargets = new Magnetic[maxNumberOfTargets];
+        HUD.TargetOverlayController.SetTargets(pullTargets, pushTargets);
+        HUD.TargetOverlayController.Clear();
+        metalLines = new List<VolumetricLineBehavior>();
+        HighlightedTarget = null;
+        lastExpectedAllomancerAcceleration = Vector3.zero;
+        //lastAllomanticForce = Vector3.zero;
+        //lastNormalForce = Vector3.zero;
+        lastMaximumAllomanticForce = Vector3.zero;
+        lastMaximumNormalForce = Vector3.zero;
+    }
+
+    // Refreshes the colors of the text of target labels and the burn rate meter.
+    private void RefreshHUDColorsOnly() {
+        if (IronPulling) {
+            if (!HasPullTarget) {
+                HUD.TargetOverlayController.SetPushTextColorStrong();
+            } else { // has pull target
+                HUD.TargetOverlayController.SetPullTextColorStrong();
+            }
+            HUD.BurnRateMeter.SetForceTextColorStrong();
+        } else {
+            if (!HasPullTarget || !SteelPushing || (HasPushTarget)) {
+                HUD.TargetOverlayController.SetPullTextColorWeak();
+            }
+        }
+        if (SteelPushing) {
+            if (!HasPushTarget) {
+                HUD.TargetOverlayController.SetPullTextColorStrong();
+            } else { // has push target
+                HUD.TargetOverlayController.SetPushTextColorStrong();
+            }
+            HUD.BurnRateMeter.SetForceTextColorStrong();
+        } else {
+            if (!IronPulling) {
+                HUD.BurnRateMeter.SetForceTextColorWeak();
+            }
+
+            if (!HasPushTarget || !IronPulling || (HasPullTarget)) {
+                HUD.TargetOverlayController.SetPushTextColorWeak();
+            }
+        }
+    }
+
+    private void RefreshHUD() {
+        RefreshHUDColorsOnly();
+        HUD.TargetOverlayController.HardRefresh();
     }
 
     private void CalculatePushPullForces(bool usingIronTargets) {
@@ -737,8 +764,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                 pushTargets[PushCount] = null;
             }
         }
-
-        HUD.TargetOverlayController.HardRefresh();
+        RefreshHUD();
     }
 
     public void RemoveTarget(Magnetic target, bool ironTarget, bool searchBoth = false) {
@@ -758,7 +784,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                         pullTargets[PullCount] = null;
 
                         if (!searchBoth) {
-                            HUD.TargetOverlayController.HardRefresh();
+                            RefreshHUD();
                             return;
                         }
                         break;
@@ -778,7 +804,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                         pushTargets[PushCount].Clear();
                         pushTargets[PushCount] = null;
 
-                        HUD.TargetOverlayController.HardRefresh();
+                        RefreshHUD();
                         return;
                     }
                 }
@@ -804,7 +830,7 @@ public class AllomanticIronSteel : MonoBehaviour {
 
     public void AddTarget(Magnetic newTarget, bool usingIron) {
         StartBurningIronSteel();
-        if (newTarget != null) {
+        if (newTarget != null && !IsTarget(newTarget)) {
             newTarget.Allomancer = this;
             newTarget.LastWasPulled = usingIron;
             if (AvailableNumberOfTargets != 0) {
@@ -818,7 +844,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                             pullTargets[i] = newTarget;
                             PullCount++;
 
-                            HUD.TargetOverlayController.HardRefresh();
+                            RefreshHUD();
                             return;
                         }
                         // this space in the array is taken.
@@ -828,7 +854,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                             }
                             pullTargets[PullCount - 1] = newTarget;
 
-                            HUD.TargetOverlayController.HardRefresh();
+                            RefreshHUD();
                             return;
                         }
                         // An irrelevant target was iterated through.
@@ -840,7 +866,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                     }
                     pullTargets[AvailableNumberOfTargets - 1] = newTarget;
 
-                    HUD.TargetOverlayController.HardRefresh();
+                    RefreshHUD();
                     return;
 
                 } else {
@@ -852,8 +878,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                         if (pushTargets[i] == null) { // empty space found, add target here
                             pushTargets[i] = newTarget;
                             PushCount++;
-
-                            HUD.TargetOverlayController.HardRefresh();
+                            RefreshHUD();
                             return;
                         }
                         // this space in the array is taken.
@@ -863,7 +888,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                             }
                             pushTargets[PushCount - 1] = newTarget;
 
-                            HUD.TargetOverlayController.HardRefresh();
+                            RefreshHUD();
                             return;
                         }
                         // An irrelevant target was iterated through.
@@ -875,7 +900,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                     }
                     pushTargets[AvailableNumberOfTargets - 1] = newTarget;
 
-                    HUD.TargetOverlayController.HardRefresh();
+                    RefreshHUD();
                     return;
                 }
             }
@@ -979,8 +1004,8 @@ public class AllomanticIronSteel : MonoBehaviour {
         for (int i = 0; i < PushCount; i++) {
             pushTargets[i].LastWasPulled = false;
         }
-
         HUD.TargetOverlayController.SetTargets(pullTargets, pushTargets);
+        RefreshHUD();
     }
 
     private void SetAllTargetsOutOfRange() {
@@ -1027,7 +1052,7 @@ public class AllomanticIronSteel : MonoBehaviour {
             }
         }
 
-        HUD.TargetOverlayController.HardRefresh();
+        RefreshHUD();
     }
 
     private void ChangeTargetForceMagnitude(float change) {
