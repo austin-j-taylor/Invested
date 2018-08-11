@@ -57,7 +57,7 @@ public class SettingsMenu : MonoBehaviour {
     private const string s_aNFMaxAF = "Allomantic Force";
     private const string s_aNFMaxAFDetails = "ANF will never be higher than the AF. Realistic behavior. You cannot be resisted harder than you can push.";
     private const string s_aNFMaxDisabled = "Disabled";
-    private const string s_aNFMaxDisabledDetails = "ANF is uncapped. You can be resisted more than you can push. Extremely glitchy and causes feedback loops. Bad idea.";
+    private const string s_aNFMaxDisabledDetails = "ANF is uncapped. You can be resisted more than you can push. Prevents certain physics from breaking (e.g. jumping on an object you're pulling lets you fly)";
     private const string s_eWVAlwaysDecreasing = "No Changes";
     private const string s_eWVAlwaysDecreasingDetails = "The higher the speed of the target, the weaker the push or pull. Period. Realistic behavior.";
     private const string s_eWVOnlyBackwardsDecreases = "Only When Moving Away";

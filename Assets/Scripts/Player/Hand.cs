@@ -8,7 +8,7 @@ using UnityEngine;
 public class Hand : MonoBehaviour {
 
     private const float baseSteepAngle = 1f / 2f;
-    private const float keyboardSteepAngle = 1f / 2f;
+    private const float keyboardSteepAngle = 2f / 3f;
 
     private Camera firstPersonCamera;
     private Transform centerOfMass;

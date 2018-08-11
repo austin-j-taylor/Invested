@@ -65,7 +65,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     // Button held-down times
     private float timeToStopBurning = 0f;
     private float timeToSwapBurning = 0f;
-    
+
     // Magnetic variables
     public int AvailableNumberOfTargets { get; private set; } = 1;
     public int PullCount { get; private set; } = 0;
@@ -76,9 +76,10 @@ public class AllomanticIronSteel : MonoBehaviour {
 
     // Used for calculating the acceleration over the last frame for pushing/pulling
     private Vector3 lastAllomancerVelocity = Vector3.zero;
+    private Vector3 lastExpectedAllomancerAcceleration = Vector3.zero;
 
-    public Vector3 lastExpectedAllomancerAcceleration = Vector3.zero;
-    private Vector3 thisFrameExpectedAllomancerAcceleration = Vector3.zero;
+    public Vector3 LastNetForceOnAllomancer { get; private set; } = Vector3.zero;
+    private Vector3 thisFrameNetForceOnAllomancer = Vector3.zero;
     //private Vector3 lastNormalForce = Vector3.zero;
     //private Vector3 thisFrameNormalForce = Vector3.zero;
     //private Vector3 lastAllomanticForce = Vector3.zero;
@@ -325,12 +326,13 @@ public class AllomanticIronSteel : MonoBehaviour {
             lastAllomancerVelocity = rb.velocity;
 
             // Debug
-            lastExpectedAllomancerAcceleration = thisFrameExpectedAllomancerAcceleration;
+            LastNetForceOnAllomancer = thisFrameNetForceOnAllomancer;
+            lastExpectedAllomancerAcceleration = LastNetForceOnAllomancer / rb.mass;
             //lastAllomanticForce = thisFrameAllomanticForce;
             //lastNormalForce = thisFrameNormalForce;
             lastMaximumAllomanticForce = thisFrameMaximumAllomanticForce;
             lastMaximumNormalForce = thisFrameMaximumNormalForce;
-            thisFrameExpectedAllomancerAcceleration = Vector3.zero;
+            thisFrameNetForceOnAllomancer = Vector3.zero;
             //thisFrameAllomanticForce = Vector3.zero;
             //thisFrameNormalForce = Vector3.zero;
             thisFrameMaximumAllomanticForce = Vector3.zero;
@@ -353,6 +355,7 @@ public class AllomanticIronSteel : MonoBehaviour {
         metalLines = new List<VolumetricLineBehavior>();
         HighlightedTarget = null;
         lastExpectedAllomancerAcceleration = Vector3.zero;
+        LastNetForceOnAllomancer = Vector3.zero;
         //lastAllomanticForce = Vector3.zero;
         //lastNormalForce = Vector3.zero;
         lastMaximumAllomanticForce = Vector3.zero;
@@ -599,7 +602,7 @@ public class AllomanticIronSteel : MonoBehaviour {
         }
 
         target.LastExpectedAcceleration = -allomanticForce / target.Mass;
-        thisFrameExpectedAllomancerAcceleration += allomanticForce / rb.mass;
+        thisFrameNetForceOnAllomancer += allomanticForce;
 
         target.LastAllomanticForce = allomanticForce;
         target.LastAllomanticNormalForceFromAllomancer = restitutionForceFromAllomancer;
@@ -740,8 +743,6 @@ public class AllomanticIronSteel : MonoBehaviour {
     }
 
     private void RemoveTarget(int index, bool ironTarget) {
-        lastAllomancerVelocity = Vector3.zero;
-        lastExpectedAllomancerAcceleration = Vector3.zero;
 
         if (ironTarget) {
 
@@ -768,8 +769,6 @@ public class AllomanticIronSteel : MonoBehaviour {
     }
 
     public void RemoveTarget(Magnetic target, bool ironTarget, bool searchBoth = false) {
-        lastAllomancerVelocity = Vector3.zero;
-        lastExpectedAllomancerAcceleration = Vector3.zero;
 
         if (ironTarget || searchBoth) {
 
@@ -1038,18 +1037,20 @@ public class AllomanticIronSteel : MonoBehaviour {
     }
 
     private void DecrementNumberOfTargets() {
-        if (AvailableNumberOfTargets > 0) {
+        //if (AvailableNumberOfTargets > 0) {
+        if (AvailableNumberOfTargets > 1) {
             AvailableNumberOfTargets--;
             if (PullCount > AvailableNumberOfTargets)
                 RemoveTarget(0, iron);
             if (PushCount > AvailableNumberOfTargets)
                 RemoveTarget(0, steel);
-            // never actually have 0 available targets. Just remove targets, and stay at 1 available targets.
-            if (AvailableNumberOfTargets == 0) {
-                AvailableNumberOfTargets++;
-            } else {
-                HUD.BurnRateMeter.MetalLineText = AvailableNumberOfTargets.ToString();
-            }
+            //// never actually have 0 available targets. Just remove targets, and stay at 1 available targets.
+            //if (AvailableNumberOfTargets == 0) {
+            //    AvailableNumberOfTargets++;
+            //} else {
+            //    HUD.BurnRateMeter.MetalLineText = AvailableNumberOfTargets.ToString();
+            //}
+            HUD.BurnRateMeter.MetalLineText = AvailableNumberOfTargets.ToString();
         }
 
         RefreshHUD();

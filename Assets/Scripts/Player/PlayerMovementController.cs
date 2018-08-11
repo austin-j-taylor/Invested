@@ -9,29 +9,29 @@ using UnityEngine;
 
 public class PlayerMovementController : MonoBehaviour {
 
-    private const float speed = 10f;
+    private const float acceleration = 5f;
     private const float maxRunningSpeed = 5f;
-    private const float airControlFactor = .2f;
-    private const float movingDrag = .2f;
-    private const float groundedDrag = movingDrag;//5f;
-    private readonly Vector3 jumpHeight = new Vector3(0, 5f, 0);
-
-
+    private const float airControlFactor = .05f;
+    private const float airDrag = .2f;
+    private const float groundedDrag = 3f;
+    private readonly Vector3 jumpHeight = new Vector3(0, 420f, 0);
+    
     private Rigidbody rb;
-    private PlayerJumpChecker jumpChecker;
+    //private AllomanticIronSteel playerIronSteel;
+    private PlayerGroundedChecker groundedChecker;
 
     public bool IsGrounded {
         get {
-            return jumpChecker.IsGrounded;
+            return groundedChecker.IsGrounded;
         }
     }
 
     private void Awake() {
         rb = GetComponent<Rigidbody>();
-        jumpChecker = GetComponentInChildren<PlayerJumpChecker>();
+        //playerIronSteel = GetComponent<AllomanticIronSteel>();
+        groundedChecker = GetComponentInChildren<PlayerGroundedChecker>();
     }
     void FixedUpdate() {
-
         // Horizontal movement
         float horiz = Keybinds.Horizontal();
         float verti = Keybinds.Vertical();
@@ -39,27 +39,27 @@ public class PlayerMovementController : MonoBehaviour {
         //if (!GamepadController.UsingGamepad)
         movement = Vector3.ClampMagnitude(movement, 1);
         movement = transform.TransformDirection(movement);
-
         Vector3 velocityInDirectionOfMovement = Vector3.Project(rb.velocity, movement.normalized);
         if (IsGrounded) {
-            
+            //// If player is trying to move in the same direction of their push, it is like they are trying to walk with their push -> use weaker drag
+            //// IF the player is not trying to move in the same direction of their push, it is like they are trying to resist their puish -> use stronger drag
+            //if (movement.magnitude > 0 && (Vector3.Dot(movement, playerIronSteel.LastNetForceOnAllomancer.normalized) > 0 && (playerIronSteel.IronPulling || playerIronSteel.SteelPushing))) {
+            //    rb.drag = airDrag;
+            //} else {
+            //    rb.drag = groundedDrag;
+            //}
             if (movement.magnitude > 0) {
-                rb.drag = movingDrag;
-                
-                if (velocityInDirectionOfMovement.magnitude < maxRunningSpeed) {
-                    //rb.MovePosition(transform.position + transform.rotation * (movement) * speed * Time.deltaTime);
-                    //rb.AddForce(transform.TransformDirection(movement) * speed, ForceMode.Acceleration);
-                    rb.AddForce(movement * speed, ForceMode.Acceleration);
-                }
-            } else { // is not moving
+                rb.drag = airDrag;
+            } else {
                 rb.drag = groundedDrag;
             }
-
         } else { // is airborne
-            rb.drag = movingDrag;
-            if (velocityInDirectionOfMovement.magnitude < maxRunningSpeed) {
-                rb.AddForce(movement * speed * airControlFactor, ForceMode.Acceleration);
-            }
+            rb.drag = airDrag;
+            movement *= airControlFactor;
+        }
+        if (movement.magnitude > 0) {
+            movement *= acceleration * Mathf.Max(maxRunningSpeed - velocityInDirectionOfMovement.magnitude, 0);
+            rb.AddForce(movement, ForceMode.Acceleration);
         }
     }
 
@@ -67,7 +67,8 @@ public class PlayerMovementController : MonoBehaviour {
         if(IsGrounded) {
             // Jump
             if (Keybinds.JumpDown()) {
-                rb.AddForce(jumpHeight, ForceMode.VelocityChange);
+                rb.AddForce(jumpHeight, ForceMode.Impulse);
+                groundedChecker.AddForceToTouchingCollider(-jumpHeight);
             }
         }
     }

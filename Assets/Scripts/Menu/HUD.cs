@@ -12,7 +12,7 @@ public class HUD : MonoBehaviour {
     private static Text coinCountText;
     private static AllomanticIronSteel playerIronSteel;
 
-    
+
     public static string CoinCountText {
         set {
             coinCountText.text = value;
@@ -55,12 +55,17 @@ public class HUD : MonoBehaviour {
     public static string ForceString(float force) {
         switch (SettingsMenu.displayUnits) {
             case ForceDisplayUnits.Newtons: {
-                    return ((int)force).ToString() + "N";
+                    return RoundToTwoSigFigs(force).ToString() + "N";
                 }
             default: {
                     return System.Math.Round(force / playerIronSteel.Mass / 9.81, 2).ToString() + "G's";
                 }
         }
+    }
+
+    // Returns a string reading a single Mass in kilograms
+    public static string MassString(float mass) {
+        return (mass).ToString() + "kg";
     }
 
     // Returns a string reading the sum of an Allomantic Force and Allomantic Normal Force in Newtons or G's
@@ -69,7 +74,7 @@ public class HUD : MonoBehaviour {
         string plusSign;
         plusSign = DecideSignColor(allomanticForce, normalForce, invert);
 
-        switch(SettingsMenu.displayUnits) {
+        switch (SettingsMenu.displayUnits) {
             case ForceDisplayUnits.Newtons: {
                     return ((int)allomanticForce.magnitude).ToString() + " " + plusSign + " " + ((int)normalForce.magnitude).ToString() + "N";
                 }
@@ -79,6 +84,15 @@ public class HUD : MonoBehaviour {
                         System.Math.Round(normalForce.magnitude / playerIronSteel.Mass / 9.81, 2).ToString() + "G's";
                 }
         }
+    }
+    // Rounds an integer to two sig figs
+    private static int RoundToTwoSigFigs(float num) {
+        int rounded = (int)num;
+        if (num < 100)
+            return rounded;
+        int newbase = (int)System.Math.Pow(10, ((int)Mathf.Log10(num) - 1));
+
+        return (rounded / newbase) * newbase;
     }
 
     // Returns a blue plus sign if the vectors point in the same direction and a red minus sign if they point in opposite directions

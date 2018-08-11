@@ -138,7 +138,7 @@ public class TargetOverlayController : MonoBehaviour {
                 Vector3 heightToTop = Vector3.zero;
                 heightToTop.y = playerIronSteel.HighlightedTarget.ColliderBody.bounds.size.y / 2f;
 
-                highlightedTargetMass.text = playerIronSteel.HighlightedTarget.Mass.ToString() + "kg";
+                highlightedTargetMass.text = HUD.MassString(playerIronSteel.HighlightedTarget.Mass);
                 highlightedTargetMass.transform.position = FPVCameraLock.FirstPersonCamera.WorldToScreenPoint(playerIronSteel.HighlightedTarget.transform.position + heightToTop) + new Vector3(0, pixelDelta);
             } else { // Target is not highlighted or is not on screen, hide mass label
                 highlightedTargetMass.text = "";
