@@ -7,6 +7,13 @@ public class Coin : Magnetic {
     private const float airResistanceFactor = .1f;
     private const float minSpeed = 5f;
     private const float maxSpeed = 120f;
+    private const float equalInMagnitudeConstant = .01f;
+
+    public override bool IsPerfectlyAnchored { // Only matters for Coins, which have so low masses that Unity thinks they have high velocities when pushed, even when anchored
+        get {
+            return Mathf.Abs(LastPosition.magnitude - transform.position.magnitude) < equalInMagnitudeConstant;
+        }
+    }
 
     //public new Vector3 LastVelocity {
     //    get {

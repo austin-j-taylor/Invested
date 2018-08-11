@@ -57,7 +57,11 @@ public class SettingsMenu : MonoBehaviour {
     private const string s_aNFMaxAF = "Allomantic Force";
     private const string s_aNFMaxAFDetails = "ANF will never be higher than the AF. Realistic behavior. You cannot be resisted harder than you can push.";
     private const string s_aNFMaxDisabled = "Disabled";
-    private const string s_aNFMaxDisabledDetails = "ANF is uncapped. You can be resisted more than you can push. Prevents certain physics from breaking (e.g. jumping on an object you're pulling lets you fly)";
+    private const string s_aNFMaxDisabledDetails = "ANF is uncapped. You can be resisted more than you can push. Sometimes unrealistic behavior.";
+    private const string s_aNFEqualityEqual = "Equal";
+    private const string s_aNFEqualityEqualDetails = "The ANF on the target and Allomancer will be equal for both, calculated from whichever is more anchored.";
+    private const string s_aNFEqualityUnequal = "Unequal";
+    private const string s_aNFEqualityUnequalDetails = "The ANFs for the target and Allomancer will be calculated independently, depending on how each is individually anchored.";
     private const string s_eWVAlwaysDecreasing = "No Changes";
     private const string s_eWVAlwaysDecreasingDetails = "The higher the speed of the target, the weaker the push or pull. Period. Realistic behavior.";
     private const string s_eWVOnlyBackwardsDecreases = "Only When Moving Away";

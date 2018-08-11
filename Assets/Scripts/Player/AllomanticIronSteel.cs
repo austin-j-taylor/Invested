@@ -9,7 +9,7 @@ using VolumetricLines;
 public class AllomanticIronSteel : MonoBehaviour {
 
     // Constants
-    private const float closenessThreshold = .01f;
+    private const float closenessThreshold = .0001f;
     //private readonly Vector3 centerOfScreen = new Vector3(.5f, .5f, 0);
     // Constants for Metal Lines
     private const float startWidth = .05f;
@@ -494,7 +494,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                     } else {
                         // Calculate Allomantic Normal Forces
 
-                        if (target.IsPerfectlyAnchored) { // If target is perfectly anchored, its ANF = AF.
+                        if (target.IsPerfectlyAnchored) { // If target is perfectly anchored, pushes are perfectly resisted. Its ANF = AF.
                             restitutionForceFromTarget = allomanticForce;
                         } else { // Target is partially anchored
                                  //calculate changes from the last frame
@@ -515,7 +515,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                     Vector3 lastAllomancerAcceleration = (newAllomancerVelocity - lastAllomancerVelocity) / Time.fixedDeltaTime;
                     Vector3 unaccountedForAllomancerAcceleration = lastAllomancerAcceleration - lastExpectedAllomancerAcceleration;
                     restitutionForceFromAllomancer = Vector3.Project(unaccountedForAllomancerAcceleration * rb.mass, positionDifference.normalized);
-
+                    
 
                     if (PhysicsController.normalForceMaximum == NormalForceMaximum.AllomanticForce) {
                         restitutionForceFromTarget = Vector3.ClampMagnitude(restitutionForceFromTarget, allomanticForce.magnitude);
@@ -543,6 +543,15 @@ public class AllomanticIronSteel : MonoBehaviour {
                                 break;
                             }
                         default: break;
+                    }
+
+                    // Makes the ANF on the target and Allomancer equal
+                    if (PhysicsController.normalForceEquality) {
+                        if (restitutionForceFromAllomancer.magnitude > restitutionForceFromTarget.magnitude) {
+                            restitutionForceFromTarget = -restitutionForceFromAllomancer;
+                        } else {
+                            restitutionForceFromAllomancer = -restitutionForceFromTarget;
+                        }
                     }
 
                     break;
@@ -607,7 +616,6 @@ public class AllomanticIronSteel : MonoBehaviour {
         target.LastAllomanticForce = allomanticForce;
         target.LastAllomanticNormalForceFromAllomancer = restitutionForceFromAllomancer;
         target.LastAllomanticNormalForceFromTarget = restitutionForceFromTarget;
-
     }
 
     private void AddForce(Magnetic target, bool pulling) {

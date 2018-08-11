@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class Magnetic : MonoBehaviour {
 
-    private const float equalMagnitudeConstant = .01f;
-
     [SerializeField]
     private float mass;
 
@@ -29,12 +27,12 @@ public class Magnetic : MonoBehaviour {
     }
     public Vector3 LastPosition { get; set; }
     public Vector3 LastVelocity { get; set; }
-    public Vector3 LastExpectedAcceleration;// { get; set; }
+    public Vector3 LastExpectedAcceleration { get; set; }
 
     // These keep track of each Magnetic's participation to the net force on the Allomancer
-    public Vector3 LastAllomanticForce;// { get; set; }
-    public Vector3 LastAllomanticNormalForceFromAllomancer;// { get; set; }
-    public Vector3 LastAllomanticNormalForceFromTarget;// { get; set; }
+    public Vector3 LastAllomanticForce { get; set; }
+    public Vector3 LastAllomanticNormalForceFromAllomancer { get; set; }
+    public Vector3 LastAllomanticNormalForceFromTarget { get; set; }
 
     public float LightSaberFactor { get; set; }
 
@@ -99,9 +97,10 @@ public class Magnetic : MonoBehaviour {
         get;
         set;
     }
-    public bool IsPerfectlyAnchored {
+    public virtual bool IsPerfectlyAnchored { // Only matters for Coins, which have so low masses that Unity thinks they have high velocities when pushed, even when anchored
         get {
-            return Mathf.Abs(LastPosition.magnitude - transform.position.magnitude) < equalMagnitudeConstant;
+            //return Mathf.Abs(LastPosition.magnitude - transform.position.magnitude) < equalMagnitudeConstant;
+            return false;
         }
     }
     public Rigidbody Rb { get; private set; }

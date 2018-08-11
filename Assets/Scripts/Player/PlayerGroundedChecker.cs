@@ -13,7 +13,7 @@ public class PlayerGroundedChecker : MonoBehaviour {
     }
 
     private bool isInCollider;
-    private Rigidbody standingOnRigidbody;
+    private Collider standingOnCollider;
 
     private void FixedUpdate() {
         IsGrounded = isInCollider;
@@ -23,21 +23,18 @@ public class PlayerGroundedChecker : MonoBehaviour {
     private void Start() {
         IsGrounded = false;
         isInCollider = false;
-        standingOnRigidbody = null;
-    }
-
-    private void OnTriggerEnter(Collider other) {
-
-        standingOnRigidbody = other.GetComponent<Rigidbody>();
+        standingOnCollider = null;
     }
 
     private void OnTriggerStay(Collider other) {
         isInCollider = true;
+        standingOnCollider = other;
     }
 
     public void AddForceToTouchingCollider(Vector3 force) {
-        if(standingOnRigidbody != null) {
-            standingOnRigidbody.AddForce(force, ForceMode.Impulse);
+        Rigidbody rb = standingOnCollider.GetComponent<Rigidbody>();
+        if (rb != null) {
+            rb.AddForce(force, ForceMode.Impulse);
         }
     }
 
