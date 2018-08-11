@@ -41,7 +41,7 @@ public class SettingsMenu : MonoBehaviour {
     private const string s_targetMassesDisabled = "Disabled";
     private const string s_targetMassesDisabledDetails = "Highlighted metals will not display their mass.";
 
-    // Physics
+    // Allomancy
     private const string s_norm = "Allomantic Normal Force\n(ANF)";
     private const string s_normDetails = "Push on an anchored coin. The coin pushes on the ground. The ground pushes back on the coin. That force with which the ground resists your push is returned to you.";
     private const string s_expV = "Exponential with Velocity\n(EWV)";
@@ -81,6 +81,8 @@ public class SettingsMenu : MonoBehaviour {
     private const string s_alloConstantDetails = "All pushes/pulls are proportional to this constant.";
     private const string s_maxRDetails = "Nearby metals can be detected within this range.";
 
+    // World
+
     public static ForceDisplayUnits displayUnits = ForceDisplayUnits.Newtons;
     public static InterfaceComplexity interfaceComplexity = InterfaceComplexity.Sums;
     public static bool interfaceTargetForces = true;
@@ -96,25 +98,34 @@ public class SettingsMenu : MonoBehaviour {
             return gameplayHeader.gameObject.activeSelf;
         }
     }
-    public bool IsPhysicsOpen {
-        get {
-            return physicsHeader.gameObject.activeSelf;
-        }
-    }
     public bool IsInterfaceOpen {
         get {
             return interfaceHeader.gameObject.activeSelf;
         }
     }
+    public bool IsAllomancyOpen {
+        get {
+            return allomancyHeader.gameObject.activeSelf;
+        }
+    }
+    public bool IsWorldOpen {
+        get {
+            return worldHeader.gameObject.activeSelf;
+        }
+    }
 
+    // Settings
     private Button gameplayButton;
-    private Button physicsButton;
     private Button interfaceButton;
+    private Button allomancyButton;
+    private Button worldButton;
     private Transform settingsHeader;
     private Transform gameplayHeader;
-    private Transform physicsHeader;
     private Transform interfaceHeader;
+    private Transform allomancyHeader;
+    private Transform worldHeader;
 
+    // Gameplay
     private Button controlSchemeButton;
     private Text controlSchemeButtonText;
     private Text controlSchemeDetails;
@@ -129,6 +140,7 @@ public class SettingsMenu : MonoBehaviour {
     private Slider smoothing;
     private Text smoothingValueText;
 
+    // Interface
     private Button forceUnitsButton;
     private Text forceUnitsButtonText;
     private Text forceUnitsDetails;
@@ -142,6 +154,7 @@ public class SettingsMenu : MonoBehaviour {
     private Text targetMassesButtonText;
     private Text targetMassesDetails;
 
+    // Allomancy
     private Button closeButton;
     private Button anchoredBoostButton;
     private Text anchoredBoostButtonText;
@@ -178,65 +191,30 @@ public class SettingsMenu : MonoBehaviour {
     private Text maxRangeValueText;
     private Text maxRangeDetails;
 
+    // World
+    private Button gravityButton;
+    private Text gravityButtonText;
+    private Button dragButton;
+    private Text dragButtonText;
+
+    private Rigidbody playerRb;
 
 
     void Start() {
+        playerRb = GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody>();
 
         // Settings Header
         settingsHeader = transform.GetChild(1);
         Button[] settingsHeaderButtons = settingsHeader.GetComponentsInChildren<Button>();
-        physicsButton = settingsHeaderButtons[0];
-        gameplayButton = settingsHeaderButtons[1];
-        interfaceButton = settingsHeaderButtons[2];
-        closeButton = settingsHeaderButtons[3];
-
-        // Physics Header
-        physicsHeader = transform.GetChild(2);
-        anchoredBoostButton = physicsHeader.GetChild(0).GetChild(0).GetComponent<Button>();
-        anchoredBoostButtonText = anchoredBoostButton.transform.GetChild(0).GetComponent<Text>();
-        anchoredBoostDetails = anchoredBoostButton.transform.GetChild(1).GetComponent<Text>();
-
-        aNFMinimumLabel = physicsHeader.GetChild(1).GetComponent<Text>();
-        aNFMinimumButton = aNFMinimumLabel.GetComponentInChildren<Button>();
-        aNFMinimumButtonText = aNFMinimumButton.transform.GetChild(0).GetComponent<Text>();
-        aNFMinimumDetails = aNFMinimumButton.transform.GetChild(1).GetComponent<Text>();
-
-        aNFMaximumLabel = physicsHeader.GetChild(2).GetComponent<Text>();
-        aNFMaximumButton = aNFMaximumLabel.GetComponentInChildren<Button>();
-        aNFMaximumButtonText = aNFMaximumButton.transform.GetChild(0).GetComponent<Text>();
-        aNFMaximumDetails = aNFMaximumButton.transform.GetChild(1).GetComponent<Text>();
-
-        eWVSignageLabel = physicsHeader.GetChild(3).GetComponent<Text>();
-        eWVSignageButton = eWVSignageLabel.GetComponentInChildren<Button>();
-        eWVSignageButtonText = eWVSignageButton.transform.GetChild(0).GetComponent<Text>();
-        eWVSignageDetails = eWVSignageButton.transform.GetChild(1).GetComponent<Text>();
-
-        eWVRelativityLabel = physicsHeader.GetChild(4).GetComponent<Text>();
-        eWVRelativityButton = eWVRelativityLabel.GetComponentInChildren<Button>();
-        eWVRelativityButtonText = eWVRelativityButton.transform.GetChild(0).GetComponent<Text>();
-        eWVRelativityDetails = eWVRelativityButton.transform.GetChild(1).GetComponent<Text>();
-
-        velocityConstantLabel = physicsHeader.GetChild(5).GetComponent<Text>();
-        velocityConstantSlider = velocityConstantLabel.GetComponentInChildren<Slider>();
-        velocityConstantValueText = velocityConstantSlider.GetComponentInChildren<Text>();
-
-        distanceRelationshipButton = physicsHeader.GetChild(6).GetChild(0).GetComponent<Button>();
-        distanceRelationshipButtonText = distanceRelationshipButton.GetComponentInChildren<Text>();
-        distanceRelationshipDetails = distanceRelationshipButton.transform.GetChild(1).GetComponent<Text>();
-
-        distanceConstantLabel = physicsHeader.GetChild(7).GetComponent<Text>();
-        distanceConstantSlider = distanceConstantLabel.GetComponentInChildren<Slider>();
-        distanceConstantValueText = distanceConstantSlider.GetComponentInChildren<Text>();
-
-        forceConstantSlider = physicsHeader.GetChild(8).GetComponentInChildren<Slider>();
-        forceConstantValueText = forceConstantSlider.GetComponentInChildren<Text>();
-        forceConstantDetails = forceConstantSlider.transform.GetChild(4).GetComponent<Text>();
-        maxRangeSlider = physicsHeader.GetChild(9).GetComponentInChildren<Slider>();
-        maxRangeValueText = maxRangeSlider.GetComponentInChildren<Text>();
-        maxRangeDetails = maxRangeSlider.transform.GetChild(4).GetComponent<Text>();
+        gameplayButton = settingsHeaderButtons[0];
+        interfaceButton = settingsHeaderButtons[1];
+        allomancyButton = settingsHeaderButtons[2];
+        worldButton = settingsHeaderButtons[3];
+        closeButton = settingsHeaderButtons[4];
 
         // Gameplay Header
-        gameplayHeader = transform.GetChild(3);
+        gameplayHeader = transform.GetChild(2);
+
         controlSchemeButton = gameplayHeader.GetChild(0).GetChild(0).GetComponent<Button>();
         controlSchemeButtonText = controlSchemeButton.GetComponentInChildren<Text>();
         controlSchemeDetails = controlSchemeButton.transform.GetChild(1).GetComponent<Text>();
@@ -256,7 +234,8 @@ public class SettingsMenu : MonoBehaviour {
         smoothingValueText = smoothing.GetComponentInChildren<Text>();
 
         // Interface Header
-        interfaceHeader = transform.GetChild(4);
+        interfaceHeader = transform.GetChild(3);
+
         forceUnitsButton = interfaceHeader.GetChild(0).GetChild(0).GetComponent<Button>();
         forceUnitsButtonText = forceUnitsButton.GetComponentInChildren<Text>();
         forceUnitsDetails = forceUnitsButton.transform.GetChild(1).GetComponent<Text>();
@@ -273,41 +252,104 @@ public class SettingsMenu : MonoBehaviour {
         targetMassesButtonText = targetMassesButton.GetComponentInChildren<Text>();
         targetMassesDetails = targetMassesButton.transform.GetChild(1).GetComponent<Text>();
 
+        // Allomancy Header
+        allomancyHeader = transform.GetChild(4);
+
+        anchoredBoostButton = allomancyHeader.GetChild(0).GetChild(0).GetComponent<Button>();
+        anchoredBoostButtonText = anchoredBoostButton.transform.GetChild(0).GetComponent<Text>();
+        anchoredBoostDetails = anchoredBoostButton.transform.GetChild(1).GetComponent<Text>();
+
+        aNFMinimumLabel = allomancyHeader.GetChild(1).GetComponent<Text>();
+        aNFMinimumButton = aNFMinimumLabel.GetComponentInChildren<Button>();
+        aNFMinimumButtonText = aNFMinimumButton.transform.GetChild(0).GetComponent<Text>();
+        aNFMinimumDetails = aNFMinimumButton.transform.GetChild(1).GetComponent<Text>();
+
+        aNFMaximumLabel = allomancyHeader.GetChild(2).GetComponent<Text>();
+        aNFMaximumButton = aNFMaximumLabel.GetComponentInChildren<Button>();
+        aNFMaximumButtonText = aNFMaximumButton.transform.GetChild(0).GetComponent<Text>();
+        aNFMaximumDetails = aNFMaximumButton.transform.GetChild(1).GetComponent<Text>();
+
+        eWVSignageLabel = allomancyHeader.GetChild(3).GetComponent<Text>();
+        eWVSignageButton = eWVSignageLabel.GetComponentInChildren<Button>();
+        eWVSignageButtonText = eWVSignageButton.transform.GetChild(0).GetComponent<Text>();
+        eWVSignageDetails = eWVSignageButton.transform.GetChild(1).GetComponent<Text>();
+
+        eWVRelativityLabel = allomancyHeader.GetChild(4).GetComponent<Text>();
+        eWVRelativityButton = eWVRelativityLabel.GetComponentInChildren<Button>();
+        eWVRelativityButtonText = eWVRelativityButton.transform.GetChild(0).GetComponent<Text>();
+        eWVRelativityDetails = eWVRelativityButton.transform.GetChild(1).GetComponent<Text>();
+
+        velocityConstantLabel = allomancyHeader.GetChild(5).GetComponent<Text>();
+        velocityConstantSlider = velocityConstantLabel.GetComponentInChildren<Slider>();
+        velocityConstantValueText = velocityConstantSlider.GetComponentInChildren<Text>();
+
+        distanceRelationshipButton = allomancyHeader.GetChild(6).GetChild(0).GetComponent<Button>();
+        distanceRelationshipButtonText = distanceRelationshipButton.GetComponentInChildren<Text>();
+        distanceRelationshipDetails = distanceRelationshipButton.transform.GetChild(1).GetComponent<Text>();
+
+        distanceConstantLabel = allomancyHeader.GetChild(7).GetComponent<Text>();
+        distanceConstantSlider = distanceConstantLabel.GetComponentInChildren<Slider>();
+        distanceConstantValueText = distanceConstantSlider.GetComponentInChildren<Text>();
+
+        forceConstantSlider = allomancyHeader.GetChild(8).GetComponentInChildren<Slider>();
+        forceConstantValueText = forceConstantSlider.GetComponentInChildren<Text>();
+        forceConstantDetails = forceConstantSlider.transform.GetChild(4).GetComponent<Text>();
+
+        maxRangeSlider = allomancyHeader.GetChild(9).GetComponentInChildren<Slider>();
+        maxRangeValueText = maxRangeSlider.GetComponentInChildren<Text>();
+        maxRangeDetails = maxRangeSlider.transform.GetChild(4).GetComponent<Text>();
+
+        // World Header
+        worldHeader = transform.GetChild(5);
+        gravityButton = worldHeader.GetChild(0).GetChild(0).GetComponent<Button>();
+        gravityButtonText = gravityButton.transform.GetChild(0).GetComponent<Text>();
+
+        dragButton = worldHeader.GetChild(1).GetChild(0).GetComponent<Button>();
+        dragButtonText = dragButton.transform.GetChild(0).GetComponent<Text>();
+
 
         // Command listeners assignment
+        // Settings
+        gameplayButton.onClick.AddListener(OpenGameplay);
+        interfaceButton.onClick.AddListener(OpenInterface);
+        allomancyButton.onClick.AddListener(OpenAllomancy);
+        worldButton.onClick.AddListener(OpenWorld);
+        closeButton.onClick.AddListener(OnClickClose);
+        // Gameplay
+        controlSchemeButton.onClick.AddListener(OnClickControlScheme);
+        rumbleButton.onClick.AddListener(OnClickRumble);
         pushControlStyleButton.onClick.AddListener(OnClickPushControlStyle);
         sensitivity.onValueChanged.AddListener(OnSensitivityChanged);
         smoothing.onValueChanged.AddListener(OnSmoothingChanged);
-        distanceConstantSlider.onValueChanged.AddListener(OnDistanceConstantChanged);
-        velocityConstantSlider.onValueChanged.AddListener(OnVelocityConstantChanged);
-        forceConstantSlider.onValueChanged.AddListener(OnForceConstantChanged);
-        maxRangeSlider.onValueChanged.AddListener(OnMaxRangeChanged);
-
+        // Interface
+        forceUnitsButton.onClick.AddListener(OnClickForceUnits);
+        interfaceComplexityButton.onClick.AddListener(OnClickInterfaceComplexity);
+        targetForcesButton.onClick.AddListener(OnClickTargetForces);
+        targetMassesButton.onClick.AddListener(OnClickTargetMasses);
+        // Allomancy
         anchoredBoostButton.onClick.AddListener(OnClickAnchoredBoost);
         aNFMinimumButton.onClick.AddListener(OnClickANFMinimum);
         aNFMaximumButton.onClick.AddListener(OnClickANFMaximum);
         eWVSignageButton.onClick.AddListener(OnClickEWVSignage);
         eWVRelativityButton.onClick.AddListener(OnClickEWVRelativity);
+        velocityConstantSlider.onValueChanged.AddListener(OnVelocityConstantChanged);
         distanceRelationshipButton.onClick.AddListener(OnClickDistanceRelationshipButton);
+        distanceConstantSlider.onValueChanged.AddListener(OnDistanceConstantChanged);
+        forceConstantSlider.onValueChanged.AddListener(OnForceConstantChanged);
+        maxRangeSlider.onValueChanged.AddListener(OnMaxRangeChanged);
+        // World
+        gravityButton.onClick.AddListener(OnGravityButton);
+        dragButton.onClick.AddListener(OnDragButton);
 
-        forceUnitsButton.onClick.AddListener(OnClickForceUnits);
-        interfaceComplexityButton.onClick.AddListener(OnClickInterfaceComplexity);
-        targetForcesButton.onClick.AddListener(OnClickTargetForces);
-        targetMassesButton.onClick.AddListener(OnClickTargetMasses);
-
-        gameplayButton.onClick.AddListener(OpenGameplay);
-        physicsButton.onClick.AddListener(OpenPhysics);
-        interfaceButton.onClick.AddListener(OpenInterface);
-        controlSchemeButton.onClick.AddListener(OnClickControlScheme);
-        rumbleButton.onClick.AddListener(OnClickRumble);
-        closeButton.onClick.AddListener(OnClickClose);
-
-        // Initial text field assignment
+        // Initial field assignments
+        // Settings
         controlSchemeDetails.text = "";
         controlSchemeButtonText.text = s_mk45;
         pushControlStyleButtonText.text = s_perc;
         pushControlStyleDetails.text = s_percDetails;
-
+        sensitivity.value = FPVCameraLock.Sensitivity;
+        smoothing.value = FPVCameraLock.Smoothing;
+        // Interface
         forceUnitsButtonText.text = s_newt;
         forceUnitsDetails.text = s_newtDetails;
         interfaceComplexityButtonText.text = s_interfaceSums;
@@ -316,7 +358,7 @@ public class SettingsMenu : MonoBehaviour {
         targetForcesDetails.text = s_targetForcesEnabledDetails;
         targetMassesButtonText.text = s_targetMassesEnabled;
         targetMassesDetails.text = s_targetMassesEnabledDetails;
-
+        // Allomancy
         anchoredBoostButtonText.text = s_norm;
         anchoredBoostDetails.text = s_normDetails;
         aNFMinimumButtonText.text = s_aNFMinZero;
@@ -330,14 +372,15 @@ public class SettingsMenu : MonoBehaviour {
         distanceRelationshipButtonText.text = s_eWD;
         distanceRelationshipDetails.text = s_eWDDetails;
         forceConstantDetails.text = s_alloConstantDetails;
-        maxRangeDetails.text = s_maxRDetails;
-
-        sensitivity.value = FPVCameraLock.Sensitivity;
-        smoothing.value = FPVCameraLock.Smoothing;
         distanceConstantSlider.value = PhysicsController.distanceConstant;
         velocityConstantSlider.value = PhysicsController.velocityConstant;
         forceConstantSlider.value = AllomanticIronSteel.AllomanticConstant;
         maxRangeSlider.value = AllomanticIronSteel.maxRange;
+        // World
+        maxRangeDetails.text = s_maxRDetails;
+        gravityButtonText.text = s_enabled;
+        dragButtonText.text = s_enabled;
+
 
         sensitivityValueText.text = sensitivity.value.ToString();
         smoothingValueText.text = smoothing.value.ToString();
@@ -348,9 +391,10 @@ public class SettingsMenu : MonoBehaviour {
 
         // Now, set up the scene to start with only the Title Screen visible
         settingsHeader.gameObject.SetActive(false);
-        physicsHeader.gameObject.SetActive(false);
         gameplayHeader.gameObject.SetActive(false);
         interfaceHeader.gameObject.SetActive(false);
+        allomancyHeader.gameObject.SetActive(false);
+        worldHeader.gameObject.SetActive(false);
         rumbleLabel.gameObject.SetActive(false);
         aNFMinimumLabel.gameObject.SetActive(true);
         aNFMaximumLabel.gameObject.SetActive(true);
@@ -367,7 +411,7 @@ public class SettingsMenu : MonoBehaviour {
 
     public void CloseSettings() {
         CloseGameplay();
-        ClosePhysics();
+        CloseAllomancy();
         gameObject.SetActive(false);
     }
 
@@ -381,16 +425,6 @@ public class SettingsMenu : MonoBehaviour {
         gameplayHeader.gameObject.SetActive(false);
     }
 
-    private void OpenPhysics() {
-        settingsHeader.gameObject.SetActive(false);
-        physicsHeader.gameObject.SetActive(true);
-    }
-
-    private void ClosePhysics() {
-        settingsHeader.gameObject.SetActive(true);
-        physicsHeader.gameObject.SetActive(false);
-    }
-
     private void OpenInterface() {
         settingsHeader.gameObject.SetActive(false);
         interfaceHeader.gameObject.SetActive(true);
@@ -401,13 +435,35 @@ public class SettingsMenu : MonoBehaviour {
         interfaceHeader.gameObject.SetActive(false);
     }
 
+    private void OpenAllomancy() {
+        settingsHeader.gameObject.SetActive(false);
+        allomancyHeader.gameObject.SetActive(true);
+    }
+
+    private void CloseAllomancy() {
+        settingsHeader.gameObject.SetActive(true);
+        allomancyHeader.gameObject.SetActive(false);
+    }
+
+    private void OpenWorld() {
+        settingsHeader.gameObject.SetActive(false);
+        worldHeader.gameObject.SetActive(true);
+    }
+
+    private void CloseWorld() {
+        settingsHeader.gameObject.SetActive(true);
+        worldHeader.gameObject.SetActive(false);
+    }
+
     public void BackSettings() {
         if (IsGameplayOpen)
             CloseGameplay();
-        else if (IsPhysicsOpen)
-            ClosePhysics();
         else if (IsInterfaceOpen)
             CloseInterface();
+        else if (IsAllomancyOpen)
+            CloseAllomancy();
+        else if (IsWorldOpen)
+            CloseWorld();
         else
             CloseSettings();
     }
@@ -570,7 +626,6 @@ public class SettingsMenu : MonoBehaviour {
                     PhysicsController.anchorBoostMode = AnchorBoostMode.None;
                     anchoredBoostButtonText.text = s_anchorDisabled;
                     anchoredBoostDetails.text = s_anchorDisabledDetails;
-                    forceConstantSlider.value /= 2;
                     break;
                 }
             default: {
@@ -579,6 +634,7 @@ public class SettingsMenu : MonoBehaviour {
                     PhysicsController.anchorBoostMode = AnchorBoostMode.AllomanticNormalForce;
                     anchoredBoostButtonText.text = s_norm;
                     anchoredBoostDetails.text = s_normDetails;
+                    forceConstantSlider.value /= 2;
                     break;
                 }
         }
@@ -704,6 +760,28 @@ public class SettingsMenu : MonoBehaviour {
     private void OnForceConstantChanged(float value) {
         AllomanticIronSteel.AllomanticConstant = ((int)value);
         forceConstantValueText.text = ((int)value).ToString();
+    }
+
+    private void OnGravityButton() {
+        if (PhysicsController.gravityEnabled) {
+            playerRb.useGravity = false;
+            gravityButtonText.text = s_disabled;
+            PhysicsController.gravityEnabled = false;
+        } else {
+            playerRb.useGravity = true;
+            gravityButtonText.text = s_enabled;
+            PhysicsController.gravityEnabled = true;
+        }
+    }
+
+    private void OnDragButton() {
+        if (PhysicsController.airResistanceEnabled) {
+            dragButtonText.text = s_disabled;
+            PhysicsController.airResistanceEnabled = false;
+        } else {
+            dragButtonText.text = s_enabled;
+            PhysicsController.airResistanceEnabled = true;
+        }
     }
 
     private void OnMaxRangeChanged(float value) {
