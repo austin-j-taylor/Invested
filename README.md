@@ -15,15 +15,15 @@ Changelog:
 
 Version 1.1.0
 
-- Added a Glossary.
-- Added several new Interface options in Settings
-- Added options for disabling gravity and air resistance on the player
-- Anchored Push Boosts are now estimated when targeting a metal but not immediately pushing on it
+- Added Glossary
+- Added several new Interface options
+- Added settings for disabling gravity and air resistance on the player
+- Anchored Push Boosts are now estimated when targeting a metal but not actively pushing on it
 	- Effectively, the forces displayed in the HUD assume that a target is perfectly anchored until you push on it.
 - Added option to force the ANF to be equal for the Allomancer and target.
-	- Whichever target or Allomancer is most anchored decides the ANF on both the target and Allomancer.
-- Changed text color of target force labels in the HUD when pushing
+	- Whichever target or Allomancer is most anchored determines the ANF on both the target and Allomancer.
+- Improved visual effect on text color of force labels in the HUD while pushing
 - Changed target force labels to only show the two highest significant figures
-- Increased friction acting on player when on ground and not trying to move
+- Increased friction acting on player when grounded and not trying to move
 - Increased angle of throwing coins when airborne with mouse & keyboard control scheme
 - Somewhat fixed bug where coins would occasionally fall through the ground when pushing on them out of a jump
