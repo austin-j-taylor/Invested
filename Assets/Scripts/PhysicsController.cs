@@ -15,7 +15,7 @@ public static class PhysicsController {
     public static AnchorBoostMode anchorBoostMode = AnchorBoostMode.AllomanticNormalForce;
     public static NormalForceMinimum normalForceMinimum = NormalForceMinimum.Zero;
     public static NormalForceMaximum normalForceMaximum = NormalForceMaximum.AllomanticForce;
-    public static bool normalForceEquality = false;
+    public static bool normalForceEquality = true;
     public static ExponentialWithVelocitySignage exponentialWithVelocitySignage = ExponentialWithVelocitySignage.AllVelocityDecreasesForce;
     public static ExponentialWithVelocityRelativity exponentialWithVelocityRelativity = ExponentialWithVelocityRelativity.Relative;
     public static float distanceConstant = 16f;

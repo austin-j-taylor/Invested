@@ -13,70 +13,17 @@ This Unity project makes use of [Volumetric Lines by Johannes Unterguggenberger]
 
 Changelog:
 
-Version 1.0.9
+Version 1.1.0
 
-- Added HUD element: Mass, Force, and AF + ANF indicators that follow targets
-- Added several physics options for calculation of Anchored Push Boosts
-- Changed color of metal lines to Pull targets to be green
-- Improved visual highlight of potential targets
-- Improved menu navigation with the Escape key
-- Improved Tutorial slightly
-- Improved Sandbox slightly
-- Swapped Jump and Throw-coin controls on gamepad
-- Fixed several bugs with the calculation of the ANF
-- Fixed visual bug with target metal lines when using gamepad
-
-
-
-Version 1.0.8
-
-- Improved lighting and colors of Luthadel
-	- Added two snazzy lamps to Luthadel and Sandbox
-- Fixed bug with the burn rate meter when stopping burning metals
-
-
-Version 1.0.7
-
-- Added mass labels above targets
-- Added Anchored Push Boost option (Allomantic Normal Force was moved here)
-	- Added Allomantic Normal Force mode
-	- Added Exponential with Velocity mode
-- Added a zero-grav zone to the Sandbox, just for fun.
-
-Version 1.0.6
-
-- Added clarification to gamepad control scheme button text
-
-Version 1.0.5
-
-- Added option to enable/disable Allomantic Normal Force
-- Added new Force-Distance Relationship: Exponential
-- Altered Settings menu to distinguish Gameplay and Physics settings
-- Added a few new blocks to the Tutorial
-- Added version number on title screen
-- Fixed bug in which the ANF was calculated wrong when quickly pulling and pushing in sequence
-	
-Version 1.0.4
-
-- Added Main menu, title screen, scene selection menu, and discrete settings menu
-- Added basics for Tutorial, Sandbox, and Luthadel scenes
-	-Added fog/mists to Luthadel
-
-Version 1.0.3
-
-- Added option to view force in User Interface in either Newtons or G's (acceleration)
-
-Version 1.0.2
-
-- Added new Push Control Style: Player can choose one of two methods to control their push:
-	- by the percentage of the maximum possible force
-	- by a constant target force magnitude.
-- Added new Force-Distance Relationship: Player can choose one of two possible formulas for the Allomantic Force:
-	- Inverse square relationship between Force and Distance
-	- Linear relationship between Force and Distance
-- Added option to control Allomantic Force Constant
-- Added option to control Max Range
-
-Version 1.0.1
-
-- Fixed bug in which thrown coins were pushed above crosshairs
+- Added a Glossary.
+- Added several new Interface options in Settings
+- Added options for disabling gravity and air resistance on the player
+- Anchored Push Boosts are now estimated when targeting a metal but not immediately pushing on it
+	- Effectively, the forces displayed in the HUD assume that a target is perfectly anchored until you push on it.
+- Added option to force the ANF to be equal for the Allomancer and target.
+	- Whichever target or Allomancer is most anchored decides the ANF on both the target and Allomancer.
+- Changed text color of target force labels in the HUD when pushing
+- Changed target force labels to only show the two highest significant figures
+- Increased friction acting on player when on ground and not trying to move
+- Increased angle of throwing coins when airborne with mouse & keyboard control scheme
+- Somewhat fixed bug where coins would occasionally fall through the ground when pushing on them out of a jump
