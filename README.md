@@ -11,7 +11,7 @@ Here are some short videos of the game:
 This Unity project makes use of [Volumetric Lines by Johannes Unterguggenberger](https://assetstore.unity.com/packages/tools/particles-effects/volumetric-lines-29160) and [Cakeslice's Outline Effect](https://github.com/cakeslice/Outline-Effect).
 
 
-Changelog:
+Recent changes:
 
 Version 1.1.0
 
@@ -27,3 +27,16 @@ Version 1.1.0
 - Increased friction acting on player when grounded and not trying to move
 - Increased angle of throwing coins when airborne with mouse & keyboard control scheme
 - Somewhat fixed bug where coins would occasionally fall through the ground when pushing on them out of a jump
+
+Version 1.0.9
+
+- Added HUD element: Mass, Force, and AF + ANF indicators that follow targets
+- Added several physics options for calculation of Anchored Push Boosts
+- Changed color of metal lines to Pull targets to be green
+- Improved visual highlight of potential targets
+- Improved menu navigation with the Escape key
+- Improved Tutorial slightly
+- Improved Sandbox slightly
+- Swapped Jump and Throw-coin controls on gamepad
+- Fixed several bugs with the calculation of the ANF
+- Fixed visual bug with target metal lines when using gamepad
