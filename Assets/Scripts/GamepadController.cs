@@ -3,15 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using XInputDotNetPure;
 
-public enum ForceStyle { ForceMagnitude, Percentage }
-public enum ControlScheme { MouseKeyboard45, MouseKeyboardQE, Gamepad }
-
 public class GamepadController : MonoBehaviour {
     
-    public static bool UsingMB45 { get; set; }
-    public static ControlScheme currentControlScheme;
-    public static ForceStyle currentForceStyle;
-
     private static bool updateRumble;
     private static bool usingGamepad;
     private static bool usingRumble;
@@ -58,10 +51,6 @@ public class GamepadController : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
-        UsingMB45 = true;
-        currentControlScheme = ControlScheme.MouseKeyboard45;
-        currentForceStyle = ForceStyle.Percentage;
-
         usingGamepad = false;
         usingRumble = true;
         updateRumble = false;

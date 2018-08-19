@@ -32,7 +32,7 @@ public class GameManager : MonoBehaviour {
     }
 
     private void Start() {
-        UnityEngine.SceneManagement.SceneManager.LoadScene(SceneSelectMenu.sceneTitleScreen);
+        SceneManager.LoadScene(SceneSelectMenu.sceneTitleScreen);
     }
 
     public static void AddMagnetic(Magnetic magnetic) {

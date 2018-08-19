@@ -4,6 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // Enumerations for settings
+public enum ForceStyle { ForceMagnitude, Percentage }
+public enum ControlScheme { MouseKeyboard45, MouseKeyboardQE, Gamepad }
 public enum ForceDisplayUnits { Newtons, Gs }
 public enum InterfaceComplexity { Simple, Sums }
 
@@ -90,6 +92,9 @@ public class SettingsMenu : MonoBehaviour {
 
     // World
 
+    public static bool UsingMB45 { get; set; } = true;
+    public static ControlScheme currentControlScheme = ControlScheme.MouseKeyboard45;
+    public static ForceStyle currentForceStyle = ForceStyle.Percentage;
     public static ForceDisplayUnits displayUnits = ForceDisplayUnits.Newtons;
     public static InterfaceComplexity interfaceComplexity = InterfaceComplexity.Simple;
     public static bool interfaceTargetForces = true;
@@ -547,15 +552,15 @@ public class SettingsMenu : MonoBehaviour {
     // Gameplay
 
     private void OnClickControlScheme() {
-        switch (GamepadController.currentControlScheme) {
+        switch (currentControlScheme) {
             case ControlScheme.MouseKeyboard45: {
-                    GamepadController.currentControlScheme = ControlScheme.MouseKeyboardQE;
+                    currentControlScheme = ControlScheme.MouseKeyboardQE;
                     controlSchemeButtonText.text = s_mkQE;
-                    GamepadController.UsingMB45 = false;
+                    UsingMB45 = false;
                     break;
                 }
             case ControlScheme.MouseKeyboardQE: {
-                    GamepadController.currentControlScheme = ControlScheme.Gamepad;
+                    currentControlScheme = ControlScheme.Gamepad;
                     controlSchemeButtonText.text = s_game;
                     controlSchemeDetails.text = s_gameDetails;
                     GamepadController.UsingGamepad = true;
@@ -566,10 +571,10 @@ public class SettingsMenu : MonoBehaviour {
                     //break;
                 }
             default: {
-                    GamepadController.currentControlScheme = ControlScheme.MouseKeyboard45;
+                    currentControlScheme = ControlScheme.MouseKeyboard45;
                     controlSchemeButtonText.text = s_mk45;
                     controlSchemeDetails.text = "";
-                    GamepadController.UsingMB45 = true;
+                    UsingMB45 = true;
                     GamepadController.UsingGamepad = false;
                     rumbleLabel.gameObject.SetActive(false);
                     break;
@@ -588,17 +593,17 @@ public class SettingsMenu : MonoBehaviour {
     }
 
     private void OnClickPushControlStyle() {
-        switch (GamepadController.currentForceStyle) {
+        switch (currentForceStyle) {
             case ForceStyle.ForceMagnitude: {
                     PushControlStyleButtonText.text = s_perc;
                     PushControlStyleDetails.text = s_percDetails;
-                    GamepadController.currentForceStyle = ForceStyle.Percentage;
+                    currentForceStyle = ForceStyle.Percentage;
                     break;
                 }
             default: {
                     PushControlStyleButtonText.text = s_forc;
                     PushControlStyleDetails.text = s_forcDetails;
-                    GamepadController.currentForceStyle = ForceStyle.ForceMagnitude;
+                    currentForceStyle = ForceStyle.ForceMagnitude;
                     break;
                 }
         }
