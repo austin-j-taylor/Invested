@@ -923,7 +923,7 @@ public class AllomanticIronSteel : MonoBehaviour {
             IsBurningIronSteel = true;
             UpdateBurnRateMeter();
             HUD.BurnRateMeter.MetalLineText = AvailableNumberOfTargets.ToString();
-            FPVCameraLock.FirstPersonCamera.cullingMask = ~0;
+            CameraController.FirstPersonCamera.cullingMask = ~0;
             SetPullRateTarget(1);
             SetPushRateTarget(1);
         }
@@ -944,7 +944,7 @@ public class AllomanticIronSteel : MonoBehaviour {
         steelBurnRate = 0;
 
         // make blue lines disappear
-        FPVCameraLock.FirstPersonCamera.cullingMask = ~(1 << blueLineLayer);
+        CameraController.FirstPersonCamera.cullingMask = ~(1 << blueLineLayer);
         //for (int i = 0; i < metalLines.Count; i++) {
         //    metalLines[i].GetComponent<MeshRenderer>().enabled = false;
         //}

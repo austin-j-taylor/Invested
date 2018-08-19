@@ -65,7 +65,7 @@ public class TargetOverlayController : MonoBehaviour {
                     Vector3 heightToTop = Vector3.zero;
                     heightToTop.y = target.ColliderBody.bounds.size.y / 2f;
 
-                    Vector3 positionActualForce = FPVCameraLock.FirstPersonCamera.WorldToScreenPoint(target.transform.position - heightToTop) + new Vector3(0, -pixelDelta);
+                    Vector3 positionActualForce = CameraController.FirstPersonCamera.WorldToScreenPoint(target.transform.position - heightToTop) + new Vector3(0, -pixelDelta);
 
                     if (positionActualForce.z > 0) {
                         pullTargetsActualForce[i].transform.position = positionActualForce;
@@ -83,7 +83,7 @@ public class TargetOverlayController : MonoBehaviour {
                     Vector3 heightToTop = Vector3.zero;
                     heightToTop.y = target.ColliderBody.bounds.size.y / 2f;
 
-                    Vector3 positionActualForce = FPVCameraLock.FirstPersonCamera.WorldToScreenPoint(target.transform.position - heightToTop) + new Vector3(0, -pixelDelta);
+                    Vector3 positionActualForce = CameraController.FirstPersonCamera.WorldToScreenPoint(target.transform.position - heightToTop) + new Vector3(0, -pixelDelta);
 
                     if (positionActualForce.z > 0) {
                         pushTargetsActualForce[i].transform.position = positionActualForce;
@@ -103,7 +103,7 @@ public class TargetOverlayController : MonoBehaviour {
                     Vector3 heightToTop = Vector3.zero;
                     heightToTop.y = target.ColliderBody.bounds.size.y / 2f;
 
-                    Vector3 positionActualForce = FPVCameraLock.FirstPersonCamera.WorldToScreenPoint(target.transform.position - heightToTop) + new Vector3(0, -pixelDelta);
+                    Vector3 positionActualForce = CameraController.FirstPersonCamera.WorldToScreenPoint(target.transform.position - heightToTop) + new Vector3(0, -pixelDelta);
 
                     if (positionActualForce.z > 0) {
                         pullTargetsActualForce[i].transform.position = positionActualForce;
@@ -120,7 +120,7 @@ public class TargetOverlayController : MonoBehaviour {
                     Vector3 heightToTop = Vector3.zero;
                     heightToTop.y = target.ColliderBody.bounds.size.y / 2f;
 
-                    Vector3 positionActualForce = FPVCameraLock.FirstPersonCamera.WorldToScreenPoint(target.transform.position - heightToTop) + new Vector3(0, -pixelDelta);
+                    Vector3 positionActualForce = CameraController.FirstPersonCamera.WorldToScreenPoint(target.transform.position - heightToTop) + new Vector3(0, -pixelDelta);
 
                     if (positionActualForce.z > 0) {
                         pushTargetsActualForce[i].transform.position = positionActualForce;
@@ -139,7 +139,7 @@ public class TargetOverlayController : MonoBehaviour {
                 heightToTop.y = playerIronSteel.HighlightedTarget.ColliderBody.bounds.size.y / 2f;
 
                 highlightedTargetMass.text = HUD.MassString(playerIronSteel.HighlightedTarget.Mass);
-                highlightedTargetMass.transform.position = FPVCameraLock.FirstPersonCamera.WorldToScreenPoint(playerIronSteel.HighlightedTarget.transform.position + heightToTop) + new Vector3(0, pixelDelta);
+                highlightedTargetMass.transform.position = CameraController.FirstPersonCamera.WorldToScreenPoint(playerIronSteel.HighlightedTarget.transform.position + heightToTop) + new Vector3(0, pixelDelta);
             } else { // Target is not highlighted or is not on screen, hide mass label
                 highlightedTargetMass.text = "";
             }

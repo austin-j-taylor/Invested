@@ -52,7 +52,7 @@ public class PauseMenu : MonoBehaviour {
 
     public static void Pause() {
         //Cursor.visible = true;
-        FPVCameraLock.UnlockCamera();
+        CameraController.UnlockCamera();
         Time.timeScale = 0f;
         pauseMenu.SetActive(true);
         IsPaused = true;
@@ -62,7 +62,7 @@ public class PauseMenu : MonoBehaviour {
         settingsMenu.CloseSettings();
 
         //Cursor.visible = false;
-        FPVCameraLock.LockCamera();
+        CameraController.LockCamera();
         Time.timeScale = 1f;
         pauseMenu.SetActive(false);
         IsPaused = false;
@@ -83,7 +83,7 @@ public class PauseMenu : MonoBehaviour {
 
     private void ClickQuit() {
         UnPause();
-        FPVCameraLock.UnlockCamera();
+        CameraController.UnlockCamera();
         mainMenu.OpenMainMenu();
         sceneSelectMenu.LoadScene(SceneSelectMenu.sceneTitleScreen);
     }

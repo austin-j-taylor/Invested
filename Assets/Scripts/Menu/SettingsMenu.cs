@@ -395,8 +395,8 @@ public class SettingsMenu : MonoBehaviour {
         controlSchemeButtonText.text = s_mk45;
         PushControlStyleButtonText.text = s_perc;
         PushControlStyleDetails.text = s_percDetails;
-        sensitivity.value = FPVCameraLock.Sensitivity;
-        smoothing.value = FPVCameraLock.Smoothing;
+        sensitivity.value = CameraController.Sensitivity;
+        smoothing.value = CameraController.Smoothing;
         // Interface
         blueLinesButtonText.text = s_enabled;
         blueLinesDetails.text = s_blueLinesDetails;
@@ -610,12 +610,12 @@ public class SettingsMenu : MonoBehaviour {
     }
 
     private void OnSensitivityChanged(float value) {
-        FPVCameraLock.Sensitivity = value;
+        CameraController.Sensitivity = value;
         sensitivityValueText.text = ((int)(100 * value) / 100f).ToString();
     }
 
     private void OnSmoothingChanged(float value) {
-        FPVCameraLock.Smoothing = value;
+        CameraController.Smoothing = value;
         smoothingValueText.text = ((int)(100 * value) / 100f).ToString();
     }
 

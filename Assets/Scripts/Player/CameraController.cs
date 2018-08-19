@@ -6,7 +6,7 @@ using UnityEngine;
  * Controls the first-person camera.
  */
 
-public class FPVCameraLock : MonoBehaviour {
+public class CameraController : MonoBehaviour {
 
     public static Camera FirstPersonCamera { get; private set; }
 

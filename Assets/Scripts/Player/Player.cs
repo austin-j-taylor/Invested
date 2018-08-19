@@ -59,7 +59,7 @@ public class Player : MonoBehaviour {
         if (spawn) {
             transform.position = spawn.transform.position;
             transform.rotation = spawn.transform.rotation;
-            FPVCameraLock.Clear();
+            CameraController.Clear();
         }
     }
     

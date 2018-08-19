@@ -72,10 +72,10 @@ public class SceneSelectMenu : MonoBehaviour {
     public void LoadScene(int scene) {
         if (scene == sceneTitleScreen) {
             player.gameObject.SetActive(false);
-            FPVCameraLock.UnlockCamera();
+            CameraController.UnlockCamera();
         } else {
             player.gameObject.SetActive(true);
-            FPVCameraLock.LockCamera();
+            CameraController.LockCamera();
         }
         hud.ResetHUD();
         player.GetComponent<Player>().ReloadPlayerIntoNewScene(scene);
