@@ -7,7 +7,6 @@ using UnityEngine.UI;
 public class BurnRateMeter : MonoBehaviour {
 
     // Constants for Burn Rate Meter
-    private const float burnRateMeterLerpConstant = .30f;
     private const float minAngle = .12f;
     private const float maxAngle = 1f - 2 * minAngle;
     
@@ -51,7 +50,7 @@ public class BurnRateMeter : MonoBehaviour {
         }
 
         playerInputText.text = HUD.ForceString(targetForce);
-        LerpToPercent(percent);
+        SetFillPercent(percent);
     }
 
     // Set the meter using the Percentage display configuration.
@@ -60,7 +59,7 @@ public class BurnRateMeter : MonoBehaviour {
         int percent = (int)Mathf.Round(rate * 100);
         playerInputText.text = percent + "%";
 
-        LerpToPercent(rate);
+        SetFillPercent(rate);
         SetActualForceText(netForce);
         SetSumForceText(allomanticForce, normalForce);
     }
@@ -77,8 +76,8 @@ public class BurnRateMeter : MonoBehaviour {
         }
     }
 
-    private void LerpToPercent(float percent) {
-        burnRateImage.fillAmount = Mathf.Lerp(burnRateImage.fillAmount, minAngle + (percent) * (maxAngle), burnRateMeterLerpConstant);
+    private void SetFillPercent(float percent) {
+        burnRateImage.fillAmount = minAngle + (percent) * (maxAngle);
     }
 
     public void InterfaceRefresh() {

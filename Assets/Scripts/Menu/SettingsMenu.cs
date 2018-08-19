@@ -30,6 +30,7 @@ public class SettingsMenu : MonoBehaviour {
     private const string s_percDetails = "Player sets a percentage of their maximum possible force to Push with.";
 
     // Interface
+    private const string s_blueLinesDetails = "Disable if you are having performance/framerate issues.";
     private const string s_newt = "Newtons";
     private const string s_newtDetails = "Pushes will be expressed as forces in units of Newtons.";
     private const string s_grav = "G's";
@@ -93,6 +94,7 @@ public class SettingsMenu : MonoBehaviour {
     public static InterfaceComplexity interfaceComplexity = InterfaceComplexity.Simple;
     public static bool interfaceTargetForces = true;
     public static bool interfaceTargetMasses = false;
+    public static bool renderBlueLines = true;
 
     public bool IsOpen {
         get {
@@ -155,6 +157,9 @@ public class SettingsMenu : MonoBehaviour {
     private Text smoothingValueText;
 
     // Interface
+    private Text blueLinesButtonText;
+    private Button blueLinesButton;
+    private Text blueLinesDetails;
     private Button forceUnitsButton;
     private Text forceUnitsButtonText;
     private Text forceUnitsDetails;
@@ -258,19 +263,23 @@ public class SettingsMenu : MonoBehaviour {
         // Interface Header
         interfaceHeader = transform.GetChild(4);
 
-        forceUnitsButton = interfaceHeader.GetChild(0).GetChild(0).GetComponent<Button>();
+        blueLinesButton = interfaceHeader.GetChild(0).GetChild(0).GetComponent<Button>();
+        blueLinesButtonText = blueLinesButton.GetComponentInChildren<Text>();
+        blueLinesDetails = blueLinesButton.transform.GetChild(1).GetComponent<Text>();
+
+        forceUnitsButton = interfaceHeader.GetChild(1).GetChild(0).GetComponent<Button>();
         forceUnitsButtonText = forceUnitsButton.GetComponentInChildren<Text>();
         forceUnitsDetails = forceUnitsButton.transform.GetChild(1).GetComponent<Text>();
 
-        interfaceComplexityButton = interfaceHeader.GetChild(1).GetChild(0).GetComponent<Button>();
+        interfaceComplexityButton = interfaceHeader.GetChild(2).GetChild(0).GetComponent<Button>();
         interfaceComplexityButtonText = interfaceComplexityButton.GetComponentInChildren<Text>();
         interfaceComplexityDetails = interfaceComplexityButton.transform.GetChild(1).GetComponent<Text>();
 
-        targetForcesButton = interfaceHeader.GetChild(3).GetChild(0).GetComponent<Button>();
+        targetForcesButton = interfaceHeader.GetChild(4).GetChild(0).GetComponent<Button>();
         targetForcesButtonText = targetForcesButton.GetComponentInChildren<Text>();
         targetForcesDetails = targetForcesButton.transform.GetChild(1).GetComponent<Text>();
 
-        targetMassesButton = interfaceHeader.GetChild(4).GetChild(0).GetComponent<Button>();
+        targetMassesButton = interfaceHeader.GetChild(5).GetChild(0).GetComponent<Button>();
         targetMassesButtonText = targetMassesButton.GetComponentInChildren<Text>();
         targetMassesDetails = targetMassesButton.transform.GetChild(1).GetComponent<Text>();
 
@@ -353,6 +362,7 @@ public class SettingsMenu : MonoBehaviour {
         sensitivity.onValueChanged.AddListener(OnSensitivityChanged);
         smoothing.onValueChanged.AddListener(OnSmoothingChanged);
         // Interface
+        blueLinesButton.onClick.AddListener(OnBlueLinesButton);
         forceUnitsButton.onClick.AddListener(OnClickForceUnits);
         interfaceComplexityButton.onClick.AddListener(OnClickInterfaceComplexity);
         targetForcesButton.onClick.AddListener(OnClickTargetForces);
@@ -383,6 +393,8 @@ public class SettingsMenu : MonoBehaviour {
         sensitivity.value = FPVCameraLock.Sensitivity;
         smoothing.value = FPVCameraLock.Smoothing;
         // Interface
+        blueLinesButtonText.text = s_enabled;
+        blueLinesDetails.text = s_blueLinesDetails;
         forceUnitsButtonText.text = s_newt;
         forceUnitsDetails.text = s_newtDetails;
         interfaceComplexityButtonText.text = s_interfaceSimple;
@@ -410,7 +422,7 @@ public class SettingsMenu : MonoBehaviour {
         distanceConstantSlider.value = PhysicsController.distanceConstant;
         velocityConstantSlider.value = PhysicsController.velocityConstant;
         forceConstantSlider.value = AllomanticIronSteel.AllomanticConstant;
-        maxRangeSlider.value = AllomanticIronSteel.maxRange;
+        maxRangeSlider.value = AllomanticIronSteel.MaxRange;
         // World
         maxRangeDetails.text = s_maxRDetails;
         gravityButtonText.text = s_enabled;
@@ -532,6 +544,8 @@ public class SettingsMenu : MonoBehaviour {
         BackSettings();
     }
 
+    // Gameplay
+
     private void OnClickControlScheme() {
         switch (GamepadController.currentControlScheme) {
             case ControlScheme.MouseKeyboard45: {
@@ -587,6 +601,28 @@ public class SettingsMenu : MonoBehaviour {
                     GamepadController.currentForceStyle = ForceStyle.ForceMagnitude;
                     break;
                 }
+        }
+    }
+
+    private void OnSensitivityChanged(float value) {
+        FPVCameraLock.Sensitivity = value;
+        sensitivityValueText.text = ((int)(100 * value) / 100f).ToString();
+    }
+
+    private void OnSmoothingChanged(float value) {
+        FPVCameraLock.Smoothing = value;
+        smoothingValueText.text = ((int)(100 * value) / 100f).ToString();
+    }
+
+    // Interface
+
+    private void OnBlueLinesButton() {
+        if (renderBlueLines) {
+            blueLinesButtonText.text = s_disabled;
+            renderBlueLines = false;
+        } else {
+            blueLinesButtonText.text = s_enabled;
+            renderBlueLines = true;
         }
     }
 
@@ -651,16 +687,8 @@ public class SettingsMenu : MonoBehaviour {
             interfaceTargetMasses = true;
         }
     }
-
-    private void OnSensitivityChanged(float value) {
-        FPVCameraLock.Sensitivity = value;
-        sensitivityValueText.text = ((int)(100 * value) / 100f).ToString();
-    }
-
-    private void OnSmoothingChanged(float value) {
-        FPVCameraLock.Smoothing = value;
-        smoothingValueText.text = ((int)(100 * value) / 100f).ToString();
-    }
+    
+    // Allomancy
 
     private void OnClickAnchoredBoost() {
         switch (PhysicsController.anchorBoostMode) {
@@ -834,6 +862,8 @@ public class SettingsMenu : MonoBehaviour {
         forceConstantValueText.text = ((int)value).ToString();
     }
 
+    // World
+
     private void OnGravityButton() {
         if (PhysicsController.gravityEnabled) {
             playerRb.useGravity = false;
@@ -857,7 +887,7 @@ public class SettingsMenu : MonoBehaviour {
     }
 
     private void OnMaxRangeChanged(float value) {
-        AllomanticIronSteel.maxRange = ((int)value);
+        AllomanticIronSteel.MaxRange = ((int)value);
         maxRangeValueText.text = ((int)value).ToString();
     }
 }

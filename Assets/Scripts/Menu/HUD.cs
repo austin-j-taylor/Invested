@@ -12,6 +12,7 @@ public class HUD : MonoBehaviour {
     private static Text coinCountText;
     private static AllomanticIronSteel playerIronSteel;
 
+    private float deltaTimeFPS = 0.0f;
 
     public static string CoinCountText {
         set {
@@ -32,6 +33,25 @@ public class HUD : MonoBehaviour {
         BurnRateMeter = GetComponentInChildren<BurnRateMeter>();
         TargetOverlayController = GetComponentInChildren<TargetOverlayController>();
     }
+
+	void Update() {
+        deltaTimeFPS += (Time.unscaledDeltaTime - deltaTimeFPS) * 0.1f;
+	}
+
+	void OnGUI()
+	{
+		int w = Screen.width, h = Screen.height;
+ 
+		GUIStyle style = new GUIStyle();
+ 
+		Rect rect = new Rect(0, 0, w, h * 2 / 100);
+		style.alignment = TextAnchor.UpperLeft;
+		style.fontSize = h * 2 / 100;
+		style.normal.textColor = new Color (0.75f, 0.75f, 0.75f, 1.0f);
+		float fps = 1.0f / deltaTimeFPS;
+		string text = string.Format("{0:0.} fps", fps);
+		GUI.Label(rect, text, style);
+	}
 
     public void EnableHUD() {
         gameObject.SetActive(true);

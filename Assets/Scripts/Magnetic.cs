@@ -2,14 +2,19 @@ using cakeslice;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using VolumetricLines;
 
 public class Magnetic : MonoBehaviour {
 
+    private const float metalLinesLerpConstant = .30f;
+
     [SerializeField]
     private float mass;
-
+    
     private bool lastWasPulled;
     private Outline highlightedTargetOutline;
+    private VolumetricLineBehavior blueLine;
+    private float lightSaberFactor;
 
     public AllomanticIronSteel Allomancer {
         get;
@@ -34,7 +39,6 @@ public class Magnetic : MonoBehaviour {
     public Vector3 LastAllomanticNormalForceFromAllomancer { get; set; }
     public Vector3 LastAllomanticNormalForceFromTarget { get; set; }
 
-    public float LightSaberFactor { get; set; }
 
     public bool LastWasPulled {
         get {
@@ -88,11 +92,6 @@ public class Magnetic : MonoBehaviour {
             return mass;
         }
     }
-    public float Charge {
-        get {
-            return Mathf.Pow(mass, AllomanticIronSteel.chargePower);
-        }
-    }
     public bool InRange {
         get;
         set;
@@ -104,6 +103,7 @@ public class Magnetic : MonoBehaviour {
         }
     }
     public Rigidbody Rb { get; private set; }
+    public float Charge;// { get; private set; }
     public bool IsStatic { get; set; }
 
 
@@ -111,6 +111,7 @@ public class Magnetic : MonoBehaviour {
     void Awake () {
         Allomancer = null;
         highlightedTargetOutline = gameObject.AddComponent<Outline>();
+        blueLine = Instantiate(GameManager.MetalLineTemplate, transform);
         Rb = GetComponent<Rigidbody>();
         ColliderBody = GetComponent<Collider>();
         LastPosition = Vector3.zero;
@@ -119,7 +120,7 @@ public class Magnetic : MonoBehaviour {
         LastAllomanticForce = Vector3.zero;
         LastAllomanticNormalForceFromAllomancer = Vector3.zero;
         LastAllomanticNormalForceFromTarget = Vector3.zero;
-        LightSaberFactor = 1;
+        lightSaberFactor = 1;
         lastWasPulled = false;
         IsHighlighted = false;
         IsStatic = Rb == null;
@@ -129,9 +130,12 @@ public class Magnetic : MonoBehaviour {
         } else {
             LocalCenterOfMass = Vector3.zero;
         }
+        Charge = Mathf.Pow(mass, AllomanticIronSteel.chargePower);
         InRange = false;
     }
-
+    private void Start() {
+        GameManager.AddMagnetic(this);
+    }
     // If the Magnetic is untargeted
     public void Clear() {
         LastVelocity = Vector3.zero;
@@ -140,8 +144,9 @@ public class Magnetic : MonoBehaviour {
         LastAllomanticNormalForceFromAllomancer = Vector3.zero;
         LastAllomanticNormalForceFromTarget = Vector3.zero;
         Allomancer = null;
-        LightSaberFactor = 1;
+        lightSaberFactor = 1;
         InRange = false;
+        blueLine.GetComponent<MeshRenderer>().enabled = false;
         RemoveTargetGlow();
     }
 
@@ -154,17 +159,35 @@ public class Magnetic : MonoBehaviour {
         //LightSaberFactor = 1;
     }
 
+    private void OnDestroy() {
+        GameManager.MagneticsInScene.Remove(this);
+    }
+
     public virtual void AddForce(Vector3 netForce, ForceMode forceMode) {
         if (!IsStatic) {
             Rb.AddForce(netForce, forceMode);
         }
     }
+
     public void AddTargetGlow() {
         highlightedTargetOutline.Enable();
     }
 
     public void RemoveTargetGlow() {
         highlightedTargetOutline.Disable();
+    }
+
+    public void SetBlueLine(Vector3 endPos, float width, float lsf, Color color) {
+        blueLine.GetComponent<MeshRenderer>().enabled = true;
+        blueLine.EndPos = transform.InverseTransformPoint(endPos);
+        blueLine.LineWidth = width;
+        lightSaberFactor = Mathf.Lerp(lightSaberFactor, lsf, metalLinesLerpConstant);
+        blueLine.LightSaberFactor = lightSaberFactor;
+        blueLine.LineColor = color;
+    }
+
+    public void DisableBlueLine() {
+        blueLine.GetComponent<MeshRenderer>().enabled = false;
     }
 
     //public void AddTargetGlow() {
