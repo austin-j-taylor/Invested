@@ -8,21 +8,47 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour {
 
-    public static Camera FirstPersonCamera { get; private set; }
+    public static Camera ActiveCamera { get; private set; }
 
-    private static Player player;
+    public static Camera thirdPersonCamera;
+    public static Camera firstPersonCamera;
+    private static Transform player;
     private static Vector2 cameraPosition;
     private static Vector2 cameraVelocity;
-    private readonly Vector2 gamepadSpeed = new Vector3(80, 64);
-    
+    private readonly static Vector2 gamepadSpeed = new Vector3(80, 64);
+
+    private static bool firstPerson = false;
+    public static bool FirstPerson {
+        get {
+            return firstPerson;
+        }
+        set {
+            firstPerson = value;
+            if (value) {
+                thirdPersonCamera.gameObject.SetActive(false);
+                firstPersonCamera.gameObject.SetActive(true);
+                firstPersonCamera.cullingMask = thirdPersonCamera.cullingMask;
+                ActiveCamera = firstPersonCamera;
+                Clear();
+            } else {
+                firstPersonCamera.gameObject.SetActive(false);
+                thirdPersonCamera.gameObject.SetActive(true);
+                thirdPersonCamera.cullingMask = firstPersonCamera.cullingMask;
+                ActiveCamera = thirdPersonCamera;
+                Clear();
+            }
+        }
+    }
     public static bool CameraIsLocked { get; private set; }
     public static float Sensitivity { get; set; } = 2f;
     public static float Smoothing { get; set; } = 1f;
 
     // Use this for initialization
     void Awake() {
-        player = GetComponentInParent<Player>();
-        FirstPersonCamera = player.GetComponentInChildren<Camera>();
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+        firstPersonCamera = player.Find("Body/FirstPersonCamera").GetComponent<Camera>();
+        thirdPersonCamera = player.Find("Body/ThirdPersonCamera").GetComponent<Camera>();
+        FirstPerson = false;
         Clear();
         UnlockCamera();
     }
@@ -48,8 +74,8 @@ public class CameraController : MonoBehaviour {
             cameraPosition += cameraVelocity;
             cameraPosition.y = Mathf.Clamp(cameraPosition.y, -90f, 90f);
 
-            transform.localRotation = Quaternion.AngleAxis(-cameraPosition.y, Vector3.right);
-            player.transform.localRotation = Quaternion.AngleAxis(cameraPosition.x, player.transform.up);
+            ActiveCamera.transform.localRotation = Quaternion.AngleAxis(-cameraPosition.y, Vector3.right);
+            player.localRotation = Quaternion.AngleAxis(cameraPosition.x, player.up);
         }
     }
 
@@ -66,8 +92,11 @@ public class CameraController : MonoBehaviour {
     }
 
     public static void Clear() {
-        cameraPosition.x = player.transform.eulerAngles.y;
-        cameraPosition.y = player.transform.eulerAngles.x - Mathf.Rad2Deg * Mathf.Atan2(FirstPersonCamera.transform.localPosition.y, -FirstPersonCamera.transform.localPosition.z);
+        cameraPosition.x = player.eulerAngles.y;
+        if (firstPerson) 
+            cameraPosition.y = player.eulerAngles.x;
+        else
+            cameraPosition.y = player.eulerAngles.x - Mathf.Rad2Deg * Mathf.Atan2(ActiveCamera.transform.localPosition.y, -ActiveCamera.transform.localPosition.z);
     }
 
 }

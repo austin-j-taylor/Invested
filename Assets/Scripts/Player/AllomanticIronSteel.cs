@@ -27,7 +27,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     private const int blueLineLayer = 10;
     public const int maxNumberOfTargets = 10;
     public const float chargePower = 1f / 8f;
-    public static float AllomanticConstant { get; set; } = 600;
+    public static float AllomanticConstant { get; set; } = 1200;
     public static float MaxRange {
         get {
             return maxRange;
@@ -49,7 +49,6 @@ public class AllomanticIronSteel : MonoBehaviour {
     private const bool iron = true;
 
     //private LayerMask ignorePlayerLayer;
-    private Camera firstPersonView;
     private GamepadController gamepad;
     private Rigidbody rb;
     [SerializeField]
@@ -131,7 +130,6 @@ public class AllomanticIronSteel : MonoBehaviour {
 
     private void Awake() {
         //ignorePlayerLayer = ~(1 << LayerMask.NameToLayer("Player"));
-        firstPersonView = GetComponentInChildren<Camera>();
         rb = GetComponent<Rigidbody>();
         gamepad = GameObject.FindGameObjectWithTag("GameController").GetComponent<GamepadController>();
         centerOfMass.localPosition = Vector3.zero;
@@ -687,7 +685,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                     target.InRange = true;
 
                     // calculate the object's position on screen and find the one closest to the center to highlight.
-                    Vector3 screenPosition = firstPersonView.WorldToViewportPoint(target.transform.position);
+                    Vector3 screenPosition = CameraController.ActiveCamera.WorldToViewportPoint(target.transform.position);
                     if (screenPosition.z > 0 && screenPosition.x > horizontalMin && screenPosition.x < horizontalMax && screenPosition.y > verticalMin && screenPosition.y < verticalMax) {
                         // Test if the new object is the more ideal pullTarget than the last most ideal pullTarget
                         float distanceFromCenter = verticalImportanceFactor * Mathf.Pow(screenPosition.x - .5f, 2) + Mathf.Pow(screenPosition.y - .5f, 2);
@@ -923,7 +921,7 @@ public class AllomanticIronSteel : MonoBehaviour {
             IsBurningIronSteel = true;
             UpdateBurnRateMeter();
             HUD.BurnRateMeter.MetalLineText = AvailableNumberOfTargets.ToString();
-            CameraController.FirstPersonCamera.cullingMask = ~0;
+            CameraController.ActiveCamera.cullingMask = ~0;
             SetPullRateTarget(1);
             SetPushRateTarget(1);
         }
@@ -944,7 +942,7 @@ public class AllomanticIronSteel : MonoBehaviour {
         steelBurnRate = 0;
 
         // make blue lines disappear
-        CameraController.FirstPersonCamera.cullingMask = ~(1 << blueLineLayer);
+        CameraController.ActiveCamera.cullingMask = ~(1 << blueLineLayer);
         //for (int i = 0; i < metalLines.Count; i++) {
         //    metalLines[i].GetComponent<MeshRenderer>().enabled = false;
         //}

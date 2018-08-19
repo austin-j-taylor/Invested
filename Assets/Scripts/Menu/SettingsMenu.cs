@@ -30,6 +30,8 @@ public class SettingsMenu : MonoBehaviour {
     private const string s_forcDetails = "Player sets a target force magnitude. Pushes will always try to have that magnitude.";
     private const string s_perc = "Control Force Percentage";
     private const string s_percDetails = "Player sets a percentage of their maximum possible force to Push with.";
+    private const string s_perspectiveFirstPerson = "First Person";
+    private const string s_perspectiveThirdPerson = "Third Person";
 
     // Interface
     private const string s_blueLinesDetails = "Disable if you are having performance/framerate issues.";
@@ -153,9 +155,11 @@ public class SettingsMenu : MonoBehaviour {
     private Text rumbleLabel;
     private Button rumbleButton;
     private Text rumbleButtonText;
-    private Button PushControlStyleButton;
-    private Text PushControlStyleButtonText;
-    private Text PushControlStyleDetails;
+    private Button pushControlStyleButton;
+    private Text pushControlStyleButtonText;
+    private Text pushControlStyleDetails;
+    private Button perspectiveButton;
+    private Text perspectiveButtonText;
     private Slider sensitivity;
     private Text sensitivityValueText;
     private Slider smoothing;
@@ -255,14 +259,17 @@ public class SettingsMenu : MonoBehaviour {
         rumbleButton = rumbleLabel.GetComponentInChildren<Button>();
         rumbleButtonText = rumbleButton.GetComponentInChildren<Text>();
 
-        PushControlStyleButton = gameplayHeader.GetChild(2).GetChild(0).GetComponent<Button>();
-        PushControlStyleButtonText = PushControlStyleButton.transform.GetChild(0).GetComponent<Text>();
-        PushControlStyleDetails = PushControlStyleButton.transform.GetChild(1).GetComponent<Text>();
+        pushControlStyleButton = gameplayHeader.GetChild(2).GetChild(0).GetComponent<Button>();
+        pushControlStyleButtonText = pushControlStyleButton.transform.GetChild(0).GetComponent<Text>();
+        pushControlStyleDetails = pushControlStyleButton.transform.GetChild(1).GetComponent<Text>();
 
-        sensitivity = gameplayHeader.GetChild(3).GetComponentInChildren<Slider>();
+        perspectiveButton = gameplayHeader.GetChild(3).GetChild(0).GetComponent<Button>();
+        perspectiveButtonText = perspectiveButton.GetComponentInChildren<Text>();
+
+        sensitivity = gameplayHeader.GetChild(4).GetComponentInChildren<Slider>();
         sensitivityValueText = sensitivity.GetComponentInChildren<Text>();
 
-        smoothing = gameplayHeader.GetChild(4).GetComponentInChildren<Slider>();
+        smoothing = gameplayHeader.GetChild(5).GetComponentInChildren<Slider>();
         smoothingValueText = smoothing.GetComponentInChildren<Text>();
 
         // Interface Header
@@ -363,7 +370,8 @@ public class SettingsMenu : MonoBehaviour {
         // Gameplay
         controlSchemeButton.onClick.AddListener(OnClickControlScheme);
         rumbleButton.onClick.AddListener(OnClickRumble);
-        PushControlStyleButton.onClick.AddListener(OnClickPushControlStyle);
+        pushControlStyleButton.onClick.AddListener(OnClickPushControlStyle);
+        perspectiveButton.onClick.AddListener(OnClickPerspectiveButton);
         sensitivity.onValueChanged.AddListener(OnSensitivityChanged);
         smoothing.onValueChanged.AddListener(OnSmoothingChanged);
         // Interface
@@ -385,16 +393,17 @@ public class SettingsMenu : MonoBehaviour {
         forceConstantSlider.onValueChanged.AddListener(OnForceConstantChanged);
         maxRangeSlider.onValueChanged.AddListener(OnMaxRangeChanged);
         // World
-        gravityButton.onClick.AddListener(OnGravityButton);
-        dragButton.onClick.AddListener(OnDragButton);
+        gravityButton.onClick.AddListener(OnClickGravityButton);
+        dragButton.onClick.AddListener(OnClickDragButton);
 
         // Initial field assignments
         titleText.text = s_settings;
         // Gameplay
         controlSchemeDetails.text = "";
         controlSchemeButtonText.text = s_mk45;
-        PushControlStyleButtonText.text = s_perc;
-        PushControlStyleDetails.text = s_percDetails;
+        pushControlStyleButtonText.text = s_perc;
+        pushControlStyleDetails.text = s_percDetails;
+        perspectiveButtonText.text = s_perspectiveThirdPerson;
         sensitivity.value = CameraController.Sensitivity;
         smoothing.value = CameraController.Smoothing;
         // Interface
@@ -595,17 +604,27 @@ public class SettingsMenu : MonoBehaviour {
     private void OnClickPushControlStyle() {
         switch (currentForceStyle) {
             case ForceStyle.ForceMagnitude: {
-                    PushControlStyleButtonText.text = s_perc;
-                    PushControlStyleDetails.text = s_percDetails;
+                    pushControlStyleButtonText.text = s_perc;
+                    pushControlStyleDetails.text = s_percDetails;
                     currentForceStyle = ForceStyle.Percentage;
                     break;
                 }
             default: {
-                    PushControlStyleButtonText.text = s_forc;
-                    PushControlStyleDetails.text = s_forcDetails;
+                    pushControlStyleButtonText.text = s_forc;
+                    pushControlStyleDetails.text = s_forcDetails;
                     currentForceStyle = ForceStyle.ForceMagnitude;
                     break;
                 }
+        }
+    }
+
+    private void OnClickPerspectiveButton() {
+        if(CameraController.FirstPerson) {
+            CameraController.FirstPerson = false;
+            perspectiveButtonText.text = s_perspectiveThirdPerson;
+        } else {
+            CameraController.FirstPerson = true;
+            perspectiveButtonText.text = s_perspectiveFirstPerson;
         }
     }
 
@@ -869,7 +888,7 @@ public class SettingsMenu : MonoBehaviour {
 
     // World
 
-    private void OnGravityButton() {
+    private void OnClickGravityButton() {
         if (PhysicsController.gravityEnabled) {
             playerRb.useGravity = false;
             gravityButtonText.text = s_disabled;
@@ -881,7 +900,7 @@ public class SettingsMenu : MonoBehaviour {
         }
     }
 
-    private void OnDragButton() {
+    private void OnClickDragButton() {
         if (PhysicsController.airResistanceEnabled) {
             dragButtonText.text = s_disabled;
             PhysicsController.airResistanceEnabled = false;
