@@ -22,7 +22,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     private const float blueLineBrightnessConstant = 1 / chargePower;
     private const float blueLineForceCutoff = 100f;
     private const float verticalImportanceFactor = 100f;
-    private const float lightSaberConstant = 2048;
+    private const float lightSaberConstant = 1024;
     private const float burnRateLerpConstant = .30f;
     private const int blueLineLayer = 10;
     public const int maxNumberOfTargets = 10;

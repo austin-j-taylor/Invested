@@ -9,7 +9,8 @@ public class BurnRateMeter : MonoBehaviour {
     // Constants for Burn Rate Meter
     private const float minAngle = .12f;
     private const float maxAngle = 1f - 2 * minAngle;
-    
+
+    private static AllomanticIronSteel playerIronSteel;
     private Text actualForceText;
     private Text sumForceText;
     private Text playerInputText;
@@ -23,6 +24,7 @@ public class BurnRateMeter : MonoBehaviour {
     }
 
     void Awake() {
+        playerIronSteel = GameObject.FindGameObjectWithTag("Player").GetComponent<AllomanticIronSteel>();
         Text[] texts = GetComponentsInChildren<Text>();
         actualForceText = texts[0];
         playerInputText = texts[1];
@@ -49,7 +51,7 @@ public class BurnRateMeter : MonoBehaviour {
             SetSumForceText(allomanticForce, normalForce);
         }
 
-        playerInputText.text = HUD.ForceString(targetForce);
+        playerInputText.text = HUD.ForceString(targetForce, playerIronSteel.Mass);
         SetFillPercent(percent);
     }
 
@@ -65,14 +67,14 @@ public class BurnRateMeter : MonoBehaviour {
     }
 
     private void SetActualForceText(float forceActual) {
-        actualForceText.text = HUD.ForceString(forceActual);
+        actualForceText.text = HUD.ForceString(forceActual, playerIronSteel.Mass);
     }
 
     private void SetSumForceText(Vector3 allomanticForce, Vector3 normalForce) {
         if (SettingsMenu.interfaceComplexity == InterfaceComplexity.Sums) {
             float allomanticMagnitude = allomanticForce.magnitude;
             float normalMagnitude = normalForce.magnitude;
-            sumForceText.text = HUD.AllomanticSumString(allomanticForce, normalForce);
+            sumForceText.text = HUD.AllomanticSumString(allomanticForce, normalForce, playerIronSteel.Mass);
         }
     }
 

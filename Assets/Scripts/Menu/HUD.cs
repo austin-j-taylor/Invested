@@ -10,7 +10,6 @@ public class HUD : MonoBehaviour {
     public static readonly Color strongBlue = new Color(0, 1f, 1, 1);
 
     private static Text coinCountText;
-    private static AllomanticIronSteel playerIronSteel;
 
     private float deltaTimeFPS = 0.0f;
 
@@ -28,7 +27,6 @@ public class HUD : MonoBehaviour {
     }
 
     void Awake() {
-        playerIronSteel = GameObject.FindGameObjectWithTag("Player").GetComponent<AllomanticIronSteel>();
         coinCountText = GetComponentsInChildren<Text>()[0];
         BurnRateMeter = GetComponentInChildren<BurnRateMeter>();
         TargetOverlayController = GetComponentInChildren<TargetOverlayController>();
@@ -72,13 +70,13 @@ public class HUD : MonoBehaviour {
     }
 
     // Returns a string reading a single Force in Newtons or G's
-    public static string ForceString(float force) {
+    public static string ForceString(float force, float mass) {
         switch (SettingsMenu.displayUnits) {
             case ForceDisplayUnits.Newtons: {
                     return RoundToTwoSigFigs(force).ToString() + "N";
                 }
             default: {
-                    return System.Math.Round(force / playerIronSteel.Mass / 9.81, 2).ToString() + "G's";
+                    return System.Math.Round(force / mass / 9.81, 2).ToString() + "G's";
                 }
         }
     }
@@ -90,7 +88,7 @@ public class HUD : MonoBehaviour {
 
     // Returns a string reading the sum of an Allomantic Force and Allomantic Normal Force in Newtons or G's
     // e.g. "650N + 250N"
-    public static string AllomanticSumString(Vector3 allomanticForce, Vector3 normalForce, bool invert = false) {
+    public static string AllomanticSumString(Vector3 allomanticForce, Vector3 normalForce, float mass, bool invert = false) {
         string plusSign;
         plusSign = DecideSignColor(allomanticForce, normalForce, invert);
 
@@ -99,9 +97,9 @@ public class HUD : MonoBehaviour {
                     return ((int)allomanticForce.magnitude).ToString() + " " + plusSign + " " + ((int)normalForce.magnitude).ToString() + "N";
                 }
             default: {
-                    return System.Math.Round(allomanticForce.magnitude / playerIronSteel.Mass / 9.81, 2).ToString()
+                    return System.Math.Round(allomanticForce.magnitude / mass / 9.81, 2).ToString()
                         + " " + plusSign + " " +
-                        System.Math.Round(normalForce.magnitude / playerIronSteel.Mass / 9.81, 2).ToString() + "G's";
+                        System.Math.Round(normalForce.magnitude / mass / 9.81, 2).ToString() + "G's";
                 }
         }
     }
