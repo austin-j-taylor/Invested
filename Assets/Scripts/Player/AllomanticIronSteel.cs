@@ -439,14 +439,14 @@ public class AllomanticIronSteel : MonoBehaviour {
     //}
 
     // Debug
-    public float allomanticsForce;
-    public float netAllomancersForce;
-    public float netTargetsForce;
-    public Vector3 allomanticsForces;
-    public Vector3 resititutionFromTargetsForce;
-    public Vector3 resititutionFromPlayersForce;
-    public float percentOfTargetForceReturned;
-    public float percentOfAllomancerForceReturned;
+    private float allomanticsForce;
+    private float netAllomancersForce;
+    private float netTargetsForce;
+    private Vector3 allomanticsForces;
+    private Vector3 resititutionFromTargetsForce;
+    private Vector3 resititutionFromPlayersForce;
+    private float percentOfTargetForceReturned;
+    private float percentOfAllomancerForceReturned;
 
     /* Pushing and Pulling
      * 

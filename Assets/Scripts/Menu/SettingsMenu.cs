@@ -160,10 +160,10 @@ public class SettingsMenu : MonoBehaviour {
     private Text pushControlStyleDetails;
     private Button perspectiveButton;
     private Text perspectiveButtonText;
-    private Slider sensitivity;
-    private Text sensitivityValueText;
-    private Slider smoothing;
-    private Text smoothingValueText;
+    private Slider sensitivityX;
+    private Text sensitivityXValueText;
+    private Slider sensitivityY;
+    private Text sensitivityYValueText;
 
     // Interface
     private Text blueLinesButtonText;
@@ -266,11 +266,11 @@ public class SettingsMenu : MonoBehaviour {
         perspectiveButton = gameplayHeader.GetChild(3).GetChild(0).GetComponent<Button>();
         perspectiveButtonText = perspectiveButton.GetComponentInChildren<Text>();
 
-        sensitivity = gameplayHeader.GetChild(4).GetComponentInChildren<Slider>();
-        sensitivityValueText = sensitivity.GetComponentInChildren<Text>();
+        sensitivityX = gameplayHeader.GetChild(4).GetComponentInChildren<Slider>();
+        sensitivityXValueText = sensitivityX.GetComponentInChildren<Text>();
 
-        smoothing = gameplayHeader.GetChild(5).GetComponentInChildren<Slider>();
-        smoothingValueText = smoothing.GetComponentInChildren<Text>();
+        sensitivityY = gameplayHeader.GetChild(5).GetComponentInChildren<Slider>();
+        sensitivityYValueText = sensitivityY.GetComponentInChildren<Text>();
 
         // Interface Header
         interfaceHeader = transform.GetChild(4);
@@ -372,8 +372,8 @@ public class SettingsMenu : MonoBehaviour {
         rumbleButton.onClick.AddListener(OnClickRumble);
         pushControlStyleButton.onClick.AddListener(OnClickPushControlStyle);
         perspectiveButton.onClick.AddListener(OnClickPerspectiveButton);
-        sensitivity.onValueChanged.AddListener(OnSensitivityChanged);
-        smoothing.onValueChanged.AddListener(OnSmoothingChanged);
+        sensitivityX.onValueChanged.AddListener(OnSensitivityXChanged);
+        sensitivityY.onValueChanged.AddListener(OnSensitivityYChanged);
         // Interface
         blueLinesButton.onClick.AddListener(OnBlueLinesButton);
         forceUnitsButton.onClick.AddListener(OnClickForceUnits);
@@ -404,8 +404,8 @@ public class SettingsMenu : MonoBehaviour {
         pushControlStyleButtonText.text = s_perc;
         pushControlStyleDetails.text = s_percDetails;
         perspectiveButtonText.text = s_perspectiveThirdPerson;
-        sensitivity.value = CameraController.Sensitivity;
-        smoothing.value = CameraController.Smoothing;
+        sensitivityX.value = CameraController.SensitivityX;
+        sensitivityY.value = CameraController.SensitivityY;
         // Interface
         blueLinesButtonText.text = s_enabled;
         blueLinesDetails.text = s_blueLinesDetails;
@@ -443,8 +443,8 @@ public class SettingsMenu : MonoBehaviour {
         dragButtonText.text = s_enabled;
 
 
-        sensitivityValueText.text = sensitivity.value.ToString();
-        smoothingValueText.text = smoothing.value.ToString();
+        sensitivityXValueText.text = sensitivityX.value.ToString();
+        sensitivityYValueText.text = sensitivityY.value.ToString();
         distanceConstantValueText.text = distanceConstantSlider.value.ToString();
         velocityConstantValueText.text = velocityConstantSlider.value.ToString();
         forceConstantValueText.text = forceConstantSlider.value.ToString();
@@ -628,14 +628,14 @@ public class SettingsMenu : MonoBehaviour {
         }
     }
 
-    private void OnSensitivityChanged(float value) {
-        CameraController.Sensitivity = value;
-        sensitivityValueText.text = ((int)(100 * value) / 100f).ToString();
+    private void OnSensitivityXChanged(float value) {
+        CameraController.SensitivityX = value;
+        sensitivityXValueText.text = ((int)(100 * value) / 100f).ToString();
     }
 
-    private void OnSmoothingChanged(float value) {
-        CameraController.Smoothing = value;
-        smoothingValueText.text = ((int)(100 * value) / 100f).ToString();
+    private void OnSensitivityYChanged(float value) {
+        CameraController.SensitivityY = value;
+        sensitivityYValueText.text = ((int)(100 * value) / 100f).ToString();
     }
 
     // Interface

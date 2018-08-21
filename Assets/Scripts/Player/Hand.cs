@@ -9,14 +9,12 @@ public class Hand : MonoBehaviour {
 
     private const float baseSteepAngle = 1f / 2f;
     private const float keyboardSteepAngle = 2f / 3f;
-
-    private Camera firstPersonCamera;
+    
     private Transform centerOfMass;
     private PlayerMovementController movementController;
 
     // Use this for initialization
     void Start() {
-        firstPersonCamera = transform.parent.parent.parent.GetComponentInChildren<Camera>();
         centerOfMass = transform.parent;
         movementController = GetComponentInParent<PlayerMovementController>();
     }
@@ -26,7 +24,7 @@ public class Hand : MonoBehaviour {
     void Update() {
 
         if (movementController.IsGrounded) {
-            centerOfMass.localEulerAngles = new Vector3(firstPersonCamera.transform.eulerAngles.x, 0, 0);
+            centerOfMass.localEulerAngles = new Vector3(CameraController.ActiveCamera.transform.eulerAngles.x, 0, 0);
         } else {
             float vertical = -Keybinds.Vertical() * baseSteepAngle;
             float horizontal = -Keybinds.Horizontal() * baseSteepAngle;
