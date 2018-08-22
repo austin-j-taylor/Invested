@@ -9,7 +9,7 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour {
 
-    private const float walledCameraHeight = .05f;//.5f;
+    private const float walledCameraHeight = .125f;//.5f;
     private const float wallDistanceCheck = 5;
     private const float distanceFromPlayer = 5f;
 
@@ -89,11 +89,12 @@ public class CameraController : MonoBehaviour {
         } else {
             Vector3 wantedPosition = targetPosition.position;
             RaycastHit hit;
-            if (Physics.Raycast(player.position, wantedPosition - player.position, out hit, wallDistanceCheck, ignorePlayerLayer)) {
-                wantedPosition.x = hit.point.x;
-                wantedPosition.y = hit.point.y + walledCameraHeight;
+            if (Physics.Raycast(player.position + cameraHeightOffset, wantedPosition - player.position - cameraHeightOffset, out hit, wallDistanceCheck, ignorePlayerLayer)) {
+                Vector3 normal = walledCameraHeight * hit.normal;
+                wantedPosition.x = hit.point.x + normal.x;
+                wantedPosition.y = hit.point.y + normal.y;
                 //wantedPosition.y = Mathf.Lerp(wantedPosition.y, hit.point.y + walledCameraHeight, Time.deltaTime * damping);
-                wantedPosition.z = hit.point.z;
+                wantedPosition.z = hit.point.z + normal.z;
             }
 
             ActiveCamera.transform.position = wantedPosition;
