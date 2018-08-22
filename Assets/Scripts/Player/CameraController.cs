@@ -9,7 +9,7 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour {
 
-    private const float walledCameraHeight = .5f;
+    private const float walledCameraHeight = .05f;//.5f;
     private const float wallDistanceCheck = 5;
     private const float distanceFromPlayer = 5f;
 
@@ -67,10 +67,10 @@ public class CameraController : MonoBehaviour {
         if (CameraIsLocked) {
             if (GamepadController.UsingGamepad) {
                 currentX += Input.GetAxis("HorizontalRight") * SensitivityX;
-                currentY += Input.GetAxis("VerticalRight") * SensitivityY;
+                currentY -= Input.GetAxis("VerticalRight") * SensitivityY;
             } else {
                 currentX += Input.GetAxis("Mouse X") * SensitivityX;
-                currentY += -Input.GetAxis("Mouse Y") * SensitivityY;
+                currentY -= Input.GetAxis("Mouse Y") * SensitivityY;
             }
             currentY = Mathf.Clamp(currentY, -89f, 89.999f);
 
@@ -115,6 +115,8 @@ public class CameraController : MonoBehaviour {
     }
 
     public static void Clear() {
+        currentY = player.parent.localEulerAngles.x;
+        currentX = player.parent.localEulerAngles.y;
         RefreshCamera();
     }
 

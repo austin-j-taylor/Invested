@@ -53,6 +53,7 @@ public class PauseMenu : MonoBehaviour {
     public static void Pause() {
         //Cursor.visible = true;
         CameraController.UnlockCamera();
+        GamepadController.SetRumble(0, 0);
         Time.timeScale = 0f;
         pauseMenu.SetActive(true);
         IsPaused = true;

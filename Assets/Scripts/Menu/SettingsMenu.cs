@@ -401,6 +401,7 @@ public class SettingsMenu : MonoBehaviour {
         // Gameplay
         controlSchemeDetails.text = "";
         controlSchemeButtonText.text = s_mk45;
+        rumbleButtonText.text = s_enabled;
         pushControlStyleButtonText.text = s_perc;
         pushControlStyleDetails.text = s_percDetails;
         perspectiveButtonText.text = s_perspectiveThirdPerson;
