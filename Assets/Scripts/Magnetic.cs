@@ -111,7 +111,7 @@ public class Magnetic : MonoBehaviour {
     void Awake () {
         Allomancer = null;
         highlightedTargetOutline = gameObject.AddComponent<Outline>();
-        blueLine = Instantiate(GameManager.MetalLineTemplate, transform);
+        blueLine = Instantiate(GameManager.MetalLineTemplate);
         Rb = GetComponent<Rigidbody>();
         ColliderBody = GetComponent<Collider>();
         LastPosition = Vector3.zero;
@@ -179,7 +179,8 @@ public class Magnetic : MonoBehaviour {
 
     public void SetBlueLine(Vector3 endPos, float width, float lsf, Color color) {
         blueLine.GetComponent<MeshRenderer>().enabled = true;
-        blueLine.EndPos = transform.InverseTransformPoint(endPos);
+        blueLine.StartPos = CenterOfMass;
+        blueLine.EndPos = endPos;
         blueLine.LineWidth = width;
         lightSaberFactor = Mathf.Lerp(lightSaberFactor, lsf, metalLinesLerpConstant);
         blueLine.LightSaberFactor = lightSaberFactor;

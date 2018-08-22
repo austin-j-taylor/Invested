@@ -4,28 +4,24 @@ using UnityEngine;
 using UnityEngine.UI;
 using VolumetricLines;
 /*
- * Controls all facets of Ironpulling and Steelpushing. Any Ironpuller or Steelpusher would have this attached to their GameObject.
+ * Controls all facets of Ironpulling and Steelpushing.
  */
 public class AllomanticIronSteel : MonoBehaviour {
-
-    // Constants
-    //private readonly Vector3 centerOfScreen = new Vector3(.5f, .5f, 0);
+    
     // Constants for Metal Lines
+    private const float verticalImportanceFactor = 100f;
     private const float horizontalMin = .45f;
     private const float horizontalMax = .55f;
     private const float verticalMin = .2f;
     private const float verticalMax = .8f;
     private const float gMaxLines = .1f;
     private const float bMaxLines = .85f;
-    private const float blueLineWidthConstant = .04f;
-    private const float blueLineTargetedWidthConstant = 1.5f;
-    private const float blueLineBrightnessConstant = 1 / chargePower;
+    private const float blueLineWidthBaseFactor = .04f;
+    private const float blueLineTargetedWidthFactor = 1.5f;
+    private const float blueLineBrightnessFactor = 100;
     private const float blueLineForceCutoff = 100f;
-    private const float verticalImportanceFactor = 100f;
     private const float lightSaberConstant = 1024;
-    private const float burnRateLerpConstant = .30f;
-    private const int blueLineLayer = 10;
-    public const int maxNumberOfTargets = 10;
+    // Physics Constants
     public const float chargePower = 1f / 8f;
     public static float AllomanticConstant { get; set; } = 1200;
     public static float MaxRange {
@@ -39,11 +35,13 @@ public class AllomanticIronSteel : MonoBehaviour {
     }
     private static float maxRange = 100;
     private static float sqrMaxRange = maxRange * maxRange;
-
     // Button-press time constants
     private const float timeToHoldDown = .5f;
     private const float timeDoubleTapWindow = .5f;
-
+    // Other Constants
+    private const float burnRateLerpConstant = .30f;
+    private const int blueLineLayer = 10;
+    public const int maxNumberOfTargets = 10;
     // Simple metal booleans for passing to methods
     private const bool steel = false;
     private const bool iron = true;
@@ -693,10 +691,10 @@ public class AllomanticIronSteel : MonoBehaviour {
 
                     // Set line properties
                     if (SettingsMenu.renderBlueLines) {
-                        float closeness = Mathf.Exp(-blueLineBrightnessConstant / softForce);
+                        float closeness = Mathf.Exp(-blueLineBrightnessFactor / softForce);
                         target.SetBlueLine(
                             CenterOfMass,
-                            blueLineWidthConstant * target.Charge,
+                            blueLineWidthBaseFactor * target.Charge,
                             1,
                             new Color(0, closeness * gMaxLines, closeness * bMaxLines, 1)
                             );
@@ -722,7 +720,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                 target.InRange = true;
                 target.SetBlueLine(
                     CenterOfMass,
-                    blueLineWidthConstant * target.Charge * blueLineTargetedWidthConstant,
+                    blueLineWidthBaseFactor * target.Charge * blueLineTargetedWidthFactor,
                     Mathf.Exp(-target.LastNetAllomanticForceOnAllomancer.magnitude / lightSaberConstant),
                     new Color(0, 1, gMaxLines, 1));
             } else {
@@ -736,7 +734,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                 target.InRange = true;
                 target.SetBlueLine(
                     CenterOfMass,
-                    blueLineWidthConstant * target.Charge * blueLineTargetedWidthConstant,
+                    blueLineWidthBaseFactor * target.Charge * blueLineTargetedWidthFactor,
                     Mathf.Exp(-target.LastNetAllomanticForceOnAllomancer.magnitude / lightSaberConstant),
                     new Color(1, gMaxLines, 0, 1));
             } else {
