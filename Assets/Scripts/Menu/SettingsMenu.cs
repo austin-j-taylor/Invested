@@ -574,10 +574,11 @@ public class SettingsMenu : MonoBehaviour {
                     controlSchemeDetails.text = s_gameDetails;
                     GamepadController.UsingGamepad = true;
                     rumbleLabel.gameObject.SetActive(true);
+                    CameraController.SensitivityX *= 2;
+                    CameraController.SensitivityY *= 2;
+                    sensitivityX.value *= 2;
+                    sensitivityY.value *= 2;
                     break;
-                    //currentControlScheme = ControlScheme.MouseKeyboard45;
-                    //controlSchemeButtonText.text = "Mouse and Keyboard (MB 4 & 5)";
-                    //break;
                 }
             default: {
                     currentControlScheme = ControlScheme.MouseKeyboard45;
@@ -586,6 +587,10 @@ public class SettingsMenu : MonoBehaviour {
                     UsingMB45 = true;
                     GamepadController.UsingGamepad = false;
                     rumbleLabel.gameObject.SetActive(false);
+                    CameraController.SensitivityX /= 2;
+                    CameraController.SensitivityY /= 2;
+                    sensitivityX.value /= 2;
+                    sensitivityY.value /= 2;
                     break;
                 }
         }
@@ -727,6 +732,7 @@ public class SettingsMenu : MonoBehaviour {
                     PhysicsController.anchorBoostMode = AnchorBoostMode.ExponentialWithVelocity;
                     anchoredBoostButtonText.text = s_expV;
                     anchoredBoostDetails.text = s_expVDetails;
+                    AllomanticIronSteel.AllomanticConstant *= 2;
                     forceConstantSlider.value *= 2;
                     break;
                 }
@@ -746,6 +752,7 @@ public class SettingsMenu : MonoBehaviour {
                     PhysicsController.anchorBoostMode = AnchorBoostMode.AllomanticNormalForce;
                     anchoredBoostButtonText.text = s_norm;
                     anchoredBoostDetails.text = s_normDetails;
+                    AllomanticIronSteel.AllomanticConstant /= 2;
                     forceConstantSlider.value /= 2;
                     break;
                 }

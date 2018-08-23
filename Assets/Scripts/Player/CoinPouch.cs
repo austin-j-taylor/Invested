@@ -24,7 +24,6 @@ public class CoinPouch : MonoBehaviour {
     public void AddCoin(Coin coin) {
         if (coin.Allomancer || parentIronSteel.IsTarget(coin))
             parentIronSteel.RemoveTarget(coin, true, true);
-        Debug.Log(coin.gameObject == null);
         Destroy(coin.gameObject);
         Count++;
         UpdateUI();
