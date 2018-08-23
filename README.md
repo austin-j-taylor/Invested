@@ -13,6 +13,23 @@ This Unity project makes use of [Volumetric Lines by Johannes Unterguggenberger]
 
 Recent changes:
 
+Version 1.1.1
+- Improved blue metal lines
+	- More massive targets can be detected and targeted from farther away than less massive targets
+	- Lines are thinner for less visual clutter
+	- The higher the burn rate, the greater the range for detecting targets
+- Improved camera
+	- No longer clips through walls
+	- Added option for first person perspective
+- Coins no longer clip through the ground
+	- Coins also return to the player's coin pouch much more smoothly when pulled
+- Scrolling to a burn rate of 0% now extinguishes metals
+- Setting the Force Display Units to be G's now scales the acceleration with the target's mass, not the player's
+- Performance improvements
+	- Added option to disable rendering of blue lines for lower-end computers
+	- Blue lines are now a bit less intensive to calculate
+- Increased default Allomantic Constant
+
 Version 1.1.0
 
 - Added Glossary
@@ -27,16 +44,3 @@ Version 1.1.0
 - Increased friction acting on player when grounded and not trying to move
 - Increased angle of throwing coins when airborne with mouse & keyboard control scheme
 - Somewhat fixed bug where coins would occasionally fall through the ground when pushing on them out of a jump
-
-Version 1.0.9
-
-- Added HUD element: Mass, Force, and AF + ANF indicators that follow targets
-- Added several physics options for calculation of Anchored Push Boosts
-- Changed color of metal lines to Pull targets to be green
-- Improved visual highlight of potential targets
-- Improved menu navigation with the Escape key
-- Improved Tutorial slightly
-- Improved Sandbox slightly
-- Swapped Jump and Throw-coin controls on gamepad
-- Fixed several bugs with the calculation of the ANF
-- Fixed visual bug with target metal lines when using gamepad
