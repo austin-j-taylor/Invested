@@ -12,7 +12,7 @@ public class Player : MonoBehaviour {
     private PlayerMovementController movementController;
 
     public AllomanticIronSteel IronSteel { get; private set; }
-    public CoinPouch Pouch { get; private set; }
+    public Hand CoinHand { get; private set; }
 
     private float lastCoinThrowTime = 0;
     
@@ -21,7 +21,7 @@ public class Player : MonoBehaviour {
 
         //animator = GetComponent<Animator>();
         IronSteel = GetComponent<AllomanticIronSteel>();
-        Pouch = GetComponentInChildren<CoinPouch>();
+        CoinHand = GetComponentInChildren<Hand>();
         SceneManager.sceneLoaded += ResetPosition;
     }
 	
@@ -36,12 +36,9 @@ public class Player : MonoBehaviour {
             lastCoinThrowTime = Time.time;
             // If jump button had also been held, throw coin downward and target it.
             if (Keybinds.Jump()) {
-                Coin coin = Pouch.SpawnCoin(transform.position + feet);
-                IronSteel.AddTarget(coin, false);
-
+                IronSteel.AddTarget(CoinHand.SpawnCoin(transform.position + feet), false);
             } else { // If only pressing the COIN button, draw a coin into hand
-                Coin coin = Pouch.WithdrawCoinToHand();
-                IronSteel.AddTarget(coin, false);
+                IronSteel.AddTarget(CoinHand.WithdrawCoinToHand(), false);
             }
         }
 	}
@@ -50,7 +47,7 @@ public class Player : MonoBehaviour {
     public void ReloadPlayerIntoNewScene(int scene) {
         movementController.Clear();
         IronSteel.Clear();
-        Pouch.Clear();
+        CoinHand.Clear();
     }
 
     // Reset position to SpawnPosition at beginning of each scene

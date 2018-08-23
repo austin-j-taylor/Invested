@@ -160,6 +160,7 @@ public class Magnetic : MonoBehaviour {
     }
 
     private void OnDestroy() {
+        Destroy(blueLine);
         GameManager.MagneticsInScene.Remove(this);
     }
 

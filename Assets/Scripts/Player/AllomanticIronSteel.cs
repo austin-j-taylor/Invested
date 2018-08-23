@@ -63,11 +63,6 @@ public class AllomanticIronSteel : MonoBehaviour {
             return PushCount != 0;
         }
     }
-    private Vector3 CenterOfMass {
-        get {
-            return centerOfMass.position;
-        }
-    }
     // Button held-down times
     private float timeToStopBurning = 0f;
     private float timeToSwapBurning = 0f;
@@ -114,6 +109,11 @@ public class AllomanticIronSteel : MonoBehaviour {
     public bool IronPulling { get; private set; } = false;
     public bool SteelPushing { get; private set; } = false;
     public bool IsBurningIronSteel { get; private set; } = false;
+    public Vector3 CenterOfMass {
+        get {
+            return centerOfMass.position;
+        }
+    }
     public float Mass {
         get {
             return rb.mass;

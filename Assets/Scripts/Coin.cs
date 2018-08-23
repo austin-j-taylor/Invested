@@ -8,6 +8,7 @@ public class Coin : Magnetic {
     private const float minSpeed = 5f;
     private const float maxSpeed = 120f;
     private const float equalInMagnitudeConstant = .01f;
+    private bool inContactWithPlayer = false;
 
     public override bool IsPerfectlyAnchored { // Only matters for Coins, which have so low masses that Unity thinks they have high velocities when pushed, even when anchored
         get {
@@ -56,16 +57,24 @@ public class Coin : Magnetic {
     //        //lastExpectedAcceleration = Vector3.zero;// + Physics.gravity;
     //    }
     //}
-
     private void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Player")) {
-            Player player = other.GetComponent<Player>();
-            //if (player.IronSteel.IronPulling)
-            if (Keybinds.IronPulling()) {
-                player.Pouch.AddCoin(this);
-                HUD.TargetOverlayController.HardRefresh();
-            }
+            inContactWithPlayer = true;
         }
+    }
+    private void OnTriggerStay(Collider other) {
+        if (inContactWithPlayer && Keybinds.IronPulling() && other.CompareTag("Player")) {
+            BeCaughtByAllomancer(other.GetComponent<Player>());
+        }
+    }
+    private void OnTriggerExit(Collider other) {
+        if(other.CompareTag("Player")) {
+            inContactWithPlayer = false;
+        }
+    }
+    private void BeCaughtByAllomancer(Player player) {
+        player.CoinHand.CatchCoin(this);
+        HUD.TargetOverlayController.HardRefresh();
     }
     //private void OnCollisionEnter(Collision collision) {
     //    if (!collision.collider.CompareTag("Player")) {

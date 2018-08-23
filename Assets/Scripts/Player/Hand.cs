@@ -9,14 +9,19 @@ public class Hand : MonoBehaviour {
 
     private const float baseSteepAngle = 1f / 2f;
     private const float keyboardSteepAngle = 2f / 3f;
-    
+    private const float coinSize = .05f;
+    private float distanceToHand;
+
     private Transform centerOfMass;
     private PlayerMovementController movementController;
+    private CoinPouch pouch;
 
     // Use this for initialization
     void Start() {
         centerOfMass = transform.parent;
         movementController = GetComponentInParent<PlayerMovementController>();
+        pouch = GetComponent<CoinPouch>();
+        distanceToHand = transform.localPosition.magnitude;
     }
 
     // If the player is in the air, the hand follows the left joystick.
@@ -40,4 +45,36 @@ public class Hand : MonoBehaviour {
             centerOfMass.localRotation = newRotation;
         }
     }
+
+    public Coin WithdrawCoinToHand() {
+        if (pouch.Count > 0) {
+            Coin coin;
+            // Raycast towards the hand. If the raycast hits something, spawn the coin there to prevent it from going through walls.
+            RaycastHit hit;
+            if (Physics.Raycast(centerOfMass.position, transform.position - centerOfMass.position, out hit, distanceToHand, GameManager.IgnorePlayerLayer)) {
+                coin = pouch.RemoveCoin(hit.point + hit.normal * coinSize);
+            } else {
+                coin = pouch.RemoveCoin(transform.position);
+            }
+            return coin;
+        }
+        return null;
+    }
+
+    public Coin SpawnCoin(Vector3 position) {
+        if (pouch.Count > 0) {
+            Coin coin = pouch.RemoveCoin(position);
+            return coin;
+        }
+        return null;
+    }
+
+    public void CatchCoin(Coin coin) {
+        pouch.AddCoin(coin);
+    }
+
+    public void Clear() {
+        
+    }
+
 }

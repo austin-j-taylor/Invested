@@ -16,6 +16,8 @@ public class GameManager : MonoBehaviour {
     // Holds all Magnetics in scene
     public static List<Magnetic> MagneticsInScene { get; private set; }
 
+    public static int IgnorePlayerLayer { get; private set; }
+
     //void Awake() {
     //    if (Instance != null && Instance != this) {
     //        Destroy(this.gameObject);
@@ -28,6 +30,7 @@ public class GameManager : MonoBehaviour {
         TargetHighlightMaterial = Resources.Load<Material>("targetHighlightMaterial");
         MetalLineTemplate = Resources.Load<VolumetricLineBehavior>("MetalLineTemplate");
         MagneticsInScene = new List<Magnetic>();
+        IgnorePlayerLayer = ~(1 << LayerMask.NameToLayer("Player"));
         SceneManager.sceneLoaded += Clear;
     }
 

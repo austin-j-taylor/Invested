@@ -19,7 +19,6 @@ public class CameraController : MonoBehaviour {
     private static Camera firstPersonCamera;
     private static Transform player;
     private static Transform targetPosition;
-    private static LayerMask ignorePlayerLayer;
 
     private static bool firstPerson = false;
     public static bool FirstPerson {
@@ -56,7 +55,6 @@ public class CameraController : MonoBehaviour {
         targetPosition = player.Find("CameraTargetPosition").GetComponent<Transform>();
         firstPersonCamera = player.Find("FirstPersonCamera").GetComponent<Camera>();
         thirdPersonCamera = player.Find("ThirdPersonCamera").GetComponent<Camera>();
-        ignorePlayerLayer = ~(1 << LayerMask.NameToLayer("Player"));
         //walledCameraHeight = firstPersonCamera.transform.localPosition.y;
         FirstPerson = false;
         Clear();
@@ -89,7 +87,7 @@ public class CameraController : MonoBehaviour {
         } else {
             Vector3 wantedPosition = targetPosition.position;
             RaycastHit hit;
-            if (Physics.Raycast(player.position + cameraHeightOffset, wantedPosition - player.position - cameraHeightOffset, out hit, wallDistanceCheck, ignorePlayerLayer)) {
+            if (Physics.Raycast(player.position + cameraHeightOffset, wantedPosition - player.position - cameraHeightOffset, out hit, wallDistanceCheck, GameManager.IgnorePlayerLayer)) {
                 Vector3 normal = walledCameraHeight * hit.normal;
                 wantedPosition.x = hit.point.x + normal.x;
                 wantedPosition.y = hit.point.y + normal.y;

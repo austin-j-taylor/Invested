@@ -90,9 +90,8 @@ public class SettingsMenu : MonoBehaviour {
     private const string s_eWD = "Exponential with Distance";
     private const string s_eWDDetails = "AF ∝ e ^ -d/D where d = distance between Allomancer and target; D = Exponential Constant";
     private const string s_alloConstantDetails = "All Pushes are proportional to this constant.";
-    private const string s_maxRDetails = "Nearby metals can be detected within this range.";
+    private const string s_maxRDetails = "Nearby metals can be detected within this range. Only impactful with \"Linear\" Force-Distance Relationship. ";
 
-    // World
 
     public static bool UsingMB45 { get; set; } = true;
     public static ControlScheme currentControlScheme = ControlScheme.MouseKeyboard45;

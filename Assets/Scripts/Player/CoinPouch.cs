@@ -10,41 +10,31 @@ public class CoinPouch : MonoBehaviour {
 
     private AllomanticIronSteel parentIronSteel;
     private Rigidbody parentRigidbody;
-    private int coinCount;
+    public int Count { get; private set; }
 
 	// Use this for initialization
 	void Start () {
         parentIronSteel = GetComponentInParent<AllomanticIronSteel>();
         parentRigidbody = GetComponentInParent<Rigidbody>();
 
-        coinCount = 50;
+        Count = 50;
         UpdateUI();
     }
 
     public void AddCoin(Coin coin) {
         if (coin.Allomancer || parentIronSteel.IsTarget(coin))
             parentIronSteel.RemoveTarget(coin, true, true);
+        Debug.Log(coin.gameObject == null);
         Destroy(coin.gameObject);
-        coinCount++;
+        Count++;
         UpdateUI();
-}
-
-    public Coin WithdrawCoinToHand() {
-        if (coinCount > 0) {
-            coinCount--;
-            UpdateUI();
-            Coin coin = Instantiate(coinPrefab, transform.position, transform.rotation);
-            coin.GetComponent<Rigidbody>().velocity = parentRigidbody.velocity;
-            return coin;
-        }
-        return null;
     }
 
-    public Coin SpawnCoin(Vector3 position) {
-        if (coinCount > 0) {
-            coinCount--;
+    public Coin RemoveCoin(Vector3 spawnPosition) {
+        if (Count > 0) {
+            Count--;
             UpdateUI();
-            Coin coin = Instantiate(coinPrefab, position, transform.rotation);
+            Coin coin = Instantiate(coinPrefab, spawnPosition, transform.rotation);
             coin.GetComponent<Rigidbody>().velocity = parentRigidbody.velocity;
             return coin;
         }
@@ -52,10 +42,10 @@ public class CoinPouch : MonoBehaviour {
     }
 
     private void UpdateUI() {
-        HUD.CoinCountText = coinCount.ToString();
+        HUD.CoinCountText = Count.ToString();
     }
 
     public void Clear() {
-        coinCount = 50;
+        Count = 50;
     }
 }
