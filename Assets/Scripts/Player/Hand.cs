@@ -13,13 +13,11 @@ public class Hand : MonoBehaviour {
     private float distanceToHand;
 
     private Transform centerOfMass;
-    private PlayerMovementController movementController;
     private CoinPouch pouch;
 
     // Use this for initialization
-    void Start() {
+    void Awake() {
         centerOfMass = transform.parent;
-        movementController = GetComponentInParent<PlayerMovementController>();
         pouch = GetComponent<CoinPouch>();
         distanceToHand = transform.localPosition.magnitude;
     }
@@ -74,7 +72,7 @@ public class Hand : MonoBehaviour {
     }
 
     public void Clear() {
-        
+        pouch.Clear();
     }
 
 }

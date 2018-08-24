@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
- * Controls the first-person camera.
+ * Controls the first- and third-person cameras.
  * Adapted from http://wiki.unity3d.com/index.php?title=SmoothFollowWithCameraBumper
  */
 
@@ -12,6 +12,7 @@ public class CameraController : MonoBehaviour {
     private const float walledCameraHeight = .125f;//.5f;
     private const float wallDistanceCheck = 5;
     private const float distanceFromPlayer = 5f;
+    private readonly static Vector3 cameraHeightOffset = new Vector3(0, 1.5f, 0);
 
     public static Camera ActiveCamera { get; private set; }
 
@@ -48,7 +49,6 @@ public class CameraController : MonoBehaviour {
 
     private static float currentX = 0;
     private static float currentY = 0;
-    private static Vector3 cameraHeightOffset = new Vector3(0, .5f, 0);
     
     void Awake() {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>().Find("Body");

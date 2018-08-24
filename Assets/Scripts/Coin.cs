@@ -8,6 +8,12 @@ public class Coin : Magnetic {
     private const float minSpeed = 5f;
     private const float maxSpeed = 120f;
     private const float equalInMagnitudeConstant = .01f;
+    private const float drag = 1.25f;
+
+    //private float freeStaticFriction;
+    //private float freeDynamicFriction;
+    //private float pushFriction = 10f;
+    //private PhysicMaterial material;
     private bool inContactWithPlayer = false;
 
     public override bool IsPerfectlyAnchored { // Only matters for Coins, which have so low masses that Unity thinks they have high velocities when pushed, even when anchored
@@ -15,6 +21,70 @@ public class Coin : Magnetic {
             return Mathf.Abs(LastPosition.magnitude - transform.position.magnitude) < equalInMagnitudeConstant;
         }
     }
+
+    private new void Awake() {
+        base.Awake();
+        //material = GetComponent<Collider>().material;
+        //freeStaticFriction = material.staticFriction;
+        //freeDynamicFriction = material.dynamicFriction;
+    }
+    private void OnTriggerEnter(Collider other) {
+        if (other.CompareTag("Player")) {
+            inContactWithPlayer = true;
+        }
+    }
+    private void OnTriggerStay(Collider other) {
+        if (inContactWithPlayer && Keybinds.IronPulling() && other.CompareTag("Player")) {
+            BeCaughtByAllomancer(other.GetComponent<Player>());
+        }
+    }
+    private void OnTriggerExit(Collider other) {
+        if(other.CompareTag("Player")) {
+            inContactWithPlayer = false;
+        }
+    }
+
+    private void BeCaughtByAllomancer(Player player) {
+        player.CoinHand.CatchCoin(this);
+        HUD.TargetOverlayController.HardRefresh();
+    }
+
+    // Effectively caps the max velocity of the coin without affecting the ANF
+    public override void AddForce(Vector3 netForce) {
+        // Calculate drag from its new velocity
+        Vector3 newNetForce = Vector3.ClampMagnitude(
+            -(Vector3.Project(Rb.velocity, netForce.normalized) + (netForce / Mass * Time.fixedDeltaTime)) * drag, netForce.magnitude
+        ) + netForce;
+
+        LastExpectedAcceleration = newNetForce / Time.fixedDeltaTime;
+        Rb.AddForce(newNetForce, ForceMode.Force);
+    }
+
+    //public override void StartBeingPullPushed(bool pulling) {
+    //    if (!pulling) {
+    //        material.staticFriction = pushFriction;
+    //        material.dynamicFriction = pushFriction;
+    //    }
+    //}
+    //public override void StopBeingPullPushed() {
+    //    material.staticFriction = freeStaticFriction;
+    //    material.dynamicFriction = freeDynamicFriction;
+    //}
+
+    // Makes coins sticky after colliding with something
+    //private void OnCollisionEnter(Collision collision) {
+    //    if (!collision.collider.CompareTag("Player")) {
+    //        Rb.isKinematic = true;
+    //    }
+    //}
+    //private void OnCollisionStay(Collision collision) {
+    //    if(Allomancer.SteelPushing) {
+    //        material.staticFriction = pushFriction;
+    //        material.dynamicFriction = pushFriction;
+    //    } else {
+
+    //    }
+    //}
 
     //public new Vector3 LastVelocity {
     //    get {
@@ -57,51 +127,6 @@ public class Coin : Magnetic {
     //        //lastExpectedAcceleration = Vector3.zero;// + Physics.gravity;
     //    }
     //}
-    private void OnTriggerEnter(Collider other) {
-        if (other.CompareTag("Player")) {
-            inContactWithPlayer = true;
-        }
-    }
-    private void OnTriggerStay(Collider other) {
-        if (inContactWithPlayer && Keybinds.IronPulling() && other.CompareTag("Player")) {
-            BeCaughtByAllomancer(other.GetComponent<Player>());
-        }
-    }
-    private void OnTriggerExit(Collider other) {
-        if(other.CompareTag("Player")) {
-            inContactWithPlayer = false;
-        }
-    }
-    private void BeCaughtByAllomancer(Player player) {
-        player.CoinHand.CatchCoin(this);
-        HUD.TargetOverlayController.HardRefresh();
-    }
-    //private void OnCollisionEnter(Collision collision) {
-    //    if (!collision.collider.CompareTag("Player")) {
-    //        Rb.isKinematic = true;
-    //    }
-    //}
-
-    // Effectively caps the max velocity of the coin without affecting the ANF
-    public override void AddForce(Vector3 netForce, ForceMode forceMode) {
-        // If the force would accelerate this Coin past its maxSpeed, don't accelerate it any more!
-        if (forceMode == ForceMode.Force) {
-            Vector3 newVelocity = Rb.velocity + netForce / Mass * Time.fixedDeltaTime;
-            if ((newVelocity).magnitude > maxSpeed) {
-                // Apply the force that would push it to the maxSpeed, but no further
-                Vector3 changeInVelocityThatWillBringMeToTopSpeed = Vector3.ClampMagnitude(newVelocity, maxSpeed) - Rb.velocity;
-
-                LastExpectedAcceleration = changeInVelocityThatWillBringMeToTopSpeed / Time.fixedDeltaTime;
-                //LastExpectedAcceleration = force / Mass;
-                Rb.AddForce(changeInVelocityThatWillBringMeToTopSpeed, ForceMode.VelocityChange);
-            } else {
-                //LastExpectedAcceleration = allomanticForce / Mass;
-                Rb.AddForce(netForce, ForceMode.Force);
-            }
-        } else {
-            Debug.Log("You shouldn't be adding a force to a Coin with anything other than ForceMode.Force");
-        }
-    }
 
     //public override void AddForce(Vector3 force, ForceMode forceMode) {
     //    LastVelocity = Rb.velocity;

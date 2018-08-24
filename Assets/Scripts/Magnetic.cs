@@ -16,10 +16,7 @@ public class Magnetic : MonoBehaviour {
     private VolumetricLineBehavior blueLine;
     private float lightSaberFactor;
 
-    public AllomanticIronSteel Allomancer {
-        get;
-        set;
-    }
+    public AllomanticIronSteel Allomancer { get; set; }
 
     // Used for calculating Allomantic Normal Force
     public Vector3 Velocity { get
@@ -38,7 +35,9 @@ public class Magnetic : MonoBehaviour {
     public Vector3 LastAllomanticForce { get; set; }
     public Vector3 LastAllomanticNormalForceFromAllomancer { get; set; }
     public Vector3 LastAllomanticNormalForceFromTarget { get; set; }
-
+    
+    public bool InRange { get; set; }
+    public bool IsStatic { get; set; }
 
     public bool LastWasPulled {
         get {
@@ -46,7 +45,6 @@ public class Magnetic : MonoBehaviour {
         }
         set {
             if(value != lastWasPulled) { // swapped between pulling and pushing, clear certain values
-                SoftClear();
                 lastWasPulled = value;
             }
         }
@@ -79,22 +77,16 @@ public class Magnetic : MonoBehaviour {
     // If the object has a Rigidbody, this is the real centerOfMass. Otherwise, it is just the transform local position.
     public Vector3 LocalCenterOfMass { get; private set; }
     public Collider ColliderBody { get; private set; }
+    public Rigidbody Rb { get; private set; }
+    public float Charge { get; private set; }
     // If this Magnetic is at the center of the screen, highlighted, ready to be targeted.
     public bool IsHighlighted { get; private set; }
+    public float Mass { get { return mass; } }
     // Global center of mass
     public Vector3 CenterOfMass {
         get {
             return transform.TransformPoint(LocalCenterOfMass);
         }
-    }
-    public float Mass {
-        get {
-            return mass;
-        }
-    }
-    public bool InRange {
-        get;
-        set;
     }
     public virtual bool IsPerfectlyAnchored { // Only matters for Coins, which have so low masses that Unity thinks they have high velocities when pushed, even when anchored
         get {
@@ -102,13 +94,8 @@ public class Magnetic : MonoBehaviour {
             return false;
         }
     }
-    public Rigidbody Rb { get; private set; }
-    public float Charge;// { get; private set; }
-    public bool IsStatic { get; set; }
-
-
-    // Use this for initialization
-    void Awake () {
+    
+    protected void Awake () {
         Allomancer = null;
         highlightedTargetOutline = gameObject.AddComponent<Outline>();
         blueLine = Instantiate(GameManager.MetalLineTemplate);
@@ -133,11 +120,14 @@ public class Magnetic : MonoBehaviour {
         Charge = Mathf.Pow(mass, AllomanticIronSteel.chargePower);
         InRange = false;
     }
+
     private void Start() {
         GameManager.AddMagnetic(this);
     }
+
     // If the Magnetic is untargeted
     public void Clear() {
+        //StopBeingPullPushed();
         LastVelocity = Vector3.zero;
         LastExpectedAcceleration = Vector3.zero;
         LastAllomanticForce = Vector3.zero;
@@ -150,23 +140,19 @@ public class Magnetic : MonoBehaviour {
         RemoveTargetGlow();
     }
 
-    public void SoftClear() {
-        //LastExpectedAcceleration = Vector3.zero;
-        //LastAllomanticForce = Vector3.zero;
-        //LastAllomanticNormalForceFromAllomancer = Vector3.zero;
-        //LastAllomanticNormalForceFromTarget = Vector3.zero;
-        //LastVelocity = Vector3.zero;
-        //LightSaberFactor = 1;
-    }
+    //public virtual void StartBeingPullPushed(bool pull) {
+    //}
+    //public virtual void StopBeingPullPushed() {
+    //}
 
     private void OnDestroy() {
         Destroy(blueLine);
         GameManager.MagneticsInScene.Remove(this);
     }
 
-    public virtual void AddForce(Vector3 netForce, ForceMode forceMode) {
+    public virtual void AddForce(Vector3 netForce) {
         if (!IsStatic) {
-            Rb.AddForce(netForce, forceMode);
+            Rb.AddForce(netForce, ForceMode.Force);
         }
     }
 
@@ -191,7 +177,6 @@ public class Magnetic : MonoBehaviour {
     public void DisableBlueLine() {
         blueLine.GetComponent<MeshRenderer>().enabled = false;
     }
-
     //public void AddTargetGlow() {
     //    Renderer targetRenderer;
     //    Material[] mats;

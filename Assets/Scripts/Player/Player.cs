@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour {
-    
+
     private const float coinCooldown = 0.1f;
 
     //private Animator animator;

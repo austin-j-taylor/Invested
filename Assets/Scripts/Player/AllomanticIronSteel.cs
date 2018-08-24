@@ -19,7 +19,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     private const float blueLineWidthBaseFactor = .04f;
     private const float blueLineTargetedWidthFactor = 1.5f;
     private const float blueLineBrightnessFactor = 100;
-    private const float blueLineForceCutoff = 100f;
+    private const float blueLineForceCutoff = 50f;
     private const float lightSaberConstant = 1024;
     // Physics Constants
     public const float chargePower = 1f / 8f;
@@ -213,22 +213,30 @@ public class AllomanticIronSteel : MonoBehaviour {
                     if (!lastWasPulling) { // first frame of pulling
                         RefreshHUDColorsOnly();
                         lastWasPulling = true;
+                        //StartPushPullingOnTargets(iron);
                     }
                 } else {
-                    if (lastWasPulling) {
+                    if (lastWasPulling) { // first frame of NOT pulling
                         RefreshHUDColorsOnly();
                         lastWasPulling = false;
+                        //StopPushPullingOnTargets(iron);
+                        //if (!HasPullTarget)
+                        //    StopPushPullingOnTargets(steel);
                     }
                 }
                 if (SteelPushing) {
                     if (!lastWasPushing) { // first frame of pushing
                         RefreshHUDColorsOnly();
                         lastWasPushing = true;
+                        //StartPushPullingOnTargets(steel);
                     }
                 } else {
-                    if (lastWasPushing) {
+                    if (lastWasPushing) { // first frame of NOT pushing
                         RefreshHUDColorsOnly();
                         lastWasPushing = false;
+                        //StopPushPullingOnTargets(steel);
+                        //if (!HasPushTarget)
+                        //    StopPushPullingOnTargets(iron);
                     }
                 }
 
@@ -628,7 +636,7 @@ public class AllomanticIronSteel : MonoBehaviour {
         //    netForceOnAllomancer = steelBurnRate * (target.LastNetAllomanticForceOnAllomancer);
         //}
 
-        target.AddForce(target.LastNetAllomanticForceOnTarget, ForceMode.Force);
+        target.AddForce(target.LastNetAllomanticForceOnTarget);
         // apply force to player
         rb.AddForce(target.LastNetAllomanticForceOnAllomancer, ForceMode.Force);
 
@@ -744,6 +752,64 @@ public class AllomanticIronSteel : MonoBehaviour {
         }
         return centerObject;
     }
+
+    private void StartBurningIronSteel() {
+        if (!IsBurningIronSteel) { // just started burning metal
+            GamepadController.Shake(.1f, .1f, .3f);
+            IsBurningIronSteel = true;
+            UpdateBurnRateMeter();
+            HUD.BurnRateMeter.MetalLineText = AvailableNumberOfTargets.ToString();
+            CameraController.ActiveCamera.cullingMask = ~0;
+            SetPullRateTarget(1);
+            SetPushRateTarget(1);
+        }
+    }
+
+    public void StopBurningIronSteel() {
+        RemoveAllTargets();
+        //if (IsBurningIronSteel) {
+        if (HasHighlightedTarget)
+            HighlightedTarget.RemoveTargetGlow();
+        IsBurningIronSteel = false;
+        if (HUD.BurnRateMeter) {
+            HUD.BurnRateMeter.Clear();
+        }
+        GamepadController.SetRumble(0, 0);
+        ironBurnRate = 0;
+        steelBurnRate = 0;
+
+        // make blue lines disappear
+        CameraController.ActiveCamera.cullingMask = ~(1 << blueLineLayer);
+        //for (int i = 0; i < metalLines.Count; i++) {
+        //    metalLines[i].GetComponent<MeshRenderer>().enabled = false;
+        //}
+        //}
+    }
+
+    //private void StartPushPullingOnTargets(bool pulling) {
+    //    if ((HasPullTarget && pulling) || !HasPushTarget) {
+    //        for (int i = 0; i < PullCount; i++) {
+    //            pullTargets[i].StartBeingPullPushed(pulling);
+    //        }
+    //    }
+    //    if (HasPushTarget) {
+    //        for (int i = 0; i < PushCount; i++) {
+    //            pushTargets[i].StartBeingPullPushed(pulling);
+    //        }
+    //    }
+    //}
+
+    //private void StopPushPullingOnTargets(bool usingIronTargets) {
+    //    if (usingIronTargets) {
+    //        for (int i = 0; i < PullCount; i++) {
+    //            pullTargets[i].StopBeingPullPushed();
+    //        }
+    //    } else {
+    //        for (int i = 0; i < PushCount; i++) {
+    //            pushTargets[i].StopBeingPullPushed();
+    //        }
+    //    }
+    //}
 
     private void RemoveTarget(int index, bool ironTarget) {
 
@@ -909,77 +975,6 @@ public class AllomanticIronSteel : MonoBehaviour {
         }
     }
 
-    private void StartBurningIronSteel() {
-        if (!IsBurningIronSteel) { // just started burning metal
-            GamepadController.Shake(.1f, .1f, .3f);
-            IsBurningIronSteel = true;
-            UpdateBurnRateMeter();
-            HUD.BurnRateMeter.MetalLineText = AvailableNumberOfTargets.ToString();
-            CameraController.ActiveCamera.cullingMask = ~0;
-            SetPullRateTarget(1);
-            SetPushRateTarget(1);
-        }
-    }
-
-    public void StopBurningIronSteel() {
-        RemoveAllTargets();
-        //if (IsBurningIronSteel) {
-        if (HasHighlightedTarget)
-            HighlightedTarget.RemoveTargetGlow();
-        IsBurningIronSteel = false;
-        if (HUD.BurnRateMeter) {
-            HUD.BurnRateMeter.Clear();
-        }
-        GamepadController.SetRumble(0, 0);
-        ironBurnRate = 0;
-        steelBurnRate = 0;
-
-        // make blue lines disappear
-        CameraController.ActiveCamera.cullingMask = ~(1 << blueLineLayer);
-        //for (int i = 0; i < metalLines.Count; i++) {
-        //    metalLines[i].GetComponent<MeshRenderer>().enabled = false;
-        //}
-        //}
-    }
-
-    private void SetPullRateTarget(float rate) {
-        if (rate > .01f) {
-            if (SettingsMenu.currentForceStyle == ForceStyle.Percentage)
-                ironBurnRateTarget = rate;
-            else
-                ironBurnRateTarget = Mathf.Min(1, rate);
-            if (HasPullTarget || HasPushTarget)
-                GamepadController.SetRumble(steelBurnRateTarget, ironBurnRateTarget);
-        } else {
-            //IronPulling = false;
-            ironBurnRateTarget = 0;
-            GamepadController.SetRumbleRight(0);
-        }
-    }
-
-    private void SetPushRateTarget(float rate) {
-        if (rate > .01f) {
-            if (SettingsMenu.currentForceStyle == ForceStyle.Percentage)
-                steelBurnRateTarget = rate;
-            else
-                steelBurnRateTarget = Mathf.Min(1, rate);
-            if (HasPullTarget || HasPushTarget)
-                GamepadController.SetRumble(steelBurnRateTarget, ironBurnRateTarget);
-        } else {
-            //SteelPushing = false;
-            steelBurnRateTarget = 0;
-            GamepadController.SetRumbleLeft(0);
-        }
-    }
-
-    private void LerpToBurnRates() {
-        ironBurnRate = Mathf.Lerp(ironBurnRate, ironBurnRateTarget, burnRateLerpConstant);
-        steelBurnRate = Mathf.Lerp(steelBurnRate, steelBurnRateTarget, burnRateLerpConstant);
-        if (!GamepadController.UsingGamepad && (ironBurnRate < .01f || steelBurnRate < .01f)) {
-            StopBurningIronSteel();
-        }
-    }
-
     public bool IsTarget(Magnetic potentialTarget) {
         for (int i = 0; i < PullCount; i++) {
             if (potentialTarget == pullTargets[i])
@@ -1033,6 +1028,44 @@ public class AllomanticIronSteel : MonoBehaviour {
             if (!pushTargets[i].InRange) {
                 RemoveTarget(i, steel);
             }
+        }
+    }
+
+    private void SetPullRateTarget(float rate) {
+        if (rate > .01f) {
+            if (SettingsMenu.currentForceStyle == ForceStyle.Percentage)
+                ironBurnRateTarget = rate;
+            else
+                ironBurnRateTarget = Mathf.Min(1, rate);
+            if (HasPullTarget || HasPushTarget)
+                GamepadController.SetRumble(steelBurnRateTarget, ironBurnRateTarget);
+        } else {
+            //IronPulling = false;
+            ironBurnRateTarget = 0;
+            GamepadController.SetRumbleRight(0);
+        }
+    }
+
+    private void SetPushRateTarget(float rate) {
+        if (rate > .01f) {
+            if (SettingsMenu.currentForceStyle == ForceStyle.Percentage)
+                steelBurnRateTarget = rate;
+            else
+                steelBurnRateTarget = Mathf.Min(1, rate);
+            if (HasPullTarget || HasPushTarget)
+                GamepadController.SetRumble(steelBurnRateTarget, ironBurnRateTarget);
+        } else {
+            //SteelPushing = false;
+            steelBurnRateTarget = 0;
+            GamepadController.SetRumbleLeft(0);
+        }
+    }
+
+    private void LerpToBurnRates() {
+        ironBurnRate = Mathf.Lerp(ironBurnRate, ironBurnRateTarget, burnRateLerpConstant);
+        steelBurnRate = Mathf.Lerp(steelBurnRate, steelBurnRateTarget, burnRateLerpConstant);
+        if (!GamepadController.UsingGamepad && (ironBurnRate < .01f || steelBurnRate < .01f)) {
+            StopBurningIronSteel();
         }
     }
 
