@@ -6,7 +6,6 @@ using UnityEngine.SceneManagement;
 public class Player : MonoBehaviour {
     
     private const float coinCooldown = 0.1f;
-    private readonly Vector3 feet = Vector3.zero;
 
     //private Animator animator;
     private PlayerMovementController movementController;
@@ -35,11 +34,11 @@ public class Player : MonoBehaviour {
         if (Keybinds.WithdrawCoinDown() && lastCoinThrowTime + coinCooldown < Time.time) {
             lastCoinThrowTime = Time.time;
             // If jump button had also been held, throw coin downward and target it.
-            if (Keybinds.Jump()) {
-                IronSteel.AddTarget(CoinHand.SpawnCoin(transform.position + feet), false);
-            } else { // If only pressing the COIN button, draw a coin into hand
-                IronSteel.AddTarget(CoinHand.WithdrawCoinToHand(), false);
-            }
+            //if (Keybinds.Jump()) {
+            //    IronSteel.AddTarget(CoinHand.SpawnCoin(transform.position + feet), false);
+            //} else { // If only pressing the COIN button, draw a coin into hand
+            IronSteel.AddTarget(CoinHand.WithdrawCoinToHand(), false);
+            //}
         }
 	}
 

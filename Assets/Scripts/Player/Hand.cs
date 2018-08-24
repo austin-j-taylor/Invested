@@ -24,13 +24,11 @@ public class Hand : MonoBehaviour {
         distanceToHand = transform.localPosition.magnitude;
     }
 
-    // If the player is in the air, the hand follows the left joystick.
-    // If the player is grounded or is in the air but not touching the joystick, the hand follows the camera.
+    // If the player is holding down Jump, throw the coin downwards biased against the player's movement.
+    // If the player is not jumping, the hand follows the camera.
     void Update() {
 
-        if (movementController.IsGrounded) {
-            centerOfMass.localEulerAngles = new Vector3(CameraController.ActiveCamera.transform.eulerAngles.x, 0, 0);
-        } else {
+        if (Keybinds.Jump()) {
             float vertical = -Keybinds.Vertical() * baseSteepAngle;
             float horizontal = -Keybinds.Horizontal() * baseSteepAngle;
 
@@ -43,6 +41,8 @@ public class Hand : MonoBehaviour {
             Quaternion newRotation = new Quaternion();
             newRotation.SetLookRotation(new Vector3(horizontal, (-1 + Vector2.ClampMagnitude(new Vector2(horizontal, vertical), 1).magnitude), vertical), Vector3.up);
             centerOfMass.localRotation = newRotation;
+        } else {
+            centerOfMass.localEulerAngles = new Vector3(CameraController.ActiveCamera.transform.eulerAngles.x, 0, 0);
         }
     }
 
