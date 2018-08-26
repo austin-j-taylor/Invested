@@ -22,12 +22,12 @@ public class Coin : Magnetic {
         }
     }
 
-    private new void Awake() {
-        base.Awake();
+    //private new void Awake() {
+    //    base.Awake();
         //material = GetComponent<Collider>().material;
         //freeStaticFriction = material.staticFriction;
         //freeDynamicFriction = material.dynamicFriction;
-    }
+    //}
     private void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Player")) {
             inContactWithPlayer = true;
@@ -51,13 +51,28 @@ public class Coin : Magnetic {
 
     // Effectively caps the max velocity of the coin without affecting the ANF
     public override void AddForce(Vector3 netForce) {
-        // Calculate drag from its new velocity
+        //Calculate drag from its new velocity
         Vector3 newNetForce = Vector3.ClampMagnitude(
             -(Vector3.Project(Rb.velocity, netForce.normalized) + (netForce / Mass * Time.fixedDeltaTime)) * drag, netForce.magnitude
         ) + netForce;
+        //Vector3 newNetForce = netForce;
 
-        LastExpectedAcceleration = newNetForce / Time.fixedDeltaTime;
+        LastExpectedAcceleration = newNetForce / Mass;
         Rb.AddForce(newNetForce, ForceMode.Force);
+    }
+
+    // Makes coins sticky when colliding with something
+    private void OnCollisionStay(Collision collision) {
+        if (!collision.collider.CompareTag("Player")) {
+            //Rb.isKinematic = true;
+            if (Allomancer && Allomancer.SteelPushing) {
+                if (IsPerfectlyAnchored) {
+                    Rb.velocity = Vector3.zero;
+                } else {
+                    Rb.velocity /= 10;
+                }
+            }
+        }
     }
 
     //public override void StartBeingPullPushed(bool pulling) {
@@ -69,13 +84,6 @@ public class Coin : Magnetic {
     //public override void StopBeingPullPushed() {
     //    material.staticFriction = freeStaticFriction;
     //    material.dynamicFriction = freeDynamicFriction;
-    //}
-
-    // Makes coins sticky after colliding with something
-    //private void OnCollisionEnter(Collision collision) {
-    //    if (!collision.collider.CompareTag("Player")) {
-    //        Rb.isKinematic = true;
-    //    }
     //}
     //private void OnCollisionStay(Collision collision) {
     //    if(Allomancer.SteelPushing) {

@@ -114,7 +114,7 @@ public class CameraController : MonoBehaviour {
     }
 
     public static void Clear() {
-        currentY = player.parent.localEulerAngles.x;
+        currentY = player.parent.localEulerAngles.x + 30; // Tilted downward a little
         currentX = player.parent.localEulerAngles.y;
         RefreshCamera();
     }

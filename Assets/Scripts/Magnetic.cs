@@ -17,6 +17,7 @@ public class Magnetic : MonoBehaviour {
     private float lightSaberFactor;
 
     public AllomanticIronSteel Allomancer { get; set; }
+    protected Rigidbody Rb { get; set; }
 
     // Used for calculating Allomantic Normal Force
     public Vector3 Velocity { get
@@ -27,9 +28,19 @@ public class Magnetic : MonoBehaviour {
                 return Rb.velocity;
         }
     }
-    public Vector3 LastPosition { get; set; }
-    public Vector3 LastVelocity { get; set; }
-    public Vector3 LastExpectedAcceleration { get; set; }
+    public Vector3 LastPosition { get; private set; }
+    public Vector3 LastVelocity { get; private set; }
+    public Vector3 LastExpectedAcceleration {
+        get {
+            return lastExpectedAcceleration;
+        }
+        protected set {
+            lastExpectedAcceleration = value;
+            LastPosition = transform.position;
+            LastVelocity = Velocity;
+        }
+    }
+    private Vector3 lastExpectedAcceleration;
 
     // These keep track of each Magnetic's participation to the net force on the Allomancer
     public Vector3 LastAllomanticForce { get; set; }
@@ -77,7 +88,6 @@ public class Magnetic : MonoBehaviour {
     // If the object has a Rigidbody, this is the real centerOfMass. Otherwise, it is just the transform local position.
     public Vector3 LocalCenterOfMass { get; private set; }
     public Collider ColliderBody { get; private set; }
-    public Rigidbody Rb { get; private set; }
     public float Charge { get; private set; }
     // If this Magnetic is at the center of the screen, highlighted, ready to be targeted.
     public bool IsHighlighted { get; private set; }
@@ -95,18 +105,12 @@ public class Magnetic : MonoBehaviour {
         }
     }
     
-    protected void Awake () {
+    private void Awake () {
         Allomancer = null;
         highlightedTargetOutline = gameObject.AddComponent<Outline>();
         blueLine = Instantiate(GameManager.MetalLineTemplate);
         Rb = GetComponent<Rigidbody>();
         ColliderBody = GetComponent<Collider>();
-        LastPosition = Vector3.zero;
-        LastVelocity = Vector3.zero;
-        LastExpectedAcceleration = Vector3.zero;
-        LastAllomanticForce = Vector3.zero;
-        LastAllomanticNormalForceFromAllomancer = Vector3.zero;
-        LastAllomanticNormalForceFromTarget = Vector3.zero;
         lightSaberFactor = 1;
         lastWasPulled = false;
         IsHighlighted = false;
@@ -118,6 +122,12 @@ public class Magnetic : MonoBehaviour {
             LocalCenterOfMass = Vector3.zero;
         }
         Charge = Mathf.Pow(mass, AllomanticIronSteel.chargePower);
+        LastPosition = Vector3.zero;
+        LastVelocity = Vector3.zero;
+        LastExpectedAcceleration = Vector3.zero;
+        LastAllomanticForce = Vector3.zero;
+        LastAllomanticNormalForceFromAllomancer = Vector3.zero;
+        LastAllomanticNormalForceFromTarget = Vector3.zero;
         InRange = false;
     }
 
@@ -152,6 +162,7 @@ public class Magnetic : MonoBehaviour {
 
     public virtual void AddForce(Vector3 netForce) {
         if (!IsStatic) {
+            LastExpectedAcceleration = netForce / Mass;
             Rb.AddForce(netForce, ForceMode.Force);
         }
     }
