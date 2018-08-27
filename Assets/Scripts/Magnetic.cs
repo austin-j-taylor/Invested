@@ -137,7 +137,7 @@ public class Magnetic : MonoBehaviour {
 
     // If the Magnetic is untargeted
     public void Clear() {
-        //StopBeingPullPushed();
+        StopBeingPullPushed();
         LastVelocity = Vector3.zero;
         LastExpectedAcceleration = Vector3.zero;
         LastAllomanticForce = Vector3.zero;
@@ -152,8 +152,8 @@ public class Magnetic : MonoBehaviour {
 
     //public virtual void StartBeingPullPushed(bool pull) {
     //}
-    //public virtual void StopBeingPullPushed() {
-    //}
+    public virtual void StopBeingPullPushed() {
+    }
 
     private void OnDestroy() {
         Destroy(blueLine);

@@ -14,6 +14,7 @@ public class GamepadController : MonoBehaviour {
     private static bool shaking = false;
     private static float leftRumble = 0;
     private static float rightRumble = 0;
+    public const float rumbleFactor = .3f;
 
     private static GamepadRumble rumble;
 
@@ -84,7 +85,7 @@ public class GamepadController : MonoBehaviour {
         // Update is called once per frame
         void Update() {
             if (usingGamepad) {
-                if ((usingRumble && updateRumble && !shaking)) {
+                if (usingRumble && updateRumble && !shaking) {
                     GamePad.SetVibration(0, leftRumble, rightRumble);
                     updateRumble = false;
                 } else if (updateRumble && !usingRumble) {

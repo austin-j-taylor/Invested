@@ -9,25 +9,47 @@ public class Coin : Magnetic {
     private const float maxSpeed = 120f;
     private const float equalInMagnitudeConstant = .01f;
     private const float drag = 1.25f;
+    private const float stuckThreshold = 1f;
 
     //private float freeStaticFriction;
     //private float freeDynamicFriction;
     //private float pushFriction = 10f;
     //private PhysicMaterial material;
     private bool inContactWithPlayer = false;
+    private bool isStuck = false;
 
     public override bool IsPerfectlyAnchored { // Only matters for Coins, which have so low masses that Unity thinks they have high velocities when pushed, even when anchored
         get {
             return Mathf.Abs(LastPosition.magnitude - transform.position.magnitude) < equalInMagnitudeConstant;
         }
     }
+    private bool IsStuck {
+        get {
+            return isStuck;
+        }
+        set {
+            isStuck = value;
+            Rb.isKinematic = value;
+            Rb.velocity = Vector3.zero;
+            //if(value)
+            //    Debug.Log("STICKING");
+            //else
+            //    Debug.Log("Unsticking");
+        }
+    }
+
+    public new void Clear() {
+        base.Clear();
+        IsStuck = false;
+    }
 
     //private new void Awake() {
     //    base.Awake();
-        //material = GetComponent<Collider>().material;
-        //freeStaticFriction = material.staticFriction;
-        //freeDynamicFriction = material.dynamicFriction;
+    //material = GetComponent<Collider>().material;
+    //freeStaticFriction = material.staticFriction;
+    //freeDynamicFriction = material.dynamicFriction;
     //}
+
     private void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Player")) {
             inContactWithPlayer = true;
@@ -57,20 +79,40 @@ public class Coin : Magnetic {
         ) + netForce;
         //Vector3 newNetForce = netForce;
 
+        if(IsStuck) {
+            if (Allomancer.SteelPushing) {
+                //newNetForce = Vector3.Project(newNetForce, stuckImpulse * 10);
+                if (newNetForce.sqrMagnitude < stuckThreshold) {
+                    IsStuck = false;
+                }
+            }
+        }
+
         LastExpectedAcceleration = newNetForce / Mass;
         Rb.AddForce(newNetForce, ForceMode.Force);
     }
 
     // Makes coins sticky when colliding with something
+    private void OnCollisionEnter(Collision collision) {
+        if (!collision.collider.CompareTag("Player")) {
+            AddFriction(collision);
+        }
+    }
+    // must uncomment soon
     private void OnCollisionStay(Collision collision) {
         if (!collision.collider.CompareTag("Player")) {
-            //Rb.isKinematic = true;
-            if (Allomancer && Allomancer.SteelPushing) {
-                if (IsPerfectlyAnchored) {
-                    Rb.velocity = Vector3.zero;
-                } else {
-                    Rb.velocity /= 10;
+            if(Allomancer && Allomancer.SteelPushing) {
+                if(!IsStuck) {
+                    AddFriction(collision);
                 }
+            }
+        }
+    }
+    private void AddFriction(Collision collision) {
+        if (Allomancer && Allomancer.SteelPushing) {
+            IsStuck = collision.impulse.sqrMagnitude > stuckThreshold;
+            if (IsPerfectlyAnchored || IsStuck) {
+                Rb.velocity = Vector3.zero;
             }
         }
     }
@@ -81,10 +123,12 @@ public class Coin : Magnetic {
     //        material.dynamicFriction = pushFriction;
     //    }
     //}
-    //public override void StopBeingPullPushed() {
-    //    material.staticFriction = freeStaticFriction;
-    //    material.dynamicFriction = freeDynamicFriction;
-    //}
+    public override void StopBeingPullPushed() {
+        if(IsStuck)
+            IsStuck = false;
+        //material.staticFriction = freeStaticFriction;
+        //material.dynamicFriction = freeDynamicFriction;
+    }
     //private void OnCollisionStay(Collision collision) {
     //    if(Allomancer.SteelPushing) {
     //        material.staticFriction = pushFriction;
