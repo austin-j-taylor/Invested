@@ -42,9 +42,21 @@ public class CameraController : MonoBehaviour {
             }
         }
     }
-    public static bool CameraIsLocked { get; private set; }
+    private static bool clampCamera = true;
+    public static bool ClampCamera {
+        get {
+            return clampCamera;
+        }
+        set {
+            clampCamera = value;
+            if(value)
+                ClampY();
+        }
+    }
     public static float SensitivityX { get; set; } = 2.5f;
     public static float SensitivityY { get; set; } = 2.5f;
+
+    public static bool CameraIsLocked { get; private set; }
 
     private static float currentX = 0;
     private static float currentY = 0;
@@ -69,10 +81,17 @@ public class CameraController : MonoBehaviour {
                 currentX += Input.GetAxis("Mouse X") * SensitivityX;
                 currentY -= Input.GetAxis("Mouse Y") * SensitivityY;
             }
-            currentY = Mathf.Clamp(currentY, -89.99f, 89.99f); // (controls top, controls bottom)
+            if (ClampCamera)
+                ClampY();
 
             RefreshCamera();
         }
+    }
+
+    public static void Clear() {
+        currentY = player.parent.localEulerAngles.x + 30; // Tilted downward a little
+        currentX = player.parent.localEulerAngles.y;
+        RefreshCamera();
     }
 
     private static void RefreshCamera() {
@@ -94,6 +113,10 @@ public class CameraController : MonoBehaviour {
         }
     }
 
+    private static void ClampY() {
+        currentY = Mathf.Clamp(currentY, -89.99f, 89.99f); // (controls top, controls bottom)
+    }
+
     public static void LockCamera() {
         Cursor.lockState = CursorLockMode.Locked;
         CameraIsLocked = true;
@@ -104,12 +127,6 @@ public class CameraController : MonoBehaviour {
         Cursor.lockState = CursorLockMode.None;
         CameraIsLocked = false;
         Cursor.visible = true;
-    }
-
-    public static void Clear() {
-        currentY = player.parent.localEulerAngles.x + 30; // Tilted downward a little
-        currentX = player.parent.localEulerAngles.y;
-        RefreshCamera();
     }
 
 }

@@ -12,6 +12,7 @@ public class SceneSelectMenu : MonoBehaviour {
     public const int sceneTutorial = 2;
     public const int sceneSandbox = 3;
     public const int sceneLuthadel = 4;
+    public const int sceneExperimental = 5;
 
     public bool IsOpen {
         get {
@@ -23,6 +24,7 @@ public class SceneSelectMenu : MonoBehaviour {
     private Button tutorialButton;
     private Button sandboxButton;
     private Button luthadelButton;
+    private Button experimentalButton;
     private Button backButton;
 
     //private MainMenu mainMenu;
@@ -39,11 +41,13 @@ public class SceneSelectMenu : MonoBehaviour {
         tutorialButton = buttons[0];
         sandboxButton = buttons[1];
         luthadelButton = buttons[2];
-        backButton = buttons[3];
+        experimentalButton = buttons[3];
+        backButton = buttons[4];
 
         tutorialButton.onClick.AddListener(OnClickedTutorial);
         sandboxButton.onClick.AddListener(OnClickedSandbox);
         luthadelButton.onClick.AddListener(OnClickedLuthadel);
+        experimentalButton.onClick.AddListener(OnClickedExperimental);
         backButton.onClick.AddListener(OnClickedBack);
 
         // Only close the main menu after the scene loads to prevent jarring camera transitions
@@ -93,6 +97,10 @@ public class SceneSelectMenu : MonoBehaviour {
 
     private void OnClickedLuthadel() {
         LoadScene(sceneLuthadel);
+    }
+
+    private void OnClickedExperimental() {
+        LoadScene(sceneExperimental);
     }
 
     private void OnClickedBack() {

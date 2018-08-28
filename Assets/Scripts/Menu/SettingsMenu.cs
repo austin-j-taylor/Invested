@@ -32,6 +32,10 @@ public class SettingsMenu : MonoBehaviour {
     private const string s_percDetails = "Player sets a percentage of their maximum possible force to Push with.";
     private const string s_perspectiveFirstPerson = "First Person";
     private const string s_perspectiveThirdPerson = "Third Person";
+    private const string s_clampingClamped = "Clamped";
+    private const string s_clampingClampedDetails = "Camera cannot be rotated beyond 90° from the horizontal. Acts like any other game.";
+    private const string s_clampingUnclamped = "Unclamped";
+    private const string s_clampingUnclampedDetails = "Camera can be rotated without limits and wraps vertically around the player.";
 
     // Interface
     private const string s_blueLinesDetails = "Disable if you are having performance/framerate issues.";
@@ -159,6 +163,9 @@ public class SettingsMenu : MonoBehaviour {
     private Text pushControlStyleDetails;
     private Button perspectiveButton;
     private Text perspectiveButtonText;
+    private Button clampingButton;
+    private Text clampingButtonText;
+    private Text clampingDetails;
     private Slider sensitivityX;
     private Text sensitivityXValueText;
     private Slider sensitivityY;
@@ -265,10 +272,14 @@ public class SettingsMenu : MonoBehaviour {
         perspectiveButton = gameplayHeader.GetChild(3).GetChild(0).GetComponent<Button>();
         perspectiveButtonText = perspectiveButton.GetComponentInChildren<Text>();
 
-        sensitivityX = gameplayHeader.GetChild(4).GetComponentInChildren<Slider>();
+        clampingButton = gameplayHeader.GetChild(4).GetChild(0).GetComponent<Button>();
+        clampingButtonText = clampingButton.GetComponentInChildren<Text>();
+        clampingDetails = clampingButton.transform.GetChild(1).GetComponent<Text>();
+
+        sensitivityX = gameplayHeader.GetChild(5).GetComponentInChildren<Slider>();
         sensitivityXValueText = sensitivityX.GetComponentInChildren<Text>();
 
-        sensitivityY = gameplayHeader.GetChild(5).GetComponentInChildren<Slider>();
+        sensitivityY = gameplayHeader.GetChild(6).GetComponentInChildren<Slider>();
         sensitivityYValueText = sensitivityY.GetComponentInChildren<Text>();
 
         // Interface Header
@@ -371,6 +382,7 @@ public class SettingsMenu : MonoBehaviour {
         rumbleButton.onClick.AddListener(OnClickRumble);
         pushControlStyleButton.onClick.AddListener(OnClickPushControlStyle);
         perspectiveButton.onClick.AddListener(OnClickPerspectiveButton);
+        clampingButton.onClick.AddListener(OnClickClampingButton);
         sensitivityX.onValueChanged.AddListener(OnSensitivityXChanged);
         sensitivityY.onValueChanged.AddListener(OnSensitivityYChanged);
         // Interface
@@ -404,6 +416,8 @@ public class SettingsMenu : MonoBehaviour {
         pushControlStyleButtonText.text = s_perc;
         pushControlStyleDetails.text = s_percDetails;
         perspectiveButtonText.text = s_perspectiveThirdPerson;
+        clampingButtonText.text = s_clampingClamped;
+        clampingDetails.text = s_clampingClampedDetails;
         sensitivityX.value = CameraController.SensitivityX;
         sensitivityY.value = CameraController.SensitivityY;
         // Interface
@@ -630,6 +644,18 @@ public class SettingsMenu : MonoBehaviour {
         } else {
             CameraController.FirstPerson = true;
             perspectiveButtonText.text = s_perspectiveFirstPerson;
+        }
+    }
+
+    private void OnClickClampingButton() {
+        if(CameraController.ClampCamera) {
+            CameraController.ClampCamera = false;
+            clampingButtonText.text = s_clampingUnclamped;
+            clampingDetails.text = s_clampingUnclampedDetails;
+        } else {
+            CameraController.ClampCamera = true;
+            clampingButtonText.text = s_clampingClamped;
+            clampingDetails.text = s_clampingClampedDetails;
         }
     }
 
