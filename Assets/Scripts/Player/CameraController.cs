@@ -9,17 +9,16 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour {
 
-    private const float walledCameraHeight = .125f;//.5f;
+    private const float distanceFromHitWall = .125f;//.5f;
     private const float wallDistanceCheck = 5;
-    private const float distanceFromPlayer = 5f;
-    private readonly static Vector3 cameraHeightOffset = new Vector3(0, 1.5f, 0);
+    private static readonly Vector3 distancefromPlayer = new Vector3(0, 0, -wallDistanceCheck);
 
     public static Camera ActiveCamera { get; private set; }
 
     private static Camera thirdPersonCamera;
     private static Camera firstPersonCamera;
     private static Transform player;
-    private static Transform targetPosition;
+    private static Transform lookAtTarget;
 
     private static bool firstPerson = false;
     public static bool FirstPerson {
@@ -52,9 +51,9 @@ public class CameraController : MonoBehaviour {
     
     void Awake() {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>().Find("Body");
-        targetPosition = player.Find("CameraTargetPosition").GetComponent<Transform>();
+        lookAtTarget = player.Find("CameraLookAtTarget").GetComponent<Transform>();
+        thirdPersonCamera = lookAtTarget.Find("ThirdPersonCamera").GetComponent<Camera>();
         firstPersonCamera = player.Find("FirstPersonCamera").GetComponent<Camera>();
-        thirdPersonCamera = player.Find("ThirdPersonCamera").GetComponent<Camera>();
         //walledCameraHeight = firstPersonCamera.transform.localPosition.y;
         FirstPerson = false;
         Clear();
@@ -70,34 +69,28 @@ public class CameraController : MonoBehaviour {
                 currentX += Input.GetAxis("Mouse X") * SensitivityX;
                 currentY -= Input.GetAxis("Mouse Y") * SensitivityY;
             }
-            currentY = Mathf.Clamp(currentY, -89f, 89.999f);
+            currentY = Mathf.Clamp(currentY, -89.99f, 89.99f); // (controls top, controls bottom)
 
             RefreshCamera();
         }
     }
 
     private static void RefreshCamera() {
-        Vector3 direction = new Vector3(0, 0, -distanceFromPlayer);
-        Quaternion rotation = Quaternion.Euler(currentY, 0, 0);
-        player.parent.localRotation = Quaternion.AngleAxis(currentX, player.up);
-        targetPosition.localPosition = rotation * direction;
+        // Horizontal rotation (rotates player body left and right)
+        Quaternion horizontalRotation = Quaternion.Euler(0, currentX, 0);
+        player.parent.localRotation = horizontalRotation;
+        // Vertical rotation (rotates camera up and down body)
+        Quaternion verticalRotation = Quaternion.Euler(currentY, 0, 0);
+        ActiveCamera.transform.localRotation = verticalRotation;
 
-        if (firstPerson) {
-            ActiveCamera.transform.localRotation = Quaternion.AngleAxis(currentY, Vector3.right);
-        } else {
-            Vector3 wantedPosition = targetPosition.position;
+        if(!firstPerson) {
+            Vector3 wantedPosition = verticalRotation * distancefromPlayer; // local
             RaycastHit hit;
-            if (Physics.Raycast(player.position + cameraHeightOffset, wantedPosition - player.position - cameraHeightOffset, out hit, wallDistanceCheck, GameManager.IgnorePlayerLayer)) {
-                Vector3 normal = walledCameraHeight * hit.normal;
-                wantedPosition.x = hit.point.x + normal.x;
-                wantedPosition.y = hit.point.y + normal.y;
-                //wantedPosition.y = Mathf.Lerp(wantedPosition.y, hit.point.y + walledCameraHeight, Time.deltaTime * damping);
-                wantedPosition.z = hit.point.z + normal.z;
+            if (Physics.Raycast(lookAtTarget.position, horizontalRotation * wantedPosition, out hit, wallDistanceCheck, GameManager.IgnorePlayerLayer)) {
+                ActiveCamera.transform.position = hit.point + distanceFromHitWall * hit.normal;
+            } else {
+                ActiveCamera.transform.localPosition = wantedPosition;
             }
-
-            ActiveCamera.transform.position = wantedPosition;
-            Vector3 lookPosition = player.TransformPoint(cameraHeightOffset);
-            ActiveCamera.transform.LookAt(lookPosition);
         }
     }
 
