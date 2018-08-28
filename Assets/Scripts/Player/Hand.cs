@@ -59,13 +59,13 @@ public class Hand : MonoBehaviour {
         return null;
     }
 
-    public Coin SpawnCoin(Vector3 position) {
-        if (pouch.Count > 0) {
-            Coin coin = pouch.RemoveCoin(position);
-            return coin;
-        }
-        return null;
-    }
+    //public Coin SpawnCoin(Vector3 position) {
+    //    if (pouch.Count > 0) {
+    //        Coin coin = pouch.RemoveCoin(position);
+    //        return coin;
+    //    }
+    //    return null;
+    //}
 
     public void CatchCoin(Coin coin) {
         pouch.AddCoin(coin);
