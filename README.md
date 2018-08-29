@@ -22,11 +22,11 @@ Version 1.1.2
 - Coins have more realistic friction when pushed against a surface
 - Improved camera
 	- Fixed bug where camera moves strangely when player is against a wall
-	- Added option for removing vertical rotations limits on camera (can now vertically wrap around freely)
+	- Added option for removing vertical rotation limits on camera (can now vertically wrap around freely)
 - When pushing on multiple targets, your individual pushes on each target are no longer decreased
 	- For example: previously, if you had 3 push targets, your push on each was divided by 3. This kept the net force on you from increasing with multiple targets. Now, no alterations are made to each push.
 - Burn Rate can now be controlled with precision from 0% to 10%
-- Fixed bug with Magnitude Push Control Style when targeting a force of 0.\
+- Fixed bug with Magnitude Push Control Style when targeting a force of 0.
 - Added Experimental scene
 
 Version 1.1.1
