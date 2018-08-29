@@ -14,7 +14,23 @@ This Unity project makes use of [Volumetric Lines by Johannes Unterguggenberger]
 
 ### Recent changes:
 
+Version 1.1.2
+
+- Changed how coins are thrown
+	- When holding down Jump key: coins are thrown beneath you, slightly opposing your directional movement
+	- When not holding down Jump key: coins are thrown towards crosshair
+- Coins have more realistic friction when pushed against a surface
+- Improved camera
+	- Fixed bug where camera moves strangely when player is against a wall
+	- Added option for removing vertical rotations limits on camera (can now vertically wrap around freely)
+- When pushing on multiple targets, your individual pushes on each target are no longer decreased
+	- For example: previously, if you had 3 push targets, your push on each was divided by 3. This kept the net force on you from increasing with multiple targets. Now, no alterations are made to each push.
+- Burn Rate can now be controlled with precision from 0% to 10%
+- Fixed bug with Magnitude Push Control Style when targeting a force of 0.\
+- Added Experimental scene
+
 Version 1.1.1
+
 - Improved blue metal lines
 	- More massive targets can be detected and targeted from farther away than less massive targets
 	- Lines are thinner for less visual clutter
@@ -30,18 +46,3 @@ Version 1.1.1
 	- Added option to disable rendering of blue lines for lower-end computers
 	- Blue lines are now a bit less intensive to calculate
 - Increased default Allomantic Constant
-
-Version 1.1.0
-
-- Added Glossary
-- Added several new Interface options
-- Added settings for disabling gravity and air resistance on the player
-- Anchored Push Boosts are now estimated when targeting a metal but not actively pushing on it
-	- Effectively, the forces displayed in the HUD assume that a target is perfectly anchored until you push on it.
-- Added option to force the ANF to be equal for the Allomancer and target.
-	- Whichever target or Allomancer is most anchored determines the ANF on both the target and Allomancer.
-- Improved visual effect on text color of force labels in the HUD while pushing
-- Changed target force labels to only show the two highest significant figures
-- Increased friction acting on player when grounded and not trying to move
-- Increased angle of throwing coins when airborne with mouse & keyboard control scheme
-- Somewhat fixed bug where coins would occasionally fall through the ground when pushing on them out of a jump
