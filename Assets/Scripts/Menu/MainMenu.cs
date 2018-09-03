@@ -31,6 +31,8 @@ public class MainMenu : MonoBehaviour {
         DontDestroyOnLoad(GameObject.FindGameObjectWithTag("Player"));
         DontDestroyOnLoad(transform.parent.parent.gameObject);
         DontDestroyOnLoad(GameObject.FindGameObjectWithTag("GameController"));
+
+        settingsMenu.CloseSettings();
     }
 
     private void Update() {

@@ -20,7 +20,7 @@ public class PauseMenu : MonoBehaviour {
     private static GameObject pauseMenu;
 
     // Use this for initialization
-    void Start () {
+    void Awake () {
         settingsMenu = transform.parent.GetComponentInChildren<SettingsMenu>();
         sceneSelectMenu = transform.parent.GetComponentInChildren<SceneSelectMenu>();
         mainMenu = transform.parent.GetComponentInChildren<MainMenu>();

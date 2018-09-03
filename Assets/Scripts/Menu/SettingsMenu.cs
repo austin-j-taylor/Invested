@@ -152,6 +152,14 @@ public class SettingsMenu : MonoBehaviour {
     private Transform worldHeader;
 
     // Gameplay
+    private ButtonSetting controlScheme;
+    private ButtonSetting rumble;
+    private ButtonSetting pushControlStyle;
+    private ButtonSetting perspective;
+    private ButtonSetting clamping;
+    private SliderSetting sensX;
+    private SliderSetting sensY;
+
     private Button controlSchemeButton;
     private Text controlSchemeButtonText;
     private Text controlSchemeDetails;
@@ -172,6 +180,12 @@ public class SettingsMenu : MonoBehaviour {
     private Text sensitivityYValueText;
 
     // Interface
+    private ButtonSetting renderblueLines;
+    private ButtonSetting forceUnits;
+    private ButtonSetting complexity;
+    private ButtonSetting forceLabels;
+    private ButtonSetting massLabels;
+
     private Text blueLinesButtonText;
     private Button blueLinesButton;
     private Text blueLinesDetails;
@@ -189,6 +203,18 @@ public class SettingsMenu : MonoBehaviour {
     private Text targetMassesDetails;
 
     // Allomancy
+    private ButtonSetting anchoredBoost;
+    private ButtonSetting normalMinimum;
+    private ButtonSetting normalMaximum;
+    private ButtonSetting normalEquality;
+    private ButtonSetting expvelSignage;
+    private ButtonSetting expvelRelativity;
+    private SliderSetting expvelConstant;
+    private ButtonSetting distanceRelationship;
+    private SliderSetting distanceConstant;
+    private SliderSetting allomanticConstant;
+    private SliderSetting maxRange;
+
     private Button closeButton;
     private Button anchoredBoostButton;
     private Text anchoredBoostButtonText;
@@ -230,15 +256,22 @@ public class SettingsMenu : MonoBehaviour {
     private Text maxRangeDetails;
 
     // World
+    private ButtonSetting gravity;
+    private ButtonSetting drag;
+
     private Button gravityButton;
     private Text gravityButtonText;
     private Button dragButton;
     private Text dragButtonText;
 
+    private Setting[] settings;
+
+    public static SettingsData settingsData;
     private Rigidbody playerRb;
 
-
-    void Start() {
+    void Awake() {
+        settings = GetComponentsInChildren<Setting>();
+        settingsData = new SettingsData();
         playerRb = GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody>();
 
         // Settings Header
@@ -464,6 +497,12 @@ public class SettingsMenu : MonoBehaviour {
         forceConstantValueText.text = forceConstantSlider.value.ToString();
         maxRangeValueText.text = maxRangeSlider.value.ToString();
 
+        // New stuff
+        settingsData.LoadSettings();
+        foreach (Setting setting in settings)
+            setting.Refresh();
+        
+
         // Now, set up the scene to start with only the Title Screen visible
         settingsHeader.gameObject.SetActive(false);
         glossaryHeader.gameObject.SetActive(false);
@@ -475,7 +514,6 @@ public class SettingsMenu : MonoBehaviour {
         eWVRelativityLabel.gameObject.SetActive(false);
         eWVSignageLabel.gameObject.SetActive(false);
         velocityConstantLabel.gameObject.SetActive(false);
-        CloseSettings();
     }
 
     public void OpenSettings() {
@@ -638,7 +676,7 @@ public class SettingsMenu : MonoBehaviour {
     }
 
     private void OnClickPerspectiveButton() {
-        if(CameraController.FirstPerson) {
+        if (CameraController.FirstPerson) {
             CameraController.FirstPerson = false;
             perspectiveButtonText.text = s_perspectiveThirdPerson;
         } else {
@@ -648,7 +686,7 @@ public class SettingsMenu : MonoBehaviour {
     }
 
     private void OnClickClampingButton() {
-        if(CameraController.ClampCamera) {
+        if (CameraController.ClampCamera) {
             CameraController.ClampCamera = false;
             clampingButtonText.text = s_clampingUnclamped;
             clampingDetails.text = s_clampingUnclampedDetails;
@@ -742,7 +780,7 @@ public class SettingsMenu : MonoBehaviour {
             interfaceTargetMasses = true;
         }
     }
-    
+
     // Allomancy
 
     private void OnClickAnchoredBoost() {
@@ -826,7 +864,7 @@ public class SettingsMenu : MonoBehaviour {
     }
 
     private void OnClickANFEquality() {
-        if(PhysicsController.normalForceEquality) {
+        if (PhysicsController.normalForceEquality) {
             aNFEqualityButtonText.text = s_aNFEqualityUnequal;
             aNFEqualityDetails.text = s_aNFEqualityUnequalDetails;
             PhysicsController.normalForceEquality = false;
