@@ -12,6 +12,7 @@ public class HUD : MonoBehaviour {
     private static Text coinCountText;
 
     private float deltaTimeFPS = 0.0f;
+    private static GameObject hudGameObject;
 
     public static string CoinCountText {
         set {
@@ -27,6 +28,7 @@ public class HUD : MonoBehaviour {
     }
 
     void Awake() {
+        hudGameObject = gameObject;
         coinCountText = GetComponentsInChildren<Text>()[0];
         BurnRateMeter = GetComponentInChildren<BurnRateMeter>();
         TargetOverlayController = GetComponentInChildren<TargetOverlayController>();
@@ -51,16 +53,16 @@ public class HUD : MonoBehaviour {
 		GUI.Label(rect, text, style);
 	}
 
-    public void EnableHUD() {
-        gameObject.SetActive(true);
+    public static void EnableHUD() {
+        hudGameObject.SetActive(true);
     }
 
-    public void DisableHUD() {
-        gameObject.SetActive(false);
+    public static void DisableHUD() {
+        hudGameObject.SetActive(false);
     }
 
     // Clears the values currently on the HUD
-    public void ResetHUD() {
+    public static void ResetHUD() {
         EnableHUD();
         if (BurnRateMeter) {
             BurnRateMeter.Clear();

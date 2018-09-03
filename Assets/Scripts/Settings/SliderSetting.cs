@@ -1,6 +1,7 @@
 ﻿using UnityEngine.UI;
 
 public class SliderSetting : Setting {
+    private float data;
 
     private Slider slider;
     private Text valueText;
@@ -9,23 +10,36 @@ public class SliderSetting : Setting {
     public float max = 100;
     public float defaultValue = 0;
 
-    protected override void Awake() {
-        base.Awake();
-        slider = GetComponentInChildren<Slider>();
-        valueText = GetComponentInChildren<Text>();
-        slider.onValueChanged.AddListener(OnValueChanged);
+    void Awake() {
 
+        slider = GetComponentInChildren<Slider>();
+        valueText = transform.GetChild(0).GetChild(1).GetComponent<Text>();
+        
         slider.minValue = min;
         slider.maxValue = max;
         slider.value = defaultValue;
-        hasDetails = false;
+
+        slider.onValueChanged.AddListener(OnValueChanged);
     }
 
-    public override void Refresh() {
-        base.Refresh();
+    /*
+     * Checks SettingsData for this slider's data
+     */
+    public override void RefreshData() {
+        data = SettingsMenu.settingsData.GetDataFloat(id);
+        slider.value = data;
+    }
+
+    /*
+     * Updates the text fields for this setting to reflect the setting's data
+     */
+    public override void RefreshText() {
+        valueText.text = ((int)data).ToString();
     }
 
     public void OnValueChanged(float value) {
-        valueText.text = ((int)value).ToString();
+        data = value;
+        SettingsMenu.settingsData.SetData(id, data);
+        RefreshText();
     }
 }

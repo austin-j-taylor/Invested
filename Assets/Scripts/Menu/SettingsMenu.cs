@@ -4,10 +4,19 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // Enumerations for settings
+// Gameplay
 public enum ForceStyle { ForceMagnitude, Percentage }
 public enum ControlScheme { MouseKeyboard45, MouseKeyboardQE, Gamepad }
+// Interface
 public enum ForceDisplayUnits { Newtons, Gs }
 public enum InterfaceComplexity { Simple, Sums }
+// Allomancy
+public enum ForceDistanceRelationship { InverseSquareLaw, Linear, Exponential }
+public enum AnchorBoostMode { AllomanticNormalForce, ExponentialWithVelocity, None }
+public enum NormalForceMinimum { Zero, ZeroAndNegate, Disabled }
+public enum NormalForceMaximum { AllomanticForce, Disabled }
+public enum ExponentialWithVelocitySignage { AllVelocityDecreasesForce, OnlyBackwardsDecreasesForce, BackwardsDecreasesAndForwardsIncreasesForce }
+public enum ExponentialWithVelocityRelativity { Relative, Absolute }
 
 
 public class SettingsMenu : MonoBehaviour {
@@ -96,7 +105,7 @@ public class SettingsMenu : MonoBehaviour {
     private const string s_alloConstantDetails = "All Pushes are proportional to this constant.";
     private const string s_maxRDetails = "Nearby metals can be detected within this range. Only impactful with \"Linear\" Force-Distance Relationship. ";
 
-
+    // Variables for settings - TBDeleted
     public static bool UsingMB45 { get; set; } = true;
     public static ControlScheme currentControlScheme = ControlScheme.MouseKeyboard45;
     public static ForceStyle currentForceStyle = ForceStyle.Percentage;
@@ -271,7 +280,7 @@ public class SettingsMenu : MonoBehaviour {
 
     void Awake() {
         settings = GetComponentsInChildren<Setting>();
-        settingsData = new SettingsData();
+        settingsData = gameObject.AddComponent<SettingsData>();
         playerRb = GameObject.FindGameObjectWithTag("Player").GetComponent<Rigidbody>();
 
         // Settings Header
@@ -497,11 +506,6 @@ public class SettingsMenu : MonoBehaviour {
         forceConstantValueText.text = forceConstantSlider.value.ToString();
         maxRangeValueText.text = maxRangeSlider.value.ToString();
 
-        // New stuff
-        settingsData.LoadSettings();
-        foreach (Setting setting in settings)
-            setting.Refresh();
-        
 
         // Now, set up the scene to start with only the Title Screen visible
         settingsHeader.gameObject.SetActive(false);
@@ -514,6 +518,15 @@ public class SettingsMenu : MonoBehaviour {
         eWVRelativityLabel.gameObject.SetActive(false);
         eWVSignageLabel.gameObject.SetActive(false);
         velocityConstantLabel.gameObject.SetActive(false);
+    }
+
+    private void Start() {
+        // Refresh all settings after they've been loaded
+        //settingsData.LoadSettings();
+        foreach (Setting setting in settings) {
+            setting.RefreshData();
+            setting.RefreshText();
+        }
     }
 
     public void OpenSettings() {
@@ -590,6 +603,7 @@ public class SettingsMenu : MonoBehaviour {
     }
 
     public void BackSettings() {
+
         if (IsGlossaryOpen)
             CloseGlossary();
         else if (IsGameplayOpen)
@@ -600,8 +614,11 @@ public class SettingsMenu : MonoBehaviour {
             CloseAllomancy();
         else if (IsWorldOpen)
             CloseWorld();
-        else
+        else {
+            // And save settings
+            settingsData.SaveSettings();
             CloseSettings();
+        }
     }
 
     // On Button Click methods

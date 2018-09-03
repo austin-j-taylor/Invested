@@ -4,7 +4,7 @@ using System.IO;
  * Stores the variables determining each setting that are read from and written to the JSON configuration file.
  */
 [System.Serializable]
-public class SettingsData : ScriptableObject {
+public class SettingsData : MonoBehaviour {
 
     private const string configFileName = "config.json";
     
@@ -12,12 +12,12 @@ public class SettingsData : ScriptableObject {
     public int rumble;
     public int pushControlStyle;
     public float allomanticConstant;
-
-    public SettingsData() {
+    
+    private void Awake() {
         LoadSettings();
     }
 
-    public void LoadSettings() {
+    private void LoadSettings() {
         StreamReader reader = new StreamReader(configFileName, true);
         string jSONText = reader.ReadToEnd();
         reader.Close();
@@ -26,8 +26,11 @@ public class SettingsData : ScriptableObject {
     }
 
     public void SaveSettings() {
+        string jSONText = JsonUtility.ToJson(this, true);
 
-
+        StreamWriter writer = new StreamWriter(configFileName, false);
+        writer.Write(jSONText);
+        writer.Close();
     }
 
     /*
@@ -102,4 +105,10 @@ public class SettingsData : ScriptableObject {
         }
     }
 
+    ///*
+    // * Just in case the player quits with the settings menu still open
+    // */
+    //private void OnApplicationQuit() {
+    //    SaveSettings();
+    //}
 }

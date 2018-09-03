@@ -28,11 +28,15 @@ public class MainMenu : MonoBehaviour {
         quitButton.onClick.AddListener(OnClickedQuit);
 
         // Set up the Player, Canvas, and EventSystem to persist between scenes
-        DontDestroyOnLoad(GameObject.FindGameObjectWithTag("Player"));
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        DontDestroyOnLoad(player);
         DontDestroyOnLoad(transform.parent.parent.gameObject);
         DontDestroyOnLoad(GameObject.FindGameObjectWithTag("GameController"));
 
+        player.SetActive(false);
         settingsMenu.CloseSettings();
+        sceneSelectMenu.CloseSceneSelect();
+        HUD.DisableHUD();
     }
 
     private void Update() {

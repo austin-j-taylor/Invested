@@ -28,14 +28,12 @@ public class SceneSelectMenu : MonoBehaviour {
     private Button backButton;
 
     //private MainMenu mainMenu;
-    private static HUD hud;
-    private static GameObject player;
+    private static Player player;
 
     void Start() {
         titleScreenBG = transform.parent.GetComponent<Image>();
         //mainMenu = transform.parent.GetComponentInChildren<MainMenu>();
-        hud = transform.parent.parent.GetComponentInChildren<HUD>();
-        player = GameObject.FindGameObjectWithTag("Player");
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
 
         Button[] buttons = GetComponentsInChildren<Button>();
         tutorialButton = buttons[0];
@@ -52,10 +50,6 @@ public class SceneSelectMenu : MonoBehaviour {
 
         // Only close the main menu after the scene loads to prevent jarring camera transitions
         SceneManager.sceneLoaded += ExitMainMenu;
-
-        player.SetActive(false);
-        gameObject.SetActive(false);
-        hud.DisableHUD();
     }
 
     public void OpenSceneSelect() {
@@ -81,8 +75,8 @@ public class SceneSelectMenu : MonoBehaviour {
             player.gameObject.SetActive(true);
             CameraController.LockCamera();
         }
-        hud.ResetHUD();
-        player.GetComponent<Player>().ReloadPlayerIntoNewScene(scene);
+        HUD.ResetHUD();
+        player.ReloadPlayerIntoNewScene(scene);
 
         SceneManager.LoadScene(scene);
     }
