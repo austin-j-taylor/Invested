@@ -9,8 +9,8 @@ using XInputDotNetPure;
 public class GamepadController : MonoBehaviour {
     
     private static bool updateRumble = false;
-    private static bool usingGamepad = false;
-    private static bool usingRumble = true;
+    //private static bool usingGamepad = false;
+    //private static bool usingRumble = true;
     private static bool shaking = false;
     private static float leftRumble = 0;
     private static float rightRumble = 0;
@@ -24,19 +24,15 @@ public class GamepadController : MonoBehaviour {
 
     public static bool UsingGamepad {
         get {
-            return usingGamepad;
-        }
-        set {
-            usingGamepad = value;
-            updateRumble = true;
+            return SettingsMenu.settingsData.controlScheme == 2;
         }
     }
     public static bool UsingRumble {
         get {
-            return usingRumble;
+            return SettingsMenu.settingsData.gamepadRumble == 1;
         }
         set {
-            usingRumble = value;
+            SettingsMenu.settingsData.gamepadRumble = value ? 1 : 0;
             updateRumble = true;
         }
     }
@@ -76,7 +72,7 @@ public class GamepadController : MonoBehaviour {
     }
 
     public static void Shake(float left, float right, float time = .1f) {
-        if (usingGamepad && usingRumble)
+        if (SettingsMenu.settingsData.controlScheme == 2 && SettingsMenu.settingsData.gamepadRumble == 1)
             rumble.Shake(left, right, time);
     }
 
@@ -84,11 +80,13 @@ public class GamepadController : MonoBehaviour {
         
         // Update is called once per frame
         void Update() {
-            if (usingGamepad) {
-                if (usingRumble && updateRumble && !shaking) {
-                    GamePad.SetVibration(0, leftRumble, rightRumble);
-                    updateRumble = false;
-                } else if (updateRumble && !usingRumble) {
+            if (SettingsMenu.settingsData.controlScheme == 2) {
+                if(SettingsMenu.settingsData.gamepadRumble == 1) {
+                    if(updateRumble && !shaking) {
+                        GamePad.SetVibration(0, leftRumble, rightRumble);
+                        updateRumble = false;
+                    }
+                } else if(updateRumble) {
                     GamePad.SetVibration(0, 0, 0);
                 }
             }

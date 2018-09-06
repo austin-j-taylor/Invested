@@ -71,7 +71,7 @@ public class BurnRateMeter : MonoBehaviour {
     }
 
     private void SetSumForceText(Vector3 allomanticForce, Vector3 normalForce) {
-        if (SettingsMenu.interfaceComplexity == InterfaceComplexity.Sums) {
+        if (SettingsMenu.settingsData.forceComplexity == 1) {
             float allomanticMagnitude = allomanticForce.magnitude;
             float normalMagnitude = normalForce.magnitude;
             sumForceText.text = HUD.AllomanticSumString(allomanticForce, normalForce, playerIronSteel.Mass);
@@ -83,7 +83,7 @@ public class BurnRateMeter : MonoBehaviour {
     }
 
     public void InterfaceRefresh() {
-        if (SettingsMenu.interfaceComplexity == InterfaceComplexity.Simple) {
+        if (SettingsMenu.settingsData.forceComplexity == 0) {
             sumForceText.text = "";
         }
     }

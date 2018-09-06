@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 /*
@@ -8,6 +9,7 @@ using UnityEngine.UI;
  */
 public class ButtonSetting : Setting {
     private int data;
+    public UnityEvent extraCall;
 
     protected bool hasChildren;
     protected Setting[] children;
@@ -118,6 +120,7 @@ public class ButtonSetting : Setting {
         if (data >= optionsCount) {
             data = 0;
         }
+        extraCall.Invoke();
         SettingsMenu.settingsData.SetData(id, data);
         RefreshText();
     }

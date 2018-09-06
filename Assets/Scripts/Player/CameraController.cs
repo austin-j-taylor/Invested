@@ -20,13 +20,13 @@ public class CameraController : MonoBehaviour {
     private static Transform player;
     private static Transform lookAtTarget;
 
-    private static bool firstPerson = false;
+    //private static bool firstPerson = false;
     public static bool FirstPerson {
         get {
-            return firstPerson;
+            return SettingsMenu.settingsData.cameraFirstPerson == 1;
         }
         set {
-            firstPerson = value;
+            SettingsMenu.settingsData.cameraFirstPerson = value ? 1 : 0;
             if (value) {
                 thirdPersonCamera.gameObject.SetActive(false);
                 firstPersonCamera.gameObject.SetActive(true);
@@ -42,19 +42,19 @@ public class CameraController : MonoBehaviour {
             }
         }
     }
-    private static bool clampCamera = true;
+    //private static bool clampCamera = true;
     public static bool ClampCamera {
         get {
-            return clampCamera;
+            return SettingsMenu.settingsData.cameraClamping == 1;
         }
         set {
-            clampCamera = value;
+            SettingsMenu.settingsData.cameraClamping = value ? 1 : 0;
             if(value)
                 ClampY();
         }
     }
-    public static float SensitivityX { get; set; } = 2.5f;
-    public static float SensitivityY { get; set; } = 2.5f;
+    //public static float SensitivityX { get; set; } = 2.5f;
+    //public static float SensitivityY { get; set; } = 2.5f;
 
     public static bool CameraIsLocked { get; private set; }
 
@@ -75,11 +75,11 @@ public class CameraController : MonoBehaviour {
     private void LateUpdate() {
         if (CameraIsLocked) {
             if (GamepadController.UsingGamepad) {
-                currentX += Input.GetAxis("HorizontalRight") * SensitivityX;
-                currentY -= Input.GetAxis("VerticalRight") * SensitivityY;
+                currentX += Input.GetAxis("HorizontalRight") * SettingsMenu.settingsData.gamepadSensitivityX;
+                currentY -= Input.GetAxis("VerticalRight") * SettingsMenu.settingsData.gamepadSensitivityY;
             } else {
-                currentX += Input.GetAxis("Mouse X") * SensitivityX;
-                currentY -= Input.GetAxis("Mouse Y") * SensitivityY;
+                currentX += Input.GetAxis("Mouse X") * SettingsMenu.settingsData.mouseSensitivityX;
+                currentY -= Input.GetAxis("Mouse Y") * SettingsMenu.settingsData.mouseSensitivityY;
             }
             if (ClampCamera)
                 ClampY();
@@ -102,7 +102,7 @@ public class CameraController : MonoBehaviour {
         Quaternion verticalRotation = Quaternion.Euler(currentY, 0, 0);
         ActiveCamera.transform.localRotation = verticalRotation;
 
-        if(!firstPerson) {
+        if(SettingsMenu.settingsData.cameraFirstPerson == 0) {
             Vector3 wantedPosition = verticalRotation * distancefromPlayer; // local
             RaycastHit hit;
             if (Physics.Raycast(lookAtTarget.position, horizontalRotation * wantedPosition, out hit, wallDistanceCheck, GameManager.IgnorePlayerLayer)) {

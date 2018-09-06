@@ -73,13 +73,10 @@ public class HUD : MonoBehaviour {
 
     // Returns a string reading a single Force in Newtons or G's
     public static string ForceString(float force, float mass) {
-        switch (SettingsMenu.displayUnits) {
-            case ForceDisplayUnits.Newtons: {
-                    return RoundToTwoSigFigs(force).ToString() + "N";
-                }
-            default: {
-                    return System.Math.Round(force / mass / 9.81, 2).ToString() + "G's";
-                }
+        if(SettingsMenu.settingsData.forceUnits == 1) {
+            return RoundToTwoSigFigs(force).ToString() + "N";
+        } else {
+            return System.Math.Round(force / mass / 9.81, 2).ToString() + "G's";
         }
     }
 
@@ -94,15 +91,12 @@ public class HUD : MonoBehaviour {
         string plusSign;
         plusSign = DecideSignColor(allomanticForce, normalForce, invert);
 
-        switch (SettingsMenu.displayUnits) {
-            case ForceDisplayUnits.Newtons: {
-                    return ((int)allomanticForce.magnitude).ToString() + " " + plusSign + " " + ((int)normalForce.magnitude).ToString() + "N";
-                }
-            default: {
-                    return System.Math.Round(allomanticForce.magnitude / mass / 9.81, 2).ToString()
-                        + " " + plusSign + " " +
-                        System.Math.Round(normalForce.magnitude / mass / 9.81, 2).ToString() + "G's";
-                }
+        if (SettingsMenu.settingsData.forceUnits == 1) {
+            return ((int)allomanticForce.magnitude).ToString() + " " + plusSign + " " + ((int)normalForce.magnitude).ToString() + "N";
+        } else {
+            return System.Math.Round(allomanticForce.magnitude / mass / 9.81, 2).ToString()
+                + " " + plusSign + " " +
+                System.Math.Round(normalForce.magnitude / mass / 9.81, 2).ToString() + "G's";
         }
     }
     // Rounds an integer to two sig figs

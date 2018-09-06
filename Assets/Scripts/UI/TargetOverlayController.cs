@@ -55,9 +55,9 @@ public class TargetOverlayController : MonoBehaviour {
 
     // Update forces, positions on screen
     private void SoftRefresh() {
-        if (SettingsMenu.interfaceTargetForces) {
+        if (SettingsMenu.settingsData.hudForces == 1) {
             // If should display Sums of forces
-            if (SettingsMenu.interfaceComplexity == InterfaceComplexity.Sums) {
+            if (SettingsMenu.settingsData.forceComplexity == 1) {
 
                 for (int i = 0; i < playerIronSteel.PullCount; i++) {
                     Magnetic target = pullTargets[i];
@@ -133,7 +133,7 @@ public class TargetOverlayController : MonoBehaviour {
             }
         }
         // If the target is highlighted and on screen, display mass
-        if (SettingsMenu.interfaceTargetMasses) {
+        if (SettingsMenu.settingsData.hudMasses == 1) {
             if (playerIronSteel.HasHighlightedTarget) {
                 Vector3 heightToTop = Vector3.zero;
                 heightToTop.y = playerIronSteel.HighlightedTarget.ColliderBody.bounds.size.y / 2f;
@@ -161,10 +161,10 @@ public class TargetOverlayController : MonoBehaviour {
     }
 
     public void InterfaceRefresh() {
-        if (!SettingsMenu.interfaceTargetMasses) {
+        if (SettingsMenu.settingsData.hudMasses == 0) {
             highlightedTargetMass.text = "";
         }
-        if (SettingsMenu.interfaceComplexity == InterfaceComplexity.Simple && SettingsMenu.interfaceTargetForces) {
+        if (SettingsMenu.settingsData.forceComplexity == 0 && SettingsMenu.settingsData.hudForces == 1) {
             for (int i = 0; i < playerIronSteel.PullCount; i++) {
                 pullTargetsSumForce[i].text = "";
             }
@@ -172,7 +172,7 @@ public class TargetOverlayController : MonoBehaviour {
                 pushTargetsSumForce[i].text = "";
             }
         } else {
-            if (!SettingsMenu.interfaceTargetForces) {
+            if (SettingsMenu.settingsData.hudForces == 0) {
                 for (int i = 0; i < playerIronSteel.PullCount; i++) {
                     pullTargetsSumForce[i].text = "";
                     pullTargetsActualForce[i].text = "";

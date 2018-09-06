@@ -72,7 +72,7 @@ public static class Keybinds {
     public static bool SelectDown() {
         if (GamepadController.UsingGamepad)
             return Input.GetButtonDown("RightBumper");
-        else if (SettingsMenu.UsingMB45)
+        else if (SettingsMenu.settingsData.controlScheme == 0)
             return Input.GetButtonDown("Mouse4");
         else
             return Input.GetKeyDown(KeyCode.E);
@@ -80,7 +80,7 @@ public static class Keybinds {
     public static bool Select() {
         if (GamepadController.UsingGamepad)
             return Input.GetButton("RightBumper");
-        else if (SettingsMenu.UsingMB45)
+        else if (SettingsMenu.settingsData.controlScheme == 0)
             return Input.GetButton("Mouse4");
         else
             return Input.GetKey(KeyCode.E);
@@ -89,7 +89,7 @@ public static class Keybinds {
     public static bool SelectAlternate() {
         if (GamepadController.UsingGamepad)
             return Input.GetButton("LeftBumper");
-        else if (SettingsMenu.UsingMB45)
+        else if (SettingsMenu.settingsData.controlScheme == 0)
             return Input.GetButton("Mouse3");
         else
             return Input.GetKey(KeyCode.Q);
@@ -97,7 +97,7 @@ public static class Keybinds {
     public static bool SelectAlternateDown() {
         if (GamepadController.UsingGamepad)
             return Input.GetButtonDown("LeftBumper");
-        else if (SettingsMenu.UsingMB45)
+        else if (SettingsMenu.settingsData.controlScheme == 0)
             return Input.GetButtonDown("Mouse3");
         else
             return Input.GetKeyDown(KeyCode.Q);
