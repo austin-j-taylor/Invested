@@ -1,7 +1,11 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-
+/*
+ * Represents a setting that is controlled by a button.
+ * In the inspector, assign the text that appears with each setting, both on the button and
+ *      in the details field.
+ */
 public class ButtonSetting : Setting {
     private int data;
 
@@ -61,6 +65,18 @@ public class ButtonSetting : Setting {
         }
         hasChildren = children != null;
 
+        // Assign font and button size
+        RectTransform rectButton = button.GetComponent<RectTransform>();
+        RectTransform rectDetails = detailsText.GetComponent<RectTransform>();
+        Vector2 right = rectButton.offsetMax;
+        Vector2 left = rectDetails.offsetMax;
+        left.x = 420 - settingSize;
+        right.x = settingSize;
+        rectButton.offsetMax = right;
+        rectDetails.offsetMax = left;
+
+        detailsText.fontSize = detailsFontSize;
+
         button.onClick.AddListener(OnClick);
     }
 
@@ -104,5 +120,9 @@ public class ButtonSetting : Setting {
         }
         SettingsMenu.settingsData.SetData(id, data);
         RefreshText();
+    }
+
+    protected virtual void SetFontSize() {
+
     }
 }

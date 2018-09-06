@@ -8,11 +8,40 @@ public class SettingsData : MonoBehaviour {
 
     private const string configFileName = "config.json";
     
+    // Gameplay
     public int controlScheme;
-    public int rumble;
+    public int gamepadRumble;
     public int pushControlStyle;
+    public int cameraPerspective;
+    public int cameraClamping;
+    public float mouseSensitivityX;
+    public float mouseSensitivityY;
+    public float gamepadSensitivityX;
+    public float gamepadSensitivityY;
+    // Interface
+    public int renderblueLines;
+    public int forceUnits;
+    public int forceComplexity;
+    public int hudforces;
+    public int hudMasses;
+    // Allomancy
+    public int anchoredBoost;
+    public int normalForceMin;
+    public int normalForceMax;
+    public int normalForceEquality;
+    public int exponentialWithVelocitySignage;
+    public int exponentialWithVelocityRelativity;
+    public float exponentialConstant;
+    public int forceDistanceRelationship;
+    public float distanceConstant;
     public float allomanticConstant;
-    
+    public float maxPushRange;
+    // World
+    public int playerGravity;
+    public int playerAirResistance;
+
+
+
     private void Awake() {
         LoadSettings();
     }
@@ -49,7 +78,7 @@ public class SettingsData : MonoBehaviour {
                     return true;
                 }
             case "rumble": {
-                    rumble = data;
+                    gamepadRumble = data;
                     return true;
                 }
             case "pushControlStyle": {
@@ -81,7 +110,7 @@ public class SettingsData : MonoBehaviour {
                     return controlScheme;
                 }
             case "rumble": {
-                    return rumble;
+                    return gamepadRumble;
                 }
             case "pushControlStyle": {
                     return pushControlStyle;
