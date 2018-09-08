@@ -17,27 +17,26 @@ public class CameraController : MonoBehaviour {
 
     private static Camera thirdPersonCamera;
     private static Camera firstPersonCamera;
-    private static Transform player;
+    private static Transform playerBody;
     private static Transform lookAtTarget;
-    
-    public static bool CameraIsLocked { get; private set; }
 
     private static float currentX = 0;
     private static float currentY = 0;
+    private static bool cameraIsLocked;
     
     void Awake() {
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>().Find("Body");
-        lookAtTarget = player.Find("CameraLookAtTarget").GetComponent<Transform>();
+        playerBody = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>().Find("Body");
+        lookAtTarget = playerBody.Find("CameraLookAtTarget").GetComponent<Transform>();
         thirdPersonCamera = lookAtTarget.Find("ThirdPersonCamera").GetComponent<Camera>();
-        firstPersonCamera = player.Find("FirstPersonCamera").GetComponent<Camera>();
+        firstPersonCamera = playerBody.Find("FirstPersonCamera").GetComponent<Camera>();
         ActiveCamera = thirdPersonCamera;
         Clear();
         UnlockCamera();
     }
 
     private void LateUpdate() {
-        if (CameraIsLocked) {
-            if (GamepadController.UsingGamepad) {
+        if (cameraIsLocked) {
+            if (SettingsMenu.settingsData.controlScheme == 2) {
                 currentX += Input.GetAxis("HorizontalRight") * SettingsMenu.settingsData.gamepadSensitivityX;
                 currentY -= Input.GetAxis("VerticalRight") * SettingsMenu.settingsData.gamepadSensitivityY;
             } else {
@@ -52,15 +51,15 @@ public class CameraController : MonoBehaviour {
     }
 
     public static void Clear() {
-        currentY = player.parent.localEulerAngles.x + 30; // Tilted downward a little
-        currentX = player.parent.localEulerAngles.y;
+        currentY = playerBody.parent.localEulerAngles.x + 30; // Tilted downward a little
+        currentX = playerBody.parent.localEulerAngles.y;
         RefreshCamera();
     }
 
     private static void RefreshCamera() {
-        // Horizontal rotation (rotates player body left and right)
+        // Horizontal rotation (rotates playerBody body left and right)
         Quaternion horizontalRotation = Quaternion.Euler(0, currentX, 0);
-        player.parent.localRotation = horizontalRotation;
+        playerBody.parent.localRotation = horizontalRotation;
         // Vertical rotation (rotates camera up and down body)
         Quaternion verticalRotation = Quaternion.Euler(currentY, 0, 0);
         ActiveCamera.transform.localRotation = verticalRotation;
@@ -78,13 +77,13 @@ public class CameraController : MonoBehaviour {
 
     public static void LockCamera() {
         Cursor.lockState = CursorLockMode.Locked;
-        CameraIsLocked = true;
+        cameraIsLocked = true;
         Cursor.visible = false;
     }
 
     public static void UnlockCamera() {
         Cursor.lockState = CursorLockMode.None;
-        CameraIsLocked = false;
+        cameraIsLocked = false;
         Cursor.visible = true;
     }
 

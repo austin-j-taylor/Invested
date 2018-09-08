@@ -27,13 +27,8 @@ public class SceneSelectMenu : MonoBehaviour {
     private Button experimentalButton;
     private Button backButton;
 
-    //private MainMenu mainMenu;
-    private static Player player;
-
     void Start() {
         titleScreenBG = transform.parent.GetComponent<Image>();
-        //mainMenu = transform.parent.GetComponentInChildren<MainMenu>();
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
 
         Button[] buttons = GetComponentsInChildren<Button>();
         tutorialButton = buttons[0];
@@ -69,14 +64,14 @@ public class SceneSelectMenu : MonoBehaviour {
 
     public void LoadScene(int scene) {
         if (scene == sceneTitleScreen) {
-            player.gameObject.SetActive(false);
+            Player.PlayerInstance.gameObject.SetActive(false);
             CameraController.UnlockCamera();
         } else {
-            player.gameObject.SetActive(true);
+            Player.PlayerInstance.gameObject.SetActive(true);
             CameraController.LockCamera();
         }
         HUD.ResetHUD();
-        player.ReloadPlayerIntoNewScene(scene);
+        Player.PlayerInstance.ReloadPlayerIntoNewScene(scene);
 
         SceneManager.LoadScene(scene);
     }

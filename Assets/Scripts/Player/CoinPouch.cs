@@ -7,14 +7,12 @@ public class CoinPouch : MonoBehaviour {
 
     [SerializeField]
     private Coin coinPrefab;
-
-    private AllomanticIronSteel parentIronSteel;
+    
     private Rigidbody parentRigidbody;
     public int Count { get; private set; }
 
 	// Use this for initialization
 	void Start () {
-        parentIronSteel = GetComponentInParent<AllomanticIronSteel>();
         parentRigidbody = GetComponentInParent<Rigidbody>();
 
         Count = 50;
@@ -22,8 +20,8 @@ public class CoinPouch : MonoBehaviour {
     }
 
     public void AddCoin(Coin coin) {
-        if (coin.Allomancer || parentIronSteel.IsTarget(coin))
-            parentIronSteel.RemoveTarget(coin, true, true);
+        if (coin.Allomancer == Player.PlayerIronSteel)
+            Player.PlayerIronSteel.RemoveTarget(coin, true, true);
         Destroy(coin.gameObject);
         Count++;
         UpdateUI();

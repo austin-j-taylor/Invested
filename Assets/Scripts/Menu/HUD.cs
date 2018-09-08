@@ -38,19 +38,24 @@ public class HUD : MonoBehaviour {
         deltaTimeFPS += (Time.unscaledDeltaTime - deltaTimeFPS) * 0.1f;
 	}
 
-	void OnGUI()
+    /*
+     * FPS Counter
+     * Modified from http://wiki.unity3d.com/index.php/FramesPerSecond
+     */
+    void OnGUI()
 	{
-		int w = Screen.width, h = Screen.height;
- 
-		GUIStyle style = new GUIStyle();
- 
-		Rect rect = new Rect(0, 0, w, h * 2 / 100);
-		style.alignment = TextAnchor.UpperLeft;
-		style.fontSize = h * 2 / 100;
-		style.normal.textColor = new Color (0.75f, 0.75f, 0.75f, 1.0f);
-		float fps = 1.0f / deltaTimeFPS;
-		string text = string.Format("{0:0.} fps", fps);
-		GUI.Label(rect, text, style);
+        if (SettingsMenu.settingsData.fpsCounter == 1) {
+            int w = Screen.width, h = Screen.height;
+
+            GUIStyle style = new GUIStyle();
+            
+            style.alignment = TextAnchor.UpperLeft;
+            style.fontSize = h * 2 / 100;
+            style.normal.textColor = new Color(0.75f, 0.75f, 0.75f, 1.0f);
+            float fps = 1.0f / deltaTimeFPS;
+            string text = string.Format("{0:0.} fps", fps);
+            GUI.Label(new Rect(0, 0, w, h * 2 / 100), text, style);
+        }
 	}
 
     public static void EnableHUD() {
@@ -69,12 +74,6 @@ public class HUD : MonoBehaviour {
             TargetOverlayController.Clear();
             coinCountText.text = "50";
         }
-    }
-
-    // Clear unwanted fields after changing settings
-    public void InterfaceRefresh() {
-        BurnRateMeter.InterfaceRefresh();
-        TargetOverlayController.InterfaceRefresh();
     }
 
     // Returns a string reading a single Force in Newtons or G's
@@ -122,5 +121,11 @@ public class HUD : MonoBehaviour {
         } else {
             return "<color=#ff0000>-</color>";
         }
+    }
+    
+    // Clear unwanted fields after changing settings
+    public void InterfaceRefresh() {
+        BurnRateMeter.InterfaceRefresh();
+        TargetOverlayController.InterfaceRefresh();
     }
 }

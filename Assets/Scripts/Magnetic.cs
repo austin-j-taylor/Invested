@@ -100,7 +100,6 @@ public class Magnetic : MonoBehaviour {
     }
     public virtual bool IsPerfectlyAnchored { // Only matters for Coins, which have so low masses that Unity thinks they have high velocities when pushed, even when anchored
         get {
-            //return Mathf.Abs(LastPosition.magnitude - transform.position.magnitude) < equalMagnitudeConstant;
             return false;
         }
     }
@@ -150,11 +149,6 @@ public class Magnetic : MonoBehaviour {
         RemoveTargetGlow();
     }
 
-    //public virtual void StartBeingPullPushed(bool pull) {
-    //}
-    public virtual void StopBeingPullPushed() {
-    }
-
     private void OnDestroy() {
         Destroy(blueLine);
         GameManager.MagneticsInScene.Remove(this);
@@ -166,6 +160,7 @@ public class Magnetic : MonoBehaviour {
             Rb.AddForce(netForce, ForceMode.Force);
         }
     }
+    public virtual void StopBeingPullPushed() { }
 
     public void AddTargetGlow() {
         highlightedTargetOutline.Enable();
@@ -188,93 +183,4 @@ public class Magnetic : MonoBehaviour {
     public void DisableBlueLine() {
         blueLine.GetComponent<MeshRenderer>().enabled = false;
     }
-    //public void AddTargetGlow() {
-    //    Renderer targetRenderer;
-    //    Material[] mats;
-    //    Material[] temp;
-    //    // add glowing of new pullTarget
-    //    targetRenderer = GetComponent<Renderer>();
-    //    temp = targetRenderer.materials;
-    //    mats = new Material[temp.Length + 1];
-    //    for (int i = 0; i < temp.Length; i++) {
-    //        mats[i] = temp[i];
-    //    }
-
-    //    mats[mats.Length - 1] = GameManager.Instance.TargetHighlightMaterial;
-    //    targetRenderer.materials = mats;
-    //    IsHighlighted = true;
-    //}
-
-    //public void RemoveTargetGlow() {
-    //    if (IsHighlighted) {
-    //        Renderer targetRenderer;
-    //        Material[] mats;
-    //        Material[] temp;
-
-    //        // remove glowing of old target
-    //        targetRenderer = GetComponent<Renderer>();
-    //        temp = targetRenderer.materials;
-    //        if (temp.Length > 1) {
-    //            mats = new Material[temp.Length - 1];
-    //            mats[0] = temp[0];
-    //            for (int i = 1; i < mats.Length; i++) {
-    //                if (temp[i].name == "targetHighlightMaterial (Instance)") {
-    //                    for (int j = i; j < mats.Length; j++) {
-    //                        mats[j] = temp[j + 1];
-    //                    }
-    //                    break;
-    //                } else {
-    //                    mats[i] = temp[i];
-    //                }
-    //            }
-    //            targetRenderer.materials = mats;
-    //            IsHighlighted = false;
-    //            HUD.TargetOverlayController.RemoveHighlightedTargetLabel();
-
-    //        }
-    //    }
-    //}
-
-    //private void OnCollisionStay(Collision collision) {
-    //    if (allomancer != null) {
-    //        Vector3 collisionWithoutGravity = (collision.impulse / Time.fixedDeltaTime + Physics.gravity * mass);
-    //        Vector3 forceOnPlayer = collisionWithoutGravity;// / mass * allomancer.Mass;
-    //        Debug.Log("forceOnPlayer: " + forceOnPlayer + " raw: " + collision.impulse / Time.fixedDeltaTime + " Gravity: " + Physics.gravity * mass + " delta time: " + Time.fixedDeltaTime);
-    //        forceFromCollision = forceOnPlayer;
-    //    }
-    //}
-    //private void OnCollisionExit(Collision collision) {
-    //    forceFromCollision = Vector3.zero;
-    //}
-    //public Vector3 forceFromCollision = Vector3.zero;
-
-    //    private void OnCollisionStay(Collision collision) {
-    //        frameCounter++;
-    //        if (Allomancer != null) {
-    //            if (frameCounter % 2 == 0) {
-    //                Vector3 collisionWithoutGravity = (collision.impulse / Time.fixedDeltaTime + Physics.gravity * mass);
-    //                Vector3 forceOnPlayer = collisionWithoutGravity;// / mass * allomancer.Mass;
-    //                Vector3 raw = collision.impulse / Time.fixedDeltaTime;
-    //                Debug.Log("EVE forceOnPlayer: " + forceOnPlayer + " raw: " + collision.impulse / Time.fixedDeltaTime + " Gravity: " + Physics.gravity * mass + " delta time: " + Time.fixedDeltaTime);
-
-    //                forceFromCollisionTotal = collisionWithoutGravity + forceFromCollisionOdd;
-
-    //                Debug.Log("Total Force: " + forceFromCollisionTotal);
-    //            } else {
-    //                Vector3 collisionWithoutGravity = (collision.impulse / Time.fixedDeltaTime + Physics.gravity * mass);
-    //                Vector3 forceOnPlayer = collisionWithoutGravity;// / mass * allomancer.Mass;
-    //                Vector3 raw = collision.impulse / Time.fixedDeltaTime;
-    //                Debug.Log("ODD forceOnPlayer: " + forceOnPlayer + " raw: " + collision.impulse / Time.fixedDeltaTime + " Gravity: " + Physics.gravity * mass + " delta time: " + Time.fixedDeltaTime);
-    //                forceFromCollisionOdd = collisionWithoutGravity;
-    //            }
-    //        }
-    //    }
-
-    //    private void OnCollisionExit(Collision collision) {
-    //    forceFromCollisionOdd = Vector3.zero;
-    //    forceFromCollisionTotal = Vector3.zero;
-    //}
-    //    public Vector3 forceFromCollisionOdd = Vector3.zero;
-    //    public Vector3 forceFromCollisionTotal = Vector3.zero;
-    //    private int frameCounter = 0;
 }

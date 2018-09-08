@@ -10,7 +10,8 @@ public class Player : MonoBehaviour {
     //private Animator animator;
     private PlayerMovementController movementController;
 
-    public AllomanticIronSteel IronSteel { get; private set; }
+    public static AllomanticIronSteel PlayerIronSteel { get; private set; }
+    public static Player PlayerInstance { get; private set; }
     public Hand CoinHand { get; private set; }
 
     private float lastCoinThrowTime = 0;
@@ -19,7 +20,8 @@ public class Player : MonoBehaviour {
         movementController = GetComponent<PlayerMovementController>();
 
         //animator = GetComponent<Animator>();
-        IronSteel = GetComponent<AllomanticIronSteel>();
+        PlayerIronSteel = GetComponent<AllomanticIronSteel>();
+        PlayerInstance = this;
         CoinHand = GetComponentInChildren<Hand>();
         SceneManager.sceneLoaded += ResetPosition;
     }
@@ -37,22 +39,22 @@ public class Player : MonoBehaviour {
             //if (Keybinds.Jump()) {
             //    IronSteel.AddTarget(CoinHand.SpawnCoin(transform.position + feet), false);
             //} else { // If only pressing the COIN button, draw a coin into hand
-            IronSteel.AddTarget(CoinHand.WithdrawCoinToHand(), false);
+            PlayerIronSteel.AddTarget(CoinHand.WithdrawCoinToHand(), false);
             //}
         }
 	}
 
-    // Reset certain values as the player enters a new scene
+    // Reset certain values before the player enters a new scene
     public void ReloadPlayerIntoNewScene(int scene) {
         movementController.Clear();
-        IronSteel.Clear();
+        PlayerIronSteel.Clear();
         CoinHand.Clear();
     }
 
     // Reset position to SpawnPosition at beginning of each scene
     private void ResetPosition(Scene scene, LoadSceneMode mode) {
         GameObject spawn = GameObject.FindGameObjectWithTag("PlayerSpawn");
-        if (spawn) {
+        if (spawn && CameraController.ActiveCamera) { // if CameraController.Awake has been called
             transform.position = spawn.transform.position;
             transform.rotation = spawn.transform.rotation;
             CameraController.Clear();

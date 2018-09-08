@@ -167,7 +167,15 @@ public class AllomanticIronSteel : MonoBehaviour {
                 }
 
                 // Check scrollwheel for changing the max number of targets and burn rate
-                if (!GamepadController.UsingGamepad) {
+                if(SettingsMenu.settingsData.controlScheme == 2) {
+                    float scrollValue = Keybinds.ScrollWheelAxis();
+                    if (scrollValue > 0) {
+                        IncrementNumberOfTargets();
+                    }
+                    if (scrollValue < 0) {
+                        DecrementNumberOfTargets();
+                    }
+                } else {
                     if (Keybinds.ScrollWheelButton()) {
                         if (Keybinds.ScrollWheelAxis() != 0) {
                             if (Keybinds.ScrollWheelAxis() > 0) {
@@ -182,14 +190,6 @@ public class AllomanticIronSteel : MonoBehaviour {
                         else
                             ChangeBurnRateTarget(Keybinds.ScrollWheelAxis());
                     }
-                } else {
-                    float scrollValue = Keybinds.ScrollWheelAxis();
-                    if (scrollValue > 0) {
-                        IncrementNumberOfTargets();
-                    }
-                    if (scrollValue < 0) {
-                        DecrementNumberOfTargets();
-                    }
                 }
                 // If controlling push Magnitude, assign the burn rate to be the % of the max net force on player
                 if (SettingsMenu.settingsData.pushControlStyle == 1) {
@@ -197,7 +197,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                     SetPullRateTarget(forceMagnitudeTarget / maxNetForce);
                     SetPushRateTarget(forceMagnitudeTarget / maxNetForce);
                 } else {
-                    if (GamepadController.UsingGamepad) {
+                    if (SettingsMenu.settingsData.controlScheme == 2) {
                         SetPullRateTarget(Keybinds.RightBurnRate());
                         SetPushRateTarget(Keybinds.LeftBurnRate());
                     }
@@ -1146,7 +1146,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     private void LerpToBurnRates() {
         ironBurnRate = Mathf.Lerp(ironBurnRate, ironBurnRateTarget, burnRateLerpConstant);
         steelBurnRate = Mathf.Lerp(steelBurnRate, steelBurnRateTarget, burnRateLerpConstant);
-        if (!GamepadController.UsingGamepad && SettingsMenu.settingsData.pushControlStyle == 0 && (ironBurnRate < .001f || steelBurnRate < .001f)) {
+        if (SettingsMenu.settingsData.pushControlStyle == 0 && (ironBurnRate < .001f || steelBurnRate < .001f)) {
             StopBurningIronSteel();
         }
     }

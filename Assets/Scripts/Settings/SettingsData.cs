@@ -26,6 +26,7 @@ public class SettingsData : MonoBehaviour {
     public int forceComplexity; // 0 for net only, 1 for full sums
     public int hudForces; // 0 for Disabled, 1 for Enabled
     public int hudMasses; // 0 for Disabled, 1 for Enabled
+    public int fpsCounter; // 0 for Disabled, 1 for Enabled
     // Allomancy
     public int anchoredBoost; // 0 for Disabled, 1 for ANF, 2 for EWF
     public int normalForceMin; // 0 for Disabled, 1 for zero, 2 for zero and negate
@@ -104,6 +105,10 @@ public class SettingsData : MonoBehaviour {
                 }
             case "forceComplexity": {
                     forceComplexity = data;
+                    return true;
+                }
+            case "fpsCounter": {
+                    fpsCounter = data;
                     return true;
                 }
             case "hudForces": {
@@ -223,6 +228,9 @@ public class SettingsData : MonoBehaviour {
                 }
             case "forceComplexity": {
                     return forceComplexity;
+                }
+            case "fpsCounter": {
+                    return fpsCounter;
                 }
             case "hudForces": {
                     return hudForces;

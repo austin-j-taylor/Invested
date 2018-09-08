@@ -10,7 +10,6 @@ public class BurnRateMeter : MonoBehaviour {
     private const float minAngle = .12f;
     private const float maxAngle = 1f - 2 * minAngle;
 
-    private static AllomanticIronSteel playerIronSteel;
     private Text actualForceText;
     private Text sumForceText;
     private Text playerInputText;
@@ -24,7 +23,6 @@ public class BurnRateMeter : MonoBehaviour {
     }
 
     void Awake() {
-        playerIronSteel = GameObject.FindGameObjectWithTag("Player").GetComponent<AllomanticIronSteel>();
         Text[] texts = GetComponentsInChildren<Text>();
         actualForceText = texts[0];
         playerInputText = texts[1];
@@ -57,7 +55,7 @@ public class BurnRateMeter : MonoBehaviour {
      *  The force calculated from rate as a % of the net force is used for the blue circle bar and the ActualForceText field.
      */
     public void SetBurnRateMeterForceMagnitude(Vector3 allomanticForce, Vector3 normalForce, float rate, float targetForce) {
-        playerInputText.text = HUD.ForceString(targetForce, playerIronSteel.Mass);
+        playerInputText.text = HUD.ForceString(targetForce, Player.PlayerIronSteel.Mass);
 
         SetActualForceText((allomanticForce + normalForce).magnitude);
         SetSumForceText(allomanticForce, normalForce);
@@ -74,14 +72,14 @@ public class BurnRateMeter : MonoBehaviour {
     }
 
     private void SetActualForceText(float forceActual) {
-        actualForceText.text = HUD.ForceString(forceActual, playerIronSteel.Mass);
+        actualForceText.text = HUD.ForceString(forceActual, Player.PlayerIronSteel.Mass);
     }
 
     private void SetSumForceText(Vector3 allomanticForce, Vector3 normalForce) {
         if (SettingsMenu.settingsData.forceComplexity == 1) {
             float allomanticMagnitude = allomanticForce.magnitude;
             float normalMagnitude = normalForce.magnitude;
-            sumForceText.text = HUD.AllomanticSumString(allomanticForce, normalForce, playerIronSteel.Mass);
+            sumForceText.text = HUD.AllomanticSumString(allomanticForce, normalForce, Player.PlayerIronSteel.Mass);
         }
     }
 

@@ -9,8 +9,6 @@ using XInputDotNetPure;
 public class GamepadController : MonoBehaviour {
     
     private static bool updateRumble = false;
-    //private static bool usingGamepad = false;
-    //private static bool usingRumble = true;
     private static bool shaking = false;
     private static float leftRumble = 0;
     private static float rightRumble = 0;
@@ -22,20 +20,6 @@ public class GamepadController : MonoBehaviour {
         rumble = gameObject.AddComponent<GamepadRumble>();
     }
 
-    public static bool UsingGamepad {
-        get {
-            return SettingsMenu.settingsData.controlScheme == 2;
-        }
-    }
-    public static bool UsingRumble {
-        get {
-            return SettingsMenu.settingsData.gamepadRumble == 1;
-        }
-        set {
-            SettingsMenu.settingsData.gamepadRumble = value ? 1 : 0;
-            updateRumble = true;
-        }
-    }
     public static float LeftRumble {
         get {
             return leftRumble;
@@ -98,7 +82,7 @@ public class GamepadController : MonoBehaviour {
         }
 
         public IEnumerator ShakeController(float left, float right, float time) {
-            if (UsingGamepad && UsingRumble) {
+            if (SettingsMenu.settingsData.controlScheme == 2 && SettingsMenu.settingsData.gamepadRumble == 1) {
                 shaking = true;
                 GamePad.SetVibration(0, left, right);
                 yield return new WaitForSeconds(time);

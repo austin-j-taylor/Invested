@@ -7,10 +7,7 @@ using UnityEngine;
  */
 public class PlayerGroundedChecker : MonoBehaviour {
     
-    public bool IsGrounded {
-        get;
-        private set;
-    }
+    public bool IsGrounded { get; private set; }
 
     private bool isInCollider;
     private Collider standingOnCollider;

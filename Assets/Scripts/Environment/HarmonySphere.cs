@@ -7,13 +7,11 @@ public class HarmonySphere : MonoBehaviour {
     private const float distanceThreshold = .001f;
     private const float forceConstantFar = 50f;
 
-    private AllomanticIronSteel player;
     private Rigidbody rb;
     private Transform harmonySphere;
     private Transform inner;
 
     private void Awake() {
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<AllomanticIronSteel>();
         rb = GetComponentInChildren<Rigidbody>();
         harmonySphere = rb.GetComponent<Transform>();
         inner = transform.GetChild(0);

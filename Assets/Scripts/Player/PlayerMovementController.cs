@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
- * Controls player movement and certain first-person camera control.
+ * Controls player Movement, Jumping, Gravity, and Air resistance.
  * 
  */
 
@@ -12,10 +12,11 @@ public class PlayerMovementController : MonoBehaviour {
     private const float acceleration = 5f;
     private const float maxRunningSpeed = 5f;
     private const float airControlFactor = .05f;
+    private const float airDrag = .2f;
+    private const float groundedDrag = 3f;
     private readonly Vector3 jumpHeight = new Vector3(0, 420f, 0);
     
     private Rigidbody rb;
-    //private AllomanticIronSteel playerIronSteel;
     private PlayerGroundedChecker groundedChecker;
 
     public bool IsGrounded {
@@ -26,37 +27,25 @@ public class PlayerMovementController : MonoBehaviour {
 
     private void Awake() {
         rb = GetComponent<Rigidbody>();
-        //playerIronSteel = GetComponent<AllomanticIronSteel>();
         groundedChecker = GetComponentInChildren<PlayerGroundedChecker>();
     }
     void FixedUpdate() {
-        // Horizontal movement
-        float horiz = Keybinds.Horizontal();
-        float verti = Keybinds.Vertical();
-        Vector3 movement = new Vector3(horiz, 0f, verti);
-        //if (!GamepadController.UsingGamepad)
-        movement = Vector3.ClampMagnitude(movement, 1);
-        movement = transform.TransformDirection(movement);
-        Vector3 velocityInDirectionOfMovement = Vector3.Project(rb.velocity, movement.normalized);
+        Vector3 movement = new Vector3(Keybinds.Horizontal(), 0f, Keybinds.Vertical());
+        movement = transform.TransformDirection(Vector3.ClampMagnitude(movement, 1));
         if (IsGrounded) {
-            //// If player is trying to move in the same direction of their push, it is like they are trying to walk with their push -> use weaker drag
-            //// IF the player is not trying to move in the same direction of their push, it is like they are trying to resist their puish -> use stronger drag
-            //if (movement.magnitude > 0 && (Vector3.Dot(movement, playerIronSteel.LastNetForceOnAllomancer.normalized) > 0 && (playerIronSteel.IronPulling || playerIronSteel.SteelPushing))) {
-            //    rb.drag = airDrag;
-            //} else {
-            //    rb.drag = groundedDrag;
-            //}
             if (movement.magnitude > 0) {
-                rb.drag = PhysicsController.AirDrag;
+                // You: "why use ints to represent binary values that should be represented by booleans"
+                // Me, an intellectual:
+                rb.drag = SettingsMenu.settingsData.playerAirResistance * airDrag;
             } else {
-                rb.drag = PhysicsController.GroundedDrag;
+                rb.drag = SettingsMenu.settingsData.playerAirResistance * groundedDrag;
             }
         } else { // is airborne
-            rb.drag = PhysicsController.AirDrag;
+            rb.drag = SettingsMenu.settingsData.playerAirResistance * airDrag;
             movement *= airControlFactor;
         }
         if (movement.magnitude > 0) {
-            movement *= acceleration * Mathf.Max(maxRunningSpeed - velocityInDirectionOfMovement.magnitude, 0);
+            movement *= acceleration * Mathf.Max(maxRunningSpeed - Vector3.Project(rb.velocity, movement.normalized).magnitude, 0);
             rb.AddForce(movement, ForceMode.Acceleration);
         }
     }
