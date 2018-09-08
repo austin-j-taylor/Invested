@@ -16,6 +16,7 @@ public class SliderSetting : Setting {
     public float min = 0;
     public float max = 100;
     public float defaultValue = 0;
+    public bool showDecimals;
 
     void Awake() {
 
@@ -54,7 +55,11 @@ public class SliderSetting : Setting {
      * Updates the text fields for this setting to reflect the setting's data
      */
     public override void RefreshText() {
-        valueText.text = ((int)data).ToString();
+        if(showDecimals)
+            valueText.text = ((int)(100 * data) / 100f).ToString(); // rounds to two decimal places
+        else
+            valueText.text = ((int)data).ToString();
+
     }
 
     public void OnValueChanged(float value) {

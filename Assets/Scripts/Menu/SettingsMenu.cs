@@ -61,9 +61,9 @@ public class SettingsMenu : MonoBehaviour {
     private const string s_targetForcesDisabled = "Disabled";
     private const string s_targetForcesDisabledDetails = "Targets will not display force(s) acting on them.";
     private const string s_targetMassesEnabled = "Enabled";
-    private const string s_targetMassesEnabledDetails = "Highlighted metals will display their mass.";
+    private const string s_targetMassesEnabledDetails = "Hovered-over metals will display their mass.";
     private const string s_targetMassesDisabled = "Disabled";
-    private const string s_targetMassesDisabledDetails = "Highlighted metals will not display their mass.";
+    private const string s_targetMassesDisabledDetails = "Hovered-over metals will not display their mass.";
 
     // Allomancy
     private const string s_norm = "Allomantic Normal Force\n(ANF)";
@@ -77,7 +77,7 @@ public class SettingsMenu : MonoBehaviour {
     private const string s_aNFMinZeroNegate = "Zero & Negate";
     private const string s_aNFMinZeroNegateDetails = "ANF cannot be negative, but values that would be negative have their sign swapped and improve your Push instead. Unrealistic behavior.";
     private const string s_aNFMinDisabled = "Disabled";
-    private const string s_aNFMinDisabledDetails = "ANF can be negative. Unrealistic behavior. You can Push but actually move towards your target, if your target resists you really well.";
+    private const string s_aNFMinDisabledDetails = "ANF can be negative. You can Push but actually move towards your target, if your target resists you really well. Unrealistic behavior.";
     private const string s_aNFMaxAF = "Allomantic Force";
     private const string s_aNFMaxAFDetails = "ANF will never be higher than the AF. Realistic behavior. You cannot be resisted harder than you can Push.";
     private const string s_aNFMaxDisabled = "Disabled";
@@ -103,7 +103,7 @@ public class SettingsMenu : MonoBehaviour {
     private const string s_eWD = "Exponential with Distance";
     private const string s_eWDDetails = "AF ∝ e ^ -d/D where d = distance between Allomancer and target; D = Exponential Constant";
     private const string s_alloConstantDetails = "All Pushes are proportional to this constant.";
-    private const string s_maxRDetails = "Nearby metals can be detected within this range. Only impactful with \"Linear\" Force-Distance Relationship. ";
+    private const string s_maxRDetails = "Nearby metals can be detected within this range. Only impactful with \"Linear\" Force-Distance Relationship.";
 
     // Variables for settings - TBDeleted
     //public static bool UsingMB45 { get; set; } = true;

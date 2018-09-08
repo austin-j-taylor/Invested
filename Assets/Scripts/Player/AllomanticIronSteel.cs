@@ -31,11 +31,11 @@ public class AllomanticIronSteel : MonoBehaviour {
         }
         set {
             SettingsMenu.settingsData.maxPushRange = value;
-            sqrMaxRange = value * value;
+            //sqrMaxRange = value * value;
         }
     }
     //private static float maxRange = 100;
-    private static float sqrMaxRange;
+    //private static float sqrMaxRange;
     // Button-press time constants
     private const float timeToHoldDown = .5f;
     private const float timeDoubleTapWindow = .5f;
@@ -224,6 +224,13 @@ public class AllomanticIronSteel : MonoBehaviour {
                     timeToStopBurning = 0;
                 }
 
+                LerpToBurnRates();
+                UpdateBurnRateMeter();
+            }
+
+            // Could have stopped burning above. double-check.
+            if(IsBurningIronSteel) {
+
                 IronPulling = Keybinds.IronPulling();
                 SteelPushing = Keybinds.SteelPushing();
 
@@ -314,8 +321,6 @@ public class AllomanticIronSteel : MonoBehaviour {
                         }
                     }
                 }
-                LerpToBurnRates();
-                UpdateBurnRateMeter();
             }
         }
     }
@@ -474,7 +479,12 @@ public class AllomanticIronSteel : MonoBehaviour {
 
         //if ((IronPulling && target.LastWasPulled) || (SteelPushing && !target.LastWasPulled)) { //If pushing or pulling, ANF should be added to calculation
         switch (SettingsMenu.settingsData.anchoredBoost) {
-            case 0: {
+            case 0: { // Disabled
+                    restitutionForceFromTarget = Vector3.zero;
+                    restitutionForceFromAllomancer = Vector3.zero;
+                    break;
+                }
+            case 1: { // ANF
                     if (target.IsStatic) {
                         // If the target has no rigidbody, let the let the restitution force equal the allomantic force. It's a perfect anchor.
                         // Thus:
@@ -508,6 +518,9 @@ public class AllomanticIronSteel : MonoBehaviour {
                     // Prevents the ANF from being negative relative to the AF and prevents the ANF from ever decreasing the AF below its original value
                     switch (SettingsMenu.settingsData.normalForceMin) {
                         case 0: {
+                                break;
+                            }
+                        case 1: {
                                 if (Vector3.Dot(restitutionForceFromAllomancer, allomanticForce) > 0) {
                                     restitutionForceFromAllomancer = Vector3.zero;
                                 }
@@ -516,7 +529,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                                 }
                                 break;
                             }
-                        case 1: {
+                        default: {
                                 if (Vector3.Dot(restitutionForceFromAllomancer, allomanticForce) > 0) {
                                     restitutionForceFromAllomancer = -restitutionForceFromAllomancer;
                                 }
@@ -525,7 +538,6 @@ public class AllomanticIronSteel : MonoBehaviour {
                                 }
                                 break;
                             }
-                        default: break;
                     }
 
                     // Makes the ANF on the target and Allomancer equal
@@ -539,7 +551,7 @@ public class AllomanticIronSteel : MonoBehaviour {
 
                     break;
                 }
-            case 1: {
+            default: { // EWV
                     // The restitutionForceFromTarget is actually negative, rather than positive, unlike in ANF mode. It contains the percentage of the AF that is subtracted from the AF to get the net AF.
                     float velocityFactorTarget;
                     float velocityFactorAllomancer;
@@ -550,7 +562,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                         velocityFactorTarget = 1 - Mathf.Exp(-(Vector3.Project(rb.velocity - target.Velocity, distanceFactor.normalized).magnitude / SettingsMenu.settingsData.velocityConstant));
                         velocityFactorAllomancer = 1 - Mathf.Exp(-(Vector3.Project(target.Velocity - rb.velocity, distanceFactor.normalized).magnitude / SettingsMenu.settingsData.velocityConstant));
                     }
-                    switch(SettingsMenu.settingsData.exponentialWithVelocitySignage) {
+                    switch (SettingsMenu.settingsData.exponentialWithVelocitySignage) {
                         case 0: {
                                 // Do nothing
                                 break;
@@ -578,11 +590,6 @@ public class AllomanticIronSteel : MonoBehaviour {
                     restitutionForceFromAllomancer = allomanticForce * velocityFactorAllomancer;
                     restitutionForceFromTarget = allomanticForce * -velocityFactorTarget;
 
-                    break;
-                }
-            default: {
-                    restitutionForceFromTarget = Vector3.zero;
-                    restitutionForceFromAllomancer = Vector3.zero;
                     break;
                 }
         }
@@ -617,10 +624,10 @@ public class AllomanticIronSteel : MonoBehaviour {
         float distance = positionDifference.magnitude;
         switch (SettingsMenu.settingsData.forceDistanceRelationship) {
             case 0: {
-                    return (positionDifference / distance / distance);
+                    return positionDifference.normalized * (1 - positionDifference.magnitude / MaxRange);
                 }
             case 1: {
-                    return positionDifference.normalized * (1 - positionDifference.magnitude / MaxRange);
+                    return (positionDifference / distance / distance);
                 }
             default: {
                     return positionDifference.normalized * Mathf.Exp(-distance / SettingsMenu.settingsData.distanceConstant);
@@ -682,7 +689,8 @@ public class AllomanticIronSteel : MonoBehaviour {
 
         for (int i = 0; i < GameManager.MagneticsInScene.Count; i++) {
             Magnetic target = GameManager.MagneticsInScene[i];
-            if ((target.CenterOfMass - CenterOfMass).sqrMagnitude < sqrMaxRange) {
+            if ((target.CenterOfMass - CenterOfMass).sqrMagnitude < SettingsMenu.settingsData.maxPushRange * SettingsMenu.settingsData.maxPushRange) {
+            //if ((target.CenterOfMass - CenterOfMass).sqrMagnitude < sqrMaxRange) {
                 float softForce = SettingsMenu.settingsData.allomanticConstant * target.Charge * Mathf.Pow(Mass, chargePower) * DistanceFactor(target).magnitude;
                 // If using Percentage force mode, burn rate affects your range for burning
                 if (SettingsMenu.settingsData.pushControlStyle == 0 && SettingsMenu.settingsData.controlScheme != 2)
@@ -733,7 +741,7 @@ public class AllomanticIronSteel : MonoBehaviour {
         // Go through targets and update their metal lines
         for (int i = 0; i < PullCount; i++) {
             Magnetic target = pullTargets[i];
-            if ((target.CenterOfMass - CenterOfMass).sqrMagnitude < sqrMaxRange) {
+            if ((target.CenterOfMass - CenterOfMass).sqrMagnitude < SettingsMenu.settingsData.maxPushRange * SettingsMenu.settingsData.maxPushRange) {
                 target.InRange = true;
                 target.SetBlueLine(
                     CenterOfMass,
@@ -747,7 +755,7 @@ public class AllomanticIronSteel : MonoBehaviour {
         }
         for (int i = 0; i < PushCount; i++) {
             Magnetic target = pushTargets[i];
-            if ((target.CenterOfMass - CenterOfMass).sqrMagnitude < sqrMaxRange) {
+            if ((target.CenterOfMass - CenterOfMass).sqrMagnitude < SettingsMenu.settingsData.maxPushRange * SettingsMenu.settingsData.maxPushRange) {
                 target.InRange = true;
                 target.SetBlueLine(
                     CenterOfMass,
@@ -777,10 +785,11 @@ public class AllomanticIronSteel : MonoBehaviour {
     public void StopBurningIronSteel() {
         RemoveAllTargets();
         //if (IsBurningIronSteel) {
-        if (HasHighlightedTarget)
+        if (HasHighlightedTarget) {
             HighlightedTarget.RemoveTargetGlow();
+            HighlightedTarget = null;
+        }
         IsBurningIronSteel = false;
-        RefreshHUD();
         GamepadController.SetRumble(0, 0);
         ironBurnRate = 0;
         steelBurnRate = 0;
@@ -791,6 +800,7 @@ public class AllomanticIronSteel : MonoBehaviour {
         //    metalLines[i].GetComponent<MeshRenderer>().enabled = false;
         //}
         //}
+        RefreshHUD();
     }
 
     //private void StartPushPullingOnTargets(bool pulling) {
@@ -1072,12 +1082,23 @@ public class AllomanticIronSteel : MonoBehaviour {
     private void ChangeTargetForceMagnitude(float change) {
         if (change > 0) {
             //change = Mathf.Max(10, (lastMaximumAllomanticForce + lastMaximumNormalForce).magnitude / 10f);
-            change = targetForceMagnitudeChange;
+            if (forceMagnitudeTarget < 100) {
+                change = targetForceMagnitudeChange / 10f;
+            } else {
+                change = targetForceMagnitudeChange;
+            }
         } else if (change < 0) {
             //change = -Mathf.Max(10, (lastMaximumAllomanticForce + lastMaximumNormalForce).magnitude / 10f);
-            change = -targetForceMagnitudeChange;
+            if (forceMagnitudeTarget <= 100) {
+                change = -targetForceMagnitudeChange / 10f;
+            } else {
+                change = -targetForceMagnitudeChange;
+            }
         }
-        forceMagnitudeTarget = Mathf.Max(0, forceMagnitudeTarget + change);
+
+        forceMagnitudeTarget = forceMagnitudeTarget + change;
+        if (forceMagnitudeTarget <= 0.01f)
+            StopBurningIronSteel();
     }
 
     // Increments or decrements the current burn rate

@@ -47,7 +47,7 @@ public class TargetOverlayController : MonoBehaviour {
             pushTargetsSumForce[i].text = "";
         }
     }
-    private void Update() {
+    private void LateUpdate() {
         if (playerIronSteel.IsBurningIronSteel) {
             SoftRefresh();
         }
@@ -160,6 +160,7 @@ public class TargetOverlayController : MonoBehaviour {
         }
     }
 
+    // Clear unwanted fields after changing settings
     public void InterfaceRefresh() {
         if (SettingsMenu.settingsData.hudMasses == 0) {
             highlightedTargetMass.text = "";

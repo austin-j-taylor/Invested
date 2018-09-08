@@ -12,36 +12,36 @@ public class SettingsData : MonoBehaviour {
     
     // Gameplay
     public int controlScheme; // 0 for MK45, 1 for MKQE, 2 for Gamepad
-    public int gamepadRumble;
+    public int gamepadRumble; // 0 for Disabled, 1 for Enabled
     public int pushControlStyle; // 0 for percentage, 1 for magnitude
     public int cameraFirstPerson; // 0 for third person, 1 for first person
-    public int cameraClamping;
+    public int cameraClamping; // 0 for clamped, 1 for unclamped
     public float mouseSensitivityX;
     public float mouseSensitivityY;
     public float gamepadSensitivityX;
     public float gamepadSensitivityY;
     // Interface
-    public int renderblueLines;
-    public int forceUnits; // 0 for Gravity, 1 for Newtons
+    public int renderblueLines; // 0 for Disabled, 1 for Enabled
+    public int forceUnits; // 0 for G's, 1 for Newtons
     public int forceComplexity; // 0 for net only, 1 for full sums
-    public int hudForces;
-    public int hudMasses;
+    public int hudForces; // 0 for Disabled, 1 for Enabled
+    public int hudMasses; // 0 for Disabled, 1 for Enabled
     // Allomancy
-    public int anchoredBoost; // 0 for ANF, 1 for EWF, 2 for Disabled
-    public int normalForceMin; // 0 for zero, 1 for zero and negate, 2 for Disabled
-    public int normalForceMax; // 0 for ANF, 1 for Disabled
+    public int anchoredBoost; // 0 for Disabled, 1 for ANF, 2 for EWF
+    public int normalForceMin; // 0 for Disabled, 1 for zero, 2 for zero and negate
+    public int normalForceMax; // 0 for Disabled, 1 for AF
     public int normalForceEquality; // 0 for Unequal, 1 for Equal
-    public int exponentialWithVelocitySignage; // 0 for All Decreases Force, 1 for Only Backwards Decreases force, 2 for Backwards Decreases & Forwards Increases
+    public int exponentialWithVelocitySignage; // 0 for Both Directions Decrease Force, 1 for Only Backwards Decreases force, 2 for Backwards Decreases & Forwards Increases
     public int exponentialWithVelocityRelativity; // 0 for Relative, 1 for Absolute
     public float velocityConstant;
-    public int forceDistanceRelationship; // 0 for Inverse Square, 1 for Linear, 2 for Exponential
+    public int forceDistanceRelationship; // 0 for Linear, 1 for Inverse Square, 2 for Exponential with Distance
     public float distanceConstant;
     public float allomanticConstant;
     public float maxPushRange;
     // World
-    public int playerGravity;
-    public int playerAirResistance;
-    
+    public int playerGravity; // 0 for Disabled, 1 for Enabled
+    public int playerAirResistance; // 0 for Disabled, 1 for Enabled
+
     private void Awake() {
         LoadSettings();
     }
@@ -67,9 +67,10 @@ public class SettingsData : MonoBehaviour {
      * SetData assigns data to the variable with the name name.
      * 
      * Unity is annoying and doesn't support C#7 features like ref functions,
+     * Nor pointers (without making me feel bad my calling my code "unsafe")
      * so we're having to get the variables by their string names every time.
      * 
-     * really liking that O(n) efficiency
+     * really liking that O(2*n) efficiency every time you click a button
      */
     public bool SetData(string name, int data) {
         switch (name) {
@@ -77,12 +78,76 @@ public class SettingsData : MonoBehaviour {
                     controlScheme = data;
                     return true;
                 }
-            case "rumble": {
+            case "gamepadRumble": {
                     gamepadRumble = data;
                     return true;
                 }
             case "pushControlStyle": {
                     pushControlStyle = data;
+                    return true;
+                }
+            case "cameraFirstPerson": {
+                    cameraFirstPerson = data;
+                    return true;
+                }
+            case "cameraClamping": {
+                    cameraClamping = data;
+                    return true;
+                }
+            case "renderblueLines": {
+                    renderblueLines = data;
+                    return true;
+                }
+            case "forceUnits": {
+                    forceUnits = data;
+                    return true;
+                }
+            case "forceComplexity": {
+                    forceComplexity = data;
+                    return true;
+                }
+            case "hudForces": {
+                    hudForces = data;
+                    return true;
+                }
+            case "hudMasses": {
+                    hudMasses = data;
+                    return true;
+                }
+            case "anchoredBoost": {
+                    anchoredBoost = data;
+                    return true;
+                }
+            case "normalForceMin": {
+                    normalForceMin = data;
+                    return true;
+                }
+            case "normalForceMax": {
+                    normalForceMax = data;
+                    return true;
+                }
+            case "normalForceEquality": {
+                    normalForceEquality = data;
+                    return true;
+                }
+            case "exponentialWithVelocitySignage": {
+                    exponentialWithVelocitySignage = data;
+                    return true;
+                }
+            case "exponentialWithVelocityRelativity": {
+                    exponentialWithVelocityRelativity = data;
+                    return true;
+                }
+            case "forceDistanceRelationship": {
+                    forceDistanceRelationship = data;
+                    return true;
+                }
+            case "playerGravity": {
+                    playerGravity = data;
+                    return true;
+                }
+            case "playerAirResistance": {
+                    playerAirResistance = data;
                     return true;
                 }
             default: {
@@ -94,8 +159,36 @@ public class SettingsData : MonoBehaviour {
 
     public bool SetData(string name, float data) {
         switch (name) {
+            case "mouseSensitivityX": {
+                    mouseSensitivityX = data;
+                    return true;
+                }
+            case "mouseSensitivityY": {
+                    mouseSensitivityY = data;
+                    return true;
+                }
+            case "gamepadSensitivityX": {
+                    gamepadSensitivityX = data;
+                    return true;
+                }
+            case "gamepadSensitivityY": {
+                    gamepadSensitivityY = data;
+                    return true;
+                }
+            case "velocityConstant": {
+                    velocityConstant = data;
+                    return true;
+                }
+            case "distanceConstant": {
+                    distanceConstant = data;
+                    return true;
+                }
             case "allomanticConstant": {
                     allomanticConstant = data;
+                    return true;
+                }
+            case "maxPushRange": {
+                    maxPushRange = data;
                     return true;
                 }
             default: {
@@ -110,11 +203,59 @@ public class SettingsData : MonoBehaviour {
             case "controlScheme": {
                     return controlScheme;
                 }
-            case "rumble": {
+            case "gamepadRumble": {
                     return gamepadRumble;
                 }
             case "pushControlStyle": {
                     return pushControlStyle;
+                }
+            case "cameraFirstPerson": {
+                    return cameraFirstPerson;
+                }
+            case "cameraClamping": {
+                    return cameraClamping;
+                }
+            case "renderblueLines": {
+                    return renderblueLines;
+                }
+            case "forceUnits": {
+                    return forceUnits;
+                }
+            case "forceComplexity": {
+                    return forceComplexity;
+                }
+            case "hudForces": {
+                    return hudForces;
+                }
+            case "hudMasses": {
+                    return hudMasses;
+                }
+            case "anchoredBoost": {
+                    return anchoredBoost;
+                }
+            case "normalForceMin": {
+                    return normalForceMin;
+                }
+            case "normalForceMax": {
+                    return normalForceMax;
+                }
+            case "normalForceEquality": {
+                    return normalForceEquality;
+                }
+            case "exponentialWithVelocitySignage": {
+                    return exponentialWithVelocitySignage;
+                }
+            case "exponentialWithVelocityRelativity": {
+                    return exponentialWithVelocityRelativity;
+                }
+            case "forceDistanceRelationship": {
+                    return forceDistanceRelationship;
+                }
+            case "playerGravity": {
+                    return playerGravity;
+                }
+            case "playerAirResistance": {
+                    return playerAirResistance;
                 }
             default: {
                     Debug.LogError("GetDataInt with invalid ID: " + name);
@@ -125,8 +266,29 @@ public class SettingsData : MonoBehaviour {
 
     public float GetDataFloat(string name) {
         switch (name) {
+            case "mouseSensitivityX": {
+                    return mouseSensitivityX;
+                }
+            case "mouseSensitivityY": {
+                    return mouseSensitivityY;
+                }
+            case "gamepadSensitivityX": {
+                    return gamepadSensitivityX;
+                }
+            case "gamepadSensitivityY": {
+                    return gamepadSensitivityY;
+                }
+            case "velocityConstant": {
+                    return velocityConstant;
+                }
+            case "distanceConstant": {
+                    return distanceConstant;
+                }
             case "allomanticConstant": {
                     return allomanticConstant;
+                }
+            case "maxPushRange": {
+                    return maxPushRange;
                 }
             default: {
                     Debug.LogError("GetDataFloat with invalid ID: " + name);
