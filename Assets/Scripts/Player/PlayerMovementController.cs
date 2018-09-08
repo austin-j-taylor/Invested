@@ -75,4 +75,12 @@ public class PlayerMovementController : MonoBehaviour {
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
     }
+
+    public void EnableGravity() {
+        rb.useGravity = true;
+    }
+    public void DisableGravity() {
+        rb.useGravity = false;
+    }
+
 }

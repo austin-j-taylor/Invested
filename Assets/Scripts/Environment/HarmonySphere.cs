@@ -21,14 +21,13 @@ public class HarmonySphere : MonoBehaviour {
     
     private void FixedUpdate() {
         if (!rb.IsSleeping()) {
-            Vector3 distancetoPlayer = harmonySphere.position - player.transform.position;
+            Vector3 distancetoPlayer = harmonySphere.position - CameraController.ActiveCamera.transform.position;// player.transform.position;
 
             float angle = 180 + Mathf.Atan2(distancetoPlayer.x, distancetoPlayer.z) * Mathf.Rad2Deg;
             Vector3 newRotation = Vector3.zero;
-            angle = Mathf.LerpAngle(inner.eulerAngles.y, angle, Time.deltaTime);
+            //angle = Mathf.LerpAngle(inner.eulerAngles.y, angle, Time.deltaTime * 10f);
 
             newRotation.y = angle;
-            //inner.eulerAngles = Vector3.Lerp(inner.eulerAngles, newRotation, Time.deltaTime * 1f);
             inner.eulerAngles = newRotation;
 
             Vector3 distance = inner.position - harmonySphere.position;

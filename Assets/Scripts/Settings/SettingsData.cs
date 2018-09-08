@@ -15,7 +15,7 @@ public class SettingsData : MonoBehaviour {
     public int gamepadRumble; // 0 for Disabled, 1 for Enabled
     public int pushControlStyle; // 0 for percentage, 1 for magnitude
     public int cameraFirstPerson; // 0 for third person, 1 for first person
-    public int cameraClamping; // 0 for clamped, 1 for unclamped
+    public int cameraClamping; // 0 for Unclamped, 1 for Clamped
     public float mouseSensitivityX;
     public float mouseSensitivityY;
     public float gamepadSensitivityX;

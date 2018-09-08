@@ -19,43 +19,7 @@ public class CameraController : MonoBehaviour {
     private static Camera firstPersonCamera;
     private static Transform player;
     private static Transform lookAtTarget;
-
-    //private static bool firstPerson = false;
-    public static bool FirstPerson {
-        get {
-            return SettingsMenu.settingsData.cameraFirstPerson == 1;
-        }
-        set {
-            SettingsMenu.settingsData.cameraFirstPerson = value ? 1 : 0;
-            if (value) {
-                thirdPersonCamera.gameObject.SetActive(false);
-                firstPersonCamera.gameObject.SetActive(true);
-                firstPersonCamera.cullingMask = thirdPersonCamera.cullingMask;
-                ActiveCamera = firstPersonCamera;
-                Clear();
-            } else {
-                firstPersonCamera.gameObject.SetActive(false);
-                thirdPersonCamera.gameObject.SetActive(true);
-                thirdPersonCamera.cullingMask = firstPersonCamera.cullingMask;
-                ActiveCamera = thirdPersonCamera;
-                Clear();
-            }
-        }
-    }
-    //private static bool clampCamera = true;
-    public static bool ClampCamera {
-        get {
-            return SettingsMenu.settingsData.cameraClamping == 1;
-        }
-        set {
-            SettingsMenu.settingsData.cameraClamping = value ? 1 : 0;
-            if(value)
-                ClampY();
-        }
-    }
-    //public static float SensitivityX { get; set; } = 2.5f;
-    //public static float SensitivityY { get; set; } = 2.5f;
-
+    
     public static bool CameraIsLocked { get; private set; }
 
     private static float currentX = 0;
@@ -66,8 +30,7 @@ public class CameraController : MonoBehaviour {
         lookAtTarget = player.Find("CameraLookAtTarget").GetComponent<Transform>();
         thirdPersonCamera = lookAtTarget.Find("ThirdPersonCamera").GetComponent<Camera>();
         firstPersonCamera = player.Find("FirstPersonCamera").GetComponent<Camera>();
-        //walledCameraHeight = firstPersonCamera.transform.localPosition.y;
-        FirstPerson = false;
+        ActiveCamera = thirdPersonCamera;
         Clear();
         UnlockCamera();
     }
@@ -81,7 +44,7 @@ public class CameraController : MonoBehaviour {
                 currentX += Input.GetAxis("Mouse X") * SettingsMenu.settingsData.mouseSensitivityX;
                 currentY -= Input.GetAxis("Mouse Y") * SettingsMenu.settingsData.mouseSensitivityY;
             }
-            if (ClampCamera)
+            if (SettingsMenu.settingsData.cameraClamping == 1)
                 ClampY();
 
             RefreshCamera();
@@ -113,10 +76,6 @@ public class CameraController : MonoBehaviour {
         }
     }
 
-    private static void ClampY() {
-        currentY = Mathf.Clamp(currentY, -89.99f, 89.99f); // (controls top, controls bottom)
-    }
-
     public static void LockCamera() {
         Cursor.lockState = CursorLockMode.Locked;
         CameraIsLocked = true;
@@ -127,6 +86,26 @@ public class CameraController : MonoBehaviour {
         Cursor.lockState = CursorLockMode.None;
         CameraIsLocked = false;
         Cursor.visible = true;
+    }
+
+    private void ClampY() {
+        currentY = Mathf.Clamp(currentY, -89.99f, 89.99f); // (controls top, controls bottom)
+    }
+
+    public void SetThirdPerson() {
+        firstPersonCamera.gameObject.SetActive(false);
+        thirdPersonCamera.gameObject.SetActive(true);
+        thirdPersonCamera.cullingMask = firstPersonCamera.cullingMask;
+        ActiveCamera = thirdPersonCamera;
+        Clear();
+    }
+
+    public void SetFirstPerson() {
+        thirdPersonCamera.gameObject.SetActive(false);
+        firstPersonCamera.gameObject.SetActive(true);
+        firstPersonCamera.cullingMask = thirdPersonCamera.cullingMask;
+        ActiveCamera = firstPersonCamera;
+        Clear();
     }
 
 }

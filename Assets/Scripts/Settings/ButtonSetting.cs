@@ -9,9 +9,8 @@ using UnityEngine.UI;
  */
 public class ButtonSetting : Setting {
     private int data;
-    public UnityEvent extraCall;
+    public UnityEvent[] buttonCalls;
 
-    protected bool hasChildren;
     private Button button;
     private Text buttonText;
     private Text detailsText;
@@ -59,9 +58,6 @@ public class ButtonSetting : Setting {
 
         }
 
-        // Get childrenHeaders
-        hasChildren = childrenHeaders.Length != 0;
-
         // Assign font and button size
         RectTransform rectButton = button.GetComponent<RectTransform>();
         RectTransform rectDetails = detailsText.GetComponent<RectTransform>();
@@ -82,6 +78,10 @@ public class ButtonSetting : Setting {
      */
     public override void RefreshData() {
         data = SettingsMenu.settingsData.GetDataInt(id);
+        // Update other functions
+        if (buttonCalls.Length > 0)
+            if (buttonCalls[data] != null)
+                buttonCalls[data].Invoke();
     }
 
     /*
@@ -91,7 +91,7 @@ public class ButtonSetting : Setting {
         buttonText.text = buttonStrings[data];
         if (hasDetails)
             detailsText.text = detailStrings[data];
-        if (hasChildren) {
+        if (childrenHeaders.Length != 0) {
             for (int i = 0; i < optionsCount; i++) {
                 if (i != data) { // This is not the active option. Disable all childrenHeaders.
                     if (childrenHeaders[i]) {
@@ -114,12 +114,13 @@ public class ButtonSetting : Setting {
         if (data >= optionsCount) {
             data = 0;
         }
-        extraCall.Invoke();
+
         SettingsMenu.settingsData.SetData(id, data);
+
+        // Update other functions
+        if (buttonCalls.Length > 0)
+            if (buttonCalls[data] != null)
+                buttonCalls[data].Invoke();
         RefreshText();
-    }
-
-    protected virtual void SetFontSize() {
-
     }
 }

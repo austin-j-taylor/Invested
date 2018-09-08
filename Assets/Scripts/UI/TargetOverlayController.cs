@@ -47,9 +47,57 @@ public class TargetOverlayController : MonoBehaviour {
             pushTargetsSumForce[i].text = "";
         }
     }
+
     private void LateUpdate() {
         if (playerIronSteel.IsBurningIronSteel) {
             SoftRefresh();
+        }
+    }
+
+    public void Clear() {
+        HardRefresh();
+        highlightedTargetMass.text = "";
+        SetPullTextColorWeak();
+        SetPushTextColorWeak();
+    }
+
+    // Update number of targets
+    public void HardRefresh() {
+        SoftRefresh();
+        for (int i = playerIronSteel.PullCount; i < AllomanticIronSteel.maxNumberOfTargets; i++) {
+            pullTargetsSumForce[i].text = "";
+            pullTargetsActualForce[i].text = "";
+        }
+
+        for (int i = playerIronSteel.PushCount; i < AllomanticIronSteel.maxNumberOfTargets; i++) {
+            pushTargetsSumForce[i].text = "";
+            pushTargetsActualForce[i].text = "";
+        }
+    }
+
+    // Clear unwanted fields after changing settings
+    public void InterfaceRefresh() {
+        if (SettingsMenu.settingsData.hudMasses == 0) {
+            highlightedTargetMass.text = "";
+        }
+        if (SettingsMenu.settingsData.forceComplexity == 0 && SettingsMenu.settingsData.hudForces == 1) {
+            for (int i = 0; i < playerIronSteel.PullCount; i++) {
+                pullTargetsSumForce[i].text = "";
+            }
+            for (int i = 0; i < playerIronSteel.PushCount; i++) {
+                pushTargetsSumForce[i].text = "";
+            }
+        } else {
+            if (SettingsMenu.settingsData.hudForces == 0) {
+                for (int i = 0; i < playerIronSteel.PullCount; i++) {
+                    pullTargetsSumForce[i].text = "";
+                    pullTargetsActualForce[i].text = "";
+                }
+                for (int i = 0; i < playerIronSteel.PushCount; i++) {
+                    pushTargetsSumForce[i].text = "";
+                    pushTargetsActualForce[i].text = "";
+                }
+            }
         }
     }
 
@@ -144,53 +192,6 @@ public class TargetOverlayController : MonoBehaviour {
                 highlightedTargetMass.text = "";
             }
         }
-    }
-
-    // Update number of targets
-    public void HardRefresh() {
-        SoftRefresh();
-        for (int i = playerIronSteel.PullCount; i < AllomanticIronSteel.maxNumberOfTargets; i++) {
-            pullTargetsSumForce[i].text = "";
-            pullTargetsActualForce[i].text = "";
-        }
-
-        for (int i = playerIronSteel.PushCount; i < AllomanticIronSteel.maxNumberOfTargets; i++) {
-            pushTargetsSumForce[i].text = "";
-            pushTargetsActualForce[i].text = "";
-        }
-    }
-
-    // Clear unwanted fields after changing settings
-    public void InterfaceRefresh() {
-        if (SettingsMenu.settingsData.hudMasses == 0) {
-            highlightedTargetMass.text = "";
-        }
-        if (SettingsMenu.settingsData.forceComplexity == 0 && SettingsMenu.settingsData.hudForces == 1) {
-            for (int i = 0; i < playerIronSteel.PullCount; i++) {
-                pullTargetsSumForce[i].text = "";
-            }
-            for (int i = 0; i < playerIronSteel.PushCount; i++) {
-                pushTargetsSumForce[i].text = "";
-            }
-        } else {
-            if (SettingsMenu.settingsData.hudForces == 0) {
-                for (int i = 0; i < playerIronSteel.PullCount; i++) {
-                    pullTargetsSumForce[i].text = "";
-                    pullTargetsActualForce[i].text = "";
-                }
-                for (int i = 0; i < playerIronSteel.PushCount; i++) {
-                    pushTargetsSumForce[i].text = "";
-                    pushTargetsActualForce[i].text = "";
-                }
-            }
-        }
-    }
-
-    public void Clear() {
-        HardRefresh();
-        highlightedTargetMass.text = "";
-        SetPullTextColorWeak();
-        SetPushTextColorWeak();
     }
 
     public void SetPullTextColorStrong() {

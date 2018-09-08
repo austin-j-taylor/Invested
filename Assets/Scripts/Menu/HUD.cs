@@ -71,10 +71,16 @@ public class HUD : MonoBehaviour {
         }
     }
 
+    // Clear unwanted fields after changing settings
+    public void InterfaceRefresh() {
+        BurnRateMeter.InterfaceRefresh();
+        TargetOverlayController.InterfaceRefresh();
+    }
+
     // Returns a string reading a single Force in Newtons or G's
     public static string ForceString(float force, float mass) {
         if(SettingsMenu.settingsData.forceUnits == 1) {
-            return RoundToTwoSigFigs(force).ToString() + "N";
+            return RoundIntToTwoSigFigs(force).ToString() + "N";
         } else {
             return System.Math.Round(force / mass / 9.81, 2).ToString() + "G's";
         }
@@ -92,15 +98,15 @@ public class HUD : MonoBehaviour {
         plusSign = DecideSignColor(allomanticForce, normalForce, invert);
 
         if (SettingsMenu.settingsData.forceUnits == 1) {
-            return ((int)allomanticForce.magnitude).ToString() + " " + plusSign + " " + ((int)normalForce.magnitude).ToString() + "N";
+            return RoundIntToTwoSigFigs(allomanticForce.magnitude).ToString() + " " + plusSign + " " + RoundIntToTwoSigFigs(normalForce.magnitude).ToString() + "N";
         } else {
-            return System.Math.Round(allomanticForce.magnitude / mass / 9.81, 2).ToString()
+            return System.Math.Round(allomanticForce.magnitude / mass / 9.81f, 2).ToString()
                 + " " + plusSign + " " +
-                System.Math.Round(normalForce.magnitude / mass / 9.81, 2).ToString() + "G's";
+                System.Math.Round(normalForce.magnitude / mass / 9.81f, 2).ToString() + "G's";
         }
     }
-    // Rounds an integer to two sig figs
-    private static int RoundToTwoSigFigs(float num) {
+    // Rounds an integer above 100 to two sig figs
+    private static int RoundIntToTwoSigFigs(float num) {
         int rounded = (int)num;
         if (num < 100)
             return rounded;

@@ -36,34 +36,41 @@ public class BurnRateMeter : MonoBehaviour {
         Clear();
     }
 
-    // Set the meter using the Force Magnitude display configuration.
-    public void SetBurnRateMeterForceMagnitude(Vector3 allomanticForce, Vector3 normalForce, float targetForce) {
-        float netForce = (allomanticForce + normalForce).magnitude;
-        float percent = 0;
-        if (netForce != 0) {
-            percent = targetForce / (netForce);
-        }
-        if(percent < 1f) {
-            SetActualForceText(targetForce);
-            SetSumForceText(allomanticForce * percent, normalForce * percent);
-        } else { // trying to push at a magnitude you can't reach
-            SetActualForceText(netForce);
-            SetSumForceText(allomanticForce, normalForce);
-        }
+    public void Clear() {
+        actualForceText.text = "";
+        playerInputText.text = "";
+        sumForceText.text = "";
+        metalLineCountText.text = "";
+        burnRateImage.fillAmount = minAngle;
+    }
 
+    // Clear unwanted fields after changing settings
+    public void InterfaceRefresh() {
+        if (SettingsMenu.settingsData.forceComplexity == 0) {
+            sumForceText.text = "";
+        }
+    }
+
+    /* 
+     * Set the meter using the Force Magnitude or Force Percentage display configuration, depending on the targetForce argument.
+     *  targetForce only appears in the playerInputText field.
+     *  The force calculated from rate as a % of the net force is used for the blue circle bar and the ActualForceText field.
+     */
+    public void SetBurnRateMeterForceMagnitude(Vector3 allomanticForce, Vector3 normalForce, float rate, float targetForce) {
         playerInputText.text = HUD.ForceString(targetForce, playerIronSteel.Mass);
-        SetFillPercent(percent);
+
+        SetActualForceText((allomanticForce + normalForce).magnitude);
+        SetSumForceText(allomanticForce, normalForce);
+        SetFillPercent(rate);
     }
 
     // Set the meter using the Percentage display configuration.
     public void SetBurnRateMeterPercentage(Vector3 allomanticForce, Vector3 normalForce, float rate) {
-        float netForce = (allomanticForce + normalForce).magnitude;
-        int percent = (int)Mathf.Round(rate * 100);
-        playerInputText.text = percent + "%";
+        playerInputText.text = (int)Mathf.Round(rate * 100) + "%";
 
-        SetFillPercent(rate);
-        SetActualForceText(netForce);
+        SetActualForceText((allomanticForce + normalForce).magnitude);
         SetSumForceText(allomanticForce, normalForce);
+        SetFillPercent(rate);
     }
 
     private void SetActualForceText(float forceActual) {
@@ -80,20 +87,6 @@ public class BurnRateMeter : MonoBehaviour {
 
     private void SetFillPercent(float percent) {
         burnRateImage.fillAmount = minAngle + (percent) * (maxAngle);
-    }
-
-    public void InterfaceRefresh() {
-        if (SettingsMenu.settingsData.forceComplexity == 0) {
-            sumForceText.text = "";
-        }
-    }
-
-    public void Clear() {
-        actualForceText.text = "";
-        playerInputText.text = "";
-        sumForceText.text = "";
-        metalLineCountText.text = "";
-        burnRateImage.fillAmount = minAngle;
     }
 
     public void SetForceTextColorStrong() {
