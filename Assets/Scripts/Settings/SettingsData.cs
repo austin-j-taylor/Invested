@@ -9,6 +9,7 @@ using System.IO;
 public class SettingsData : MonoBehaviour {
 
     private const string configFileName = "config.json";
+    private const string defaultConfigFileName = "default_config.json";
     
     // Gameplay
     public int controlScheme; // 0 for MK45, 1 for MKQE, 2 for Gamepad
@@ -47,7 +48,7 @@ public class SettingsData : MonoBehaviour {
         LoadSettings();
     }
 
-    private void LoadSettings() {
+    public void LoadSettings() {
         StreamReader reader = new StreamReader(configFileName, true);
         string jSONText = reader.ReadToEnd();
         reader.Close();
@@ -61,6 +62,20 @@ public class SettingsData : MonoBehaviour {
         StreamWriter writer = new StreamWriter(configFileName, false);
         writer.Write(jSONText);
         writer.Close();
+    }
+
+    public void ResetToDefaults() {
+        StreamReader reader = new StreamReader(defaultConfigFileName, true);
+        reader.ReadLine(); // get rid of comments in first line
+        reader.ReadLine();
+        string jSONText = reader.ReadToEnd();
+        reader.Close();
+
+        StreamWriter writer = new StreamWriter(configFileName, false);
+        writer.Write(jSONText);
+        writer.Close();
+
+        LoadSettings();
     }
 
     /*

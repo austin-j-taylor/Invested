@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class SettingsMenu : MonoBehaviour {
@@ -10,6 +12,10 @@ public class SettingsMenu : MonoBehaviour {
     private const string s_interface = "Interface";
     private const string s_allomancy = "Allomancy Physics";
     private const string s_world = "World Physics";
+    private const string s_back = "Back";
+    private const string s_save = "Save & Back";
+    private const string s_reset = "Reset to Defaults";
+    private const string s_reset_confirmed = "Settings reset.";
 
     // Previously-used string constants for buttons, labels, details, etc.
     //// Gameplay
@@ -134,10 +140,17 @@ public class SettingsMenu : MonoBehaviour {
     private Transform allomancyHeader;
     private Transform worldHeader;
     private Button closeButton;
-    
+    private Text closeText;
+    private Button discardButton;
+    private Button resetToDefaultsButton;
+    private Text resetToDefaultsText;
+
+    private Setting[] settings;
+
     public static SettingsData settingsData;
 
     void Awake() {
+        settings = GetComponentsInChildren<Setting>();
         settingsData = gameObject.AddComponent<SettingsData>();
 
         // Settings Header
@@ -161,6 +174,10 @@ public class SettingsMenu : MonoBehaviour {
         worldHeader = transform.GetChild(6);
         // Close Button
         closeButton = transform.GetChild(7).GetComponent<Button>();
+        closeText = closeButton.GetComponentInChildren<Text>();
+        discardButton = transform.GetChild(8).GetComponent<Button>();
+        resetToDefaultsButton = transform.GetChild(9).GetComponent<Button>();
+        resetToDefaultsText = resetToDefaultsButton.GetComponentInChildren<Text>();
 
         // Command listeners assignment
         glossaryButton.onClick.AddListener(OpenGlossary);
@@ -169,32 +186,44 @@ public class SettingsMenu : MonoBehaviour {
         allomancyButton.onClick.AddListener(OpenAllomancy);
         worldButton.onClick.AddListener(OpenWorld);
         closeButton.onClick.AddListener(OnClickClose);
+        discardButton.onClick.AddListener(OnClickDiscard);
+        resetToDefaultsButton.onClick.AddListener(OnClickResetToDefaults);
         // Initial field assignments
         titleText.text = s_settings;
-
+        closeText.text = s_back;
+        resetToDefaultsText.text = s_reset;
     }
 
     private void Start() {
         // Refresh all settings after they've been loaded
-        foreach (Setting setting in GetComponentsInChildren<Setting>()) {
+        RefreshSettings();
+
+        // Now, set up the scene to start with only the Title Screen visible
+        //settingsHeader.gameObject.SetActive(false);
+        //glossaryHeader.gameObject.SetActive(false);
+        //gameplayHeader.gameObject.SetActive(false);
+        //interfaceHeader.gameObject.SetActive(false);
+        //allomancyHeader.gameObject.SetActive(false);
+        //worldHeader.gameObject.SetActive(false);
+        discardButton.gameObject.SetActive(false);
+        resetToDefaultsButton.gameObject.SetActive(false);
+    }
+
+    private void RefreshSettings() {
+        foreach (Setting setting in settings) {
             setting.RefreshData();
             setting.RefreshText();
         }
-
-        // Now, set up the scene to start with only the Title Screen visible
-        settingsHeader.gameObject.SetActive(false);
-        glossaryHeader.gameObject.SetActive(false);
-        gameplayHeader.gameObject.SetActive(false);
-        interfaceHeader.gameObject.SetActive(false);
-        allomancyHeader.gameObject.SetActive(false);
-        worldHeader.gameObject.SetActive(false);
     }
 
     public void OpenSettings() {
         gameObject.SetActive(true);
+        resetToDefaultsButton.gameObject.SetActive(transform);
     }
 
     public void CloseSettings() {
+        resetToDefaultsText.text = s_reset;
+        resetToDefaultsButton.gameObject.SetActive(false);
         CloseGlossary();
         CloseInterface();
         CloseGameplay();
@@ -203,67 +232,74 @@ public class SettingsMenu : MonoBehaviour {
         gameObject.SetActive(false);
     }
 
+    private void OpenHeader() {
+        resetToDefaultsText.text = s_reset;
+        settingsHeader.gameObject.SetActive(false);
+        discardButton.gameObject.SetActive(true);
+        resetToDefaultsButton.gameObject.SetActive(false);
+        closeText.text = s_save;
+    }
+
     private void OpenGlossary() {
         titleText.text = s_glossary;
-        settingsHeader.gameObject.SetActive(false);
         glossaryHeader.gameObject.SetActive(true);
+        OpenHeader();
     }
 
     private void CloseGlossary() {
         titleText.text = s_settings;
-        settingsHeader.gameObject.SetActive(true);
         glossaryHeader.gameObject.SetActive(false);
     }
 
     private void OpenGameplay() {
         titleText.text = s_gameplay;
-        settingsHeader.gameObject.SetActive(false);
         gameplayHeader.gameObject.SetActive(true);
+        OpenHeader();
     }
 
     private void CloseGameplay() {
         titleText.text = s_settings;
-        settingsHeader.gameObject.SetActive(true);
         gameplayHeader.gameObject.SetActive(false);
     }
 
     private void OpenInterface() {
         titleText.text = s_interface;
-        settingsHeader.gameObject.SetActive(false);
         interfaceHeader.gameObject.SetActive(true);
+        OpenHeader();
     }
 
     private void CloseInterface() {
         titleText.text = s_settings;
-        settingsHeader.gameObject.SetActive(true);
         interfaceHeader.gameObject.SetActive(false);
     }
 
     private void OpenAllomancy() {
         titleText.text = s_allomancy;
-        settingsHeader.gameObject.SetActive(false);
         allomancyHeader.gameObject.SetActive(true);
+        OpenHeader();
     }
 
     private void CloseAllomancy() {
         titleText.text = s_settings;
-        settingsHeader.gameObject.SetActive(true);
         allomancyHeader.gameObject.SetActive(false);
     }
 
     private void OpenWorld() {
         titleText.text = s_world;
-        settingsHeader.gameObject.SetActive(false);
         worldHeader.gameObject.SetActive(true);
+        OpenHeader();
     }
 
     private void CloseWorld() {
         titleText.text = s_settings;
-        settingsHeader.gameObject.SetActive(true);
         worldHeader.gameObject.SetActive(false);
     }
 
     public void BackSettings() {
+        settingsHeader.gameObject.SetActive(true);
+        discardButton.gameObject.SetActive(false);
+        resetToDefaultsButton.gameObject.SetActive(true);
+        closeText.text = s_back;
 
         if (IsGlossaryOpen)
             CloseGlossary();
@@ -276,13 +312,24 @@ public class SettingsMenu : MonoBehaviour {
         else if (IsWorldOpen)
             CloseWorld();
         else {
-            // And save settings
-            settingsData.SaveSettings();
             CloseSettings();
         }
     }
 
     private void OnClickClose() {
+        settingsData.SaveSettings();
         BackSettings();
+    }
+
+    private void OnClickDiscard() {
+        BackSettings();
+        settingsData.LoadSettings();
+        RefreshSettings();
+    }
+
+    private void OnClickResetToDefaults() {
+        resetToDefaultsText.text = s_reset_confirmed;
+        settingsData.ResetToDefaults();
+        RefreshSettings();
     }
 }
