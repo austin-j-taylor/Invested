@@ -71,6 +71,8 @@ public class SettingsData : MonoBehaviour {
         string jSONText = reader.ReadToEnd();
         reader.Close();
 
+        JsonUtility.FromJsonOverwrite(jSONText, this);
+
         StreamWriter writer = new StreamWriter(configFileName, false);
         writer.Write(jSONText);
         writer.Close();

@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class CoinPouch : MonoBehaviour {
 
@@ -20,7 +17,7 @@ public class CoinPouch : MonoBehaviour {
     }
 
     public void AddCoin(Coin coin) {
-        if (coin.Allomancer == Player.PlayerIronSteel)
+        if (coin.Allomancer == Player.PlayerIronSteel || Player.PlayerIronSteel.IsTarget(coin))
             Player.PlayerIronSteel.RemoveTarget(coin, true, true);
         Destroy(coin.gameObject);
         Count++;

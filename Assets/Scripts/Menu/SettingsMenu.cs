@@ -100,6 +100,11 @@ public class SettingsMenu : MonoBehaviour {
             return gameObject.activeSelf;
         }
     }
+    public bool AreHeadersClosed {
+        get {
+            return settingsHeader.gameObject.activeSelf;
+        }
+    }
     public bool IsGlossaryOpen {
         get {
             return glossaryHeader.gameObject.activeSelf;
@@ -198,13 +203,6 @@ public class SettingsMenu : MonoBehaviour {
         // Refresh all settings after they've been loaded
         RefreshSettings();
 
-        // Now, set up the scene to start with only the Title Screen visible
-        //settingsHeader.gameObject.SetActive(false);
-        //glossaryHeader.gameObject.SetActive(false);
-        //gameplayHeader.gameObject.SetActive(false);
-        //interfaceHeader.gameObject.SetActive(false);
-        //allomancyHeader.gameObject.SetActive(false);
-        //worldHeader.gameObject.SetActive(false);
         discardButton.gameObject.SetActive(false);
         resetToDefaultsButton.gameObject.SetActive(false);
     }
@@ -240,15 +238,24 @@ public class SettingsMenu : MonoBehaviour {
         closeText.text = s_save;
     }
 
+    private void CloseHeader() {
+        settingsHeader.gameObject.SetActive(true);
+        discardButton.gameObject.SetActive(false);
+        resetToDefaultsButton.gameObject.SetActive(true);
+        closeText.text = s_back;
+    }
+
     private void OpenGlossary() {
         titleText.text = s_glossary;
         glossaryHeader.gameObject.SetActive(true);
-        OpenHeader();
+        settingsHeader.gameObject.SetActive(false);
+        resetToDefaultsButton.gameObject.SetActive(false);
     }
 
     private void CloseGlossary() {
         titleText.text = s_settings;
         glossaryHeader.gameObject.SetActive(false);
+        CloseHeader();
     }
 
     private void OpenGameplay() {
@@ -260,6 +267,7 @@ public class SettingsMenu : MonoBehaviour {
     private void CloseGameplay() {
         titleText.text = s_settings;
         gameplayHeader.gameObject.SetActive(false);
+        CloseHeader();
     }
 
     private void OpenInterface() {
@@ -271,6 +279,7 @@ public class SettingsMenu : MonoBehaviour {
     private void CloseInterface() {
         titleText.text = s_settings;
         interfaceHeader.gameObject.SetActive(false);
+        CloseHeader();
     }
 
     private void OpenAllomancy() {
@@ -282,6 +291,7 @@ public class SettingsMenu : MonoBehaviour {
     private void CloseAllomancy() {
         titleText.text = s_settings;
         allomancyHeader.gameObject.SetActive(false);
+        CloseHeader();
     }
 
     private void OpenWorld() {
@@ -293,14 +303,16 @@ public class SettingsMenu : MonoBehaviour {
     private void CloseWorld() {
         titleText.text = s_settings;
         worldHeader.gameObject.SetActive(false);
+        CloseHeader();
     }
 
-    public void BackSettings() {
-        settingsHeader.gameObject.SetActive(true);
-        discardButton.gameObject.SetActive(false);
-        resetToDefaultsButton.gameObject.SetActive(true);
-        closeText.text = s_back;
+    public void BackAndSaveSettings() {
+        if (!AreHeadersClosed)
+            settingsData.SaveSettings();
+        BackSettings();
+    }
 
+    private void BackSettings() {
         if (IsGlossaryOpen)
             CloseGlossary();
         else if (IsGameplayOpen)
@@ -317,14 +329,13 @@ public class SettingsMenu : MonoBehaviour {
     }
 
     private void OnClickClose() {
-        settingsData.SaveSettings();
-        BackSettings();
+        BackAndSaveSettings();
     }
 
     private void OnClickDiscard() {
-        BackSettings();
         settingsData.LoadSettings();
         RefreshSettings();
+        BackSettings();
     }
 
     private void OnClickResetToDefaults() {

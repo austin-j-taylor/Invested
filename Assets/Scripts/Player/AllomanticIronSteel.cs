@@ -28,7 +28,6 @@ public class AllomanticIronSteel : MonoBehaviour {
     private const float timeToHoldDown = .5f;
     private const float timeDoubleTapWindow = .5f;
     // Other Constants
-    private const int targetForceMagnitudeChange = 100;
     private const float burnRateLerpConstant = .30f;
     private const int blueLineLayer = 10;
     public const int maxNumberOfTargets = 10;
@@ -1078,21 +1077,16 @@ public class AllomanticIronSteel : MonoBehaviour {
 
     private void ChangeTargetForceMagnitude(float change) {
         if (change > 0) {
-            //change = Mathf.Max(10, (lastMaximumAllomanticForce + lastMaximumNormalForce).magnitude / 10f);
+            change = 100;
             if (forceMagnitudeTarget < 100) {
-                change = targetForceMagnitudeChange / 10f;
-            } else {
-                change = targetForceMagnitudeChange;
+                change /= 10f;
             }
         } else if (change < 0) {
-            //change = -Mathf.Max(10, (lastMaximumAllomanticForce + lastMaximumNormalForce).magnitude / 10f);
+            change = -100;
             if (forceMagnitudeTarget <= 100) {
-                change = -targetForceMagnitudeChange / 10f;
-            } else {
-                change = -targetForceMagnitudeChange;
+                change /= 10f;
             }
         }
-
         forceMagnitudeTarget = forceMagnitudeTarget + change;
         if (forceMagnitudeTarget <= 0.01f)
             StopBurningIronSteel();
@@ -1101,12 +1095,15 @@ public class AllomanticIronSteel : MonoBehaviour {
     // Increments or decrements the current burn rate
     private void ChangeBurnRateTarget(float change) {
         if (change > 0) {
-            change = .1f;
+            change = .10f;
+            if (ironBurnRateTarget < .09f || steelBurnRateTarget < .09f) {
+                change /= 10f;
+            }
         } else if (change < 0) {
-            change = -.1f;
-        }
-        if(ironBurnRateTarget < .10f || steelBurnRateTarget < .10f) {
-            change /= 10f;
+            change = -.10f;
+            if (ironBurnRateTarget <= .10f || steelBurnRateTarget <= .10f) {
+                change /= 10f;
+            }
         }
         SetPullRateTarget(Mathf.Clamp(ironBurnRateTarget + change, 0, 1));
         SetPushRateTarget(Mathf.Clamp(steelBurnRateTarget + change, 0, 1));
@@ -1115,10 +1112,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     // Sets the target Iron burn rate
     private void SetPullRateTarget(float rate) {
         if (rate > .001f) {
-            if (SettingsMenu.settingsData.pushControlStyle == 1)
-                ironBurnRateTarget = Mathf.Min(1, rate);
-            else
-                ironBurnRateTarget = rate;
+            ironBurnRateTarget = Mathf.Min(1, rate);
             if (HasPullTarget || HasPushTarget)
                 GamepadController.SetRumbleRight(ironBurnRateTarget * GamepadController.rumbleFactor);
         } else {
@@ -1130,10 +1124,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     // Sets the target Steel burn rate
     private void SetPushRateTarget(float rate) {
         if (rate > .001f) {
-            if (SettingsMenu.settingsData.pushControlStyle == 1)
-                steelBurnRateTarget = Mathf.Min(1, rate);
-            else
-                steelBurnRateTarget = rate;
+            steelBurnRateTarget = Mathf.Min(1, rate);
             if (HasPullTarget || HasPushTarget)
                 GamepadController.SetRumbleLeft(steelBurnRateTarget * GamepadController.rumbleFactor);
         } else {

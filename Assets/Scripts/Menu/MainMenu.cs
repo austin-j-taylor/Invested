@@ -44,7 +44,7 @@ public class MainMenu : MonoBehaviour {
                 sceneSelectMenu.CloseSceneSelect();
                 //OpenMainMenu();
             } else if(settingsMenu.IsOpen) {
-                settingsMenu.BackSettings();
+                settingsMenu.BackAndSaveSettings();
             } else {
                 settingsMenu.OpenSettings();
             }
