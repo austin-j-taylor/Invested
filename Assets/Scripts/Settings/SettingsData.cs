@@ -73,11 +73,7 @@ public class SettingsData : MonoBehaviour {
 
         JsonUtility.FromJsonOverwrite(jSONText, this);
 
-        StreamWriter writer = new StreamWriter(configFileName, false);
-        writer.Write(jSONText);
-        writer.Close();
-
-        LoadSettings();
+        SaveSettings();
     }
 
     /*
