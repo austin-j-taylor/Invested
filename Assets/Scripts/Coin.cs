@@ -36,26 +36,28 @@ public class Coin : Magnetic {
         IsStuck = false;
     }
 
-    private void OnTriggerEnter(Collider other) {
-        if (other.CompareTag("Player")) {
-            inContactWithPlayer = true;
-        }
-    }
-
-    // Makes coins sticky when colliding with something
+    // Makes coins sticky upon colliding with something
     private void OnCollisionEnter(Collision collision) {
         if (!collision.collider.CompareTag("Player")) {
-            AddFriction(collision);
+            if(Allomancer && Allomancer.SteelPushing && !LastWasPulled)
+                AddFriction(collision);
         }
     }
 
+    // Only called when not kinematic i.e. when sliding along the ground
     private void OnCollisionStay(Collision collision) {
         if (!collision.collider.CompareTag("Player")) {
-            if (Allomancer && Allomancer.SteelPushing) {
+            if (Allomancer && Allomancer.SteelPushing && !LastWasPulled) {
                 if (!IsStuck) {
                     AddFriction(collision);
                 }
             }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other) {
+        if (other.CompareTag("Player")) {
+            inContactWithPlayer = true;
         }
     }
 
@@ -91,11 +93,9 @@ public class Coin : Magnetic {
     }
 
     private void AddFriction(Collision collision) {
-        if (Allomancer && Allomancer.SteelPushing) {
-            IsStuck = collision.impulse.sqrMagnitude > stuckThreshold;
-            if (IsPerfectlyAnchored || IsStuck) {
-                Rb.velocity = Vector3.zero;
-            }
+        IsStuck = collision.impulse.sqrMagnitude > stuckThreshold;
+        if (IsPerfectlyAnchored || IsStuck) {
+            Rb.velocity = Vector3.zero;
         }
     }
 

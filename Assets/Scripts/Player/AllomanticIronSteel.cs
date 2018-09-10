@@ -217,11 +217,16 @@ public class AllomanticIronSteel : MonoBehaviour {
                 UpdateBurnRateMeter();
             }
 
-            // Could have stopped burning above. double-check.
+            // Could have stopped burning above. Check if the Allomancer is still burning.
             if(IsBurningIronSteel) {
 
                 IronPulling = Keybinds.IronPulling();
                 SteelPushing = Keybinds.SteelPushing();
+
+                // If you are trying to push and pull and don't have both push and pull targets, only pull.
+                if(IronPulling && SteelPushing && !(HasPullTarget && HasPushTarget)) {
+                    SteelPushing = false;
+                }
 
                 // Change colors of target labels when toggling pushing/pulling
                 if (IronPulling) {
