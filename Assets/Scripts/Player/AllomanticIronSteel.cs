@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -146,7 +146,6 @@ public class AllomanticIronSteel : MonoBehaviour {
 
     private void Update() {
         if (!PauseMenu.IsPaused) {
-
             // Start burning
             if ((Keybinds.SelectDown() || Keybinds.SelectAlternateDown()) && !Keybinds.Negate()) {
                 StartBurningIronSteel();
@@ -1120,6 +1119,8 @@ public class AllomanticIronSteel : MonoBehaviour {
             ironBurnRateTarget = Mathf.Min(1, rate);
             if (HasPullTarget || HasPushTarget)
                 GamepadController.SetRumbleRight(ironBurnRateTarget * GamepadController.rumbleFactor);
+            else
+                GamepadController.SetRumbleRight(0);
         } else {
             //IronPulling = false;
             ironBurnRateTarget = 0;
@@ -1132,6 +1133,8 @@ public class AllomanticIronSteel : MonoBehaviour {
             steelBurnRateTarget = Mathf.Min(1, rate);
             if (HasPullTarget || HasPushTarget)
                 GamepadController.SetRumbleLeft(steelBurnRateTarget * GamepadController.rumbleFactor);
+            else
+                GamepadController.SetRumbleLeft(0);
         } else {
             //SteelPushing = false;
             steelBurnRateTarget = 0;
@@ -1142,7 +1145,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     private void LerpToBurnRates() {
         ironBurnRate = Mathf.Lerp(ironBurnRate, ironBurnRateTarget, burnRateLerpConstant);
         steelBurnRate = Mathf.Lerp(steelBurnRate, steelBurnRateTarget, burnRateLerpConstant);
-        if (SettingsMenu.settingsData.pushControlStyle == 0 && (ironBurnRate < .001f || steelBurnRate < .001f)) {
+        if (SettingsMenu.settingsData.pushControlStyle == 0 && SettingsMenu.settingsData.controlScheme != 2 && (ironBurnRate < .001f || steelBurnRate < .001f)) {
             StopBurningIronSteel();
         }
     }

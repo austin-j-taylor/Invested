@@ -31,16 +31,12 @@ public class Player : MonoBehaviour {
         if (Keybinds.EscapeDown() && !PauseMenu.IsPaused) {
             PauseMenu.Pause();
         }
-
-        // On pressing COIN button
-        if (Keybinds.WithdrawCoinDown() && lastCoinThrowTime + coinCooldown < Time.time) {
-            lastCoinThrowTime = Time.time;
-            // If jump button had also been held, throw coin downward and target it.
-            //if (Keybinds.Jump()) {
-            //    IronSteel.AddTarget(CoinHand.SpawnCoin(transform.position + feet), false);
-            //} else { // If only pressing the COIN button, draw a coin into hand
-            PlayerIronSteel.AddTarget(CoinHand.WithdrawCoinToHand(), false);
-            //}
+        if (!PauseMenu.IsPaused) {
+            // On pressing COIN button
+            if (Keybinds.WithdrawCoinDown() && lastCoinThrowTime + coinCooldown < Time.time) {
+                lastCoinThrowTime = Time.time;
+                PlayerIronSteel.AddTarget(CoinHand.WithdrawCoinToHand(), false);
+            }
         }
 	}
 
