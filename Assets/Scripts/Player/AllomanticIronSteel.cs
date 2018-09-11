@@ -463,7 +463,7 @@ public class AllomanticIronSteel : MonoBehaviour {
      */
     private void CalculateForce(Magnetic target, bool usingIronTargets) {
         Vector3 distanceFactor = DistanceFactor(target);
-        Vector3 allomanticForce = SettingsMenu.settingsData.allomanticConstant * Mathf.Pow(target.Mass * rb.mass, chargePower) * distanceFactor /* / (usingIronTargets ? PullCount : PushCount) */ * (target.LastWasPulled ? 1 : -1);
+        Vector3 allomanticForce = SettingsMenu.settingsData.allomanticConstant * target.Charge * Mathf.Pow(rb.mass, chargePower) * distanceFactor /* / (usingIronTargets ? PullCount : PushCount) */ * (target.LastWasPulled ? 1 : -1);
 
         //thisFrameMaximumAllomanticForce += allomanticForce;
         thisFrameMaximumNetForce += allomanticForce;
@@ -497,7 +497,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                             Vector3 newTargetVelocity = target.Velocity;
                             Vector3 lastTargetAcceleration = (newTargetVelocity - target.LastVelocity) / Time.fixedDeltaTime;
                             Vector3 unaccountedForTargetAcceleration = lastTargetAcceleration - target.LastExpectedAcceleration;// + Physics.gravity;
-                            restitutionForceFromTarget = Vector3.Project(unaccountedForTargetAcceleration * target.Mass, distanceFactor.normalized);
+                            restitutionForceFromTarget = Vector3.Project(unaccountedForTargetAcceleration * target.NetMass, distanceFactor.normalized);
                         }
                     }
                     

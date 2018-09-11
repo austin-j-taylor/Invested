@@ -3,14 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VolumetricLines;
-
+/*
+ * Signifies that this object is magnetic. It can be Pushed or Pulled.
+ * The RigidBody mass of this object signifies the total mass of this object, and the "magneticMass" field indicates
+ *      the mass of this object that is actually magnetic (i.e. A person may weigh 60kg (RigidBody mass) but only have 3kg worth of metal on them, implying 57kg of non-metal.)
+ * If the magneticMass field is left to be 0, then the object is considered to be wholly magnetic (i.e. a RigidBody mass of 60kg with 60kg worth of metal) and uses the RigidBody mass
+ * If the object does not have a RigidBody attached, then fall back to the netMass field for the netMass.
+ *      If the netMass field is left to be 0, an error is thrown. 
+ *      If magneticMass is left to be 0, then the object is considered to be wholly magnetic and simply uses netMass.
+ */
 public class Magnetic : MonoBehaviour {
 
     private const float metalLinesLerpConstant = .30f;
 
     [SerializeField]
-    private float mass;
-    
+    private float netMass = 0;
+    [SerializeField]
+    private float magneticMass = 0;
+
     private bool lastWasPulled;
     private Outline highlightedTargetOutline;
     private VolumetricLineBehavior blueLine;
@@ -20,8 +30,8 @@ public class Magnetic : MonoBehaviour {
     protected Rigidbody Rb { get; set; }
 
     // Used for calculating Allomantic Normal Force
-    public Vector3 Velocity { get
-            {
+    public Vector3 Velocity {
+        get {
             if (IsStatic)
                 return Vector3.zero;
             else
@@ -46,7 +56,7 @@ public class Magnetic : MonoBehaviour {
     public Vector3 LastAllomanticForce { get; set; }
     public Vector3 LastAllomanticNormalForceFromAllomancer { get; set; }
     public Vector3 LastAllomanticNormalForceFromTarget { get; set; }
-    
+
     public bool InRange { get; set; }
     public bool IsStatic { get; set; }
 
@@ -55,7 +65,7 @@ public class Magnetic : MonoBehaviour {
             return lastWasPulled;
         }
         set {
-            if(value != lastWasPulled) { // swapped between pulling and pushing, clear certain values
+            if (value != lastWasPulled) { // swapped between pulling and pushing, clear certain values
                 lastWasPulled = value;
             }
         }
@@ -91,7 +101,10 @@ public class Magnetic : MonoBehaviour {
     public float Charge { get; private set; }
     // If this Magnetic is at the center of the screen, highlighted, ready to be targeted.
     public bool IsHighlighted { get; private set; }
-    public float Mass { get { return mass; } }
+    // The total mass of this object (RigidBody mass)
+    public float NetMass { get { return netMass; } }
+    // The magnetic mass of this object
+    public float MagneticMass { get { return magneticMass; } }
     // Global center of mass
     public Vector3 CenterOfMass {
         get {
@@ -103,8 +116,8 @@ public class Magnetic : MonoBehaviour {
             return false;
         }
     }
-    
-    private void Awake () {
+
+    private void Awake() {
         Allomancer = null;
         highlightedTargetOutline = gameObject.AddComponent<Outline>();
         blueLine = Instantiate(GameManager.MetalLineTemplate);
@@ -114,13 +127,24 @@ public class Magnetic : MonoBehaviour {
         lastWasPulled = false;
         IsHighlighted = false;
         IsStatic = Rb == null;
-        if(!IsStatic) {
-            mass = Rb.mass;
-            LocalCenterOfMass = Rb.centerOfMass;
-        } else {
+
+        if (IsStatic) { // No RigidBody attached
+            if (netMass == 0) {
+                Debug.LogError("Magnetic's netMass is 0 on an object without a RigidBody " + name + " at " + transform.position);
+            }
+            if (magneticMass == 0) {
+                magneticMass = netMass;
+            }
             LocalCenterOfMass = Vector3.zero;
+        } else { // RigidBody attached, which has its own mass, which replaces netMass
+            netMass = Rb.mass;
+            if (magneticMass == 0) {
+                magneticMass = netMass;
+            }
+            LocalCenterOfMass = Rb.centerOfMass;
         }
-        Charge = Mathf.Pow(mass, AllomanticIronSteel.chargePower);
+
+        Charge = Mathf.Pow(magneticMass, AllomanticIronSteel.chargePower);
         LastPosition = Vector3.zero;
         LastVelocity = Vector3.zero;
         LastExpectedAcceleration = Vector3.zero;
@@ -156,7 +180,7 @@ public class Magnetic : MonoBehaviour {
 
     public virtual void AddForce(Vector3 netForce) {
         if (!IsStatic) {
-            LastExpectedAcceleration = netForce / Mass;
+            LastExpectedAcceleration = netForce / netMass;
             Rb.AddForce(netForce, ForceMode.Force);
         }
     }

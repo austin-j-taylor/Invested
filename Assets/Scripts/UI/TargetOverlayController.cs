@@ -115,8 +115,8 @@ public class TargetOverlayController : MonoBehaviour {
 
                     if (positionActualForce.z > 0) {
                         pullTargetsActualForce[i].transform.position = positionActualForce;
-                        pullTargetsActualForce[i].text = HUD.ForceString(target.LastNetAllomanticForceOnTarget.magnitude, target.Mass);
-                        pullTargetsSumForce[i].text = HUD.AllomanticSumString(target.LastAllomanticForce, target.LastAllomanticNormalForceFromAllomancer, target.Mass, true);
+                        pullTargetsActualForce[i].text = HUD.ForceString(target.LastNetAllomanticForceOnTarget.magnitude, target.NetMass);
+                        pullTargetsSumForce[i].text = HUD.AllomanticSumString(target.LastAllomanticForce, target.LastAllomanticNormalForceFromAllomancer, target.NetMass, true);
                     } else { // Target is not on screen
                         pullTargetsSumForce[i].text = "";
                         pullTargetsActualForce[i].text = "";
@@ -133,8 +133,8 @@ public class TargetOverlayController : MonoBehaviour {
 
                     if (positionActualForce.z > 0) {
                         pushTargetsActualForce[i].transform.position = positionActualForce;
-                        pushTargetsActualForce[i].text = HUD.ForceString(target.LastNetAllomanticForceOnTarget.magnitude, target.Mass);
-                        pushTargetsSumForce[i].text = HUD.AllomanticSumString(target.LastAllomanticForce, target.LastAllomanticNormalForceFromAllomancer, target.Mass, true);
+                        pushTargetsActualForce[i].text = HUD.ForceString(target.LastNetAllomanticForceOnTarget.magnitude, target.NetMass);
+                        pushTargetsSumForce[i].text = HUD.AllomanticSumString(target.LastAllomanticForce, target.LastAllomanticNormalForceFromAllomancer, target.NetMass, true);
                     } else { // Target is not on screen
                         pushTargetsSumForce[i].text = "";
                         pushTargetsActualForce[i].text = "";
@@ -152,7 +152,7 @@ public class TargetOverlayController : MonoBehaviour {
 
                     if (positionActualForce.z > 0) {
                         pullTargetsActualForce[i].transform.position = positionActualForce;
-                        pullTargetsActualForce[i].text = HUD.ForceString(target.LastNetAllomanticForceOnTarget.magnitude, target.Mass);
+                        pullTargetsActualForce[i].text = HUD.ForceString(target.LastNetAllomanticForceOnTarget.magnitude, target.NetMass);
                     } else { // Target is not on screen
                         pullTargetsSumForce[i].text = "";
                         pullTargetsActualForce[i].text = "";
@@ -169,7 +169,7 @@ public class TargetOverlayController : MonoBehaviour {
 
                     if (positionActualForce.z > 0) {
                         pushTargetsActualForce[i].transform.position = positionActualForce;
-                        pushTargetsActualForce[i].text = HUD.ForceString(target.LastNetAllomanticForceOnTarget.magnitude, target.Mass);
+                        pushTargetsActualForce[i].text = HUD.ForceString(target.LastNetAllomanticForceOnTarget.magnitude, target.NetMass);
                     } else { // Target is not on screen
                         pushTargetsSumForce[i].text = "";
                         pushTargetsActualForce[i].text = "";
@@ -183,7 +183,7 @@ public class TargetOverlayController : MonoBehaviour {
                 Vector3 heightToTop = Vector3.zero;
                 heightToTop.y = Player.PlayerIronSteel.HighlightedTarget.ColliderBody.bounds.size.y / 2f;
 
-                highlightedTargetMass.text = HUD.MassString(Player.PlayerIronSteel.HighlightedTarget.Mass);
+                highlightedTargetMass.text = HUD.MassString(Player.PlayerIronSteel.HighlightedTarget.MagneticMass);
                 highlightedTargetMass.transform.position = CameraController.ActiveCamera.WorldToScreenPoint(Player.PlayerIronSteel.HighlightedTarget.transform.position + heightToTop) + new Vector3(0, pixelDelta);
             } else { // Target is not highlighted or is not on screen, hide mass label
                 highlightedTargetMass.text = "";

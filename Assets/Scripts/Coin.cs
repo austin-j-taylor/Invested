@@ -77,7 +77,7 @@ public class Coin : Magnetic {
     public override void AddForce(Vector3 netForce) {
         // Calculate drag from its new velocity
         Vector3 newNetForce = Vector3.ClampMagnitude(
-            -(Vector3.Project(Rb.velocity, netForce.normalized) + (netForce / Mass * Time.fixedDeltaTime)) * drag, netForce.magnitude
+            -(Vector3.Project(Rb.velocity, netForce.normalized) + (netForce / NetMass * Time.fixedDeltaTime)) * drag, netForce.magnitude
         ) + netForce;
 
         if (IsStuck) {
@@ -88,7 +88,7 @@ public class Coin : Magnetic {
             }
         }
 
-        LastExpectedAcceleration = newNetForce / Mass;
+        LastExpectedAcceleration = newNetForce / NetMass;
         Rb.AddForce(newNetForce, ForceMode.Force);
     }
 
