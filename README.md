@@ -14,6 +14,20 @@ This Unity project makes use of [Volumetric Lines by Johannes Unterguggenberger]
 
 ### Recent changes:
 
+Version 1.1.3
+
+- Settings are now saved to disk
+	- Added separate settings for Mouse Sensitivity and Gamepad Sensitivity
+	- Added setting to disable/enable FPS counter
+- Improvements to Magnitude Push Control Style
+	- Magnitude can now be controlled with precision from 0N to 100N
+	- Works better when targeting multiple metal targets
+	- Burn Rate Meter updates more smoothly
+	- Works better with both ANF and EWV Anchored Push Boosts
+- Fixed bugs in the calculation of the ANF
+- Fixed bug with friction on coins when trying to push and pull on them simultaneously
+- Added something special to the Experimental map
+
 Version 1.1.2
 
 - Changed how coins are thrown
@@ -28,21 +42,3 @@ Version 1.1.2
 - Burn Rate can now be controlled with precision from 0% to 10%
 - Fixed bug with Magnitude Push Control Style when targeting a force of 0.
 - Added Experimental scene
-
-Version 1.1.1
-
-- Improved blue metal lines
-	- More massive targets can be detected and targeted from farther away than less massive targets
-	- Lines are thinner for less visual clutter
-	- The higher the burn rate, the greater the range for detecting targets
-- Improved camera
-	- No longer clips through walls
-	- Added option for first person perspective
-- Coins no longer clip through the ground
-	- Coins also return to the player's coin pouch much more smoothly when pulled
-- Scrolling to a burn rate of 0% now extinguishes metals
-- Setting the Force Display Units to be G's now scales the acceleration with the target's mass, not the player's
-- Performance improvements
-	- Added option to disable rendering of blue lines for lower-end computers
-	- Blue lines are now a bit less intensive to calculate
-- Increased default Allomantic Constant
