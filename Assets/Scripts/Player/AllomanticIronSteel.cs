@@ -7,21 +7,28 @@ using VolumetricLines;
  * Controls all facets of Ironpulling and Steelpushing.
  */
 public class AllomanticIronSteel : MonoBehaviour {
-    
+
     // Constants for Metal Lines
-    private const float verticalImportanceFactor = 100f;
     private const float horizontalMin = .45f;
     private const float horizontalMax = .55f;
     private const float verticalMin = .2f;
     private const float verticalMax = .8f;
-    private const float gMaxLines = .1f;
-    private const float bMaxLines = .85f;
+    private const float targetFocusRadius = .1f;                   // Determines the range around the center of the screen within which blue lines are in focus.
+    private const float verticalImportanceFactor = 1 / 64f;        // Determines how elliptical the range around the center of the screen is. Squared.
+    private const float targetFocusFalloffConstant = 128;           // Determines how quickly blue lines blend from in-focus to out-of-focus
+    private const float targetFocusLowerBound = .2f;               // Determines the luminosity of blue lines that are out of foucus
+    private const float targetFocusOffScreenBound = .035f;           // Determines the luminosity of blue lines that are off-screen
+    private const float lowLineColor = .1f;
+    private const float highLineColor = .85f;
+    private readonly Color targetedRedLine = new Color(1, .1f, 1);
+    private readonly Color targetedGreenLine = new Color(0, 1, .1f);
+    private readonly Color targetedBlueLine = new Color(0, .1f, 1);
     private const float blueLineWidthBaseFactor = .04f;
     private const float blueLineTargetedWidthFactor = 1.5f;
     private const float blueLineStartupFactor = 2f;
     private const float blueLineBrightnessFactor = 1 / 4f;
-    private const float forceDetectionThreshold = 50f;
-    private const float lightSaberConstant = 8 * 1024;
+    private const float forceDetectionThreshold = 50f;              // If the potential force on a target is above this, a blue line will point to it
+    private const float lightSaberConstant = 1 * 1024;
     // Physics Constants
     public const float chargePower = 1f / 8f;
     // Button-press time constants
@@ -34,7 +41,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     // Simple metal booleans for passing to methods
     private const bool steel = false;
     private const bool iron = true;
-    
+
     private Rigidbody rb;
     [SerializeField]
     private Transform metalLinesAnchor;
@@ -165,7 +172,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                 }
 
                 // Check scrollwheel for changing the max number of targets and burn rate
-                if(SettingsMenu.settingsData.controlScheme == 2) {
+                if (SettingsMenu.settingsData.controlScheme == 2) {
                     float scrollValue = Keybinds.ScrollWheelAxis();
                     if (scrollValue > 0) {
                         IncrementNumberOfTargets();
@@ -217,13 +224,13 @@ public class AllomanticIronSteel : MonoBehaviour {
             }
 
             // Could have stopped burning above. Check if the Allomancer is still burning.
-            if(IsBurningIronSteel) {
+            if (IsBurningIronSteel) {
 
                 IronPulling = Keybinds.IronPulling();
                 SteelPushing = Keybinds.SteelPushing();
 
                 // If you are trying to push and pull and don't have both push and pull targets, only pull.
-                if(IronPulling && SteelPushing && !(HasPullTarget && HasPushTarget)) {
+                if (IronPulling && SteelPushing && !(HasPullTarget && HasPushTarget)) {
                     SteelPushing = false;
                 }
 
@@ -353,7 +360,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                     }
                 }
                 lastAllomancerVelocity = rb.velocity;
-                
+
                 lastAllomanticForce = thisFrameAllomanticForce;
                 thisFrameAllomanticForce = Vector3.zero;
                 lastNormalForce = thisFrameNormalForce;
@@ -500,11 +507,11 @@ public class AllomanticIronSteel : MonoBehaviour {
                             restitutionForceFromTarget = Vector3.Project(unaccountedForTargetAcceleration * target.NetMass, distanceFactor.normalized);
                         }
                     }
-                    
+
                     Vector3 lastAllomancerAcceleration = (rb.velocity - lastAllomancerVelocity) / Time.fixedDeltaTime;
                     Vector3 unaccountedForAllomancerAcceleration = lastAllomancerAcceleration - lastExpectedAllomancerAcceleration;
                     restitutionForceFromAllomancer = Vector3.Project(unaccountedForAllomancerAcceleration * rb.mass, distanceFactor.normalized);
-                    
+
                     if (SettingsMenu.settingsData.normalForceMax == 1) {
                         restitutionForceFromTarget = Vector3.ClampMagnitude(restitutionForceFromTarget, allomanticForce.magnitude);
                         restitutionForceFromAllomancer = Vector3.ClampMagnitude(restitutionForceFromAllomancer, allomanticForce.magnitude);
@@ -633,6 +640,10 @@ public class AllomanticIronSteel : MonoBehaviour {
         }
     }
 
+    /*
+     * Applys the force that was calculated in CalculateForce to the target and player.
+     * This effectively executes the Push or Pull.
+     */
     private void AddForce(Magnetic target, bool pulling) {
         target.LastWasPulled = pulling;
         //Debug.Log(target.LastAllomanticNormalForceFromTarget);
@@ -669,7 +680,7 @@ public class AllomanticIronSteel : MonoBehaviour {
         percentOfAllomancerForceReturned = resititutionFromPlayersForce.magnitude / allomanticsForce;
         netTargetsForce = target.LastNetAllomanticForceOnTarget.magnitude;
     }
-    
+
 
     /*
      * Searches all Magnetics in the scene for those that are within detection range of the player.
@@ -688,7 +699,7 @@ public class AllomanticIronSteel : MonoBehaviour {
         for (int i = 0; i < GameManager.MagneticsInScene.Count; i++) {
             Magnetic target = GameManager.MagneticsInScene[i];
             if ((target.CenterOfMass - CenterOfMass).sqrMagnitude < SettingsMenu.settingsData.maxPushRange * SettingsMenu.settingsData.maxPushRange) {
-            //if ((target.CenterOfMass - CenterOfMass).sqrMagnitude < sqrMaxRange) {
+                //if ((target.CenterOfMass - CenterOfMass).sqrMagnitude < sqrMaxRange) {
                 float softForce = SettingsMenu.settingsData.allomanticConstant * target.Charge * Mathf.Pow(Mass, chargePower) * DistanceFactor(target).magnitude;
                 // If using Percentage force mode, burn rate affects your range for burning
                 if (SettingsMenu.settingsData.pushControlStyle == 0 && SettingsMenu.settingsData.controlScheme != 2)
@@ -698,14 +709,21 @@ public class AllomanticIronSteel : MonoBehaviour {
                     //if ((target.CenterOfMass - CenterOfMass).sqrMagnitude < effectiveMaxRange * effectiveMaxRange) {
                     // Magnetic is within range, as determined by its mass
                     target.InRange = true;
-
                     // calculate the object's position on screen and find the one closest to the center to highlight.
                     Vector3 screenPosition = CameraController.ActiveCamera.WorldToViewportPoint(target.transform.position);
-                    if (screenPosition.z > 0 && screenPosition.x > horizontalMin && screenPosition.x < horizontalMax && screenPosition.y > verticalMin && screenPosition.y < verticalMax) {
-                        // Test if the new object is the more ideal pullTarget than the last most ideal pullTarget
-                        float distanceFromCenter = verticalImportanceFactor * Mathf.Pow(screenPosition.x - .5f, 2) + Mathf.Pow(screenPosition.y - .5f, 2);
-                        if (distanceFromCenter < smallestDistanceFromCenter) {
-                            smallestDistanceFromCenter = distanceFromCenter;
+
+                    // Calculate the distance from the center for deciding which blue lines are "in-focus"
+                    float weightedDistanceFromCenter = Mathf.Sqrt(Mathf.Pow(screenPosition.x - .5f, 2) + verticalImportanceFactor * Mathf.Pow(screenPosition.y - .5f, 2));
+                    if (screenPosition.z < 0) { // the target is behind the player, off-screen
+                        weightedDistanceFromCenter = 1;
+                    }
+
+                    // If the Magnetic could be targeted
+                    // A Magnetic can be targeted if it is within an ellipse. The ellipse's x axis is targetFocusRadius, and its y is verticalImportanceFactor * targetFocusRadius.
+                    if (weightedDistanceFromCenter < targetFocusRadius) {
+                        // IF the new Magnetic is closer to the center of the screen than the previous most-center Magnetic
+                        if (weightedDistanceFromCenter < smallestDistanceFromCenter) {
+                            smallestDistanceFromCenter = weightedDistanceFromCenter;
                             centerObject = target;
                         }
                     }
@@ -715,11 +733,16 @@ public class AllomanticIronSteel : MonoBehaviour {
                         //float closeness = Mathf.Pow(softForce, 2) / 64;
                         //float closeness = Mathf.Exp(-blueLineBrightnessFactor / softForce);
                         float closeness = Mathf.Exp(-blueLineStartupFactor * Mathf.Pow(1 / softForce, blueLineBrightnessFactor));
+                        // Make lines in-focus if near the center of the screen
+                        if (screenPosition.z < 0)
+                            closeness = targetFocusOffScreenBound;
+                        else
+                            closeness *= targetFocusLowerBound + (1 - targetFocusLowerBound) * Mathf.Exp(-Mathf.Pow(weightedDistanceFromCenter + 1 - targetFocusRadius, targetFocusFalloffConstant));
                         target.SetBlueLine(
                             CenterOfMass,
                             blueLineWidthBaseFactor * target.Charge,
                             1,
-                            new Color(0, closeness * gMaxLines, closeness * bMaxLines, 1)
+                            new Color(0, closeness * lowLineColor, closeness * highLineColor, 1)
                             );
                     } else {
                         target.DisableBlueLine();
@@ -745,7 +768,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                     CenterOfMass,
                     blueLineWidthBaseFactor * target.Charge * blueLineTargetedWidthFactor,
                     Mathf.Exp(-target.LastNetAllomanticForceOnAllomancer.magnitude / lightSaberConstant),
-                    new Color(0, 1, gMaxLines, 1));
+                    SettingsMenu.settingsData.pullTargetLineColor == 0 ? targetedBlueLine : targetedGreenLine);
             } else {
                 target.InRange = false;
                 target.DisableBlueLine();
@@ -759,7 +782,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                     CenterOfMass,
                     blueLineWidthBaseFactor * target.Charge * blueLineTargetedWidthFactor,
                     Mathf.Exp(-target.LastNetAllomanticForceOnAllomancer.magnitude / lightSaberConstant),
-                    new Color(1, gMaxLines, 0, 1));
+                    SettingsMenu.settingsData.pushTargetLineColor == 0 ? targetedBlueLine : targetedRedLine);
             } else {
                 target.InRange = false;
                 target.DisableBlueLine();
