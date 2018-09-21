@@ -12,6 +12,7 @@ public class Player : MonoBehaviour {
 
     public static AllomanticIronSteel PlayerIronSteel { get; private set; }
     public static Player PlayerInstance { get; private set; }
+    public static bool CanControlPlayer { get; set; }
     public Hand CoinHand { get; private set; }
 
     private float lastCoinThrowTime = 0;
@@ -42,6 +43,9 @@ public class Player : MonoBehaviour {
 
     // Reset certain values before the player enters a new scene
     public void ReloadPlayerIntoNewScene(int scene) {
+        CanControlPlayer = true;
+        GetComponentInChildren<MeshRenderer>().material = GameManager.Material_Gebaude;
+
         movementController.Clear();
         PlayerIronSteel.Clear();
         CoinHand.Clear();

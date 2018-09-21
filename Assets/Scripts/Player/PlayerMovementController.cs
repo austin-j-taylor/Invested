@@ -30,23 +30,25 @@ public class PlayerMovementController : MonoBehaviour {
         groundedChecker = GetComponentInChildren<PlayerGroundedChecker>();
     }
     void FixedUpdate() {
-        Vector3 movement = new Vector3(Keybinds.Horizontal(), 0f, Keybinds.Vertical());
-        movement = transform.TransformDirection(Vector3.ClampMagnitude(movement, 1));
-        if (IsGrounded) {
-            if (movement.magnitude > 0) {
-                // You: "why use ints to represent binary values that should be represented by booleans"
-                // Me, an intellectual:
+        if (Player.CanControlPlayer) {
+            Vector3 movement = new Vector3(Keybinds.Horizontal(), 0f, Keybinds.Vertical());
+            movement = transform.TransformDirection(Vector3.ClampMagnitude(movement, 1));
+            if (IsGrounded) {
+                if (movement.magnitude > 0) {
+                    // You: "why use ints to represent binary values that should be represented by booleans"
+                    // Me, an intellectual:
+                    rb.drag = SettingsMenu.settingsData.playerAirResistance * airDrag;
+                } else {
+                    rb.drag = SettingsMenu.settingsData.playerAirResistance * groundedDrag;
+                }
+            } else { // is airborne
                 rb.drag = SettingsMenu.settingsData.playerAirResistance * airDrag;
-            } else {
-                rb.drag = SettingsMenu.settingsData.playerAirResistance * groundedDrag;
+                movement *= airControlFactor;
             }
-        } else { // is airborne
-            rb.drag = SettingsMenu.settingsData.playerAirResistance * airDrag;
-            movement *= airControlFactor;
-        }
-        if (movement.magnitude > 0) {
-            movement *= acceleration * Mathf.Max(maxRunningSpeed - Vector3.Project(rb.velocity, movement.normalized).magnitude, 0);
-            rb.AddForce(movement, ForceMode.Acceleration);
+            if (movement.magnitude > 0) {
+                movement *= acceleration * Mathf.Max(maxRunningSpeed - Vector3.Project(rb.velocity, movement.normalized).magnitude, 0);
+                rb.AddForce(movement, ForceMode.Acceleration);
+            }
         }
     }
 
@@ -63,6 +65,7 @@ public class PlayerMovementController : MonoBehaviour {
     public void Clear() {
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
+        rb.useGravity = SettingsMenu.settingsData.playerGravity == 1;
     }
 
     public void EnableGravity() {
@@ -71,5 +74,4 @@ public class PlayerMovementController : MonoBehaviour {
     public void DisableGravity() {
         rb.useGravity = false;
     }
-
 }

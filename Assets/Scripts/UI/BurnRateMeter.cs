@@ -49,6 +49,13 @@ public class BurnRateMeter : MonoBehaviour {
         }
     }
 
+    // Hide the burn meter if the player is not burning iron/steel
+    public void HardRefresh() {
+        if(!Player.PlayerIronSteel.IsBurningIronSteel) {
+            Clear();
+        }
+    }
+
     /* 
      * Set the meter using the Force Magnitude or Force Percentage display configuration, depending on the targetForce argument.
      *  targetForce only appears in the playerInputText field.

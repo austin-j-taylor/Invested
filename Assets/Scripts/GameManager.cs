@@ -5,32 +5,25 @@ using UnityEngine;
 using VolumetricLines;
 /*
  * At startup, loads the Title Screen scene
+ * Also holds all Resources
  */
 public class GameManager : MonoBehaviour {
 
-    //public static GameManager Instance { get; private set; }
-
-    public static Material TargetHighlightMaterial { get; private set; }
+    //public static Material Material_TargetHighlight { get; private set; }
+    public static Material Material_Gebaude { get; private set; }
     public static VolumetricLineBehavior MetalLineTemplate { get; private set; }
 
     // Holds all Magnetics in scene
     public static List<Magnetic> MagneticsInScene { get; private set; }
 
-    public static int IgnorePlayerLayer { get; private set; }
-
-    //void Awake() {
-    //    if (Instance != null && Instance != this) {
-    //        Destroy(this.gameObject);
-    //    } else {
-    //        Instance = this;
-    //    }
-    //}
+    public static int Layer_IgnorePlayer { get; private set; }
 
     void Awake() {
-        TargetHighlightMaterial = Resources.Load<Material>("targetHighlightMaterial");
+        //Material_TargetHighlight = Resources.Load<Material>("Materials/targetHighlightMaterial");
+        Material_Gebaude = Resources.Load<Material>("Materials/Gebaude");
         MetalLineTemplate = Resources.Load<VolumetricLineBehavior>("MetalLineTemplate");
         MagneticsInScene = new List<Magnetic>();
-        IgnorePlayerLayer = ~(1 << LayerMask.NameToLayer("Player"));
+        Layer_IgnorePlayer = ~(1 << LayerMask.NameToLayer("Player"));
         SceneManager.sceneLoaded += Clear;
     }
 

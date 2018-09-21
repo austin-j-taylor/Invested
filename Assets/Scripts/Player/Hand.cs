@@ -49,7 +49,7 @@ public class Hand : MonoBehaviour {
             Coin coin;
             // Raycast towards the hand. If the raycast hits something, spawn the coin there to prevent it from going through walls.
             RaycastHit hit;
-            if (Physics.Raycast(centerOfMass.position, transform.position - centerOfMass.position, out hit, distanceToHand, GameManager.IgnorePlayerLayer)) {
+            if (Physics.Raycast(centerOfMass.position, transform.position - centerOfMass.position, out hit, distanceToHand, GameManager.Layer_IgnorePlayer)) {
                 coin = pouch.RemoveCoin(hit.point + hit.normal * coinSize);
             } else {
                 coin = pouch.RemoveCoin(transform.position);

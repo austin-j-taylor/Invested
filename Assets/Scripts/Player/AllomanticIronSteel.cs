@@ -152,7 +152,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     }
 
     private void Update() {
-        if (!PauseMenu.IsPaused) {
+        if (!PauseMenu.IsPaused && Player.CanControlPlayer) {
             // Start burning
             if ((Keybinds.SelectDown() || Keybinds.SelectAlternateDown()) && !Keybinds.Negate()) {
                 StartBurningIronSteel();
@@ -326,7 +326,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     }
 
     private void FixedUpdate() {
-        if (!PauseMenu.IsPaused) {
+        if (!PauseMenu.IsPaused && Player.CanControlPlayer) {
             if (IsBurningIronSteel) {
                 CalculatePushPullForces(iron);
                 CalculatePushPullForces(steel);
@@ -413,6 +413,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     private void RefreshHUD() {
         RefreshHUDColorsOnly();
         HUD.TargetOverlayController.HardRefresh();
+        HUD.BurnRateMeter.HardRefresh();
     }
 
     private void CalculatePushPullForces(bool usingIronTargets) {
