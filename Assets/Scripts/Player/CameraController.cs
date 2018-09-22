@@ -11,8 +11,9 @@ public class CameraController : MonoBehaviour {
 
     private const float distanceFromHitWall = .125f;//.5f;
     private const float wallDistanceCheck = 5;
-    private const float lerpConstant = 10;
+    private const float lerpConstant = 5;
     private static readonly Vector3 distancefromPlayer = new Vector3(0, 0, -wallDistanceCheck);
+    private static readonly Vector3 firstPersonCameraHeight = new Vector3(0, 1, 0);
 
     public static Camera ActiveCamera { get; private set; }
     public static Transform ExternalPositionTarget { get; set; } // Assigned by another part of the program for tracking
@@ -55,6 +56,9 @@ public class CameraController : MonoBehaviour {
     }
 
     public static void Clear() {
+        ExternalPositionTarget = null;
+        ExternalLookAtTarget = null;
+        firstPersonCamera.transform.localPosition = firstPersonCameraHeight;
         currentY = playerBody.parent.localEulerAngles.x + 30; // Tilted downward a little
         currentX = playerBody.parent.localEulerAngles.y;
         RefreshCamera();

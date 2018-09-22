@@ -13,11 +13,11 @@ public class HarmonyTarget : MonoBehaviour {
 
     private Rigidbody rb;
     private Animator anim;
+    private Renderer[] symbolRenderers;
     private Transform harmonySphere;
     private Transform inner;
     private Transform cameraPositionTarget;
     private Transform cameraLookAtTarget;
-    private Material originalPlayerMaterial;
 
     private void Awake() {
         rb = GetComponentInChildren<Rigidbody>();
@@ -26,7 +26,8 @@ public class HarmonyTarget : MonoBehaviour {
         cameraPositionTarget = transform.GetChild(0);
         inner = transform.GetChild(1);
         cameraLookAtTarget = inner.GetChild(0);
-        originalPlayerMaterial = Player.PlayerInstance.GetComponentInChildren<Renderer>().material;
+
+        symbolRenderers = GetComponentsInChildren<Renderer>();
         
         harmonySphere.gameObject.AddComponent<HarmonySphere>();
 
@@ -62,15 +63,20 @@ public class HarmonyTarget : MonoBehaviour {
             pos.y = cameraLookAtTarget.position.y;
             cameraPositionTarget.position = pos;
             //rb.AddForce(forceConstantClose * distance, ForceMode.Force);
+
+            // So the light from the sphere doesn't flicker around the player's body
+            harmonySphere.position = Player.PlayerIronSteel.CenterOfMass;
         }
     }
 
     private void BeginAnimation() {
         playerHasEntered = true;
         Player.CanControlPlayer = false;
+        harmonySphere.GetComponent<Renderer>().enabled = false;
+        harmonySphere.GetComponent<Collider>().enabled = false;
         anim.SetTrigger("PlayerHasEntered");
-
-        harmonySphere.gameObject.SetActive(false);
+        HUD.DisableHUD();
+        
         Player.PlayerIronSteel.StopBurningIronSteel();
         Player.PlayerInstance.GetComponent<Rigidbody>().useGravity = false;
         Player.PlayerInstance.GetComponent<Rigidbody>().drag = dragConstantClose;
@@ -81,10 +87,11 @@ public class HarmonyTarget : MonoBehaviour {
 
     private void EndAnimation() {
         Player.PlayerInstance.GetComponentInChildren<MeshRenderer>().material = harmonySphere.GetComponent<Renderer>().material;
-        harmonySphere.gameObject.SetActive(true);
-        harmonySphere.GetComponent<Renderer>().enabled = false;
-        harmonySphere.GetComponent<Collider>().enabled = false;
+        foreach (Renderer renderer in symbolRenderers)
+            renderer.material = GameManager.Material_Ettmetal_Glowing;
+        
         // Open menus
+
     }
 
     private void EndLevel() {

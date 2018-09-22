@@ -26,7 +26,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     private const float blueLineWidthBaseFactor = .04f;
     private const float blueLineTargetedWidthFactor = 1.5f;
     private const float blueLineStartupFactor = 2f;
-    private const float blueLineBrightnessFactor = 1 / 4f;
+    private const float blueLineBrightnessFactor = 1 / 1f;
     private const float forceDetectionThreshold = 50f;              // If the potential force on a target is above this, a blue line will point to it
     private const float lightSaberConstant = 1 * 1024;
     // Physics Constants

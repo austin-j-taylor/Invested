@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour {
 
     //public static Material Material_TargetHighlight { get; private set; }
     public static Material Material_Gebaude { get; private set; }
+    public static Material Material_Ettmetal_Glowing { get; private set; }
+    public static Font Font_Heebo { get; private set; }
     public static VolumetricLineBehavior MetalLineTemplate { get; private set; }
 
     // Holds all Magnetics in scene
@@ -21,6 +23,8 @@ public class GameManager : MonoBehaviour {
     void Awake() {
         //Material_TargetHighlight = Resources.Load<Material>("Materials/targetHighlightMaterial");
         Material_Gebaude = Resources.Load<Material>("Materials/Gebaude");
+        Material_Ettmetal_Glowing = Resources.Load<Material>("Materials/Ettmetal_glowing");
+        Font_Heebo = Resources.Load<Font>("Fonts/Heebo-Medium");
         MetalLineTemplate = Resources.Load<VolumetricLineBehavior>("MetalLineTemplate");
         MagneticsInScene = new List<Magnetic>();
         Layer_IgnorePlayer = ~(1 << LayerMask.NameToLayer("Player"));
