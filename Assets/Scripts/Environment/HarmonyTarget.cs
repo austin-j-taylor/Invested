@@ -72,7 +72,7 @@ public class HarmonyTarget : MonoBehaviour {
     private void BeginAnimation() {
         playerHasEntered = true;
         Player.CanControlPlayer = false;
-        harmonySphere.GetComponent<Renderer>().enabled = false;
+        //harmonySphere.GetComponent<Renderer>().enabled = false;
         harmonySphere.GetComponent<Collider>().enabled = false;
         anim.SetTrigger("PlayerHasEntered");
         HUD.DisableHUD();

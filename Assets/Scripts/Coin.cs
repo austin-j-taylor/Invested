@@ -9,10 +9,11 @@ public class Coin : Magnetic {
     private const float maxSpeed = 120f;
     private const float equalInMagnitudeConstant = .01f;
     private const float drag = 1.25f;
-    private const float stuckThreshold = 1f;
+    private const float stuckThreshold = 100f; // Square magnitude of normal force necessary for friction
     
     private bool inContactWithPlayer = false;
     private bool isStuck = false;
+    private Vector3 stuckNormal;
 
     public override bool IsPerfectlyAnchored { // Only matters for Coins, which have so low masses that Unity thinks they have high velocities when pushed, even when anchored
         get {
@@ -27,7 +28,8 @@ public class Coin : Magnetic {
         set {
             isStuck = value;
             Rb.isKinematic = value;
-            Rb.velocity = Vector3.zero;
+            if (value)
+                Rb.velocity = Vector3.zero;
         }
     }
 
@@ -36,12 +38,8 @@ public class Coin : Magnetic {
         IsStuck = false;
     }
 
-    // Makes coins sticky upon colliding with something
     private void OnCollisionEnter(Collision collision) {
-        if (!collision.collider.CompareTag("Player")) {
-            if(Allomancer && Allomancer.SteelPushing && !LastWasPulled)
-                AddFriction(collision);
-        }
+        OnCollisionStay(collision);
     }
 
     // Only called when not kinematic i.e. when sliding along the ground
@@ -49,7 +47,7 @@ public class Coin : Magnetic {
         if (!collision.collider.CompareTag("Player")) {
             if (Allomancer && Allomancer.SteelPushing && !LastWasPulled) {
                 if (!IsStuck) {
-                    AddFriction(collision);
+                    CheckStuck(collision);
                 }
             }
         }
@@ -79,24 +77,23 @@ public class Coin : Magnetic {
         Vector3 newNetForce = Vector3.ClampMagnitude(
             -(Vector3.Project(Rb.velocity, netForce.normalized) + (netForce / NetMass * Time.fixedDeltaTime)) * drag, netForce.magnitude
         ) + netForce;
-
-        if (IsStuck) {
-            if (Allomancer.SteelPushing) {
-                if (newNetForce.sqrMagnitude < stuckThreshold) {
-                    IsStuck = false;
-                }
-            }
+        
+        if (Allomancer.SteelPushing) {
+            IsStuck = Vector3.Project(newNetForce, stuckNormal).sqrMagnitude > stuckThreshold;
         }
 
         LastExpectedAcceleration = newNetForce / NetMass;
         Rb.AddForce(newNetForce, ForceMode.Force);
     }
-
-    private void AddFriction(Collision collision) {
-        IsStuck = collision.impulse.sqrMagnitude > stuckThreshold;
-        if (IsPerfectlyAnchored || IsStuck) {
-            Rb.velocity = Vector3.zero;
-        }
+    /*
+     * Simulates friction and makes the target stuck to the colliding surface
+     */
+    private void CheckStuck(Collision collision) {
+        stuckNormal = collision.contacts[0].normal;
+        IsStuck = Vector3.Project(collision.impulse / Time.deltaTime, stuckNormal).sqrMagnitude > stuckThreshold;
+        //if (IsPerfectlyAnchored) {
+        //    Rb.velocity = Vector3.zero;
+        //}
     }
 
     private void BeCaughtByAllomancer(Player player) {
@@ -105,7 +102,6 @@ public class Coin : Magnetic {
     }
 
     public override void StopBeingPullPushed() {
-        if(IsStuck)
-            IsStuck = false;
+        IsStuck = false;
     }
 }

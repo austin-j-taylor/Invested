@@ -20,15 +20,15 @@ public class AllomanticIronSteel : MonoBehaviour {
     private const float targetFocusOffScreenBound = .035f;           // Determines the luminosity of blue lines that are off-screen
     private const float lowLineColor = .1f;
     private const float highLineColor = .85f;
-    private readonly Color targetedRedLine = new Color(1, .1f, 1);
-    private readonly Color targetedGreenLine = new Color(0, 1, .1f);
-    private readonly Color targetedBlueLine = new Color(0, .1f, 1);
+    private readonly Color targetedRedLine = new Color(1, 0, 1);
+    private readonly Color targetedGreenLine = new Color(0, 1, 0);
+    private readonly Color targetedBlueLine = new Color(0, 0, 1);
     private const float blueLineWidthBaseFactor = .04f;
-    private const float blueLineTargetedWidthFactor = 1.5f;
+    private const float blueLineTargetedWidthFactor = 1 / 1.5f;
     private const float blueLineStartupFactor = 2f;
     private const float blueLineBrightnessFactor = 1 / 1f;
     private const float forceDetectionThreshold = 50f;              // If the potential force on a target is above this, a blue line will point to it
-    private const float lightSaberConstant = 1 * 1024;
+    private const float lightSaberConstant = 1024;
     // Physics Constants
     public const float chargePower = 1f / 8f;
     // Button-press time constants
@@ -749,7 +749,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                         target.DisableBlueLine();
                     }
                 } else {
-                    // Magnetic is out of max range
+                    // Magnetic is out of force-determined range
                     target.InRange = false;
                     GameManager.MagneticsInScene[i].DisableBlueLine();
                 }
@@ -764,13 +764,20 @@ public class AllomanticIronSteel : MonoBehaviour {
         for (int i = 0; i < PullCount; i++) {
             Magnetic target = pullTargets[i];
             if ((target.CenterOfMass - CenterOfMass).sqrMagnitude < SettingsMenu.settingsData.maxPushRange * SettingsMenu.settingsData.maxPushRange) {
-                target.InRange = true;
-                target.SetBlueLine(
-                    CenterOfMass,
-                    blueLineWidthBaseFactor * target.Charge * blueLineTargetedWidthFactor,
-                    Mathf.Exp(-target.LastNetAllomanticForceOnAllomancer.magnitude / lightSaberConstant),
-                    SettingsMenu.settingsData.pullTargetLineColor == 0 ? targetedBlueLine : targetedGreenLine);
+                if (target.LastAllomanticForce.magnitude > forceDetectionThreshold || target.LastAllomanticForce.magnitude == 0) { // == 0 only happens on the first frame of pushing
+                    target.InRange = true;
+                    target.SetBlueLine(
+                        CenterOfMass,
+                        Mathf.Pow(blueLineWidthBaseFactor * target.Charge, blueLineTargetedWidthFactor),
+                        Mathf.Exp(-target.LastNetAllomanticForceOnAllomancer.magnitude / lightSaberConstant),
+                        SettingsMenu.settingsData.pullTargetLineColor == 0 ? targetedBlueLine : targetedGreenLine);
+                } else {
+                    // Target is out of force-determined range
+                    target.InRange = false;
+                    target.DisableBlueLine();
+                }
             } else {
+                // Magnetic is out of max range
                 target.InRange = false;
                 target.DisableBlueLine();
             }
@@ -778,12 +785,18 @@ public class AllomanticIronSteel : MonoBehaviour {
         for (int i = 0; i < PushCount; i++) {
             Magnetic target = pushTargets[i];
             if ((target.CenterOfMass - CenterOfMass).sqrMagnitude < SettingsMenu.settingsData.maxPushRange * SettingsMenu.settingsData.maxPushRange) {
-                target.InRange = true;
-                target.SetBlueLine(
-                    CenterOfMass,
-                    blueLineWidthBaseFactor * target.Charge * blueLineTargetedWidthFactor,
-                    Mathf.Exp(-target.LastNetAllomanticForceOnAllomancer.magnitude / lightSaberConstant),
-                    SettingsMenu.settingsData.pushTargetLineColor == 0 ? targetedBlueLine : targetedRedLine);
+                if (target.LastAllomanticForce.magnitude > forceDetectionThreshold || target.LastAllomanticForce.magnitude == 0) { // == 0 only happens on the first frame of pushing
+                    target.InRange = true;
+                    target.SetBlueLine(
+                        CenterOfMass,
+                        Mathf.Pow(blueLineWidthBaseFactor * target.Charge, blueLineTargetedWidthFactor),
+                        Mathf.Exp(-target.LastNetAllomanticForceOnAllomancer.magnitude / lightSaberConstant),
+                        SettingsMenu.settingsData.pushTargetLineColor == 0 ? targetedBlueLine : targetedRedLine);
+                } else {
+                    // Target is out of force-determined range
+                    target.InRange = false;
+                    target.DisableBlueLine();
+                }
             } else {
                 target.InRange = false;
                 target.DisableBlueLine();
