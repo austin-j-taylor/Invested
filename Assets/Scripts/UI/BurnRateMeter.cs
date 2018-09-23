@@ -16,12 +16,6 @@ public class BurnRateMeter : MonoBehaviour {
     private Text metalLineCountText;
     private Image burnRateImage;
 
-    public string MetalLineText {
-        set {
-            metalLineCountText.text = value;
-        }
-    }
-
     void Awake() {
         Text[] texts = GetComponentsInChildren<Text>();
         actualForceText = texts[0];
@@ -100,5 +94,9 @@ public class BurnRateMeter : MonoBehaviour {
 
     public void SetForceTextColorWeak() {
         actualForceText.color = HUD.weakBlue;
+    }
+
+    public void SetMetalLineCountText(string text) {
+        metalLineCountText.text = text;
     }
 }

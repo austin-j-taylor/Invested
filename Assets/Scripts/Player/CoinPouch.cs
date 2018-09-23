@@ -17,8 +17,7 @@ public class CoinPouch : MonoBehaviour {
     }
 
     public void AddCoin(Coin coin) {
-        if (coin.Allomancer == Player.PlayerIronSteel || Player.PlayerIronSteel.IsTarget(coin))
-            Player.PlayerIronSteel.RemoveTarget(coin, true, true);
+        Player.PlayerIronSteel.RemoveTarget(coin, true);
         Destroy(coin.gameObject);
         Count++;
         UpdateUI();

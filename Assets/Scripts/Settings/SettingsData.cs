@@ -42,6 +42,7 @@ public class SettingsData : MonoBehaviour {
     public float distanceConstant;
     public float allomanticConstant;
     public float maxPushRange;
+    public float forceDetectionThreshold;
     // World
     public int playerGravity; // 0 for Disabled, 1 for Enabled
     public int playerAirResistance; // 0 for Disabled, 1 for Enabled
@@ -219,6 +220,10 @@ public class SettingsData : MonoBehaviour {
                     maxPushRange = data;
                     return true;
                 }
+            case "forceDetectionThreshold": {
+                    forceDetectionThreshold = data;
+                    return true;
+                }
             default: {
                     Debug.LogError("SetData with invalid ID: " + name);
                     return false;
@@ -326,6 +331,9 @@ public class SettingsData : MonoBehaviour {
                 }
             case "maxPushRange": {
                     return maxPushRange;
+                }
+            case "forceDetectionThreshold": {
+                    return forceDetectionThreshold;
                 }
             default: {
                     Debug.LogError("GetDataFloat with invalid ID: " + name);

@@ -56,8 +56,7 @@ public class Magnetic : MonoBehaviour {
     public Vector3 LastAllomanticForce { get; set; }
     public Vector3 LastAllomanticNormalForceFromAllomancer { get; set; }
     public Vector3 LastAllomanticNormalForceFromTarget { get; set; }
-
-    public bool InRange { get; set; }
+    
     public bool IsStatic { get; set; }
 
     public bool LastWasPulled {
@@ -151,7 +150,6 @@ public class Magnetic : MonoBehaviour {
         LastAllomanticForce = Vector3.zero;
         LastAllomanticNormalForceFromAllomancer = Vector3.zero;
         LastAllomanticNormalForceFromTarget = Vector3.zero;
-        InRange = false;
     }
 
     private void Start() {
@@ -168,7 +166,6 @@ public class Magnetic : MonoBehaviour {
         LastAllomanticNormalForceFromTarget = Vector3.zero;
         Allomancer = null;
         lightSaberFactor = 1;
-        InRange = false;
         blueLine.GetComponent<MeshRenderer>().enabled = false;
         RemoveTargetGlow();
     }

@@ -77,7 +77,7 @@ public class HarmonyTarget : MonoBehaviour {
         anim.SetTrigger("PlayerHasEntered");
         HUD.DisableHUD();
         
-        Player.PlayerIronSteel.StopBurningIronSteel();
+        Player.PlayerIronSteel.StopBurning();
         Player.PlayerInstance.GetComponent<Rigidbody>().useGravity = false;
         Player.PlayerInstance.GetComponent<Rigidbody>().drag = dragConstantClose;
         CameraController.ExternalPositionTarget = cameraPositionTarget;
