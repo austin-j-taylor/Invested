@@ -11,7 +11,6 @@ public class Coin : Magnetic {
     private const float drag = 1.25f;
     private const float stuckThreshold = 100f; // Square magnitude of normal force necessary for friction
     
-    private bool inContactWithPlayer = false;
     private bool isStuck = false;
     private Vector3 stuckNormal;
 
@@ -54,20 +53,8 @@ public class Coin : Magnetic {
     }
 
     private void OnTriggerEnter(Collider other) {
-        if (other.CompareTag("Player")) {
-            inContactWithPlayer = true;
-        }
-    }
-
-    private void OnTriggerStay(Collider other) {
-        if (inContactWithPlayer && Keybinds.IronPulling() && other.CompareTag("Player")) {
+        if (Keybinds.IronPulling() && other.CompareTag("Player")) {
             BeCaughtByAllomancer(other.GetComponent<Player>());
-        }
-    }
-
-    private void OnTriggerExit(Collider other) {
-        if(other.CompareTag("Player")) {
-            inContactWithPlayer = false;
         }
     }
 
@@ -77,8 +64,8 @@ public class Coin : Magnetic {
         Vector3 newNetForce = Vector3.ClampMagnitude(
             -(Vector3.Project(Rb.velocity, netForce.normalized) + (netForce / NetMass * Time.fixedDeltaTime)) * drag, netForce.magnitude
         ) + netForce;
-        
-        if (Allomancer.SteelPushing) {
+
+        if (Allomancer && Allomancer.SteelPushing) {
             IsStuck = Vector3.Project(newNetForce, stuckNormal).sqrMagnitude > stuckThreshold;
         }
 

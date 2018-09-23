@@ -659,7 +659,6 @@ public class AllomanticIronSteel : MonoBehaviour {
         //    netForceOnTarget = steelBurnRate * (target.LastNetAllomanticForceOnTarget);
         //    netForceOnAllomancer = steelBurnRate * (target.LastNetAllomanticForceOnAllomancer);
         //}
-
         target.AddForce(target.LastNetAllomanticForceOnTarget);
         // apply force to player
         rb.AddForce(target.LastNetAllomanticForceOnAllomancer, ForceMode.Force);
@@ -869,7 +868,6 @@ public class AllomanticIronSteel : MonoBehaviour {
 
     // Removes a target by index
     private void RemoveTarget(int index, bool ironTarget) {
-
         if (ironTarget) {
 
             if (HasPullTarget && index < PullCount) {
@@ -896,7 +894,6 @@ public class AllomanticIronSteel : MonoBehaviour {
 
     // Removes a target by reference
     public void RemoveTarget(Magnetic target, bool ironTarget, bool searchBoth = false) {
-
         if (ironTarget || searchBoth) {
 
             if (HasPullTarget) {

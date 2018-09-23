@@ -184,6 +184,7 @@ public class Magnetic : MonoBehaviour {
             Rb.AddForce(netForce, ForceMode.Force);
         }
     }
+    public virtual void StartBeingPullPushed() { }
     public virtual void StopBeingPullPushed() { }
 
     public void AddTargetGlow() {
