@@ -15,7 +15,7 @@ public class PlayerPushPullController : MonoBehaviour {
     private const float verticalMin = .2f;
     private const float verticalMax = .8f;
     private const float targetFocusRadius = .1f;                   // Determines the range around the center of the screen within which blue lines are in focus.
-    private const float verticalImportanceFactor = 1 / 100f;        // Determines how elliptical the range around the center of the screen is. Squared.
+    private const float verticalImportanceFactor = 1 / 10f;        // Determines how elliptical the range around the center of the screen is.
     private const float targetFocusFalloffConstant = 128;           // Determines how quickly blue lines blend from in-focus to out-of-focus
     private const float targetFocusLowerBound = .2f;               // Determines the luminosity of blue lines that are out of foucus
     private const float targetFocusOffScreenBound = .035f;           // Determines the luminosity of blue lines that are off-screen
@@ -210,7 +210,7 @@ public class PlayerPushPullController : MonoBehaviour {
                             player.AddPullTarget(target);
                         } else {
                             if (!player.RemovePullTarget(target) && Keybinds.SelectDown()) // If the player is hovering over a pullTarget, instantly remove that one
-                                if (!player.RemoveTarget(target, true)) { // If the highlighted Magnetic is not a pullTarget, remove the oldest pullTarget instead
+                                if (!player.RemovePullTarget(target)) { // If the highlighted Magnetic is not a pullTarget, remove the oldest pullTarget instead
                                     player.RemovePullTargetAt(0);
                                 }
                         }
@@ -220,7 +220,7 @@ public class PlayerPushPullController : MonoBehaviour {
                             player.AddPushTarget(target);
                         } else {
                             if (!player.RemovePushTarget(target) && Keybinds.SelectAlternateDown())
-                                if (!player.RemoveTarget(target, false)) {
+                                if (!player.RemovePushTarget(target)) {
                                     player.RemovePushTargetAt(0);
                                 }
                         }
