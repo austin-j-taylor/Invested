@@ -40,7 +40,7 @@ public class AllomanticIronSteel : MonoBehaviour {
 
     public bool HasPullTarget {
         get {
-            return PushTargets.Count != 0;
+            return PullTargets.Count != 0;
         }
     }
     public bool HasPushTarget {

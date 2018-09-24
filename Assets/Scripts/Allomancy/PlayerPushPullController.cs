@@ -137,10 +137,15 @@ public class PlayerPushPullController : MonoBehaviour {
                 player.IronPulling = Keybinds.IronPulling();
                 player.SteelPushing = Keybinds.SteelPushing();
 
-                // If you are trying to push and pull and don't have both push and pull targets, only pull.
-                //if (player.IronPulling && player.PullingOnPullTargets && player.PushingOnPullTargets || player.PushingOnPushTargets && player.PushingOnPushTargets) {
-                //    player.SteelPushing = false;
-                //}
+                // If you are trying to push and pull and only have pullTargets, only push. And vice versa
+                if (!player.HasPushTarget && player.HasPullTarget) {
+                    if (player.IronPulling)
+                        player.SteelPushing = false;
+                } else
+                if (!player.HasPullTarget && player.HasPushTarget) {
+                    if (player.SteelPushing)
+                        player.IronPulling = false;
+                }
 
                 // Change colors of target labels when toggling pushing/pulling
                 if (player.IronPulling) {
