@@ -209,20 +209,24 @@ public class PlayerPushPullController : MonoBehaviour {
                         if (selecting) {
                             player.AddPullTarget(target);
                         } else {
-                            if (!player.RemovePullTarget(target) && Keybinds.SelectDown()) // If the player is hovering over a pullTarget, instantly remove that one
-                                if (!player.RemovePullTarget(target)) { // If the highlighted Magnetic is not a pullTarget, remove the oldest pullTarget instead
-                                    player.RemovePullTargetAt(0);
-                                }
+                            if (player.RemovePullTarget(target)) {// If the player is hovering over a pullTarget, instantly remove that one. Keep it highlighted.
+                                target.AddTargetGlow();
+                            } else
+                                if (Keybinds.SelectDown() && !player.RemovePullTarget(target)) { // If the highlighted Magnetic is not a pullTarget, remove the oldest pullTarget instead
+                                player.RemovePullTargetAt(0);
+                            }
                         }
                     }
                     if (Keybinds.SelectAlternate()) {
                         if (selecting) {
                             player.AddPushTarget(target);
                         } else {
-                            if (!player.RemovePushTarget(target) && Keybinds.SelectAlternateDown())
-                                if (!player.RemovePushTarget(target)) {
-                                    player.RemovePushTargetAt(0);
-                                }
+                            if (player.RemovePushTarget(target)) {
+                                target.AddTargetGlow();
+                            } else
+                                if (Keybinds.SelectAlternateDown() && !player.RemovePushTarget(target)) {
+                                player.RemovePushTargetAt(0);
+                            }
                         }
                     }
                 }

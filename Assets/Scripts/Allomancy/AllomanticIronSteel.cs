@@ -108,8 +108,8 @@ public class AllomanticIronSteel : MonoBehaviour {
         SteelPushing = false;
         IronBurnRate = 0;
         SteelBurnRate = 0;
-        PullTargets.Clear();
-        PushTargets.Clear();
+        PullTargets.Clear(true);
+        PushTargets.Clear(true);
         lastExpectedAllomancerAcceleration = Vector3.zero;
         LastNetForceOnAllomancer = Vector3.zero;
         LastAllomanticForce = Vector3.zero;
@@ -461,23 +461,28 @@ public class AllomanticIronSteel : MonoBehaviour {
     }
 
     /*
-     * Add a target, if it isn't already a push target
+     * Add a target
+     * If it's a pushTarget, remove it from pullTargets and move it to pushTargets
      */
     public void AddPullTarget(Magnetic target) {
-        if(!IsBurningIronSteel)
+        if (!IsBurningIronSteel)
             StartBurning();
-        if (!PushTargets.IsTarget(target))
-            PullTargets.AddTarget(target, this);
+        if (PushTargets.IsTarget(target)) {
+            PushTargets.RemoveTarget(target, false);
+        }
+        PullTargets.AddTarget(target, this);
     }
 
     /*
-     * Add a target, if it isn't already a pull target
+     * Add a target, if it isn't already a push target
      */
     public void AddPushTarget(Magnetic target) {
         if (!IsBurningIronSteel)
             StartBurning();
-        if (!PullTargets.IsTarget(target))
-            PushTargets.AddTarget(target, this);
+        if (PullTargets.IsTarget(target)) {
+            PullTargets.RemoveTarget(target, false);
+        }
+        PushTargets.AddTarget(target, this);
     }
 
     /*

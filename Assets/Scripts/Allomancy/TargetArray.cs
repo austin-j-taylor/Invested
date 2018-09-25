@@ -30,8 +30,9 @@ public class TargetArray {
      * Moves all elements down, covering the element at index, making an empty space at Count
      * Decrements Count.
      */
-    private void MoveDown(int index) {
-        targets[index].Clear();
+    private void MoveDown(int index, bool clear = true) {
+        if(clear)
+            targets[index].Clear();
 
         for (int i = index; i < Count - 1; i++) {
             targets[i] = targets[i + 1];
@@ -52,10 +53,10 @@ public class TargetArray {
      * Removes a target by reference
      * return true if it was successfully removed, false if target was not found
      */
-    public bool RemoveTarget(Magnetic target) {
+    public bool RemoveTarget(Magnetic target, bool clear = true) {
         for (int i = 0; i < Count; i++) {
             if (targets[i] == target) { // Magnetic was found, move targets along
-                MoveDown(i);
+                MoveDown(i, clear);
                 return true;
             }
         }
@@ -76,7 +77,7 @@ public class TargetArray {
 
                 if (indexOfTarget < Count - 1) { // Target is not already at the end of the array
                     // MoveDown over old version of the target, and add the new one at the end.
-                    MoveDown(indexOfTarget);
+                    MoveDown(indexOfTarget, false);
                     targets[Count] = newTarget;
                     Count++;
                 }
@@ -118,12 +119,14 @@ public class TargetArray {
     }
 
     // Removes all targets from the array
-    public void Clear() {
+    public void Clear(bool setSizeTo1 = false) {
         for (int i = 0; i < Count; i++) {
             targets[i].Clear();
             targets[i] = null;
         }
         Count = 0;
+        if (setSizeTo1)
+            Size = 1;
     }
 
     /*
