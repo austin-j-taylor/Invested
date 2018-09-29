@@ -18,7 +18,7 @@ public class SliderSetting : Setting {
     public float defaultValue = 0;
     public bool showDecimals;
 
-    void Awake() {
+    void Start() {
 
         slider = GetComponentInChildren<Slider>();
         Text detailsText = transform.GetChild(0).GetChild(0).GetComponent<Text>();

@@ -14,10 +14,22 @@ public class GraphicsController : MonoBehaviour {
         profile.antialiasing.enabled = SettingsMenu.settingsData.antialiasing == 1;
         profile.ambientOcclusion.enabled = SettingsMenu.settingsData.ambientOcclusion == 1;
         profile.motionBlur.enabled = SettingsMenu.settingsData.motionBlur == 1;
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    }
+
+    public void SetAntialiasing(bool enable) {
+        profile.antialiasing.enabled = enable;
+    }
+
+    public void SetAmbientOcclusion(bool enable) {
+        profile.ambientOcclusion.enabled = enable;
+    }
+
+    public void SetBloom(bool enable) {
+        profile.bloom.enabled = enable;
+    }
+
+    public void SetMotionBlur(bool enable) {
+        profile.motionBlur.enabled = enable;
+    }
+
 }

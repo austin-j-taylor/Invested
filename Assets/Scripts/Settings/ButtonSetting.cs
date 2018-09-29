@@ -40,7 +40,7 @@ public class ButtonSetting : Setting {
      * 
      */
 
-    void Awake() {
+    void Start() {
 
         button = GetComponentInChildren<Button>();
         buttonText = transform.GetChild(0).GetChild(1).GetComponent<Text>();
@@ -61,14 +61,22 @@ public class ButtonSetting : Setting {
         // Assign font and button size
         RectTransform rectButton = button.GetComponent<RectTransform>();
         RectTransform rectDetails = detailsText.GetComponent<RectTransform>();
-        Vector2 right = rectButton.offsetMax;
-        Vector2 left = rectDetails.offsetMax;
-        left.x = 900 + 180 - settingSize;
-        right.x = settingSize;
-        rectButton.offsetMax = right;
-        rectDetails.offsetMax = left;
+        Vector2 buttonRightSide = rectButton.offsetMax;
+        Vector2 detailsRightSide = rectDetails.offsetMax;
+        Vector2 detailsLeftSide = rectDetails.offsetMin;
+        detailsRightSide.x = 840 + 240 - settingSize;
+        buttonRightSide.x = settingSize;
+        detailsLeftSide.x = 240 - settingSize + 30;
+        rectButton.offsetMax = buttonRightSide;
+        rectDetails.offsetMax = detailsRightSide;
+        rectDetails.offsetMin = detailsLeftSide;
+
+        buttonText.font = GameManager.Font_Heebo;
+        buttonText.fontStyle = FontStyle.Normal;
 
         detailsText.fontSize = detailsFontSize;
+        detailsText.font = GameManager.Font_Heebo;
+        detailsText.fontStyle = FontStyle.Normal;
 
         button.onClick.AddListener(OnClick);
     }
