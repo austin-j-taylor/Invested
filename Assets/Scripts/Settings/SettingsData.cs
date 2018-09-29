@@ -23,6 +23,7 @@ public class SettingsData : MonoBehaviour {
     public float gamepadSensitivityY;
     // Interface
     public int renderblueLines; // 0 for Disabled, 1 for Enabled
+    public int highlightedTargetOutline; // 0 for Disabled, 1 for Enabled
     public int pullTargetLineColor; // 0 for blue, 1 for green
     public int pushTargetLineColor; // 0 for blue, 1 for red
     public int forceUnits; // 0 for G's, 1 for Newtons
@@ -30,6 +31,11 @@ public class SettingsData : MonoBehaviour {
     public int hudForces; // 0 for Disabled, 1 for Enabled
     public int hudMasses; // 0 for Disabled, 1 for Enabled
     public int fpsCounter; // 0 for Disabled, 1 for Enabled
+    // Graphics
+    public int antialiasing;
+    public int ambientOcclusion;
+    public int motionBlur;
+    public int bloom;
     // Allomancy
     public int anchoredBoost; // 0 for Disabled, 1 for ANF, 2 for EWF
     public int normalForceMin; // 0 for Disabled, 1 for zero, 2 for zero and negate
@@ -42,7 +48,7 @@ public class SettingsData : MonoBehaviour {
     public float distanceConstant;
     public float allomanticConstant;
     public float maxPushRange;
-    public float forceDetectionThreshold;
+    public float metalDetectionThreshold;
     // World
     public int playerGravity; // 0 for Disabled, 1 for Enabled
     public int playerAirResistance; // 0 for Disabled, 1 for Enabled
@@ -115,6 +121,10 @@ public class SettingsData : MonoBehaviour {
                     renderblueLines = data;
                     return true;
                 }
+            case "highlightedTargetOutline": {
+                    highlightedTargetOutline = data;
+                    return true;
+                }
             case "pullTargetLineColor": {
                     pullTargetLineColor = data;
                     return true;
@@ -133,6 +143,22 @@ public class SettingsData : MonoBehaviour {
                 }
             case "fpsCounter": {
                     fpsCounter = data;
+                    return true;
+                }
+            case "antialiasing": {
+                    antialiasing = data;
+                    return true;
+                }
+            case "ambientOcclusion": {
+                    ambientOcclusion = data;
+                    return true;
+                }
+            case "motionBlur": {
+                    motionBlur = data;
+                    return true;
+                }
+            case "bloom": {
+                    bloom = data;
                     return true;
                 }
             case "hudForces": {
@@ -220,8 +246,8 @@ public class SettingsData : MonoBehaviour {
                     maxPushRange = data;
                     return true;
                 }
-            case "forceDetectionThreshold": {
-                    forceDetectionThreshold = data;
+            case "metalDetectionThreshold": {
+                    metalDetectionThreshold = data;
                     return true;
                 }
             default: {
@@ -251,6 +277,9 @@ public class SettingsData : MonoBehaviour {
             case "renderblueLines": {
                     return renderblueLines;
                 }
+            case "highlightedTargetOutline": {
+                    return highlightedTargetOutline;
+                }
             case "pullTargetLineColor": {
                     return pullTargetLineColor;
                 }
@@ -265,6 +294,18 @@ public class SettingsData : MonoBehaviour {
                 }
             case "fpsCounter": {
                     return fpsCounter;
+                }
+            case "antialiasing": {
+                    return antialiasing;
+                }
+            case "ambientOcclusion": {
+                    return ambientOcclusion;
+                }
+            case "motionBlur": {
+                    return motionBlur;
+                }
+            case "bloom": {
+                    return bloom;
                 }
             case "hudForces": {
                     return hudForces;
@@ -332,8 +373,8 @@ public class SettingsData : MonoBehaviour {
             case "maxPushRange": {
                     return maxPushRange;
                 }
-            case "forceDetectionThreshold": {
-                    return forceDetectionThreshold;
+            case "metalDetectionThreshold": {
+                    return metalDetectionThreshold;
                 }
             default: {
                     Debug.LogError("GetDataFloat with invalid ID: " + name);

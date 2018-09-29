@@ -5,8 +5,9 @@ using UnityEngine;
  */
 
 public static class Keybinds {
-    
-    private static float timeToHold = 0f;
+
+    private static float timeToHoldDPadY = 0f;
+    private static float timeToHoldDPadX = 0f;
 
     public static float Horizontal() {
         if (SettingsMenu.settingsData.controlScheme == 2)
@@ -70,7 +71,7 @@ public static class Keybinds {
     }
 
     public static bool SelectDown() {
-        switch(SettingsMenu.settingsData.controlScheme) {
+        switch (SettingsMenu.settingsData.controlScheme) {
             case 0: {
                     return Input.GetButtonDown("Mouse4");
                 }
@@ -137,25 +138,38 @@ public static class Keybinds {
             return Input.GetButton("Mouse0") ? 1 : 0;
     }
 
+    public static float LeftTrigger() {
+        return Input.GetAxis("LeftTrigger");
+    }
+
+    public static float RightTrigger() {
+        return Input.GetAxis("RightTrigger");
+    }
+
     public static float ScrollWheelAxis() {
-        if(SettingsMenu.settingsData.controlScheme == 2) {
-            if (timeToHold < Time.time) {
-                timeToHold = Time.time + .1f;
-                return Input.GetAxis("GamepadDPadY");
-            } else {
-                return 0f;
-            }
+        return Input.GetAxis("Mouse ScrollWheel");
+    }
+
+    public static float DPadYAxis() {
+        if (timeToHoldDPadY < Time.time) {
+            timeToHoldDPadY = Time.time + .1f;
+            return Input.GetAxis("GamepadDPadY");
         } else {
-            return Input.GetAxis("Mouse ScrollWheel");
+            return 0;
+        }
+    }
+
+    public static float DPadXAxis() {
+        if (timeToHoldDPadX < Time.time) {
+            timeToHoldDPadX = Time.time + .1f;
+            return Input.GetAxis("GamepadDPadX");
+        } else {
+            return 0;
         }
     }
 
     public static bool ScrollWheelButton() {
-        if (SettingsMenu.settingsData.controlScheme == 2) {
-            return false;
-        } else {
-            return Input.GetButton("Mouse2");
-        }
+        return Input.GetButton("Mouse2");
     }
 
     public static bool EscapeDown() {

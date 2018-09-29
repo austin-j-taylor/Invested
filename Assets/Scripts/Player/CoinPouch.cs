@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class CoinPouch : MonoBehaviour {
 
+    private const int startingCoinCount = 50;
+
     [SerializeField]
     private Coin coinPrefab;
     
@@ -12,7 +14,7 @@ public class CoinPouch : MonoBehaviour {
 	void Start () {
         parentRigidbody = GetComponentInParent<Rigidbody>();
 
-        Count = 50;
+        Count = startingCoinCount;
         UpdateUI();
     }
 
@@ -39,6 +41,6 @@ public class CoinPouch : MonoBehaviour {
     }
 
     public void Clear() {
-        Count = 50;
+        Count = startingCoinCount;
     }
 }

@@ -63,7 +63,7 @@ public class ButtonSetting : Setting {
         RectTransform rectDetails = detailsText.GetComponent<RectTransform>();
         Vector2 right = rectButton.offsetMax;
         Vector2 left = rectDetails.offsetMax;
-        left.x = 420 - settingSize;
+        left.x = 900 + 180 - settingSize;
         right.x = settingSize;
         rectButton.offsetMax = right;
         rectDetails.offsetMax = left;

@@ -89,8 +89,6 @@ public class AllomanticIronSteel : MonoBehaviour {
             return rb.mass;
         }
     }
-    public Magnetic[] pullers;
-    public Magnetic[] pushers;
     private void Awake() {
         rb = GetComponent<Rigidbody>();
         centerOfMass = transform.Find("Body/Center of Mass");
@@ -98,8 +96,6 @@ public class AllomanticIronSteel : MonoBehaviour {
         Charge = Mathf.Pow(Mass, chargePower);
         PullTargets = new TargetArray(maxNumberOfTargets);
         PushTargets = new TargetArray(maxNumberOfTargets);
-        pullers = PullTargets.targets;
-        pushers = PushTargets.targets;
     }
 
     public void Clear() {
@@ -258,8 +254,9 @@ public class AllomanticIronSteel : MonoBehaviour {
         Vector3 direction = allomanticForce.normalized;
 
         thisFrameMaximumNetForce += allomanticForce;
+        target.LastMaxPossibleAllomanticForce = allomanticForce;
 
-        // The AF is proportional to the burn rate
+        // Make the AF proportional to the burn rate
         allomanticForce *= (target.LastWasPulled ? IronBurnRate : SteelBurnRate);
 
         Vector3 restitutionForceFromTarget;
@@ -380,8 +377,11 @@ public class AllomanticIronSteel : MonoBehaviour {
         }
         thisFrameAllomanticForce += allomanticForce;
         thisFrameNormalForce += restitutionForceFromTarget;
-        thisFrameMaximumNetForce += restitutionForceFromTarget / (target.LastWasPulled ? IronBurnRate : SteelBurnRate);
-
+        if (SettingsMenu.settingsData.controlScheme == 2) {
+            thisFrameMaximumNetForce += restitutionForceFromTarget;
+        } else {
+            thisFrameMaximumNetForce += restitutionForceFromTarget / (target.LastWasPulled ? IronBurnRate : SteelBurnRate);
+        }
         target.LastAllomanticForce = allomanticForce;
         target.LastAllomanticNormalForceFromAllomancer = restitutionForceFromAllomancer;
         target.LastAllomanticNormalForceFromTarget = restitutionForceFromTarget;

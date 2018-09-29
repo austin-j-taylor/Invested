@@ -14,8 +14,8 @@ public class PlayerPushPullController : MonoBehaviour {
     private const float horizontalMax = .55f;
     private const float verticalMin = .2f;
     private const float verticalMax = .8f;
-    private const float targetFocusRadius = .1f;                   // Determines the range around the center of the screen within which blue lines are in focus.
-    private const float verticalImportanceFactor = 1 / 10f;        // Determines how elliptical the range around the center of the screen is.
+    private const float targetFocusRadius = .05f;                   // Determines the range around the center of the screen within which blue lines are in focus.
+    private const float verticalImportanceFactor = 1 / 20f;        // Determines how elliptical the range around the center of the screen is.
     private const float targetFocusFalloffConstant = 128;           // Determines how quickly blue lines blend from in-focus to out-of-focus
     private const float targetFocusLowerBound = .2f;               // Determines the luminosity of blue lines that are out of foucus
     private const float targetFocusOffScreenBound = .035f;           // Determines the luminosity of blue lines that are off-screen
@@ -79,40 +79,45 @@ public class PlayerPushPullController : MonoBehaviour {
                     }
                 }
 
-                // Check scrollwheel for changing the max number of targets and burn rate
-                if (SettingsMenu.settingsData.controlScheme == 2) {
-                    float scrollValue = Keybinds.ScrollWheelAxis();
-                    if (scrollValue > 0) {
-                        IncrementNumberOfTargets();
+                // Check scrollwheel for changing the max number of targets and burn rate, or DPad if using gamepad
+                float scrollValue = 0;
+                if (SettingsMenu.settingsData.controlScheme == 2) { // Gamepad
+                    scrollValue = Keybinds.DPadXAxis();
+                    if (SettingsMenu.settingsData.pushControlStyle == 1) {
+                        ChangeTargetForceMagnitude(Keybinds.DPadYAxis());
                     }
-                    if (scrollValue < 0) {
-                        DecrementNumberOfTargets();
-                    }
-                } else {
+                } else { // Mouse and keyboard
                     if (Keybinds.ScrollWheelButton()) {
-                        if (Keybinds.ScrollWheelAxis() != 0) {
-                            if (Keybinds.ScrollWheelAxis() > 0) {
-                                IncrementNumberOfTargets();
-                            } else if (Keybinds.ScrollWheelAxis() < 0) {
-                                DecrementNumberOfTargets();
-                            }
-                        }
+                        scrollValue = Keybinds.ScrollWheelAxis();
                     } else {
-                        if (SettingsMenu.settingsData.pushControlStyle == 1)
-                            ChangeTargetForceMagnitude(Keybinds.ScrollWheelAxis());
-                        else
+                        if (SettingsMenu.settingsData.pushControlStyle == 0) {
                             ChangeBurnRateTarget(Keybinds.ScrollWheelAxis());
+                        } else {
+                            ChangeTargetForceMagnitude(Keybinds.ScrollWheelAxis());
+                        }
                     }
                 }
-                // If controlling push Magnitude, assign the burn rate to be the % of the max net force on player
-                if (SettingsMenu.settingsData.pushControlStyle == 1) {
-                    float maxNetForce = (player.LastMaximumNetForce).magnitude;
-                    SetPullRateTarget(forceMagnitudeTarget / maxNetForce);
-                    SetPushRateTarget(forceMagnitudeTarget / maxNetForce);
-                } else {
+                if (scrollValue > 0) {
+                    IncrementNumberOfTargets();
+                }
+                if (scrollValue < 0) {
+                    DecrementNumberOfTargets();
+                }
+
+                // Assign Burn rate targets based on the previously changed burn rate/target magnitudes
+                if (SettingsMenu.settingsData.pushControlStyle == 0) { // Percentage
                     if (SettingsMenu.settingsData.controlScheme == 2) {
                         SetPullRateTarget(Keybinds.RightBurnRate());
                         SetPushRateTarget(Keybinds.LeftBurnRate());
+                    }
+                } else { // Magnitude
+                    if (player.HasPullTarget || player.HasPushTarget) {
+                        float maxNetForce = (player.LastMaximumNetForce).magnitude;
+                        SetPullRateTarget(forceMagnitudeTarget / maxNetForce);
+                        SetPushRateTarget(forceMagnitudeTarget / maxNetForce);
+                    } else {
+                        SetPullRateTarget(0);
+                        SetPushRateTarget(0);
                     }
                 }
 
@@ -211,8 +216,7 @@ public class PlayerPushPullController : MonoBehaviour {
                         } else {
                             if (player.RemovePullTarget(target)) {// If the player is hovering over a pullTarget, instantly remove that one. Keep it highlighted.
                                 target.AddTargetGlow();
-                            } else
-                                if (Keybinds.SelectDown() && !player.RemovePullTarget(target)) { // If the highlighted Magnetic is not a pullTarget, remove the oldest pullTarget instead
+                            } else if (Keybinds.SelectDown() && !player.RemovePullTarget(target)) { // If the highlighted Magnetic is not a pullTarget, remove the oldest pullTarget instead
                                 player.RemovePullTargetAt(0);
                             }
                         }
@@ -223,8 +227,7 @@ public class PlayerPushPullController : MonoBehaviour {
                         } else {
                             if (player.RemovePushTarget(target)) {
                                 target.AddTargetGlow();
-                            } else
-                                if (Keybinds.SelectAlternateDown() && !player.RemovePushTarget(target)) {
+                            } else if (Keybinds.SelectAlternateDown() && !player.RemovePushTarget(target)) {
                                 player.RemovePushTargetAt(0);
                             }
                         }
@@ -243,7 +246,8 @@ public class PlayerPushPullController : MonoBehaviour {
         GamepadController.Shake(.1f, .1f, .3f);
         UpdateBurnRateMeter();
         HUD.BurnRateMeter.SetMetalLineCountText(player.PullTargets.Size.ToString());
-        CameraController.ActiveCamera.cullingMask = ~0;
+        if(SettingsMenu.settingsData.renderblueLines == 1)
+            EnableRenderingBlueLines();
         SetPullRateTarget(1);
         SetPushRateTarget(1);
         forceMagnitudeTarget = 600;
@@ -259,7 +263,7 @@ public class PlayerPushPullController : MonoBehaviour {
         }
         forceMagnitudeTarget = 0;
         GamepadController.SetRumble(0, 0);
-        CameraController.ActiveCamera.cullingMask = ~(1 << blueLineLayer);
+        DisableRenderingBlueLines();
         RefreshHUD();
     }
 
@@ -285,7 +289,7 @@ public class PlayerPushPullController : MonoBehaviour {
             if (SettingsMenu.settingsData.pushControlStyle == 0 && SettingsMenu.settingsData.controlScheme != 2)
                 allomanticForce *= Mathf.Max(player.IronBurnRate, player.SteelBurnRate);
 
-            allomanticForce -= SettingsMenu.settingsData.forceDetectionThreshold; // blue metal lines will fade to a luminocity of 0 when the force is on the edge of the threshold
+            allomanticForce -= SettingsMenu.settingsData.metalDetectionThreshold; // blue metal lines will fade to a luminocity of 0 when the force is on the edge of the threshold
             if (allomanticForce > 0) {
                 Vector3 screenPosition = CameraController.ActiveCamera.WorldToViewportPoint(target.transform.position);
 
@@ -391,34 +395,36 @@ public class PlayerPushPullController : MonoBehaviour {
     private void SetPullRateTarget(float rate) {
         if (rate > .001f) {
             ironBurnRateTarget = Mathf.Min(1, rate);
-            if (player.HasPullTarget || player.HasPushTarget)
-                GamepadController.SetRumbleRight(ironBurnRateTarget * GamepadController.rumbleFactor);
-            else
-                GamepadController.SetRumbleRight(0);
         } else {
-            //player.IronPulling = false;
             ironBurnRateTarget = 0;
-            GamepadController.SetRumbleRight(0);
         }
     }
     // Sets the target Steel burn rate
     private void SetPushRateTarget(float rate) {
         if (rate > .001f) {
             steelBurnRateTarget = Mathf.Min(1, rate);
-            if (player.HasPullTarget || player.HasPushTarget)
-                GamepadController.SetRumbleLeft(steelBurnRateTarget * GamepadController.rumbleFactor);
-            else
-                GamepadController.SetRumbleLeft(0);
         } else {
-            //player.SteelPushing = false;
             steelBurnRateTarget = 0;
-            GamepadController.SetRumbleLeft(0);
         }
     }
 
     private void LerpToBurnRates() {
         player.IronBurnRate = Mathf.Lerp(player.IronBurnRate, ironBurnRateTarget, burnRateLerpConstant);
         player.SteelBurnRate = Mathf.Lerp(player.SteelBurnRate, steelBurnRateTarget, burnRateLerpConstant);
+        if (player.HasPullTarget || player.HasPushTarget) {
+            if (player.IronPulling) {
+                GamepadController.SetRumbleRight(player.IronBurnRate * GamepadController.rumbleFactor);
+            } else {
+                GamepadController.SetRumbleRight(0);
+            }
+            if (player.SteelPushing) {
+                GamepadController.SetRumbleLeft(player.SteelBurnRate * GamepadController.rumbleFactor);
+            } else {
+                GamepadController.SetRumbleLeft(0);
+            }
+        } else {
+            GamepadController.SetRumble(0, 0);
+        }
         if (SettingsMenu.settingsData.pushControlStyle == 0 && SettingsMenu.settingsData.controlScheme != 2 && (player.IronBurnRate < .001f || player.SteelBurnRate < .001f)) {
             player.StopBurning();
         }
@@ -462,6 +468,13 @@ public class PlayerPushPullController : MonoBehaviour {
         } else {
             HUD.BurnRateMeter.SetForceTextColorWeak();
         }
+    }
 
+    public void EnableRenderingBlueLines() {
+        CameraController.ActiveCamera.cullingMask = ~0;
+    }
+
+    public void DisableRenderingBlueLines() {
+        CameraController.ActiveCamera.cullingMask = ~(1 << blueLineLayer);
     }
 }

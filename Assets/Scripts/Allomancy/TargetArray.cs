@@ -12,7 +12,7 @@ public class TargetArray {
     private readonly Color targetedBlueLine = new Color(0, 0, 1);
 
 
-    public Magnetic[] targets;
+    private Magnetic[] targets;
 
     public int Size { get; private set; } = 1;
     public int Count { get; private set; } = 0;
@@ -190,7 +190,7 @@ public class TargetArray {
      */
     public void RemoveAllOutOfRange() {
         for(int i = 0; i < Count; i++) {
-            if (targets[i].LastAllomanticForce.magnitude < SettingsMenu.settingsData.forceDetectionThreshold && targets[i].LastAllomanticForce.magnitude != 0) { // == 0 when not yet touched by force
+            if (targets[i].LastAllomanticForce.magnitude < SettingsMenu.settingsData.metalDetectionThreshold && targets[i].LastAllomanticForce.magnitude != 0) { // == 0 when not yet touched by force
                 RemoveTargetAt(i);
             }
         }

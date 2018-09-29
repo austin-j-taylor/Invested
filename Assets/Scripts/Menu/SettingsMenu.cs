@@ -10,6 +10,7 @@ public class SettingsMenu : MonoBehaviour {
     private const string s_glossary = "Glossary";
     private const string s_gameplay = "Gameplay";
     private const string s_interface = "Interface";
+    private const string s_graphics = "Graphics";
     private const string s_allomancy = "Allomancy Physics";
     private const string s_world = "World Physics";
     private const string s_back = "Back";
@@ -120,6 +121,11 @@ public class SettingsMenu : MonoBehaviour {
             return interfaceHeader.gameObject.activeSelf;
         }
     }
+    public bool IsGraphicsOpen {
+        get {
+            return graphicsHeader.gameObject.activeSelf;
+        }
+    }
     public bool IsAllomancyOpen {
         get {
             return allomancyHeader.gameObject.activeSelf;
@@ -137,11 +143,13 @@ public class SettingsMenu : MonoBehaviour {
     private Button glossaryButton;
     private Button gameplayButton;
     private Button interfaceButton;
+    private Button graphicsButton;
     private Button allomancyButton;
     private Button worldButton;
     private Transform glossaryHeader;
     private Transform gameplayHeader;
     private Transform interfaceHeader;
+    private Transform graphicsHeader;
     private Transform allomancyHeader;
     private Transform worldHeader;
     private Button closeButton;
@@ -165,29 +173,34 @@ public class SettingsMenu : MonoBehaviour {
         glossaryButton = settingsHeaderButtons[0];
         gameplayButton = settingsHeaderButtons[1];
         interfaceButton = settingsHeaderButtons[2];
-        allomancyButton = settingsHeaderButtons[3];
-        worldButton = settingsHeaderButtons[4];
+        graphicsButton = settingsHeaderButtons[3];
+        allomancyButton = settingsHeaderButtons[4];
+        worldButton = settingsHeaderButtons[5];
         // Glossary
         glossaryHeader = transform.GetChild(2);
         // Gameplay Header
         gameplayHeader = transform.GetChild(3);
         // Interface Header
         interfaceHeader = transform.GetChild(4);
+        // Graphics Header
+        graphicsHeader = transform.GetChild(5);
         // Allomancy Header
-        allomancyHeader = transform.GetChild(5);
+        allomancyHeader = transform.GetChild(6);
         // World Header
-        worldHeader = transform.GetChild(6);
+        worldHeader = transform.GetChild(7);
         // Close Button
-        closeButton = transform.GetChild(7).GetComponent<Button>();
+        closeButton = transform.GetChild(8).GetComponent<Button>();
+
         closeText = closeButton.GetComponentInChildren<Text>();
-        discardButton = transform.GetChild(8).GetComponent<Button>();
-        resetToDefaultsButton = transform.GetChild(9).GetComponent<Button>();
+        discardButton = transform.GetChild(9).GetComponent<Button>();
+        resetToDefaultsButton = transform.GetChild(10).GetComponent<Button>();
         resetToDefaultsText = resetToDefaultsButton.GetComponentInChildren<Text>();
 
         // Command listeners assignment
         glossaryButton.onClick.AddListener(OpenGlossary);
         gameplayButton.onClick.AddListener(OpenGameplay);
         interfaceButton.onClick.AddListener(OpenInterface);
+        graphicsButton.onClick.AddListener(OpenGraphics);
         allomancyButton.onClick.AddListener(OpenAllomancy);
         worldButton.onClick.AddListener(OpenWorld);
         closeButton.onClick.AddListener(OnClickClose);
@@ -216,7 +229,7 @@ public class SettingsMenu : MonoBehaviour {
 
     public void OpenSettings() {
         gameObject.SetActive(true);
-        resetToDefaultsButton.gameObject.SetActive(transform);
+        resetToDefaultsButton.gameObject.SetActive(true);
     }
 
     public void CloseSettings() {
@@ -224,6 +237,7 @@ public class SettingsMenu : MonoBehaviour {
         resetToDefaultsButton.gameObject.SetActive(false);
         CloseGlossary();
         CloseInterface();
+        CloseGraphics();
         CloseGameplay();
         CloseAllomancy();
         CloseWorld();
@@ -282,6 +296,18 @@ public class SettingsMenu : MonoBehaviour {
         CloseHeader();
     }
 
+    private void OpenGraphics() {
+        titleText.text = s_graphics;
+        graphicsHeader.gameObject.SetActive(true);
+        OpenHeader();
+    }
+
+    private void CloseGraphics() {
+        titleText.text = s_settings;
+        graphicsHeader.gameObject.SetActive(false);
+        CloseHeader();
+    }
+
     private void OpenAllomancy() {
         titleText.text = s_allomancy;
         allomancyHeader.gameObject.SetActive(true);
@@ -319,6 +345,8 @@ public class SettingsMenu : MonoBehaviour {
             CloseGameplay();
         else if (IsInterfaceOpen)
             CloseInterface();
+        else if (IsGraphicsOpen)
+            CloseGraphics();
         else if (IsAllomancyOpen)
             CloseAllomancy();
         else if (IsWorldOpen)

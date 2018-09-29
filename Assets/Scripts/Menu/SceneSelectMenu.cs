@@ -70,8 +70,8 @@ public class SceneSelectMenu : MonoBehaviour {
             Player.PlayerInstance.gameObject.SetActive(true);
             CameraController.LockCamera();
         }
-        HUD.ResetHUD();
         Player.PlayerInstance.ReloadPlayerIntoNewScene(scene);
+        HUD.ResetHUD();
 
         SceneManager.LoadScene(scene);
     }

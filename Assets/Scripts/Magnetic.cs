@@ -56,7 +56,9 @@ public class Magnetic : MonoBehaviour {
     public Vector3 LastAllomanticForce { get; set; }
     public Vector3 LastAllomanticNormalForceFromAllomancer { get; set; }
     public Vector3 LastAllomanticNormalForceFromTarget { get; set; }
-    
+    // The allomantic force, excluding the burn rate.
+    public Vector3 LastMaxPossibleAllomanticForce { get; set; }
+
     public bool IsStatic { get; set; }
 
     public bool LastWasPulled {
@@ -148,6 +150,7 @@ public class Magnetic : MonoBehaviour {
         LastVelocity = Vector3.zero;
         LastExpectedAcceleration = Vector3.zero;
         LastAllomanticForce = Vector3.zero;
+        LastMaxPossibleAllomanticForce = Vector3.zero;
         LastAllomanticNormalForceFromAllomancer = Vector3.zero;
         LastAllomanticNormalForceFromTarget = Vector3.zero;
     }
@@ -162,6 +165,7 @@ public class Magnetic : MonoBehaviour {
         LastVelocity = Vector3.zero;
         LastExpectedAcceleration = Vector3.zero;
         LastAllomanticForce = Vector3.zero;
+        LastMaxPossibleAllomanticForce = Vector3.zero;
         LastAllomanticNormalForceFromAllomancer = Vector3.zero;
         LastAllomanticNormalForceFromTarget = Vector3.zero;
         Allomancer = null;
@@ -185,7 +189,8 @@ public class Magnetic : MonoBehaviour {
     public virtual void StopBeingPullPushed() { }
 
     public void AddTargetGlow() {
-        highlightedTargetOutline.Enable();
+        if(SettingsMenu.settingsData.highlightedTargetOutline == 1)
+            highlightedTargetOutline.Enable();
     }
 
     public void RemoveTargetGlow() {

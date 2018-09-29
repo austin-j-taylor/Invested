@@ -6,21 +6,15 @@ using UnityEngine;
  * Every frame, checks if the player is just above a collider (i.e. is grounded).
  */
 public class PlayerGroundedChecker : MonoBehaviour {
-    
-    public bool IsGrounded { get; private set; }
 
-    private bool isInCollider;
-    private Collider standingOnCollider;
+    public bool IsGrounded { get; private set; } = false;
+
+    private bool isInCollider = false;
+    private Collider standingOnCollider = null;
 
     private void FixedUpdate() {
         IsGrounded = isInCollider;
         isInCollider = false;
-    }
-
-    private void Start() {
-        IsGrounded = false;
-        isInCollider = false;
-        standingOnCollider = null;
     }
 
     private void OnTriggerStay(Collider other) {
