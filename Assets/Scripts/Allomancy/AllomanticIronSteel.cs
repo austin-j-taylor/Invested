@@ -116,6 +116,10 @@ public class AllomanticIronSteel : MonoBehaviour {
     private void FixedUpdate() {
         if (!PauseMenu.IsPaused && Player.CanControlPlayer) {
             if (IsBurningIronSteel) {
+                // Remove all targets that are out of pushing range
+                PullTargets.RemoveAllOutOfRange();
+                PushTargets.RemoveAllOutOfRange();
+
                 CalculatePullForces();
                 CalculatePushForces();
 
@@ -377,10 +381,18 @@ public class AllomanticIronSteel : MonoBehaviour {
         }
         thisFrameAllomanticForce += allomanticForce;
         thisFrameNormalForce += restitutionForceFromTarget;
-        if (SettingsMenu.settingsData.controlScheme == 2) {
-            thisFrameMaximumNetForce += restitutionForceFromTarget;
+        if(target.LastWasPulled) {
+            if(IronBurnRate == 0) {
+                thisFrameMaximumNetForce += restitutionForceFromTarget;
+            } else {
+                thisFrameMaximumNetForce += restitutionForceFromTarget / IronBurnRate;
+            }
         } else {
-            thisFrameMaximumNetForce += restitutionForceFromTarget / (target.LastWasPulled ? IronBurnRate : SteelBurnRate);
+            if(SteelBurnRate == 0) {
+                thisFrameMaximumNetForce += restitutionForceFromTarget;
+            } else {
+                thisFrameMaximumNetForce += restitutionForceFromTarget / IronBurnRate;
+            }
         }
         target.LastAllomanticForce = allomanticForce;
         target.LastAllomanticNormalForceFromAllomancer = restitutionForceFromAllomancer;
@@ -462,7 +474,7 @@ public class AllomanticIronSteel : MonoBehaviour {
 
     /*
      * Add a target
-     * If it's a pushTarget, remove it from pullTargets and move it to pushTargets
+     * If it's a pushTarget, remove it from pushTargets and move it to pullTargets
      */
     public void AddPullTarget(Magnetic target) {
         if (!IsBurningIronSteel)
@@ -474,7 +486,8 @@ public class AllomanticIronSteel : MonoBehaviour {
     }
 
     /*
-     * Add a target, if it isn't already a push target
+     * Add a target
+     * If it's a pullTarget, remove it from pullTargets and move it to pushTargets
      */
     public void AddPushTarget(Magnetic target) {
         if (!IsBurningIronSteel)

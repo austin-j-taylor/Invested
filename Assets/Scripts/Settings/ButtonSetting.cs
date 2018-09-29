@@ -40,7 +40,7 @@ public class ButtonSetting : Setting {
      * 
      */
 
-    void Start() {
+    void Awake() {
 
         button = GetComponentInChildren<Button>();
         buttonText = transform.GetChild(0).GetChild(1).GetComponent<Text>();

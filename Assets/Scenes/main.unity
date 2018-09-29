@@ -367,6 +367,11 @@ Prefab:
       propertyPath: buttonCalls.Array.data[1].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114008144310392452, guid: d384f94ff36ed5947bc960a8fa285f91,
+        type: 2}
+      propertyPath: m_FontData.m_VerticalOverflow
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d384f94ff36ed5947bc960a8fa285f91, type: 2}
   m_IsPrefabAsset: 0
@@ -714,6 +719,11 @@ Prefab:
         type: 2}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114008144310392452, guid: d384f94ff36ed5947bc960a8fa285f91,
+        type: 2}
+      propertyPath: m_FontData.m_VerticalOverflow
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d384f94ff36ed5947bc960a8fa285f91, type: 2}
@@ -1094,6 +1104,11 @@ Prefab:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114008144310392452, guid: d384f94ff36ed5947bc960a8fa285f91,
+        type: 2}
+      propertyPath: m_FontData.m_VerticalOverflow
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d384f94ff36ed5947bc960a8fa285f91, type: 2}
   m_IsPrefabAsset: 0
@@ -1173,37 +1188,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!84 &49689760
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  m_Width: 1529
-  m_Height: 845
-  m_AntiAliasing: 1
-  m_DepthFormat: 1
-  m_ColorFormat: 7
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1001 &50155389
 Prefab:
   m_ObjectHideFlags: 0
@@ -1885,6 +1869,11 @@ Prefab:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114008144310392452, guid: d384f94ff36ed5947bc960a8fa285f91,
+        type: 2}
+      propertyPath: m_FontData.m_VerticalOverflow
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d384f94ff36ed5947bc960a8fa285f91, type: 2}
   m_IsPrefabAsset: 0
@@ -2385,6 +2374,11 @@ Prefab:
       propertyPath: settingSize
       value: 180
       objectReference: {fileID: 0}
+    - target: {fileID: 114008144310392452, guid: d384f94ff36ed5947bc960a8fa285f91,
+        type: 2}
+      propertyPath: m_FontData.m_VerticalOverflow
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d384f94ff36ed5947bc960a8fa285f91, type: 2}
   m_IsPrefabAsset: 0
@@ -2768,6 +2762,11 @@ Prefab:
         type: 2}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114008144310392452, guid: d384f94ff36ed5947bc960a8fa285f91,
+        type: 2}
+      propertyPath: m_FontData.m_VerticalOverflow
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d384f94ff36ed5947bc960a8fa285f91, type: 2}
@@ -3429,6 +3428,11 @@ Prefab:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114008144310392452, guid: d384f94ff36ed5947bc960a8fa285f91,
+        type: 2}
+      propertyPath: m_FontData.m_VerticalOverflow
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d384f94ff36ed5947bc960a8fa285f91, type: 2}
   m_IsPrefabAsset: 0
@@ -3502,11 +3506,9 @@ MonoBehaviour:
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 0.75
-  m_Text: 'Reset Level
-
-'
+  m_Text: Reset Level
 --- !u!222 &241384673
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4148,6 +4150,11 @@ Prefab:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114008144310392452, guid: d384f94ff36ed5947bc960a8fa285f91,
+        type: 2}
+      propertyPath: m_FontData.m_VerticalOverflow
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d384f94ff36ed5947bc960a8fa285f91, type: 2}
   m_IsPrefabAsset: 0
@@ -4681,6 +4688,11 @@ Prefab:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114008144310392452, guid: d384f94ff36ed5947bc960a8fa285f91,
+        type: 2}
+      propertyPath: m_FontData.m_VerticalOverflow
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d384f94ff36ed5947bc960a8fa285f91, type: 2}
   m_IsPrefabAsset: 0
@@ -5116,6 +5128,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98960d16a668d094ab85a637011ed09c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!84 &411869961
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_Width: 1528
+  m_Height: 845
+  m_AntiAliasing: 1
+  m_DepthFormat: 1
+  m_ColorFormat: 7
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1 &426331645
 GameObject:
   m_ObjectHideFlags: 0
@@ -5574,6 +5617,11 @@ Prefab:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114008144310392452, guid: d384f94ff36ed5947bc960a8fa285f91,
+        type: 2}
+      propertyPath: m_FontData.m_VerticalOverflow
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d384f94ff36ed5947bc960a8fa285f91, type: 2}
   m_IsPrefabAsset: 0
@@ -5876,6 +5924,11 @@ Prefab:
         type: 2}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114008144310392452, guid: d384f94ff36ed5947bc960a8fa285f91,
+        type: 2}
+      propertyPath: m_FontData.m_VerticalOverflow
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d384f94ff36ed5947bc960a8fa285f91, type: 2}
@@ -6382,6 +6435,11 @@ Prefab:
     - target: {fileID: 114883794922931634, guid: d384f94ff36ed5947bc960a8fa285f91,
         type: 2}
       propertyPath: buttonCalls.Array.data[1].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114008144310392452, guid: d384f94ff36ed5947bc960a8fa285f91,
+        type: 2}
+      propertyPath: m_FontData.m_VerticalOverflow
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -6911,6 +6969,11 @@ Prefab:
       propertyPath: m_AnchoredPosition.x
       value: 240
       objectReference: {fileID: 0}
+    - target: {fileID: 114008144310392452, guid: d384f94ff36ed5947bc960a8fa285f91,
+        type: 2}
+      propertyPath: m_FontData.m_VerticalOverflow
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d384f94ff36ed5947bc960a8fa285f91, type: 2}
   m_IsPrefabAsset: 0
@@ -7088,16 +7151,16 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: 565e743353a5a8243ac835ae23dd0d26, type: 3}
-    m_FontSize: 35
+    m_FontSize: 32
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
-    m_MaxSize: 40
+    m_MaxSize: 41
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 0.75
   m_Text: Unpause
 --- !u!222 &620418847
@@ -7555,6 +7618,37 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 667583161}
   m_CullTransparentMesh: 0
+--- !u!84 &695298408
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_Width: 1528
+  m_Height: 845
+  m_AntiAliasing: 1
+  m_DepthFormat: 1
+  m_ColorFormat: 7
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 0
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1 &697142196
 GameObject:
   m_ObjectHideFlags: 0
@@ -8122,6 +8216,11 @@ Prefab:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114008144310392452, guid: d384f94ff36ed5947bc960a8fa285f91,
+        type: 2}
+      propertyPath: m_FontData.m_VerticalOverflow
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d384f94ff36ed5947bc960a8fa285f91, type: 2}
   m_IsPrefabAsset: 0
@@ -8482,7 +8581,7 @@ MonoBehaviour:
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
   m_FontData:
     m_Font: {fileID: 12800000, guid: 565e743353a5a8243ac835ae23dd0d26, type: 3}
-    m_FontSize: 35
+    m_FontSize: 32
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 3
@@ -8491,7 +8590,7 @@ MonoBehaviour:
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 0.75
   m_Text: Settings
 --- !u!222 &880930042
@@ -8794,6 +8893,11 @@ Prefab:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114008144310392452, guid: d384f94ff36ed5947bc960a8fa285f91,
+        type: 2}
+      propertyPath: m_FontData.m_VerticalOverflow
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d384f94ff36ed5947bc960a8fa285f91, type: 2}
   m_IsPrefabAsset: 0
@@ -8867,7 +8971,7 @@ MonoBehaviour:
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 0.75
   m_Text: 'v. 1.1.4 '
 --- !u!222 &930478633
@@ -9017,11 +9121,9 @@ MonoBehaviour:
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 0.75
-  m_Text: 'Quit Level
-
-'
+  m_Text: Quit Level
 --- !u!222 &939523825
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -9396,6 +9498,11 @@ Prefab:
       propertyPath: buttonCalls.Array.data[1].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114008144310392452, guid: d384f94ff36ed5947bc960a8fa285f91,
+        type: 2}
+      propertyPath: m_FontData.m_VerticalOverflow
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d384f94ff36ed5947bc960a8fa285f91, type: 2}
   m_IsPrefabAsset: 0
@@ -9648,8 +9755,8 @@ MonoBehaviour:
   sourceCamera: {fileID: 980503537}
   outlineCamera: {fileID: 2096318919}
   outlineShaderMaterial: {fileID: 0}
-  renderTexture: {fileID: 1202376737}
-  extraRenderTexture: {fileID: 1290733385}
+  renderTexture: {fileID: 695298408}
+  extraRenderTexture: {fileID: 1765424874}
 --- !u!1 &1000910687
 GameObject:
   m_ObjectHideFlags: 0
@@ -9919,7 +10026,7 @@ MonoBehaviour:
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 1
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 0.75
   m_Text: A <i>Mistborn</i> physics demonstration & fan game
 --- !u!222 &1042268819
@@ -10167,6 +10274,11 @@ Prefab:
         type: 2}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114008144310392452, guid: d384f94ff36ed5947bc960a8fa285f91,
+        type: 2}
+      propertyPath: m_FontData.m_VerticalOverflow
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d384f94ff36ed5947bc960a8fa285f91, type: 2}
@@ -10988,37 +11100,6 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1200666898}
   m_CullTransparentMesh: 0
---- !u!84 &1202376737
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  m_Width: 1529
-  m_Height: 845
-  m_AntiAliasing: 1
-  m_DepthFormat: 1
-  m_ColorFormat: 7
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 0
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &1208425391
 GameObject:
   m_ObjectHideFlags: 0
@@ -11222,7 +11303,7 @@ MonoBehaviour:
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 0.75
   m_Text: Luthadel
 --- !u!222 &1229886893
@@ -11232,37 +11313,6 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1229886890}
   m_CullTransparentMesh: 0
---- !u!84 &1241321295
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  m_Width: 1529
-  m_Height: 845
-  m_AntiAliasing: 1
-  m_DepthFormat: 1
-  m_ColorFormat: 7
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 0
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &1242450459
 GameObject:
   m_ObjectHideFlags: 0
@@ -11748,37 +11798,6 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1271552718}
   m_CullTransparentMesh: 0
---- !u!84 &1290733385
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  m_Width: 1529
-  m_Height: 845
-  m_AntiAliasing: 1
-  m_DepthFormat: 1
-  m_ColorFormat: 7
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &1291360106
 GameObject:
   m_ObjectHideFlags: 0
@@ -12073,7 +12092,7 @@ MonoBehaviour:
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 0.75
   m_Text: Settings
 --- !u!222 &1328753246
@@ -12403,6 +12422,11 @@ Prefab:
         type: 2}
       propertyPath: settingSize
       value: 180
+      objectReference: {fileID: 0}
+    - target: {fileID: 114008144310392452, guid: d384f94ff36ed5947bc960a8fa285f91,
+        type: 2}
+      propertyPath: m_FontData.m_VerticalOverflow
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d384f94ff36ed5947bc960a8fa285f91, type: 2}
@@ -13039,6 +13063,37 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1379973285}
   m_CullTransparentMesh: 0
+--- !u!84 &1384307819
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_Width: 1528
+  m_Height: 845
+  m_AntiAliasing: 1
+  m_DepthFormat: 1
+  m_ColorFormat: 7
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 0
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1 &1386480021
 GameObject:
   m_ObjectHideFlags: 0
@@ -13251,7 +13306,7 @@ MonoBehaviour:
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 0.75
   m_Text: Quit
 --- !u!222 &1411833537
@@ -13697,11 +13752,9 @@ MonoBehaviour:
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 1
-  m_Text: 'Paused
-
-'
+  m_Text: Paused
 --- !u!222 &1485967186
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -13955,6 +14008,11 @@ Prefab:
     - target: {fileID: 114883794922931634, guid: d384f94ff36ed5947bc960a8fa285f91,
         type: 2}
       propertyPath: buttonCalls.Array.data[1].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114008144310392452, guid: d384f94ff36ed5947bc960a8fa285f91,
+        type: 2}
+      propertyPath: m_FontData.m_VerticalOverflow
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -14407,6 +14465,11 @@ Prefab:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114008144310392452, guid: d384f94ff36ed5947bc960a8fa285f91,
+        type: 2}
+      propertyPath: m_FontData.m_VerticalOverflow
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d384f94ff36ed5947bc960a8fa285f91, type: 2}
   m_IsPrefabAsset: 0
@@ -14474,7 +14537,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 0
   m_RenderingPath: 1
-  m_TargetTexture: {fileID: 1241321295}
+  m_TargetTexture: {fileID: 1384307819}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 0
@@ -14932,6 +14995,11 @@ Prefab:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114008144310392452, guid: d384f94ff36ed5947bc960a8fa285f91,
+        type: 2}
+      propertyPath: m_FontData.m_VerticalOverflow
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d384f94ff36ed5947bc960a8fa285f91, type: 2}
   m_IsPrefabAsset: 0
@@ -15086,7 +15154,7 @@ MonoBehaviour:
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 0.75
   m_Text: Tutorial
 --- !u!222 &1628123290
@@ -15658,6 +15726,11 @@ Prefab:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114008144310392452, guid: d384f94ff36ed5947bc960a8fa285f91,
+        type: 2}
+      propertyPath: m_FontData.m_VerticalOverflow
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d384f94ff36ed5947bc960a8fa285f91, type: 2}
   m_IsPrefabAsset: 0
@@ -16008,7 +16081,7 @@ MonoBehaviour:
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 0.75
   m_Text: Sandbox
 --- !u!222 &1689509248
@@ -16083,7 +16156,7 @@ MonoBehaviour:
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 0.75
   m_Text: Back
 --- !u!222 &1700213545
@@ -16204,6 +16277,37 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   profile: {fileID: 11400000, guid: bc8ca7f3b8f8e304ab5f1cb2457c62f3, type: 2}
+--- !u!84 &1765424874
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_Width: 1528
+  m_Height: 845
+  m_AntiAliasing: 1
+  m_DepthFormat: 1
+  m_ColorFormat: 7
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1 &1774380016
 GameObject:
   m_ObjectHideFlags: 0
@@ -16269,7 +16373,7 @@ MonoBehaviour:
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 0.75
   m_Text: Experimental
 --- !u!222 &1774380019
@@ -16954,6 +17058,11 @@ Prefab:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114008144310392452, guid: d384f94ff36ed5947bc960a8fa285f91,
+        type: 2}
+      propertyPath: m_FontData.m_VerticalOverflow
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d384f94ff36ed5947bc960a8fa285f91, type: 2}
   m_IsPrefabAsset: 0
@@ -17526,6 +17635,11 @@ Prefab:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114008144310392452, guid: d384f94ff36ed5947bc960a8fa285f91,
+        type: 2}
+      propertyPath: m_FontData.m_VerticalOverflow
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d384f94ff36ed5947bc960a8fa285f91, type: 2}
   m_IsPrefabAsset: 0
@@ -17787,6 +17901,11 @@ Prefab:
         type: 2}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114008144310392452, guid: d384f94ff36ed5947bc960a8fa285f91,
+        type: 2}
+      propertyPath: m_FontData.m_VerticalOverflow
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d384f94ff36ed5947bc960a8fa285f91, type: 2}
@@ -18200,7 +18319,7 @@ MonoBehaviour:
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
-    m_VerticalOverflow: 0
+    m_VerticalOverflow: 1
     m_LineSpacing: 0.75
   m_Text: Play
 --- !u!222 &1990277778
@@ -18575,6 +18694,11 @@ Prefab:
         type: 2}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114008144310392452, guid: d384f94ff36ed5947bc960a8fa285f91,
+        type: 2}
+      propertyPath: m_FontData.m_VerticalOverflow
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d384f94ff36ed5947bc960a8fa285f91, type: 2}
@@ -19040,8 +19164,8 @@ MonoBehaviour:
   sourceCamera: {fileID: 2094948116}
   outlineCamera: {fileID: 1578086683}
   outlineShaderMaterial: {fileID: 0}
-  renderTexture: {fileID: 1241321295}
-  extraRenderTexture: {fileID: 49689760}
+  renderTexture: {fileID: 1384307819}
+  extraRenderTexture: {fileID: 411869961}
 --- !u!81 &2094948113
 AudioListener:
   m_ObjectHideFlags: 0
@@ -19170,7 +19294,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 0
   m_RenderingPath: 1
-  m_TargetTexture: {fileID: 1202376737}
+  m_TargetTexture: {fileID: 695298408}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 0
@@ -19576,6 +19700,11 @@ Prefab:
         type: 2}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 114008144310392452, guid: d384f94ff36ed5947bc960a8fa285f91,
+        type: 2}
+      propertyPath: m_FontData.m_VerticalOverflow
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d384f94ff36ed5947bc960a8fa285f91, type: 2}

@@ -69,6 +69,8 @@ public class PlayerPushPullController : MonoBehaviour {
             }
 
             if (player.IsBurningIronSteel) {
+
+
                 // Swap pull- and push- targets
                 if (Keybinds.NegateDown() && timeToSwapBurning > Time.time) {
                     // Double-tapped, Swap targets
@@ -112,6 +114,9 @@ public class PlayerPushPullController : MonoBehaviour {
                     }
                 } else { // Magnitude
                     if (player.HasPullTarget || player.HasPushTarget) {
+
+                        //Debug.Log(player.LastMaximumNetForce);
+
                         float maxNetForce = (player.LastMaximumNetForce).magnitude;
                         SetPullRateTarget(forceMagnitudeTarget / maxNetForce);
                         SetPushRateTarget(forceMagnitudeTarget / maxNetForce);
@@ -187,10 +192,6 @@ public class PlayerPushPullController : MonoBehaviour {
                         }
                     }
                 }
-
-                // Remove all targets that are out of pushing range
-                player.PullTargets.RemoveAllOutOfRange();
-                player.PushTargets.RemoveAllOutOfRange();
 
                 // Check input for target selection
                 bool selecting = (Keybinds.Select() || Keybinds.SelectAlternate()) && !Keybinds.Negate();

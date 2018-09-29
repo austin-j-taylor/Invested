@@ -190,8 +190,14 @@ public class TargetArray {
      */
     public void RemoveAllOutOfRange() {
         for(int i = 0; i < Count; i++) {
-            if (targets[i].LastAllomanticForce.magnitude < SettingsMenu.settingsData.metalDetectionThreshold && targets[i].LastAllomanticForce.magnitude != 0) { // == 0 when not yet touched by force
-                RemoveTargetAt(i);
+            if (SettingsMenu.settingsData.pushControlStyle == 0) {
+                if (targets[i].LastAllomanticForce.magnitude < SettingsMenu.settingsData.metalDetectionThreshold && targets[i].LastAllomanticForce != Vector3.zero) { // zero on first frame of pushing
+                    RemoveTargetAt(i);
+                }
+            } else { // If using the Magnitude control style, burn rate does not affect how far range of targets
+                if (targets[i].LastMaxPossibleAllomanticForce.magnitude < SettingsMenu.settingsData.metalDetectionThreshold && targets[i].LastMaxPossibleAllomanticForce != Vector3.zero) {
+                    RemoveTargetAt(i);
+                }
             }
         }
     }

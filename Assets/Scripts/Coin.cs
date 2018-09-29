@@ -40,6 +40,7 @@ public class Coin : Magnetic {
         isInCollider = false;
         IsStuck = false;
         lastWasStuck = false;
+        Debug.Log(Allomancer);
     }
 
     private void OnCollisionEnter(Collision collision) {
