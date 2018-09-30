@@ -35,12 +35,17 @@ public class Hand : MonoBehaviour {
                 vertical *= keyboardSteepAngle;
                 horizontal *= keyboardSteepAngle;
             }
-
             Quaternion newRotation = new Quaternion();
             newRotation.SetLookRotation(new Vector3(horizontal, (-1 + Vector2.ClampMagnitude(new Vector2(horizontal, vertical), 1).magnitude), vertical), Vector3.up);
             centerOfMass.localRotation = newRotation;
         } else {
-            centerOfMass.localEulerAngles = new Vector3(CameraController.ActiveCamera.transform.eulerAngles.x, 0, 0);
+            // Rotate hand to look towards reticle target
+            RaycastHit hit;
+            if (Physics.Raycast(CameraController.ActiveCamera.transform.position, CameraController.ActiveCamera.transform.forward, out hit, 1000, GameManager.Layer_IgnorePlayer)) {
+                centerOfMass.LookAt(hit.point);
+            } else {
+                centerOfMass.localEulerAngles = new Vector3(CameraController.ActiveCamera.transform.eulerAngles.x, 0, 0);
+            }
         }
     }
 
