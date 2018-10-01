@@ -10,18 +10,22 @@ public class Coin : Magnetic {
     private const float equalInMagnitudeConstant = .01f;
     private const float drag = 1.25f;
     private const float stuckThreshold = 100f; // Square magnitude of normal force necessary for friction
-
-    private bool isStuck = false;
+    
     private bool lastWasStuck = false;
-    private Vector3 stuckNormal;
-    //private Vector3 collisionLocalPosition;
-    private Transform collidedCollider = null;
+
+    // Used for pseudo-parenting Coin when stuck to object it collides with
+    private Transform collidedCollider;
+    private Vector3 collisionNormal;
+    private Quaternion startParentRotation;
+    private Vector3 startChildPosition;
+    private Quaternion startChildRotation;
 
     public override bool IsPerfectlyAnchored { // Only matters for Coins, which have so low masses that Unity thinks they have high velocities when pushed, even when anchored
         get {
             return Mathf.Abs(LastPosition.sqrMagnitude - transform.position.sqrMagnitude) < equalInMagnitudeConstant;
         }
     }
+    private bool isStuck;
 
     private bool IsStuck {
         get {
@@ -29,30 +33,8 @@ public class Coin : Magnetic {
         }
         set {
             isStuck = value;
-            if (value)
-                Rb.velocity = Vector3.zero;
-        }
-    }
-
-
-    Matrix4x4 parentMatrix;
-    
-    Quaternion startParentRotation;
-
-    Vector3 startChildPosition;
-    Quaternion startChildRotation;
-    
-
-    private void FixedUpdate() {
-        UpdatePositionToParent();
-    }
-
-    private void UpdatePositionToParent() {
-        if (IsStuck) { // Coin is stuck to something; pseudo-parent it.
-            parentMatrix = Matrix4x4.TRS(collidedCollider.position, collidedCollider.rotation, collidedCollider.lossyScale);
-            //transform.position = startChildPosition;
-            transform.position = parentMatrix.MultiplyPoint3x4(startChildPosition);
-            transform.rotation = (collidedCollider.rotation * Quaternion.Inverse(startParentRotation)) * startChildRotation;
+            if (!value)
+                lastWasStuck = false;
         }
     }
 
@@ -62,34 +44,62 @@ public class Coin : Magnetic {
         IsStuck = false;
         lastWasStuck = false;
     }
-    /*
-     * Entered collision. Initialize pseudo-parenting.
-     */
+
     private void OnCollisionEnter(Collision collision) {
         OnCollisionStay(collision);
     }
 
-    // Only called when not kinematic i.e. when sliding along the ground
+    /*
+     * Simulates friction and makes the target stuck to the colliding surface
+     * 
+     * If stuck, the coin is pseudo-parented to the object it collided with.
+     * collisionNormal needs to be constantly updated for each OnCollisionStay
+     */
     private void OnCollisionStay(Collision collision) {
-        collidedCollider = collision.transform;
-
         if (!collision.collider.CompareTag("Player")) {
-            if (Allomancer && Allomancer.SteelPushing && !LastWasPulled) {
-                CheckStuck(collision);
+            // Could be colliding with multiple objects.
+            // Only care about the oldest one, for now.
+            if(collidedCollider == collision.transform || collidedCollider == null) {
+                collidedCollider = collision.transform;
+                collisionNormal = collision.contacts[0].normal;
+
+                if (Allomancer && (Allomancer.SteelPushing || Allomancer.IronPulling)) {
+
+                    IsStuck = IsStuckByFriction(collision.impulse / Time.deltaTime);
+                    if (IsStuck) {
+                        if (!lastWasStuck) {
+                            // First frame of being stuck.
+                            startParentRotation = collidedCollider.rotation;
+                            startChildPosition = collision.contacts[0].point; // Coin embeds itself in the target collider. Intended behavior?
+                            startChildRotation = transform.rotation;
+
+                            // Keeps child position from being modified at the start by the parent's initial transform
+                            Vector3 num = Quaternion.Inverse(collidedCollider.rotation) * (startChildPosition - collidedCollider.position);
+                            Vector3 den = collidedCollider.lossyScale;
+                            startChildPosition = new Vector3(num.x / den.x, num.y / den.y, num.z / den.z);
+                        }
+                        UpdatePositionToParent();
+                        Rb.velocity = Vector3.zero;
+                    } else {
+                        collidedCollider = null;
+                    }
+
+                    lastWasStuck = IsStuck;
+                }
+            } else {
+                // A new collision has occured
             }
         }
     }
 
     private void OnCollisionExit(Collision collision) {
-        //collidedCollider = null;
-        IsStuck = false;
+        if (collidedCollider == collision.transform) {
+            collidedCollider = null;
+            IsStuck = false;
+        } else {
+            // A different collision has ended
+        }
     }
-
-    //private void OnTriggerEnter(Collider other) {
-    //    if (Keybinds.IronPulling() && other.CompareTag("Player")) {
-    //        BeCaughtByAllomancer(other.GetComponent<Player>());
-    //    }
-    //}
 
     private void OnTriggerStay(Collider other) {
         if (Keybinds.IronPulling() && other.CompareTag("Player")) {
@@ -97,52 +107,34 @@ public class Coin : Magnetic {
         }
     }
 
-    // Effectively caps the max velocity of the coin without affecting the ANF
     public override void AddForce(Vector3 netForce) {
         // Calculate drag from its new velocity
+        // Effectively caps the max velocity of the coin without affecting the ANF.
         Vector3 newNetForce = Vector3.ClampMagnitude(
             -(Vector3.Project(Rb.velocity, netForce.normalized) + (netForce / NetMass * Time.fixedDeltaTime)) * drag, netForce.magnitude
         ) + netForce;
-        
-        if (Allomancer && Allomancer.SteelPushing) {
-            IsStuck = Vector3.Project(newNetForce, stuckNormal).sqrMagnitude > stuckThreshold;
+
+        if (Allomancer && (Allomancer.SteelPushing || Allomancer.IronPulling)) {
+            IsStuck = Vector3.Dot(newNetForce, collisionNormal) < 0 && IsStuckByFriction(newNetForce);
         }
 
         LastExpectedAcceleration = newNetForce / NetMass; // LastPosition, LastVelocity are updated
         Rb.AddForce(newNetForce, ForceMode.Force);
     }
 
+    private bool IsStuckByFriction(Vector3 allomanticForce) {
+        return Vector3.Project(allomanticForce, collisionNormal).sqrMagnitude > stuckThreshold;
+    }
+
     /*
-     * Simulates friction and makes the target stuck to the colliding surface
-     * 
-     * If stuck, the coin is pseudo-parented to the object it collided with.
-     * stuckNormal needs to be constantly updated for each OnCollisionStay
+     * Moves the Coin such that it appears parented to the object it has collided with
      */
-    private void CheckStuck(Collision collision) {
-        Vector3 thisNormal = collision.contacts[0].normal;
-        IsStuck = Vector3.Project(collision.impulse / Time.deltaTime, thisNormal).sqrMagnitude > stuckThreshold;
-        if (IsStuck) {
-            if (!lastWasStuck) {
-                // First frame of being stuck.
+    private void UpdatePositionToParent() {
+        transform.position = Matrix4x4.TRS(
+            collidedCollider.position, collidedCollider.rotation, collidedCollider.lossyScale
+        ).MultiplyPoint3x4(startChildPosition);
 
-                startParentRotation = collidedCollider.rotation;
-                startChildPosition = transform.position;
-                startChildRotation = transform.rotation;
-
-                // Keeps child position from being modified at the start by the parent's initial transform
-                Vector3 num = Quaternion.Inverse(collidedCollider.rotation) * (startChildPosition - collidedCollider.position);
-                Vector3 den = collidedCollider.lossyScale;
-                startChildPosition = new Vector3(num.x / den.x, num.y / den.y, num.z / den.z);
-            }
-            stuckNormal = thisNormal;
-            //transform.position = collisionLocalPosition;
-            UpdatePositionToParent();
-            Rb.velocity = Vector3.zero;
-        } else {
-            //collidedCollider = null;
-        }
-
-        lastWasStuck = IsStuck;
+        transform.rotation = (collidedCollider.rotation * Quaternion.Inverse(startParentRotation)) * startChildRotation;
     }
 
     private void BeCaughtByAllomancer(Player player) {
@@ -152,6 +144,5 @@ public class Coin : Magnetic {
 
     public override void StopBeingPullPushed() {
         IsStuck = false;
-        lastWasStuck = false;
     }
 }
