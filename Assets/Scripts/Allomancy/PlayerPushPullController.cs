@@ -14,16 +14,16 @@ public class PlayerPushPullController : MonoBehaviour {
     private const float horizontalMax = .55f;
     private const float verticalMin = .2f;
     private const float verticalMax = .8f;
-    private const float targetFocusRadius = .05f;                   // Determines the range around the center of the screen within which blue lines are in focus.
-    private const float verticalImportanceFactor = 1 / 20f;        // Determines how elliptical the range around the center of the screen is.
-    private const float targetFocusFalloffConstant = 128;           // Determines how quickly blue lines blend from in-focus to out-of-focus
-    private const float targetFocusLowerBound = .2f;               // Determines the luminosity of blue lines that are out of foucus
-    private const float targetFocusOffScreenBound = .035f;           // Determines the luminosity of blue lines that are off-screen
+    private const float targetFocusRadius = .05f;               // Determines the range around the center of the screen within which blue lines are in focus.
+    private const float verticalImportanceFactor = 1 / 20f;     // Determines how elliptical the range around the center of the screen is.
+    private const float targetFocusFalloffConstant = 128;       // Determines how quickly blue lines blend from in-focus to out-of-focus
+    private const float targetFocusLowerBound = .2f;            // Determines the luminosity of blue lines that are out of foucus
+    private const float targetFocusOffScreenBound = .035f;      // Determines the luminosity of blue lines that are off-screen
     private const float lowLineColor = .1f;
     private const float highLineColor = .85f;
     private const float blueLineWidthBaseFactor = .04f;
     private const float blueLineStartupFactor = 2f;
-    private const float blueLineBrightnessFactor = 1 / 1f;
+    private const float blueLineBrightnessFactor = 1;
     // Other Constants
     private const float burnRateLerpConstant = .30f;
     private const int blueLineLayer = 10;
