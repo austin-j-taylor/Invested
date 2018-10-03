@@ -10,6 +10,7 @@ public class TargetArray {
     private readonly Color targetedRedLine = new Color(1, 0, 1);
     private readonly Color targetedGreenLine = new Color(0, 1, 0);
     private readonly Color targetedBlueLine = new Color(0, 0, 1);
+    private readonly Color targetedLightBlueLine = new Color(0, .5f, 1f);
 
 
     private Magnetic[] targets;
@@ -169,19 +170,24 @@ public class TargetArray {
      * Refreshes the blue metal lies that point to each target.
      * pullTheme determines the color (green or red) that the line could have.
      */
-    public void UpdateBlueLines(bool pullTheme) {
+    public void UpdateBlueLines(bool pullTheme, float burnRate) {
         // Go through targets and update their metal lines
         for (int i = 0; i < Count; i++) {
             targets[i].SetBlueLine(
                 Player.PlayerIronSteel.CenterOfMass,
                 blueLineTargetedWidthFactor * targets[i].Charge,
-                Mathf.Exp(-targets[i].LastNetAllomanticForceOnAllomancer.magnitude / lightSaberConstant),
+                Mathf.Exp(-targets[i].LastMaxPossibleAllomanticForce.magnitude * burnRate / lightSaberConstant),
                 // 200IQ Ternary Operator
                 (pullTheme) ? 
-                    SettingsMenu.settingsData.pullTargetLineColor == 0 ? targetedBlueLine : targetedGreenLine
+                    SettingsMenu.settingsData.pullTargetLineColor == 0 ? targetedBlueLine
+                    :
+                        SettingsMenu.settingsData.pullTargetLineColor == 1 ? targetedLightBlueLine 
+                        :
+                        targetedGreenLine
                 :
                     SettingsMenu.settingsData.pushTargetLineColor == 0 ? targetedBlueLine : targetedRedLine
                 );
+            
         }
     }
 
