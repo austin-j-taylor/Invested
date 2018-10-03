@@ -24,7 +24,7 @@ public class SettingsData : MonoBehaviour {
     // Interface
     public int renderblueLines; // 0 for Disabled, 1 for Enabled
     public int highlightedTargetOutline; // 0 for Disabled, 1 for Enabled
-    public int pullTargetLineColor; // 0 for blue, 1 for green
+    public int pullTargetLineColor; // 0 for blue, 1 for light blue, 2 for green
     public int pushTargetLineColor; // 0 for blue, 1 for red
     public int forceUnits; // 0 for G's, 1 for Newtons
     public int forceComplexity; // 0 for net only, 1 for full sums

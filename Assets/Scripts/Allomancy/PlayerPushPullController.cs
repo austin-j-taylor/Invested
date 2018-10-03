@@ -254,8 +254,8 @@ public class PlayerPushPullController : MonoBehaviour {
         HUD.BurnRateMeter.SetMetalLineCountText(player.PullTargets.Size.ToString());
         if(SettingsMenu.settingsData.renderblueLines == 1)
             EnableRenderingBlueLines();
-        SetPullRateTarget(1);
-        SetPushRateTarget(1);
+        ironBurnRateLerp = 1;
+        steelBurnRateLerp = 1;
         forceMagnitudeTarget = 600;
     }
 
@@ -267,6 +267,8 @@ public class PlayerPushPullController : MonoBehaviour {
             HighlightedTarget.RemoveTargetGlow();
             HighlightedTarget = null;
         }
+        steelBurnRateTarget = 0;
+        ironBurnRateTarget = 0;
         forceMagnitudeTarget = 0;
         GamepadController.SetRumble(0, 0);
         DisableRenderingBlueLines();
@@ -335,8 +337,19 @@ public class PlayerPushPullController : MonoBehaviour {
             }
         }
 
-        player.PullTargets.UpdateBlueLines(true, player.IronBurnRate);
-        player.PushTargets.UpdateBlueLines(false, player.SteelBurnRate);
+        // Update metal lines for Pull/PushTargets
+        if(player.HasPullTarget) {
+            if(player.HasPushTarget) {
+                player.PullTargets.UpdateBlueLines(true, player.IronBurnRate);
+                player.PushTargets.UpdateBlueLines(false, player.SteelBurnRate);
+            } else {
+                player.PullTargets.UpdateBlueLines(true, Mathf.Max(player.IronBurnRate, player.SteelBurnRate));
+            }
+        } else {
+            if(player.HasPushTarget) {
+                player.PushTargets.UpdateBlueLines(false, Mathf.Max(player.IronBurnRate, player.SteelBurnRate));
+            }
+        }
 
         return centerObject;
     }
@@ -450,7 +463,7 @@ public class PlayerPushPullController : MonoBehaviour {
         }
         // If using the Percentage control scheme and the target burn rate is 0 (and not using a gamepad, which will very often be 0)
         //      Then stop burning metals
-        if (SettingsMenu.settingsData.pushControlStyle == 0 && SettingsMenu.settingsData.controlScheme != 2 && (ironBurnRateTarget == 0 && steelBurnRateTarget == 0)) {
+        if (SettingsMenu.settingsData.pushControlStyle == 0 && SettingsMenu.settingsData.controlScheme != 2 && (ironBurnRateTarget < .001f && steelBurnRateTarget < .001f)) {
             player.StopBurning();
         }
     }

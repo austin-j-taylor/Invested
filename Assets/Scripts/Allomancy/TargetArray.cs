@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+/*
+ * Array-based data structure used for storing an Allomancer's Pull targets or Push targets
+ */
 public class TargetArray {
 
     // Blue metal line constants
@@ -11,8 +13,7 @@ public class TargetArray {
     private readonly Color targetedGreenLine = new Color(0, 1, 0);
     private readonly Color targetedBlueLine = new Color(0, 0, 1);
     private readonly Color targetedLightBlueLine = new Color(0, .5f, 1f);
-
-
+    
     private Magnetic[] targets;
 
     public int Size { get; private set; } = 1;

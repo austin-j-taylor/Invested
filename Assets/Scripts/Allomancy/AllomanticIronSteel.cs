@@ -391,7 +391,7 @@ public class AllomanticIronSteel : MonoBehaviour {
             if(SteelBurnRate == 0) {
                 thisFrameMaximumNetForce += restitutionForceFromTarget;
             } else {
-                thisFrameMaximumNetForce += restitutionForceFromTarget / IronBurnRate;
+                thisFrameMaximumNetForce += restitutionForceFromTarget / SteelBurnRate;
             }
         }
         target.LastAllomanticForce = allomanticForce;
