@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/*
+ * Represents the player.
+ */
 public class Player : MonoBehaviour {
 
     private const float coinCooldown = 0.1f;
@@ -26,35 +29,38 @@ public class Player : MonoBehaviour {
         PushPullController = GetComponent<PlayerPushPullController>();
         PlayerInstance = this;
         CoinHand = GetComponentInChildren<Hand>();
-        SceneManager.sceneLoaded += ResetPosition;
+        SceneManager.sceneLoaded += ClearPlayerAfterSceneChange;
+        SceneManager.sceneUnloaded += ClearPlayerBeforeSceneChange;
     }
 	
 	void Update () {
-        // Pausing
-        if (Keybinds.EscapeDown() && !PauseMenu.IsPaused) {
-            PauseMenu.Pause();
-        }
-        if (!PauseMenu.IsPaused) {
-            // On pressing COIN button
-            if (Keybinds.WithdrawCoinDown() && lastCoinThrowTime + coinCooldown < Time.time) {
-                lastCoinThrowTime = Time.time;
-                PlayerIronSteel.AddPushTarget(CoinHand.WithdrawCoinToHand());
+        if (CanControlPlayer) {
+            // Pausing
+            if (Keybinds.EscapeDown() && !PauseMenu.IsPaused) {
+                PauseMenu.Pause();
+            }
+            if (!PauseMenu.IsPaused) {
+                // On pressing COIN button
+                if (Keybinds.WithdrawCoinDown() && lastCoinThrowTime + coinCooldown < Time.time) {
+                    lastCoinThrowTime = Time.time;
+                    PlayerIronSteel.AddPushTarget(CoinHand.WithdrawCoinToHand());
+                }
             }
         }
 	}
 
-    // Reset certain values before the player enters a new scene
-    public void ReloadPlayerIntoNewScene(int scene) {
-        CanControlPlayer = true;
-        GetComponentInChildren<MeshRenderer>().material = GameManager.Material_Gebaude;
-
+    // Reset certain values BEFORE the player enters a new scene
+    public void ClearPlayerBeforeSceneChange(Scene scene) {
         movementController.Clear();
-        PlayerIronSteel.Clear();
-        CoinHand.Clear();
+        PlayerIronSteel.Clear(false);
     }
 
-    // Reset position to SpawnPosition at beginning of each scene
-    private void ResetPosition(Scene scene, LoadSceneMode mode) {
+    // Reset certain values AFTER the player enters a new scene
+    private void ClearPlayerAfterSceneChange(Scene scene, LoadSceneMode mode) {
+        CoinHand.Clear();
+        GetComponentInChildren<MeshRenderer>().material = GameManager.Material_Gebaude;
+        CanControlPlayer = true;
+
         GameObject spawn = GameObject.FindGameObjectWithTag("PlayerSpawn");
         if (spawn && CameraController.ActiveCamera) { // if CameraController.Awake has been called
             transform.position = spawn.transform.position;

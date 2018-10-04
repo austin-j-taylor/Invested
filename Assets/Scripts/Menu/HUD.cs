@@ -14,11 +14,11 @@ public class HUD : MonoBehaviour {
     private float deltaTimeFPS = 0.0f;
     private static GameObject hudGameObject;
 
-    public static string CoinCountText {
-        set {
-            coinCountText.text = value;
-        }
-    }
+    //public static string CoinCountText {
+    //    set {
+    //        coinCountText.text = value;
+    //    }
+    //}
 
     public static BurnRateMeter BurnRateMeter {
         get; private set;
@@ -36,6 +36,7 @@ public class HUD : MonoBehaviour {
 
 	void Update() {
         deltaTimeFPS += (Time.unscaledDeltaTime - deltaTimeFPS) * 0.1f;
+        coinCountText.text = Player.PlayerInstance.CoinHand.Pouch.Count.ToString();
 	}
 
     /*
@@ -72,7 +73,6 @@ public class HUD : MonoBehaviour {
         if (BurnRateMeter) {
             BurnRateMeter.Clear();
             TargetOverlayController.Clear();
-            coinCountText.text = "50";
         }
     }
 

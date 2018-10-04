@@ -98,14 +98,14 @@ public class AllomanticIronSteel : MonoBehaviour {
         PushTargets = new TargetArray(maxNumberOfTargets);
     }
 
-    public void Clear() {
+    public void Clear(bool clearTargets = true) {
         IsBurningIronSteel = false;
         IronPulling = false;
         SteelPushing = false;
         IronBurnRate = 0;
         SteelBurnRate = 0;
-        PullTargets.Clear(true);
-        PushTargets.Clear(true);
+        PullTargets.Clear(true, clearTargets);
+        PushTargets.Clear(true, clearTargets);
         lastExpectedAllomancerAcceleration = Vector3.zero;
         LastNetForceOnAllomancer = Vector3.zero;
         LastAllomanticForce = Vector3.zero;
@@ -114,7 +114,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     }
 
     private void FixedUpdate() {
-        if (!PauseMenu.IsPaused && Player.CanControlPlayer) {
+        if (!PauseMenu.IsPaused) {
             if (IsBurningIronSteel) {
                 // Remove all targets that are out of pushing range
                 PullTargets.RemoveAllOutOfRange();

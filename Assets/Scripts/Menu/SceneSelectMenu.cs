@@ -44,7 +44,7 @@ public class SceneSelectMenu : MonoBehaviour {
         backButton.onClick.AddListener(OnClickedBack);
 
         // Only close the main menu after the scene loads to prevent jarring camera transitions
-        SceneManager.sceneLoaded += ExitMainMenu;
+        SceneManager.sceneLoaded += ClearAfterSceneChange;
     }
 
     public void OpenSceneSelect() {
@@ -55,25 +55,32 @@ public class SceneSelectMenu : MonoBehaviour {
         gameObject.SetActive(false);
     }
 
-    private void ExitMainMenu(Scene scene, LoadSceneMode mode) {
+    public static void LoadScene(int scene) {
+        CameraController.ExternalPositionTarget = null;
+
+        SceneManager.LoadScene(scene);
+    }
+
+    public static void ReloadScene() {
+        LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+
+    private void ClearAfterSceneChange(Scene scene, LoadSceneMode mode) {
+        PauseMenu.UnPause();
+
         if (scene.buildIndex != sceneTitleScreen) {
             titleScreenBG.gameObject.SetActive(false);
             CloseSceneSelect();
-        }
-    }
 
-    public void LoadScene(int scene) {
-        if (scene == sceneTitleScreen) {
-            Player.PlayerInstance.gameObject.SetActive(false);
-            CameraController.UnlockCamera();
-        } else {
             Player.PlayerInstance.gameObject.SetActive(true);
             CameraController.LockCamera();
-        }
-        Player.PlayerInstance.ReloadPlayerIntoNewScene(scene);
-        HUD.ResetHUD();
 
-        SceneManager.LoadScene(scene);
+        } else {
+            Player.PlayerInstance.gameObject.SetActive(false);
+            CameraController.UnlockCamera();
+        }
+
+        HUD.ResetHUD();
     }
 
     private void OnClickedTutorial() {

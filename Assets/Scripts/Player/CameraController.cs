@@ -86,7 +86,6 @@ public class CameraController : MonoBehaviour {
             // Camera is being controlled by some other source, i.e. HarmonyTarget
             ActiveCamera.transform.position = Vector3.Lerp(ActiveCamera.transform.position, ExternalPositionTarget.position, lerpConstant * Time.deltaTime);
             ActiveCamera.transform.LookAt(ExternalLookAtTarget);
-
         }
     }
 

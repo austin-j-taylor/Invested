@@ -62,7 +62,6 @@ public class HarmonyTarget : MonoBehaviour {
             Vector3 pos = cameraPositionTarget.position;
             pos.y = cameraLookAtTarget.position.y;
             cameraPositionTarget.position = pos;
-            //rb.AddForce(forceConstantClose * distance, ForceMode.Force);
 
             // So the light from the sphere doesn't flicker around the player's body
             harmonySphere.position = Player.PlayerIronSteel.CenterOfMass;
@@ -72,12 +71,12 @@ public class HarmonyTarget : MonoBehaviour {
     private void BeginAnimation() {
         playerHasEntered = true;
         Player.CanControlPlayer = false;
-        //harmonySphere.GetComponent<Renderer>().enabled = false;
+        Player.PlayerIronSteel.StopBurning();
         harmonySphere.GetComponent<Collider>().enabled = false;
         anim.SetTrigger("PlayerHasEntered");
         HUD.DisableHUD();
         
-        Player.PlayerIronSteel.StopBurning();
+        //Player.PlayerIronSteel.StopBurning();
         Player.PlayerInstance.GetComponent<Rigidbody>().useGravity = false;
         Player.PlayerInstance.GetComponent<Rigidbody>().drag = dragConstantClose;
         CameraController.ExternalPositionTarget = cameraPositionTarget;
@@ -89,13 +88,10 @@ public class HarmonyTarget : MonoBehaviour {
         Player.PlayerInstance.GetComponentInChildren<MeshRenderer>().material = harmonySphere.GetComponent<Renderer>().material;
         foreach (Renderer renderer in symbolRenderers)
             renderer.material = GameManager.Material_Ettmetal_Glowing;
-        
+
+
         // Open menus
-
-    }
-
-    private void EndLevel() {
-        playerHasEntered = false;
+        LevelCompletedScreen.OpenScreen();
     }
 
     private class HarmonySphere : MonoBehaviour {

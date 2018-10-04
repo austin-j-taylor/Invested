@@ -121,9 +121,10 @@ public class TargetArray {
     }
 
     // Removes all targets from the array
-    public void Clear(bool setSizeTo1 = false) {
+    public void Clear(bool setSizeTo1 = false, bool clearTargets = true) {
         for (int i = 0; i < Count; i++) {
-            targets[i].Clear();
+            if(clearTargets)
+                targets[i].Clear();
             targets[i] = null;
         }
         Count = 0;

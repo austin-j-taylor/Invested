@@ -67,180 +67,186 @@ public class PlayerPushPullController : MonoBehaviour {
     }
 
     private void Update() {
-        if (!PauseMenu.IsPaused && Player.CanControlPlayer) {
-            // Start burning
-            if ((Keybinds.SelectDown() || Keybinds.SelectAlternateDown()) && !Keybinds.Negate()) {
-                player.StartBurning();
-            }
-
-            if (player.IsBurningIronSteel) {
-
-
-                // Swap pull- and push- targets
-                if (Keybinds.NegateDown() && timeToSwapBurning > Time.time) {
-                    // Double-tapped, Swap targets
-                    player.PullTargets.SwapContents(player.PushTargets);
-                } else {
-                    if (Keybinds.NegateDown()) {
-                        timeToSwapBurning = Time.time + timeDoubleTapWindow;
-                    }
+        if (!PauseMenu.IsPaused) {
+            if (Player.CanControlPlayer) {
+                // Start burning
+                if ((Keybinds.SelectDown() || Keybinds.SelectAlternateDown()) && !Keybinds.Negate()) {
+                    player.StartBurning();
                 }
 
-                // Check scrollwheel for changing the max number of targets and burn rate, or DPad if using gamepad
-                float scrollValue = 0;
-                if (SettingsMenu.settingsData.controlScheme == 2) { // Gamepad
-                    scrollValue = Keybinds.DPadXAxis();
-                    if (SettingsMenu.settingsData.pushControlStyle == 1) {
-                        ChangeTargetForceMagnitude(Keybinds.DPadYAxis());
-                    }
-                } else { // Mouse and keyboard
-                    if (Keybinds.ScrollWheelButton()) {
-                        scrollValue = Keybinds.ScrollWheelAxis();
+                if (player.IsBurningIronSteel) {
+
+
+                    // Swap pull- and push- targets
+                    if (Keybinds.NegateDown() && timeToSwapBurning > Time.time) {
+                        // Double-tapped, Swap targets
+                        player.PullTargets.SwapContents(player.PushTargets);
                     } else {
-                        if (SettingsMenu.settingsData.pushControlStyle == 0) {
-                            ChangeBurnRateTarget(Keybinds.ScrollWheelAxis());
-                        } else {
-                            ChangeTargetForceMagnitude(Keybinds.ScrollWheelAxis());
+                        if (Keybinds.NegateDown()) {
+                            timeToSwapBurning = Time.time + timeDoubleTapWindow;
                         }
                     }
-                }
-                if (scrollValue > 0) {
-                    IncrementNumberOfTargets();
-                }
-                if (scrollValue < 0) {
-                    DecrementNumberOfTargets();
-                }
 
-                // Assign Burn rate targets based on the previously changed burn rate/target magnitudes
-                if (SettingsMenu.settingsData.pushControlStyle == 0) { // Percentage
-                    if (SettingsMenu.settingsData.controlScheme == 2) {
-                        SetPullRateTarget(Keybinds.RightBurnRate());
-                        SetPushRateTarget(Keybinds.LeftBurnRate());
+                    // Check scrollwheel for changing the max number of targets and burn rate, or DPad if using gamepad
+                    float scrollValue = 0;
+                    if (SettingsMenu.settingsData.controlScheme == 2) { // Gamepad
+                        scrollValue = Keybinds.DPadXAxis();
+                        if (SettingsMenu.settingsData.pushControlStyle == 1) {
+                            ChangeTargetForceMagnitude(Keybinds.DPadYAxis());
+                        }
+                    } else { // Mouse and keyboard
+                        if (Keybinds.ScrollWheelButton()) {
+                            scrollValue = Keybinds.ScrollWheelAxis();
+                        } else {
+                            if (SettingsMenu.settingsData.pushControlStyle == 0) {
+                                ChangeBurnRateTarget(Keybinds.ScrollWheelAxis());
+                            } else {
+                                ChangeTargetForceMagnitude(Keybinds.ScrollWheelAxis());
+                            }
+                        }
                     }
-                } else { // Magnitude
-                    if (player.HasPullTarget || player.HasPushTarget) {
+                    if (scrollValue > 0) {
+                        IncrementNumberOfTargets();
+                    }
+                    if (scrollValue < 0) {
+                        DecrementNumberOfTargets();
+                    }
 
-                        //Debug.Log(player.LastMaximumNetForce);
+                    // Assign Burn rate targets based on the previously changed burn rate/target magnitudes
+                    if (SettingsMenu.settingsData.pushControlStyle == 0) { // Percentage
+                        if (SettingsMenu.settingsData.controlScheme == 2) {
+                            SetPullRateTarget(Keybinds.RightBurnRate());
+                            SetPushRateTarget(Keybinds.LeftBurnRate());
+                        }
+                    } else { // Magnitude
+                        if (player.HasPullTarget || player.HasPushTarget) {
 
-                        float maxNetForce = (player.LastMaximumNetForce).magnitude;
-                        SetPullRateTarget(forceMagnitudeTarget / maxNetForce);
-                        SetPushRateTarget(forceMagnitudeTarget / maxNetForce);
+                            //Debug.Log(player.LastMaximumNetForce);
+
+                            float maxNetForce = (player.LastMaximumNetForce).magnitude;
+                            SetPullRateTarget(forceMagnitudeTarget / maxNetForce);
+                            SetPushRateTarget(forceMagnitudeTarget / maxNetForce);
+                        } else {
+                            SetPullRateTarget(0);
+                            SetPushRateTarget(0);
+                        }
+                    }
+
+                    // Stop burning altogether, hide metal lines
+                    if (Keybinds.Negate()) {
+                        timeToStopBurning += Time.deltaTime;
+                        if (Keybinds.Select() && Keybinds.SelectAlternate() && timeToStopBurning > timeToHoldDown) {
+                            player.StopBurning();
+                            timeToStopBurning = 0;
+                        }
                     } else {
-                        SetPullRateTarget(0);
-                        SetPushRateTarget(0);
-                    }
-                }
-
-                // Stop burning altogether, hide metal lines
-                if (Keybinds.Negate()) {
-                    timeToStopBurning += Time.deltaTime;
-                    if (Keybinds.Select() && Keybinds.SelectAlternate() && timeToStopBurning > timeToHoldDown) {
-                        player.StopBurning();
                         timeToStopBurning = 0;
                     }
-                } else {
-                    timeToStopBurning = 0;
+
+                    LerpToBurnRates();
+                    UpdateBurnRateMeter();
                 }
 
-                LerpToBurnRates();
-                UpdateBurnRateMeter();
-            }
+                // Could have stopped burning above. Check if the Allomancer is still burning.
+                if (player.IsBurningIronSteel) {
 
-            // Could have stopped burning above. Check if the Allomancer is still burning.
-            if (player.IsBurningIronSteel) {
+                    player.IronPulling = Keybinds.IronPulling();
+                    player.SteelPushing = Keybinds.SteelPushing();
 
-                player.IronPulling = Keybinds.IronPulling();
-                player.SteelPushing = Keybinds.SteelPushing();
-
-                // If you are trying to push and pull and only have pullTargets, only push. And vice versa
-                if (!player.HasPushTarget && player.HasPullTarget) {
-                    if (player.IronPulling)
-                        player.SteelPushing = false;
-                } else
-                if (!player.HasPullTarget && player.HasPushTarget) {
-                    if (player.SteelPushing)
-                        player.IronPulling = false;
-                }
-
-                // Change colors of target labels when toggling pushing/pulling
-                if (player.IronPulling) {
-                    if (!lastWasPulling) { // first frame of pulling
-                        RefreshHUDColorsOnly();
-                        lastWasPulling = true;
-                        //StartPushPullingOnTargets(iron);
+                    // If you are trying to push and pull and only have pullTargets, only push. And vice versa
+                    if (!player.HasPushTarget && player.HasPullTarget) {
+                        if (player.IronPulling)
+                            player.SteelPushing = false;
+                    } else
+                    if (!player.HasPullTarget && player.HasPushTarget) {
+                        if (player.SteelPushing)
+                            player.IronPulling = false;
                     }
-                } else {
-                    if (lastWasPulling) { // first frame of NOT pulling
-                        RefreshHUDColorsOnly();
-                        lastWasPulling = false;
-                        if (player.HasPullTarget) {
-                            player.StopOnPullTargets();
-                        } else {
-                            player.StopOnPushTargets();
+
+                    // Change colors of target labels when toggling pushing/pulling
+                    if (player.IronPulling) {
+                        if (!lastWasPulling) { // first frame of pulling
+                            RefreshHUDColorsOnly();
+                            lastWasPulling = true;
+                            //StartPushPullingOnTargets(iron);
                         }
-                    }
-                }
-                if (player.SteelPushing) {
-                    if (!lastWasPushing) { // first frame of pushing
-                        RefreshHUDColorsOnly();
-                        lastWasPushing = true;
-                        //StartPushPullingOnTargets(steel);
-                    }
-                } else {
-                    if (lastWasPushing) { // first frame of NOT pushing
-                        RefreshHUDColorsOnly();
-                        lastWasPushing = false;
-                        if (player.HasPushTarget) {
-                            player.StopOnPushTargets();
-                        } else {
-                            player.StopOnPullTargets();
-                        }
-                    }
-                }
-
-                // Check input for target selection
-                bool selecting = (Keybinds.Select() || Keybinds.SelectAlternate()) && !Keybinds.Negate();
-                Magnetic target = SearchForMetals();
-
-                // highlight the potential target you would select, if you targeted it
-                if (target != null && target != HighlightedTarget) {
-                    if (HasHighlightedTarget)
-                        HighlightedTarget.RemoveTargetGlow();
-                    target.AddTargetGlow();
-                    HighlightedTarget = target;
-                } else if (target == null) {
-                    if (HasHighlightedTarget)
-                        HighlightedTarget.RemoveTargetGlow();
-                    HighlightedTarget = null;
-                }
-
-                if (Keybinds.Select() || Keybinds.SelectAlternate()) {
-                    // Select or Deselect pullTarget and/or pushTarget
-                    if (Keybinds.Select()) { // Selecting pull target
-                        if (selecting) {
-                            player.AddPullTarget(target);
-                        } else {
-                            if (player.RemovePullTarget(target)) {// If the player is hovering over a pullTarget, instantly remove that one. Keep it highlighted.
-                                target.AddTargetGlow();
-                            } else if (Keybinds.SelectDown() && !player.RemovePullTarget(target)) { // If the highlighted Magnetic is not a pullTarget, remove the oldest pullTarget instead
-                                player.RemovePullTargetAt(0);
+                    } else {
+                        if (lastWasPulling) { // first frame of NOT pulling
+                            RefreshHUDColorsOnly();
+                            lastWasPulling = false;
+                            if (player.HasPullTarget) {
+                                player.StopOnPullTargets();
+                            } else {
+                                player.StopOnPushTargets();
                             }
                         }
                     }
-                    if (Keybinds.SelectAlternate()) {
-                        if (selecting) {
-                            player.AddPushTarget(target);
-                        } else {
-                            if (player.RemovePushTarget(target)) {
-                                target.AddTargetGlow();
-                            } else if (Keybinds.SelectAlternateDown() && !player.RemovePushTarget(target)) {
-                                player.RemovePushTargetAt(0);
+                    if (player.SteelPushing) {
+                        if (!lastWasPushing) { // first frame of pushing
+                            RefreshHUDColorsOnly();
+                            lastWasPushing = true;
+                            //StartPushPullingOnTargets(steel);
+                        }
+                    } else {
+                        if (lastWasPushing) { // first frame of NOT pushing
+                            RefreshHUDColorsOnly();
+                            lastWasPushing = false;
+                            if (player.HasPushTarget) {
+                                player.StopOnPushTargets();
+                            } else {
+                                player.StopOnPullTargets();
                             }
                         }
                     }
-                }
 
-                RefreshHUD();
+                    // Check input for target selection
+                    bool selecting = (Keybinds.Select() || Keybinds.SelectAlternate()) && !Keybinds.Negate();
+                    Magnetic target = SearchForMetals();
+
+                    // highlight the potential target you would select, if you targeted it
+                    if (target != null && target != HighlightedTarget) {
+                        if (HasHighlightedTarget)
+                            HighlightedTarget.RemoveTargetGlow();
+                        target.AddTargetGlow();
+                        HighlightedTarget = target;
+                    } else if (target == null) {
+                        if (HasHighlightedTarget)
+                            HighlightedTarget.RemoveTargetGlow();
+                        HighlightedTarget = null;
+                    }
+
+                    if (Keybinds.Select() || Keybinds.SelectAlternate()) {
+                        // Select or Deselect pullTarget and/or pushTarget
+                        if (Keybinds.Select()) { // Selecting pull target
+                            if (selecting) {
+                                player.AddPullTarget(target);
+                            } else {
+                                if (player.RemovePullTarget(target)) {// If the player is hovering over a pullTarget, instantly remove that one. Keep it highlighted.
+                                    target.AddTargetGlow();
+                                } else if (Keybinds.SelectDown() && !player.RemovePullTarget(target)) { // If the highlighted Magnetic is not a pullTarget, remove the oldest pullTarget instead
+                                    player.RemovePullTargetAt(0);
+                                }
+                            }
+                        }
+                        if (Keybinds.SelectAlternate()) {
+                            if (selecting) {
+                                player.AddPushTarget(target);
+                            } else {
+                                if (player.RemovePushTarget(target)) {
+                                    target.AddTargetGlow();
+                                } else if (Keybinds.SelectAlternateDown() && !player.RemovePushTarget(target)) {
+                                    player.RemovePushTargetAt(0);
+                                }
+                            }
+                        }
+                    }
+
+                    RefreshHUD();
+                }
+            } else { // If the player is not in control, but still burning metals, show blue lines to metals.
+                if (player.IsBurningIronSteel) {
+                    OnlyUpdateBlueLines();
+                }
             }
         }
     }
@@ -352,6 +358,47 @@ public class PlayerPushPullController : MonoBehaviour {
         }
 
         return centerObject;
+    }
+
+    /*
+     * Like SearchForMetals, this shows the blue lines to nearby metals, but does not do anything related to target selection.
+     * It only updates the visual effect of these blue lines.
+     */ 
+    private void OnlyUpdateBlueLines() {
+        for (int i = 0; i < GameManager.MagneticsInScene.Count; i++) {
+            Magnetic target = GameManager.MagneticsInScene[i];
+
+            float allomanticForce = AllomanticIronSteel.CalculateAllomanticForce(target, player).magnitude;
+            // If using Percentage force mode, burn rate affects your range for burning
+            if (SettingsMenu.settingsData.pushControlStyle == 0 && SettingsMenu.settingsData.controlScheme != 2)
+                allomanticForce *= Mathf.Max(ironBurnRateTarget, steelBurnRateTarget);
+
+            allomanticForce -= SettingsMenu.settingsData.metalDetectionThreshold; // blue metal lines will fade to a luminocity of 0 when the force is on the edge of the threshold
+            if (allomanticForce > 0) {
+                bool isOffScreen =  CameraController.ActiveCamera.WorldToViewportPoint(target.transform.position).z < 0;
+
+                // Set line properties
+                if (SettingsMenu.settingsData.renderblueLines == 1) {
+                    float closeness = Mathf.Exp(-blueLineStartupFactor * Mathf.Pow(1 / allomanticForce, blueLineBrightnessFactor));
+                    // Make lines in-focus if near the center of the screen
+                    if (isOffScreen)
+                        closeness *= targetFocusOffScreenBound;
+                    else
+                        closeness *= targetFocusLowerBound + (1 - targetFocusLowerBound) * Mathf.Exp(-Mathf.Pow(1 - targetFocusRadius, targetFocusFalloffConstant));
+                    target.SetBlueLine(
+                        player.CenterOfMass,
+                        blueLineWidthBaseFactor * target.Charge,
+                        1,
+                        new Color(0, closeness * lowLineColor, closeness * highLineColor, 1)
+                        );
+                }
+            } else { // Magnetic is out of range
+                target.DisableBlueLine();
+            }
+        }
+        if(HasHighlightedTarget) {
+            HighlightedTarget.RemoveTargetGlow();
+        }
     }
 
     private void RemoveAllTargets() {
@@ -479,6 +526,7 @@ public class PlayerPushPullController : MonoBehaviour {
         }
     }
 
+    // Refreshes all elements of the hud relevent to pushing and pulling
     private void RefreshHUD() {
         RefreshHUDColorsOnly();
         HUD.TargetOverlayController.HardRefresh();

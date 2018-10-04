@@ -13,12 +13,12 @@ public class Hand : MonoBehaviour {
     private float distanceToHand;
 
     private Transform centerOfMass;
-    private CoinPouch pouch;
+    public CoinPouch Pouch { get; private set; }
 
     // Use this for initialization
     void Awake() {
         centerOfMass = transform.parent;
-        pouch = GetComponent<CoinPouch>();
+        Pouch = GetComponent<CoinPouch>();
         distanceToHand = transform.localPosition.magnitude;
     }
 
@@ -50,14 +50,14 @@ public class Hand : MonoBehaviour {
     }
 
     public Coin WithdrawCoinToHand() {
-        if (pouch.Count > 0) {
+        if (Pouch.Count > 0) {
             Coin coin;
             // Raycast towards the hand. If the raycast hits something, spawn the coin there to prevent it from going through walls.
             RaycastHit hit;
             if (Physics.Raycast(centerOfMass.position, transform.position - centerOfMass.position, out hit, distanceToHand, GameManager.Layer_IgnorePlayer)) {
-                coin = pouch.RemoveCoin(hit.point + hit.normal * coinSize);
+                coin = Pouch.RemoveCoin(hit.point + hit.normal * coinSize);
             } else {
-                coin = pouch.RemoveCoin(transform.position);
+                coin = Pouch.RemoveCoin(transform.position);
             }
             return coin;
         }
@@ -65,19 +65,19 @@ public class Hand : MonoBehaviour {
     }
 
     //public Coin SpawnCoin(Vector3 position) {
-    //    if (pouch.Count > 0) {
-    //        Coin coin = pouch.RemoveCoin(position);
+    //    if (Pouch.Count > 0) {
+    //        Coin coin = Pouch.RemoveCoin(position);
     //        return coin;
     //    }
     //    return null;
     //}
 
     public void CatchCoin(Coin coin) {
-        pouch.AddCoin(coin);
+        Pouch.AddCoin(coin);
     }
 
     public void Clear() {
-        pouch.Clear();
+        Pouch.Clear();
     }
 
 }

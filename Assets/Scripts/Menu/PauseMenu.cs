@@ -9,7 +9,6 @@ public class PauseMenu : MonoBehaviour {
     public static bool IsPaused { get; private set; }
 
     private static SettingsMenu settingsMenu;
-    private SceneSelectMenu sceneSelectMenu;
     private MainMenu mainMenu;
     
     private Button unpauseButton;
@@ -22,7 +21,6 @@ public class PauseMenu : MonoBehaviour {
     // Use this for initialization
     void Awake () {
         settingsMenu = transform.parent.GetComponentInChildren<SettingsMenu>();
-        sceneSelectMenu = transform.parent.GetComponentInChildren<SceneSelectMenu>();
         mainMenu = transform.parent.GetComponentInChildren<MainMenu>();
 
         Button[] buttons = GetComponentsInChildren<Button>();
@@ -51,7 +49,6 @@ public class PauseMenu : MonoBehaviour {
     }
 
     public static void Pause() {
-        //Cursor.visible = true;
         CameraController.UnlockCamera();
         GamepadController.SetRumble(0, 0);
         Time.timeScale = 0f;
@@ -62,7 +59,6 @@ public class PauseMenu : MonoBehaviour {
     public static void UnPause() {
         settingsMenu.CloseSettings();
 
-        //Cursor.visible = false;
         CameraController.LockCamera();
         Time.timeScale = 1f;
         pauseMenu.SetActive(false);
@@ -78,14 +74,12 @@ public class PauseMenu : MonoBehaviour {
     }
 
     private void ClickReset() {
-        UnPause();
-        sceneSelectMenu.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SceneSelectMenu.ReloadScene();
     }
 
     private void ClickQuit() {
-        UnPause();
         CameraController.UnlockCamera();
         mainMenu.OpenMainMenu();
-        sceneSelectMenu.LoadScene(SceneSelectMenu.sceneTitleScreen);
+        SceneSelectMenu.LoadScene(SceneSelectMenu.sceneTitleScreen);
     }
 }
