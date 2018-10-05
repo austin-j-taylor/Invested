@@ -146,7 +146,7 @@ public class Magnetic : MonoBehaviour {
         }
 
         Charge = Mathf.Pow(magneticMass, AllomanticIronSteel.chargePower);
-        LastPosition = Vector3.zero;
+        LastPosition = transform.position;
         LastVelocity = Vector3.zero;
         LastExpectedAcceleration = Vector3.zero;
         LastAllomanticForce = Vector3.zero;

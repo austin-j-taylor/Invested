@@ -4,7 +4,7 @@
  * Controls the blue metal lines that point from the player to nearby metals.
  * Controls the means through which the player selects Pull/PushTargets.
  */
-public class PlayerPushPullController : MonoBehaviour {
+public class PlayerPullPushController : MonoBehaviour {
 
     // Button-press time constants
     private const float timeToHoldDown = .5f;
@@ -36,12 +36,8 @@ public class PlayerPushPullController : MonoBehaviour {
     private bool lastWasPulling = false;
     private bool lastWasPushing = false;
 
-    // burn rate targets
-    // When burning metals but not immediately Pushing or Pulling, these will not be set to 0.
-    // These are displayed in the Burn Rate Meter
-    private float ironBurnRateTarget = 0;
-    private float steelBurnRateTarget = 0;
     // Lerp goals for burn rate targets
+    // These are displayed in the Burn Rate Meter
     private float ironBurnRateLerp = 0;
     private float steelBurnRateLerp = 0;
     // for Magnitude control style
@@ -273,8 +269,8 @@ public class PlayerPushPullController : MonoBehaviour {
             HighlightedTarget.RemoveTargetGlow();
             HighlightedTarget = null;
         }
-        steelBurnRateTarget = 0;
-        ironBurnRateTarget = 0;
+        steelBurnRateLerp = 0;
+        ironBurnRateLerp = 0;
         forceMagnitudeTarget = 0;
         GamepadController.SetRumble(0, 0);
         DisableRenderingBlueLines();
@@ -301,7 +297,7 @@ public class PlayerPushPullController : MonoBehaviour {
             float allomanticForce = AllomanticIronSteel.CalculateAllomanticForce(target, player).magnitude;
             // If using Percentage force mode, burn rate affects your range for burning
             if (SettingsMenu.settingsData.pushControlStyle == 0 && SettingsMenu.settingsData.controlScheme != 2)
-                allomanticForce *= Mathf.Max(ironBurnRateTarget, steelBurnRateTarget);
+                allomanticForce *= player.GreaterBurnRate;
 
             allomanticForce -= SettingsMenu.settingsData.metalDetectionThreshold; // blue metal lines will fade to a luminocity of 0 when the force is on the edge of the threshold
             if (allomanticForce > 0) {
@@ -346,14 +342,14 @@ public class PlayerPushPullController : MonoBehaviour {
         // Update metal lines for Pull/PushTargets
         if(player.HasPullTarget) {
             if(player.HasPushTarget) {
-                player.PullTargets.UpdateBlueLines(true, player.IronBurnRate);
-                player.PushTargets.UpdateBlueLines(false, player.SteelBurnRate);
+                player.PullTargets.UpdateBlueLines(true, player.IronBurnRateTarget);
+                player.PushTargets.UpdateBlueLines(false, player.SteelBurnRateTarget);
             } else {
-                player.PullTargets.UpdateBlueLines(true, Mathf.Max(player.IronBurnRate, player.SteelBurnRate));
+                player.PullTargets.UpdateBlueLines(true, Mathf.Max(player.IronBurnRateTarget, player.SteelBurnRateTarget));
             }
         } else {
             if(player.HasPushTarget) {
-                player.PushTargets.UpdateBlueLines(false, Mathf.Max(player.IronBurnRate, player.SteelBurnRate));
+                player.PushTargets.UpdateBlueLines(false, Mathf.Max(player.IronBurnRateTarget, player.SteelBurnRateTarget));
             }
         }
 
@@ -371,7 +367,7 @@ public class PlayerPushPullController : MonoBehaviour {
             float allomanticForce = AllomanticIronSteel.CalculateAllomanticForce(target, player).magnitude;
             // If using Percentage force mode, burn rate affects your range for burning
             if (SettingsMenu.settingsData.pushControlStyle == 0 && SettingsMenu.settingsData.controlScheme != 2)
-                allomanticForce *= Mathf.Max(ironBurnRateTarget, steelBurnRateTarget);
+                allomanticForce *= player.GreaterBurnRate;
 
             allomanticForce -= SettingsMenu.settingsData.metalDetectionThreshold; // blue metal lines will fade to a luminocity of 0 when the force is on the edge of the threshold
             if (allomanticForce > 0) {
@@ -480,28 +476,18 @@ public class PlayerPushPullController : MonoBehaviour {
      *      Set, not lerped - there's more precision there.
      */
     private void LerpToBurnRates() {
-        ironBurnRateTarget = Mathf.Lerp(ironBurnRateTarget, ironBurnRateLerp, burnRateLerpConstant);
-        steelBurnRateTarget = Mathf.Lerp(steelBurnRateTarget, steelBurnRateLerp, burnRateLerpConstant);
-        if (player.IronPulling) {
-            player.IronBurnRate = ironBurnRateTarget;
-        } else {
-            player.IronBurnRate = 0;
-        }
-        if(player.SteelPushing) {
-            player.SteelBurnRate = steelBurnRateTarget;
-        } else {
-            player.SteelBurnRate = 0;
-        }
+        player.IronBurnRateTarget = Mathf.Lerp(player.IronBurnRateTarget, ironBurnRateLerp, burnRateLerpConstant);
+        player.SteelBurnRateTarget = Mathf.Lerp(player.SteelBurnRateTarget, steelBurnRateLerp, burnRateLerpConstant);
 
         // Gamepad rumble
         if (player.HasPullTarget || player.HasPushTarget) {
             if (player.IronPulling) {
-                GamepadController.SetRumbleRight(player.IronBurnRate * GamepadController.rumbleFactor);
+                GamepadController.SetRumbleRight(player.IronBurnRateTarget * GamepadController.rumbleFactor);
             } else {
                 GamepadController.SetRumbleRight(0);
             }
             if (player.SteelPushing) {
-                GamepadController.SetRumbleLeft(player.SteelBurnRate * GamepadController.rumbleFactor);
+                GamepadController.SetRumbleLeft(player.SteelBurnRateTarget * GamepadController.rumbleFactor);
             } else {
                 GamepadController.SetRumbleLeft(0);
             }
@@ -510,7 +496,7 @@ public class PlayerPushPullController : MonoBehaviour {
         }
         // If using the Percentage control scheme and the target burn rate is 0 (and not using a gamepad, which will very often be 0)
         //      Then stop burning metals
-        if (SettingsMenu.settingsData.pushControlStyle == 0 && SettingsMenu.settingsData.controlScheme != 2 && (ironBurnRateTarget < .001f && steelBurnRateTarget < .001f)) {
+        if (SettingsMenu.settingsData.pushControlStyle == 0 && SettingsMenu.settingsData.controlScheme != 2 && (player.IronBurnRateTarget < .001f && player.SteelBurnRateTarget < .001f)) {
             player.StopBurning();
         }
     }
@@ -518,9 +504,9 @@ public class PlayerPushPullController : MonoBehaviour {
     private void UpdateBurnRateMeter() {
         if (player.IsBurningIronSteel) {
             if (SettingsMenu.settingsData.pushControlStyle == 1)
-                HUD.BurnRateMeter.SetBurnRateMeterForceMagnitude(player.LastAllomanticForce, player.LastNormalForce, Mathf.Max(ironBurnRateTarget, steelBurnRateTarget), forceMagnitudeTarget);
+                HUD.BurnRateMeter.SetBurnRateMeterForceMagnitude(player.LastAllomanticForce, player.LastNormalForce, player.GreaterBurnRate, forceMagnitudeTarget);
             else
-                HUD.BurnRateMeter.SetBurnRateMeterPercentage(player.LastAllomanticForce, player.LastNormalForce, Mathf.Max(ironBurnRateTarget, steelBurnRateTarget));
+                HUD.BurnRateMeter.SetBurnRateMeterPercentage(player.LastAllomanticForce, player.LastNormalForce, player.GreaterBurnRate);
         } else {
             HUD.BurnRateMeter.Clear();
         }

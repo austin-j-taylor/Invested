@@ -7,11 +7,12 @@ public class AllomanticIronSteel : MonoBehaviour {
 
     public const float chargePower = 1f / 8f;
     public const int maxNumberOfTargets = 10;
+
+    private const float slowBurn = .1f;
     // Simple metal booleans for passing to methods
     private const bool steel = false;
     private const bool iron = true;
-
-
+    
     // Pull and Push Target members
     public TargetArray PullTargets { get; private set; }
     public TargetArray PushTargets { get; private set; }
@@ -69,8 +70,14 @@ public class AllomanticIronSteel : MonoBehaviour {
 
 
     // Metal burn rates
-    public float IronBurnRate { get; set; }
-    public float SteelBurnRate { get; set; }
+    // When burning metals, not necessarily immediately Pushing or Pulling. Hence, they are "targets" and not the actual burn rate of the Allomancer.
+    public float IronBurnRateTarget { get; set; }
+    public float SteelBurnRateTarget { get; set; }
+    public float GreaterBurnRate {
+        get {
+            return Mathf.Max(IronBurnRateTarget, SteelBurnRateTarget);
+        }
+    }
 
     private Transform centerOfMass;
     private Rigidbody rb;
@@ -102,8 +109,8 @@ public class AllomanticIronSteel : MonoBehaviour {
         IsBurningIronSteel = false;
         IronPulling = false;
         SteelPushing = false;
-        IronBurnRate = 0;
-        SteelBurnRate = 0;
+        IronBurnRateTarget = 0;
+        SteelBurnRateTarget = 0;
         PullTargets.Clear(true, clearTargets);
         PushTargets.Clear(true, clearTargets);
         lastExpectedAllomancerAcceleration = Vector3.zero;
@@ -117,8 +124,9 @@ public class AllomanticIronSteel : MonoBehaviour {
         if (!PauseMenu.IsPaused) {
             if (IsBurningIronSteel) {
                 // Remove all targets that are out of pushing range
-                PullTargets.RemoveAllOutOfRange();
-                PushTargets.RemoveAllOutOfRange();
+                // For Mouse/Keyboard, Iron and Steel burn rates are equal, so it's somewhat redundant to specify
+                PullTargets.RemoveAllOutOfRange(IronBurnRateTarget);
+                PushTargets.RemoveAllOutOfRange(SteelBurnRateTarget);
 
                 CalculatePullForces();
                 CalculatePushForces();
@@ -261,7 +269,7 @@ public class AllomanticIronSteel : MonoBehaviour {
         target.LastMaxPossibleAllomanticForce = allomanticForce;
 
         // Make the AF proportional to the burn rate
-        allomanticForce *= (target.LastWasPulled ? IronBurnRate : SteelBurnRate);
+        allomanticForce *= (target.LastWasPulled ? IronBurnRateTarget : SteelBurnRateTarget);
 
         Vector3 restitutionForceFromTarget;
         Vector3 restitutionForceFromAllomancer;
@@ -382,16 +390,16 @@ public class AllomanticIronSteel : MonoBehaviour {
         thisFrameAllomanticForce += allomanticForce;
         thisFrameNormalForce += restitutionForceFromTarget;
         if(target.LastWasPulled) {
-            if(IronBurnRate == 0) {
+            if(IronBurnRateTarget == 0) {
                 thisFrameMaximumNetForce += restitutionForceFromTarget;
             } else {
-                thisFrameMaximumNetForce += restitutionForceFromTarget / IronBurnRate;
+                thisFrameMaximumNetForce += restitutionForceFromTarget / IronBurnRateTarget;
             }
         } else {
-            if(SteelBurnRate == 0) {
+            if(SteelBurnRateTarget == 0) {
                 thisFrameMaximumNetForce += restitutionForceFromTarget;
             } else {
-                thisFrameMaximumNetForce += restitutionForceFromTarget / SteelBurnRate;
+                thisFrameMaximumNetForce += restitutionForceFromTarget / SteelBurnRateTarget;
             }
         }
         target.LastAllomanticForce = allomanticForce;
@@ -423,10 +431,13 @@ public class AllomanticIronSteel : MonoBehaviour {
     public void StartBurning() {
         if (!IsBurningIronSteel) {
             IsBurningIronSteel = true;
+            // Set burn rates to slow burn, to start
+            IronBurnRateTarget = slowBurn;
+            SteelBurnRateTarget = slowBurn;
 
             // If this component belongs to the player
             if (tag == "Player")
-                GetComponent<PlayerPushPullController>().StartBurningIronSteel();
+                GetComponent<PlayerPullPushController>().StartBurningIronSteel();
         }
 
     }
@@ -435,13 +446,13 @@ public class AllomanticIronSteel : MonoBehaviour {
         if (IsBurningIronSteel) {
             PullTargets.Clear();
             PushTargets.Clear();
-            IronBurnRate = 0;
-            SteelBurnRate = 0;
+            IronBurnRateTarget = 0;
+            SteelBurnRateTarget = 0;
             IsBurningIronSteel = false;
 
             // If this component belongs to the player
             if (tag == "Player")
-                GetComponent<PlayerPushPullController>().StopBurningIronSteel();
+                GetComponent<PlayerPullPushController>().StopBurningIronSteel();
         }
     }
 

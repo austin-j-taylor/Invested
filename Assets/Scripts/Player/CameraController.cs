@@ -51,7 +51,10 @@ public class CameraController : MonoBehaviour {
                 if (SettingsMenu.settingsData.cameraClamping == 1)
                     ClampY();
             }
-            RefreshCamera();
+            UpdateCamera();
+        }
+        if(ExternalPositionTarget) {
+            UpdateCameraToExternalSource();
         }
     }
 
@@ -61,10 +64,10 @@ public class CameraController : MonoBehaviour {
         firstPersonCamera.transform.localPosition = firstPersonCameraHeight;
         currentY = playerBody.parent.localEulerAngles.x + 30; // Tilted downward a little
         currentX = playerBody.parent.localEulerAngles.y;
-        RefreshCamera();
+        UpdateCamera();
     }
 
-    private static void RefreshCamera() {
+    private static void UpdateCamera() {
         if (Player.CanControlPlayer) {
             // Horizontal rotation (rotates playerBody body left and right)
             Quaternion horizontalRotation = Quaternion.Euler(0, currentX, 0);
@@ -82,11 +85,14 @@ public class CameraController : MonoBehaviour {
                     ActiveCamera.transform.localPosition = wantedPosition;
                 }
             }
-        } else if(ExternalPositionTarget) {
-            // Camera is being controlled by some other source, i.e. HarmonyTarget
-            ActiveCamera.transform.position = Vector3.Lerp(ActiveCamera.transform.position, ExternalPositionTarget.position, lerpConstant * Time.deltaTime);
-            ActiveCamera.transform.LookAt(ExternalLookAtTarget);
         }
+    }
+    /*
+     * Called when the Camera is being controlled by some other source, i.e. HarmonyTarget
+     */
+    private void UpdateCameraToExternalSource() {
+        ActiveCamera.transform.position = Vector3.Lerp(ActiveCamera.transform.position, ExternalPositionTarget.position, lerpConstant * Time.deltaTime);
+        ActiveCamera.transform.LookAt(ExternalLookAtTarget);
     }
 
     public static void LockCamera() {

@@ -43,7 +43,7 @@ public class HarmonyTarget : MonoBehaviour {
             //angle = Mathf.LerpAngle(inner.eulerAngles.y, angle, Time.deltaTime * 10f);
 
             newRotation.y = angle;
-            transform.eulerAngles = newRotation;
+            inner.eulerAngles = newRotation;
         }
     }
 

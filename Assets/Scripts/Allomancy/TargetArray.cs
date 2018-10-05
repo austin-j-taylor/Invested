@@ -194,16 +194,16 @@ public class TargetArray {
     }
 
     /*
-     * Removes all entries out of range
+     * Removes all entries out of range, using the given burn rate
      */
-    public void RemoveAllOutOfRange() {
+    public void RemoveAllOutOfRange(float burnRate) {
         for(int i = 0; i < Count; i++) {
             if (SettingsMenu.settingsData.pushControlStyle == 0) {
-                if (targets[i].LastAllomanticForce.magnitude < SettingsMenu.settingsData.metalDetectionThreshold && targets[i].LastAllomanticForce != Vector3.zero) { // zero on first frame of pushing
+                if (AllomanticIronSteel.CalculateAllomanticForce(targets[i], targets[i].Allomancer).magnitude * burnRate < SettingsMenu.settingsData.metalDetectionThreshold) {
                     RemoveTargetAt(i);
                 }
-            } else { // If using the Magnitude control style, burn rate does not affect how far range of targets
-                if (targets[i].LastMaxPossibleAllomanticForce.magnitude < SettingsMenu.settingsData.metalDetectionThreshold && targets[i].LastMaxPossibleAllomanticForce != Vector3.zero) {
+            } else { // If using the Magnitude control style, burn rate does not affect the range of targets
+                if (AllomanticIronSteel.CalculateAllomanticForce(targets[i], targets[i].Allomancer).magnitude < SettingsMenu.settingsData.metalDetectionThreshold) {
                     RemoveTargetAt(i);
                 }
             }

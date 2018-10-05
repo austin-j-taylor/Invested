@@ -14,7 +14,7 @@ public class Player : MonoBehaviour {
     private PlayerMovementController movementController;
 
     public static AllomanticIronSteel PlayerIronSteel { get; private set; }
-    public static PlayerPushPullController PushPullController { get; private set; }
+    public static PlayerPullPushController PushPullController { get; private set; }
     public static Player PlayerInstance { get; private set; }
     public static bool CanControlPlayer { get; set; }
     public Hand CoinHand { get; private set; }
@@ -26,7 +26,7 @@ public class Player : MonoBehaviour {
 
         //animator = GetComponent<Animator>();
         PlayerIronSteel = GetComponent<AllomanticIronSteel>();
-        PushPullController = GetComponent<PlayerPushPullController>();
+        PushPullController = GetComponent<PlayerPullPushController>();
         PlayerInstance = this;
         CoinHand = GetComponentInChildren<Hand>();
         SceneManager.sceneLoaded += ClearPlayerAfterSceneChange;
