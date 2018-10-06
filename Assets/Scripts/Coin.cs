@@ -80,8 +80,6 @@ public class Coin : Magnetic {
                         }
                         UpdatePositionToParent();
                         Rb.velocity = Vector3.zero;
-                    } else {
-                        collidedCollider = null;
                     }
 
                     lastWasStuck = IsStuck;
@@ -94,6 +92,7 @@ public class Coin : Magnetic {
 
     private void OnCollisionExit(Collision collision) {
         if (collidedCollider == collision.transform) {
+            collisionNormal = Vector3.zero;
             collidedCollider = null;
             IsStuck = false;
         } else {
@@ -117,7 +116,6 @@ public class Coin : Magnetic {
         if (Allomancer && (Allomancer.SteelPushing || Allomancer.IronPulling)) {
             IsStuck = Vector3.Dot(newNetForce, collisionNormal) < 0 && IsStuckByFriction(newNetForce);
         }
-
         LastExpectedAcceleration = newNetForce / NetMass; // LastPosition, LastVelocity are updated
         Rb.AddForce(newNetForce, ForceMode.Force);
     }
