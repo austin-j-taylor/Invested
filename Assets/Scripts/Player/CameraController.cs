@@ -10,7 +10,7 @@ using UnityEngine;
 public class CameraController : MonoBehaviour {
 
     private const float distanceFromHitWall = .125f;//.5f;
-    private const float wallDistanceCheck = 5;
+    private const float wallDistanceCheck = 4;
     private const float lerpConstant = 5;
     private static readonly Vector3 distancefromPlayer = new Vector3(0, 0, -wallDistanceCheck);
     private static readonly Vector3 firstPersonCameraHeight = new Vector3(0, 1, 0);
