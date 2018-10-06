@@ -18,6 +18,52 @@ public class TargetArray {
 
     public int Size { get; private set; } = 1;
     public int Count { get; private set; } = 0;
+    
+    /*
+     * Calculates the center of MAGNETIC mass of all targets within this TargetArray.
+     */
+    public Vector3 CenterOfMagneticMasses() {
+        if (Count > 0) {
+            Vector3 centerOfMasses = Vector3.zero;
+            float mass = 0;
+            for (int i = 0; i < Count; i++) {
+                centerOfMasses += targets[i].CenterOfMass * targets[i].MagneticMass;
+                mass += targets[i].MagneticMass;
+            }
+            return centerOfMasses / mass;
+        } else {
+            return Vector3.zero;
+        }
+    }
+
+    /*
+     * The sum of all MAGNETIC mass within this array
+     */
+    public float NetMagneticMass() {
+        float mass = 0;
+        for (int i = 0; i < Count; i++) {
+            mass += targets[i].MagneticMass;
+        }
+        return mass;
+    }
+
+    /*
+     * The charge of the sum of each target's mass
+     */
+    public float NetCharge() {
+        return Mathf.Pow(NetMagneticMass(), AllomanticIronSteel.chargePower);
+    }
+
+    /*
+     * The sum of each target's charge
+     */
+    public float SumOfCharges() {
+        float charge = 0;
+        for (int i = 0; i < Count; i++) {
+            charge += targets[i].Charge;
+        }
+        return charge;
+    }
 
     public Magnetic this[int key] {
         get {
@@ -28,6 +74,7 @@ public class TargetArray {
     public TargetArray(int maxNumberOfTargets) {
         targets = new Magnetic[maxNumberOfTargets];
     }
+
     /*
      * Moves all elements down, covering the element at index, making an empty space at Count
      * Decrements Count.
@@ -51,6 +98,7 @@ public class TargetArray {
             MoveDown(index);
         }
     }
+
     /*
      * Removes a target by reference
      * return true if it was successfully removed, false if target was not found
@@ -64,6 +112,7 @@ public class TargetArray {
         }
         return false;
     }
+
     /*
      * Addes newTarget to the array.
      *      newTarget is added to the first empty space in the array.
@@ -97,6 +146,7 @@ public class TargetArray {
             }
         }
     }
+
     /*
      * Returns true if potentialTarget is in the array, false otherwise
      */
@@ -120,7 +170,9 @@ public class TargetArray {
         return -1;
     }
 
-    // Removes all targets from the array
+    /*
+     * Removes all targets from the array
+     */
     public void Clear(bool setSizeTo1 = false, bool clearTargets = true) {
         for (int i = 0; i < Count; i++) {
             if(clearTargets)
@@ -140,6 +192,7 @@ public class TargetArray {
             Size++;
         }
     }
+
     /*
      * Decrements the available number of targets in the array.
      * If there are too many targets after decrementing the Size, remove the oldest one.
@@ -172,7 +225,7 @@ public class TargetArray {
      * Refreshes the blue metal lies that point to each target.
      * pullTheme determines the color (green or red) that the line could have.
      */
-    public void UpdateBlueLines(bool pullTheme, float burnRate) {
+    public void UpdateBlueLines(bool pullingColor, float burnRate) {
         // Go through targets and update their metal lines
         for (int i = 0; i < Count; i++) {
             targets[i].SetBlueLine(
@@ -180,7 +233,7 @@ public class TargetArray {
                 blueLineTargetedWidthFactor * targets[i].Charge,
                 Mathf.Exp(-targets[i].LastMaxPossibleAllomanticForce.magnitude * burnRate / lightSaberConstant),
                 // 200IQ Ternary Operator
-                (pullTheme) ? 
+                (pullingColor) ? 
                     SettingsMenu.settingsData.pullTargetLineColor == 0 ? targetedBlueLine
                     :
                         SettingsMenu.settingsData.pullTargetLineColor == 1 ? targetedLightBlueLine 

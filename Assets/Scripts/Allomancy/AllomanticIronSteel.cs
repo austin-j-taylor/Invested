@@ -1,6 +1,6 @@
 using UnityEngine;
 /*
- * Controls of Ironpulling and Steelpushing.
+ * Controls Ironpulling and Steelpushing.
  * Should be attached to any Allomancer.
  */
 public class AllomanticIronSteel : MonoBehaviour {
@@ -9,14 +9,13 @@ public class AllomanticIronSteel : MonoBehaviour {
     public const int maxNumberOfTargets = 10;
 
     private const float slowBurn = .1f;
-    // Simple metal booleans for passing to methods
+    // Simple metal boolean constants for passing to methods
     private const bool steel = false;
     private const bool iron = true;
     
     // Pull and Push Target members
     public TargetArray PullTargets { get; private set; }
     public TargetArray PushTargets { get; private set; }
-    //public int AvailableNumberOfTargets { get; private set; } = 1;
 
     public bool PullingOnPullTargets {
         get {
@@ -55,24 +54,29 @@ public class AllomanticIronSteel : MonoBehaviour {
     private Vector3 lastExpectedAllomancerAcceleration = Vector3.zero;
 
     public Vector3 LastNetForceOnAllomancer { get; private set; } = Vector3.zero;
-    //private Vector3 thisFrameNetForceOnAllomancer = Vector3.zero;
     public Vector3 LastNormalForce { get; private set; } = Vector3.zero;
     private Vector3 thisFrameNormalForce = Vector3.zero;
     public Vector3 LastAllomanticForce { get; private set; } = Vector3.zero;
     private Vector3 thisFrameAllomanticForce = Vector3.zero;
-
-    //private Vector3 thisFrameMaximumAllomanticForce = Vector3.zero;
-    //private Vector3 lastMaximumAllomanticForce = Vector3.zero;
+    
     private Vector3 thisFrameMaximumNetForce = Vector3.zero;
     public Vector3 LastMaximumNetForce { get; private set; } = Vector3.zero;
-    //private Vector3 thisFrameMaximumNormalForce = Vector3.zero;
-    //private Vector3 lastMaximumNormalForce = Vector3.zero;
-
-
+    
+    // Debug variables for viewing values in the Unity editor
+    public float allomanticsForce;
+    public float netAllomancersForce;
+    public float netTargetsForce;
+    public Vector3 allomanticsForces;
+    public Vector3 resititutionFromTargetsForce;
+    public Vector3 resititutionFromPlayersForce;
+    public float percentOfTargetForceReturned;
+    public float percentOfAllomancerForceReturned;
+    
     // Metal burn rates
-    // When burning metals, not necessarily immediately Pushing or Pulling. Hence, they are "targets" and not the actual burn rate of the Allomancer.
+    // Used when burning metals, but not necessarily immediately Pushing or Pulling. Hence, they are "targets" and not the actual burn rate of the Allomancer.
     public float IronBurnRateTarget { get; set; }
     public float SteelBurnRateTarget { get; set; }
+
     public float GreaterBurnRate {
         get {
             return Mathf.Max(IronBurnRateTarget, SteelBurnRateTarget);
@@ -96,6 +100,7 @@ public class AllomanticIronSteel : MonoBehaviour {
             return rb.mass;
         }
     }
+
     private void Awake() {
         rb = GetComponent<Rigidbody>();
         centerOfMass = transform.Find("Body/Center of Mass");
@@ -127,108 +132,72 @@ public class AllomanticIronSteel : MonoBehaviour {
                 // For Mouse/Keyboard, Iron and Steel burn rates are equal, so it's somewhat redundant to specify
                 PullTargets.RemoveAllOutOfRange(IronBurnRateTarget);
                 PushTargets.RemoveAllOutOfRange(SteelBurnRateTarget);
+                
+                // Calculate net charges to know how pushes will be distributed amongst targets
+                float netPullTargetsCharge = PullTargets.NetCharge();
+                float netPushTargetsCharge = PushTargets.NetCharge();
+                float sumPullTargetsCharge = PullTargets.SumOfCharges();
+                float sumPushTargetsCharge = PushTargets.SumOfCharges();
+                
 
-                CalculatePullForces();
-                CalculatePushForces();
+                // Calculate Allomantic Forces and APBs
+                // Execute AFs and APBs on target and Allomancer
+                if (PullingOnPullTargets) {
+                    for (int i = 0; i < PullTargets.Count; i++) {
+                        CalculateForce(PullTargets[i], netPullTargetsCharge, sumPullTargetsCharge, iron);
+                        AddForce(PullTargets[i]);
+                    }
+                } else if (PushingOnPullTargets) {
+                    for (int i = 0; i < PullTargets.Count; i++) {
+                        CalculateForce(PullTargets[i], netPullTargetsCharge, sumPullTargetsCharge, steel);
+                        AddForce(PullTargets[i]);
+                    }
+                } else if(HasPullTarget) {
+                    for (int i = 0; i < PullTargets.Count; i++) {
+                        CalculateForce(PullTargets[i], netPullTargetsCharge, sumPullTargetsCharge, iron);
+                    }
+                }
 
-                ExecutePushesAndPulls();
+                if (PullingOnPushTargets) {
+                    for (int i = 0; i < PushTargets.Count; i++) {
+                        CalculateForce(PushTargets[i], netPushTargetsCharge, sumPushTargetsCharge, iron);
+                        AddForce(PushTargets[i]);
+                    }
+                } else if (PushingOnPushTargets) {
+                    for (int i = 0; i < PushTargets.Count; i++) {
+                        CalculateForce(PushTargets[i], netPushTargetsCharge, sumPushTargetsCharge, steel);
+                        AddForce(PushTargets[i]);
+                    }
+                } else if (HasPushTarget) {
+                    for (int i = 0; i < PushTargets.Count; i++) {
+                        CalculateForce(PushTargets[i], netPushTargetsCharge, sumPushTargetsCharge, steel);
+                    }
+                }
 
+                // Update variables for calculating APBs and the like for next frame
                 lastAllomancerVelocity = rb.velocity;
-
                 LastAllomanticForce = thisFrameAllomanticForce;
                 thisFrameAllomanticForce = Vector3.zero;
                 LastNormalForce = thisFrameNormalForce;
                 thisFrameNormalForce = Vector3.zero;
-                //lastMaximumAllomanticForce = thisFrameMaximumAllomanticForce;
-                //lastMaximumNormalForce = thisFrameMaximumNormalForce;
                 LastMaximumNetForce = thisFrameMaximumNetForce;
                 thisFrameMaximumNetForce = Vector3.zero;
                 LastNetForceOnAllomancer = LastAllomanticForce + LastNormalForce;
                 lastExpectedAllomancerAcceleration = LastNetForceOnAllomancer / rb.mass;
-                //thisFrameNetForceOnAllomancer = Vector3.zero;
-                //thisFrameMaximumAllomanticForce = Vector3.zero;
-                //thisFrameMaximumNormalForce = Vector3.zero;
             }
         }
     }
 
-    private void CalculatePullForces() {
-        for (int i = 0; i < PullTargets.Count; i++) {
-            CalculateForce(PullTargets[i], iron);
-        }
-    }
-
-    private void CalculatePushForces() {
-        for (int i = 0; i < PushTargets.Count; i++) {
-            CalculateForce(PushTargets[i], steel);
-        }
-    }
-
-    private void ExecutePushesAndPulls() {
-        if (PullingOnPullTargets) {
-            PullOnTargets(iron);
-        } else if (PushingOnPullTargets) {
-            PushOnTargets(iron);
-        }
-
-        if (PullingOnPushTargets) {
-            PullOnTargets(steel);
-        } else if (PushingOnPushTargets) {
-            PushOnTargets(steel);
-        }
-    }
-
-    private void PullOnTargets(bool usingIronTargets) {
-        if (usingIronTargets) {
-            for (int i = 0; i < PullTargets.Count; i++) {
-                AddForce(PullTargets[i], iron);
-            }
-        } else {
-            for (int i = 0; i < PushTargets.Count; i++) {
-                AddForce(PushTargets[i], iron);
-            }
-        }
-    }
-
-    private void PushOnTargets(bool usingIronTargets) {
-        if (usingIronTargets) {
-            for (int i = 0; i < PullTargets.Count; i++) {
-                AddForce(PullTargets[i], steel);
-            }
-        } else {
-            for (int i = 0; i < PushTargets.Count; i++) {
-                AddForce(PushTargets[i], steel);
-            }
-        }
-    }
-
-    //private void ResetPullStatus(bool usingIronTargets) {
-    //    if (usingIronTargets) {
-    //        for (int i = 0; i < PullCount; i++) {
-    //            PullTargets[i].LastWasPulled = true;
-    //        }
-    //    } else {
-    //        for (int i = 0; i < PushCount; i++) {
-    //            PushTargets[i].LastWasPulled = false;
-    //        }
-    //    }
-    //}
-
-    // Debug
-    public float allomanticsForce;
-    public float netAllomancersForce;
-    public float netTargetsForce;
-    public Vector3 allomanticsForces;
-    public Vector3 resititutionFromTargetsForce;
-    public Vector3 resititutionFromPlayersForce;
-    public float percentOfTargetForceReturned;
-    public float percentOfAllomancerForceReturned;
     /*
      * Calculates the unaltered, maximum possible Allomantic Force between the allomancer and target.
      */
     public static Vector3 CalculateAllomanticForce(Magnetic target, AllomanticIronSteel allomancer) {
+        return allomancer.CalculateAllomanticForce(target.CenterOfMass, target.Charge); ;
+    }
+
+    private Vector3 CalculateAllomanticForce(Vector3 targetCenterOfMass, float targetCharge) {
         Vector3 distanceFactor;
-        Vector3 positionDifference = target.CenterOfMass - allomancer.CenterOfMass;
+        Vector3 positionDifference = targetCenterOfMass - CenterOfMass;
 
         switch (SettingsMenu.settingsData.forceDistanceRelationship) {
             case 0: {
@@ -244,8 +213,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                     break;
                 }
         }
-
-        return SettingsMenu.settingsData.allomanticConstant * target.Charge * allomancer.Charge * distanceFactor;
+        return SettingsMenu.settingsData.allomanticConstant * targetCharge * Charge * distanceFactor;
     }
 
     /* 
@@ -261,8 +229,16 @@ public class AllomanticIronSteel : MonoBehaviour {
      *              (i.e. push on one target => 100% of the push going to them, push on three targets => 33% of each push going to each, etc. Not thought out very in-depth.)
      *  C: the Allomantic Constant.
      */
-    private void CalculateForce(Magnetic target, bool usingIronTargets) {
-        Vector3 allomanticForce = CalculateAllomanticForce(target, this) * (target.LastWasPulled ? 1 : -1) /* / (usingIronTargets ? PullCount : PushCount) */;
+    private void CalculateForce(Magnetic target, float netMagneticCharge, float sumOfCharges, bool pulling) {
+        target.LastWasPulled = pulling;
+
+        // When pushing on multiple targets, you are effectively pushing on a mass equal to the sum of the masses of each target.
+        // This effective mass is netMagneticMass, and is used here to calculate the effective charge against which the allomancer can push for this specific target
+        //      SUCH THAT the sum of the pushes on each target will equal a single push on an imaginary target with a mass equal to the sum of each target's mass.
+
+        float effectiveCharge = target.Charge / sumOfCharges * netMagneticCharge;
+
+        Vector3 allomanticForce = CalculateAllomanticForce(target.CenterOfMass, effectiveCharge) * (target.LastWasPulled ? 1 : -1) /* / (usingIronTargets ? PullCount : PushCount) */;
         Vector3 direction = allomanticForce.normalized;
 
         thisFrameMaximumNetForce += allomanticForce;
@@ -411,11 +387,10 @@ public class AllomanticIronSteel : MonoBehaviour {
      * Applys the force that was calculated in CalculateForce to the target and player.
      * This effectively executes the Push or Pull.
      */
-    private void AddForce(Magnetic target, bool pulling) {
-        target.LastWasPulled = pulling;
+    private void AddForce(Magnetic target) {
 
         target.AddForce(target.LastNetAllomanticForceOnTarget);
-        rb.AddForce(target.LastNetAllomanticForceOnAllomancer, ForceMode.Force);
+        rb.AddForce(target.LastNetAllomanticForceOnAllomancer);
 
         // Debug
         allomanticsForce = target.LastAllomanticForce.magnitude;
@@ -455,19 +430,6 @@ public class AllomanticIronSteel : MonoBehaviour {
                 GetComponent<PlayerPullPushController>().StopBurningIronSteel();
         }
     }
-
-    //private void StartPushPullingOnTargets(bool pulling) {
-    //    if ((HasPullTarget && pulling) || !HasPushTarget) {
-    //        for (int i = 0; i < PullCount; i++) {
-    //            PullTargets[i].StartBeingPullPushed(pulling);
-    //        }
-    //    }
-    //    if (HasPushTarget) {
-    //        for (int i = 0; i < PushCount; i++) {
-    //            PushTargets[i].StartBeingPullPushed(pulling);
-    //        }
-    //    }
-    //}
 
     //Stop pushing or pulling on Pull targets
     public void StopOnPullTargets() {
@@ -540,5 +502,4 @@ public class AllomanticIronSteel : MonoBehaviour {
     public void RemovePushTargetAt(int index) {
         PushTargets.RemoveTargetAt(index);
     }
-
 }

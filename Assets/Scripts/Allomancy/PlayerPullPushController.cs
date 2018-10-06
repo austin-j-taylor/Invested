@@ -340,17 +340,19 @@ public class PlayerPullPushController : MonoBehaviour {
         }
 
         // Update metal lines for Pull/PushTargets
-        if(player.HasPullTarget) {
-            if(player.HasPushTarget) {
-                player.PullTargets.UpdateBlueLines(true, player.IronBurnRateTarget);
-                player.PushTargets.UpdateBlueLines(false, player.SteelBurnRateTarget);
-            } else {
-                player.PullTargets.UpdateBlueLines(true, Mathf.Max(player.IronBurnRateTarget, player.SteelBurnRateTarget));
-            }
-        } else {
-            if(player.HasPushTarget) {
-                player.PushTargets.UpdateBlueLines(false, Mathf.Max(player.IronBurnRateTarget, player.SteelBurnRateTarget));
-            }
+        if (player.PullingOnPullTargets) {
+            player.PullTargets.UpdateBlueLines(true, player.IronBurnRateTarget);
+        } else if(player.PushingOnPullTargets) {
+            player.PullTargets.UpdateBlueLines(true, player.SteelBurnRateTarget);
+        } else if(player.HasPullTarget) {
+            player.PullTargets.UpdateBlueLines(true, 0);
+        }
+        if(player.PullingOnPushTargets) {
+            player.PushTargets.UpdateBlueLines(false, player.IronBurnRateTarget);
+        } else if(player.PushingOnPushTargets) {
+            player.PushTargets.UpdateBlueLines(false, player.SteelBurnRateTarget);
+        } else if(player.HasPushTarget) {
+            player.PushTargets.UpdateBlueLines(false, 0);
         }
 
         return centerObject;
