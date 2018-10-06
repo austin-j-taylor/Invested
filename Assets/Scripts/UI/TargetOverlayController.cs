@@ -114,7 +114,7 @@ public class TargetOverlayController : MonoBehaviour {
                     if (positionActualForce.z > 0) {
                         pullTargetsActualForce[i].transform.position = positionActualForce;
                         pullTargetsActualForce[i].text = HUD.ForceString(target.LastNetAllomanticForceOnTarget.magnitude, target.NetMass);
-                        pullTargetsSumForce[i].text = HUD.AllomanticSumString(target.LastAllomanticForce, target.LastAllomanticNormalForceFromAllomancer, target.NetMass, true);
+                        pullTargetsSumForce[i].text = HUD.AllomanticSumString(target.LastAllomanticForce, target.LastAnchoredPushBoostFromAllomancer, target.NetMass, true);
                     } else { // Target is not on screen
                         pullTargetsSumForce[i].text = "";
                         pullTargetsActualForce[i].text = "";
@@ -132,7 +132,7 @@ public class TargetOverlayController : MonoBehaviour {
                     if (positionActualForce.z > 0) {
                         pushTargetsActualForce[i].transform.position = positionActualForce;
                         pushTargetsActualForce[i].text = HUD.ForceString(target.LastNetAllomanticForceOnTarget.magnitude, target.NetMass);
-                        pushTargetsSumForce[i].text = HUD.AllomanticSumString(target.LastAllomanticForce, target.LastAllomanticNormalForceFromAllomancer, target.NetMass, true);
+                        pushTargetsSumForce[i].text = HUD.AllomanticSumString(target.LastAllomanticForce, target.LastAnchoredPushBoostFromAllomancer, target.NetMass, true);
                     } else { // Target is not on screen
                         pushTargetsSumForce[i].text = "";
                         pushTargetsActualForce[i].text = "";

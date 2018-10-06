@@ -506,9 +506,9 @@ public class PlayerPullPushController : MonoBehaviour {
     private void UpdateBurnRateMeter() {
         if (player.IsBurningIronSteel) {
             if (SettingsMenu.settingsData.pushControlStyle == 1)
-                HUD.BurnRateMeter.SetBurnRateMeterForceMagnitude(player.LastAllomanticForce, player.LastNormalForce, player.GreaterBurnRate, forceMagnitudeTarget);
+                HUD.BurnRateMeter.SetBurnRateMeterForceMagnitude(player.LastAllomanticForce, player.LastAnchoredPushBoost, player.GreaterBurnRate, forceMagnitudeTarget);
             else
-                HUD.BurnRateMeter.SetBurnRateMeterPercentage(player.LastAllomanticForce, player.LastNormalForce, player.GreaterBurnRate);
+                HUD.BurnRateMeter.SetBurnRateMeterPercentage(player.LastAllomanticForce, player.LastAnchoredPushBoost, player.GreaterBurnRate);
         } else {
             HUD.BurnRateMeter.Clear();
         }

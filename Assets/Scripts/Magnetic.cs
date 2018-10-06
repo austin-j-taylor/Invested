@@ -1,6 +1,4 @@
 using cakeslice;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using VolumetricLines;
 /*
@@ -28,8 +26,7 @@ public class Magnetic : MonoBehaviour {
 
     public AllomanticIronSteel Allomancer { get; set; }
     protected Rigidbody Rb { get; set; }
-
-    // Used for calculating Allomantic Normal Force
+    
     public Vector3 Velocity {
         get {
             if (IsStatic)
@@ -54,8 +51,8 @@ public class Magnetic : MonoBehaviour {
 
     // These keep track of each Magnetic's participation to the net force on the Allomancer
     public Vector3 LastAllomanticForce { get; set; }
-    public Vector3 LastAllomanticNormalForceFromAllomancer { get; set; }
-    public Vector3 LastAllomanticNormalForceFromTarget { get; set; }
+    public Vector3 LastAnchoredPushBoostFromAllomancer { get; set; }
+    public Vector3 LastAnchoredPushBoostFromTarget { get; set; }
     // The allomantic force, excluding the burn rate.
     public Vector3 LastMaxPossibleAllomanticForce { get; set; }
 
@@ -74,13 +71,13 @@ public class Magnetic : MonoBehaviour {
 
     public Vector3 LastNetAllomanticForceOnAllomancer {
         get {
-            return LastAllomanticForce + LastAllomanticNormalForceFromTarget;
+            return LastAllomanticForce + LastAnchoredPushBoostFromTarget;
         }
     }
 
     public Vector3 LastNetAllomanticForceOnTarget {
         get {
-            return -LastAllomanticForce + LastAllomanticNormalForceFromAllomancer;
+            return -LastAllomanticForce + LastAnchoredPushBoostFromAllomancer;
         }
     }
 
@@ -151,8 +148,8 @@ public class Magnetic : MonoBehaviour {
         LastExpectedAcceleration = Vector3.zero;
         LastAllomanticForce = Vector3.zero;
         LastMaxPossibleAllomanticForce = Vector3.zero;
-        LastAllomanticNormalForceFromAllomancer = Vector3.zero;
-        LastAllomanticNormalForceFromTarget = Vector3.zero;
+        LastAnchoredPushBoostFromAllomancer = Vector3.zero;
+        LastAnchoredPushBoostFromTarget = Vector3.zero;
     }
 
     private void Start() {
@@ -166,8 +163,8 @@ public class Magnetic : MonoBehaviour {
         LastExpectedAcceleration = Vector3.zero;
         LastAllomanticForce = Vector3.zero;
         LastMaxPossibleAllomanticForce = Vector3.zero;
-        LastAllomanticNormalForceFromAllomancer = Vector3.zero;
-        LastAllomanticNormalForceFromTarget = Vector3.zero;
+        LastAnchoredPushBoostFromAllomancer = Vector3.zero;
+        LastAnchoredPushBoostFromTarget = Vector3.zero;
         Allomancer = null;
         lightSaberFactor = 1;
         blueLine.GetComponent<MeshRenderer>().enabled = false;

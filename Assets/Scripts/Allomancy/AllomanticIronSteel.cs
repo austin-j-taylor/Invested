@@ -54,8 +54,8 @@ public class AllomanticIronSteel : MonoBehaviour {
     private Vector3 lastExpectedAllomancerAcceleration = Vector3.zero;
 
     public Vector3 LastNetForceOnAllomancer { get; private set; } = Vector3.zero;
-    public Vector3 LastNormalForce { get; private set; } = Vector3.zero;
-    private Vector3 thisFrameNormalForce = Vector3.zero;
+    public Vector3 LastAnchoredPushBoost { get; private set; } = Vector3.zero;
+    private Vector3 thisFrameAnchoredPushBoost = Vector3.zero;
     public Vector3 LastAllomanticForce { get; private set; } = Vector3.zero;
     private Vector3 thisFrameAllomanticForce = Vector3.zero;
     
@@ -121,7 +121,7 @@ public class AllomanticIronSteel : MonoBehaviour {
         lastExpectedAllomancerAcceleration = Vector3.zero;
         LastNetForceOnAllomancer = Vector3.zero;
         LastAllomanticForce = Vector3.zero;
-        LastNormalForce = Vector3.zero;
+        LastAnchoredPushBoost = Vector3.zero;
         LastMaximumNetForce = Vector3.zero;
     }
 
@@ -178,11 +178,11 @@ public class AllomanticIronSteel : MonoBehaviour {
                 lastAllomancerVelocity = rb.velocity;
                 LastAllomanticForce = thisFrameAllomanticForce;
                 thisFrameAllomanticForce = Vector3.zero;
-                LastNormalForce = thisFrameNormalForce;
-                thisFrameNormalForce = Vector3.zero;
+                LastAnchoredPushBoost = thisFrameAnchoredPushBoost;
+                thisFrameAnchoredPushBoost = Vector3.zero;
                 LastMaximumNetForce = thisFrameMaximumNetForce;
                 thisFrameMaximumNetForce = Vector3.zero;
-                LastNetForceOnAllomancer = LastAllomanticForce + LastNormalForce;
+                LastNetForceOnAllomancer = LastAllomanticForce + LastAnchoredPushBoost;
                 lastExpectedAllomancerAcceleration = LastNetForceOnAllomancer / rb.mass;
             }
         }
@@ -217,7 +217,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     }
 
     /* 
-     * Calculates the Allomantic Force and Allomantic Normal Force that would affect this target, if it were Pushed or Pulled.
+     * Calculates the Allomantic Force and Anchored Push Boost that would affect this target, if it were Pushed or Pulled.
      * 
      * 
      * Pushing and Pulling
@@ -364,7 +364,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                 }
         }
         thisFrameAllomanticForce += allomanticForce;
-        thisFrameNormalForce += restitutionForceFromTarget;
+        thisFrameAnchoredPushBoost += restitutionForceFromTarget;
         if(target.LastWasPulled) {
             if(IronBurnRateTarget == 0) {
                 thisFrameMaximumNetForce += restitutionForceFromTarget;
@@ -379,8 +379,8 @@ public class AllomanticIronSteel : MonoBehaviour {
             }
         }
         target.LastAllomanticForce = allomanticForce;
-        target.LastAllomanticNormalForceFromAllomancer = restitutionForceFromAllomancer;
-        target.LastAllomanticNormalForceFromTarget = restitutionForceFromTarget;
+        target.LastAnchoredPushBoostFromAllomancer = restitutionForceFromAllomancer;
+        target.LastAnchoredPushBoostFromTarget = restitutionForceFromTarget;
     }
 
     /*
@@ -396,8 +396,8 @@ public class AllomanticIronSteel : MonoBehaviour {
         allomanticsForce = target.LastAllomanticForce.magnitude;
         allomanticsForces = target.LastAllomanticForce;
         netAllomancersForce = target.LastNetAllomanticForceOnAllomancer.magnitude;
-        resititutionFromTargetsForce = target.LastAllomanticNormalForceFromTarget;
-        resititutionFromPlayersForce = target.LastAllomanticNormalForceFromAllomancer;
+        resititutionFromTargetsForce = target.LastAnchoredPushBoostFromTarget;
+        resititutionFromPlayersForce = target.LastAnchoredPushBoostFromAllomancer;
         percentOfTargetForceReturned = resititutionFromTargetsForce.magnitude / allomanticsForce;
         percentOfAllomancerForceReturned = resititutionFromPlayersForce.magnitude / allomanticsForce;
         netTargetsForce = target.LastNetAllomanticForceOnTarget.magnitude;
