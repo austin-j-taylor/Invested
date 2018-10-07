@@ -5,6 +5,7 @@ Invested is a physics simulation and game made in the Unity engine. It is a pers
 Download the current build from [here.](https://www.dropbox.com/s/6o152qparaoede7/Invested.zip?dl=1)
 
 Here are some short videos of the game:
+- ["Centrifuge" Pulling](https://gfycat.com/BlackandwhiteEllipticalAfricanaugurbuzzard)
 - [Pushing and Pulling on metal targets](https://gfycat.com/PowerfulPaleAuk)
 - [Pull targets vs. Push targets](https://gfycat.com/FoolishUnderstatedBackswimmer)
 - [Some recent developments to the HUD](https://gfycat.com/ChubbySelfishBoutu)

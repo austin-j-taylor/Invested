@@ -251,11 +251,11 @@ public class TargetArray {
      */
     public void RemoveAllOutOfRange(float burnRate) {
         for(int i = 0; i < Count; i++) {
-            if (SettingsMenu.settingsData.pushControlStyle == 0) {
+            if (SettingsMenu.settingsData.pushControlStyle == 0 && SettingsMenu.settingsData.controlScheme != 2) {
                 if (AllomanticIronSteel.CalculateAllomanticForce(targets[i], targets[i].Allomancer).magnitude * burnRate < SettingsMenu.settingsData.metalDetectionThreshold) {
                     RemoveTargetAt(i);
                 }
-            } else { // If using the Magnitude control style, burn rate does not affect the range of targets
+            } else { // If using the Magnitude control style (or gamepad), burn rate does not affect the range of targets
                 if (AllomanticIronSteel.CalculateAllomanticForce(targets[i], targets[i].Allomancer).magnitude < SettingsMenu.settingsData.metalDetectionThreshold) {
                     RemoveTargetAt(i);
                 }
