@@ -7,10 +7,10 @@ public class Coin : Magnetic {
     private const float airResistanceFactor = .1f;
     private const float minSpeed = 5f;
     private const float maxSpeed = 120f;
-    private const float equalInMagnitudeConstant = .01f;
     private const float drag = 1.25f;
     private const float stuckThreshold = 100f; // Square magnitude of normal force necessary for friction
-    
+    private const float equalMagnitudeConstant = .01f;
+
     private bool lastWasStuck = false;
 
     // Used for pseudo-parenting Coin when stuck to object it collides with
@@ -19,12 +19,7 @@ public class Coin : Magnetic {
     private Quaternion startParentRotation;
     private Vector3 startChildPosition;
     private Quaternion startChildRotation;
-
-    public override bool IsPerfectlyAnchored { // Only matters for Coins, which have so low masses that Unity thinks they have high velocities when pushed, even when anchored
-        get {
-            return Mathf.Abs(LastPosition.sqrMagnitude - transform.position.sqrMagnitude) < equalInMagnitudeConstant;
-        }
-    }
+    
     private bool isStuck;
 
     private bool IsStuck {
@@ -37,7 +32,11 @@ public class Coin : Magnetic {
                 lastWasStuck = false;
         }
     }
-
+    public override bool IsPerfectlyAnchored {
+        get {
+            return Mathf.Abs((LastPosition - transform.position).sqrMagnitude) < equalMagnitudeConstant;
+        }
+    }
     public new void Clear() {
         base.Clear();
         collidedCollider = null;

@@ -53,14 +53,15 @@ public class AllomanticIronSteel : MonoBehaviour {
     private Vector3 lastAllomancerVelocity = Vector3.zero;
     private Vector3 lastExpectedAllomancerAcceleration = Vector3.zero;
 
+    // Used in calculation of Net force on allomancer, AF on allomancer, and APB on allomancer this/last frame
     public Vector3 LastNetForceOnAllomancer { get; private set; } = Vector3.zero;
-    public Vector3 LastAnchoredPushBoost { get; private set; } = Vector3.zero;
-    private Vector3 thisFrameAnchoredPushBoost = Vector3.zero;
     public Vector3 LastAllomanticForce { get; private set; } = Vector3.zero;
     private Vector3 thisFrameAllomanticForce = Vector3.zero;
-    
-    private Vector3 thisFrameMaximumNetForce = Vector3.zero;
+    public Vector3 LastAnchoredPushBoost { get; private set; } = Vector3.zero;
+    private Vector3 thisFrameAnchoredPushBoost = Vector3.zero;
+    // Maximum possible Net Force on allomancer, regardless of burn rate
     public Vector3 LastMaximumNetForce { get; private set; } = Vector3.zero;
+    private Vector3 thisFrameMaximumNetForce = Vector3.zero;
     
     // Debug variables for viewing values in the Unity editor
     public float allomanticsForce;
@@ -228,6 +229,8 @@ public class AllomanticIronSteel : MonoBehaviour {
      *      / (depending on my mood) number of targets currently being pushed on
      *              (i.e. push on one target => 100% of the push going to them, push on three targets => 33% of each push going to each, etc. Not thought out very in-depth.)
      *  C: the Allomantic Constant.
+     *  
+     *  With the ANF, a push against a perfectly anchored metal structure is exactly twice as powerful as a push against a completely unanchored, freely-moving metal structure
      */
     private void CalculateForce(Magnetic target, float netMagneticCharge, float sumOfCharges, bool pulling) {
         target.LastWasPulled = pulling;
@@ -257,29 +260,25 @@ public class AllomanticIronSteel : MonoBehaviour {
                     break;
                 }
             case 1: { // ANF
-                    if (target.IsStatic) {
-                        // If the target has no rigidbody, let the let the restitution force equal the allomantic force. It's a perfect anchor.
-                        // Thus:
-                        // a push against a perfectly anchored metal structure is exactly twice as powerful as a push against a completely unanchored, freely-moving metal structure
+                    if (pulling && !IronPulling || !pulling && !SteelPushing) { // If not actively pushing/pulling on this target, let the APB = AF for both target and allomancer
                         restitutionForceFromTarget = allomanticForce;
+                        restitutionForceFromAllomancer = -allomanticForce;
                     } else {
-                        // Calculate Allomantic Normal Forces
-
-                        if (target.IsPerfectlyAnchored) { // If target is perfectly anchored, pushes are perfectly resisted. Its ANF = AF.
+                        if (target.IsStatic || target.IsPerfectlyAnchored) { // If target is perfectly anchored, pushes are perfectly resisted. Its ANF = AF.
                             restitutionForceFromTarget = allomanticForce;
-                        } else { // Target is partially anchored
-                                 //calculate changes from the last frame
+                        } else {
+                            // Calculate Allomantic Normal Forces
+                            // Target is partially anchored
+                            //calculate changes from the last frame
                             Vector3 newTargetVelocity = target.Velocity;
                             Vector3 lastTargetAcceleration = (newTargetVelocity - target.LastVelocity) / Time.fixedDeltaTime;
                             Vector3 unaccountedForTargetAcceleration = lastTargetAcceleration - target.LastExpectedAcceleration;// + Physics.gravity;
                             restitutionForceFromTarget = Vector3.Project(unaccountedForTargetAcceleration * target.NetMass, direction);
                         }
+                        Vector3 lastAllomancerAcceleration = (rb.velocity - lastAllomancerVelocity) / Time.fixedDeltaTime;
+                        Vector3 unaccountedForAllomancerAcceleration = lastAllomancerAcceleration - lastExpectedAllomancerAcceleration;
+                        restitutionForceFromAllomancer = Vector3.Project(unaccountedForAllomancerAcceleration * rb.mass, direction);
                     }
-
-                    Vector3 lastAllomancerAcceleration = (rb.velocity - lastAllomancerVelocity) / Time.fixedDeltaTime;
-                    Vector3 unaccountedForAllomancerAcceleration = lastAllomancerAcceleration - lastExpectedAllomancerAcceleration;
-                    restitutionForceFromAllomancer = Vector3.Project(unaccountedForAllomancerAcceleration * rb.mass, direction);
-
                     if (SettingsMenu.settingsData.normalForceMax == 1) {
                         restitutionForceFromTarget = Vector3.ClampMagnitude(restitutionForceFromTarget, allomanticForce.magnitude);
                         restitutionForceFromAllomancer = Vector3.ClampMagnitude(restitutionForceFromAllomancer, allomanticForce.magnitude);
@@ -363,9 +362,10 @@ public class AllomanticIronSteel : MonoBehaviour {
                     break;
                 }
         }
+
         thisFrameAllomanticForce += allomanticForce;
         thisFrameAnchoredPushBoost += restitutionForceFromTarget;
-        if(target.LastWasPulled) {
+        if (target.LastWasPulled) {
             if(IronBurnRateTarget == 0) {
                 thisFrameMaximumNetForce += restitutionForceFromTarget;
             } else {

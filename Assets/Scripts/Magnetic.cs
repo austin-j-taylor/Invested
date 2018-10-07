@@ -50,9 +50,9 @@ public class Magnetic : MonoBehaviour {
     private Vector3 lastExpectedAcceleration;
 
     // These keep track of each Magnetic's participation to the net force on the Allomancer
-    public Vector3 LastAllomanticForce { get; set; }
-    public Vector3 LastAnchoredPushBoostFromAllomancer { get; set; }
-    public Vector3 LastAnchoredPushBoostFromTarget { get; set; }
+    public Vector3 LastAllomanticForce;// { get; set; }
+    public Vector3 LastAnchoredPushBoostFromAllomancer;// { get; set; }
+    public Vector3 LastAnchoredPushBoostFromTarget;// { get; set; }
     // The allomantic force, excluding the burn rate.
     public Vector3 LastMaxPossibleAllomanticForce { get; set; }
 
@@ -109,7 +109,7 @@ public class Magnetic : MonoBehaviour {
             return transform.TransformPoint(LocalCenterOfMass);
         }
     }
-    public virtual bool IsPerfectlyAnchored { // Only matters for Coins, which have so low masses that Unity thinks they have high velocities when pushed, even when anchored
+    public virtual bool IsPerfectlyAnchored { // Only relevant for low-mass targets
         get {
             return false;
         }
