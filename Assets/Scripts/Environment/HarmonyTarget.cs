@@ -16,6 +16,8 @@ public class HarmonyTarget : MonoBehaviour {
     private Renderer[] symbolRenderers;
     private Transform harmonySphere;
     private Transform inner;
+    private Transform outerLeft;
+    private Transform outerRight;
     private Transform cameraPositionTarget;
     private Transform cameraLookAtTarget;
 
@@ -23,12 +25,13 @@ public class HarmonyTarget : MonoBehaviour {
         rb = GetComponentInChildren<Rigidbody>();
         anim = GetComponent<Animator>();
         harmonySphere = rb.GetComponent<Transform>();
-        cameraPositionTarget = transform.GetChild(0);
+        cameraPositionTarget = transform.GetChild(0).GetChild(0);
         inner = transform.GetChild(1);
+        outerLeft = transform.GetChild(2);
+        outerRight = transform.GetChild(3);
         cameraLookAtTarget = inner.GetChild(0);
 
         symbolRenderers = GetComponentsInChildren<Renderer>();
-        
         harmonySphere.gameObject.AddComponent<HarmonySphere>();
 
         playerHasEntered = false;
@@ -43,7 +46,9 @@ public class HarmonyTarget : MonoBehaviour {
             //angle = Mathf.LerpAngle(inner.eulerAngles.y, angle, Time.deltaTime * 10f);
 
             newRotation.y = angle;
-            inner.eulerAngles = newRotation;
+            transform.eulerAngles = newRotation;
+            outerLeft.eulerAngles -= newRotation;
+            outerRight.eulerAngles -= newRotation;
         }
     }
 
@@ -75,7 +80,7 @@ public class HarmonyTarget : MonoBehaviour {
         harmonySphere.GetComponent<Collider>().enabled = false;
         anim.SetTrigger("PlayerHasEntered");
         HUD.DisableHUD();
-        
+
         //Player.PlayerIronSteel.StopBurning();
         Player.PlayerInstance.GetComponent<Rigidbody>().useGravity = false;
         Player.PlayerInstance.GetComponent<Rigidbody>().drag = dragConstantClose;

@@ -11,7 +11,6 @@ using VolumetricLines;
  *      If magneticMass is left to be 0, then the object is considered to be wholly magnetic and simply uses netMass.
  */
 public class Magnetic : MonoBehaviour {
-
     private const float metalLinesLerpConstant = .30f;
 
     [SerializeField]
@@ -50,9 +49,9 @@ public class Magnetic : MonoBehaviour {
     private Vector3 lastExpectedAcceleration;
 
     // These keep track of each Magnetic's participation to the net force on the Allomancer
-    public Vector3 LastAllomanticForce;// { get; set; }
-    public Vector3 LastAnchoredPushBoostFromAllomancer;// { get; set; }
-    public Vector3 LastAnchoredPushBoostFromTarget;// { get; set; }
+    public Vector3 LastAllomanticForce { get; set; }
+    public Vector3 LastAnchoredPushBoostFromAllomancer { get; set; }
+    public Vector3 LastAnchoredPushBoostFromTarget { get; set; }
     // The allomantic force, excluding the burn rate.
     public Vector3 LastMaxPossibleAllomanticForce { get; set; }
 
