@@ -18,6 +18,26 @@ This Unity project makes use of:
 
 ### Recent changes:
 
+Version 1.1.4
+- Improved blue metal lines
+	- Reduced visual clutter by making lines dimmer when off-screen and brighter near the center of the the screen
+	- Added option to change the color of the lines pointing to Push/Pull targets
+- More intuitive Push/Pull target selection
+	- Can "paint" while deselecting to deselect multiple targets, similar to how selecting works
+	- Selecting a Push target for Pulling turns it into a Pull target, and vice-versa
+	- Added option to disable the blue outline around the would-be-selected target near the center of the screen
+- Magnitude Push Control Style now works with gamepad
+	- Control target magnitude with up/down on the D-pad
+	- Control number of targets with left/right on the D-pad (previously bound to up/down)
+- Physics improvements
+	- Coins
+		- Coins are now thrown directly at crosshairs
+		- When thrown at/pushed into non-static objects, friction holds the coin to the object (rather than the coin just bouncing away)
+	- When pushing on multiple targets, you now push on the combined effective mass and Charge of all of them, rather than the mass of each individual target.
+- Added Graphics settings (anti-aliasing, ambient occlusion, bloom, motion blur)
+	- Changed fonts from Unity's default Arial to Heebo
+- Added "Harmony Targets" to Luthadel, Sandbox, and Experimental scenes (WIP targets for the player to reach and complete a level)
+
 Version 1.1.3
 
 - Settings are now saved to disk
@@ -31,18 +51,3 @@ Version 1.1.3
 - Fixed bugs in the calculation of the ANF
 - Fixed bug with friction on coins when trying to push and pull on them simultaneously
 - Added something special to the Experimental map
-
-Version 1.1.2
-
-- Changed how coins are thrown
-	- When holding down Jump key: coins are thrown beneath you, slightly opposing your directional movement
-	- When not holding down Jump key: coins are thrown towards crosshair
-- Coins have more realistic friction when pushed against a surface
-- Improved camera
-	- Fixed bug where camera moves strangely when player is against a wall
-	- Added option for removing vertical rotation limits on camera (can now vertically wrap around freely)
-- When pushing on multiple targets, your individual pushes on each target are no longer decreased
-	- For example: previously, if you had 3 push targets, your push on each was divided by 3. This kept the net force on you from increasing with multiple targets. Now, no alterations are made to each push.
-- Burn Rate can now be controlled with precision from 0% to 10%
-- Fixed bug with Magnitude Push Control Style when targeting a force of 0.
-- Added Experimental scene
