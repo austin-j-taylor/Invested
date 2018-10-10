@@ -18,6 +18,12 @@ This Unity project makes use of:
 
 ### Recent changes:
 
+Version 1.1.4.1
+- When coins are pushed into other objects, friction now more realistically holds the coin to the object until the coin is deflected away.
+	- The push on the coin is transferred to the object.
+	- The coin will rotate with the object, as long as it is held by friction.
+- Smoothened the transitions for the blue lines to metals from in-focus to out-of-focus to off-screen
+
 Version 1.1.4
 - Improved blue metal lines
 	- Reduced visual clutter by making lines dimmer when off-screen and brighter near the center of the the screen
