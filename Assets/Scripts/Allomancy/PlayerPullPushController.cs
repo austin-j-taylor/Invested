@@ -10,15 +10,14 @@ public class PlayerPullPushController : MonoBehaviour {
     private const float timeToHoldDown = .5f;
     private const float timeDoubleTapWindow = .5f;
     // Blue Line constants
-    private const float targetFocusRadius = .05f;               // Determines the range around the center of the screen within which blue lines are in focus.
-    private const float verticalImportanceFactor = 1 / 20f;     // Determines how elliptical the range around the center of the screen is.
+    private const float horizontalImportanceFactor = .1f;
+    private const float verticalImportanceFactor = .35f;
+    private const float importanceRatio = (horizontalImportanceFactor / verticalImportanceFactor) * (horizontalImportanceFactor / verticalImportanceFactor);
     private const float targetFocusFalloffConstant = 128;       // Determines how quickly blue lines blend from in-focus to out-of-focus
-    private const float targetFocusLowerBound = .35f;           // Determines the luminosity of blue lines that are out of foucus
+    private const float targetFocusLowerBound = .2f;            // Determines the luminosity of blue lines that are out of foucus
     private const float targetFocusOffScreenBound = .035f;      // Determines the luminosity of blue lines that are off-screen
-    private const float targetFocusMinOffset = .02f;
-    private const float targetFocusMaxOffset = 1 + targetFocusMinOffset;
-    private const float targetFocusMinTransition = .1f;
-    private const float targetFocusMaxTransition = 1 - targetFocusMinTransition;
+    private const float targetLowTransition = .06f;
+    private const float targetLowCurvePosition = .02f;
     private const float lowLineColor = .1f;
     private const float highLineColor = .85f;
     private const float blueLineWidthBaseFactor = .04f;
@@ -296,8 +295,7 @@ public class PlayerPullPushController : MonoBehaviour {
 
             float weightedDistanceFromCenter = SetLineProperties(target, true);
             // If the Magnetic could be targeted
-            // A Magnetic can be targeted if it is within an ellipse. The ellipse's x axis is targetFocusRadius, and its y is verticalImportanceFactor * targetFocusRadius.
-            if (weightedDistanceFromCenter < targetFocusRadius) {
+            if (weightedDistanceFromCenter < 1) {
                 // IF the new Magnetic is closer to the center of the screen than the previous most-center Magnetic
                 if (weightedDistanceFromCenter < smallestDistanceFromCenter) {
                     smallestDistanceFromCenter = weightedDistanceFromCenter;
@@ -351,31 +349,55 @@ public class PlayerPullPushController : MonoBehaviour {
             if (SettingsMenu.settingsData.renderblueLines == 1) {
                 Vector3 screenPosition = CameraController.ActiveCamera.WorldToViewportPoint(target.transform.position);
 
+                float centerX = Mathf.Abs(screenPosition.x - .5f);
+                float centerY = Mathf.Abs(screenPosition.y - .5f);
+
                 // Calculate the distance from the center for deciding which blue lines are "in-focus"
-                float weightedDistanceFromCenter = Mathf.Sqrt(Mathf.Pow(screenPosition.x - .5f, 2) + verticalImportanceFactor * Mathf.Pow(screenPosition.y - .5f, 2));
-                if (!focus || screenPosition.z < 0) { // not focusing, or, the target is behind the player, off-screen; Do not highlight this target
-                    weightedDistanceFromCenter = 1;
+                float distance = Mathf.Sqrt(
+                    (centerX) * (centerX)
+                    + (centerY) * (centerY) * importanceRatio
+                );
+                
+                if (screenPosition.z < 0 || centerX > horizontalImportanceFactor || centerY > verticalImportanceFactor) { // not focusing, or, the target is behind the player, off-screen; Do not highlight this target
+                    distance = 1;
                 }
                 float closeness = Mathf.Exp(-blueLineStartupFactor * Mathf.Pow(1 / allomanticForce, blueLineBrightnessFactor));
                 // Make lines in-focus if near the center of the screen
                 // If nearly off-screen, instead make lines dimmer
-
                 if (screenPosition.z < 0) { // behind player
                     closeness *= targetFocusOffScreenBound;
                 } else {
-                    float xMag = Mathf.Abs(screenPosition.x - .5f);
-                    float yMag = Mathf.Abs(screenPosition.y - .5f);
-                    // off-screen
-                    if (yMag > .3f) {
-                        closeness *= targetFocusOffScreenBound + (targetFocusLowerBound - targetFocusOffScreenBound) * Mathf.Exp(-Mathf.Pow(yMag + targetFocusMinOffset, targetFocusFalloffConstant));
-                    }
-                    if (xMag > .3f) {
-                        closeness *= targetFocusOffScreenBound + (targetFocusLowerBound - targetFocusOffScreenBound) * Mathf.Exp(-Mathf.Pow(xMag + targetFocusMinOffset, targetFocusFalloffConstant));
-                    } else if (focus) {
-                        closeness *= targetFocusLowerBound + (1 - targetFocusLowerBound) * Mathf.Exp(-Mathf.Pow(weightedDistanceFromCenter + 1 - targetFocusRadius, targetFocusFalloffConstant));
+                    float x = screenPosition.x;
+                    float y = screenPosition.y;
+                    if (x < targetLowTransition) {
+                        closeness *= targetFocusOffScreenBound + (targetFocusLowerBound - targetFocusOffScreenBound) * Mathf.Exp(-Mathf.Pow(-x + 1 + targetLowCurvePosition, targetFocusFalloffConstant));
+                    } else if(focus && x < .5f) {
+                        closeness *= targetFocusLowerBound + (1 - targetFocusLowerBound) * Mathf.Exp(-Mathf.Pow(-x + 1.5f - horizontalImportanceFactor, targetFocusFalloffConstant));
+                    } else if(focus && x < 1 - targetLowTransition) {
+                        closeness *= targetFocusLowerBound + (1 - targetFocusLowerBound) * Mathf.Exp(-Mathf.Pow(-x - .5f + horizontalImportanceFactor, targetFocusFalloffConstant));
                     } else {
-                        closeness *= targetFocusLowerBound;
+                        closeness *= targetFocusOffScreenBound + (targetFocusLowerBound - targetFocusOffScreenBound) * Mathf.Exp(-Mathf.Pow(-x + targetLowCurvePosition, targetFocusFalloffConstant));
                     }
+                    if (y < targetLowTransition) {
+                        closeness *= targetFocusOffScreenBound + (targetFocusLowerBound - targetFocusOffScreenBound) * Mathf.Exp(-Mathf.Pow(-y + 1 + targetLowCurvePosition, targetFocusFalloffConstant));
+                    } else if (focus && y < .5f) {
+                        closeness *= targetFocusLowerBound + (1 - targetFocusLowerBound) * Mathf.Exp(-Mathf.Pow(-y + 1.5f - verticalImportanceFactor, targetFocusFalloffConstant));
+                    } else if (focus && y < 1 - targetLowTransition) {
+                        closeness *= targetFocusLowerBound + (1 - targetFocusLowerBound) * Mathf.Exp(-Mathf.Pow(-y - .5f + verticalImportanceFactor, targetFocusFalloffConstant));
+                    } else {
+                        closeness *= targetFocusOffScreenBound + (targetFocusLowerBound - targetFocusOffScreenBound) * Mathf.Exp(-Mathf.Pow(-y + targetLowCurvePosition, targetFocusFalloffConstant));
+                    }
+
+                    //if (yMag > .3f) {
+                    //    closeness *= targetFocusOffScreenBound + (targetFocusLowerBound - targetFocusOffScreenBound) * Mathf.Exp(-Mathf.Pow(yMag + targetFocusMinOffset, targetFocusFalloffConstant));
+                    //}
+                    //if (xMag > .3f) {
+                    //    closeness *= targetFocusOffScreenBound + (targetFocusLowerBound - targetFocusOffScreenBound) * Mathf.Exp(-Mathf.Pow(xMag + targetFocusMinOffset, targetFocusFalloffConstant));
+                    //} else if (false && focus) {
+                    //    closeness *= targetFocusLowerBound + (1 - targetFocusLowerBound) * Mathf.Exp(-Mathf.Pow(weightedDistanceFromCenter + 1 - targetFocusRadius, targetFocusFalloffConstant));
+                    //} else {
+                    //    closeness *= targetFocusLowerBound;
+                    //}
                 }
 
                 target.SetBlueLine(
@@ -385,7 +407,7 @@ public class PlayerPullPushController : MonoBehaviour {
                     new Color(0, closeness * lowLineColor, closeness * highLineColor, 1)
                     );
 
-                return weightedDistanceFromCenter;
+                return distance;
             }
 
         } else { // Magnetic is out of range
