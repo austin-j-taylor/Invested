@@ -11,37 +11,22 @@ public class Coin : Magnetic {
     private const float stuckThreshold = 100f; // Square magnitude of normal force necessary for friction
     private const float equalMagnitudeConstant = .01f;
 
-    private bool lastWasStuck = false;
-
     // Used for pseudo-parenting Coin when stuck to object it collides with
-    private Transform collidedCollider;
+    private FixedJoint collisionJoint;
+    private Transform collisionCollider;
     private Vector3 collisionNormal;
-    private Quaternion startParentRotation;
-    private Vector3 startChildPosition;
-    private Quaternion startChildRotation;
-    
+
     private bool isStuck;
 
-    private bool IsStuck {
-        get {
-            return isStuck;
-        }
-        set {
-            isStuck = value;
-            if (!value)
-                lastWasStuck = false;
-        }
-    }
     public override bool IsPerfectlyAnchored {
         get {
             return Mathf.Abs((LastPosition - transform.position).sqrMagnitude) < equalMagnitudeConstant;
         }
     }
+
     public new void Clear() {
         base.Clear();
-        collidedCollider = null;
-        IsStuck = false;
-        lastWasStuck = false;
+        UnStick();
     }
 
     private void OnCollisionEnter(Collision collision) {
@@ -51,51 +36,35 @@ public class Coin : Magnetic {
     /*
      * Simulates friction and makes the target stuck to the colliding surface
      * 
-     * If stuck, the coin is pseudo-parented to the object it collided with.
-     * collisionNormal needs to be constantly updated for each OnCollisionStay
+     * If stuck, the coin is jointed to the object it collided with.
+     * collisionNormal needs to be constantly updated for each OnCollisionStay.
      */
     private void OnCollisionStay(Collision collision) {
         if (!collision.collider.CompareTag("Player")) {
             // Could be colliding with multiple objects.
             // Only care about the oldest one, for now.
-            if(collidedCollider == collision.transform || collidedCollider == null) {
-                collidedCollider = collision.transform;
+            if (collisionCollider == collision.transform || collisionCollider == null) {
+                collisionCollider = collision.transform;
                 collisionNormal = collision.contacts[0].normal;
-
                 if (Allomancer && (Allomancer.SteelPushing || Allomancer.IronPulling)) {
-
-                    IsStuck = IsStuckByFriction(collision.impulse / Time.deltaTime);
-                    if (IsStuck) {
-                        if (!lastWasStuck) {
-                            // First frame of being stuck.
-                            startParentRotation = collidedCollider.rotation;
-                            startChildPosition = collision.contacts[0].point; // Coin embeds itself in the target collider. Intended behavior?
-                            startChildRotation = transform.rotation;
-
-                            // Keeps child position from being modified at the start by the parent's initial transform
-                            Vector3 num = Quaternion.Inverse(collidedCollider.rotation) * (startChildPosition - collidedCollider.position);
-                            Vector3 den = collidedCollider.lossyScale;
-                            startChildPosition = new Vector3(num.x / den.x, num.y / den.y, num.z / den.z);
+                    if (!isStuck) { // Only updates on first frame of being stuck
+                        isStuck = IsStuckByFriction(collision.impulse / Time.deltaTime);
+                        if(isStuck) {
+                            CreateJoint(collision.rigidbody);
                         }
-                        UpdatePositionToParent();
-                        Rb.velocity = Vector3.zero;
                     }
-
-                    lastWasStuck = IsStuck;
                 }
             } else {
-                // A new collision has occured
+                // A second, simultaneous collision has occured. Disregard.
             }
         }
     }
 
     private void OnCollisionExit(Collision collision) {
-        if (collidedCollider == collision.transform) {
-            collisionNormal = Vector3.zero;
-            collidedCollider = null;
-            IsStuck = false;
+        if (collisionCollider == collision.transform) {
+            UnStick();
         } else {
-            // A different collision has ended
+            // A different collision has ended. Disregard.
         }
     }
 
@@ -111,35 +80,52 @@ public class Coin : Magnetic {
         Vector3 newNetForce = Vector3.ClampMagnitude(
             -(Vector3.Project(Rb.velocity, netForce.normalized) + (netForce / NetMass * Time.fixedDeltaTime)) * drag, netForce.magnitude
         ) + netForce;
-
-        if (Allomancer && (Allomancer.SteelPushing || Allomancer.IronPulling)) {
-            IsStuck = Vector3.Dot(newNetForce, collisionNormal) < 0 && IsStuckByFriction(newNetForce);
+        
+        if(collisionCollider) { // If in a collision..
+            if(isStuck) { // and is stuck...
+                if (Vector3.Dot(newNetForce, collisionNormal) >= 0 || !IsStuckByFriction(newNetForce)) { // ... but friction is too weak to keep the coin stuck in the target.
+                    UnStick();
+                }
+            } else { // and is not yet stuck from the previous pushes...
+                isStuck = Vector3.Dot(newNetForce, collisionNormal) < 0 && IsStuckByFriction(newNetForce);
+                if (isStuck) { // but this push would stick the coin.
+                    CreateJoint(collisionCollider.GetComponent<Rigidbody>());
+                }
+            }
         }
+
         LastExpectedAcceleration = newNetForce / NetMass; // LastPosition, LastVelocity are updated
-        Rb.AddForce(newNetForce, ForceMode.Force);
+        Rb.AddForce(newNetForce);
     }
 
+    public override void StopBeingPullPushed() {
+        UnStick();
+    }
+
+    /*
+     * Creates a joint between the Coin and anchor.
+     */
+    private void CreateJoint(Rigidbody anchor) {
+        collisionJoint = gameObject.AddComponent<FixedJoint>();
+        collisionJoint.connectedBody = anchor;
+    }
+
+    /*
+     * Returns true if allomanticForce provides a strong enough friction against the collisionNormal
+     */
     private bool IsStuckByFriction(Vector3 allomanticForce) {
         return Vector3.Project(allomanticForce, collisionNormal).sqrMagnitude > stuckThreshold;
     }
 
-    /*
-     * Moves the Coin such that it appears parented to the object it has collided with
-     */
-    private void UpdatePositionToParent() {
-        transform.position = Matrix4x4.TRS(
-            collidedCollider.position, collidedCollider.rotation, collidedCollider.lossyScale
-        ).MultiplyPoint3x4(startChildPosition);
-
-        transform.rotation = (collidedCollider.rotation * Quaternion.Inverse(startParentRotation)) * startChildRotation;
+    private void UnStick() {
+        isStuck = false;
+        collisionCollider = null;
+        Destroy(collisionJoint);
+        collisionNormal = Vector3.zero;
     }
 
     private void BeCaughtByAllomancer(Player player) {
         player.CoinHand.CatchCoin(this);
         HUD.TargetOverlayController.HardRefresh();
-    }
-
-    public override void StopBeingPullPushed() {
-        IsStuck = false;
     }
 }
