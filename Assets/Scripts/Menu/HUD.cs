@@ -23,6 +23,9 @@ public class HUD : MonoBehaviour {
     public static BurnRateMeter BurnRateMeter {
         get; private set;
     }
+    public static MetalReserveMeters MetalReserveMeters {
+        get; private set;
+    }
     public static TargetOverlayController TargetOverlayController {
         get; private set;
     }
@@ -32,6 +35,7 @@ public class HUD : MonoBehaviour {
         coinCountText = GetComponentsInChildren<Text>()[0];
         BurnRateMeter = GetComponentInChildren<BurnRateMeter>();
         TargetOverlayController = GetComponentInChildren<TargetOverlayController>();
+        MetalReserveMeters = GetComponentInChildren<MetalReserveMeters>();
     }
 
 	void Update() {
@@ -73,13 +77,14 @@ public class HUD : MonoBehaviour {
         if (BurnRateMeter) {
             BurnRateMeter.Clear();
             TargetOverlayController.Clear();
+            MetalReserveMeters.Clear();
         }
     }
 
     // Returns a string reading a single Force in Newtons or G's
     public static string ForceString(float force, float mass) {
         if(SettingsMenu.settingsData.forceUnits == 1) {
-            return RoundIntToTwoSigFigs(force).ToString() + "N";
+            return RoundStringToSigFigs(force).ToString() + "N";
         } else {
             return System.Math.Round(force / mass / 9.81, 2).ToString() + "G's";
         }
@@ -97,21 +102,28 @@ public class HUD : MonoBehaviour {
         plusSign = DecideSignColor(allomanticForce, normalForce, invert);
 
         if (SettingsMenu.settingsData.forceUnits == 1) {
-            return RoundIntToTwoSigFigs(allomanticForce.magnitude).ToString() + " " + plusSign + " " + RoundIntToTwoSigFigs(normalForce.magnitude).ToString() + "N";
+            return RoundStringToSigFigs(allomanticForce.magnitude).ToString() + " " + plusSign + " " + RoundStringToSigFigs(normalForce.magnitude).ToString() + "N";
         } else {
             return System.Math.Round(allomanticForce.magnitude / mass / 9.81f, 2).ToString()
                 + " " + plusSign + " " +
                 System.Math.Round(normalForce.magnitude / mass / 9.81f, 2).ToString() + "G's";
         }
     }
-    // Rounds an integer above 100 to two sig figs
-    private static int RoundIntToTwoSigFigs(float num) {
-        int rounded = (int)num;
-        if (num < 100)
-            return rounded;
-        int newbase = (int)System.Math.Pow(10, ((int)Mathf.Log10(num) - 1));
 
-        return (rounded / newbase) * newbase;
+    // Rounds a float to the given sig figs, returning a string
+    public static string RoundStringToSigFigs(float num, int sigFigs = 2) {
+
+        if (Mathf.Abs(num) < Mathf.Pow(10, sigFigs - 1)) {
+            int logLevel = (int)(-Mathf.Log10(num) + sigFigs);
+            if (logLevel > 15 || logLevel < 0)
+                return "0";
+            return System.Math.Round(num, logLevel).ToString("." + new string('0', logLevel));
+        }
+        // divide it down to the right number of digits, round to int, multiply it back up
+        int tenPower = (int)Mathf.Pow(10, (int)Mathf.Log10(Mathf.Abs(num)) + 1 - sigFigs);
+        int low = (int)(num / tenPower);
+        //Debug.Log(low + " rounded to " + rounded);
+        return (low * tenPower * ((num < 0) ? -1 : 1)).ToString();
     }
 
     // Returns a blue plus sign if the vectors point in the same direction and a red minus sign if they point in opposite directions

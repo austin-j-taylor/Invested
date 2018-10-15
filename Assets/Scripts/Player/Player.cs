@@ -20,10 +20,9 @@ public class Player : MonoBehaviour {
     public Hand CoinHand { get; private set; }
 
     private float lastCoinThrowTime = 0;
-    
+
     void Awake() {
         movementController = GetComponent<PlayerMovementController>();
-
         //animator = GetComponent<Animator>();
         PlayerIronSteel = GetComponent<AllomanticIronSteel>();
         PushPullController = GetComponent<PlayerPullPushController>();
@@ -32,8 +31,8 @@ public class Player : MonoBehaviour {
         SceneManager.sceneLoaded += ClearPlayerAfterSceneChange;
         SceneManager.sceneUnloaded += ClearPlayerBeforeSceneChange;
     }
-	
-	void Update () {
+
+    void Update() {
         if (CanControlPlayer) {
             // Pausing
             if (Keybinds.EscapeDown() && !PauseMenu.IsPaused) {
@@ -47,7 +46,7 @@ public class Player : MonoBehaviour {
                 }
             }
         }
-	}
+    }
 
     // Reset certain values BEFORE the player enters a new scene
     public void ClearPlayerBeforeSceneChange(Scene scene) {
@@ -57,16 +56,19 @@ public class Player : MonoBehaviour {
 
     // Reset certain values AFTER the player enters a new scene
     private void ClearPlayerAfterSceneChange(Scene scene, LoadSceneMode mode) {
-        CoinHand.Clear();
-        GetComponentInChildren<MeshRenderer>().material = GameManager.Material_Gebaude;
-        CanControlPlayer = true;
+        if (mode == LoadSceneMode.Single) { // Not loading all of the scenes, as it does at startup
+            CoinHand.Clear();
+            PushPullController.Clear();
+            GetComponentInChildren<MeshRenderer>().material = GameManager.Material_Gebaude;
+            CanControlPlayer = true;
 
-        GameObject spawn = GameObject.FindGameObjectWithTag("PlayerSpawn");
-        if (spawn && CameraController.ActiveCamera) { // if CameraController.Awake has been called
-            transform.position = spawn.transform.position;
-            transform.rotation = spawn.transform.rotation;
-            CameraController.Clear();
+            GameObject spawn = GameObject.FindGameObjectWithTag("PlayerSpawn");
+            if (spawn && CameraController.ActiveCamera) { // if CameraController.Awake has been called
+                transform.position = spawn.transform.position;
+                transform.rotation = spawn.transform.rotation;
+                CameraController.Clear();
+            }
         }
     }
-    
+
 }

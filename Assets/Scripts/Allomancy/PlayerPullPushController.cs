@@ -14,7 +14,7 @@ public class PlayerPullPushController : MonoBehaviour {
     private const float verticalImportanceFactor = .35f;
     private const float importanceRatio = (horizontalImportanceFactor / verticalImportanceFactor) * (horizontalImportanceFactor / verticalImportanceFactor);
     private const float targetFocusFalloffConstant = 128;       // Determines how quickly blue lines blend from in-focus to out-of-focus
-    private const float targetFocusLowerBound = .2f;            // Determines the luminosity of blue lines that are out of foucus
+    private const float targetFocusLowerBound = .3f;            // Determines the luminosity of blue lines that are out of foucus
     private const float targetFocusOffScreenBound = .035f;      // Determines the luminosity of blue lines that are off-screen
     private const float targetLowTransition = .06f;
     private const float targetLowCurvePosition = .02f;
@@ -57,8 +57,8 @@ public class PlayerPullPushController : MonoBehaviour {
     }
 
     public void Clear() {
-        forceMagnitudeTarget = 600;
-        HighlightedTarget = null;
+        player.IronReserve.Mass = 150;
+        player.SteelReserve.Mass = 150;
     }
 
     private void Update() {
@@ -144,9 +144,8 @@ public class PlayerPullPushController : MonoBehaviour {
 
                 // Could have stopped burning above. Check if the Allomancer is still burning.
                 if (player.IsBurningIronSteel) {
-
-                    player.IronPulling = Keybinds.IronPulling();
-                    player.SteelPushing = Keybinds.SteelPushing();
+                    player.IronPulling = Keybinds.IronPulling() && player.IronReserve.Mass > 0;
+                    player.SteelPushing = Keybinds.SteelPushing() && player.SteelReserve.Mass > 0;
 
                     // If you are trying to push and pull and only have pullTargets, only push. And vice versa
                     if (!player.HasPushTarget && player.HasPullTarget) {

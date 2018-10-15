@@ -12,7 +12,10 @@ public class AllomanticIronSteel : MonoBehaviour {
     // Simple metal boolean constants for passing to methods
     private const bool steel = false;
     private const bool iron = true;
-    
+
+    public MetalReserve IronReserve { get; private set; }
+    public MetalReserve SteelReserve { get; private set; }
+
     // Pull and Push Target members
     public TargetArray PullTargets { get; private set; }
     public TargetArray PushTargets { get; private set; }
@@ -107,6 +110,8 @@ public class AllomanticIronSteel : MonoBehaviour {
         centerOfMass = transform.Find("Body/Center of Mass");
         centerOfMass.localPosition = Vector3.zero;
         Charge = Mathf.Pow(Mass, chargePower);
+        IronReserve = gameObject.AddComponent<MetalReserve>();
+        SteelReserve = gameObject.AddComponent<MetalReserve>();
         PullTargets = new TargetArray(maxNumberOfTargets);
         PushTargets = new TargetArray(maxNumberOfTargets);
     }
@@ -147,11 +152,13 @@ public class AllomanticIronSteel : MonoBehaviour {
                     for (int i = 0; i < PullTargets.Count; i++) {
                         CalculateForce(PullTargets[i], netPullTargetsCharge, sumPullTargetsCharge, iron);
                         AddForce(PullTargets[i]);
+                        BurnIron(PullTargets[i].LastAllomanticForce.magnitude);
                     }
                 } else if (PushingOnPullTargets) {
                     for (int i = 0; i < PullTargets.Count; i++) {
                         CalculateForce(PullTargets[i], netPullTargetsCharge, sumPullTargetsCharge, steel);
                         AddForce(PullTargets[i]);
+                        BurnSteel(PullTargets[i].LastAllomanticForce.magnitude);
                     }
                 } else if(HasPullTarget) {
                     for (int i = 0; i < PullTargets.Count; i++) {
@@ -163,11 +170,13 @@ public class AllomanticIronSteel : MonoBehaviour {
                     for (int i = 0; i < PushTargets.Count; i++) {
                         CalculateForce(PushTargets[i], netPushTargetsCharge, sumPushTargetsCharge, iron);
                         AddForce(PushTargets[i]);
+                        BurnIron(PushTargets[i].LastAllomanticForce.magnitude);
                     }
                 } else if (PushingOnPushTargets) {
                     for (int i = 0; i < PushTargets.Count; i++) {
                         CalculateForce(PushTargets[i], netPushTargetsCharge, sumPushTargetsCharge, steel);
                         AddForce(PushTargets[i]);
+                        BurnSteel(PushTargets[i].LastAllomanticForce.magnitude);
                     }
                 } else if (HasPushTarget) {
                     for (int i = 0; i < PushTargets.Count; i++) {
@@ -391,7 +400,7 @@ public class AllomanticIronSteel : MonoBehaviour {
 
         target.AddForce(target.LastNetAllomanticForceOnTarget);
         rb.AddForce(target.LastNetAllomanticForceOnAllomancer);
-
+        
         // Debug
         allomanticsForce = target.LastAllomanticForce.magnitude;
         allomanticsForces = target.LastAllomanticForce;
@@ -445,6 +454,24 @@ public class AllomanticIronSteel : MonoBehaviour {
         }
     }
 
+    // Consume iron for pull
+    private void BurnIron(float force) {
+        float burnedMass = .12f;
+
+        IronReserve.Mass -= burnedMass;
+        if (IronReserve.Mass < 0)
+            IronReserve.Mass = 0;
+    }
+
+    // Consume steel for push
+    private void BurnSteel(float force) {
+        float burnedMass = .12f;
+
+        SteelReserve.Mass -= burnedMass;
+        if (SteelReserve.Mass < 0)
+            SteelReserve.Mass = 0;
+    }
+    
     /*
      * Add a target
      * If it's a pushTarget, remove it from pushTargets and move it to pullTargets
