@@ -21,13 +21,13 @@ public class MetalReserveMeters : MonoBehaviour {
     }
 
     private void Update() {
-        iron.massText.text = HUD.RoundStringToSigFigs(iron.reserve.Mass, 3) + "g";
-        iron.rateText.text = HUD.RoundStringToSigFigs(iron.reserve.Rate * 1000, 3) + "mg";
-        iron.fill.fillAmount = iron.reserve.Mass / maxMass;
+        iron.massText.text = HUD.RoundStringToSigFigs((float)iron.reserve.Mass, 3) + "g";
+        iron.rateText.text = HUD.RoundStringToSigFigs((float)iron.reserve.Rate * 1000, 2) + "mg";
+        iron.fill.fillAmount = (float)iron.reserve.Mass / maxMass;
 
-        steel.massText.text = HUD.RoundStringToSigFigs(steel.reserve.Mass, 3) + "g";
-        steel.rateText.text = HUD.RoundStringToSigFigs(steel.reserve.Rate * 1000, 3) + "mg";
-        steel.fill.fillAmount = steel.reserve.Mass / maxMass;
+        steel.massText.text = HUD.RoundStringToSigFigs((float)steel.reserve.Mass, 3) + "g";
+        steel.rateText.text = HUD.RoundStringToSigFigs((float)steel.reserve.Rate * 1000, 2) + "mg";
+        steel.fill.fillAmount = (float)steel.reserve.Mass / maxMass;
 
     }
 
@@ -44,14 +44,15 @@ public class MetalReserveMeters : MonoBehaviour {
         public Text massText;
         public Text rateText;
 
-        private void Start() {
+        private void Awake() {
             fill = transform.GetChild(1).GetComponentInChildren<Image>();
             massText = transform.GetChild(2).GetComponent<Text>();
             rateText = transform.GetChild(3).GetComponent<Text>();
         }
 
         public void Clear() {
-
+            massText.text = "";
+            rateText.text = "";
         }
     }
 }

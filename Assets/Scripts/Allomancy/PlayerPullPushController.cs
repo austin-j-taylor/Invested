@@ -31,10 +31,6 @@ public class PlayerPullPushController : MonoBehaviour {
     private float timeToStopBurning = 0f;
     private float timeToSwapBurning = 0f;
 
-    // Determines if the player just toggled between pushing/pulling and not pushing/pulling
-    private bool lastWasPulling = false;
-    private bool lastWasPushing = false;
-
     // Lerp goals for burn rate targets
     // These are displayed in the Burn Rate Meter
     private float ironBurnRateLerp = 0;
@@ -57,21 +53,22 @@ public class PlayerPullPushController : MonoBehaviour {
     }
 
     public void Clear() {
-        player.IronReserve.Mass = 150;
-        player.SteelReserve.Mass = 150;
+        player.IronReserve.SetMass(150);
+        player.SteelReserve.SetMass(150);
     }
 
     private void Update() {
         if (!PauseMenu.IsPaused) {
             if (Player.CanControlPlayer) {
                 // Start burning
-                if ((Keybinds.SelectDown() || Keybinds.SelectAlternateDown()) && !Keybinds.Negate()) {
-                    player.StartBurning();
+                if (!Keybinds.Negate()) {
+                    if(Keybinds.SelectDown() && player.IronReserve.Mass > 0)
+                        player.StartBurning(true);
+                    else if(Keybinds.SelectAlternateDown() && player.SteelReserve.Mass > 0)
+                        player.StartBurning(false);
                 }
 
                 if (player.IsBurningIronSteel) {
-
-
                     // Swap pull- and push- targets
                     if (Keybinds.NegateDown() && timeToSwapBurning > Time.time) {
                         // Double-tapped, Swap targets
@@ -156,42 +153,7 @@ public class PlayerPullPushController : MonoBehaviour {
                         if (player.SteelPushing)
                             player.IronPulling = false;
                     }
-
-                    // Change colors of target labels when toggling pushing/pulling
-                    if (player.IronPulling) {
-                        if (!lastWasPulling) { // first frame of pulling
-                            RefreshHUDColorsOnly();
-                            lastWasPulling = true;
-                            //StartPushPullingOnTargets(iron);
-                        }
-                    } else {
-                        if (lastWasPulling) { // first frame of NOT pulling
-                            RefreshHUDColorsOnly();
-                            lastWasPulling = false;
-                            if (player.HasPullTarget) {
-                                player.StopOnPullTargets();
-                            } else {
-                                player.StopOnPushTargets();
-                            }
-                        }
-                    }
-                    if (player.SteelPushing) {
-                        if (!lastWasPushing) { // first frame of pushing
-                            RefreshHUDColorsOnly();
-                            lastWasPushing = true;
-                            //StartPushPullingOnTargets(steel);
-                        }
-                    } else {
-                        if (lastWasPushing) { // first frame of NOT pushing
-                            RefreshHUDColorsOnly();
-                            lastWasPushing = false;
-                            if (player.HasPushTarget) {
-                                player.StopOnPushTargets();
-                            } else {
-                                player.StopOnPullTargets();
-                            }
-                        }
-                    }
+                    
 
                     // Check input for target selection
                     bool selecting = (Keybinds.Select() || Keybinds.SelectAlternate()) && !Keybinds.Negate();

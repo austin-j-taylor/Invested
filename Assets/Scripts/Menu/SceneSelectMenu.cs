@@ -66,21 +66,22 @@ public class SceneSelectMenu : MonoBehaviour {
     }
 
     private void ClearAfterSceneChange(Scene scene, LoadSceneMode mode) {
-        PauseMenu.UnPause();
+        if (mode == LoadSceneMode.Single) {
+            PauseMenu.UnPause();
 
-        if (scene.buildIndex != sceneTitleScreen) {
-            titleScreenBG.gameObject.SetActive(false);
-            CloseSceneSelect();
+            if (scene.buildIndex != sceneTitleScreen) {
+                titleScreenBG.gameObject.SetActive(false);
+                CloseSceneSelect();
 
-            Player.PlayerInstance.gameObject.SetActive(true);
-            CameraController.LockCamera();
+                Player.PlayerInstance.gameObject.SetActive(true);
+                CameraController.LockCamera();
+                HUD.ResetHUD();
 
-        } else {
-            Player.PlayerInstance.gameObject.SetActive(false);
-            CameraController.UnlockCamera();
+            } else {
+                Player.PlayerInstance.gameObject.SetActive(false);
+                CameraController.UnlockCamera();
+            }
         }
-
-        HUD.ResetHUD();
     }
 
     private void OnClickedTutorial() {

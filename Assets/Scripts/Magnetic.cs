@@ -68,13 +68,13 @@ public class Magnetic : MonoBehaviour {
         }
     }
 
-    public Vector3 LastNetAllomanticForceOnAllomancer {
+    public Vector3 LastNetForceOnAllomancer {
         get {
             return LastAllomanticForce + LastAnchoredPushBoostFromTarget;
         }
     }
 
-    public Vector3 LastNetAllomanticForceOnTarget {
+    public Vector3 LastNetForceOnTarget {
         get {
             return -LastAllomanticForce + LastAnchoredPushBoostFromAllomancer;
         }

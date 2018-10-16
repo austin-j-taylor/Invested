@@ -112,18 +112,18 @@ public class HUD : MonoBehaviour {
 
     // Rounds a float to the given sig figs, returning a string
     public static string RoundStringToSigFigs(float num, int sigFigs = 2) {
+        float mag = num < 0 ? -num : num;
 
-        if (Mathf.Abs(num) < Mathf.Pow(10, sigFigs - 1)) {
-            int logLevel = (int)(-Mathf.Log10(num) + sigFigs);
+        if (mag < Mathf.Pow(10, sigFigs - 1)) {
+            int logLevel = (int)(-Mathf.Log10(mag) + sigFigs);
             if (logLevel > 15 || logLevel < 0)
                 return "0";
             return System.Math.Round(num, logLevel).ToString("." + new string('0', logLevel));
         }
         // divide it down to the right number of digits, round to int, multiply it back up
-        int tenPower = (int)Mathf.Pow(10, (int)Mathf.Log10(Mathf.Abs(num)) + 1 - sigFigs);
+        int tenPower = (int)Mathf.Pow(10, (int)Mathf.Log10(mag) + 1 - sigFigs);
         int low = (int)(num / tenPower);
-        //Debug.Log(low + " rounded to " + rounded);
-        return (low * tenPower * ((num < 0) ? -1 : 1)).ToString();
+        return (low * tenPower).ToString();
     }
 
     // Returns a blue plus sign if the vectors point in the same direction and a red minus sign if they point in opposite directions

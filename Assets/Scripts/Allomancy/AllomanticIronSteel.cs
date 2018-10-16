@@ -7,8 +7,11 @@ public class AllomanticIronSteel : MonoBehaviour {
 
     public const float chargePower = 1f / 8f;
     public const int maxNumberOfTargets = 10;
+    // Actual "Burn Rates" of iron and steel
+    private const double gramsIronPerSecondPerNewton = .001f;
+    private const double gramsSteelPerSecondPerNewton = gramsIronPerSecondPerNewton;
+    private const double gramsPerSecondPassiveBurn = .005f; // 5 mg/s for passively burning iron or steel to see metal lines
 
-    private const float slowBurn = .1f;
     // Simple metal boolean constants for passing to methods
     private const bool steel = false;
     private const bool iron = true;
@@ -65,7 +68,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     // Maximum possible Net Force on allomancer, regardless of burn rate
     public Vector3 LastMaximumNetForce { get; private set; } = Vector3.zero;
     private Vector3 thisFrameMaximumNetForce = Vector3.zero;
-    
+
     // Debug variables for viewing values in the Unity editor
     public float allomanticsForce;
     public float netAllomancersForce;
@@ -75,11 +78,12 @@ public class AllomanticIronSteel : MonoBehaviour {
     public Vector3 resititutionFromPlayersForce;
     public float percentOfTargetForceReturned;
     public float percentOfAllomancerForceReturned;
-    
+
     // Metal burn rates
     // Used when burning metals, but not necessarily immediately Pushing or Pulling. Hence, they are "targets" and not the actual burn rate of the Allomancer.
     public float IronBurnRateTarget { get; set; }
     public float SteelBurnRateTarget { get; set; }
+
 
     public float GreaterBurnRate {
         get {
@@ -89,8 +93,31 @@ public class AllomanticIronSteel : MonoBehaviour {
 
     private Transform centerOfMass;
     private Rigidbody rb;
-    public bool IronPulling { get; set; } = false;
-    public bool SteelPushing { get; set; } = false;
+    private bool lastWasPulling = false;
+    private bool ironPulling = false;
+    private bool steelPushing = false;
+    public bool IronPulling {
+        get {
+            return ironPulling;
+        }
+        set {
+            ironPulling = value;
+            if (value) {
+                lastWasPulling = true;
+            }
+        }
+    }
+    public bool SteelPushing {
+        get {
+            return steelPushing;
+        }
+        set {
+            steelPushing = value;
+            if (value) {
+                lastWasPulling = false;
+            }
+        }
+    }
     public bool IsBurningIronSteel { get; set; } = false;
     // Allomantic Charge
     public float Charge { get; private set; }
@@ -138,13 +165,13 @@ public class AllomanticIronSteel : MonoBehaviour {
                 // For Mouse/Keyboard, Iron and Steel burn rates are equal, so it's somewhat redundant to specify
                 PullTargets.RemoveAllOutOfRange(IronBurnRateTarget);
                 PushTargets.RemoveAllOutOfRange(SteelBurnRateTarget);
-                
+
                 // Calculate net charges to know how pushes will be distributed amongst targets
                 float netPullTargetsCharge = PullTargets.NetCharge();
                 float netPushTargetsCharge = PushTargets.NetCharge();
                 float sumPullTargetsCharge = PullTargets.SumOfCharges();
                 float sumPushTargetsCharge = PushTargets.SumOfCharges();
-                
+
 
                 // Calculate Allomantic Forces and APBs
                 // Execute AFs and APBs on target and Allomancer
@@ -152,15 +179,15 @@ public class AllomanticIronSteel : MonoBehaviour {
                     for (int i = 0; i < PullTargets.Count; i++) {
                         CalculateForce(PullTargets[i], netPullTargetsCharge, sumPullTargetsCharge, iron);
                         AddForce(PullTargets[i]);
-                        BurnIron(PullTargets[i].LastAllomanticForce.magnitude);
+                        BurnIron(PullTargets[i].LastNetForceOnAllomancer.magnitude);
                     }
                 } else if (PushingOnPullTargets) {
                     for (int i = 0; i < PullTargets.Count; i++) {
                         CalculateForce(PullTargets[i], netPullTargetsCharge, sumPullTargetsCharge, steel);
                         AddForce(PullTargets[i]);
-                        BurnSteel(PullTargets[i].LastAllomanticForce.magnitude);
+                        BurnSteel(PullTargets[i].LastNetForceOnAllomancer.magnitude);
                     }
-                } else if(HasPullTarget) {
+                } else if (HasPullTarget) {
                     for (int i = 0; i < PullTargets.Count; i++) {
                         CalculateForce(PullTargets[i], netPullTargetsCharge, sumPullTargetsCharge, iron);
                     }
@@ -170,19 +197,36 @@ public class AllomanticIronSteel : MonoBehaviour {
                     for (int i = 0; i < PushTargets.Count; i++) {
                         CalculateForce(PushTargets[i], netPushTargetsCharge, sumPushTargetsCharge, iron);
                         AddForce(PushTargets[i]);
-                        BurnIron(PushTargets[i].LastAllomanticForce.magnitude);
+                        BurnIron(PushTargets[i].LastNetForceOnAllomancer.magnitude);
                     }
                 } else if (PushingOnPushTargets) {
                     for (int i = 0; i < PushTargets.Count; i++) {
                         CalculateForce(PushTargets[i], netPushTargetsCharge, sumPushTargetsCharge, steel);
                         AddForce(PushTargets[i]);
-                        BurnSteel(PushTargets[i].LastAllomanticForce.magnitude);
+                        BurnSteel(PushTargets[i].LastNetForceOnAllomancer.magnitude);
                     }
                 } else if (HasPushTarget) {
                     for (int i = 0; i < PushTargets.Count; i++) {
                         CalculateForce(PushTargets[i], netPushTargetsCharge, sumPushTargetsCharge, steel);
                     }
                 }
+
+                // Consume iron or steel for passively burning, depending on which metal was last used to push/pull
+                if ((IronPulling && !SteelPushing || lastWasPulling || SteelReserve.Mass == 0) && IronReserve.Mass > 0) {
+                    IronReserve.Mass -= IronBurnRateTarget * gramsPerSecondPassiveBurn * Time.fixedDeltaTime;
+                } else {
+                    if ((SteelPushing && !IronPulling || !lastWasPulling || IronReserve.Mass == 0) && SteelReserve.Mass > 0) {
+                        SteelReserve.Mass -= SteelBurnRateTarget * gramsPerSecondPassiveBurn * Time.fixedDeltaTime;
+                    } else {
+                        IronReserve.Mass -= IronBurnRateTarget * gramsPerSecondPassiveBurn * Time.fixedDeltaTime / 2;
+                        SteelReserve.Mass -= SteelBurnRateTarget * gramsPerSecondPassiveBurn * Time.fixedDeltaTime / 2;
+                    }
+                }
+
+                // If out of metals, stop burning.
+                if (IronReserve.Mass == 0 && SteelReserve.Mass == 0)
+                    StopBurning();
+
 
                 // Update variables for calculating APBs and the like for next frame
                 lastAllomancerVelocity = rb.velocity;
@@ -375,13 +419,13 @@ public class AllomanticIronSteel : MonoBehaviour {
         thisFrameAllomanticForce += allomanticForce;
         thisFrameAnchoredPushBoost += restitutionForceFromTarget;
         if (target.LastWasPulled) {
-            if(IronBurnRateTarget == 0) {
+            if (IronBurnRateTarget == 0) {
                 thisFrameMaximumNetForce += restitutionForceFromTarget;
             } else {
                 thisFrameMaximumNetForce += restitutionForceFromTarget / IronBurnRateTarget;
             }
         } else {
-            if(SteelBurnRateTarget == 0) {
+            if (SteelBurnRateTarget == 0) {
                 thisFrameMaximumNetForce += restitutionForceFromTarget;
             } else {
                 thisFrameMaximumNetForce += restitutionForceFromTarget / SteelBurnRateTarget;
@@ -398,27 +442,27 @@ public class AllomanticIronSteel : MonoBehaviour {
      */
     private void AddForce(Magnetic target) {
 
-        target.AddForce(target.LastNetAllomanticForceOnTarget);
-        rb.AddForce(target.LastNetAllomanticForceOnAllomancer);
-        
+        target.AddForce(target.LastNetForceOnTarget);
+        rb.AddForce(target.LastNetForceOnAllomancer);
+
         // Debug
         allomanticsForce = target.LastAllomanticForce.magnitude;
         allomanticsForces = target.LastAllomanticForce;
-        netAllomancersForce = target.LastNetAllomanticForceOnAllomancer.magnitude;
+        netAllomancersForce = target.LastNetForceOnAllomancer.magnitude;
         resititutionFromTargetsForce = target.LastAnchoredPushBoostFromTarget;
         resititutionFromPlayersForce = target.LastAnchoredPushBoostFromAllomancer;
         percentOfTargetForceReturned = resititutionFromTargetsForce.magnitude / allomanticsForce;
         percentOfAllomancerForceReturned = resititutionFromPlayersForce.magnitude / allomanticsForce;
-        netTargetsForce = target.LastNetAllomanticForceOnTarget.magnitude;
+        netTargetsForce = target.LastNetForceOnTarget.magnitude;
     }
 
-    public void StartBurning() {
+    public void StartBurning(bool startIron) {
         if (!IsBurningIronSteel) {
             IsBurningIronSteel = true;
             // Set burn rates to slow burn, to start
-            IronBurnRateTarget = slowBurn;
-            SteelBurnRateTarget = slowBurn;
-
+            IronBurnRateTarget = .1f;
+            SteelBurnRateTarget = .1f;
+            lastWasPulling = startIron;
             // If this component belongs to the player
             if (tag == "Player")
                 GetComponent<PlayerPullPushController>().StartBurningIronSteel();
@@ -456,29 +500,23 @@ public class AllomanticIronSteel : MonoBehaviour {
 
     // Consume iron for pull
     private void BurnIron(float force) {
-        float burnedMass = .12f;
-
+        double burnedMass = gramsIronPerSecondPerNewton * force * Time.fixedDeltaTime;
         IronReserve.Mass -= burnedMass;
-        if (IronReserve.Mass < 0)
-            IronReserve.Mass = 0;
     }
 
     // Consume steel for push
     private void BurnSteel(float force) {
-        float burnedMass = .12f;
-
+        double burnedMass = gramsSteelPerSecondPerNewton * force * Time.fixedDeltaTime;
         SteelReserve.Mass -= burnedMass;
-        if (SteelReserve.Mass < 0)
-            SteelReserve.Mass = 0;
     }
-    
+
     /*
      * Add a target
      * If it's a pushTarget, remove it from pushTargets and move it to pullTargets
      */
     public void AddPullTarget(Magnetic target) {
         if (!IsBurningIronSteel)
-            StartBurning();
+            StartBurning(true);
         if (PushTargets.IsTarget(target)) {
             PushTargets.RemoveTarget(target, false);
         }
@@ -491,7 +529,7 @@ public class AllomanticIronSteel : MonoBehaviour {
      */
     public void AddPushTarget(Magnetic target) {
         if (!IsBurningIronSteel)
-            StartBurning();
+            StartBurning(false);
         if (PullTargets.IsTarget(target)) {
             PullTargets.RemoveTarget(target, false);
         }
