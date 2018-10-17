@@ -80,8 +80,7 @@ public class Coin : Magnetic {
         Vector3 newNetForce = Vector3.ClampMagnitude(
             -(Vector3.Project(Rb.velocity, netForce.normalized) + (netForce / NetMass * Time.fixedDeltaTime)) * drag, netForce.magnitude
         ) + netForce;
-        
-        if(collisionCollider) { // If in a collision..
+        if (collisionCollider) { // If in a collision..
             if(isStuck) { // and is stuck...
                 if (Vector3.Dot(newNetForce, collisionNormal) >= 0 || !IsStuckByFriction(newNetForce)) { // ... but friction is too weak to keep the coin stuck in the target.
                     UnStick();
@@ -97,17 +96,20 @@ public class Coin : Magnetic {
         LastExpectedAcceleration = newNetForce / NetMass; // LastPosition, LastVelocity are updated
         Rb.AddForce(newNetForce);
     }
-
     public override void StopBeingPullPushed() {
         UnStick();
     }
-
     /*
      * Creates a joint between the Coin and anchor.
      */
     private void CreateJoint(Rigidbody anchor) {
-        collisionJoint = gameObject.AddComponent<FixedJoint>();
-        collisionJoint.connectedBody = anchor;
+        if (anchor) { // collided-with object has a rigidbody
+            collisionJoint = gameObject.AddComponent<FixedJoint>();
+            collisionJoint.connectedBody = anchor;
+        } else { // collided-with object does not have a rigidbody, like a wall or ceiling
+                 // simply freeze the coin where it is
+            Rb.constraints = RigidbodyConstraints.FreezeAll;
+        }
     }
 
     /*
@@ -122,6 +124,7 @@ public class Coin : Magnetic {
         collisionCollider = null;
         Destroy(collisionJoint);
         collisionNormal = Vector3.zero;
+        Rb.constraints = RigidbodyConstraints.None;
     }
 
     private void BeCaughtByAllomancer(Player player) {

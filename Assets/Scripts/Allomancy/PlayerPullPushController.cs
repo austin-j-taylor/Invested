@@ -14,8 +14,8 @@ public class PlayerPullPushController : MonoBehaviour {
     private const float verticalImportanceFactor = .35f;
     private const float importanceRatio = (horizontalImportanceFactor / verticalImportanceFactor) * (horizontalImportanceFactor / verticalImportanceFactor);
     private const float targetFocusFalloffConstant = 128;       // Determines how quickly blue lines blend from in-focus to out-of-focus
-    private const float targetFocusLowerBound = .3f;            // Determines the luminosity of blue lines that are out of foucus
-    private const float targetFocusOffScreenBound = .035f;      // Determines the luminosity of blue lines that are off-screen
+    private const float targetFocusLowerBound = .2f;            // Determines the luminosity of blue lines that are out of foucus
+    private const float targetFocusOffScreenBound = .15f;      // Determines the luminosity of blue lines that are off-screen
     private const float targetLowTransition = .06f;
     private const float targetLowCurvePosition = .02f;
     private const float lowLineColor = .1f;
@@ -326,39 +326,19 @@ public class PlayerPullPushController : MonoBehaviour {
                 // Make lines in-focus if near the center of the screen
                 // If nearly off-screen, instead make lines dimmer
                 if (screenPosition.z < 0) { // behind player
-                    closeness *= targetFocusOffScreenBound;
+                    closeness *= targetFocusOffScreenBound * targetFocusOffScreenBound;
                 } else {
-                    float x = screenPosition.x;
-                    float y = screenPosition.y;
-                    if (x < targetLowTransition) {
-                        closeness *= targetFocusOffScreenBound + (targetFocusLowerBound - targetFocusOffScreenBound) * Mathf.Exp(-Mathf.Pow(-x + 1 + targetLowCurvePosition, targetFocusFalloffConstant));
-                    } else if(focus && x < .5f) {
-                        closeness *= targetFocusLowerBound + (1 - targetFocusLowerBound) * Mathf.Exp(-Mathf.Pow(-x + 1.5f - horizontalImportanceFactor, targetFocusFalloffConstant));
-                    } else if(focus && x < 1 - targetLowTransition) {
-                        closeness *= targetFocusLowerBound + (1 - targetFocusLowerBound) * Mathf.Exp(-Mathf.Pow(-x - .5f + horizontalImportanceFactor, targetFocusFalloffConstant));
+                    if(centerX < .44f) {
+                        closeness *= targetFocusLowerBound + (1 - targetFocusLowerBound) * Mathf.Exp(-Mathf.Pow(centerX + 1 - horizontalImportanceFactor, targetFocusFalloffConstant));
                     } else {
-                        closeness *= targetFocusOffScreenBound + (targetFocusLowerBound - targetFocusOffScreenBound) * Mathf.Exp(-Mathf.Pow(-x + targetLowCurvePosition, targetFocusFalloffConstant));
-                    }
-                    if (y < targetLowTransition) {
-                        closeness *= targetFocusOffScreenBound + (targetFocusLowerBound - targetFocusOffScreenBound) * Mathf.Exp(-Mathf.Pow(-y + 1 + targetLowCurvePosition, targetFocusFalloffConstant));
-                    } else if (focus && y < .5f) {
-                        closeness *= targetFocusLowerBound + (1 - targetFocusLowerBound) * Mathf.Exp(-Mathf.Pow(-y + 1.5f - verticalImportanceFactor, targetFocusFalloffConstant));
-                    } else if (focus && y < 1 - targetLowTransition) {
-                        closeness *= targetFocusLowerBound + (1 - targetFocusLowerBound) * Mathf.Exp(-Mathf.Pow(-y - .5f + verticalImportanceFactor, targetFocusFalloffConstant));
-                    } else {
-                        closeness *= targetFocusOffScreenBound + (targetFocusLowerBound - targetFocusOffScreenBound) * Mathf.Exp(-Mathf.Pow(-y + targetLowCurvePosition, targetFocusFalloffConstant));
+                        closeness *= targetFocusOffScreenBound + (targetFocusLowerBound - targetFocusOffScreenBound) * Mathf.Exp(-Mathf.Pow(-centerX - .5f - targetLowCurvePosition, targetFocusFalloffConstant));
                     }
 
-                    //if (yMag > .3f) {
-                    //    closeness *= targetFocusOffScreenBound + (targetFocusLowerBound - targetFocusOffScreenBound) * Mathf.Exp(-Mathf.Pow(yMag + targetFocusMinOffset, targetFocusFalloffConstant));
-                    //}
-                    //if (xMag > .3f) {
-                    //    closeness *= targetFocusOffScreenBound + (targetFocusLowerBound - targetFocusOffScreenBound) * Mathf.Exp(-Mathf.Pow(xMag + targetFocusMinOffset, targetFocusFalloffConstant));
-                    //} else if (false && focus) {
-                    //    closeness *= targetFocusLowerBound + (1 - targetFocusLowerBound) * Mathf.Exp(-Mathf.Pow(weightedDistanceFromCenter + 1 - targetFocusRadius, targetFocusFalloffConstant));
-                    //} else {
-                    //    closeness *= targetFocusLowerBound;
-                    //}
+                    if (centerY < .44f) {
+                        closeness *= targetFocusLowerBound + (1 - targetFocusLowerBound) * Mathf.Exp(-Mathf.Pow(centerY + 1 - verticalImportanceFactor, targetFocusFalloffConstant));
+                    } else {
+                        closeness *= targetFocusOffScreenBound + (targetFocusLowerBound - targetFocusOffScreenBound) * Mathf.Exp(-Mathf.Pow(-centerY - .5f - targetLowCurvePosition, targetFocusFalloffConstant));
+                    }
                 }
 
                 target.SetBlueLine(

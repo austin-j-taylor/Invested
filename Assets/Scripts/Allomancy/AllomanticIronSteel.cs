@@ -101,10 +101,18 @@ public class AllomanticIronSteel : MonoBehaviour {
             return ironPulling;
         }
         set {
-            ironPulling = value;
             if (value) {
                 lastWasPulling = true;
+            } else {
+                if (ironPulling) {
+                    if (HasPullTarget)
+                        StopOnPullTargets();
+                    else
+                        StopOnPushTargets();
+                }
+                
             }
+            ironPulling = value;
         }
     }
     public bool SteelPushing {
@@ -112,10 +120,18 @@ public class AllomanticIronSteel : MonoBehaviour {
             return steelPushing;
         }
         set {
-            steelPushing = value;
             if (value) {
-                lastWasPulling = false;
+                lastWasPulling = true;
+            } else {
+                if (steelPushing) {
+                    if (HasPushTarget)
+                        StopOnPushTargets();
+                    else
+                        StopOnPullTargets();
+                }
+
             }
+            steelPushing = value;
         }
     }
     public bool IsBurningIronSteel { get; set; } = false;
@@ -145,8 +161,14 @@ public class AllomanticIronSteel : MonoBehaviour {
 
     public void Clear(bool clearTargets = true) {
         IsBurningIronSteel = false;
-        IronPulling = false;
-        SteelPushing = false;
+
+        if(clearTargets) {
+            IronPulling = false;
+            SteelPushing = false;
+        } else { // prevents calling of StopOn____Targets
+            ironPulling = false;
+            steelPushing = false;
+        }
         IronBurnRateTarget = 0;
         SteelBurnRateTarget = 0;
         PullTargets.Clear(true, clearTargets);
