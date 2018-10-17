@@ -55,6 +55,17 @@ public class AllomanticIronSteel : MonoBehaviour {
         }
     }
 
+    public bool HasIron {
+        get {
+            return IronReserve.Mass > 0;
+        }
+    }
+    public bool HasSteel {
+        get {
+            return SteelReserve.Mass > 0;
+        }
+    }
+
     // Used for calculating the acceleration over the last frame for pushing/pulling
     private Vector3 lastAllomancerVelocity = Vector3.zero;
     private Vector3 lastExpectedAllomancerAcceleration = Vector3.zero;
@@ -94,6 +105,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     private Transform centerOfMass;
     private Rigidbody rb;
     private bool lastWasPulling = false;
+    private bool lastWasPushing = false;
     private bool ironPulling = false;
     private bool steelPushing = false;
     public bool IronPulling {
@@ -102,15 +114,16 @@ public class AllomanticIronSteel : MonoBehaviour {
         }
         set {
             if (value) {
-                lastWasPulling = true;
+                //lastWasPulling = true;
             } else {
                 if (ironPulling) {
+                    //lastWasPulling = true;
+                    //lastWasPushing = false;
                     if (HasPullTarget)
                         StopOnPullTargets();
                     else
                         StopOnPushTargets();
                 }
-                
             }
             ironPulling = value;
         }
@@ -121,15 +134,16 @@ public class AllomanticIronSteel : MonoBehaviour {
         }
         set {
             if (value) {
-                lastWasPulling = true;
+                //lastWasPushing = true;
             } else {
                 if (steelPushing) {
+                    //lastWasPushing = true;
+                    //lastWasPulling = false;
                     if (HasPushTarget)
                         StopOnPushTargets();
                     else
                         StopOnPullTargets();
                 }
-
             }
             steelPushing = value;
         }
@@ -234,21 +248,41 @@ public class AllomanticIronSteel : MonoBehaviour {
                 }
 
                 // Consume iron or steel for passively burning, depending on which metal was last used to push/pull
-                if ((IronPulling && !SteelPushing || lastWasPulling || SteelReserve.Mass == 0) && IronReserve.Mass > 0) {
+                
+                if(lastWasPulling || !HasSteel) {
                     IronReserve.Mass -= IronBurnRateTarget * gramsPerSecondPassiveBurn * Time.fixedDeltaTime;
+                } else if(lastWasPushing || !HasIron) {
+                    SteelReserve.Mass -= SteelBurnRateTarget * gramsPerSecondPassiveBurn * Time.fixedDeltaTime;
                 } else {
-                    if ((SteelPushing && !IronPulling || !lastWasPulling || IronReserve.Mass == 0) && SteelReserve.Mass > 0) {
-                        SteelReserve.Mass -= SteelBurnRateTarget * gramsPerSecondPassiveBurn * Time.fixedDeltaTime;
-                    } else {
-                        IronReserve.Mass -= IronBurnRateTarget * gramsPerSecondPassiveBurn * Time.fixedDeltaTime / 2;
-                        SteelReserve.Mass -= SteelBurnRateTarget * gramsPerSecondPassiveBurn * Time.fixedDeltaTime / 2;
-                    }
+                    IronReserve.Mass -= IronBurnRateTarget * gramsPerSecondPassiveBurn * Time.fixedDeltaTime / 2;
+                    SteelReserve.Mass -= SteelBurnRateTarget * gramsPerSecondPassiveBurn * Time.fixedDeltaTime / 2;
                 }
 
-                // If out of metals, stop burning.
-                if (IronReserve.Mass == 0 && SteelReserve.Mass == 0)
-                    StopBurning();
+                //if (HasIron && (IronPulling && !SteelPushing || lastWasPulling || !HasSteel)) {
+                //    IronReserve.Mass -= IronBurnRateTarget * gramsPerSecondPassiveBurn * Time.fixedDeltaTime;
+                //} else {
+                //    if (HasSteel && (SteelPushing && !IronPulling || !lastWasPulling || !HasIron)) {
+                //        SteelReserve.Mass -= SteelBurnRateTarget * gramsPerSecondPassiveBurn * Time.fixedDeltaTime;
+                //    } else {
+                //        IronReserve.Mass -= IronBurnRateTarget * gramsPerSecondPassiveBurn * Time.fixedDeltaTime / 2;
+                //        SteelReserve.Mass -= SteelBurnRateTarget * gramsPerSecondPassiveBurn * Time.fixedDeltaTime / 2;
+                //    }
+                //}
 
+                // If out of metals, stop burning.
+                if(!HasIron) {
+                    if (HasPullTarget)
+                        PullTargets.Clear();
+                    if (!HasSteel)
+                        StopBurning();
+                }
+                if (!HasSteel)
+                    if (HasPushTarget)
+                        PushTargets.Clear();
+
+
+                lastWasPulling = (lastWasPulling || IronPulling) && !SteelPushing;
+                lastWasPushing = (lastWasPushing || SteelPushing) && !IronPulling;
 
                 // Update variables for calculating APBs and the like for next frame
                 lastAllomancerVelocity = rb.velocity;
@@ -479,7 +513,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     }
 
     public void StartBurning(bool startIron) {
-        if (!IsBurningIronSteel) {
+        if (!IsBurningIronSteel && (HasIron || HasSteel)) {
             IsBurningIronSteel = true;
             // Set burn rates to slow burn, to start
             IronBurnRateTarget = .1f;
@@ -488,6 +522,7 @@ public class AllomanticIronSteel : MonoBehaviour {
             // If this component belongs to the player
             if (tag == "Player")
                 GetComponent<PlayerPullPushController>().StartBurningIronSteel();
+            
         }
 
     }
@@ -539,10 +574,12 @@ public class AllomanticIronSteel : MonoBehaviour {
     public void AddPullTarget(Magnetic target) {
         if (!IsBurningIronSteel)
             StartBurning(true);
-        if (PushTargets.IsTarget(target)) {
-            PushTargets.RemoveTarget(target, false);
+        if (HasIron) {
+            if (PushTargets.IsTarget(target)) {
+                PushTargets.RemoveTarget(target, false);
+            }
+            PullTargets.AddTarget(target, this);
         }
-        PullTargets.AddTarget(target, this);
     }
 
     /*
@@ -552,10 +589,12 @@ public class AllomanticIronSteel : MonoBehaviour {
     public void AddPushTarget(Magnetic target) {
         if (!IsBurningIronSteel)
             StartBurning(false);
-        if (PullTargets.IsTarget(target)) {
-            PullTargets.RemoveTarget(target, false);
+        if (HasSteel) {
+            if (PullTargets.IsTarget(target)) {
+                PullTargets.RemoveTarget(target, false);
+            }
+            PushTargets.AddTarget(target, this);
         }
-        PushTargets.AddTarget(target, this);
     }
 
     /*

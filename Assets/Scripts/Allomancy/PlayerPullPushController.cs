@@ -62,9 +62,9 @@ public class PlayerPullPushController : MonoBehaviour {
             if (Player.CanControlPlayer) {
                 // Start burning
                 if (!Keybinds.Negate()) {
-                    if(Keybinds.SelectDown() && player.IronReserve.Mass > 0)
+                    if(Keybinds.SelectDown() && player.HasIron)
                         player.StartBurning(true);
-                    else if(Keybinds.SelectAlternateDown() && player.SteelReserve.Mass > 0)
+                    else if(Keybinds.SelectAlternateDown() && player.HasSteel)
                         player.StartBurning(false);
                 }
 
@@ -141,8 +141,8 @@ public class PlayerPullPushController : MonoBehaviour {
 
                 // Could have stopped burning above. Check if the Allomancer is still burning.
                 if (player.IsBurningIronSteel) {
-                    player.IronPulling = Keybinds.IronPulling() && player.IronReserve.Mass > 0;
-                    player.SteelPushing = Keybinds.SteelPushing() && player.SteelReserve.Mass > 0;
+                    player.IronPulling = Keybinds.IronPulling() && player.HasIron;
+                    player.SteelPushing = Keybinds.SteelPushing() && player.HasSteel;
 
                     // If you are trying to push and pull and only have pullTargets, only push. And vice versa
                     if (!player.HasPushTarget && player.HasPullTarget) {
@@ -173,7 +173,7 @@ public class PlayerPullPushController : MonoBehaviour {
 
                     if (Keybinds.Select() || Keybinds.SelectAlternate()) {
                         // Select or Deselect pullTarget and/or pushTarget
-                        if (Keybinds.Select()) { // Selecting pull target
+                        if (Keybinds.Select() && player.HasIron) { // Selecting pull target
                             if (selecting) {
                                 player.AddPullTarget(target);
                             } else {
@@ -184,7 +184,7 @@ public class PlayerPullPushController : MonoBehaviour {
                                 }
                             }
                         }
-                        if (Keybinds.SelectAlternate()) {
+                        if (Keybinds.SelectAlternate() && player.HasSteel) {
                             if (selecting) {
                                 player.AddPushTarget(target);
                             } else {
@@ -219,6 +219,8 @@ public class PlayerPullPushController : MonoBehaviour {
         ironBurnRateLerp = 1;
         steelBurnRateLerp = 1;
         forceMagnitudeTarget = 600;
+
+        SearchForMetals(); // first frame of blue lines
     }
 
     /*
