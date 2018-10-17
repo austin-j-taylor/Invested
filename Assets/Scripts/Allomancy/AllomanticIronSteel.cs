@@ -248,7 +248,6 @@ public class AllomanticIronSteel : MonoBehaviour {
                 }
 
                 // Consume iron or steel for passively burning, depending on which metal was last used to push/pull
-                
                 if(lastWasPulling || !HasSteel) {
                     IronReserve.Mass -= IronBurnRateTarget * gramsPerSecondPassiveBurn * Time.fixedDeltaTime;
                 } else if(lastWasPushing || !HasIron) {
@@ -257,17 +256,6 @@ public class AllomanticIronSteel : MonoBehaviour {
                     IronReserve.Mass -= IronBurnRateTarget * gramsPerSecondPassiveBurn * Time.fixedDeltaTime / 2;
                     SteelReserve.Mass -= SteelBurnRateTarget * gramsPerSecondPassiveBurn * Time.fixedDeltaTime / 2;
                 }
-
-                //if (HasIron && (IronPulling && !SteelPushing || lastWasPulling || !HasSteel)) {
-                //    IronReserve.Mass -= IronBurnRateTarget * gramsPerSecondPassiveBurn * Time.fixedDeltaTime;
-                //} else {
-                //    if (HasSteel && (SteelPushing && !IronPulling || !lastWasPulling || !HasIron)) {
-                //        SteelReserve.Mass -= SteelBurnRateTarget * gramsPerSecondPassiveBurn * Time.fixedDeltaTime;
-                //    } else {
-                //        IronReserve.Mass -= IronBurnRateTarget * gramsPerSecondPassiveBurn * Time.fixedDeltaTime / 2;
-                //        SteelReserve.Mass -= SteelBurnRateTarget * gramsPerSecondPassiveBurn * Time.fixedDeltaTime / 2;
-                //    }
-                //}
 
                 // If out of metals, stop burning.
                 if(!HasIron) {
@@ -579,6 +567,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                 PushTargets.RemoveTarget(target, false);
             }
             PullTargets.AddTarget(target, this);
+            CalculateForce(target, PullTargets.NetCharge(), PullTargets.SumOfCharges(), iron);
         }
     }
 
@@ -594,6 +583,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                 PullTargets.RemoveTarget(target, false);
             }
             PushTargets.AddTarget(target, this);
+            CalculateForce(target, PushTargets.NetCharge(), PushTargets.SumOfCharges(), steel);
         }
     }
 
