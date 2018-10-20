@@ -94,11 +94,18 @@ public class AllomanticIronSteel : MonoBehaviour {
     // Used when burning metals, but not necessarily immediately Pushing or Pulling. Hence, they are "targets" and not the actual burn rate of the Allomancer.
     public float IronBurnRateTarget { get; set; }
     public float SteelBurnRateTarget { get; set; }
-
+    // The passive burn rate of the allomancer. Only really used for the blue lines to targets.
+    public float IronPassiveBurn { get; set; }
+    public float SteelPassiveBurn { get; set; }
 
     public float GreaterBurnRate {
         get {
             return Mathf.Max(IronBurnRateTarget, SteelBurnRateTarget);
+        }
+    }
+    public float GreaterPassiveBurn {
+        get {
+            return Mathf.Max(IronPassiveBurn, SteelPassiveBurn);
         }
     }
 
@@ -185,6 +192,8 @@ public class AllomanticIronSteel : MonoBehaviour {
         }
         IronBurnRateTarget = 0;
         SteelBurnRateTarget = 0;
+        IronPassiveBurn = 0;
+        SteelPassiveBurn = 0;
         PullTargets.Clear(true, clearTargets);
         PushTargets.Clear(true, clearTargets);
         lastExpectedAllomancerAcceleration = Vector3.zero;
@@ -249,12 +258,12 @@ public class AllomanticIronSteel : MonoBehaviour {
 
                 // Consume iron or steel for passively burning, depending on which metal was last used to push/pull
                 if(lastWasPulling || !HasSteel) {
-                    IronReserve.Mass -= IronBurnRateTarget * gramsPerSecondPassiveBurn * Time.fixedDeltaTime;
+                    IronReserve.Mass -= IronPassiveBurn * gramsPerSecondPassiveBurn * Time.fixedDeltaTime;
                 } else if(lastWasPushing || !HasIron) {
-                    SteelReserve.Mass -= SteelBurnRateTarget * gramsPerSecondPassiveBurn * Time.fixedDeltaTime;
+                    SteelReserve.Mass -= SteelPassiveBurn * gramsPerSecondPassiveBurn * Time.fixedDeltaTime;
                 } else {
-                    IronReserve.Mass -= IronBurnRateTarget * gramsPerSecondPassiveBurn * Time.fixedDeltaTime / 2;
-                    SteelReserve.Mass -= SteelBurnRateTarget * gramsPerSecondPassiveBurn * Time.fixedDeltaTime / 2;
+                    IronReserve.Mass -= IronPassiveBurn * gramsPerSecondPassiveBurn * Time.fixedDeltaTime / 2;
+                    SteelReserve.Mass -= SteelPassiveBurn * gramsPerSecondPassiveBurn * Time.fixedDeltaTime / 2;
                 }
 
                 // If out of metals, stop burning.
@@ -566,8 +575,10 @@ public class AllomanticIronSteel : MonoBehaviour {
             if (PushTargets.IsTarget(target)) {
                 PushTargets.RemoveTarget(target, false);
             }
-            PullTargets.AddTarget(target, this);
-            CalculateForce(target, PullTargets.NetCharge(), PullTargets.SumOfCharges(), iron);
+            if (target != null) {
+                PullTargets.AddTarget(target, this);
+                CalculateForce(target, PullTargets.NetCharge(), PullTargets.SumOfCharges(), iron);
+            }
         }
     }
 
@@ -582,8 +593,10 @@ public class AllomanticIronSteel : MonoBehaviour {
             if (PullTargets.IsTarget(target)) {
                 PullTargets.RemoveTarget(target, false);
             }
-            PushTargets.AddTarget(target, this);
-            CalculateForce(target, PushTargets.NetCharge(), PushTargets.SumOfCharges(), steel);
+            if (target != null) {
+                PushTargets.AddTarget(target, this);
+                CalculateForce(target, PushTargets.NetCharge(), PushTargets.SumOfCharges(), steel);
+            }
         }
     }
 

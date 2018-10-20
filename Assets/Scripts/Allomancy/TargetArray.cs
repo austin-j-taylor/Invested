@@ -121,28 +121,26 @@ public class TargetArray {
      * If newTarget is already within the array or is null, it is not added.
      */
     public void AddTarget(Magnetic newTarget, AllomanticIronSteel allomancer) {
-        if (newTarget != null) {
-            newTarget.Allomancer = allomancer;
-            int indexOfTarget = GetIndex(newTarget);
-            if (indexOfTarget >= 0) {   // Target is already in the array
+        newTarget.Allomancer = allomancer;
+        int indexOfTarget = GetIndex(newTarget);
+        if (indexOfTarget >= 0) {   // Target is already in the array
 
-                if (indexOfTarget < Count - 1) { // Target is not already at the end of the array
-                    // MoveDown over old version of the target, and add the new one at the end.
-                    MoveDown(indexOfTarget, false);
-                    targets[Count] = newTarget;
-                    Count++;
-                }
-            } else { // Target is not already in the array.
-                // If Count < Size, just add newTarget at Count and increment Count.
-                if (Count < Size) {
-                    targets[Count] = newTarget;
-                    Count++;
-                } else {    // Count == Size. Move all elements down, delete the first entry, and add newTarget to the end.
-                            // Do not increment Count, since the number of entries doesn't change.
-                    MoveDown(0);
-                    targets[Count] = newTarget;
-                    Count++;
-                }
+            if (indexOfTarget < Count - 1) { // Target is not already at the end of the array
+                // MoveDown over old version of the target, and add the new one at the end.
+                MoveDown(indexOfTarget, false);
+                targets[Count] = newTarget;
+                Count++;
+            }
+        } else { // Target is not already in the array.
+            // If Count < Size, just add newTarget at Count and increment Count.
+            if (Count < Size) {
+                targets[Count] = newTarget;
+                Count++;
+            } else {    // Count == Size. Move all elements down, delete the first entry, and add newTarget to the end.
+                        // Do not increment Count, since the number of entries doesn't change.
+                MoveDown(0);
+                targets[Count] = newTarget;
+                Count++;
             }
         }
     }
