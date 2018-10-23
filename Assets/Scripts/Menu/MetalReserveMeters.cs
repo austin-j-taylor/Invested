@@ -22,11 +22,11 @@ public class MetalReserveMeters : MonoBehaviour {
 
     private void Update() {
         iron.massText.text = HUD.RoundStringToSigFigs((float)iron.reserve.Mass, 3) + "g";
-        iron.rateText.text = HUD.RoundStringToSigFigs((float)iron.reserve.Rate * 1000, 2) + "mg";
+        iron.rateText.text = HUD.RoundStringToSigFigs((float)iron.reserve.Rate * 1000, 2) + "mg/s";
         iron.fill.fillAmount = (float)iron.reserve.Mass / maxMass;
 
         steel.massText.text = HUD.RoundStringToSigFigs((float)steel.reserve.Mass, 3) + "g";
-        steel.rateText.text = HUD.RoundStringToSigFigs((float)steel.reserve.Rate * 1000, 2) + "mg";
+        steel.rateText.text = HUD.RoundStringToSigFigs((float)steel.reserve.Rate * 1000, 2) + "mg/s";
         steel.fill.fillAmount = (float)steel.reserve.Mass / maxMass;
 
     }

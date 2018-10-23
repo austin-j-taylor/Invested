@@ -18,6 +18,13 @@ This Unity project makes use of:
 
 ### Recent changes:
 
+Version 1.1.5
+- Implemented iron and steel reserves
+	- Pushing/Pulling now consumes iron and steel
+		- the mass of the iron/steel consumed is proportional to the force of the Push/Pull
+		- passively burning iron/steel without Pushing/Pulling requires a slow burn of iron or steel to see the blue lines to metals
+- Improved coin friction against large static objects
+
 Version 1.1.4.1
 - When coins are pushed into other objects, friction now more realistically holds the coin to the object until the coin is deflected away.
 	- The push on the coin is transferred to the object.
@@ -43,17 +50,3 @@ Version 1.1.4
 - Added Graphics settings (anti-aliasing, ambient occlusion, bloom, motion blur)
 	- Changed fonts from Unity's default Arial to Heebo
 - Added "Harmony Targets" to Luthadel, Sandbox, and Experimental scenes (WIP targets for the player to reach and complete a level)
-
-Version 1.1.3
-
-- Settings are now saved to disk
-	- Added separate settings for Mouse Sensitivity and Gamepad Sensitivity
-	- Added setting to disable/enable FPS counter
-- Improvements to Magnitude Push Control Style
-	- Magnitude can now be controlled with precision from 0N to 100N
-	- Works better when targeting multiple metal targets
-	- Burn Rate Meter updates more smoothly
-	- Works better with both ANF and EWV Anchored Push Boosts
-- Fixed bugs in the calculation of the ANF
-- Fixed bug with friction on coins when trying to push and pull on them simultaneously
-- Added something special to the Experimental map
