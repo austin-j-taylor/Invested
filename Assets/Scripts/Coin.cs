@@ -8,7 +8,8 @@ public class Coin : Magnetic {
     private const float minSpeed = 5f;
     private const float maxSpeed = 120f;
     private const float drag = 1.25f;
-    private const float stuckThreshold = 100f; // Square magnitude of normal force necessary for friction
+    private const float stuckThreshold = 1000f; // Square magnitude of normal force necessary for friction
+    private const float dotThreshold = -.5f; // friction threshold for dot product between force and normal vector
     private const float equalMagnitudeConstant = .01f;
 
     // Used for pseudo-parenting Coin when stuck to object it collides with
@@ -48,7 +49,7 @@ public class Coin : Magnetic {
                 collisionNormal = collision.contacts[0].normal;
                 if (Allomancer && (Allomancer.SteelPushing || Allomancer.IronPulling)) {
                     if (!isStuck) { // Only updates on first frame of being stuck
-                        isStuck = IsStuckByFriction(collision.impulse / Time.deltaTime);
+                        isStuck = IsStuckByFriction(collision.impulse / Time.deltaTime, LastNetForceOnTarget);
                         if(isStuck) {
                             CreateJoint(collision.rigidbody);
                         }
@@ -82,11 +83,11 @@ public class Coin : Magnetic {
         ) + netForce;
         if (collisionCollider) { // If in a collision..
             if(isStuck) { // and is stuck...
-                if (Vector3.Dot(newNetForce, collisionNormal) >= 0 || !IsStuckByFriction(newNetForce)) { // ... but friction is too weak to keep the coin stuck in the target.
+                if (!IsStuckByFriction(newNetForce, newNetForce)) { // ... but friction is too weak to keep the coin stuck in the target.
                     UnStick();
                 }
             } else { // and is not yet stuck from the previous pushes...
-                isStuck = Vector3.Dot(newNetForce, collisionNormal) < 0 && IsStuckByFriction(newNetForce);
+                isStuck = IsStuckByFriction(newNetForce, newNetForce);
                 if (isStuck) { // but this push would stick the coin.
                     CreateJoint(collisionCollider.GetComponent<Rigidbody>());
                 }
@@ -96,9 +97,11 @@ public class Coin : Magnetic {
         LastExpectedAcceleration = newNetForce / NetMass; // LastPosition, LastVelocity are updated
         Rb.AddForce(newNetForce);
     }
+
     public override void StopBeingPullPushed() {
         UnStick();
     }
+
     /*
      * Creates a joint between the Coin and anchor.
      */
@@ -115,8 +118,8 @@ public class Coin : Magnetic {
     /*
      * Returns true if allomanticForce provides a strong enough friction against the collisionNormal
      */
-    private bool IsStuckByFriction(Vector3 allomanticForce) {
-        return Vector3.Project(allomanticForce, collisionNormal).sqrMagnitude > stuckThreshold;
+    private bool IsStuckByFriction(Vector3 allomanticForce, Vector3 direction) {
+        return Vector3.Dot(direction.normalized, collisionNormal) < dotThreshold && Vector3.Project(allomanticForce, collisionNormal).sqrMagnitude > stuckThreshold;
     }
 
     private void UnStick() {

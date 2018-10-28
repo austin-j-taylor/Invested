@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 /*
  * Represents the player.
  */
-public class Player : MonoBehaviour {
+public class Player : Entity {
 
     private const float coinCooldown = 0.1f;
 
@@ -27,6 +27,7 @@ public class Player : MonoBehaviour {
         PlayerIronSteel = GetComponent<AllomanticIronSteel>();
         PushPullController = GetComponent<PlayerPullPushController>();
         PlayerInstance = this;
+        Health = 100;
         CoinHand = GetComponentInChildren<Hand>();
         SceneManager.sceneLoaded += ClearPlayerAfterSceneChange;
         SceneManager.sceneUnloaded += ClearPlayerBeforeSceneChange;
@@ -70,5 +71,7 @@ public class Player : MonoBehaviour {
             }
         }
     }
-
+    public override void OnHit(float damage) {
+        base.OnHit(damage);
+    }
 }
