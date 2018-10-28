@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
  */
 public class Player : Entity {
 
-    private const float coinCooldown = 0.1f;
+    private const float coinCooldown = 1f / 4;
 
     //private Animator animator;
     private PlayerMovementController movementController;
@@ -20,6 +20,8 @@ public class Player : Entity {
     public Hand CoinHand { get; private set; }
 
     private float lastCoinThrowTime = 0;
+    // In coinshot mode, the player cannot ironpull - rather, trying to ironpull throws a coin, similar to conventional first-person shooters.
+    private bool coinshotMode = false;
 
     void Awake() {
         movementController = GetComponent<PlayerMovementController>();
@@ -40,8 +42,11 @@ public class Player : Entity {
                 PauseMenu.Pause();
             }
             if (!PauseMenu.IsPaused) {
-                // On pressing COIN button
-                if (Keybinds.WithdrawCoinDown() && lastCoinThrowTime + coinCooldown < Time.time) {
+                if(Keybinds.ToggleCoinshotMode()) {
+                    coinshotMode = !coinshotMode;
+                }
+                // On throwing a coin
+                if((coinshotMode && Keybinds.IronPulling() && Keybinds.SteelPushing() || Keybinds.WithdrawCoinDown()) && lastCoinThrowTime + coinCooldown < Time.time) {
                     lastCoinThrowTime = Time.time;
                     PlayerIronSteel.AddPushTarget(CoinHand.WithdrawCoinToHand());
                 }

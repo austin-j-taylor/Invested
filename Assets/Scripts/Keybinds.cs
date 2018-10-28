@@ -172,6 +172,14 @@ public static class Keybinds {
         return Input.GetButton("Mouse2");
     }
 
+    public static bool ToggleCoinshotMode() {
+        if(SettingsMenu.settingsData.controlScheme == 2) {
+            return false;
+        } else {
+            return Input.GetKeyDown(KeyCode.C);
+        }
+    }
+
     public static bool EscapeDown() {
         return Input.GetKeyDown(KeyCode.Escape) || Input.GetButtonDown("GamepadStart");
     }

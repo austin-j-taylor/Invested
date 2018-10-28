@@ -167,8 +167,8 @@ public class SettingsMenu : MonoBehaviour {
         settingsData = gameObject.AddComponent<SettingsData>();
 
         // Settings Header
-        titleText = transform.GetChild(0).GetComponent<Text>();
-        settingsHeader = transform.GetChild(1);
+        titleText = transform.GetChild(1).GetComponent<Text>();
+        settingsHeader = transform.GetChild(2);
         Button[] settingsHeaderButtons = settingsHeader.GetComponentsInChildren<Button>();
         glossaryButton = settingsHeaderButtons[0];
         gameplayButton = settingsHeaderButtons[1];
@@ -177,23 +177,23 @@ public class SettingsMenu : MonoBehaviour {
         allomancyButton = settingsHeaderButtons[4];
         worldButton = settingsHeaderButtons[5];
         // Glossary
-        glossaryHeader = transform.GetChild(2);
+        glossaryHeader = transform.GetChild(3);
         // Gameplay Header
-        gameplayHeader = transform.GetChild(3);
+        gameplayHeader = transform.GetChild(4);
         // Interface Header
-        interfaceHeader = transform.GetChild(4);
+        interfaceHeader = transform.GetChild(5);
         // Graphics Header
-        graphicsHeader = transform.GetChild(5);
+        graphicsHeader = transform.GetChild(6);
         // Allomancy Header
-        allomancyHeader = transform.GetChild(6);
+        allomancyHeader = transform.GetChild(7);
         // World Header
-        worldHeader = transform.GetChild(7);
+        worldHeader = transform.GetChild(8);
         // Close Button
-        closeButton = transform.GetChild(8).GetComponent<Button>();
+        closeButton = transform.GetChild(9).GetComponent<Button>();
 
         closeText = closeButton.GetComponentInChildren<Text>();
-        discardButton = transform.GetChild(9).GetComponent<Button>();
-        resetToDefaultsButton = transform.GetChild(10).GetComponent<Button>();
+        discardButton = transform.GetChild(10).GetComponent<Button>();
+        resetToDefaultsButton = transform.GetChild(11).GetComponent<Button>();
         resetToDefaultsText = resetToDefaultsButton.GetComponentInChildren<Text>();
 
         // Command listeners assignment

@@ -141,19 +141,19 @@ public class PlayerPullPushController : MonoBehaviour {
 
                 // Could have stopped burning above. Check if the Allomancer is still burning.
                 if (player.IsBurningIronSteel) {
-                    player.IronPulling = Keybinds.IronPulling() && player.HasIron;
-                    player.SteelPushing = Keybinds.SteelPushing() && player.HasSteel;
-
+                    bool pulling = Keybinds.IronPulling() && player.HasIron;
+                    bool pushing = Keybinds.SteelPushing() && player.HasSteel;
                     // If you are trying to push and pull and only have pullTargets, only push. And vice versa
                     if (!player.HasPushTarget && player.HasPullTarget) {
-                        if (player.IronPulling)
-                            player.SteelPushing = false;
+                        if (pulling)
+                            pushing = false;
                     } else
                     if (!player.HasPullTarget && player.HasPushTarget) {
-                        if (player.SteelPushing)
-                            player.IronPulling = false;
+                        if (pushing)
+                            pulling = false;
                     }
-                    
+                    player.IronPulling = pulling;
+                    player.SteelPushing = pushing;
 
                     // Check input for target selection
                     bool selecting = (Keybinds.Select() || Keybinds.SelectAlternate()) && !Keybinds.Negate();

@@ -50,7 +50,7 @@ public class Coin : Magnetic {
                 if (Allomancer && (Allomancer.SteelPushing || Allomancer.IronPulling)) {
                     if (!isStuck) { // Only updates on first frame of being stuck
                         isStuck = IsStuckByFriction(collision.impulse / Time.deltaTime, LastNetForceOnTarget);
-                        if(isStuck) {
+                        if (isStuck) {
                             CreateJoint(collision.rigidbody);
                         }
                     }
@@ -69,8 +69,13 @@ public class Coin : Magnetic {
         }
     }
 
+    private void OnTriggerEnter(Collider other) {
+        OnTriggerStay(other);
+    }
     private void OnTriggerStay(Collider other) {
-        if (Keybinds.IronPulling() && other.CompareTag("Player")) {
+        if (other.CompareTag("Player") &&
+                (Player.PlayerIronSteel.PullingOnPullTargets && Player.PlayerIronSteel.PullTargets.IsTarget(this) ||
+                 Player.PlayerIronSteel.PullingOnPushTargets && Player.PlayerIronSteel.PushTargets.IsTarget(this))) {
             BeCaughtByAllomancer(other.GetComponent<Player>());
         }
     }
@@ -82,7 +87,7 @@ public class Coin : Magnetic {
             -(Vector3.Project(Rb.velocity, netForce.normalized) + (netForce / NetMass * Time.fixedDeltaTime)) * drag, netForce.magnitude
         ) + netForce;
         if (collisionCollider) { // If in a collision..
-            if(isStuck) { // and is stuck...
+            if (isStuck) { // and is stuck...
                 if (!IsStuckByFriction(newNetForce, newNetForce)) { // ... but friction is too weak to keep the coin stuck in the target.
                     UnStick();
                 }

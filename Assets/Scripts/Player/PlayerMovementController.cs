@@ -11,7 +11,7 @@ public class PlayerMovementController : MonoBehaviour {
 
     private const float acceleration = 5f;
     private const float maxRunningSpeed = 5f;
-    private const float airControlFactor = .07f;
+    private const float airControlFactor = .06f;
     private const float airDrag = .2f;
     private const float groundedDrag = 3f;
     private readonly Vector3 jumpHeight = new Vector3(0, 420f, 0);
