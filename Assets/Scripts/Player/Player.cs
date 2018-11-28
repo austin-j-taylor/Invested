@@ -20,7 +20,7 @@ public class Player : Entity {
     public Hand CoinHand { get; private set; }
 
     private float lastCoinThrowTime = 0;
-    // In coinshot mode, the player cannot ironpull - rather, trying to ironpull throws a coin, similar to conventional first-person shooters.
+    // In coinshot mode, clicking down to ironpull while pushing throws a coin, similar to conventional first-person shooters.
     private bool coinshotMode = false;
 
     void Awake() {

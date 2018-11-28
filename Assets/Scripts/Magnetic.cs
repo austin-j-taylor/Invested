@@ -21,6 +21,7 @@ public class Magnetic : MonoBehaviour {
     private bool lastWasPulled;
     private Outline highlightedTargetOutline;
     private VolumetricLineBehavior blueLine;
+    private Collider[] colliders;
     private float lightSaberFactor;
 
     public AllomanticIronSteel Allomancer { get; set; }
@@ -92,9 +93,11 @@ public class Magnetic : MonoBehaviour {
         }
     }
 
-    // If the object has a Rigidbody, this is the real centerOfMass. Otherwise, it is just the transform local position.
-    public Vector3 LocalCenterOfMass { get; private set; }
-    public Collider ColliderBody { get; private set; }
+    public Collider ColliderBody {
+        get {
+            return colliders[0];
+        }
+    }
     public float Charge { get; private set; }
     // If this Magnetic is at the center of the screen, highlighted, ready to be targeted.
     public bool IsHighlighted { get; private set; }
@@ -102,10 +105,19 @@ public class Magnetic : MonoBehaviour {
     public float NetMass { get { return netMass; } }
     // The magnetic mass of this object
     public float MagneticMass { get { return magneticMass; } }
-    // Global center of mass
+    // If the object has a Rigidbody, this is the real centerOfMass. Otherwise, it is just the transform position.
+    // if the object is made of multiple colliders, find the center of volume of all of those colliders.
     public Vector3 CenterOfMass {
         get {
-            return transform.TransformPoint(LocalCenterOfMass);
+            if (colliders.Length == 1 && !IsStatic) {
+                return Rb.worldCenterOfMass;
+            } else {
+                Vector3 centers = colliders[0].bounds.center;
+                for (int i = 1; i < colliders.Length; i++) {
+                    centers += colliders[i].bounds.center;
+                }
+                return centers / colliders.Length;
+            }
         }
     }
     public virtual bool IsPerfectlyAnchored { // Only relevant for low-mass targets
@@ -118,8 +130,8 @@ public class Magnetic : MonoBehaviour {
         Allomancer = null;
         highlightedTargetOutline = gameObject.AddComponent<Outline>();
         blueLine = Instantiate(GameManager.MetalLineTemplate);
-        Rb = GetComponent<Rigidbody>();
-        ColliderBody = GetComponent<Collider>();
+        Rb = GetComponentInParent<Rigidbody>();
+        colliders = GetComponentsInChildren<Collider>();
         lightSaberFactor = 1;
         lastWasPulled = false;
         IsHighlighted = false;
@@ -132,13 +144,11 @@ public class Magnetic : MonoBehaviour {
             if (magneticMass == 0) {
                 magneticMass = netMass;
             }
-            LocalCenterOfMass = Vector3.zero;
         } else { // RigidBody attached, which has its own mass, which replaces netMass
             netMass = Rb.mass;
             if (magneticMass == 0) {
                 magneticMass = netMass;
             }
-            LocalCenterOfMass = Rb.centerOfMass;
         }
 
         Charge = Mathf.Pow(magneticMass, AllomanticIronSteel.chargePower);

@@ -9,10 +9,10 @@ public class SceneSelectMenu : MonoBehaviour {
     // Scene build indices
     public const int sceneMain = 0;
     public const int sceneTitleScreen = 1;
-    public const int sceneTutorial = 2;
-    public const int sceneSandbox = 3;
-    public const int sceneLuthadel = 4;
-    public const int sceneExperimental = 5;
+    public const int sceneLuthadel = 2;
+    public const int sceneShootingGrounds = 3;
+    public const int sceneSandbox = 4;
+    public const int sceneSouthernMountains = 5;
 
     public bool IsOpen {
         get {
@@ -21,26 +21,26 @@ public class SceneSelectMenu : MonoBehaviour {
     }
 
     private Image titleScreenBG;
-    private Button tutorialButton;
-    private Button sandboxButton;
     private Button luthadelButton;
-    private Button experimentalButton;
+    private Button shootingGroundsButton;
+    private Button sandboxButton;
+    private Button southernMountainsButton;
     private Button backButton;
 
     void Start() {
         titleScreenBG = transform.parent.GetComponent<Image>();
 
         Button[] buttons = GetComponentsInChildren<Button>();
-        tutorialButton = buttons[0];
-        sandboxButton = buttons[1];
-        luthadelButton = buttons[2];
-        experimentalButton = buttons[3];
+        luthadelButton = buttons[0];
+        shootingGroundsButton = buttons[1];
+        sandboxButton = buttons[2];
+        southernMountainsButton = buttons[3];
         backButton = buttons[4];
 
-        tutorialButton.onClick.AddListener(OnClickedTutorial);
-        sandboxButton.onClick.AddListener(OnClickedSandbox);
         luthadelButton.onClick.AddListener(OnClickedLuthadel);
-        experimentalButton.onClick.AddListener(OnClickedExperimental);
+        shootingGroundsButton.onClick.AddListener(OnClickedShootingGrounds);
+        sandboxButton.onClick.AddListener(OnClickedSandbox);
+        southernMountainsButton.onClick.AddListener(OnClickedSouthernMountains);
         backButton.onClick.AddListener(OnClickedBack);
 
         // Only close the main menu after the scene loads to prevent jarring camera transitions
@@ -84,20 +84,20 @@ public class SceneSelectMenu : MonoBehaviour {
         }
     }
 
-    private void OnClickedTutorial() {
-        LoadScene(sceneTutorial);
+    private void OnClickedLuthadel() {
+        LoadScene(sceneLuthadel);
+    }
+
+    private void OnClickedShootingGrounds() {
+        LoadScene(sceneShootingGrounds);
     }
 
     private void OnClickedSandbox() {
         LoadScene(sceneSandbox);
     }
 
-    private void OnClickedLuthadel() {
-        LoadScene(sceneLuthadel);
-    }
-
-    private void OnClickedExperimental() {
-        LoadScene(sceneExperimental);
+    private void OnClickedSouthernMountains() {
+        LoadScene(sceneSouthernMountains);
     }
 
     private void OnClickedBack() {

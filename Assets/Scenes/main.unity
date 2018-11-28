@@ -5364,6 +5364,37 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!84 &430103091
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_Width: 1505
+  m_Height: 878
+  m_AntiAliasing: 1
+  m_DepthFormat: 1
+  m_ColorFormat: 7
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 0
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1 &439151123
 GameObject:
   m_ObjectHideFlags: 0
@@ -7905,7 +7936,7 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 697142196}
   m_CullTransparentMesh: 0
---- !u!84 &734481203
+--- !u!84 &698951653
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -7916,8 +7947,8 @@ RenderTexture:
     Hash: 00000000000000000000000000000000
   m_ForcedFallbackFormat: 4
   m_DownscaleFallback: 0
-  m_Width: 1504
-  m_Height: 888
+  m_Width: 1505
+  m_Height: 878
   m_AntiAliasing: 1
   m_DepthFormat: 1
   m_ColorFormat: 7
@@ -9449,37 +9480,6 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 933050125}
   m_CullTransparentMesh: 0
---- !u!84 &939349580
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  m_Width: 1504
-  m_Height: 888
-  m_AntiAliasing: 1
-  m_DepthFormat: 1
-  m_ColorFormat: 7
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &939523822
 GameObject:
   m_ObjectHideFlags: 0
@@ -9585,12 +9585,12 @@ RectTransform:
   m_Children:
   - {fileID: 1229886891}
   m_Father: {fileID: 1117190196}
-  m_RootOrder: 5
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.000091553, y: -50}
-  m_SizeDelta: {x: 250, y: 50}
+  m_AnchoredPosition: {x: 0.000091553, y: 50.000023}
+  m_SizeDelta: {x: 360, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &950081358
 MonoBehaviour:
@@ -10248,8 +10248,8 @@ MonoBehaviour:
   sourceCamera: {fileID: 980503537}
   outlineCamera: {fileID: 2096318919}
   outlineShaderMaterial: {fileID: 0}
-  renderTexture: {fileID: 1578417379}
-  extraRenderTexture: {fileID: 939349580}
+  renderTexture: {fileID: 698951653}
+  extraRenderTexture: {fileID: 1364158519}
 --- !u!1 &982324648
 GameObject:
   m_ObjectHideFlags: 0
@@ -10430,7 +10430,7 @@ GameObject:
   - component: {fileID: 1032698049}
   - component: {fileID: 1032698048}
   m_Layer: 5
-  m_Name: NewMap
+  m_Name: SouthernMountains
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10452,8 +10452,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.00014496, y: -150}
-  m_SizeDelta: {x: 250, y: 50}
+  m_AnchoredPosition: {x: 0.00014496, y: -100.00001}
+  m_SizeDelta: {x: 360, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1032698048
 MonoBehaviour:
@@ -11392,9 +11392,9 @@ RectTransform:
   - {fileID: 970622253}
   - {fileID: 1684412995}
   - {fileID: 1987873438}
+  - {fileID: 950081357}
   - {fileID: 1361068174}
   - {fileID: 1557466467}
-  - {fileID: 950081357}
   - {fileID: 1032698047}
   - {fileID: 1242450460}
   m_Father: {fileID: 1961963338}
@@ -11450,37 +11450,6 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1117190195}
   m_CullTransparentMesh: 0
---- !u!84 &1121114673
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  m_Width: 1504
-  m_Height: 888
-  m_AntiAliasing: 1
-  m_DepthFormat: 1
-  m_ColorFormat: 7
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &1184600579
 GameObject:
   m_ObjectHideFlags: 0
@@ -11571,6 +11540,37 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0.7490196, a: 1}
   m_EffectDistance: {x: 0.7, y: -0.7}
   m_UseGraphicAlpha: 1
+--- !u!84 &1186372270
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_Width: 1505
+  m_Height: 878
+  m_AntiAliasing: 1
+  m_DepthFormat: 1
+  m_ColorFormat: 7
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1 &1191445233
 GameObject:
   m_ObjectHideFlags: 0
@@ -13421,7 +13421,7 @@ GameObject:
   - component: {fileID: 1361068176}
   - component: {fileID: 1361068175}
   m_Layer: 5
-  m_Name: Tutorial
+  m_Name: ShootingGrounds
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13439,12 +13439,12 @@ RectTransform:
   m_Children:
   - {fileID: 1628123288}
   m_Father: {fileID: 1117190196}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.00015259, y: 50}
-  m_SizeDelta: {x: 250, y: 50}
+  m_AnchoredPosition: {x: -0.000031016, y: -0.000011444}
+  m_SizeDelta: {x: 360, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1361068175
 MonoBehaviour:
@@ -13596,6 +13596,37 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1363844371}
   m_CullTransparentMesh: 0
+--- !u!84 &1364158519
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  m_Width: 1505
+  m_Height: 878
+  m_AntiAliasing: 1
+  m_DepthFormat: 1
+  m_ColorFormat: 7
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 0
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1 &1379973285
 GameObject:
   m_ObjectHideFlags: 0
@@ -14807,12 +14838,12 @@ RectTransform:
   m_Children:
   - {fileID: 1689509246}
   m_Father: {fileID: 1117190196}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -0.0000076293945}
-  m_SizeDelta: {x: 250, y: 50}
+  m_AnchoredPosition: {x: 0.00021362, y: -50}
+  m_SizeDelta: {x: 360, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1557466468
 MonoBehaviour:
@@ -15217,7 +15248,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 0
   m_RenderingPath: 1
-  m_TargetTexture: {fileID: 734481203}
+  m_TargetTexture: {fileID: 430103091}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 0
@@ -15227,37 +15258,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!84 &1578417379
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  m_Width: 1504
-  m_Height: 888
-  m_AntiAliasing: 1
-  m_DepthFormat: 1
-  m_ColorFormat: 7
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 0
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 0
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1001 &1596350895
 Prefab:
   m_ObjectHideFlags: 0
@@ -15867,7 +15867,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 0.75
-  m_Text: Tutorial
+  m_Text: Shooting Grounds
 --- !u!222 &1628123290
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -17025,7 +17025,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 0.75
-  m_Text: Experimental
+  m_Text: Southern Mountains
 --- !u!222 &1774380019
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -18857,8 +18857,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 580, y: -165.70001}
-  m_SizeDelta: {x: 1160, y: 161.4}
+  m_AnchoredPosition: {x: 580, y: -265}
+  m_SizeDelta: {x: 1160, y: 360}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &1987873439
 MonoBehaviour:
@@ -18892,12 +18892,17 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 0.75
-  m_Text: 'All three are works in progress. The Tutorial has very little at the moment.
+  m_Text: 'Luthadel has a small cityscape with many metal fittings for flying around.
 
-    The Sandbox has many metals of different masses for push/pulling on, as well as
-    a few blocks with zero gravity.
+    The Shooting Grounds have several stationary targets for shooting coins at.
 
-    Luthadel has a few buildings for swinging around.'
+    The Sandbox has many metals of different masses - even some with zero gravity.
+
+    The Southern Mountains have many scattered metal lanterns. Use your ironsight
+    to find a path.
+
+
+    Each scene has a Harmony Target. Find it, and pull yourself into it.'
 --- !u!222 &1987873440
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -19815,8 +19820,8 @@ MonoBehaviour:
   sourceCamera: {fileID: 2094948116}
   outlineCamera: {fileID: 1578086683}
   outlineShaderMaterial: {fileID: 0}
-  renderTexture: {fileID: 734481203}
-  extraRenderTexture: {fileID: 1121114673}
+  renderTexture: {fileID: 430103091}
+  extraRenderTexture: {fileID: 1186372270}
 --- !u!81 &2094948113
 AudioListener:
   m_ObjectHideFlags: 0
@@ -19945,7 +19950,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 0
   m_RenderingPath: 1
-  m_TargetTexture: {fileID: 1578417379}
+  m_TargetTexture: {fileID: 698951653}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 0
