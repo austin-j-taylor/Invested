@@ -100,7 +100,11 @@ public class HUD : MonoBehaviour {
     // e.g. "650N + 250N"
     public static string AllomanticSumString(Vector3 allomanticForce, Vector3 normalForce, float mass, bool invert = false) {
         string plusSign;
-        plusSign = DecideSignColor(allomanticForce, normalForce, invert);
+        if (invert && Vector3.Dot(allomanticForce, normalForce) <= 0 || !invert && Vector3.Dot(allomanticForce, normalForce) >= 0) {
+            plusSign = TextCodes.LightBlue("+");
+        } else {
+            plusSign = TextCodes.Red("-");
+        }
 
         if (SettingsMenu.settingsData.forceUnits == 1) {
             return RoundStringToSigFigs(allomanticForce.magnitude).ToString() + " " + plusSign + " " + RoundStringToSigFigs(normalForce.magnitude).ToString() + "N";
@@ -127,15 +131,6 @@ public class HUD : MonoBehaviour {
         return (low * tenPower).ToString();
     }
 
-    // Returns a blue plus sign if the vectors point in the same direction and a red minus sign if they point in opposite directions
-    private static string DecideSignColor(Vector3 allomanticForce, Vector3 normalForce, bool invert) {
-        if (invert && Vector3.Dot(allomanticForce, normalForce) <= 0 || !invert && Vector3.Dot(allomanticForce, normalForce) >= 0) {
-            return "<color=#0080ff>+</color>";
-        } else {
-            return "<color=#ff0000>-</color>";
-        }
-    }
-    
     // Clear unwanted fields after changing settings
     public void InterfaceRefresh() {
         BurnRateMeter.InterfaceRefresh();
