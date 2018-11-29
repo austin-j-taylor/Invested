@@ -10,34 +10,34 @@ public static class Keybinds {
     private static float timeToHoldDPadX = 0f;
 
     public static float Horizontal() {
-        if (SettingsMenu.settingsData.controlScheme == 2)
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
             return Input.GetAxis("GamepadHorizontal");
         else
             return Input.GetAxisRaw("Horizontal");
     }
 
     public static float Vertical() {
-        if (SettingsMenu.settingsData.controlScheme == 2)
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
             return Input.GetAxis("GamepadVertical");
         else
             return Input.GetAxisRaw("Vertical");
     }
 
     public static bool Jump() {
-        if (SettingsMenu.settingsData.controlScheme == 2)
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
             return Input.GetButton("GamepadA");
         else
             return Input.GetKey(KeyCode.Space);
     }
     public static bool JumpDown() {
-        if (SettingsMenu.settingsData.controlScheme == 2)
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
             return Input.GetButtonDown("GamepadA");
         else
             return Input.GetKeyDown(KeyCode.Space);
     }
 
     public static bool WithdrawCoinDown() {
-        if (SettingsMenu.settingsData.controlScheme == 2)
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
             return Input.GetButtonDown("GamepadX");
         else
             return Input.GetKeyDown(KeyCode.LeftControl);
@@ -52,19 +52,19 @@ public static class Keybinds {
     }
 
     public static bool NegateDown() {
-        if (SettingsMenu.settingsData.controlScheme == 2)
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
             return Input.GetButtonDown("GamepadY");
         else
             return Input.GetKeyDown(KeyCode.LeftShift);
     }
     public static bool Negate() {
-        if (SettingsMenu.settingsData.controlScheme == 2)
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
             return Input.GetButton("GamepadY");
         else
             return Input.GetKey(KeyCode.LeftShift);
     }
     public static bool StopBurnUp() {
-        if (SettingsMenu.settingsData.controlScheme == 2)
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
             return Input.GetButtonUp("GamepadY");
         else
             return Input.GetKeyUp(KeyCode.LeftShift);
@@ -72,11 +72,17 @@ public static class Keybinds {
 
     public static bool SelectDown() {
         switch (SettingsMenu.settingsData.controlScheme) {
-            case 0: {
+            case SettingsData.MK54: {
                     return Input.GetButtonDown("Mouse4");
                 }
-            case 1: {
+            case SettingsData.MK45: {
+                    return Input.GetButtonDown("Mouse3");
+                }
+            case SettingsData.MKEQ: {
                     return Input.GetKeyDown(KeyCode.E);
+                }
+            case SettingsData.MKQE: {
+                    return Input.GetKeyDown(KeyCode.Q);
                 }
             default: {
                     return Input.GetButtonDown("RightBumper");
@@ -85,11 +91,17 @@ public static class Keybinds {
     }
     public static bool Select() {
         switch (SettingsMenu.settingsData.controlScheme) {
-            case 0: {
+            case SettingsData.MK54: {
                     return Input.GetButton("Mouse4");
                 }
-            case 1: {
+            case SettingsData.MK45: {
+                    return Input.GetButton("Mouse3");
+                }
+            case SettingsData.MKEQ: {
                     return Input.GetKey(KeyCode.E);
+                }
+            case SettingsData.MKQE: {
+                    return Input.GetKey(KeyCode.Q);
                 }
             default: {
                     return Input.GetButton("RightBumper");
@@ -99,11 +111,17 @@ public static class Keybinds {
 
     public static bool SelectAlternate() {
         switch (SettingsMenu.settingsData.controlScheme) {
-            case 0: {
+            case SettingsData.MK54: {
                     return Input.GetButton("Mouse3");
                 }
-            case 1: {
+            case SettingsData.MK45: {
+                    return Input.GetButton("Mouse4");
+                }
+            case SettingsData.MKEQ: {
                     return Input.GetKey(KeyCode.Q);
+                }
+            case SettingsData.MKQE: {
+                    return Input.GetKey(KeyCode.E);
                 }
             default: {
                     return Input.GetButton("LeftBumper");
@@ -112,11 +130,17 @@ public static class Keybinds {
     }
     public static bool SelectAlternateDown() {
         switch (SettingsMenu.settingsData.controlScheme) {
-            case 0: {
+            case SettingsData.MK54: {
                     return Input.GetButtonDown("Mouse3");
                 }
-            case 1: {
+            case SettingsData.MK45: {
+                    return Input.GetButtonDown("Mouse4");
+                }
+            case SettingsData.MKEQ: {
                     return Input.GetKeyDown(KeyCode.Q);
+                }
+            case SettingsData.MKQE: {
+                    return Input.GetKeyDown(KeyCode.E);
                 }
             default: {
                     return Input.GetButtonDown("LeftBumper");
@@ -125,14 +149,14 @@ public static class Keybinds {
     }
 
     public static float LeftBurnRate() {
-        if (SettingsMenu.settingsData.controlScheme == 2)
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
             return Input.GetAxis("LeftTrigger");
         else
             return Input.GetButton("Mouse1") ? 1 : 0;
     }
 
     public static float RightBurnRate() {
-        if (SettingsMenu.settingsData.controlScheme == 2)
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
             return Input.GetAxis("RightTrigger");
         else
             return Input.GetButton("Mouse0") ? 1 : 0;
@@ -173,7 +197,7 @@ public static class Keybinds {
     }
 
     public static bool ToggleCoinshotMode() {
-        if(SettingsMenu.settingsData.controlScheme == 2) {
+        if(SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
             return false;
         } else {
             return Input.GetKeyDown(KeyCode.C);

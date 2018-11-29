@@ -101,7 +101,7 @@ public class HUD : MonoBehaviour {
     public static string AllomanticSumString(Vector3 allomanticForce, Vector3 normalForce, float mass, bool invert = false) {
         string plusSign;
         if (invert && Vector3.Dot(allomanticForce, normalForce) <= 0 || !invert && Vector3.Dot(allomanticForce, normalForce) >= 0) {
-            plusSign = TextCodes.LightBlue("+");
+            plusSign = TextCodes.Blue("+");
         } else {
             plusSign = TextCodes.Red("-");
         }

@@ -41,7 +41,7 @@ public class CameraController : MonoBehaviour {
     private void LateUpdate() {
         if (cameraIsLocked) {
             if (Player.CanControlPlayer) {
-                if (SettingsMenu.settingsData.controlScheme == 2) {
+                if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
                     currentX += Input.GetAxis("HorizontalRight") * SettingsMenu.settingsData.gamepadSensitivityX;
                     currentY -= Input.GetAxis("VerticalRight") * SettingsMenu.settingsData.gamepadSensitivityY;
                 } else {

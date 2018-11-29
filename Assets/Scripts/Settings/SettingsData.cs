@@ -10,9 +10,16 @@ public class SettingsData : MonoBehaviour {
 
     private const string configFileName = "config.json";
     private const string defaultConfigFileName = "default_config.json";
-    
+
+    // Constants for setting states
+    public const int MK54 = 0; // Mouse/Keyboard with Select and SelectAlternate on 5 and 4, etc.
+    public const int MK45 = 1;
+    public const int MKEQ = 2;
+    public const int MKQE = 3;
+    public const int Gamepad = 4;
+
     // Gameplay
-    public int controlScheme; // 0 for MK45, 1 for MKQE, 2 for Gamepad
+    public int controlScheme;
     public int gamepadRumble; // 0 for Disabled, 1 for Enabled
     public int pushControlStyle; // 0 for percentage, 1 for magnitude
     public int cameraFirstPerson; // 0 for third person, 1 for first person

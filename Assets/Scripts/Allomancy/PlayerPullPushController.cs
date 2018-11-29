@@ -81,7 +81,7 @@ public class PlayerPullPushController : MonoBehaviour {
 
                     // Check scrollwheel for changing the max number of targets and burn rate, or DPad if using gamepad
                     float scrollValue = 0;
-                    if (SettingsMenu.settingsData.controlScheme == 2) { // Gamepad
+                    if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) { // Gamepad
                         scrollValue = Keybinds.DPadXAxis();
                         if (SettingsMenu.settingsData.pushControlStyle == 1) {
                             ChangeTargetForceMagnitude(Keybinds.DPadYAxis());
@@ -106,7 +106,7 @@ public class PlayerPullPushController : MonoBehaviour {
 
                     // Assign Burn rate targets based on the previously changed burn rate/target magnitudes
                     if (SettingsMenu.settingsData.pushControlStyle == 0) { // Percentage
-                        if (SettingsMenu.settingsData.controlScheme == 2) { // Gamepad
+                        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) { // Gamepad
                             SetPullRateTarget(Keybinds.RightBurnRate());
                             SetPushRateTarget(Keybinds.LeftBurnRate());
                         }
@@ -422,7 +422,7 @@ public class PlayerPullPushController : MonoBehaviour {
         if (rate > .005f) {
             ironBurnRateLerp = Mathf.Min(1, rate);
         } else {
-            if (SettingsMenu.settingsData.controlScheme == 2)
+            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
                 ironBurnRateLerp = 1;
             else
                 ironBurnRateLerp = 0;
@@ -433,7 +433,7 @@ public class PlayerPullPushController : MonoBehaviour {
         if (rate > .005f) {
             steelBurnRateLerp = Mathf.Min(1, rate);
         } else {
-            if (SettingsMenu.settingsData.controlScheme == 2)
+            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
                 steelBurnRateLerp = 1;
             else
                 steelBurnRateLerp = 0;
@@ -448,7 +448,7 @@ public class PlayerPullPushController : MonoBehaviour {
     private void LerpToBurnRates() {
         player.IronBurnRateTarget = Mathf.Lerp(player.IronBurnRateTarget, ironBurnRateLerp, burnRateLerpConstant);
         player.SteelBurnRateTarget = Mathf.Lerp(player.SteelBurnRateTarget, steelBurnRateLerp, burnRateLerpConstant);
-        if(SettingsMenu.settingsData.controlScheme == 2) {
+        if(SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
             player.IronPassiveBurn = 1;
             player.SteelPassiveBurn = 1;
         } else {
@@ -473,7 +473,7 @@ public class PlayerPullPushController : MonoBehaviour {
         }
         // If using the Percentage control scheme and the target burn rate is 0 (and not using a gamepad, which will very often be 0)
         //      Then stop burning metals
-        if (SettingsMenu.settingsData.pushControlStyle == 0 && SettingsMenu.settingsData.controlScheme != 2 && (player.IronBurnRateTarget < .001f && player.SteelBurnRateTarget < .001f)) {
+        if (SettingsMenu.settingsData.pushControlStyle == 0 && SettingsMenu.settingsData.controlScheme != SettingsData.Gamepad && (player.IronBurnRateTarget < .001f && player.SteelBurnRateTarget < .001f)) {
             player.StopBurning();
         }
     }
@@ -482,8 +482,7 @@ public class PlayerPullPushController : MonoBehaviour {
         if (player.IsBurningIronSteel) {
             if (SettingsMenu.settingsData.pushControlStyle == 1)
                 HUD.BurnRateMeter.SetBurnRateMeterForceMagnitude(player.LastAllomanticForce, player.LastAnchoredPushBoost, player.GreaterBurnRate, forceMagnitudeTarget);
-            else if (SettingsMenu.settingsData.controlScheme == 2) {
-                Debug.Log(player.IronBurnRateTarget);
+            else if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
                 if (player.SteelPushing) {
                     if (player.IronPulling) {
                         HUD.BurnRateMeter.SetBurnRateMeterPercentage(player.LastAllomanticForce, player.LastAnchoredPushBoost,
