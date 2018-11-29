@@ -11,9 +11,9 @@ Here are some short videos of the game:
 - [Some recent developments to the HUD](https://gfycat.com/ChubbySelfishBoutu)
 
 This Unity project makes use of:
-	- [Volumetric Lines by Johannes Unterguggenberger](https://assetstore.unity.com/packages/tools/particles-effects/volumetric-lines-29160)
-	- [Cakeslice's Outline Effect](https://github.com/cakeslice/Outline-Effect)
-	- [The Heebo font](https://fonts.google.com/specimen/Heebo)
+- [Volumetric Lines by Johannes Unterguggenberger](https://assetstore.unity.com/packages/tools/particles-effects/volumetric-lines-29160)
+- [Cakeslice's Outline Effect](https://github.com/cakeslice/Outline-Effect)
+- [The Heebo font](https://fonts.google.com/specimen/Heebo)
 
 
 ### Recent changes:
