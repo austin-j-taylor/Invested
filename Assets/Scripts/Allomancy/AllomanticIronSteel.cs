@@ -257,9 +257,9 @@ public class AllomanticIronSteel : MonoBehaviour {
                 }
 
                 // Consume iron or steel for passively burning, depending on which metal was last used to push/pull
-                if(lastWasPulling || !HasSteel) {
+                if(HasIron && lastWasPulling || !HasSteel) {
                     IronReserve.Mass -= IronPassiveBurn * gramsPerSecondPassiveBurn * Time.fixedDeltaTime;
-                } else if(lastWasPushing || !HasIron) {
+                } else if(HasSteel && lastWasPushing || !HasIron) {
                     SteelReserve.Mass -= SteelPassiveBurn * gramsPerSecondPassiveBurn * Time.fixedDeltaTime;
                 } else {
                     IronReserve.Mass -= IronPassiveBurn * gramsPerSecondPassiveBurn * Time.fixedDeltaTime / 2;
