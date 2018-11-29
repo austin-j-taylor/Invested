@@ -2,7 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /*
- * Controls the heads-up display
+ * Controls the heads-up display.
+ * Has several fields that control UI elements that relate to the HUD.
  */
 public class HUD : MonoBehaviour {
 
