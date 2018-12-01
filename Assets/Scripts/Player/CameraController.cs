@@ -32,6 +32,7 @@ public class CameraController : MonoBehaviour {
         playerBody = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>().Find("Body");
         playerLookAtTarget = playerBody.Find("CameraLookAtTarget").GetComponent<Transform>();
         thirdPersonCamera = playerLookAtTarget.Find("ThirdPersonCamera").GetComponent<Camera>();
+        //thirdPersonCamera.gameObject.AddComponent<CameraCollisionResolver>();
         firstPersonCamera = playerBody.Find("FirstPersonCamera").GetComponent<Camera>();
         ActiveCamera = thirdPersonCamera;
         Clear();
@@ -53,7 +54,7 @@ public class CameraController : MonoBehaviour {
             }
             UpdateCamera();
         }
-        if(ExternalPositionTarget) {
+        if (ExternalPositionTarget) {
             UpdateCameraToExternalSource();
         }
     }
@@ -78,11 +79,27 @@ public class CameraController : MonoBehaviour {
 
             if (SettingsMenu.settingsData.cameraFirstPerson == 0) {
                 Vector3 wantedPosition = verticalRotation * distancefromPlayer; // local
+                ActiveCamera.transform.localPosition = wantedPosition;
                 RaycastHit hit;
                 if (Physics.Raycast(playerLookAtTarget.position, horizontalRotation * wantedPosition, out hit, wallDistanceCheck, GameManager.Layer_IgnorePlayer)) {
                     ActiveCamera.transform.position = hit.point + distanceFromHitWall * hit.normal;
                 } else {
-                    ActiveCamera.transform.localPosition = wantedPosition;
+                    // Check if the camera is just barely touching a wall (check 6 directions)
+                    if (Physics.Raycast(ActiveCamera.transform.position, Vector3.down, out hit, distanceFromHitWall)) {
+                        ActiveCamera.transform.position = hit.point + distanceFromHitWall * hit.normal;
+                    } else if (Physics.Raycast(ActiveCamera.transform.position, Vector3.up, out hit, distanceFromHitWall)) {
+                        ActiveCamera.transform.position = hit.point + distanceFromHitWall * hit.normal;
+                    } else if (Physics.Raycast(ActiveCamera.transform.position, Vector3.left, out hit, distanceFromHitWall)) {
+                        ActiveCamera.transform.position = hit.point + distanceFromHitWall * hit.normal;
+                    } else if (Physics.Raycast(ActiveCamera.transform.position, Vector3.right, out hit, distanceFromHitWall)) {
+                        ActiveCamera.transform.position = hit.point + distanceFromHitWall * hit.normal;
+                    } else if (Physics.Raycast(ActiveCamera.transform.position, Vector3.forward, out hit, distanceFromHitWall)) {
+                        ActiveCamera.transform.position = hit.point + distanceFromHitWall * hit.normal;
+                    } else if (Physics.Raycast(ActiveCamera.transform.position, Vector3.back, out hit, distanceFromHitWall)) {
+                        ActiveCamera.transform.position = hit.point + distanceFromHitWall * hit.normal;
+                    }
+
+
                 }
             }
         }
@@ -126,5 +143,4 @@ public class CameraController : MonoBehaviour {
         ActiveCamera = firstPersonCamera;
         Clear();
     }
-
 }
