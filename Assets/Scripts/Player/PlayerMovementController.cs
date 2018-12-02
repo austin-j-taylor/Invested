@@ -10,11 +10,11 @@ using UnityEngine;
 public class PlayerMovementController : MonoBehaviour {
 
     private const float acceleration = 5f;
-    private const float maxRunningSpeed = 5f;
+    private const float maxRunningSpeed = 7.5f;
     private const float airControlFactor = .06f;
     private const float airDrag = .2f;
     private const float groundedDrag = 3f;
-    private readonly Vector3 jumpHeight = new Vector3(0, 420f, 0);
+    private readonly Vector3 jumpHeight = new Vector3(0, 400f, 0);
     
     private Rigidbody rb;
     private PlayerGroundedChecker groundedChecker;
@@ -27,12 +27,12 @@ public class PlayerMovementController : MonoBehaviour {
 
     private void Awake() {
         rb = GetComponent<Rigidbody>();
-        groundedChecker = GetComponentInChildren<PlayerGroundedChecker>();
+        groundedChecker = transform.GetComponentInChildren<PlayerGroundedChecker>();
     }
     void FixedUpdate() {
         if (Player.CanControlPlayer) {
             Vector3 movement = new Vector3(Keybinds.Horizontal(), 0f, Keybinds.Vertical());
-            movement = transform.TransformDirection(Vector3.ClampMagnitude(movement, 1));
+            movement = CameraController.ActiveCamera.transform.rotation * (Vector3.ClampMagnitude(movement, 1));
             if (IsGrounded) {
                 if (movement.magnitude > 0) {
                     // You: "why use ints to represent binary values that should be represented by booleans"

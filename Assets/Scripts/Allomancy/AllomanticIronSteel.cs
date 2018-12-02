@@ -183,7 +183,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     public void Clear(bool clearTargets = true) {
         IsBurningIronSteel = false;
 
-        if(clearTargets) {
+        if (clearTargets) {
             IronPulling = false;
             SteelPushing = false;
         } else { // prevents calling of StopOn____Targets
@@ -257,9 +257,9 @@ public class AllomanticIronSteel : MonoBehaviour {
                 }
 
                 // Consume iron or steel for passively burning, depending on which metal was last used to push/pull
-                if(HasIron && lastWasPulling || !HasSteel) {
+                if (HasIron && lastWasPulling || !HasSteel) {
                     IronReserve.Mass -= IronPassiveBurn * gramsPerSecondPassiveBurn * Time.fixedDeltaTime;
-                } else if(HasSteel && lastWasPushing || !HasIron) {
+                } else if (HasSteel && lastWasPushing || !HasIron) {
                     SteelReserve.Mass -= SteelPassiveBurn * gramsPerSecondPassiveBurn * Time.fixedDeltaTime;
                 } else {
                     IronReserve.Mass -= IronPassiveBurn * gramsPerSecondPassiveBurn * Time.fixedDeltaTime / 2;
@@ -267,7 +267,7 @@ public class AllomanticIronSteel : MonoBehaviour {
                 }
 
                 // If out of metals, stop burning.
-                if(!HasIron) {
+                if (!HasIron) {
                     if (HasPullTarget)
                         PullTargets.Clear();
                     if (!HasSteel)
@@ -519,7 +519,7 @@ public class AllomanticIronSteel : MonoBehaviour {
             // If this component belongs to the player
             if (tag == "Player")
                 GetComponent<PlayerPullPushController>().StartBurningIronSteel();
-            
+
         }
 
     }
@@ -576,8 +576,8 @@ public class AllomanticIronSteel : MonoBehaviour {
                 PushTargets.RemoveTarget(target, false);
             }
             if (target != null) {
-                PullTargets.AddTarget(target, this);
-                CalculateForce(target, PullTargets.NetCharge(), PullTargets.SumOfCharges(), iron);
+                if (PullTargets.AddTarget(target, this))
+                    CalculateForce(target, PullTargets.NetCharge(), PullTargets.SumOfCharges(), iron);
             }
         }
     }
@@ -594,8 +594,8 @@ public class AllomanticIronSteel : MonoBehaviour {
                 PullTargets.RemoveTarget(target, false);
             }
             if (target != null) {
-                PushTargets.AddTarget(target, this);
-                CalculateForce(target, PushTargets.NetCharge(), PushTargets.SumOfCharges(), steel);
+                if (PushTargets.AddTarget(target, this))
+                    CalculateForce(target, PushTargets.NetCharge(), PushTargets.SumOfCharges(), steel);
             }
         }
     }

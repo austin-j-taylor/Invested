@@ -12,26 +12,16 @@ using System.Collections;
 public class TextCodes : MonoBehaviour {
 
     // String constants (prefixed with s_)
-    private const string s_the_mouse = "the mouse";
     private const string s_Mouse_Button_4 = "Mouse Button 4";
     private const string s_Mouse_Button_5 = "Mouse Button 5";
-    private const string s_Space = "Space";
-    private const string s_Ctrl = "Ctrl";
-    private const string s_Shift = "Shift";
-    private const string s_WASD = "W/A/S/D";
-    private const string s_Q = "Q";
     private const string s_E = "E";
-    private const string s_A = "A";
-    private const string s_X = "X";
-    private const string s_Y = "Y";
+    private const string s_Q = "Q";
     private const string s_Left_Trigger = "Left Trigger";
     private const string s_Right_Trigger = "Right Trigger";
     private const string s_Left_Bumper = "Left Bumper";
     private const string s_Right_Bumper = "Right Bumper";
     private const string s_Left_Click = "Left Click";
     private const string s_Right_Click = "Right Click";
-    private const string s_Left_Joystick = "the left joystick";
-    private const string s_Right_Joystick = "the right joystick";
     private const string s_Up_Down_on_the_D_Pad = "Up/Down on the D-Pad";
     private const string s_Left_Right_on_the_D_Pad = "Left/Right on the D-Pad";
 
@@ -47,8 +37,8 @@ public class TextCodes : MonoBehaviour {
     GameObject[] tester;
     private void Update() {
         tester = GameObject.FindGameObjectsWithTag("Testing");
-        tester[0].GetComponent<Text>().text = KeyMove + " to move.";
-        tester[1].GetComponent<Text>().text = KeyLook + " to look around.";
+        tester[0].GetComponent<Text>().text = KeyLook + " to look around.";
+        tester[1].GetComponent<Text>().text = KeyMove + " to move.";
         tester[2].GetComponent<Text>().text = KeyJump + " to jump.";
         tester[3].GetComponent<Text>().text = KeyStartBurning + " to start burning " + Iron + " or " + Steel + ".";
         tester[4].GetComponent<Text>().text = s_Press_ + KeySelect + " to select a metal to be a " + Pull_target + ".";
@@ -58,11 +48,18 @@ public class TextCodes : MonoBehaviour {
         tester[8].GetComponent<Text>().text = "While holding " + KeyNegate
             + ":\n\t\t• " + s_Hold_ + KeySelect + " while looking at a " + Pull_target
             + " to deselect it.\n\t\t• " + s_Tap_ + KeySelect + " while not looking at a " + Pull_target + " to deselect your oldest " + Pull_target
-            + ".\n\t\t Likewise for " + KeySelectAlternate + " and " + Push_targets + ".";
-        tester[9].GetComponent<Text>().text = KeyPassiveBurn + " to change which metal you passively burn.";
-        tester[10].GetComponent<Text>().text = KeyStopBurning + " to stop burning " + Gray("Iron and Steel.");
-        tester[11].GetComponent<Text>().text = KeyPushPullStrength + " to change " + Gray("Push/Pull strength");
-        tester[12].GetComponent<Text>().text = KeyNumberOfTargets + " to change the " + Gray("number of Push/Pull-targets.");
+            + ".\n\t\tLikewise for " + KeySelectAlternate + " and " + Push_targets + ".";
+        tester[9].GetComponent<Text>().text = KeyPushPullStrength + " to change " + Push_Pull + Gray(" strength") + '.';
+        tester[10].GetComponent<Text>().text = KeyNumberOfTargets + " to change the " + Gray("number of " + Push_Pull_targets + ".");
+        tester[11].GetComponent<Text>().text = KeyPassiveBurn + " to change which metal you passively burn.";
+        tester[12].GetComponent<Text>().text = KeyStopBurning + " to stop burning " + Gray("Iron and Steel.");
+        tester[13].GetComponent<Text>().text = KeyThrow + " to throw a coin in front of you. Try " + Pushing + " on it.";
+        tester[14].GetComponent<Text>().text = KeyDrop + " to drop a coin at your feet. Try " + Pushing + " on it."
+            + "\n\t\t• " + KeyDropDirection + " while dropping a coin will drop the coin in the opposite direction.";
+        tester[15].GetComponent<Text>().text = KeySwap + " to swap your " + Push_targets + " and " + Pull_targets + ".";
+        tester[16].GetComponent<Text>().text = KeyCoinshotMode + " to activate " + CoinshotMode
+            + ".\n\t\t• While in " + CoinshotMode + ", " + KeyCoinshotThrow
+            + " to throw coins.\n\t\t" + KeyCoinshotMode + " again to disable " + CoinshotMode + ".";
     }
 
     // Methods that accept strings as arguments and return strings colored in their respective color
@@ -84,6 +81,9 @@ public class TextCodes : MonoBehaviour {
     public static string Gray(string s) {
         return "<color=#bfbfbf>" + s + "</color>";
     }
+    public static string Gold(string s) {
+        return "<color=#fff080>" + s + "</color>";
+    }
 
     // Known words that should always appear in a specific color
     public static string Iron {
@@ -103,7 +103,7 @@ public class TextCodes : MonoBehaviour {
     }
     public static string Pulling {
         get {
-            return LightBlue("Pulling");
+            return MidBlue("Pulling");
         }
     }
     public static string Push {
@@ -113,12 +113,22 @@ public class TextCodes : MonoBehaviour {
     }
     public static string Pushing {
         get {
-            return LightRed("Pushing");
+            return Red("Pushing");
+        }
+    }
+    public static string Push_Pull {
+        get {
+            return Push + '/' + Pull;
         }
     }
     public static string Pull_target {
         get {
             return LightBlue("Pull-target");
+        }
+    }
+    public static string Pull_targets {
+        get {
+            return LightBlue("Pull-targets");
         }
     }
     public static string Push_target {
@@ -129,6 +139,16 @@ public class TextCodes : MonoBehaviour {
     public static string Push_targets {
         get {
             return LightRed("Push-targets");
+        }
+    }
+    public static string Push_Pull_targets {
+        get {
+            return Push + '/' + LightBlue("Pull-targets");
+        }
+    }
+    public static string CoinshotMode {
+        get {
+            return Gold("Coinshot Mode");
         }
     }
 
@@ -158,29 +178,59 @@ public class TextCodes : MonoBehaviour {
             return "the " + Gray("scroll wheel");
         }
     }
+    public static string theLeftJoystick {
+        get {
+            return "the " + Gray("left joystick");
+        }
+    }
+    public static string theRightJoystick {
+        get {
+            return "the " + Gray("right joystick");
+        }
+    }
+    public static string theMouse {
+        get {
+            return "the " + Gray("mouse");
+        }
+    }
     public static string Shift {
         get {
-            return Gray(s_Shift);
+            return Gray("Shift");
         }
     }
     public static string Space {
         get {
-            return Gray(s_Space);
+            return Gray("Space");
+        }
+    }
+    public static string Ctrl {
+        get {
+            return Gray("Ctrl");
+        }
+    }
+    public static string WASD {
+        get {
+            return Gray("W/A/S/D");
+        }
+    }
+    public static string C {
+        get {
+            return Gold("C");
         }
     }
     public static string A {
         get {
-            return Gray(s_A);
+            return Gray("A");
         }
     }
     public static string X {
         get {
-            return Gray(s_X);
+            return Gray("X");
         }
     }
     public static string Y {
         get {
-            return Gray(s_Y);
+            return Gray("Y");
         }
     }
 
@@ -190,17 +240,17 @@ public class TextCodes : MonoBehaviour {
     public static string KeyMove {
         get {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-                return s_Use_ + Gray(s_Left_Joystick);
+                return s_Use_ + theLeftJoystick;
             else
-                return s_Use_ + Gray(s_WASD);
+                return s_Use_ + WASD;
         }
     }
     public static string KeyLook {
         get {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-                return s_Use_ + Gray(s_Right_Joystick);
+                return s_Use_ + theRightJoystick;
             else
-                return s_Use_ + Gray(s_the_mouse);
+                return s_Use_ + theMouse;
         }
     }
     public static string KeyJump {
@@ -338,9 +388,57 @@ public class TextCodes : MonoBehaviour {
     public static string KeyNumberOfTargets {
         get {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-                return "Press " + Gray("Up/Down") + " on the D-Pad";
+                return s_Press_ + Gray("Up/Down") + " on the D-Pad";
             else
                 return s_Press_ + "and " + s_Scroll_ + theScrollWheel;
+        }
+    }
+    public static string KeyThrow {
+        get {
+            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+                return s_Press_ + X;
+            else
+                return s_Press_ + Ctrl;
+        }
+    }
+    public static string KeyDrop {
+        get {
+            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+                return s_Hold_ + A + " and press " + X;
+            else
+                return s_Hold_ + Space + " and press " + Ctrl;
+        }
+    }
+    public static string KeyDropDirection {
+        get {
+            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+                return "Tilting " + theLeftJoystick;
+            else
+                return "Holding " + WASD;
+        }
+    }
+    public static string KeySwap {
+        get {
+            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+                return "Double-tap " + Y;
+            else
+                return "Double-tap " + Shift;
+        }
+    }
+    public static string KeyCoinshotMode {
+        get {
+            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+                return "Tap " + "COINSHOT_MODE_BUTTON";
+            else
+                return "Tap " + C;
+        }
+    }
+    public static string KeyCoinshotThrow {
+        get {
+            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+                return "hold " + LeftTrigger + " and press " + LeftTrigger;
+            else
+                return "hold " + RightClick + " and press " + LeftClick;
         }
     }
 

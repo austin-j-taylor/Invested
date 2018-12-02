@@ -11,8 +11,13 @@ public class PlayerGroundedChecker : MonoBehaviour {
 
     private bool isInCollider = false;
     private Collider standingOnCollider = null;
+    private readonly Vector3 offset = new Vector3(0, -.22f, 0);
 
     private void FixedUpdate() {
+        transform.position = Player.PlayerInstance.transform.position + offset;
+        transform.rotation = Quaternion.identity;
+
+
         IsGrounded = isInCollider;
         isInCollider = false;
     }

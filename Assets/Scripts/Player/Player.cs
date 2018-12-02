@@ -24,10 +24,10 @@ public class Player : Entity {
     private bool coinshotMode = false;
 
     void Awake() {
-        movementController = GetComponent<PlayerMovementController>();
+        movementController = GetComponentInChildren<PlayerMovementController>();
         //animator = GetComponent<Animator>();
-        PlayerIronSteel = GetComponent<AllomanticIronSteel>();
-        PushPullController = GetComponent<PlayerPullPushController>();
+        PlayerIronSteel = GetComponentInChildren<AllomanticIronSteel>();
+        PushPullController = GetComponentInChildren<PlayerPullPushController>();
         PlayerInstance = this;
         Health = 100;
         CoinHand = GetComponentInChildren<Hand>();
@@ -65,7 +65,7 @@ public class Player : Entity {
         if (mode == LoadSceneMode.Single) { // Not loading all of the scenes, as it does at startup
             CoinHand.Clear();
             PushPullController.Clear();
-            GetComponentInChildren<MeshRenderer>().material = GameManager.Material_Gebaude;
+            //GetComponentInChildren<MeshRenderer>().material = GameManager.Material_Gebaude;
             CanControlPlayer = true;
 
             GameObject spawn = GameObject.FindGameObjectWithTag("PlayerSpawn");

@@ -3,6 +3,7 @@ using UnityEngine;
 public class CoinPouch : MonoBehaviour {
 
     public const int startingCoinCount = 50;
+    public readonly Vector3 coinThrowSpeed = new Vector3(0, 0, 5);
 
     [SerializeField]
     private Coin coinPrefab;
@@ -26,7 +27,7 @@ public class CoinPouch : MonoBehaviour {
         if (Count > 0) {
             Count--;
             Coin coin = Instantiate(coinPrefab, spawnPosition, transform.rotation);
-            coin.GetComponent<Rigidbody>().velocity = parentRigidbody.velocity;
+            coin.GetComponent<Rigidbody>().velocity = parentRigidbody.velocity + transform.rotation * coinThrowSpeed;
             return coin;
         }
         return null;

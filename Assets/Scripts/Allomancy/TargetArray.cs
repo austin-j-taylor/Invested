@@ -118,9 +118,10 @@ public class TargetArray {
      *      newTarget is added to the first empty space in the array.
      *      If there are no empty spaces, the oldest entry (targets[0]) is overritten by MoveDown(0)
      *      and newTarget is added at the ent of the array.
-     * If newTarget is already within the array or is null, it is not added.
+     * If newTarget is already within the array, it is moved to the front.
+     * Returns true if newTarget was not already within the array and false if it was already in the array.
      */
-    public void AddTarget(Magnetic newTarget, AllomanticIronSteel allomancer) {
+    public bool AddTarget(Magnetic newTarget, AllomanticIronSteel allomancer) {
         newTarget.Allomancer = allomancer;
         int indexOfTarget = GetIndex(newTarget);
         if (indexOfTarget >= 0) {   // Target is already in the array
@@ -131,6 +132,7 @@ public class TargetArray {
                 targets[Count] = newTarget;
                 Count++;
             }
+            return false;
         } else { // Target is not already in the array.
             // If Count < Size, just add newTarget at Count and increment Count.
             if (Count < Size) {
@@ -142,6 +144,7 @@ public class TargetArray {
                 targets[Count] = newTarget;
                 Count++;
             }
+            return true;
         }
     }
 

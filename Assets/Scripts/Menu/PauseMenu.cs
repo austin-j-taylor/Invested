@@ -54,6 +54,12 @@ public class PauseMenu : MonoBehaviour {
         Time.timeScale = 0f;
         pauseMenu.SetActive(true);
         IsPaused = true;
+
+        // Update blue lines on frame of pausing
+        if(Player.PlayerIronSteel && Player.PlayerIronSteel.IsBurningIronSteel) {
+            Player.PushPullController.SearchForMetals();
+        }
+        CameraController.UpdateCamera();
     }
 
     public static void UnPause() {

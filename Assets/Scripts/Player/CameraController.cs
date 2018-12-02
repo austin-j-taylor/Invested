@@ -13,7 +13,7 @@ public class CameraController : MonoBehaviour {
     private const float wallDistanceCheck = 4;
     private const float lerpConstant = 5;
     private static readonly Vector3 distancefromPlayer = new Vector3(0, 0, -wallDistanceCheck);
-    private static readonly Vector3 firstPersonCameraHeight = new Vector3(0, 1, 0);
+    private static readonly Vector3 lookAtTargetHeight = new Vector3(0, 1.25f, 0);
 
     public static Camera ActiveCamera { get; private set; }
     public static Transform ExternalPositionTarget { get; set; } // Assigned by another part of the program for tracking
@@ -29,14 +29,19 @@ public class CameraController : MonoBehaviour {
     private static bool cameraIsLocked;
 
     void Awake() {
-        playerBody = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>().Find("Body");
+        playerBody = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         playerLookAtTarget = playerBody.Find("CameraLookAtTarget").GetComponent<Transform>();
         thirdPersonCamera = playerLookAtTarget.Find("ThirdPersonCamera").GetComponent<Camera>();
-        //thirdPersonCamera.gameObject.AddComponent<CameraCollisionResolver>();
-        firstPersonCamera = playerBody.Find("FirstPersonCamera").GetComponent<Camera>();
+        firstPersonCamera = playerLookAtTarget.Find("FirstPersonCamera").GetComponent<Camera>();
         ActiveCamera = thirdPersonCamera;
         Clear();
         UnlockCamera();
+    }
+
+    // Update for PlayerPushController's screen positions of targets relative to cameras
+    private void Update() {
+        playerLookAtTarget.position = playerBody.position + lookAtTargetHeight;
+        playerLookAtTarget.rotation = Quaternion.Euler(0, currentX, 0);
     }
 
     private void LateUpdate() {
@@ -62,17 +67,15 @@ public class CameraController : MonoBehaviour {
     public static void Clear() {
         ExternalPositionTarget = null;
         ExternalLookAtTarget = null;
-        firstPersonCamera.transform.localPosition = firstPersonCameraHeight;
-        currentY = playerBody.parent.localEulerAngles.x + 30; // Tilted downward a little
-        currentX = playerBody.parent.localEulerAngles.y;
+        firstPersonCamera.transform.localPosition = lookAtTargetHeight;
+        currentY = playerLookAtTarget.localEulerAngles.x + 30; // Tilted downward a little
+        currentX = playerLookAtTarget.localEulerAngles.y;
         UpdateCamera();
     }
 
-    private static void UpdateCamera() {
+    public static void UpdateCamera() {
         if (Player.CanControlPlayer) {
             // Horizontal rotation (rotates playerBody body left and right)
-            Quaternion horizontalRotation = Quaternion.Euler(0, currentX, 0);
-            playerBody.parent.localRotation = horizontalRotation;
             // Vertical rotation (rotates camera up and down body)
             Quaternion verticalRotation = Quaternion.Euler(currentY, 0, 0);
             ActiveCamera.transform.localRotation = verticalRotation;
@@ -81,7 +84,7 @@ public class CameraController : MonoBehaviour {
                 Vector3 wantedPosition = verticalRotation * distancefromPlayer; // local
                 ActiveCamera.transform.localPosition = wantedPosition;
                 RaycastHit hit;
-                if (Physics.Raycast(playerLookAtTarget.position, horizontalRotation * wantedPosition, out hit, wallDistanceCheck, GameManager.Layer_IgnorePlayer)) {
+                if (Physics.Raycast(playerLookAtTarget.position, Quaternion.Euler(0, currentX, 0) * wantedPosition, out hit, wallDistanceCheck, GameManager.Layer_IgnorePlayer)) {
                     ActiveCamera.transform.position = hit.point + distanceFromHitWall * hit.normal;
                 } else {
                     // Check if the camera is just barely touching a wall (check 6 directions)

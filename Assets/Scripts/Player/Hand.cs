@@ -37,7 +37,7 @@ public class Hand : MonoBehaviour {
             }
             Quaternion newRotation = new Quaternion();
             newRotation.SetLookRotation(new Vector3(horizontal, (-1 + Vector2.ClampMagnitude(new Vector2(horizontal, vertical), 1).magnitude), vertical), Vector3.up);
-            centerOfMass.localRotation = newRotation;
+            centerOfMass.rotation = CameraController.ActiveCamera.transform.rotation * newRotation;
         } else {
             // Rotate hand to look towards reticle target
             RaycastHit hit;
