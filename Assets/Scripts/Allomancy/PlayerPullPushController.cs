@@ -82,9 +82,9 @@ public class PlayerPullPushController : MonoBehaviour {
                     // Check scrollwheel for changing the max number of targets and burn rate, or DPad if using gamepad
                     float scrollValue = 0;
                     if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) { // Gamepad
-                        scrollValue = Keybinds.DPadXAxis();
+                        scrollValue = Keybinds.DPadYAxis();
                         if (SettingsMenu.settingsData.pushControlStyle == 1) {
-                            ChangeTargetForceMagnitude(Keybinds.DPadYAxis());
+                            ChangeTargetForceMagnitude(Keybinds.DPadXAxis());
                         }
                     } else { // Mouse and keyboard
                         if (Keybinds.ScrollWheelButton()) {

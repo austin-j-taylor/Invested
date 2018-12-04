@@ -8,68 +8,17 @@ public static class Keybinds {
 
     private static float timeToHoldDPadY = 0f;
     private static float timeToHoldDPadX = 0f;
-
-    public static float Horizontal() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-            return Input.GetAxis("GamepadHorizontal");
-        else
-            return Input.GetAxisRaw("Horizontal");
-    }
-
-    public static float Vertical() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-            return Input.GetAxis("GamepadVertical");
-        else
-            return Input.GetAxisRaw("Vertical");
-    }
-
-    public static bool Jump() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-            return Input.GetButton("GamepadA");
-        else
-            return Input.GetKey(KeyCode.Space);
-    }
-    public static bool JumpDown() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-            return Input.GetButtonDown("GamepadA");
-        else
-            return Input.GetKeyDown(KeyCode.Space);
-    }
-
-    public static bool WithdrawCoinDown() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-            return Input.GetButtonDown("GamepadX");
-        else
-            return Input.GetKeyDown(KeyCode.LeftControl);
-    }
+    private static float triggerDeadband = 0.01f;
 
     public static bool IronPulling() {
-        return RightBurnRate() > .1f;
+        return RightBurnRate() > triggerDeadband;
     }
 
     public static bool SteelPushing() {
-        return LeftBurnRate() > .1f;
+        return LeftBurnRate() > triggerDeadband;
     }
 
-    public static bool NegateDown() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-            return Input.GetButtonDown("GamepadY");
-        else
-            return Input.GetKeyDown(KeyCode.LeftShift);
-    }
-    public static bool Negate() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-            return Input.GetButton("GamepadY");
-        else
-            return Input.GetKey(KeyCode.LeftShift);
-    }
-    public static bool StopBurnUp() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-            return Input.GetButtonUp("GamepadY");
-        else
-            return Input.GetKeyUp(KeyCode.LeftShift);
-    }
-
+    // Both Keyboard and Gamepad (Specifics for M45/KQE)
     public static bool SelectDown() {
         switch (SettingsMenu.settingsData.controlScheme) {
             case SettingsData.MK54: {
@@ -148,6 +97,64 @@ public static class Keybinds {
         }
     }
 
+    // Both Keyboard and Gamepad
+    public static bool EscapeDown() {
+        return Input.GetKeyDown(KeyCode.Escape) || Input.GetButtonDown("GamepadStart");
+    }
+
+    public static float Horizontal() {
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            return Input.GetAxis("GamepadHorizontal");
+        else
+            return Input.GetAxisRaw("Horizontal");
+    }
+
+    public static float Vertical() {
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            return Input.GetAxis("GamepadVertical");
+        else
+            return Input.GetAxisRaw("Vertical");
+    }
+
+    public static bool Jump() {
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            return Input.GetButton("GamepadA");
+        else
+            return Input.GetKey(KeyCode.Space);
+    }
+    public static bool JumpDown() {
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            return Input.GetButtonDown("GamepadA");
+        else
+            return Input.GetKeyDown(KeyCode.Space);
+    }
+
+    public static bool WithdrawCoinDown() {
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            return Input.GetButtonDown("GamepadX");
+        else
+            return Input.GetKeyDown(KeyCode.LeftControl);
+    }
+
+    public static bool NegateDown() {
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            return Input.GetButtonDown("GamepadY");
+        else
+            return Input.GetKeyDown(KeyCode.LeftShift);
+    }
+    public static bool Negate() {
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            return Input.GetButton("GamepadY");
+        else
+            return Input.GetKey(KeyCode.LeftShift);
+    }
+    public static bool StopBurnUp() {
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            return Input.GetButtonUp("GamepadY");
+        else
+            return Input.GetKeyUp(KeyCode.LeftShift);
+    }
+
     public static float LeftBurnRate() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
             return Input.GetAxis("LeftTrigger");
@@ -162,16 +169,22 @@ public static class Keybinds {
             return Input.GetButton("Mouse0") ? 1 : 0;
     }
 
+    public static bool ToggleCoinshotMode() {
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+            return Input.GetButtonDown("GamepadRightJoystickClick");
+        } else {
+            return Input.GetKeyDown(KeyCode.C);
+        }
+    }
+
+    // Only Gamepad
+
     public static float LeftTrigger() {
         return Input.GetAxis("LeftTrigger");
     }
 
     public static float RightTrigger() {
         return Input.GetAxis("RightTrigger");
-    }
-
-    public static float ScrollWheelAxis() {
-        return Input.GetAxis("Mouse ScrollWheel");
     }
 
     public static float DPadYAxis() {
@@ -192,20 +205,14 @@ public static class Keybinds {
         }
     }
 
+
+    // Only Mouse/Keyboard
+    public static float ScrollWheelAxis() {
+        return Input.GetAxis("Mouse ScrollWheel");
+    }
+
     public static bool ScrollWheelButton() {
         return Input.GetButton("Mouse2");
-    }
-
-    public static bool ToggleCoinshotMode() {
-        if(SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
-            return false;
-        } else {
-            return Input.GetKeyDown(KeyCode.C);
-        }
-    }
-
-    public static bool EscapeDown() {
-        return Input.GetKeyDown(KeyCode.Escape) || Input.GetButtonDown("GamepadStart");
     }
 
 }

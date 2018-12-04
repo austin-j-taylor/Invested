@@ -45,22 +45,22 @@ public class TextCodes : MonoBehaviour {
         tester[5].GetComponent<Text>().text = s_Press_ + KeySelectAlternate + " to select a metal to be a " + Push_target + ".";
         tester[6].GetComponent<Text>().text = KeyPull + " to " + Pull + ".";
         tester[7].GetComponent<Text>().text = KeyPush + " to " + Push + ".";
-        tester[8].GetComponent<Text>().text = "While holding " + KeyNegate
-            + ":\n\t\t• " + s_Hold_ + KeySelect + " while looking at a " + Pull_target
+        tester[8].GetComponent<Text>().text = KeyNumberOfTargets + " to change your " + Gray("max number of " + Push_Pull_targets + ".");
+        tester[9].GetComponent<Text>().text = "While holding " + KeyNegate
+            + ":\n\t\t• " + s_Press_ + KeySelect + " while looking at a " + Pull_target
             + " to deselect it.\n\t\t• " + s_Tap_ + KeySelect + " while not looking at a " + Pull_target + " to deselect your oldest " + Pull_target
             + ".\n\t\tLikewise for " + KeySelectAlternate + " and " + Push_targets + ".";
-        tester[9].GetComponent<Text>().text = KeyPushPullStrength + " to change " + Push_Pull + Gray(" strength") + '.';
-        tester[10].GetComponent<Text>().text = KeyNumberOfTargets + " to change your " + Gray("max number of " + Push_Pull_targets + ".");
+        tester[10].GetComponent<Text>().text = KeyPushPullStrength + " to change " + Push_Pull + Gray(" strength") + '.';
         tester[11].GetComponent<Text>().text = KeyPassiveBurn + " to change which metal you passively burn.";
         tester[12].GetComponent<Text>().text = KeyStopBurning + " to stop burning " + Gray("Iron and Steel.");
-        tester[13].GetComponent<Text>().text = KeyThrow + " to throw a coin in front of you. Try " + Pushing + " on it.";
+        tester[13].GetComponent<Text>().text = KeyThrow + " to throw a coin in front of you. Try " + Pushing + " on it as you throw.";
         tester[14].GetComponent<Text>().text = KeyDrop + " to drop a coin at your feet. Try " + Pushing + " on it."
             + "\n\t\t• " + KeyDropDirection + " while dropping a coin will drop the coin in the opposite direction.";
-        tester[15].GetComponent<Text>().text = KeySwap + " to swap your " + Push_targets + " and " + Pull_targets + ".";
-        tester[16].GetComponent<Text>().text = KeyCoinshotMode + " to activate " + CoinshotMode
+        tester[15].GetComponent<Text>().text = Pull + " a coin into you to " + Gray("catch") + " it.";
+        tester[16].GetComponent<Text>().text = KeySwap + " to swap your " + Push_targets + " and " + Pull_targets + ".";
+        tester[17].GetComponent<Text>().text = KeyCoinshotMode + " to activate " + CoinshotMode
             + ".\n\t\t• While in " + CoinshotMode + ", " + KeyCoinshotThrow
             + " to throw coins.\n\t\t" + KeyCoinshotMode + " again to disable " + CoinshotMode + ".";
-        tester[17].GetComponent<Text>().text = Pull + " a coin into you to " + Gray("catch") + " it.";
     }
 
     // Methods that accept strings as arguments and return strings colored in their respective color
@@ -149,7 +149,7 @@ public class TextCodes : MonoBehaviour {
     }
     public static string CoinshotMode {
         get {
-            return Gold("Coinshot Mode");
+            return Gold("Coinshot mode");
         }
     }
 
@@ -429,7 +429,7 @@ public class TextCodes : MonoBehaviour {
     public static string KeyCoinshotMode {
         get {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-                return "Push in " + Gray("the right joystick");
+                return "Click in " + Gold("the right joystick");
             else
                 return "Tap " + C;
         }
@@ -437,9 +437,9 @@ public class TextCodes : MonoBehaviour {
     public static string KeyCoinshotThrow {
         get {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-                return "hold " + LeftTrigger + " and press " + LeftTrigger;
+                return "hold " + LeftTrigger + " and press " + RightTrigger + " (or vice-versa)";
             else
-                return "hold " + RightClick + " and press " + LeftClick;
+                return "hold " + RightClick + " and press " + LeftClick + " (or vice-versa)";
         }
     }
 

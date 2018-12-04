@@ -36,9 +36,10 @@ public class MetalReserveMeters : MonoBehaviour {
         steel.fill.fillAmount = (float)steel.reserve.Mass / maxMass;
 
         ironAnimator.SetBool("IsLow", iron.fill.fillAmount < lowThreshold);
-        ironAnimator.SetBool("IsDraining", iron.reserve.Rate < AllomanticIronSteel.gramsPerSecondPassiveBurn || iron.reserve.Mass < criticalMassThreshold && iron.reserve.Mass != 0);
+        // The -.001f is to account for floating-point error
+        ironAnimator.SetBool("IsDraining", iron.reserve.Rate < AllomanticIronSteel.gramsPerSecondPassiveBurn - .001f || iron.reserve.Mass < criticalMassThreshold && iron.reserve.Mass != 0);
         steelAnimator.SetBool("IsLow", steel.fill.fillAmount < lowThreshold);
-        steelAnimator.SetBool("IsDraining", steel.reserve.Rate < AllomanticIronSteel.gramsPerSecondPassiveBurn || steel.reserve.Mass < criticalMassThreshold && steel.reserve.Mass != 0);
+        steelAnimator.SetBool("IsDraining", steel.reserve.Rate < AllomanticIronSteel.gramsPerSecondPassiveBurn - .001f || steel.reserve.Mass < criticalMassThreshold && steel.reserve.Mass != 0);
     }
 
     public void Clear() {
