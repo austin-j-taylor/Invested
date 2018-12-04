@@ -50,7 +50,7 @@ public class TextCodes : MonoBehaviour {
             + " to deselect it.\n\t\t• " + s_Tap_ + KeySelect + " while not looking at a " + Pull_target + " to deselect your oldest " + Pull_target
             + ".\n\t\tLikewise for " + KeySelectAlternate + " and " + Push_targets + ".";
         tester[9].GetComponent<Text>().text = KeyPushPullStrength + " to change " + Push_Pull + Gray(" strength") + '.';
-        tester[10].GetComponent<Text>().text = KeyNumberOfTargets + " to change the " + Gray("number of " + Push_Pull_targets + ".");
+        tester[10].GetComponent<Text>().text = KeyNumberOfTargets + " to change your " + Gray("max number of " + Push_Pull_targets + ".");
         tester[11].GetComponent<Text>().text = KeyPassiveBurn + " to change which metal you passively burn.";
         tester[12].GetComponent<Text>().text = KeyStopBurning + " to stop burning " + Gray("Iron and Steel.");
         tester[13].GetComponent<Text>().text = KeyThrow + " to throw a coin in front of you. Try " + Pushing + " on it.";
@@ -60,6 +60,7 @@ public class TextCodes : MonoBehaviour {
         tester[16].GetComponent<Text>().text = KeyCoinshotMode + " to activate " + CoinshotMode
             + ".\n\t\t• While in " + CoinshotMode + ", " + KeyCoinshotThrow
             + " to throw coins.\n\t\t" + KeyCoinshotMode + " again to disable " + CoinshotMode + ".";
+        tester[17].GetComponent<Text>().text = Pull + " a coin into you to " + Gray("catch") + " it.";
     }
 
     // Methods that accept strings as arguments and return strings colored in their respective color
@@ -390,7 +391,7 @@ public class TextCodes : MonoBehaviour {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
                 return s_Press_ + Gray("Up/Down") + " on the D-Pad";
             else
-                return s_Press_ + "and " + s_Scroll_ + theScrollWheel;
+                return s_Press_ + "and scroll " + theScrollWheel;
         }
     }
     public static string KeyThrow {
@@ -428,7 +429,7 @@ public class TextCodes : MonoBehaviour {
     public static string KeyCoinshotMode {
         get {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-                return "Tap " + "COINSHOT_MODE_BUTTON";
+                return "Push in " + Gray("the right joystick");
             else
                 return "Tap " + C;
         }

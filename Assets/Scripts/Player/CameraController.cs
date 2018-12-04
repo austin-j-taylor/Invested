@@ -13,7 +13,6 @@ public class CameraController : MonoBehaviour {
     private const float wallDistanceCheck = 4;
     private const float lerpConstant = 5;
     private static readonly Vector3 distancefromPlayer = new Vector3(0, 0, -wallDistanceCheck);
-    private static readonly Vector3 lookAtTargetHeight = new Vector3(0, 1.25f, 0);
 
     public static Camera ActiveCamera { get; private set; }
     public static Transform ExternalPositionTarget { get; set; } // Assigned by another part of the program for tracking
@@ -28,11 +27,23 @@ public class CameraController : MonoBehaviour {
     private static float currentY = 0;
     private static bool cameraIsLocked;
 
+
+    // Returns the horizontal direction the camera is facing (only in the x/z plane)
+    public static Quaternion CameraDirection {
+        get {
+            Vector3 eulers = ActiveCamera.transform.eulerAngles;
+            eulers.x = 0;
+            eulers.z = 0;
+            return Quaternion.Euler(eulers);
+        }
+    }
+
+
     void Awake() {
         playerBody = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
-        playerLookAtTarget = playerBody.Find("CameraLookAtTarget").GetComponent<Transform>();
-        thirdPersonCamera = playerLookAtTarget.Find("ThirdPersonCamera").GetComponent<Camera>();
-        firstPersonCamera = playerLookAtTarget.Find("FirstPersonCamera").GetComponent<Camera>();
+        playerLookAtTarget = transform.GetChild(0);
+        thirdPersonCamera = playerLookAtTarget.GetChild(0).GetComponent<Camera>();
+        firstPersonCamera = playerLookAtTarget.GetChild(1).GetChild(0).GetComponent<Camera>();
         ActiveCamera = thirdPersonCamera;
         Clear();
         UnlockCamera();
@@ -40,11 +51,9 @@ public class CameraController : MonoBehaviour {
 
     // Update for PlayerPushController's screen positions of targets relative to cameras
     private void Update() {
-        playerLookAtTarget.position = playerBody.position + lookAtTargetHeight;
+        transform.position = playerBody.transform.position;
         playerLookAtTarget.rotation = Quaternion.Euler(0, currentX, 0);
-    }
-
-    private void LateUpdate() {
+        
         if (cameraIsLocked) {
             if (Player.CanControlPlayer) {
                 if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
@@ -62,15 +71,6 @@ public class CameraController : MonoBehaviour {
         if (ExternalPositionTarget) {
             UpdateCameraToExternalSource();
         }
-    }
-
-    public static void Clear() {
-        ExternalPositionTarget = null;
-        ExternalLookAtTarget = null;
-        firstPersonCamera.transform.localPosition = lookAtTargetHeight;
-        currentY = playerLookAtTarget.localEulerAngles.x + 30; // Tilted downward a little
-        currentX = playerLookAtTarget.localEulerAngles.y;
-        UpdateCamera();
     }
 
     public static void UpdateCamera() {
@@ -101,12 +101,24 @@ public class CameraController : MonoBehaviour {
                     } else if (Physics.Raycast(ActiveCamera.transform.position, Vector3.back, out hit, distanceFromHitWall)) {
                         ActiveCamera.transform.position = hit.point + distanceFromHitWall * hit.normal;
                     }
-
-
                 }
             }
         }
     }
+
+    public static void Clear() {
+        ExternalPositionTarget = null;
+        ExternalLookAtTarget = null;
+        firstPersonCamera.transform.localPosition = Vector3.zero;
+        Vector3 eulers = Player.PlayerInstance.transform.eulerAngles;
+        eulers.x = 0;
+        eulers.z = 0;
+        playerLookAtTarget.rotation = Quaternion.Euler(eulers);
+        currentY = playerLookAtTarget.localEulerAngles.x + 15; // Tilted downward a little
+        currentX = playerLookAtTarget.localEulerAngles.y;
+        UpdateCamera();
+    }
+
     /*
      * Called when the Camera is being controlled by some other source, i.e. HarmonyTarget
      */

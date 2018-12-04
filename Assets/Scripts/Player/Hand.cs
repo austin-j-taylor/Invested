@@ -24,8 +24,7 @@ public class Hand : MonoBehaviour {
 
     // If the player is holding down Jump, throw the coin downwards biased against the player's movement.
     // If the player is not jumping, the hand follows the camera.
-    void Update() {
-
+    void LateUpdate() {
         if (Keybinds.Jump()) {
             float vertical = -Keybinds.Vertical() * baseSteepAngle;
             float horizontal = -Keybinds.Horizontal() * baseSteepAngle;
@@ -37,19 +36,20 @@ public class Hand : MonoBehaviour {
             }
             Quaternion newRotation = new Quaternion();
             newRotation.SetLookRotation(new Vector3(horizontal, (-1 + Vector2.ClampMagnitude(new Vector2(horizontal, vertical), 1).magnitude), vertical), Vector3.up);
-            centerOfMass.rotation = CameraController.ActiveCamera.transform.rotation * newRotation;
+            centerOfMass.rotation = CameraController.CameraDirection * newRotation;
         } else {
             // Rotate hand to look towards reticle target
             RaycastHit hit;
             if (Physics.Raycast(CameraController.ActiveCamera.transform.position, CameraController.ActiveCamera.transform.forward, out hit, 1000, GameManager.Layer_IgnorePlayer)) {
                 centerOfMass.LookAt(hit.point);
             } else {
-                centerOfMass.localEulerAngles = new Vector3(CameraController.ActiveCamera.transform.eulerAngles.x, 0, 0);
+                centerOfMass.eulerAngles = CameraController.ActiveCamera.transform.eulerAngles;
             }
         }
     }
 
     public Coin WithdrawCoinToHand() {
+        LateUpdate();
         if (Pouch.Count > 0) {
             Coin coin;
             // Raycast towards the hand. If the raycast hits something, spawn the coin there to prevent it from going through walls.

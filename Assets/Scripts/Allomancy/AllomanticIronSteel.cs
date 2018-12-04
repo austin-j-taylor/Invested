@@ -10,7 +10,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     // Actual "Burn Rates" of iron and steel
     private const double gramsIronPerSecondPerNewton = .001f;
     private const double gramsSteelPerSecondPerNewton = gramsIronPerSecondPerNewton;
-    private const double gramsPerSecondPassiveBurn = .005f; // 5 mg/s for passively burning iron or steel to see metal lines
+    public const double gramsPerSecondPassiveBurn = -.005f; // 5 mg/s for passively burning iron or steel to see metal lines
 
     // Simple metal boolean constants for passing to methods
     private const bool steel = false;
@@ -258,12 +258,12 @@ public class AllomanticIronSteel : MonoBehaviour {
 
                 // Consume iron or steel for passively burning, depending on which metal was last used to push/pull
                 if (HasIron && lastWasPulling || !HasSteel) {
-                    IronReserve.Mass -= IronPassiveBurn * gramsPerSecondPassiveBurn * Time.fixedDeltaTime;
+                    IronReserve.Mass += IronPassiveBurn * gramsPerSecondPassiveBurn * Time.fixedDeltaTime;
                 } else if (HasSteel && lastWasPushing || !HasIron) {
-                    SteelReserve.Mass -= SteelPassiveBurn * gramsPerSecondPassiveBurn * Time.fixedDeltaTime;
+                    SteelReserve.Mass += SteelPassiveBurn * gramsPerSecondPassiveBurn * Time.fixedDeltaTime;
                 } else {
-                    IronReserve.Mass -= IronPassiveBurn * gramsPerSecondPassiveBurn * Time.fixedDeltaTime / 2;
-                    SteelReserve.Mass -= SteelPassiveBurn * gramsPerSecondPassiveBurn * Time.fixedDeltaTime / 2;
+                    IronReserve.Mass += IronPassiveBurn * gramsPerSecondPassiveBurn * Time.fixedDeltaTime / 2;
+                    SteelReserve.Mass += SteelPassiveBurn * gramsPerSecondPassiveBurn * Time.fixedDeltaTime / 2;
                 }
 
                 // If out of metals, stop burning.

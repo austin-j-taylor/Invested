@@ -6,16 +6,22 @@ using UnityEngine.UI;
 public class MetalReserveMeters : MonoBehaviour {
 
     private const float maxMass = 100;
+    private const float lowThreshold = .15f;
+    private const float criticalMassThreshold = 1f; // When reserve is < 1g, always flash red
 
     private MetalReserveElement iron;
     private MetalReserveElement steel;
+    private Animator ironAnimator;
+    private Animator steelAnimator;
 
     private void Start() {
         iron = transform.GetChild(0).gameObject.AddComponent<MetalReserveElement>();
+        ironAnimator = iron.GetComponent<Animator>();
         iron.metalColor = new Color(0, .5f, 1);
         iron.reserve = Player.PlayerIronSteel.IronReserve;
 
         steel = transform.GetChild(1).gameObject.AddComponent<MetalReserveElement>();
+        steelAnimator = steel.GetComponent<Animator>();
         steel.metalColor = new Color(1, 0, 0);
         steel.reserve = Player.PlayerIronSteel.SteelReserve;
     }
@@ -29,6 +35,10 @@ public class MetalReserveMeters : MonoBehaviour {
         steel.rateText.text = HUD.RoundStringToSigFigs((float)steel.reserve.Rate * 1000, 2) + "mg/s";
         steel.fill.fillAmount = (float)steel.reserve.Mass / maxMass;
 
+        ironAnimator.SetBool("IsLow", iron.fill.fillAmount < lowThreshold);
+        ironAnimator.SetBool("IsDraining", iron.reserve.Rate < AllomanticIronSteel.gramsPerSecondPassiveBurn || iron.reserve.Mass < criticalMassThreshold && iron.reserve.Mass != 0);
+        steelAnimator.SetBool("IsLow", steel.fill.fillAmount < lowThreshold);
+        steelAnimator.SetBool("IsDraining", steel.reserve.Rate < AllomanticIronSteel.gramsPerSecondPassiveBurn || steel.reserve.Mass < criticalMassThreshold && steel.reserve.Mass != 0);
     }
 
     public void Clear() {

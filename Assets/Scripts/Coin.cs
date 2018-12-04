@@ -9,7 +9,7 @@ public class Coin : Magnetic {
     private const float maxSpeed = 120f;
     private const float drag = 1.25f;
     private const float stuckThreshold = 1000f; // Square magnitude of normal force necessary for friction
-    private const float dotThreshold = -.5f; // friction threshold for dot product between force and normal vector
+    private const float dotThreshold = -.3f; // friction threshold for dot product between force and normal vector
     private const float equalMagnitudeConstant = .01f;
 
     // Used for pseudo-parenting Coin when stuck to object it collides with
@@ -69,13 +69,16 @@ public class Coin : Magnetic {
         }
     }
 
-    private void OnTriggerEnter(Collider other) {
-        OnTriggerStay(other);
-    }
+    //private void OnTriggerEnter(Collider other) {
+    //    OnTriggerStay(other);
+    //}
+
     private void OnTriggerStay(Collider other) {
         if (other.CompareTag("Player") &&
-                (Player.PlayerIronSteel.PullingOnPullTargets && Player.PlayerIronSteel.PullTargets.IsTarget(this) ||
-                 Player.PlayerIronSteel.PullingOnPushTargets && Player.PlayerIronSteel.PushTargets.IsTarget(this))) {
+                    Keybinds.IronPulling() && !(Player.PlayerIronSteel.HasPullTarget &&  Player.PlayerIronSteel.PushTargets.IsTarget(this))) {
+                //(Player.PlayerIronSteel.PullingOnPullTargets && Player.PlayerIronSteel.PullTargets.IsTarget(this) ||
+                // Player.PlayerIronSteel.PullingOnPushTargets && Player.PlayerIronSteel.PushTargets.IsTarget(this) || 
+                // !Player.PlayerIronSteel.HasIron && Keybinds.IronPulling())) {
             BeCaughtByAllomancer(other.GetComponent<Player>());
         }
     }
