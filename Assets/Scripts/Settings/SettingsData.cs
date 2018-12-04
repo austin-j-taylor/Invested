@@ -24,6 +24,8 @@ public class SettingsData : MonoBehaviour {
     public int pushControlStyle; // 0 for percentage, 1 for magnitude
     public int cameraFirstPerson; // 0 for third person, 1 for first person
     public int cameraClamping; // 0 for Unclamped, 1 for Clamped
+    public int cameraInvertX; // 0 for disabled, 1 for inverted
+    public int cameraInvertY;
     public float mouseSensitivityX;
     public float mouseSensitivityY;
     public float gamepadSensitivityX;
@@ -122,6 +124,14 @@ public class SettingsData : MonoBehaviour {
                 }
             case "cameraClamping": {
                     cameraClamping = data;
+                    return true;
+                }
+            case "cameraInvertX": {
+                    cameraInvertX = data;
+                    return true;
+                }
+            case "cameraInvertY": {
+                    cameraInvertY = data;
                     return true;
                 }
             case "renderblueLines": {
@@ -280,6 +290,12 @@ public class SettingsData : MonoBehaviour {
                 }
             case "cameraClamping": {
                     return cameraClamping;
+                }
+            case "cameraInvertX": {
+                    return cameraInvertX;
+                }
+            case "cameraInvertY": {
+                    return cameraInvertY;
                 }
             case "renderblueLines": {
                     return renderblueLines;

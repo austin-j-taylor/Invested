@@ -15,10 +15,10 @@ public class PlayerMovementController : MonoBehaviour {
     private const float airDrag = .2f;
     private const float groundedDrag = 3f;
     private readonly Vector3 jumpHeight = new Vector3(0, 400f, 0);
-    
+
     private Rigidbody rb;
     private PlayerGroundedChecker groundedChecker;
-    
+
     public bool IsGrounded {
         get {
             return groundedChecker.IsGrounded;
@@ -32,7 +32,16 @@ public class PlayerMovementController : MonoBehaviour {
     void FixedUpdate() {
         if (Player.CanControlPlayer) {
             Vector3 movement = new Vector3(Keybinds.Horizontal(), 0f, Keybinds.Vertical());
-            movement = CameraController.CameraDirection * (Vector3.ClampMagnitude(movement, 1));
+            movement = CameraController.CameraDirection * Vector3.ClampMagnitude(movement, 1);
+
+            // If is unclamped and upside-down, keep movement in an intuitive direction for the player
+            if (SettingsMenu.settingsData.cameraClamping == 0) {
+                float angle = CameraController.ActiveCamera.transform.localEulerAngles.y;
+                if (angle > 1) { // flips to 180 when camera is upside-down
+                    movement = -movement;
+                }
+            }
+
             if (IsGrounded) {
                 if (movement.magnitude > 0) {
                     // You: "why use ints to represent binary values that should be represented by booleans"
@@ -53,7 +62,7 @@ public class PlayerMovementController : MonoBehaviour {
     }
 
     private void Update() {
-        if(IsGrounded) {
+        if (IsGrounded) {
             // Jump
             if (Keybinds.JumpDown()) {
                 rb.AddForce(jumpHeight, ForceMode.Impulse);

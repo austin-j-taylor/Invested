@@ -53,16 +53,25 @@ public class CameraController : MonoBehaviour {
     private void Update() {
         transform.position = playerBody.transform.position;
         playerLookAtTarget.rotation = Quaternion.Euler(0, currentX, 0);
-        
+
         if (cameraIsLocked) {
             if (Player.CanControlPlayer) {
+                float deltaX;
+                float deltaY;
                 if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
-                    currentX += Input.GetAxis("HorizontalRight") * SettingsMenu.settingsData.gamepadSensitivityX;
-                    currentY -= Input.GetAxis("VerticalRight") * SettingsMenu.settingsData.gamepadSensitivityY;
+                    deltaX = Input.GetAxis("HorizontalRight") * SettingsMenu.settingsData.gamepadSensitivityX;
+                    deltaY = Input.GetAxis("VerticalRight") * SettingsMenu.settingsData.gamepadSensitivityY;
                 } else {
-                    currentX += Input.GetAxis("Mouse X") * SettingsMenu.settingsData.mouseSensitivityX;
-                    currentY -= Input.GetAxis("Mouse Y") * SettingsMenu.settingsData.mouseSensitivityY;
+                    deltaX = Input.GetAxis("Mouse X") * SettingsMenu.settingsData.mouseSensitivityX;
+                    deltaY = Input.GetAxis("Mouse Y") * SettingsMenu.settingsData.mouseSensitivityY;
                 }
+                // deltaY is normally the negative of the above statements, so an uninverted camera should be negatative
+                if (SettingsMenu.settingsData.cameraInvertX == 1)
+                    deltaX = -deltaX;
+                if (SettingsMenu.settingsData.cameraInvertY == 0)
+                    deltaY = -deltaY;
+                currentX += deltaX;
+                currentY += deltaY;
                 if (SettingsMenu.settingsData.cameraClamping == 1)
                     ClampY();
             }
@@ -72,6 +81,10 @@ public class CameraController : MonoBehaviour {
             UpdateCameraToExternalSource();
         }
     }
+
+    //private void LateUpdate() {
+    //    Update();
+    //}
 
     public static void UpdateCamera() {
         if (Player.CanControlPlayer) {
@@ -84,7 +97,7 @@ public class CameraController : MonoBehaviour {
                 Vector3 wantedPosition = verticalRotation * distancefromPlayer; // local
                 ActiveCamera.transform.localPosition = wantedPosition;
                 RaycastHit hit;
-                if (Physics.Raycast(playerLookAtTarget.position, Quaternion.Euler(0, currentX, 0) * wantedPosition, out hit, wallDistanceCheck, GameManager.Layer_IgnorePlayer)) {
+                if (Physics.Raycast(playerLookAtTarget.position, ActiveCamera.transform.position - playerLookAtTarget.position, out hit, wallDistanceCheck, GameManager.Layer_IgnorePlayer)) {
                     ActiveCamera.transform.position = hit.point + distanceFromHitWall * hit.normal;
                 } else {
                     // Check if the camera is just barely touching a wall (check 6 directions)
