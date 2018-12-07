@@ -45,9 +45,6 @@ public class TargetOverlayController : MonoBehaviour {
     }
 
     private void LateUpdate() {
-        if (Player.PlayerIronSteel.IsBurningIronSteel) {
-            SoftRefresh();
-        }
     }
 
     public void Clear() {
@@ -68,6 +65,26 @@ public class TargetOverlayController : MonoBehaviour {
         for (int i = Player.PlayerIronSteel.PushTargets.Count; i < AllomanticIronSteel.maxNumberOfTargets; i++) {
             pushTargetsSumForce[i].text = "";
             pushTargetsActualForce[i].text = "";
+        }
+    }
+
+    // Update forces, positions on screen
+    public void SoftRefresh() {
+        if (SettingsMenu.settingsData.hudForces == 1) {
+            SoftRefreshTargets(Player.PlayerIronSteel.PullTargets, pullTargetsActualForce, pullTargetsSumForce, SettingsMenu.settingsData.forceComplexity == 1);
+            SoftRefreshTargets(Player.PlayerIronSteel.PushTargets, pushTargetsActualForce, pushTargetsSumForce, SettingsMenu.settingsData.forceComplexity == 1);
+        }
+        // If the target is highlighted and on screen, display mass
+        if (SettingsMenu.settingsData.hudMasses == 1) {
+            if (Player.PushPullController.HasHighlightedTarget) {
+                Vector3 heightToTop = Vector3.zero;
+                heightToTop.y = Player.PushPullController.HighlightedTarget.ColliderBodyBoundsSizeY / 2f;
+
+                highlightedTargetMass.text = HUD.MassString(Player.PushPullController.HighlightedTarget.MagneticMass);
+                highlightedTargetMass.transform.position = CameraController.ActiveCamera.WorldToScreenPoint(Player.PushPullController.HighlightedTarget.transform.position + heightToTop) + new Vector3(0, pixelDelta);
+            } else { // Target is not highlighted or is not on screen, hide mass label
+                highlightedTargetMass.text = "";
+            }
         }
     }
 
@@ -97,94 +114,23 @@ public class TargetOverlayController : MonoBehaviour {
         }
     }
 
-    // Update forces, positions on screen
-    private void SoftRefresh() {
-        if (SettingsMenu.settingsData.hudForces == 1) {
-            // If should display Sums of forces
-            if (SettingsMenu.settingsData.forceComplexity == 1) {
+    private void SoftRefreshTargets(TargetArray targets, Text[] actualForce, Text[] sumForce, bool refreshSum) {
+        for (int i = 0; i < targets.Count; i++) {
+            Magnetic target = targets[i];
 
-                for (int i = 0; i < Player.PlayerIronSteel.PullTargets.Count; i++) {
-                    Magnetic target = Player.PlayerIronSteel.PullTargets[i];
+            Vector3 heightToTop = Vector3.zero;
+            heightToTop.y = target.ColliderBodyBoundsSizeY / 2f;
 
-                    Vector3 heightToTop = Vector3.zero;
-                    heightToTop.y = target.ColliderBody.bounds.size.y / 2f;
+            Vector3 positionActualForce = CameraController.ActiveCamera.WorldToScreenPoint(target.transform.position - heightToTop) + new Vector3(0, -pixelDelta);
 
-                    Vector3 positionActualForce = CameraController.ActiveCamera.WorldToScreenPoint(target.transform.position - heightToTop) + new Vector3(0, -pixelDelta);
-
-                    if (positionActualForce.z > 0) {
-                        pullTargetsActualForce[i].transform.position = positionActualForce;
-                        pullTargetsActualForce[i].text = HUD.ForceString(target.LastNetForceOnTarget.magnitude, target.NetMass);
-                        pullTargetsSumForce[i].text = HUD.AllomanticSumString(target.LastAllomanticForce, target.LastAnchoredPushBoostFromAllomancer, target.NetMass, true);
-                    } else { // Target is not on screen
-                        pullTargetsSumForce[i].text = "";
-                        pullTargetsActualForce[i].text = "";
-                    }
-                }
-
-                for (int i = 0; i < Player.PlayerIronSteel.PushTargets.Count; i++) {
-                    Magnetic target = Player.PlayerIronSteel.PushTargets[i];
-
-                    Vector3 heightToTop = Vector3.zero;
-                    heightToTop.y = target.ColliderBody.bounds.size.y / 2f;
-
-                    Vector3 positionActualForce = CameraController.ActiveCamera.WorldToScreenPoint(target.transform.position - heightToTop) + new Vector3(0, -pixelDelta);
-
-                    if (positionActualForce.z > 0) {
-                        pushTargetsActualForce[i].transform.position = positionActualForce;
-                        pushTargetsActualForce[i].text = HUD.ForceString(target.LastNetForceOnTarget.magnitude, target.NetMass);
-                        pushTargetsSumForce[i].text = HUD.AllomanticSumString(target.LastAllomanticForce, target.LastAnchoredPushBoostFromAllomancer, target.NetMass, true);
-                    } else { // Target is not on screen
-                        pushTargetsSumForce[i].text = "";
-                        pushTargetsActualForce[i].text = "";
-                    }
-                }
-            } else { // Do not display sums of forces
-                     // Does everything within the above conditional except change the SumForce text fields
-                for (int i = 0; i < Player.PlayerIronSteel.PullTargets.Count; i++) {
-                    Magnetic target = Player.PlayerIronSteel.PullTargets[i];
-
-                    Vector3 heightToTop = Vector3.zero;
-                    heightToTop.y = target.ColliderBody.bounds.size.y / 2f;
-
-                    Vector3 positionActualForce = CameraController.ActiveCamera.WorldToScreenPoint(target.transform.position - heightToTop) + new Vector3(0, -pixelDelta);
-
-                    if (positionActualForce.z > 0) {
-                        pullTargetsActualForce[i].transform.position = positionActualForce;
-                        pullTargetsActualForce[i].text = HUD.ForceString(target.LastNetForceOnTarget.magnitude, target.NetMass);
-                    } else { // Target is not on screen
-                        pullTargetsSumForce[i].text = "";
-                        pullTargetsActualForce[i].text = "";
-                    }
-                }
-
-                for (int i = 0; i < Player.PlayerIronSteel.PushTargets.Count; i++) {
-                    Magnetic target = Player.PlayerIronSteel.PushTargets[i];
-
-                    Vector3 heightToTop = Vector3.zero;
-                    heightToTop.y = target.ColliderBody.bounds.size.y / 2f;
-
-                    Vector3 positionActualForce = CameraController.ActiveCamera.WorldToScreenPoint(target.transform.position - heightToTop) + new Vector3(0, -pixelDelta);
-
-                    if (positionActualForce.z > 0) {
-                        pushTargetsActualForce[i].transform.position = positionActualForce;
-                        pushTargetsActualForce[i].text = HUD.ForceString(target.LastNetForceOnTarget.magnitude, target.NetMass);
-                    } else { // Target is not on screen
-                        pushTargetsSumForce[i].text = "";
-                        pushTargetsActualForce[i].text = "";
-                    }
-                }
-            }
-        }
-        // If the target is highlighted and on screen, display mass
-        if (SettingsMenu.settingsData.hudMasses == 1) {
-            if (Player.PushPullController.HasHighlightedTarget) {
-                Vector3 heightToTop = Vector3.zero;
-                heightToTop.y = Player.PushPullController.HighlightedTarget.ColliderBody.bounds.size.y / 2f;
-
-                highlightedTargetMass.text = HUD.MassString(Player.PushPullController.HighlightedTarget.MagneticMass);
-                highlightedTargetMass.transform.position = CameraController.ActiveCamera.WorldToScreenPoint(Player.PushPullController.HighlightedTarget.transform.position + heightToTop) + new Vector3(0, pixelDelta);
-            } else { // Target is not highlighted or is not on screen, hide mass label
-                highlightedTargetMass.text = "";
+            if (positionActualForce.z > 0) {
+                actualForce[i].transform.position = positionActualForce;
+                actualForce[i].text = HUD.ForceString(target.LastNetForceOnTarget.magnitude, target.NetMass);
+                if(refreshSum)
+                    sumForce[i].text = HUD.AllomanticSumString(target.LastAllomanticForce, target.LastAnchoredPushBoostFromAllomancer, target.NetMass, true);
+            } else { // Target is not on screen
+                sumForce[i].text = "";
+                actualForce[i].text = "";
             }
         }
     }

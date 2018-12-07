@@ -43,7 +43,7 @@ public class PlayerMovementController : MonoBehaviour {
             }
 
             if (IsGrounded) {
-                if (movement.magnitude > 0) {
+                if (movement.sqrMagnitude > 0 || Player.PlayerIronSteel.IronPulling || Player.PlayerIronSteel.SteelPushing) {
                     // You: "why use ints to represent binary values that should be represented by booleans"
                     // Me, an intellectual:
                     rb.drag = SettingsMenu.settingsData.playerAirResistance * airDrag;

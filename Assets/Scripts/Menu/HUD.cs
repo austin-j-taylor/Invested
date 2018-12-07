@@ -11,6 +11,7 @@ public class HUD : MonoBehaviour {
     public static readonly Color strongBlue = new Color(0, 1f, 1, 1);
 
     private static Text coinCountText;
+    private static Text fPSText;
 
     private float deltaTimeFPS = 0.0f;
     private static GameObject hudGameObject;
@@ -33,36 +34,29 @@ public class HUD : MonoBehaviour {
 
     void Awake() {
         hudGameObject = gameObject;
-        coinCountText = GetComponentsInChildren<Text>()[0];
+
+        Text[] texts = GetComponentsInChildren<Text>();
+        coinCountText = texts[0];
+        fPSText = texts[1];
         BurnRateMeter = GetComponentInChildren<BurnRateMeter>();
         TargetOverlayController = GetComponentInChildren<TargetOverlayController>();
         MetalReserveMeters = GetComponentInChildren<MetalReserveMeters>();
     }
 
-	void Update() {
+	void LateUpdate() {
         deltaTimeFPS += (Time.unscaledDeltaTime - deltaTimeFPS) * 0.1f;
-        coinCountText.text = Player.PlayerInstance.CoinHand.Pouch.Count.ToString();
-	}
-
-    /*
-     * FPS Counter
-     * Modified from http://wiki.unity3d.com/index.php/FramesPerSecond
-     */
-    void OnGUI()
-	{
         if (SettingsMenu.settingsData.fpsCounter == 1) {
-            int w = Screen.width, h = Screen.height;
-
-            GUIStyle style = new GUIStyle();
-            
-            style.alignment = TextAnchor.UpperLeft;
-            style.fontSize = h * 2 / 100;
-            style.normal.textColor = new Color(0.75f, 0.75f, 0.75f, 1.0f);
             float fps = 1.0f / deltaTimeFPS;
             string text = string.Format("{0:0.} fps", fps);
-            GUI.Label(new Rect(0, 0, w, h * 2 / 100), text, style);
+            fPSText.text = text;
+        } else {
+            fPSText.text = "";
         }
-	}
+        coinCountText.text = Player.PlayerInstance.CoinHand.Pouch.Count.ToString();
+        if (Player.PlayerIronSteel.IsBurningIronSteel) {
+            TargetOverlayController.SoftRefresh();
+        }
+    }
 
     public static void EnableHUD() {
         hudGameObject.SetActive(true);

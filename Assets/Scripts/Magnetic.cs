@@ -56,7 +56,8 @@ public class Magnetic : MonoBehaviour {
     // The allomantic force, excluding the burn rate.
     public Vector3 LastMaxPossibleAllomanticForce { get; set; }
 
-    public bool IsStatic { get; set; }
+    public bool IsStatic { get; private set; }
+    public bool HasColliders { get; private set; }
 
     public bool LastWasPulled {
         get {
@@ -93,9 +94,12 @@ public class Magnetic : MonoBehaviour {
         }
     }
 
-    public Collider ColliderBody {
+    public float ColliderBodyBoundsSizeY {
         get {
-            return colliders[0];
+            if (HasColliders)
+                return colliders[0].bounds.size.y;
+            else
+                return 0;
         }
     }
     public float Charge { get; private set; }
@@ -109,14 +113,17 @@ public class Magnetic : MonoBehaviour {
     // if the object is made of multiple colliders, find the center of volume of all of those colliders.
     public Vector3 CenterOfMass {
         get {
-            if (colliders.Length == 1 && !IsStatic) {
-                return Rb.worldCenterOfMass;
-            } else {
+            if(HasColliders && !IsStatic) {
                 Vector3 centers = colliders[0].bounds.center;
                 for (int i = 1; i < colliders.Length; i++) {
                     centers += colliders[i].bounds.center;
                 }
                 return centers / colliders.Length;
+            } else if(IsStatic) {
+                // no collider or rigidbody, so center of mass is set to transform.position as a default
+                return transform.position;
+            } else {
+                return Rb.worldCenterOfMass;
             }
         }
     }
@@ -136,6 +143,7 @@ public class Magnetic : MonoBehaviour {
         lastWasPulled = false;
         IsHighlighted = false;
         IsStatic = Rb == null;
+        HasColliders = colliders.Length > 0;
 
         if (IsStatic) { // No RigidBody attached
             if (netMass == 0) {

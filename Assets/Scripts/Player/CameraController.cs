@@ -48,9 +48,8 @@ public class CameraController : MonoBehaviour {
         Clear();
         UnlockCamera();
     }
-
-    // Update for PlayerPushController's screen positions of targets relative to cameras
-    private void Update() {
+    
+    private void LateUpdate() {
         transform.position = playerBody.transform.position;
         playerLookAtTarget.rotation = Quaternion.Euler(0, currentX, 0);
 
@@ -81,10 +80,6 @@ public class CameraController : MonoBehaviour {
             UpdateCameraToExternalSource();
         }
     }
-
-    //private void LateUpdate() {
-    //    Update();
-    //}
 
     public static void UpdateCamera() {
         if (Player.CanControlPlayer) {
