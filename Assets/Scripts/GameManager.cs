@@ -18,7 +18,7 @@ public class GameManager : MonoBehaviour {
     // Holds all Magnetics in scene
     public static List<Magnetic> MagneticsInScene { get; private set; }
 
-    public static int Layer_IgnorePlayer { get; private set; }
+    public static int Layer_IgnoreCamera { get; private set; }
 
     void Awake() {
         //Material_TargetHighlight = Resources.Load<Material>("Materials/targetHighlightMaterial");
@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour {
         Font_Heebo = Resources.Load<Font>("Fonts/Heebo-Medium");
         MetalLineTemplate = Resources.Load<VolumetricLineBehavior>("MetalLineTemplate");
         MagneticsInScene = new List<Magnetic>();
-        Layer_IgnorePlayer = ~(1 << LayerMask.NameToLayer("Player"));
+        Layer_IgnoreCamera = ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ignore Camera")));
         SceneManager.sceneLoaded += Clear;
     }
 

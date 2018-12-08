@@ -40,7 +40,7 @@ public class Hand : MonoBehaviour {
         } else {
             // Rotate hand to look towards reticle target
             RaycastHit hit;
-            if (Physics.Raycast(CameraController.ActiveCamera.transform.position, CameraController.ActiveCamera.transform.forward, out hit, 1000, GameManager.Layer_IgnorePlayer)) {
+            if (Physics.Raycast(CameraController.ActiveCamera.transform.position, CameraController.ActiveCamera.transform.forward, out hit, 1000, GameManager.Layer_IgnoreCamera)) {
                 centerOfMass.LookAt(hit.point);
             } else {
                 centerOfMass.eulerAngles = CameraController.ActiveCamera.transform.eulerAngles;
@@ -54,7 +54,7 @@ public class Hand : MonoBehaviour {
             Coin coin;
             // Raycast towards the hand. If the raycast hits something, spawn the coin there to prevent it from going through walls.
             RaycastHit hit;
-            if (Physics.Raycast(centerOfMass.position, transform.position - centerOfMass.position, out hit, distanceToHand, GameManager.Layer_IgnorePlayer)) {
+            if (Physics.Raycast(centerOfMass.position, transform.position - centerOfMass.position, out hit, distanceToHand, GameManager.Layer_IgnoreCamera  )) {
                 coin = Pouch.RemoveCoin(hit.point + hit.normal * coinSize);
             } else {
                 coin = Pouch.RemoveCoin(transform.position);

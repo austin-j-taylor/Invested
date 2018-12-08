@@ -28,10 +28,13 @@ public class BezierCurveEditor : Editor {
         spline = target as SpikePit;
         EditorGUI.BeginChangeCheck();
         bool loop = EditorGUILayout.Toggle("Loop", spline.Loop);
+        float animationTime = EditorGUILayout.FloatField("Animation Time", spline.AnimationTime);
         if (EditorGUI.EndChangeCheck()) {
             Undo.RecordObject(spline, "Toggle Loop");
+            Undo.RecordObject(spline, "Change Animation Time");
             EditorUtility.SetDirty(spline);
             spline.Loop = loop;
+            spline.AnimationTime = animationTime;
         }
         if (selectedIndex >= 0 && selectedIndex < spline.ControlPointCount) {
             DrawSelectedPointInspector();

@@ -6,6 +6,8 @@
 public class MetalReserve : MonoBehaviour {
 
     private const float maxCapacity = 500; // stomach can hold up to .5kg of metal, why not
+
+    public bool IsEndless { get; set; } = false; // If true, this reserve will never run out
     
     private double mass = 0;
     private double lastMass = 0;
@@ -20,6 +22,11 @@ public class MetalReserve : MonoBehaviour {
                 mass = 0;
         }
     } // in grams
+    public bool HasMass {
+        get {
+            return IsEndless || mass > 0;
+        }
+    }
 
     private void FixedUpdate() {
         Rate = (Mass - lastMass) / Time.fixedDeltaTime;

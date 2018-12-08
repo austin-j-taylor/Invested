@@ -26,7 +26,7 @@ public class Magnetic : MonoBehaviour {
 
     public AllomanticIronSteel Allomancer { get; set; }
     protected Rigidbody Rb { get; set; }
-    
+
     public Vector3 Velocity {
         get {
             if (IsStatic)
@@ -111,19 +111,21 @@ public class Magnetic : MonoBehaviour {
     public float MagneticMass { get { return magneticMass; } }
     // If the object has a Rigidbody, this is the real centerOfMass. Otherwise, it is just the transform position.
     // if the object is made of multiple colliders, find the center of volume of all of those colliders.
+    // If the object has only one collider, the local center of mass is calculated at startup.
+    private Vector3 centerOfMass;
     public Vector3 CenterOfMass {
         get {
-            if(HasColliders && !IsStatic) {
+            if (HasColliders && !IsStatic) {
                 Vector3 centers = colliders[0].bounds.center;
                 for (int i = 1; i < colliders.Length; i++) {
                     centers += colliders[i].bounds.center;
                 }
                 return centers / colliders.Length;
-            } else if(IsStatic) {
+            } else if (IsStatic) {
                 // no collider or rigidbody, so center of mass is set to transform.position as a default
                 return transform.position;
             } else {
-                return Rb.worldCenterOfMass;
+                return transform.TransformPoint(centerOfMass);
             }
         }
     }
@@ -135,7 +137,8 @@ public class Magnetic : MonoBehaviour {
 
     private void Awake() {
         Allomancer = null;
-        highlightedTargetOutline = gameObject.AddComponent<Outline>();
+        if (GetComponent<Renderer>())
+            highlightedTargetOutline = gameObject.AddComponent<Outline>();
         blueLine = Instantiate(GameManager.MetalLineTemplate);
         Rb = GetComponentInParent<Rigidbody>();
         colliders = GetComponentsInChildren<Collider>();
@@ -157,7 +160,11 @@ public class Magnetic : MonoBehaviour {
             if (magneticMass == 0) {
                 magneticMass = netMass;
             }
+            if (colliders.Length == 1) {
+                centerOfMass = Rb.centerOfMass;
+            }
         }
+
 
         Charge = Mathf.Pow(magneticMass, AllomanticIronSteel.chargePower);
         LastPosition = transform.position;
@@ -170,7 +177,8 @@ public class Magnetic : MonoBehaviour {
     }
 
     private void Start() {
-        GameManager.AddMagnetic(this);
+        if (gameObject.layer != LayerMask.NameToLayer("Undetectable Magnetic"))
+            GameManager.AddMagnetic(this);
     }
 
     // If the Magnetic is untargeted
@@ -203,12 +211,13 @@ public class Magnetic : MonoBehaviour {
     public virtual void StopBeingPullPushed() { }
 
     public void AddTargetGlow() {
-        if(SettingsMenu.settingsData.highlightedTargetOutline == 1)
+        if (SettingsMenu.settingsData.highlightedTargetOutline == 1 && highlightedTargetOutline)
             highlightedTargetOutline.Enable();
     }
 
     public void RemoveTargetGlow() {
-        highlightedTargetOutline.Disable();
+        if (highlightedTargetOutline)
+            highlightedTargetOutline.Disable();
     }
 
     public void SetBlueLine(Vector3 endPos, float width, float lsf, Color color) {

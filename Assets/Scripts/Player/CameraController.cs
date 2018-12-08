@@ -92,21 +92,21 @@ public class CameraController : MonoBehaviour {
                 Vector3 wantedPosition = verticalRotation * distancefromPlayer; // local
                 ActiveCamera.transform.localPosition = wantedPosition;
                 RaycastHit hit;
-                if (Physics.Raycast(playerLookAtTarget.position, ActiveCamera.transform.position - playerLookAtTarget.position, out hit, wallDistanceCheck, GameManager.Layer_IgnorePlayer)) {
+                if (Physics.Raycast(playerLookAtTarget.position, ActiveCamera.transform.position - playerLookAtTarget.position, out hit, wallDistanceCheck, GameManager.Layer_IgnoreCamera)) {
                     ActiveCamera.transform.position = hit.point + distanceFromHitWall * hit.normal;
                 } else {
                     // Check if the camera is just barely touching a wall (check 6 directions)
-                    if (Physics.Raycast(ActiveCamera.transform.position, Vector3.down, out hit, distanceFromHitWall)) {
+                    if (Physics.Raycast(ActiveCamera.transform.position, Vector3.down, out hit, distanceFromHitWall, GameManager.Layer_IgnoreCamera)) {
                         ActiveCamera.transform.position = hit.point + distanceFromHitWall * hit.normal;
-                    } else if (Physics.Raycast(ActiveCamera.transform.position, Vector3.up, out hit, distanceFromHitWall)) {
+                    } else if (Physics.Raycast(ActiveCamera.transform.position, Vector3.up, out hit, distanceFromHitWall, GameManager.Layer_IgnoreCamera)) {
                         ActiveCamera.transform.position = hit.point + distanceFromHitWall * hit.normal;
-                    } else if (Physics.Raycast(ActiveCamera.transform.position, Vector3.left, out hit, distanceFromHitWall)) {
+                    } else if (Physics.Raycast(ActiveCamera.transform.position, Vector3.left, out hit, distanceFromHitWall, GameManager.Layer_IgnoreCamera)) {
                         ActiveCamera.transform.position = hit.point + distanceFromHitWall * hit.normal;
-                    } else if (Physics.Raycast(ActiveCamera.transform.position, Vector3.right, out hit, distanceFromHitWall)) {
+                    } else if (Physics.Raycast(ActiveCamera.transform.position, Vector3.right, out hit, distanceFromHitWall, GameManager.Layer_IgnoreCamera)) {
                         ActiveCamera.transform.position = hit.point + distanceFromHitWall * hit.normal;
-                    } else if (Physics.Raycast(ActiveCamera.transform.position, Vector3.forward, out hit, distanceFromHitWall)) {
+                    } else if (Physics.Raycast(ActiveCamera.transform.position, Vector3.forward, out hit, distanceFromHitWall, GameManager.Layer_IgnoreCamera)) {
                         ActiveCamera.transform.position = hit.point + distanceFromHitWall * hit.normal;
-                    } else if (Physics.Raycast(ActiveCamera.transform.position, Vector3.back, out hit, distanceFromHitWall)) {
+                    } else if (Physics.Raycast(ActiveCamera.transform.position, Vector3.back, out hit, distanceFromHitWall, GameManager.Layer_IgnoreCamera)) {
                         ActiveCamera.transform.position = hit.point + distanceFromHitWall * hit.normal;
                     }
                 }

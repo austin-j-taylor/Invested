@@ -3,6 +3,7 @@ using UnityEngine;
  * Controls Ironpulling and Steelpushing.
  * Should be attached to any Allomancer.
  */
+ [RequireComponent(typeof(Rigidbody))]
 public class AllomanticIronSteel : MonoBehaviour {
 
     public const float chargePower = 1f / 8f;
@@ -15,6 +16,8 @@ public class AllomanticIronSteel : MonoBehaviour {
     // Simple metal boolean constants for passing to methods
     private const bool steel = false;
     private const bool iron = true;
+
+    protected Rigidbody rb;
 
     public MetalReserve IronReserve { get; private set; }
     public MetalReserve SteelReserve { get; private set; }
@@ -57,12 +60,12 @@ public class AllomanticIronSteel : MonoBehaviour {
 
     public bool HasIron {
         get {
-            return IronReserve.Mass > 0;
+            return IronReserve.HasMass;
         }
     }
     public bool HasSteel {
         get {
-            return SteelReserve.Mass > 0;
+            return SteelReserve.HasMass;
         }
     }
 
@@ -80,24 +83,23 @@ public class AllomanticIronSteel : MonoBehaviour {
     public Vector3 LastMaximumNetForce { get; private set; } = Vector3.zero;
     private Vector3 thisFrameMaximumNetForce = Vector3.zero;
 
-    // Debug variables for viewing values in the Unity editor
-    public float allomanticsForce;
-    public float netAllomancersForce;
-    public float netTargetsForce;
-    public Vector3 allomanticsForces;
-    public Vector3 resititutionFromTargetsForce;
-    public Vector3 resititutionFromPlayersForce;
-    public float percentOfTargetForceReturned;
-    public float percentOfAllomancerForceReturned;
+    //// Debug variables for viewing values in the Unity editor
+    //public float allomanticsForce;
+    //public float netAllomancersForce;
+    //public float netTargetsForce;
+    //public Vector3 allomanticsForces;
+    //public Vector3 resititutionFromTargetsForce;
+    //public Vector3 resititutionFromPlayersForce;
+    //public float percentOfTargetForceReturned;
+    //public float percentOfAllomancerForceReturned;
 
     // Metal burn rates
     // Used when burning metals, but not necessarily immediately Pushing or Pulling. Hence, they are "targets" and not the actual burn rate of the Allomancer.
     public float IronBurnRateTarget { get; set; }
     public float SteelBurnRateTarget { get; set; }
-    // The passive burn rate of the allomancer. Only really used for the blue lines to targets.
-    public float IronPassiveBurn { get; set; }
-    public float SteelPassiveBurn { get; set; }
-
+    // The passive burn rate of the allomancer.
+    protected float IronPassiveBurn { get; set; }
+    protected float SteelPassiveBurn { get; set; }
     public float GreaterBurnRate {
         get {
             return Mathf.Max(IronBurnRateTarget, SteelBurnRateTarget);
@@ -108,9 +110,7 @@ public class AllomanticIronSteel : MonoBehaviour {
             return Mathf.Max(IronPassiveBurn, SteelPassiveBurn);
         }
     }
-
-    private Transform centerOfMass;
-    private Rigidbody rb;
+    
     private bool lastWasPulling = false;
     private bool lastWasPushing = false;
     private bool ironPulling = false;
@@ -155,12 +155,12 @@ public class AllomanticIronSteel : MonoBehaviour {
             steelPushing = value;
         }
     }
-    public bool IsBurningIronSteel { get; set; } = false;
-    // Allomantic Charge
-    public float Charge { get; private set; }
+    public bool IsBurningIronSteel { get; protected set; } = false;
+    public float Strength { get; protected set; } = 1; // Allomantic Strength
+    public float Charge { get; private set; } // Allomantic Charge
     public Vector3 CenterOfMass {
         get {
-            return centerOfMass.position;
+            return rb.worldCenterOfMass;
         }
     }
     public float Mass {
@@ -171,8 +171,6 @@ public class AllomanticIronSteel : MonoBehaviour {
 
     private void Awake() {
         rb = GetComponent<Rigidbody>();
-        centerOfMass = transform.Find("Body/Center of Mass");
-        centerOfMass.localPosition = Vector3.zero;
         Charge = Mathf.Pow(Mass, chargePower);
         IronReserve = gameObject.AddComponent<MetalReserve>();
         SteelReserve = gameObject.AddComponent<MetalReserve>();
@@ -180,7 +178,7 @@ public class AllomanticIronSteel : MonoBehaviour {
         PushTargets = new TargetArray(maxNumberOfTargets);
     }
 
-    public void Clear(bool clearTargets = true) {
+    public virtual void Clear(bool clearTargets = true) {
         IsBurningIronSteel = false;
 
         if (clearTargets) {
@@ -255,7 +253,6 @@ public class AllomanticIronSteel : MonoBehaviour {
                         CalculateForce(PushTargets[i], netPushTargetsCharge, sumPushTargetsCharge, steel);
                     }
                 }
-
                 // Consume iron or steel for passively burning, depending on which metal was last used to push/pull
                 if (HasIron && lastWasPulling || !HasSteel) {
                     IronReserve.Mass += IronPassiveBurn * gramsPerSecondPassiveBurn * Time.fixedDeltaTime;
@@ -296,7 +293,8 @@ public class AllomanticIronSteel : MonoBehaviour {
     }
 
     /*
-     * Calculates the unaltered, maximum possible Allomantic Force between the allomancer and target.
+     * Calculates the maximum possible Allomantic Force between the allomancer and target.
+     * Does not account for ABPs or burn rate.
      */
     public static Vector3 CalculateAllomanticForce(Magnetic target, AllomanticIronSteel allomancer) {
         return allomancer.CalculateAllomanticForce(target.CenterOfMass, target.Charge); ;
@@ -320,7 +318,8 @@ public class AllomanticIronSteel : MonoBehaviour {
                     break;
                 }
         }
-        return SettingsMenu.settingsData.allomanticConstant * targetCharge * Charge * distanceFactor;
+        // Do the final calculation
+        return SettingsMenu.settingsData.allomanticConstant * Strength * Charge * targetCharge * distanceFactor;
     }
 
     /* 
@@ -498,43 +497,34 @@ public class AllomanticIronSteel : MonoBehaviour {
         target.AddForce(target.LastNetForceOnTarget);
         rb.AddForce(target.LastNetForceOnAllomancer);
 
-        // Debug
-        allomanticsForce = target.LastAllomanticForce.magnitude;
-        allomanticsForces = target.LastAllomanticForce;
-        netAllomancersForce = target.LastNetForceOnAllomancer.magnitude;
-        resititutionFromTargetsForce = target.LastAnchoredPushBoostFromTarget;
-        resititutionFromPlayersForce = target.LastAnchoredPushBoostFromAllomancer;
-        percentOfTargetForceReturned = resititutionFromTargetsForce.magnitude / allomanticsForce;
-        percentOfAllomancerForceReturned = resititutionFromPlayersForce.magnitude / allomanticsForce;
-        netTargetsForce = target.LastNetForceOnTarget.magnitude;
+        //// Debug
+        //allomanticsForce = target.LastAllomanticForce.magnitude;
+        //allomanticsForces = target.LastAllomanticForce;
+        //netAllomancersForce = target.LastNetForceOnAllomancer.magnitude;
+        //resititutionFromTargetsForce = target.LastAnchoredPushBoostFromTarget;
+        //resititutionFromPlayersForce = target.LastAnchoredPushBoostFromAllomancer;
+        //percentOfTargetForceReturned = resititutionFromTargetsForce.magnitude / allomanticsForce;
+        //percentOfAllomancerForceReturned = resititutionFromPlayersForce.magnitude / allomanticsForce;
+        //netTargetsForce = target.LastNetForceOnTarget.magnitude;
     }
 
-    public void StartBurning(bool startIron) {
+    protected virtual void StartBurning(bool startIron) {
         if (!IsBurningIronSteel && (HasIron || HasSteel)) {
             IsBurningIronSteel = true;
             // Set burn rates to slow burn, to start
             IronBurnRateTarget = .1f;
             SteelBurnRateTarget = .1f;
             lastWasPulling = startIron;
-            // If this component belongs to the player
-            if (tag == "Player")
-                GetComponent<PlayerPullPushController>().StartBurningIronSteel();
-
         }
-
     }
 
-    public void StopBurning() {
+    public virtual void StopBurning() {
         if (IsBurningIronSteel) {
             PullTargets.Clear();
             PushTargets.Clear();
             IronBurnRateTarget = 0;
             SteelBurnRateTarget = 0;
             IsBurningIronSteel = false;
-
-            // If this component belongs to the player
-            if (tag == "Player")
-                GetComponent<PlayerPullPushController>().StopBurningIronSteel();
         }
     }
 

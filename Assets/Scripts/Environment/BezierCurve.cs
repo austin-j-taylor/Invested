@@ -29,11 +29,20 @@ public class BezierCurve : MonoBehaviour {
             }
         }
     }
+    public float AnimationTime {
+        get {
+            return animationTime;
+        }
+        set {
+            animationTime = value;
+        }
+    }
     public int ControlPointCount { get { return points.Length; } }
     public int CurveCount { get { return (points.Length - 1) / 3; } }
-    
+
     private bool loop;
-    
+    private float animationTime = 5;
+
     public void Reset() {
         points = new Vector3[] {
             new Vector3(1f, 0f, 0f),
