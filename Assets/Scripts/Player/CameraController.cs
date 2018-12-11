@@ -48,7 +48,7 @@ public class CameraController : MonoBehaviour {
         Clear();
         UnlockCamera();
     }
-    
+
     private void LateUpdate() {
         transform.position = playerBody.transform.position;
         playerLookAtTarget.rotation = Quaternion.Euler(0, currentX, 0);

@@ -6,15 +6,15 @@ using UnityEngine;
  * 
  * Modified from https://catlikecoding.com/unity/tutorials/curves-and-splines/
  */
-[CustomEditor(typeof(SpikePit))]
+[CustomEditor(typeof(SpikeSpline))]
 public class BezierCurveEditor : Editor {
 
-    private const int stepsPerCurve = 30;
+    public const int stepsPerCurve = 30;
     private const float directionScale = 0.5f;
     private const float handleSize = 0.04f;
     private const float pickSize = 0.06f;
 
-    private SpikePit spline;
+    private SpikeSpline spline;
     private Transform handleTransform;
     private Quaternion handleRotation;
     private int selectedIndex = -1;
@@ -26,7 +26,7 @@ public class BezierCurveEditor : Editor {
     };
 
     public override void OnInspectorGUI() {
-        spline = target as SpikePit;
+        spline = target as SpikeSpline;
         EditorGUI.BeginChangeCheck();
         bool loop = EditorGUILayout.Toggle("Loop", spline.Loop);
         float animationTime = EditorGUILayout.FloatField("Animation Time", spline.AnimationTime);
@@ -66,7 +66,7 @@ public class BezierCurveEditor : Editor {
     }
 
     private void OnSceneGUI() {
-        spline = target as SpikePit;
+        spline = target as SpikeSpline;
         handleTransform = spline.transform;
         handleRotation = Tools.pivotRotation == PivotRotation.Local ?
             handleTransform.rotation : Quaternion.identity;

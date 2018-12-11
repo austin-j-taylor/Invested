@@ -99,7 +99,7 @@ public class Magnetic : MonoBehaviour {
             if (HasColliders)
                 return colliders[0].bounds.size.y;
             else
-                return 0;
+                return GetComponent<Renderer>().bounds.size.y;
         }
     }
     public float Charge { get; private set; }

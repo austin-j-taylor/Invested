@@ -6,8 +6,8 @@ public enum BezierControlPointMode {
     Free,
     Aligned
 }
+
 /*
- * 
  * Modified from https://catlikecoding.com/unity/tutorials/curves-and-splines/
  */
 public class BezierCurve : MonoBehaviour {

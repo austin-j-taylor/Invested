@@ -69,10 +69,6 @@ public class Coin : Magnetic {
         }
     }
 
-    //private void OnTriggerEnter(Collider other) {
-    //    OnTriggerStay(other);
-    //}
-
     private void OnTriggerStay(Collider other) {
         if (other.CompareTag("PlayerBody") &&
                     Keybinds.IronPulling() && !(Player.PlayerIronSteel.HasPullTarget &&  Player.PlayerIronSteel.PushTargets.IsTarget(this))) {
@@ -91,11 +87,11 @@ public class Coin : Magnetic {
         ) + netForce;
         if (collisionCollider) { // If in a collision..
             if (isStuck) { // and is stuck...
-                if (!IsStuckByFriction(newNetForce, newNetForce)) { // ... but friction is too weak to keep the coin stuck in the target.
+                if (!IsStuckByFriction(netForce)) { // ... but friction is too weak to keep the coin stuck in the target.
                     UnStick();
                 }
             } else { // and is not yet stuck from the previous pushes...
-                isStuck = IsStuckByFriction(newNetForce, newNetForce);
+                isStuck = IsStuckByFriction(netForce);
                 if (isStuck) { // but this push would stick the coin.
                     CreateJoint(collisionCollider.GetComponent<Rigidbody>());
                 }
@@ -127,6 +123,9 @@ public class Coin : Magnetic {
     /*
      * Returns true if allomanticForce provides a strong enough friction against the collisionNormal
      */
+    private bool IsStuckByFriction(Vector3 allomanticForce) {
+        return IsStuckByFriction(allomanticForce, allomanticForce);
+    }
     private bool IsStuckByFriction(Vector3 allomanticForce, Vector3 direction) {
         return Vector3.Dot(direction.normalized, collisionNormal) < dotThreshold && Vector3.Project(allomanticForce, collisionNormal).sqrMagnitude > stuckThreshold;
     }

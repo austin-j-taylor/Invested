@@ -13,9 +13,9 @@ public class AllomanticIronSteel : MonoBehaviour {
     private const double gramsSteelPerSecondPerNewton = gramsIronPerSecondPerNewton;
     public const double gramsPerSecondPassiveBurn = -.005f; // 5 mg/s for passively burning iron or steel to see metal lines
     // Blue metal line constants
-    protected const float lowLineColor = .1f;
-    protected const float highLineColor = .85f;
-    protected const float blueLineWidthBaseFactor = .04f;
+    public const float lowLineColor = .1f;
+    public const float highLineColor = .85f;
+    public const float blueLineWidthBaseFactor = .04f;
     protected const float blueLineStartupFactor = 2f;
     protected const float blueLineBrightnessFactor = 1;
 

@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using VolumetricLines;
 
-public class SpikePit : BezierCurve {
+public class SpikeSpline : BezierCurve {
     
 
     private const float distanceThreshold = .01f;
@@ -14,13 +15,27 @@ public class SpikePit : BezierCurve {
     private Spike pitSpike;
     private Rigidbody pitSpikeRb;
     private Transform spikeTarget;
+    private VolumetricLineStripBehavior volLines;
 
-    void Awake() {
+    void Start() {
         pitSpike = GetComponentInChildren<Spike>();
         pitSpikeRb = pitSpike.GetComponent<Rigidbody>();
         spikeTarget = pitSpike.transform.parent;
-
         pitSpike.transform.localPosition = pitSpikeRb.centerOfMass;
+
+        int steps = BezierCurveEditor.stepsPerCurve * CurveCount;
+        Vector3[] points = new Vector3[steps + 1];
+
+        for(int i = 0; i <= steps; i++) {
+            points[i] = GetPoint(i / (float)steps);
+        }
+
+        volLines = Instantiate(GameManager.MetalLineStripTemplate);
+        volLines.GetComponent<MeshRenderer>().enabled = true;
+        volLines.UpdateLineVertices(points);
+        volLines.LineColor = new Color(0, AllomanticIronSteel.lowLineColor, AllomanticIronSteel.highLineColor, 1);
+        volLines.LightSaberFactor = 1;
+        volLines.LineWidth = AllomanticIronSteel.blueLineWidthBaseFactor;
     }
 
     void Update() {

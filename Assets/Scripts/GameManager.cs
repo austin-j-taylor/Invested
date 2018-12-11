@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour {
     public static Material Material_Ettmetal_Glowing { get; private set; }
     public static Font Font_Heebo { get; private set; }
     public static VolumetricLineBehavior MetalLineTemplate { get; private set; }
+    public static VolumetricLineStripBehavior MetalLineStripTemplate { get; private set; }
 
     // Holds all Magnetics in scene
     public static List<Magnetic> MagneticsInScene { get; private set; }
@@ -26,6 +27,7 @@ public class GameManager : MonoBehaviour {
         Material_Ettmetal_Glowing = Resources.Load<Material>("Materials/Ettmetal_glowing");
         Font_Heebo = Resources.Load<Font>("Fonts/Heebo-Medium");
         MetalLineTemplate = Resources.Load<VolumetricLineBehavior>("MetalLineTemplate");
+        MetalLineStripTemplate = Resources.Load<VolumetricLineStripBehavior>("MetalLineStripTemplate");
         MagneticsInScene = new List<Magnetic>();
         Layer_IgnoreCamera = ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ignore Camera")));
         //SceneManager.sceneLoaded += Clear;
