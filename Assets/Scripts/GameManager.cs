@@ -28,7 +28,8 @@ public class GameManager : MonoBehaviour {
         MetalLineTemplate = Resources.Load<VolumetricLineBehavior>("MetalLineTemplate");
         MagneticsInScene = new List<Magnetic>();
         Layer_IgnoreCamera = ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ignore Camera")));
-        SceneManager.sceneLoaded += Clear;
+        //SceneManager.sceneLoaded += Clear;
+        SceneManager.sceneUnloaded += Clear;
     }
 
     private void Start() {
@@ -39,7 +40,11 @@ public class GameManager : MonoBehaviour {
         MagneticsInScene.Add(magnetic);
     }
 
-    private void Clear(Scene scene, LoadSceneMode mode) {
+    public static void RemoveMagnetic(Magnetic magnetic) {
+        MagneticsInScene.Remove(magnetic);
+    }
+
+    private void Clear(Scene scene) {
         MagneticsInScene = new List<Magnetic>();
     }
 }

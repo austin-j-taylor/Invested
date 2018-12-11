@@ -1,3 +1,4 @@
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
 
@@ -117,3 +118,4 @@ public class BezierCurveEditor : Editor {
         return point;
     }
 }
+#endif

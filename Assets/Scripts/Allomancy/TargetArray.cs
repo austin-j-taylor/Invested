@@ -1,24 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 /*
  * Array-based data structure used for storing an Allomancer's Pull targets or Push targets
  */
 public class TargetArray {
 
-    // Blue metal line constants
     private const float blueLineTargetedWidthFactor = .06f;
     private const float lightSaberConstant = 1024;
-    private readonly Color targetedRedLine = new Color(1, 0, 1);
-    private readonly Color targetedGreenLine = new Color(0, 1, 0);
-    private readonly Color targetedBlueLine = new Color(0, 0, 1);
-    private readonly Color targetedLightBlueLine = new Color(0, .5f, 1f);
-    
-    private Magnetic[] targets;
+    private static readonly Color targetedRedLine = new Color(1, 0, 1);
+    private static readonly Color targetedGreenLine = new Color(0, 1, 0);
+    private static readonly Color targetedBlueLine = new Color(0, 0, 1);
+    private static readonly Color targetedLightBlueLine = new Color(0, .5f, 1f);
+
+    protected Magnetic[] targets;
 
     public int Size { get; private set; } = 1;
     public int Count { get; private set; } = 0;
-    
+
+    public TargetArray(int maxNumberOfTargets) {
+        targets = new Magnetic[maxNumberOfTargets];
+    }
+
     /*
      * Calculates the center of MAGNETIC mass of all targets within this TargetArray.
      */
@@ -71,10 +75,6 @@ public class TargetArray {
         }
     }
 
-    public TargetArray(int maxNumberOfTargets) {
-        targets = new Magnetic[maxNumberOfTargets];
-    }
-
     /*
      * Moves all elements down, covering the element at index, making an empty space at Count
      * Decrements Count.
@@ -122,7 +122,6 @@ public class TargetArray {
      * Returns true if newTarget was not already within the array and false if it was already in the array.
      */
     public bool AddTarget(Magnetic newTarget, AllomanticIronSteel allomancer) {
-        newTarget.Allomancer = allomancer;
         int indexOfTarget = GetIndex(newTarget);
         if (indexOfTarget >= 0) {   // Target is already in the array
 
@@ -221,43 +220,42 @@ public class TargetArray {
         Count = other.Count;
         other.Count = tempCount;
     }
-
     /*
      * Refreshes the blue metal lies that point to each target.
      * pullTheme determines the color (green or red) that the line could have.
      */
-    public void UpdateBlueLines(bool pullingColor, float burnRate) {
+    public void UpdateBlueLines(bool pullingColor, float burnRate, Vector3 startPos) {
         // Go through targets and update their metal lines
         for (int i = 0; i < Count; i++) {
             targets[i].SetBlueLine(
-                Player.PlayerIronSteel.CenterOfMass,
+                startPos,
                 blueLineTargetedWidthFactor * targets[i].Charge,
                 Mathf.Exp(-targets[i].LastMaxPossibleAllomanticForce.magnitude * burnRate / lightSaberConstant),
                 // 200IQ Ternary Operator
-                (pullingColor) ? 
+                (pullingColor) ?
                     SettingsMenu.settingsData.pullTargetLineColor == 0 ? targetedBlueLine
                     :
-                        SettingsMenu.settingsData.pullTargetLineColor == 1 ? targetedLightBlueLine 
+                        SettingsMenu.settingsData.pullTargetLineColor == 1 ? targetedLightBlueLine
                         :
                         targetedGreenLine
                 :
                     SettingsMenu.settingsData.pushTargetLineColor == 0 ? targetedBlueLine : targetedRedLine
                 );
-            
+
         }
     }
 
     /*
      * Removes all entries out of range, using the given burn rate
      */
-    public void RemoveAllOutOfRange(float burnRate) {
+    public void RemoveAllOutOfRange(float burnRate, AllomanticIronSteel allomancer) {
         for(int i = 0; i < Count; i++) {
             if (SettingsMenu.settingsData.pushControlStyle == 0 && SettingsMenu.settingsData.controlScheme != SettingsData.Gamepad) {
-                if (AllomanticIronSteel.CalculateAllomanticForce(targets[i], targets[i].Allomancer).magnitude * burnRate < SettingsMenu.settingsData.metalDetectionThreshold) {
+                if (AllomanticIronSteel.CalculateAllomanticForce(targets[i], allomancer).magnitude * burnRate < SettingsMenu.settingsData.metalDetectionThreshold) {
                     RemoveTargetAt(i);
                 }
             } else { // If using the Magnitude control style (or gamepad), burn rate does not affect the range of targets
-                if (AllomanticIronSteel.CalculateAllomanticForce(targets[i], targets[i].Allomancer).magnitude < SettingsMenu.settingsData.metalDetectionThreshold) {
+                if (AllomanticIronSteel.CalculateAllomanticForce(targets[i], allomancer).magnitude < SettingsMenu.settingsData.metalDetectionThreshold) {
                     RemoveTargetAt(i);
                 }
             }

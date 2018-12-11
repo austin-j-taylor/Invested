@@ -48,7 +48,7 @@ public class SpikePit : BezierCurve {
 
     private void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Player")) {
-            Debug.Log("PLAYER INSIDE");
+            //Debug.Log("PLAYER INSIDE");
 
         }
     }

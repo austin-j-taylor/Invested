@@ -3,7 +3,7 @@ using UnityEngine;
  * Controls Ironpulling and Steelpushing.
  * Should be attached to any Allomancer.
  */
- [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Rigidbody))]
 public class AllomanticIronSteel : MonoBehaviour {
 
     public const float chargePower = 1f / 8f;
@@ -12,6 +12,12 @@ public class AllomanticIronSteel : MonoBehaviour {
     private const double gramsIronPerSecondPerNewton = .001f;
     private const double gramsSteelPerSecondPerNewton = gramsIronPerSecondPerNewton;
     public const double gramsPerSecondPassiveBurn = -.005f; // 5 mg/s for passively burning iron or steel to see metal lines
+    // Blue metal line constants
+    protected const float lowLineColor = .1f;
+    protected const float highLineColor = .85f;
+    protected const float blueLineWidthBaseFactor = .04f;
+    protected const float blueLineStartupFactor = 2f;
+    protected const float blueLineBrightnessFactor = 1;
 
     // Simple metal boolean constants for passing to methods
     private const bool steel = false;
@@ -23,8 +29,8 @@ public class AllomanticIronSteel : MonoBehaviour {
     public MetalReserve SteelReserve { get; private set; }
 
     // Pull and Push Target members
-    public TargetArray PullTargets { get; private set; }
-    public TargetArray PushTargets { get; private set; }
+    public TargetArray PullTargets { get; protected set; }
+    public TargetArray PushTargets { get; protected set; }
 
     public bool PullingOnPullTargets {
         get {
@@ -84,14 +90,14 @@ public class AllomanticIronSteel : MonoBehaviour {
     private Vector3 thisFrameMaximumNetForce = Vector3.zero;
 
     //// Debug variables for viewing values in the Unity editor
-    //public float allomanticsForce;
-    //public float netAllomancersForce;
-    //public float netTargetsForce;
-    //public Vector3 allomanticsForces;
-    //public Vector3 resititutionFromTargetsForce;
-    //public Vector3 resititutionFromPlayersForce;
-    //public float percentOfTargetForceReturned;
-    //public float percentOfAllomancerForceReturned;
+    public float allomanticsForce;
+    public float netAllomancersForce;
+    public float netTargetsForce;
+    public Vector3 allomanticsForces;
+    public Vector3 resititutionFromTargetsForce;
+    public Vector3 resititutionFromPlayersForce;
+    public float percentOfTargetForceReturned;
+    public float percentOfAllomancerForceReturned;
 
     // Metal burn rates
     // Used when burning metals, but not necessarily immediately Pushing or Pulling. Hence, they are "targets" and not the actual burn rate of the Allomancer.
@@ -110,7 +116,7 @@ public class AllomanticIronSteel : MonoBehaviour {
             return Mathf.Max(IronPassiveBurn, SteelPassiveBurn);
         }
     }
-    
+
     private bool lastWasPulling = false;
     private bool lastWasPushing = false;
     private bool ironPulling = false;
@@ -169,7 +175,7 @@ public class AllomanticIronSteel : MonoBehaviour {
         }
     }
 
-    private void Awake() {
+    protected virtual void Awake() {
         rb = GetComponent<Rigidbody>();
         Charge = Mathf.Pow(Mass, chargePower);
         IronReserve = gameObject.AddComponent<MetalReserve>();
@@ -206,15 +212,14 @@ public class AllomanticIronSteel : MonoBehaviour {
             if (IsBurningIronSteel) {
                 // Remove all targets that are out of pushing range
                 // For Mouse/Keyboard, Iron and Steel burn rates are equal, so it's somewhat redundant to specify
-                PullTargets.RemoveAllOutOfRange(IronBurnRateTarget);
-                PushTargets.RemoveAllOutOfRange(SteelBurnRateTarget);
+                PullTargets.RemoveAllOutOfRange(IronBurnRateTarget, this);
+                PushTargets.RemoveAllOutOfRange(SteelBurnRateTarget, this);
 
                 // Calculate net charges to know how pushes will be distributed amongst targets
                 float netPullTargetsCharge = PullTargets.NetCharge();
                 float netPushTargetsCharge = PushTargets.NetCharge();
                 float sumPullTargetsCharge = PullTargets.SumOfCharges();
                 float sumPushTargetsCharge = PushTargets.SumOfCharges();
-
 
                 // Calculate Allomantic Forces and APBs
                 // Execute AFs and APBs on target and Allomancer
@@ -497,15 +502,15 @@ public class AllomanticIronSteel : MonoBehaviour {
         target.AddForce(target.LastNetForceOnTarget);
         rb.AddForce(target.LastNetForceOnAllomancer);
 
-        //// Debug
-        //allomanticsForce = target.LastAllomanticForce.magnitude;
-        //allomanticsForces = target.LastAllomanticForce;
-        //netAllomancersForce = target.LastNetForceOnAllomancer.magnitude;
-        //resititutionFromTargetsForce = target.LastAnchoredPushBoostFromTarget;
-        //resititutionFromPlayersForce = target.LastAnchoredPushBoostFromAllomancer;
-        //percentOfTargetForceReturned = resititutionFromTargetsForce.magnitude / allomanticsForce;
-        //percentOfAllomancerForceReturned = resititutionFromPlayersForce.magnitude / allomanticsForce;
-        //netTargetsForce = target.LastNetForceOnTarget.magnitude;
+        // Debug
+        allomanticsForce = target.LastAllomanticForce.magnitude;
+        allomanticsForces = target.LastAllomanticForce;
+        netAllomancersForce = target.LastNetForceOnAllomancer.magnitude;
+        resititutionFromTargetsForce = target.LastAnchoredPushBoostFromTarget;
+        resititutionFromPlayersForce = target.LastAnchoredPushBoostFromAllomancer;
+        percentOfTargetForceReturned = resititutionFromTargetsForce.magnitude / allomanticsForce;
+        percentOfAllomancerForceReturned = resititutionFromPlayersForce.magnitude / allomanticsForce;
+        netTargetsForce = target.LastNetForceOnTarget.magnitude;
     }
 
     protected virtual void StartBurning(bool startIron) {

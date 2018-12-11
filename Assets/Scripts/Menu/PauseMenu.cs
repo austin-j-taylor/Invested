@@ -10,7 +10,7 @@ public class PauseMenu : MonoBehaviour {
 
     private static SettingsMenu settingsMenu;
     private MainMenu mainMenu;
-    
+
     private Button unpauseButton;
     private Button settingsButton;
     private Button resetButton;
@@ -19,7 +19,7 @@ public class PauseMenu : MonoBehaviour {
     private static GameObject pauseMenu;
 
     // Use this for initialization
-    void Awake () {
+    void Awake() {
         settingsMenu = transform.parent.GetComponentInChildren<SettingsMenu>();
         mainMenu = transform.parent.GetComponentInChildren<MainMenu>();
 
@@ -38,9 +38,9 @@ public class PauseMenu : MonoBehaviour {
         gameObject.SetActive(false);
         IsPaused = false;
     }
-    private void Update() {
+    private void LateUpdate() {
         if (Keybinds.EscapeDown()) {
-            if(settingsMenu.IsOpen) {
+            if (settingsMenu.IsOpen) {
                 settingsMenu.BackAndSaveSettings();
             } else {
                 UnPause();
@@ -52,14 +52,9 @@ public class PauseMenu : MonoBehaviour {
         CameraController.UnlockCamera();
         GamepadController.SetRumble(0, 0);
         Time.timeScale = 0f;
+
         pauseMenu.SetActive(true);
         IsPaused = true;
-
-        // Update blue lines on frame of pausing
-        if(Player.PlayerIronSteel && Player.PlayerIronSteel.IsBurningIronSteel) {
-            Player.PushPullController.SearchForMetals();
-        }
-        CameraController.UpdateCamera();
     }
 
     public static void UnPause() {

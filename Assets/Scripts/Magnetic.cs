@@ -19,12 +19,12 @@ public class Magnetic : MonoBehaviour {
     private float magneticMass = 0;
 
     private bool lastWasPulled;
+    protected bool isBeingPushPulled;
+    private float lightSaberFactor;
     private Outline highlightedTargetOutline;
     private VolumetricLineBehavior blueLine;
     private Collider[] colliders;
-    private float lightSaberFactor;
 
-    public AllomanticIronSteel Allomancer { get; set; }
     protected Rigidbody Rb { get; set; }
 
     public Vector3 Velocity {
@@ -136,14 +136,16 @@ public class Magnetic : MonoBehaviour {
     }
 
     private void Awake() {
-        Allomancer = null;
         if (GetComponent<Renderer>())
             highlightedTargetOutline = gameObject.AddComponent<Outline>();
         blueLine = Instantiate(GameManager.MetalLineTemplate);
         Rb = GetComponentInParent<Rigidbody>();
         colliders = GetComponentsInChildren<Collider>();
+        if (gameObject.layer != LayerMask.NameToLayer("Undetectable Magnetic"))
+            GameManager.AddMagnetic(this);
         lightSaberFactor = 1;
         lastWasPulled = false;
+        isBeingPushPulled = false;
         IsHighlighted = false;
         IsStatic = Rb == null;
         HasColliders = colliders.Length > 0;
@@ -165,7 +167,6 @@ public class Magnetic : MonoBehaviour {
             }
         }
 
-
         Charge = Mathf.Pow(magneticMass, AllomanticIronSteel.chargePower);
         LastPosition = transform.position;
         LastVelocity = Vector3.zero;
@@ -174,11 +175,6 @@ public class Magnetic : MonoBehaviour {
         LastMaxPossibleAllomanticForce = Vector3.zero;
         LastAnchoredPushBoostFromAllomancer = Vector3.zero;
         LastAnchoredPushBoostFromTarget = Vector3.zero;
-    }
-
-    private void Start() {
-        if (gameObject.layer != LayerMask.NameToLayer("Undetectable Magnetic"))
-            GameManager.AddMagnetic(this);
     }
 
     // If the Magnetic is untargeted
@@ -190,15 +186,12 @@ public class Magnetic : MonoBehaviour {
         LastMaxPossibleAllomanticForce = Vector3.zero;
         LastAnchoredPushBoostFromAllomancer = Vector3.zero;
         LastAnchoredPushBoostFromTarget = Vector3.zero;
-        Allomancer = null;
-        lightSaberFactor = 1;
-        blueLine.GetComponent<MeshRenderer>().enabled = false;
         RemoveTargetGlow();
     }
 
     private void OnDestroy() {
         Destroy(blueLine);
-        GameManager.MagneticsInScene.Remove(this);
+        GameManager.RemoveMagnetic(this);
     }
 
     public virtual void AddForce(Vector3 netForce) {
@@ -207,8 +200,12 @@ public class Magnetic : MonoBehaviour {
             Rb.AddForce(netForce, ForceMode.Force);
         }
     }
-    public virtual void StartBeingPullPushed() { }
-    public virtual void StopBeingPullPushed() { }
+    public virtual void StartBeingPullPushed() {
+        isBeingPushPulled = true;
+    }
+    public virtual void StopBeingPullPushed() {
+        isBeingPushPulled = false;
+    }
 
     public void AddTargetGlow() {
         if (SettingsMenu.settingsData.highlightedTargetOutline == 1 && highlightedTargetOutline)

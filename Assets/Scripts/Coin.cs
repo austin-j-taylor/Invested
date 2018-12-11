@@ -47,7 +47,7 @@ public class Coin : Magnetic {
             if (collisionCollider == collision.transform || collisionCollider == null) {
                 collisionCollider = collision.transform;
                 collisionNormal = collision.contacts[0].normal;
-                if (Allomancer && (Allomancer.SteelPushing || Allomancer.IronPulling)) {
+                if(isBeingPushPulled) {
                     if (!isStuck) { // Only updates on first frame of being stuck
                         isStuck = IsStuckByFriction(collision.impulse / Time.deltaTime, LastNetForceOnTarget);
                         if (isStuck) {
@@ -74,12 +74,12 @@ public class Coin : Magnetic {
     //}
 
     private void OnTriggerStay(Collider other) {
-        if (other.CompareTag("Player") &&
+        if (other.CompareTag("PlayerBody") &&
                     Keybinds.IronPulling() && !(Player.PlayerIronSteel.HasPullTarget &&  Player.PlayerIronSteel.PushTargets.IsTarget(this))) {
-                //(Player.PlayerIronSteel.PullingOnPullTargets && Player.PlayerIronSteel.PullTargets.IsTarget(this) ||
-                // Player.PlayerIronSteel.PullingOnPushTargets && Player.PlayerIronSteel.PushTargets.IsTarget(this) || 
-                // !Player.PlayerIronSteel.HasIron && Keybinds.IronPulling())) {
-            BeCaughtByAllomancer(other.GetComponent<Player>());
+            //(Player.PlayerIronSteel.PullingOnPullTargets && Player.PlayerIronSteel.PullTargets.IsTarget(this) ||
+            // Player.PlayerIronSteel.PullingOnPushTargets && Player.PlayerIronSteel.PushTargets.IsTarget(this) || 
+            // !Player.PlayerIronSteel.HasIron && Keybinds.IronPulling())) {
+            BeCaughtByAllomancer(other.transform.parent.GetComponent<Player>());
         }
     }
 
@@ -107,6 +107,7 @@ public class Coin : Magnetic {
     }
 
     public override void StopBeingPullPushed() {
+        base.StopBeingPullPushed();
         UnStick();
     }
 

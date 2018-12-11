@@ -51,7 +51,8 @@ public class Entity : MonoBehaviour {
         //hitstun = 0f;
         //lastHitTime = 0;
     }
-    protected void LateUpdate() {
+
+    virtual protected void LateUpdate() {
         hitThisFrame = false;
     }
 

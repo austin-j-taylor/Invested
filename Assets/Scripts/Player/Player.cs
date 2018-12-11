@@ -17,7 +17,7 @@ public class Player : Entity {
     public static AllomanticIronSteel PlayerIronSteel { get; private set; }
     public static PlayerPullPushController PushPullController { get; private set; }
     public static Player PlayerInstance { get; private set; }
-    public static bool CanControlPlayer { get; set; }
+    public static bool CanControlPlayer { get; set; } = false;
     public Hand CoinHand { get; private set; }
 
     private float lastCoinThrowTime = 0;
@@ -39,20 +39,23 @@ public class Player : Entity {
 
     void Update() {
         if (CanControlPlayer) {
-            // Pausing
-            if (Keybinds.EscapeDown() && !PauseMenu.IsPaused) {
-                PauseMenu.Pause();
-            }
             if (!PauseMenu.IsPaused) {
-                if(Keybinds.ToggleCoinshotMode()) {
+                if (Keybinds.ToggleCoinshotMode()) {
                     coinshotMode = !coinshotMode;
                 }
                 // On throwing a coin
-                if((coinshotMode && Keybinds.IronPulling() && Keybinds.SteelPushing() || Keybinds.WithdrawCoinDown()) && lastCoinThrowTime + coinCooldown < Time.time) {
+                if ((coinshotMode && Keybinds.IronPulling() && Keybinds.SteelPushing() || Keybinds.WithdrawCoinDown()) && lastCoinThrowTime + coinCooldown < Time.time) {
                     lastCoinThrowTime = Time.time;
                     PlayerIronSteel.AddPushTarget(CoinHand.WithdrawCoinToHand());
                 }
             }
+        }
+    }
+
+    protected override void LateUpdate() {
+        // Pausing
+        if (Keybinds.EscapeDown() && !PauseMenu.IsPaused) {
+            PauseMenu.Pause();
         }
     }
 

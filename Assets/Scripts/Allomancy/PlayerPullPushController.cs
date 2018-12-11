@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+using System.Collections.Generic;
+using UnityEngine;
+using VolumetricLines;
 
 /*
  * The AllomanticIronSteel specific for the Player.
@@ -19,14 +21,11 @@ public class PlayerPullPushController : AllomanticIronSteel {
     private const float targetFocusOffScreenBound = .15f;      // Determines the luminosity of blue lines that are off-screen
     private const float targetLowTransition = .06f;
     private const float targetLowCurvePosition = .02f;
-    private const float lowLineColor = .1f;
-    private const float highLineColor = .85f;
-    private const float blueLineWidthBaseFactor = .04f;
-    private const float blueLineStartupFactor = 2f;
-    private const float blueLineBrightnessFactor = 1;
+
     // Other Constants
     private const float burnRateLerpConstant = .30f;
     private const int blueLineLayer = 10;
+    private const float metalLinesLerpConstant = .30f;
 
     // Button held-down times
     private float timeToStopBurning = 0f;
@@ -45,6 +44,12 @@ public class PlayerPullPushController : AllomanticIronSteel {
         get {
             return HighlightedTarget != null;
         }
+    }
+
+    public override void Clear(bool clearTargets = true) {
+        IronReserve.SetMass(150);
+        SteelReserve.SetMass(150);
+        base.Clear(clearTargets);
     }
 
     private void Update() {
@@ -194,17 +199,17 @@ public class PlayerPullPushController : AllomanticIronSteel {
                 }
             } else { // If the player is not in control, but still burning metals, show blue lines to metals.
                 if (IsBurningIronSteel) {
-                    OnlyUpdateBlueLines();
+                    /*
+                     * Like SearchForMetals, this shows the blue lines to nearby metals, but does not do anything related to target selection.
+                     * It only updates the visual effect of these blue lines.
+                     */
+                    SearchForMetals(false);
+                    if (HasHighlightedTarget)
+                        HighlightedTarget.RemoveTargetGlow();
                 }
             }
 
         }
-    }
-
-    public override void Clear(bool clearTargets = true) {
-        IronReserve.SetMass(150);
-        SteelReserve.SetMass(150);
-        base.Clear(clearTargets);
     }
 
     protected override void StartBurning(bool startIron) {
@@ -220,7 +225,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
 
         SearchForMetals(); // first frame of blue lines
     }
-    
+
     public override void StopBurning() {
         base.StopBurning();
         if (HasHighlightedTarget) {
@@ -245,16 +250,18 @@ public class PlayerPullPushController : AllomanticIronSteel {
      *  - The BRIGHTNESS of the line is dependent on the DISTANCE from the player
      *  - The LIGHT SABER FACTOR is dependent on the FORCE acting on the target. If the metal is not a target, it is 1.
      */
-    public Magnetic SearchForMetals() {
+    public Magnetic SearchForMetals(bool targetedLineColors = true) {
         float smallestDistanceFromCenter = 1f;
         Magnetic centerObject = null;
 
         for (int i = 0; i < GameManager.MagneticsInScene.Count; i++) {
-            Magnetic target = GameManager.MagneticsInScene[i];
 
-            float weightedDistanceFromCenter = SetLineProperties(target, true);
+            Magnetic target = GameManager.MagneticsInScene[i];
+            float weightedDistanceFromCenter = SetLineProperties(target);
+
+            // If looking for the object at the center of the screen
             // If the Magnetic could be targeted
-            if (weightedDistanceFromCenter < 1) {
+            if (targetedLineColors && weightedDistanceFromCenter < 1) {
                 // IF the new Magnetic is closer to the center of the screen than the previous most-center Magnetic
                 if (weightedDistanceFromCenter < smallestDistanceFromCenter) {
                     smallestDistanceFromCenter = weightedDistanceFromCenter;
@@ -262,97 +269,84 @@ public class PlayerPullPushController : AllomanticIronSteel {
                 }
             }
         }
-
-        // Update metal lines for Pull/PushTargets
-        if (PullingOnPullTargets) {
-            PullTargets.UpdateBlueLines(true, IronBurnRateTarget);
-        } else if (PushingOnPullTargets) {
-            PullTargets.UpdateBlueLines(true, SteelBurnRateTarget);
-        } else if (HasPullTarget) {
-            PullTargets.UpdateBlueLines(true, 0);
+        if (targetedLineColors) {
+            // Update metal lines for Pull/PushTargets
+            if (PullingOnPullTargets) {
+                PullTargets.UpdateBlueLines(true, IronBurnRateTarget, CenterOfMass);
+            } else if (PushingOnPullTargets) {
+                PullTargets.UpdateBlueLines(true, SteelBurnRateTarget, CenterOfMass);
+            } else if (HasPullTarget) {
+                PullTargets.UpdateBlueLines(true, 0, CenterOfMass);
+            }
+            if (PullingOnPushTargets) {
+                PushTargets.UpdateBlueLines(false, IronBurnRateTarget, CenterOfMass);
+            } else if (PushingOnPushTargets) {
+                PushTargets.UpdateBlueLines(false, SteelBurnRateTarget, CenterOfMass);
+            } else if (HasPushTarget) {
+                PushTargets.UpdateBlueLines(false, 0, CenterOfMass);
+            }
         }
-        if (PullingOnPushTargets) {
-            PushTargets.UpdateBlueLines(false, IronBurnRateTarget);
-        } else if (PushingOnPushTargets) {
-            PushTargets.UpdateBlueLines(false, SteelBurnRateTarget);
-        } else if (HasPushTarget) {
-            PushTargets.UpdateBlueLines(false, 0);
-        }
-
         return centerObject;
     }
 
-    /*
-     * Like SearchForMetals, this shows the blue lines to nearby metals, but does not do anything related to target selection.
-     * It only updates the visual effect of these blue lines.
-     */
-    private void OnlyUpdateBlueLines() {
-        for (int i = 0; i < GameManager.MagneticsInScene.Count; i++) {
-            Magnetic target = GameManager.MagneticsInScene[i];
-            SetLineProperties(target, false);
-        }
-        if (HasHighlightedTarget) {
-            HighlightedTarget.RemoveTargetGlow();
-        }
-    }
 
-    private float SetLineProperties(Magnetic target, bool focus) {
+    private float SetLineProperties(Magnetic target) {
         float allomanticForce = CalculateAllomanticForce(target, this).magnitude;
         // If using Percentage force mode, burn rate affects your range for burning
         if (SettingsMenu.settingsData.pushControlStyle == 0)
             allomanticForce *= GreaterPassiveBurn;
 
         allomanticForce -= SettingsMenu.settingsData.metalDetectionThreshold; // blue metal lines will fade to a luminocity of 0 when the force is on the edge of the threshold
-        if (allomanticForce > 0) {
-            // Set line properties
-            if (SettingsMenu.settingsData.renderblueLines == 1) {
-                Vector3 screenPosition = CameraController.ActiveCamera.WorldToViewportPoint(target.transform.position);
 
-                float centerX = Mathf.Abs(screenPosition.x - .5f);
-                float centerY = Mathf.Abs(screenPosition.y - .5f);
+        if (allomanticForce <= 0) {
+            // Magnetic is out of range
+            target.DisableBlueLine();
+            return 1;
+        }
 
-                // Calculate the distance from the center for deciding which blue lines are "in-focus"
-                float distance = Mathf.Sqrt(
-                    (centerX) * (centerX)
-                    + (centerY) * (centerY) * importanceRatio
-                );
+        // Set line properties
+        Vector3 screenPosition = CameraController.ActiveCamera.WorldToViewportPoint(target.transform.position);
 
-                if (screenPosition.z < 0 || centerX > horizontalImportanceFactor || centerY > verticalImportanceFactor) { // not focusing, or, the target is behind the player, off-screen; Do not highlight this target
-                    distance = 1;
-                }
-                float closeness = Mathf.Exp(-blueLineStartupFactor * Mathf.Pow(1 / allomanticForce, blueLineBrightnessFactor));
-                // Make lines in-focus if near the center of the screen
-                // If nearly off-screen, instead make lines dimmer
-                if (screenPosition.z < 0) { // behind player
-                    closeness *= targetFocusOffScreenBound * targetFocusOffScreenBound;
+        float centerX = Mathf.Abs(screenPosition.x - .5f);
+        float centerY = Mathf.Abs(screenPosition.y - .5f);
+
+        // Calculate the distance from the center for deciding which blue lines are "in-focus"
+        float distance = Mathf.Sqrt(
+            (centerX) * (centerX)
+            + (centerY) * (centerY) * importanceRatio
+        );
+
+        if (screenPosition.z < 0 || centerX > horizontalImportanceFactor || centerY > verticalImportanceFactor) { // not focusing, or, the target is behind the player, off-screen; Do not highlight this target
+            distance = 1;
+        }
+        if (SettingsMenu.settingsData.renderblueLines == 1) {
+            float closeness = Mathf.Exp(-blueLineStartupFactor * Mathf.Pow(1 / allomanticForce, blueLineBrightnessFactor));
+            // Make lines in-focus if near the center of the screen
+            // If nearly off-screen, instead make lines dimmer
+            if (screenPosition.z < 0) { // behind player
+                closeness *= targetFocusOffScreenBound * targetFocusOffScreenBound;
+            } else {
+                if (centerX < .44f) {
+                    closeness *= targetFocusLowerBound + (1 - targetFocusLowerBound) * Mathf.Exp(-Mathf.Pow(centerX + 1 - horizontalImportanceFactor, targetFocusFalloffConstant));
                 } else {
-                    if (centerX < .44f) {
-                        closeness *= targetFocusLowerBound + (1 - targetFocusLowerBound) * Mathf.Exp(-Mathf.Pow(centerX + 1 - horizontalImportanceFactor, targetFocusFalloffConstant));
-                    } else {
-                        closeness *= targetFocusOffScreenBound + (targetFocusLowerBound - targetFocusOffScreenBound) * Mathf.Exp(-Mathf.Pow(-centerX - .5f - targetLowCurvePosition, targetFocusFalloffConstant));
-                    }
-
-                    if (centerY < .44f) {
-                        closeness *= targetFocusLowerBound + (1 - targetFocusLowerBound) * Mathf.Exp(-Mathf.Pow(centerY + 1 - verticalImportanceFactor, targetFocusFalloffConstant));
-                    } else {
-                        closeness *= targetFocusOffScreenBound + (targetFocusLowerBound - targetFocusOffScreenBound) * Mathf.Exp(-Mathf.Pow(-centerY - .5f - targetLowCurvePosition, targetFocusFalloffConstant));
-                    }
+                    closeness *= targetFocusOffScreenBound + (targetFocusLowerBound - targetFocusOffScreenBound) * Mathf.Exp(-Mathf.Pow(-centerX - .5f - targetLowCurvePosition, targetFocusFalloffConstant));
                 }
 
-                target.SetBlueLine(
-                    CenterOfMass,
-                    blueLineWidthBaseFactor * target.Charge,
-                    1,
-                    new Color(0, closeness * lowLineColor, closeness * highLineColor, 1)
-                    );
-
-                return distance;
+                if (centerY < .44f) {
+                    closeness *= targetFocusLowerBound + (1 - targetFocusLowerBound) * Mathf.Exp(-Mathf.Pow(centerY + 1 - verticalImportanceFactor, targetFocusFalloffConstant));
+                } else {
+                    closeness *= targetFocusOffScreenBound + (targetFocusLowerBound - targetFocusOffScreenBound) * Mathf.Exp(-Mathf.Pow(-centerY - .5f - targetLowCurvePosition, targetFocusFalloffConstant));
+                }
             }
 
-        } else { // Magnetic is out of range
-            target.DisableBlueLine();
+            target.SetBlueLine(
+                CenterOfMass,
+                blueLineWidthBaseFactor * target.Charge,
+                1,
+                new Color(0, closeness * lowLineColor, closeness * highLineColor, 1)
+                );
         }
-        return 1;
+        return distance;
     }
 
     private void RemoveAllTargets() {
@@ -529,7 +523,8 @@ public class PlayerPullPushController : AllomanticIronSteel {
     }
 
     public void EnableRenderingBlueLines() {
-        CameraController.ActiveCamera.cullingMask = ~0;
+        if (IsBurningIronSteel)
+            CameraController.ActiveCamera.cullingMask = ~0;
     }
 
     public void DisableRenderingBlueLines() {
