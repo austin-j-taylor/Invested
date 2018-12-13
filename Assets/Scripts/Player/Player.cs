@@ -14,9 +14,10 @@ public class Player : Entity {
     private PlayerMovementController movementController;
     private Material playerMaterial;
 
+    public static Player PlayerInstance { get; private set; }
     public static AllomanticIronSteel PlayerIronSteel { get; private set; }
     public static PlayerPullPushController PushPullController { get; private set; }
-    public static Player PlayerInstance { get; private set; }
+    public static Magnetic PlayerMagnetic { get; private set; }
     public static bool CanControlPlayer { get; set; } = false;
     public Hand CoinHand { get; private set; }
 
@@ -27,10 +28,11 @@ public class Player : Entity {
     void Awake() {
         movementController = GetComponentInChildren<PlayerMovementController>();
         //animator = GetComponent<Animator>();
+        PlayerInstance = this;
         playerMaterial = GetComponentInChildren<MeshRenderer>().material;
         PlayerIronSteel = GetComponentInChildren<AllomanticIronSteel>();
         PushPullController = GetComponentInChildren<PlayerPullPushController>();
-        PlayerInstance = this;
+        PlayerMagnetic = GetComponentInChildren<Magnetic>();
         Health = 100;
         CoinHand = GetComponentInChildren<Hand>();
         SceneManager.sceneLoaded += ClearPlayerAfterSceneChange;

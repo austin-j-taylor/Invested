@@ -24,8 +24,10 @@ public class PlayerGroundedChecker : MonoBehaviour {
     }
 
     private void OnTriggerStay(Collider other) {
-        isInCollider = true;
-        standingOnCollider = other;
+        if (!other.isTrigger) {
+            isInCollider = true;
+            standingOnCollider = other;
+        }
     }
 
     public void AddForceToTouchingCollider(Vector3 force) {

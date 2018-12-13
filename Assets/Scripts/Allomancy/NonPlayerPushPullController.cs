@@ -7,6 +7,28 @@ using VolumetricLines;
  */
 public class NonPlayerPushPullController : AllomanticIronSteel {
 
+    private bool linesAreVisibleWhenNotBurning = false;
+
+    public bool LinesAreVisibleWhenNotBurning {
+        get {
+            return LinesAreVisibleWhenNotBurning;
+        }
+        set {
+            if(value) {
+                for (int i = 0; i < maxNumberOfTargets; i++) {
+                    pullLines[i].gameObject.layer = GameManager.Layer_BlueLinesVisible;
+                    pushLines[i].gameObject.layer = GameManager.Layer_BlueLinesVisible;
+                }
+            } else {
+                for (int i = 0; i < maxNumberOfTargets; i++) {
+                    pullLines[i].gameObject.layer = GameManager.Layer_BlueLines;
+                    pushLines[i].gameObject.layer = GameManager.Layer_BlueLines;
+                }
+            }
+            linesAreVisibleWhenNotBurning = value;
+        }
+    }
+
     public VolumetricLineBehavior[] pullLines;
     public VolumetricLineBehavior[] pushLines;
 
@@ -14,7 +36,7 @@ public class NonPlayerPushPullController : AllomanticIronSteel {
         base.Awake();
         IronReserve.IsEndless = true;
         SteelReserve.IsEndless = true;
-
+        
         pullLines = new VolumetricLineBehavior[maxNumberOfTargets];
         pushLines = new VolumetricLineBehavior[maxNumberOfTargets];
         for (int i = 0; i < maxNumberOfTargets; i++) {

@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour {
     public static List<Magnetic> MagneticsInScene { get; private set; }
 
     public static int Layer_IgnoreCamera { get; private set; }
+    public static int Layer_BlueLines { get; private set; }
+    public static int Layer_BlueLinesVisible { get; private set; }
 
     void Awake() {
         //Material_TargetHighlight = Resources.Load<Material>("Materials/targetHighlightMaterial");
@@ -30,6 +32,8 @@ public class GameManager : MonoBehaviour {
         MetalLineStripTemplate = Resources.Load<VolumetricLineStripBehavior>("MetalLineStripTemplate");
         MagneticsInScene = new List<Magnetic>();
         Layer_IgnoreCamera = ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ignore Camera")));
+        Layer_BlueLines = LayerMask.NameToLayer("Blue Lines");
+        Layer_BlueLinesVisible = LayerMask.NameToLayer("Blue Lines Visible");
         //SceneManager.sceneLoaded += Clear;
         SceneManager.sceneUnloaded += Clear;
     }
