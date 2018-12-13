@@ -56,7 +56,7 @@ public class BezierCurve : MonoBehaviour {
         };
     }
 
-    protected void FollowCurve(Transform target, float t, bool rotateToVelocity = true) {
+    public void FollowCurve(Transform target, float t, bool rotateToVelocity = true) {
         target.position = GetPoint(t);
         if (rotateToVelocity)
             target.rotation = Quaternion.LookRotation(GetDirection(t));
@@ -125,6 +125,12 @@ public class BezierCurve : MonoBehaviour {
 
     public BezierControlPointMode GetControlPointMode(int index) {
         return modes[(index + 1) / 3];
+    }
+
+    public void SetInitialPoint(Vector3 point) {
+        Vector3 tangentOffset = points[1] - points[0];
+        points[0] = point;
+        points[1] = points[0] + tangentOffset;
     }
 
     public void SetControlPoint(int index, Vector3 point) {

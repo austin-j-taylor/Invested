@@ -6,13 +6,8 @@ using VolumetricLines;
  * Controls the blue metal lines that point from the the Allomancer to selected targets.
  */
 public class NonPlayerPushPullController : AllomanticIronSteel {
-
-    private bool linesAreVisibleWhenNotBurning = false;
-
+    
     public bool LinesAreVisibleWhenNotBurning {
-        get {
-            return LinesAreVisibleWhenNotBurning;
-        }
         set {
             if(value) {
                 for (int i = 0; i < maxNumberOfTargets; i++) {
@@ -25,7 +20,6 @@ public class NonPlayerPushPullController : AllomanticIronSteel {
                     pushLines[i].gameObject.layer = GameManager.Layer_BlueLines;
                 }
             }
-            linesAreVisibleWhenNotBurning = value;
         }
     }
 
