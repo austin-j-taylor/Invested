@@ -10,8 +10,8 @@ public class SpikePit : MonoBehaviour {
     private const float forwardTimeOffset = .2f;
     private const float forceConstantFar = 40f;
 
-    private bool spikingPlayer = false;
-    private bool followingPath = false;
+    private bool chasingPlayer = false;
+    private bool spikedPlayer = false;
     private float progress = 0;
     private float animationTime = 4;
 
@@ -19,6 +19,7 @@ public class SpikePit : MonoBehaviour {
     private Transform spikeTarget;
     private Rigidbody spikeRb;
     private NonPlayerPushPullController spike;
+    private Transform playerAnchor;
     private SpikeSpline splineDragging;
     private SpikeSpline splineReturnHome;
 
@@ -27,6 +28,7 @@ public class SpikePit : MonoBehaviour {
         spike = GetComponentInChildren<NonPlayerPushPullController>();
         spikeRb = spike.GetComponent<Rigidbody>();
         spikeTarget = spike.transform.parent;
+        playerAnchor = spike.transform.GetChild(0);
         SpikeSpline[] splines = GetComponentsInChildren<SpikeSpline>();
         splineDragging = splines[0];
         splineReturnHome = splines[1];
@@ -34,9 +36,16 @@ public class SpikePit : MonoBehaviour {
         spike.LinesAreVisibleWhenNotBurning = true;
     }
 
+    private void Update() {
+        if (!PauseMenu.IsPaused) {
+            if (spikedPlayer) {
+            }
+        }
+    }
+
     private void LateUpdate() {
         if (!PauseMenu.IsPaused) {
-            if (followingPath) {
+            if (spikedPlayer) {
                 progress += Time.deltaTime / animationTime;
                 if (progress < 1f) {
                     splineDragging.FollowCurve(spikeTarget.transform, progress, true);
@@ -58,15 +67,18 @@ public class SpikePit : MonoBehaviour {
 
                     offsetTime = offsetTime > 1 ? 1 : offsetTime;
 
+                    // Update player's position
+                    Player.PlayerInstance.transform.position = playerAnchor.transform.position;
+                    Player.PlayerInstance.transform.rotation = playerAnchor.transform.rotation;
                 } else {
-                    followingPath = false;
+                    spikedPlayer = false;
                 }
             }
         }
     }
 
     private void FixedUpdate() {
-        if (spikingPlayer) {
+        if (chasingPlayer) {
             Vector3 vel = spikeRb.velocity;
             vel = Vector3.Project(vel, (Player.PlayerIronSteel.CenterOfMass - spike.CenterOfMass).normalized);
             spikeRb.velocity = vel;
@@ -101,17 +113,17 @@ public class SpikePit : MonoBehaviour {
             spike.transform.position = spikeTarget.transform.position;
         } while (angle > equalAngleThreshold);
 
-        SpikePlayer();
+        ChasePlayer();
     }
 
-    private void SpikePlayer() {
-        spikingPlayer = true;
+    private void ChasePlayer() {
+        chasingPlayer = true;
         spikeRb.velocity = Vector3.zero;
         spike.IronBurnRateTarget = .75f;
-        StartCoroutine(SpikePlayerCoroutine());
+        StartCoroutine(ChasePlayerCoroutine());
     }
 
-    IEnumerator SpikePlayerCoroutine() {
+    IEnumerator ChasePlayerCoroutine() {
         do {
             Quaternion newRotation = Quaternion.LookRotation(Player.PlayerIronSteel.CenterOfMass - spike.transform.position);
             spike.transform.rotation = newRotation;
@@ -119,16 +131,24 @@ public class SpikePit : MonoBehaviour {
             yield return null;
         } while ((Player.PlayerIronSteel.CenterOfMass - spike.CenterOfMass).sqrMagnitude > equalDistanceThreshold);
 
-        splineDragging.SetInitialPoint(transform.InverseTransformPoint(spike.transform.position));
+        SpikePlayer();
+    }
+
+    private void SpikePlayer() {
+
+        // Set Player Anchor posiiton
+        playerAnchor.position = Player.PlayerInstance.transform.position;
         Player.PlayerInstance.GetComponent<Rigidbody>().isKinematic = true;
-        Player.PlayerInstance.transform.parent = spike.transform;
+
+        // Make Spike Target follow spline
+        splineDragging.SetInitialPoint(transform.InverseTransformPoint(spike.transform.position));
         spikeTarget.transform.position = spike.transform.position;
         spikeRb.velocity = Vector3.zero;
         spike.transform.localPosition = Vector3.zero;
         spike.transform.localRotation = Quaternion.identity;
         spike.IronBurnRateTarget = 0;
         spike.IronPulling = false;
-        spikingPlayer = false;
-        followingPath = true;
+        chasingPlayer = false;
+        spikedPlayer = true;
     }
 }

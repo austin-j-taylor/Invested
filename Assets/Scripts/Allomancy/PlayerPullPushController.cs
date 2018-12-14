@@ -56,7 +56,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
         base.Clear(clearTargets);
     }
 
-    private void Update() {
+    private void LateUpdate() {
         if (!PauseMenu.IsPaused) {
             if (Player.CanControlPlayer) {
                 // Start burning

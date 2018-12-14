@@ -28,7 +28,7 @@ public class MainMenu : MonoBehaviour {
         quitButton.onClick.AddListener(OnClickedQuit);
 
         // Set up the Player, Canvas, and EventSystem to persist between scenes
-        DontDestroyOnLoad(Player.PlayerInstance);
+        //DontDestroyOnLoad(Player.PlayerInstance);
         DontDestroyOnLoad(transform.parent.parent.gameObject);
         DontDestroyOnLoad(GameObject.FindGameObjectWithTag("GameController"));
 

@@ -4,6 +4,7 @@ using VolumetricLines;
 
 public class SpikeSplineFollower : SpikeSpline {
 
+    private const int stepsPerCurve = 30;
     private const float distanceThreshold = .01f;
     private const float forwardTimeOffset = .2f;
     private float progress = 0;
@@ -13,7 +14,7 @@ public class SpikeSplineFollower : SpikeSpline {
     private VolumetricLineStripBehavior volLines;
 
     void Start() {
-        int steps = BezierCurveEditor.stepsPerCurve * CurveCount;
+        int steps = stepsPerCurve * CurveCount;
         Vector3[] points = new Vector3[steps + 1];
 
         for (int i = 0; i <= steps; i++) {

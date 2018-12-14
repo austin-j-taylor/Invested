@@ -1,4 +1,3 @@
-#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
 
@@ -9,7 +8,7 @@ using UnityEngine;
 [CustomEditor(typeof(BezierCurve), true)]
 public class BezierCurveEditor : Editor {
 
-    public const int stepsPerCurve = 30;
+    private const int stepsPerCurve = 30;
     private const float directionScale = 0.5f;
     private const float handleSize = 0.04f;
     private const float pickSize = 0.06f;
@@ -118,4 +117,3 @@ public class BezierCurveEditor : Editor {
         return point;
     }
 }
-#endif
