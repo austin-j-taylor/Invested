@@ -7,9 +7,12 @@ using VolumetricLines;
  */
 public class NonPlayerPushPullController : AllomanticIronSteel {
     
+    public VolumetricLineBehavior[] pullLines;
+    public VolumetricLineBehavior[] pushLines;
+
     public bool LinesAreVisibleWhenNotBurning {
         set {
-            if(value) {
+            if (value) {
                 for (int i = 0; i < maxNumberOfTargets; i++) {
                     pullLines[i].gameObject.layer = GameManager.Layer_BlueLinesVisible;
                     pushLines[i].gameObject.layer = GameManager.Layer_BlueLinesVisible;
@@ -22,9 +25,6 @@ public class NonPlayerPushPullController : AllomanticIronSteel {
             }
         }
     }
-
-    public VolumetricLineBehavior[] pullLines;
-    public VolumetricLineBehavior[] pushLines;
 
     protected override void Awake() {
         base.Awake();
@@ -68,7 +68,7 @@ public class NonPlayerPushPullController : AllomanticIronSteel {
         lines[index].GetComponent<MeshRenderer>().enabled = true;
         lines[index].StartPos = array[index].CenterOfMass;
         lines[index].EndPos = CenterOfMass;
-        lines[index].LineWidth = blueLineWidthBaseFactor * array[index].Charge;
+        lines[index].LineWidth = array[index].Charge * (SettingsMenu.settingsData.cameraFirstPerson == 0 ? blueLineThirdPersonWidth : blueLineFirstPersonWidth);
         lines[index].LightSaberFactor = 1;
         lines[index].LineColor = new Color(0, closeness * lowLineColor, closeness * highLineColor, 1);
     }

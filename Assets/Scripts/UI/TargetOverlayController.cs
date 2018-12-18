@@ -76,12 +76,12 @@ public class TargetOverlayController : MonoBehaviour {
         }
         // If the target is highlighted and on screen, display mass
         if (SettingsMenu.settingsData.hudMasses == 1) {
-            if (Player.PushPullController.HasHighlightedTarget) {
+            if (Player.PlayerIronSteel.HasHighlightedTarget) {
                 Vector3 heightToTop = Vector3.zero;
-                heightToTop.y = Player.PushPullController.HighlightedTarget.ColliderBodyBoundsSizeY / 2f;
+                heightToTop.y = Player.PlayerIronSteel.HighlightedTarget.ColliderBodyBoundsSizeY / 2f;
 
-                highlightedTargetMass.text = HUD.MassString(Player.PushPullController.HighlightedTarget.MagneticMass);
-                highlightedTargetMass.transform.position = CameraController.ActiveCamera.WorldToScreenPoint(Player.PushPullController.HighlightedTarget.transform.position + heightToTop) + new Vector3(0, pixelDelta);
+                highlightedTargetMass.text = HUD.MassString(Player.PlayerIronSteel.HighlightedTarget.MagneticMass);
+                highlightedTargetMass.transform.position = CameraController.ActiveCamera.WorldToScreenPoint(Player.PlayerIronSteel.HighlightedTarget.transform.position + heightToTop) + new Vector3(0, pixelDelta);
             } else { // Target is not highlighted or is not on screen, hide mass label
                 highlightedTargetMass.text = "";
             }

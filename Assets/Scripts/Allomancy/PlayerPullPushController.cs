@@ -345,7 +345,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
 
             target.SetBlueLine(
                 CenterOfMass,
-                blueLineWidthBaseFactor * target.Charge,
+                target.Charge * (SettingsMenu.settingsData.cameraFirstPerson == 0 ? blueLineThirdPersonWidth : blueLineFirstPersonWidth),
                 1,
                 new Color(0, closeness * lowLineColor, closeness * highLineColor, 1)
                 );
@@ -472,7 +472,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
 
     private void UpdateBurnRateMeter() {
         if (IsBurningIronSteel) {
-            if (SettingsMenu.settingsData.pushControlStyle == 1)
+            if (SettingsMenu.settingsData.pushControlStyle == 1) // Magnitude
                 HUD.BurnRateMeter.SetBurnRateMeterForceMagnitude(LastAllomanticForce, LastAnchoredPushBoost, GreaterBurnRate, forceMagnitudeTarget);
             else if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
                 if (SteelPushing) {

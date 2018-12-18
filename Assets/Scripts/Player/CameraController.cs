@@ -81,7 +81,7 @@ public class CameraController : MonoBehaviour {
         }
     }
 
-    public static void UpdateCamera() {
+    private static void UpdateCamera() {
         if (Player.CanControlPlayer) {
             // Horizontal rotation (rotates playerBody body left and right)
             // Vertical rotation (rotates camera up and down body)
@@ -124,6 +124,8 @@ public class CameraController : MonoBehaviour {
         playerLookAtTarget.rotation = Quaternion.Euler(eulers);
         currentY = playerLookAtTarget.localEulerAngles.x + 15; // Tilted downward a little
         currentX = playerLookAtTarget.localEulerAngles.y;
+        if (Player.PlayerIronSteel.IsBurningIronSteel) // Update blue lines when the camera is reset
+            Player.PlayerIronSteel.SearchForMetals();
         UpdateCamera();
     }
 

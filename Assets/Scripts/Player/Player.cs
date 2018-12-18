@@ -15,8 +15,7 @@ public class Player : Entity {
     private Material playerMaterial;
 
     public static Player PlayerInstance { get; private set; }
-    public static AllomanticIronSteel PlayerIronSteel { get; private set; }
-    public static PlayerPullPushController PushPullController { get; private set; }
+    public static PlayerPullPushController PlayerIronSteel { get; private set; }
     public static Magnetic PlayerMagnetic { get; private set; }
     public static bool CanControlPlayer { get; set; } = false;
     public Hand CoinHand { get; private set; }
@@ -30,8 +29,7 @@ public class Player : Entity {
         //animator = GetComponent<Animator>();
         PlayerInstance = this;
         playerMaterial = GetComponentInChildren<MeshRenderer>().material;
-        PlayerIronSteel = GetComponentInChildren<AllomanticIronSteel>();
-        PushPullController = GetComponentInChildren<PlayerPullPushController>();
+        PlayerIronSteel = GetComponentInChildren<PlayerPullPushController>();
         PlayerMagnetic = GetComponentInChildren<Magnetic>();
         Health = 100;
         CoinHand = GetComponentInChildren<Hand>();
@@ -71,7 +69,7 @@ public class Player : Entity {
     private void ClearPlayerAfterSceneChange(Scene scene, LoadSceneMode mode) {
         if (mode == LoadSceneMode.Single) { // Not loading all of the scenes, as it does at startup
             CoinHand.Clear();
-            PushPullController.Clear();
+            PlayerIronSteel.Clear();
             GetComponentInChildren<MeshRenderer>().material = playerMaterial;
             CanControlPlayer = true;
 

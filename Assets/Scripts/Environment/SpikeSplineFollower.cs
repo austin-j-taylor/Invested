@@ -26,7 +26,7 @@ public class SpikeSplineFollower : SpikeSpline {
         volLines.UpdateLineVertices(points);
         volLines.LineColor = new Color(0, AllomanticIronSteel.lowLineColor, AllomanticIronSteel.highLineColor, 1);
         volLines.LightSaberFactor = 1;
-        volLines.LineWidth = AllomanticIronSteel.blueLineWidthBaseFactor;
+        volLines.LineWidth = AllomanticIronSteel.blueLineThirdPersonWidth;
     }
 
     void Update() {

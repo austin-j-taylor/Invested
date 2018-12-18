@@ -15,7 +15,8 @@ public class AllomanticIronSteel : MonoBehaviour {
     // Blue metal line constants
     public const float lowLineColor = .1f;
     public const float highLineColor = .85f;
-    public const float blueLineWidthBaseFactor = .04f;
+    public const float blueLineFirstPersonWidth = .02f;
+    public const float blueLineThirdPersonWidth = .04f;
     protected const float blueLineStartupFactor = 2f;
     protected const float blueLineBrightnessFactor = 1;
 
