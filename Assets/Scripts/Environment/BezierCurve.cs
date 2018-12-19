@@ -127,10 +127,10 @@ public class BezierCurve : MonoBehaviour {
         return modes[(index + 1) / 3];
     }
 
-    public void SetInitialPoint(Vector3 point) {
+    public void SetInitialPoint(Vector3 point, Vector3 slope) {
         Vector3 tangentOffset = points[1] - points[0];
         points[0] = point;
-        points[1] = points[0] + tangentOffset;
+        points[1] = points[0] + slope;
     }
 
     public void SetControlPoint(int index, Vector3 point) {

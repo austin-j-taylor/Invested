@@ -9,7 +9,7 @@ public class TargetArray {
 
     private const float blueLineTargetedWidthFactor = .06f;
     private const float lightSaberConstant = 1024;
-    private static readonly Color targetedRedLine = new Color(1, 0, 1);
+    public static readonly Color targetedRedLine = new Color(1, 0, 1);
     private static readonly Color targetedGreenLine = new Color(0, 1, 0);
     private static readonly Color targetedBlueLine = new Color(0, 0, 1);
     private static readonly Color targetedLightBlueLine = new Color(0, .5f, 1f);
@@ -18,6 +18,8 @@ public class TargetArray {
 
     public int Size { get; private set; } = 1;
     public int Count { get; private set; } = 0;
+
+    public float MaxRange { get; set; } = 0; // If anything other than zero, this Allomancer has a custom max range other than the one specified in SettingsData
 
     public TargetArray(int maxNumberOfTargets) {
         targets = new Magnetic[maxNumberOfTargets];
@@ -250,12 +252,18 @@ public class TargetArray {
      */
     public void RemoveAllOutOfRange(float burnRate, AllomanticIronSteel allomancer) {
         for(int i = 0; i < Count; i++) {
-            if (SettingsMenu.settingsData.pushControlStyle == 0 && SettingsMenu.settingsData.controlScheme != SettingsData.Gamepad) {
-                if (AllomanticIronSteel.CalculateAllomanticForce(targets[i], allomancer).magnitude * burnRate < SettingsMenu.settingsData.metalDetectionThreshold) {
-                    RemoveTargetAt(i);
+            if(MaxRange == 0) {
+                if (SettingsMenu.settingsData.pushControlStyle == 0 && SettingsMenu.settingsData.controlScheme != SettingsData.Gamepad) {
+                    if (AllomanticIronSteel.CalculateAllomanticForce(targets[i], allomancer).magnitude * burnRate < SettingsMenu.settingsData.metalDetectionThreshold) {
+                        RemoveTargetAt(i);
+                    }
+                } else { // If using the Magnitude control style (or gamepad), burn rate does not affect the range of targets
+                    if (AllomanticIronSteel.CalculateAllomanticForce(targets[i], allomancer).magnitude < SettingsMenu.settingsData.metalDetectionThreshold) {
+                        RemoveTargetAt(i);
+                    }
                 }
-            } else { // If using the Magnitude control style (or gamepad), burn rate does not affect the range of targets
-                if (AllomanticIronSteel.CalculateAllomanticForce(targets[i], allomancer).magnitude < SettingsMenu.settingsData.metalDetectionThreshold) {
+            } else {
+                if((targets[i].CenterOfMass - allomancer.CenterOfMass).sqrMagnitude > MaxRange * MaxRange) {
                     RemoveTargetAt(i);
                 }
             }

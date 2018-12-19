@@ -56,7 +56,8 @@ public class SceneSelectMenu : MonoBehaviour {
     }
 
     public static void LoadScene(int scene) {
-        CameraController.ExternalPositionTarget = null;
+        //CameraController.SetExternalSource(null, null);
+        Player.PlayerInstance.transform.parent = GameObject.FindGameObjectWithTag("GameController").transform;
 
         SceneManager.LoadScene(scene);
     }

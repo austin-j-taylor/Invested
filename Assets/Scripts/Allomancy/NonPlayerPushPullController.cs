@@ -3,7 +3,7 @@ using VolumetricLines;
 
 /*
  * The AllomanticIronSteel used by non-player Allomancers.
- * Controls the blue metal lines that point from the the Allomancer to selected targets.
+ * Controls the blue metal lines that point from the this non-player Allomancer to the Player, if this non-player Allomancer is pushing/pulling on the Player.
  */
 public class NonPlayerPushPullController : AllomanticIronSteel {
     
@@ -43,25 +43,36 @@ public class NonPlayerPushPullController : AllomanticIronSteel {
         if (!PauseMenu.IsPaused) {
             for (int i = 0; i < maxNumberOfTargets; i++) {
                 // Non-existent target, disable blue line
-                if (PullTargets[i] == null) {
+                if (PullTargets[i] == null || PullTargets[i] != Player.PlayerMagnetic) {
                     pullLines[i].GetComponent<MeshRenderer>().enabled = false;
                 } else {
-                    UpdateLines(PullTargets, pullLines, i);
+                    UpdateLines(true, i);
                 }
-                if (PushTargets[i] == null) {
+                if (PushTargets[i] == null || PushTargets[i] != Player.PlayerMagnetic) {
                     pushLines[i].GetComponent<MeshRenderer>().enabled = false;
                 } else {
-                    UpdateLines(PushTargets, pushLines, i);
+                    UpdateLines(false, i);
                 }
             }
 
         }
     }
 
-    private void UpdateLines(TargetArray array, VolumetricLineBehavior[] lines, int index) {
+    private void UpdateLines(bool pulling, int index) {
+
+        TargetArray array;
+        VolumetricLineBehavior[] lines;
+        if (pulling) {
+            array = PullTargets;
+            lines = pullLines;
+        } else {
+            array = PushTargets;
+            lines = pushLines;
+        }
+
         float allomanticForce = CalculateAllomanticForce(array[index], this).magnitude;
 
-        //allomanticForce -= SettingsMenu.settingsData.metalDetectionThreshold; // blue metal lines will fade to a luminocity of 0 when the force is on the edge of the threshold
+        //allomanticForce -= (allomancer.MaxRange == 0 ? SettingsMenu.settingsData.metalDetectionThreshold : allomancer.MaxRange); // blue metal lines will fade to a luminocity of 0 when the force is on the edge of the threshold
 
         float closeness = Mathf.Exp(-blueLineStartupFactor * Mathf.Pow(1 / allomanticForce, blueLineBrightnessFactor));
 
@@ -70,6 +81,6 @@ public class NonPlayerPushPullController : AllomanticIronSteel {
         lines[index].EndPos = CenterOfMass;
         lines[index].LineWidth = array[index].Charge * (SettingsMenu.settingsData.cameraFirstPerson == 0 ? blueLineThirdPersonWidth : blueLineFirstPersonWidth);
         lines[index].LightSaberFactor = 1;
-        lines[index].LineColor = new Color(0, closeness * lowLineColor, closeness * highLineColor, 1);
+        lines[index].LineColor = pulling ? new Color(0, closeness * lowLineColor, closeness * highLineColor, 1) : TargetArray.targetedRedLine * closeness;
     }
 }

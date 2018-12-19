@@ -41,8 +41,14 @@ public class PlayerMovementController : MonoBehaviour {
                     movement = -movement;
                 }
             }
-
+            
             if (IsGrounded) {
+                // Jump
+                if (Keybinds.JumpDown()) {
+                    rb.AddForce(jumpHeight, ForceMode.Impulse);
+                    groundedChecker.AddForceToTouchingCollider(-jumpHeight);
+                }
+                // Apply drag
                 if (movement.sqrMagnitude > 0 || Player.PlayerIronSteel.IronPulling || Player.PlayerIronSteel.SteelPushing) {
                     // You: "why use ints to represent binary values that should be represented by booleans"
                     // Me, an intellectual:
@@ -58,15 +64,11 @@ public class PlayerMovementController : MonoBehaviour {
                 movement *= acceleration * Mathf.Max(maxRunningSpeed - Vector3.Project(rb.velocity, movement.normalized).magnitude, 0);
                 rb.AddForce(movement, ForceMode.Acceleration);
             }
-        }
-    }
-
-    private void Update() {
-        if (IsGrounded) {
-            // Jump
-            if (Keybinds.JumpDown()) {
-                rb.AddForce(jumpHeight, ForceMode.Impulse);
-                groundedChecker.AddForceToTouchingCollider(-jumpHeight);
+        } else {
+            if (IsGrounded) {
+                rb.drag = SettingsMenu.settingsData.playerAirResistance * groundedDrag;
+            } else {
+                rb.drag = SettingsMenu.settingsData.playerAirResistance * airDrag;
             }
         }
     }
@@ -76,6 +78,7 @@ public class PlayerMovementController : MonoBehaviour {
         rb.angularVelocity = Vector3.zero;
         rb.useGravity = SettingsMenu.settingsData.playerGravity == 1;
         rb.isKinematic = false;
+        rb.constraints = RigidbodyConstraints.None;
     }
 
     public void EnableGravity() {

@@ -17,8 +17,19 @@ public class Player : Entity {
     public static Player PlayerInstance { get; private set; }
     public static PlayerPullPushController PlayerIronSteel { get; private set; }
     public static Magnetic PlayerMagnetic { get; private set; }
-    public static bool CanControlPlayer { get; set; } = false;
     public Hand CoinHand { get; private set; }
+    private static bool canControlPlayer = false;
+    public static bool CanControlPlayer {
+        get {
+            return canControlPlayer;
+        }
+        set {
+            canControlPlayer = value;
+            if (!value) {
+                PlayerIronSteel.SoftClear();
+            }
+        }
+    }
 
     private float lastCoinThrowTime = 0;
     // In coinshot mode, clicking down to ironpull while pushing throws a coin, similar to conventional first-person shooters.

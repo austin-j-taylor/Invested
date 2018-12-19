@@ -117,10 +117,14 @@ public class Magnetic : MonoBehaviour {
         get {
             if (HasColliders && !IsStatic) {
                 Vector3 centers = colliders[0].bounds.center;
+                int triggerCount = 0;
                 for (int i = 1; i < colliders.Length; i++) {
-                    centers += colliders[i].bounds.center;
+                    if (!colliders[i].isTrigger)
+                        centers += colliders[i].bounds.center;
+                    else
+                        triggerCount++;
                 }
-                return centers / colliders.Length;
+                return centers / (colliders.Length - triggerCount);
             } else if (IsStatic) {
                 // no collider or rigidbody, so center of mass is set to transform.position as a default
                 return transform.position;

@@ -56,90 +56,106 @@ public class PlayerPullPushController : AllomanticIronSteel {
         base.Clear(clearTargets);
     }
 
+    public void SoftClear() {
+        RemoveAllTargets();
+        IronPulling = false;
+        SteelPushing = false;
+        if (HasHighlightedTarget)
+            HighlightedTarget.RemoveTargetGlow();
+    }
+
     private void LateUpdate() {
         if (!PauseMenu.IsPaused) {
-            if (Player.CanControlPlayer) {
-                // Start burning
-                if (!Keybinds.Negate()) {
-                    if (Keybinds.SelectDown() && HasIron)
-                        StartBurning(true);
-                    else if (Keybinds.SelectAlternateDown() && HasSteel)
-                        StartBurning(false);
+
+            // Start and Stop Burning metals
+
+            // Start burning
+            if (!Keybinds.Negate()) {
+                if (Keybinds.SelectDown() && HasIron)
+                    StartBurning(true);
+                else if (Keybinds.SelectAlternateDown() && HasSteel)
+                    StartBurning(false);
+            }
+
+            // Stop burning altogether, hide metal lines
+            if (Keybinds.Negate()) {
+                timeToStopBurning += Time.deltaTime;
+                if (Keybinds.Select() && Keybinds.SelectAlternate() && timeToStopBurning > timeToHoldDown) {
+                    StopBurning();
+                    timeToStopBurning = 0;
+                }
+            } else {
+                timeToStopBurning = 0;
+            }
+
+            // Could have stopped burning above. Check if the Allomancer is still burning.
+            if (IsBurningIronSteel) {
+
+                // Change Burn Rate Targets, Number of Targets
+
+                // Check scrollwheel for changing the max number of targets and burn rate, or DPad if using gamepad
+                float scrollValue = 0;
+                if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) { // Gamepad
+                    scrollValue = Keybinds.DPadYAxis();
+                    if (SettingsMenu.settingsData.pushControlStyle == 1) {
+                        ChangeTargetForceMagnitude(Keybinds.DPadXAxis());
+                    }
+                } else { // Mouse and keyboard
+                    if (Keybinds.ScrollWheelButton()) {
+                        scrollValue = Keybinds.ScrollWheelAxis();
+                    } else {
+                        if (SettingsMenu.settingsData.pushControlStyle == 0) {
+                            ChangeBurnRateTarget(Keybinds.ScrollWheelAxis());
+                        } else {
+                            ChangeTargetForceMagnitude(Keybinds.ScrollWheelAxis());
+                        }
+                    }
+                }
+                if (scrollValue > 0) {
+                    IncrementNumberOfTargets();
+                }
+                if (scrollValue < 0) {
+                    DecrementNumberOfTargets();
                 }
 
-                if (IsBurningIronSteel) {
-                    // Swap pull- and push- targets
-                    if (Keybinds.NegateDown() && timeToSwapBurning > Time.time) {
-                        // Double-tapped, Swap targets
-                        PullTargets.SwapContents(PushTargets);
-                    } else {
-                        if (Keybinds.NegateDown()) {
-                            timeToSwapBurning = Time.time + timeDoubleTapWindow;
-                        }
-                    }
-
-                    // Check scrollwheel for changing the max number of targets and burn rate, or DPad if using gamepad
-                    float scrollValue = 0;
+                // Assign Burn rate targets based on the previously changed burn rate/target magnitudes
+                if (SettingsMenu.settingsData.pushControlStyle == 0) { // Percentage
                     if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) { // Gamepad
-                        scrollValue = Keybinds.DPadYAxis();
-                        if (SettingsMenu.settingsData.pushControlStyle == 1) {
-                            ChangeTargetForceMagnitude(Keybinds.DPadXAxis());
-                        }
-                    } else { // Mouse and keyboard
-                        if (Keybinds.ScrollWheelButton()) {
-                            scrollValue = Keybinds.ScrollWheelAxis();
-                        } else {
-                            if (SettingsMenu.settingsData.pushControlStyle == 0) {
-                                ChangeBurnRateTarget(Keybinds.ScrollWheelAxis());
-                            } else {
-                                ChangeTargetForceMagnitude(Keybinds.ScrollWheelAxis());
-                            }
-                        }
+                        SetPullRateTarget(Keybinds.RightBurnRate());
+                        SetPushRateTarget(Keybinds.LeftBurnRate());
                     }
-                    if (scrollValue > 0) {
-                        IncrementNumberOfTargets();
-                    }
-                    if (scrollValue < 0) {
-                        DecrementNumberOfTargets();
-                    }
+                } else { // Magnitude
+                    if (HasPullTarget || HasPushTarget) {
 
-                    // Assign Burn rate targets based on the previously changed burn rate/target magnitudes
-                    if (SettingsMenu.settingsData.pushControlStyle == 0) { // Percentage
-                        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) { // Gamepad
-                            SetPullRateTarget(Keybinds.RightBurnRate());
-                            SetPushRateTarget(Keybinds.LeftBurnRate());
-                        }
-                    } else { // Magnitude
-                        if (HasPullTarget || HasPushTarget) {
+                        //Debug.Log(player.LastMaximumNetForce);
 
-                            //Debug.Log(player.LastMaximumNetForce);
-
-                            float maxNetForce = (LastMaximumNetForce).magnitude;
-                            SetPullRateTarget(forceMagnitudeTarget / maxNetForce);
-                            SetPushRateTarget(forceMagnitudeTarget / maxNetForce);
-                        } else {
-                            SetPullRateTarget(0);
-                            SetPushRateTarget(0);
-                        }
-                    }
-
-                    // Stop burning altogether, hide metal lines
-                    if (Keybinds.Negate()) {
-                        timeToStopBurning += Time.deltaTime;
-                        if (Keybinds.Select() && Keybinds.SelectAlternate() && timeToStopBurning > timeToHoldDown) {
-                            StopBurning();
-                            timeToStopBurning = 0;
-                        }
+                        float maxNetForce = (LastMaximumNetForce).magnitude;
+                        SetPullRateTarget(forceMagnitudeTarget / maxNetForce);
+                        SetPushRateTarget(forceMagnitudeTarget / maxNetForce);
                     } else {
-                        timeToStopBurning = 0;
+                        SetPullRateTarget(0);
+                        SetPushRateTarget(0);
                     }
+                }
 
-                    LerpToBurnRates();
-                    UpdateBurnRateMeter();
-
-
+                LerpToBurnRates();
+                UpdateBurnRateMeter();
+                
+                if (Player.CanControlPlayer) {
                     // Could have stopped burning above. Check if the Allomancer is still burning.
                     if (IsBurningIronSteel) {
+                        // Swap pull- and push- targets
+                        if (Keybinds.NegateDown() && timeToSwapBurning > Time.time) {
+                            // Double-tapped, Swap targets
+                            PullTargets.SwapContents(PushTargets);
+                        } else {
+                            if (Keybinds.NegateDown()) {
+                                timeToSwapBurning = Time.time + timeDoubleTapWindow;
+                            }
+                        }
+
+                        // Search for Metals
+
                         bool pulling = Keybinds.IronPulling() && HasIron;
                         bool pushing = Keybinds.SteelPushing() && HasSteel;
                         // If you are trying to push and pull and only have pullTargets, only push. And vice versa
@@ -173,6 +189,8 @@ public class PlayerPullPushController : AllomanticIronSteel {
                             HighlightedTarget = null;
                         }
 
+                        // Add/Remove Targets
+
                         if (Keybinds.Select() || Keybinds.SelectAlternate()) {
                             // Select or Deselect pullTarget and/or pushTarget
                             if (Keybinds.Select() && HasIron) { // Selecting pull target
@@ -200,19 +218,16 @@ public class PlayerPullPushController : AllomanticIronSteel {
                         }
                         RefreshHUD();
                     }
-                }
-            } else { // If the player is not in control, but still burning metals, show blue lines to metals.
-                if (IsBurningIronSteel) {
-                    /*
-                     * Like SearchForMetals, this shows the blue lines to nearby metals, but does not do anything related to target selection.
-                     * It only updates the visual effect of these blue lines.
-                     */
-                    SearchForMetals(false);
-                    if (HasHighlightedTarget)
-                        HighlightedTarget.RemoveTargetGlow();
+                } else { // If the player is not in control, but still burning metals, show blue lines to metals.
+                    if (IsBurningIronSteel) {
+
+                        SearchForMetals(false);
+                        LerpToBurnRates();
+                        UpdateBurnRateMeter();
+                        RefreshHUD();
+                    }
                 }
             }
-
         }
     }
 
@@ -248,6 +263,8 @@ public class PlayerPullPushController : AllomanticIronSteel {
      * Searches all Magnetics in the scene for those that are within detection range of the player.
      * Shows metal lines drawing from them to the player.
      * Returns the Magnetic "closest" of these to the center of the screen.
+     * 
+     * If targetedLineColors is false, then push/pullTargets will not have specially colored lines (i.e. red, green, light blue)
      * 
      * Rules for the metal lines:
      *  - The WIDTH of the line is dependant on the MASS of the target
@@ -353,7 +370,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
         return distance;
     }
 
-    private void RemoveAllTargets() {
+    public void RemoveAllTargets() {
         PullTargets.Clear();
         PushTargets.Clear();
 

@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour {
         MetalLineTemplate = Resources.Load<VolumetricLineBehavior>("MetalLineTemplate");
         MetalLineStripTemplate = Resources.Load<VolumetricLineStripBehavior>("MetalLineStripTemplate");
         MagneticsInScene = new List<Magnetic>();
-        Layer_IgnoreCamera = ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ignore Camera")));
+        Layer_IgnoreCamera = ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ignore Camera")) | (1 << LayerMask.NameToLayer("Ignore Player")));
         Layer_BlueLines = LayerMask.NameToLayer("Blue Lines");
         Layer_BlueLinesVisible = LayerMask.NameToLayer("Blue Lines Visible");
         //SceneManager.sceneLoaded += Clear;
