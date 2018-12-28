@@ -8,15 +8,15 @@ public class SpikePit : MonoBehaviour {
     private const float slerpTimeChargeupPlayer = .5f;
     private const float slerpTimeChargeupPathRotation = .3f;
     private const float slerpTimeChargeupPathReturn = 1f;
-    private const float slerpTimeChargeupPath = .5f;
+    private const float slerpTimeChargeupPath = 2f;
     private const float anglePullThreshold = 45f;
     private const float angleEqualThreshold = 1f;
     private const float distanceThresholdSpiking = 1.9f;
     private const float distanceThresholdEqual = .15f;
     private const float distanceThresholdReturn = 5;
     private const float forwardTimeOffset = .2f;
-    private const float forceConstantFar = 40f;
-    private const float dragTracing = 3;
+    private const float forceConstantFar = 200f;
+    private const float dragTracing = 5;
     private const float dragChasing = .3f;
     private const float animationTime = 4;
 
@@ -98,6 +98,7 @@ public class SpikePit : MonoBehaviour {
                     spike.AddPullTarget(Player.PlayerMagnetic);
                     spike.IronPulling = true;
                     spike.IronBurnRateTarget = .2f;
+                    spike.PullTargets.MaxRange = -1;
                 }
                 if (angle < angleEqualThreshold) {
                     tracingPlayer = false;
@@ -108,6 +109,7 @@ public class SpikePit : MonoBehaviour {
                     spikeRb.isKinematic = false;
                     spikeRb.drag = dragChasing;
                     spikeRb.velocity = Vector3.zero;
+                    spikeRb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
                     spike.IronBurnRateTarget = .75f;
                 }
             }
@@ -160,6 +162,7 @@ public class SpikePit : MonoBehaviour {
             // Follow the Path.
             if (tracingPath) {
                 progress += Time.deltaTime / animationTime * slerpTime;
+                slerpTime = Mathf.Min(1, slerpTime + Time.deltaTime * slerpTimeChargeupPath);
                 if (progress < 1f) {
                     splineDragging.FollowCurve(spikeTarget.transform, progress, false);
 
@@ -171,14 +174,14 @@ public class SpikePit : MonoBehaviour {
                     // Rotate the spike to follow the path, a few moments in the future
                     float offsetTime = progress + forwardTimeOffset / animationTime;
                     offsetTime = offsetTime > 1 ? 1 : offsetTime;
-
+                    //Debug.Log("Distance: " + distance.magnitude);
                     //if (offsetTime < 1) {
-                        Vector3 velocity = splineDragging.GetVelocity(offsetTime);
-                        Quaternion newRotation = Quaternion.Slerp(spike.transform.rotation, Quaternion.LookRotation(splineDragging.GetPoint(offsetTime) - spikeTarget.position), slerpConstantPath * Time.deltaTime * slerpTimeRotation);
-                        spike.transform.rotation = newRotation;
+                    //Vector3 velocity = splineDragging.GetVelocity(offsetTime);
+                    //Quaternion newRotation = Quaternion.LookRotation(splineDragging.GetPoint(offsetTime) - spikeTarget.position);
+                    Quaternion newRotation = Quaternion.Slerp(spike.transform.rotation, Quaternion.LookRotation(splineDragging.GetPoint(offsetTime) - spikeTarget.position), slerpConstantPath * Time.deltaTime * slerpTimeRotation);
+                    spike.transform.rotation = newRotation;
                     //}
 
-                    slerpTime = Mathf.Min(1, slerpTime + Time.deltaTime * slerpTimeChargeupPath);
                     slerpTimeRotation = slerpTimeRotation + Time.deltaTime * slerpTimeChargeupPathRotation;
                 } else {
                     tracingPath = false;
@@ -187,9 +190,11 @@ public class SpikePit : MonoBehaviour {
                     slerpTimeRotation = 0;
                     progress = 0;
 
+                    Player.CanControlPlayer = true;
+
                     Player.PlayerInstance.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
                     Player.PlayerInstance.transform.SetParent(GameObject.FindGameObjectWithTag("GameController").transform);
-
+               
                     Player.PlayerInstance.GetComponent<Rigidbody>().velocity = splineDragging.GetVelocity(1);
                     Player.PlayerInstance.transform.position += splineDragging.GetVelocity(1) * Time.fixedDeltaTime;
                     spikeRb.velocity = -splineDragging.GetVelocity(1);
@@ -205,19 +210,20 @@ public class SpikePit : MonoBehaviour {
             // Pushing the player off of the Spike.
             if (releasingPlayer) {
                 if ((Player.PlayerIronSteel.CenterOfMass - spike.CenterOfMass).sqrMagnitude > .01) {
-                    //Quaternion newRotation = Quaternion.LookRotation(Player.PlayerIronSteel.CenterOfMass - spike.CenterOfMass);
-                    spike.transform.rotation = Quaternion.LookRotation(-spikeRb.velocity);
+                    Quaternion newRotation = Quaternion.LookRotation(Player.PlayerIronSteel.CenterOfMass - spike.CenterOfMass);
+                    //Quaternion newRotation = Quaternion.LookRotation(-spikeRb.velocity);
+                    spike.transform.rotation = newRotation;
                 }
 
                 if ((spike.CenterOfMass - Player.PlayerIronSteel.CenterOfMass).magnitude > distanceThresholdReturn) {
                     releasingPlayer = false;
                     returningHome = true;
 
+                    spikeRb.collisionDetectionMode = CollisionDetectionMode.Discrete;
                     spikeTarget.transform.position = spike.transform.position;
                     spike.transform.localPosition = Vector3.zero;
                     splineReturnHome.SetInitialPoint(transform.InverseTransformPoint(spike.transform.position), spikeRb.velocity.normalized);
 
-                    Player.CanControlPlayer = true;
                 }
             }
 
@@ -268,7 +274,6 @@ public class SpikePit : MonoBehaviour {
     private void OnTriggerStay(Collider other) {
         if (other.CompareTag("PlayerBody") && anim.enabled) {
             anim.SetTrigger("PlayerEntersHome");
-            Debug.Log(other.name);
         }
     }
 

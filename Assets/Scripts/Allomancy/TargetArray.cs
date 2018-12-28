@@ -19,7 +19,7 @@ public class TargetArray {
     public int Size { get; private set; } = 1;
     public int Count { get; private set; } = 0;
 
-    public float MaxRange { get; set; } = 0; // If anything other than zero, this Allomancer has a custom max range other than the one specified in SettingsData
+    public float MaxRange { get; set; } = 0; // 0 if ignored (use SettingsData), negative if infinite, positive if this Allomancer has a custom max range
 
     public TargetArray(int maxNumberOfTargets) {
         targets = new Magnetic[maxNumberOfTargets];
@@ -251,8 +251,10 @@ public class TargetArray {
      * Removes all entries out of range, using the given burn rate
      */
     public void RemoveAllOutOfRange(float burnRate, AllomanticIronSteel allomancer) {
-        for(int i = 0; i < Count; i++) {
-            if(MaxRange == 0) {
+
+
+        if(MaxRange == 0) {
+            for (int i = 0; i < Count; i++) {
                 if (SettingsMenu.settingsData.pushControlStyle == 0 && SettingsMenu.settingsData.controlScheme != SettingsData.Gamepad) {
                     if (AllomanticIronSteel.CalculateAllomanticForce(targets[i], allomancer).magnitude * burnRate < SettingsMenu.settingsData.metalDetectionThreshold) {
                         RemoveTargetAt(i);
@@ -262,11 +264,13 @@ public class TargetArray {
                         RemoveTargetAt(i);
                     }
                 }
-            } else {
-                if((targets[i].CenterOfMass - allomancer.CenterOfMass).sqrMagnitude > MaxRange * MaxRange) {
+            }
+        } else if(MaxRange > 0) {
+            for (int i = 0; i < Count; i++) {
+                if ((targets[i].CenterOfMass - allomancer.CenterOfMass).sqrMagnitude > MaxRange * MaxRange) {
                     RemoveTargetAt(i);
                 }
             }
-        }
+        } // else: maxrange < 0, no max range
     }
 }

@@ -12,8 +12,9 @@ public class PlayerMovementController : MonoBehaviour {
     private const float acceleration = 5f;
     private const float maxRunningSpeed = 7.5f;
     private const float airControlFactor = .06f;
-    private const float airDrag = .2f;
-    private const float groundedDrag = 3f;
+    private const float dragAirborne = .2f;
+    private const float dragGrounded = 3f;
+    private const float dragNoControl = 10f;
     private readonly Vector3 jumpHeight = new Vector3(0, 400f, 0);
 
     private Rigidbody rb;
@@ -52,12 +53,12 @@ public class PlayerMovementController : MonoBehaviour {
                 if (movement.sqrMagnitude > 0 || Player.PlayerIronSteel.IronPulling || Player.PlayerIronSteel.SteelPushing) {
                     // You: "why use ints to represent binary values that should be represented by booleans"
                     // Me, an intellectual:
-                    rb.drag = SettingsMenu.settingsData.playerAirResistance * airDrag;
+                    rb.drag = SettingsMenu.settingsData.playerAirResistance * dragAirborne;
                 } else {
-                    rb.drag = SettingsMenu.settingsData.playerAirResistance * groundedDrag;
+                    rb.drag = SettingsMenu.settingsData.playerAirResistance * dragGrounded;
                 }
             } else { // is airborne
-                rb.drag = SettingsMenu.settingsData.playerAirResistance * airDrag;
+                rb.drag = SettingsMenu.settingsData.playerAirResistance * dragAirborne;
                 movement *= airControlFactor;
             }
             if (movement.magnitude > 0) {
@@ -65,11 +66,11 @@ public class PlayerMovementController : MonoBehaviour {
                 rb.AddForce(movement, ForceMode.Acceleration);
             }
         } else {
-            if (IsGrounded) {
-                rb.drag = SettingsMenu.settingsData.playerAirResistance * groundedDrag;
-            } else {
-                rb.drag = SettingsMenu.settingsData.playerAirResistance * airDrag;
-            }
+            //if (IsGrounded) {
+                rb.drag = SettingsMenu.settingsData.playerAirResistance * dragNoControl;
+            //} else {
+            //    rb.drag = SettingsMenu.settingsData.playerAirResistance * airDrag;
+            //}
         }
     }
 

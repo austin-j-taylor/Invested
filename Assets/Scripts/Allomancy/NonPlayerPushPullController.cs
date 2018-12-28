@@ -43,12 +43,12 @@ public class NonPlayerPushPullController : AllomanticIronSteel {
         if (!PauseMenu.IsPaused) {
             for (int i = 0; i < maxNumberOfTargets; i++) {
                 // Non-existent target, disable blue line
-                if (PullTargets[i] == null || PullTargets[i] != Player.PlayerMagnetic) {
+                if (PullTargets[i] != Player.PlayerMagnetic || !IronPulling) {
                     pullLines[i].GetComponent<MeshRenderer>().enabled = false;
                 } else {
                     UpdateLines(true, i);
                 }
-                if (PushTargets[i] == null || PushTargets[i] != Player.PlayerMagnetic) {
+                if (PushTargets[i] != Player.PlayerMagnetic || !SteelPushing) {
                     pushLines[i].GetComponent<MeshRenderer>().enabled = false;
                 } else {
                     UpdateLines(false, i);

@@ -7,7 +7,6 @@ public class HarmonyTarget : MonoBehaviour {
     private const float distanceThreshold = .001f;
     private const float forceConstantFar = 40f;
     private const float forceConstantClose = 10000f;
-    private const float dragConstantClose = 10f;
 
     private bool playerHasEntered;
 
@@ -83,7 +82,6 @@ public class HarmonyTarget : MonoBehaviour {
 
         //Player.PlayerIronSteel.StopBurning();
         Player.PlayerInstance.GetComponent<Rigidbody>().useGravity = false;
-        Player.PlayerInstance.GetComponent<Rigidbody>().drag = dragConstantClose;
         CameraController.SetExternalSource(cameraPositionTarget, cameraLookAtTarget);
 
     }
