@@ -9,7 +9,6 @@ public class PauseMenu : MonoBehaviour {
     public static bool IsPaused { get; private set; }
 
     private static SettingsMenu settingsMenu;
-    private MainMenu mainMenu;
 
     private Button unpauseButton;
     private Button settingsButton;
@@ -21,7 +20,6 @@ public class PauseMenu : MonoBehaviour {
     // Use this for initialization
     void Awake() {
         settingsMenu = transform.parent.GetComponentInChildren<SettingsMenu>();
-        mainMenu = transform.parent.GetComponentInChildren<MainMenu>();
 
         Button[] buttons = GetComponentsInChildren<Button>();
         unpauseButton = buttons[0];
@@ -58,7 +56,7 @@ public class PauseMenu : MonoBehaviour {
     }
 
     public static void UnPause() {
-        settingsMenu.CloseSettings();
+        settingsMenu.Close();
 
         CameraController.LockCamera();
         Time.timeScale = 1f;
@@ -71,7 +69,7 @@ public class PauseMenu : MonoBehaviour {
     }
 
     private void ClickSettings() {
-        settingsMenu.OpenSettings();
+        settingsMenu.Open();
     }
 
     private void ClickReset() {
@@ -80,7 +78,6 @@ public class PauseMenu : MonoBehaviour {
 
     private void ClickQuit() {
         CameraController.UnlockCamera();
-        mainMenu.OpenMainMenu();
         SceneSelectMenu.LoadScene(SceneSelectMenu.sceneTitleScreen);
     }
 }

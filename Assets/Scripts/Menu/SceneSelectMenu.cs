@@ -13,6 +13,7 @@ public class SceneSelectMenu : MonoBehaviour {
     public const int sceneShootingGrounds = 3;
     public const int sceneSandbox = 4;
     public const int sceneSouthernMountains = 5;
+    public const int sceneLevel01 = 6;
 
     public bool IsOpen {
         get {
@@ -20,44 +21,52 @@ public class SceneSelectMenu : MonoBehaviour {
         }
     }
 
-    private Image titleScreenBG;
+    private Text tooltip;
     private Button luthadelButton;
     private Button shootingGroundsButton;
     private Button sandboxButton;
     private Button southernMountainsButton;
+    private Button level01Button;
     private Button backButton;
 
     void Start() {
-        titleScreenBG = transform.parent.GetComponent<Image>();
+        tooltip = transform.Find("Tooltip").GetComponent<Text>();
 
         Button[] buttons = GetComponentsInChildren<Button>();
         luthadelButton = buttons[0];
         shootingGroundsButton = buttons[1];
         sandboxButton = buttons[2];
         southernMountainsButton = buttons[3];
-        backButton = buttons[4];
-
+        level01Button = buttons[4];
+        backButton = buttons[buttons.Length - 1];
+        
         luthadelButton.onClick.AddListener(OnClickedLuthadel);
         shootingGroundsButton.onClick.AddListener(OnClickedShootingGrounds);
         sandboxButton.onClick.AddListener(OnClickedSandbox);
         southernMountainsButton.onClick.AddListener(OnClickedSouthernMountains);
+        level01Button.onClick.AddListener(OnClickedLevel01Button);
         backButton.onClick.AddListener(OnClickedBack);
 
         // Only close the main menu after the scene loads to prevent jarring camera transitions
         SceneManager.sceneLoaded += ClearAfterSceneChange;
     }
 
-    public void OpenSceneSelect() {
+    public void Open() {
         gameObject.SetActive(true);
+        tooltip.text = "";
     }
 
-    public void CloseSceneSelect() {
+    public void Close() {
         gameObject.SetActive(false);
     }
 
     public static void LoadScene(int scene) {
         //CameraController.SetExternalSource(null, null);
         Player.PlayerInstance.transform.parent = GameObject.FindGameObjectWithTag("GameController").transform;
+        if (scene == sceneTitleScreen) {
+            MainMenu.Open();
+            MainMenu.OpenSceneSelectMenu();
+        }
 
         SceneManager.LoadScene(scene);
     }
@@ -71,8 +80,8 @@ public class SceneSelectMenu : MonoBehaviour {
             PauseMenu.UnPause();
 
             if (scene.buildIndex != sceneTitleScreen) {
-                titleScreenBG.gameObject.SetActive(false);
-                CloseSceneSelect();
+                Close();
+                MainMenu.Close();
 
                 Player.PlayerInstance.gameObject.SetActive(true);
                 CameraController.LockCamera();
@@ -83,6 +92,10 @@ public class SceneSelectMenu : MonoBehaviour {
                 CameraController.UnlockCamera();
             }
         }
+    }
+
+    public void SetTooltip(string tip) {
+        tooltip.text = tip;
     }
 
     private void OnClickedLuthadel() {
@@ -101,8 +114,11 @@ public class SceneSelectMenu : MonoBehaviour {
         LoadScene(sceneSouthernMountains);
     }
 
+    private void OnClickedLevel01Button() {
+        LoadScene(sceneLevel01);
+    }
+
     private void OnClickedBack() {
-        //mainMenu.OpenMainMenu();
-        CloseSceneSelect();
+        Close();
     }
 }

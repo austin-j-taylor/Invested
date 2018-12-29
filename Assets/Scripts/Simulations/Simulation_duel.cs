@@ -18,6 +18,8 @@ public class Simulation_duel : MonoBehaviour {
             allomancers[i].AddPushTarget(spheres[i / 2]);
             allomancers[i].SteelPushing = true;
             allomancers[i].SteelBurnRateTarget = 1;
+            allomancers[i].PullTargets.MaxRange = 10;
+            allomancers[i].PushTargets.MaxRange = 10;
         }
     }
     //private void Update() {

@@ -5,71 +5,76 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour {
 
-    private Button playButton;
-    private Button settingsButton;
-    private Button quitButton;
-
-    private Image titleScreenBG;
+    private static MainMenu instance;
+    
+    private TitleScreen titleScreen;
     private SettingsMenu settingsMenu;
     private SceneSelectMenu sceneSelectMenu;
-    
-    private void Start () {
-        titleScreenBG = transform.parent.GetComponent<Image>();
-        settingsMenu = transform.parent.parent.GetComponentInChildren<SettingsMenu>();
-        sceneSelectMenu = transform.parent.GetComponentInChildren<SceneSelectMenu>();
 
-        Button[] buttons = GetComponentsInChildren<Button>();
-        playButton = buttons[0];
-        settingsButton = buttons[1];
-        quitButton = buttons[2];
-
-        playButton.onClick.AddListener(OnClickedPlay);
-        settingsButton.onClick.AddListener(OnClickedSettings);
-        quitButton.onClick.AddListener(OnClickedQuit);
+    private void Awake() {
+        instance = this;
+        titleScreen = GetComponentInChildren<TitleScreen>();
+        settingsMenu = transform.parent.GetComponentInChildren<SettingsMenu>();
+        sceneSelectMenu = GetComponentInChildren<SceneSelectMenu>();
 
         // Set up the Player, Canvas, and EventSystem to persist between scenes
         //DontDestroyOnLoad(Player.PlayerInstance);
-        DontDestroyOnLoad(transform.parent.parent.gameObject);
+        DontDestroyOnLoad(transform.parent.gameObject);
         DontDestroyOnLoad(GameObject.FindGameObjectWithTag("GameController"));
+    }
 
+    private void Start () {
         Player.PlayerInstance.gameObject.SetActive(false);
-        settingsMenu.CloseSettings();
-        sceneSelectMenu.CloseSceneSelect();
+        settingsMenu.Close();
+        sceneSelectMenu.Close();
         HUD.DisableHUD();
     }
 
     private void Update() {
         if(Keybinds.EscapeDown()) {
             if(sceneSelectMenu.IsOpen) {
-                sceneSelectMenu.CloseSceneSelect();
-                //OpenMainMenu();
+                CloseSceneSelectMenu();
+                OpenTitleScreen();
             } else if(settingsMenu.IsOpen) {
-                settingsMenu.BackAndSaveSettings();
+                if (settingsMenu.BackAndSaveSettings())
+                    OpenTitleScreen();
             } else {
-                settingsMenu.OpenSettings();
+                OpenSettingsMenu();
             }
         }
     }
 
-    public void OpenMainMenu() {
-        titleScreenBG.gameObject.SetActive(true);
-        gameObject.SetActive(true);
+    public static void Open() {
+        instance.gameObject.SetActive(true);
     }
 
-    public void CloseMainMenu() {
-        gameObject.SetActive(false);
+    public static void Close() {
+        instance.gameObject.SetActive(false);
     }
 
-    private void OnClickedPlay() {
-        sceneSelectMenu.OpenSceneSelect();
-        //CloseMainMenu();
+    public static void OpenTitleScreen() {
+        CloseSettingsMenu();
+        instance.titleScreen.Open();
     }
 
-    private void OnClickedSettings() {
-        settingsMenu.OpenSettings();
+    public static void CloseTitleScreen() {
+        instance.titleScreen.Close();
     }
 
-    private void OnClickedQuit() {
-        Application.Quit();
+    public static void OpenSceneSelectMenu() {
+        CloseTitleScreen();
+        instance.sceneSelectMenu.Open();
+    }
+
+    public static void CloseSceneSelectMenu() {
+        instance.sceneSelectMenu.Close();
+    }
+
+    public static void OpenSettingsMenu() {
+        instance.settingsMenu.Open();
+    }
+
+    public static void CloseSettingsMenu() {
+        instance.settingsMenu.Close();
     }
 }
