@@ -9,6 +9,7 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour {
 
+    private const float playerLookAtTargetHeight = 1.25f;
     private const float distanceFromHitWall = .125f;//.5f;
     private const float wallDistanceCheck = 4;
     private const float lerpConstant = 5;
@@ -87,11 +88,21 @@ public class CameraController : MonoBehaviour {
             // Vertical rotation (rotates camera up and down body)
             Quaternion verticalRotation = Quaternion.Euler(currentY, 0, 0);
             ActiveCamera.transform.localRotation = verticalRotation;
+            
+            // Check if lookAtTarget would be clipping into a ceiling
+            if (Physics.Raycast(playerBody.position, Vector3.up, out RaycastHit hit, playerLookAtTargetHeight, GameManager.Layer_IgnoreCameraVertically)) {
+                playerLookAtTarget.transform.position = hit.point + distanceFromHitWall * hit.normal;
+            } else {
+                Vector3 pos = Vector3.zero;
+                pos.y = playerLookAtTargetHeight;
+                playerLookAtTarget.transform.localPosition = pos;
+            }
 
             if (SettingsMenu.settingsData.cameraFirstPerson == 0) {
+
                 Vector3 wantedPosition = verticalRotation * distancefromPlayer; // local
                 ActiveCamera.transform.localPosition = wantedPosition;
-                if (Physics.Raycast(playerLookAtTarget.position, ActiveCamera.transform.position - playerLookAtTarget.position, out RaycastHit hit, wallDistanceCheck, GameManager.Layer_IgnoreCamera)) {
+                if (Physics.Raycast(playerLookAtTarget.position, ActiveCamera.transform.position - playerLookAtTarget.position, out hit, wallDistanceCheck, GameManager.Layer_IgnoreCamera)) {
                     ActiveCamera.transform.position = hit.point + distanceFromHitWall * hit.normal;
                 } else {
                     // Check if the camera is just barely touching a wall (check 6 directions)

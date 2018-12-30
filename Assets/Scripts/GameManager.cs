@@ -16,10 +16,12 @@ public class GameManager : MonoBehaviour {
     public static VolumetricLineBehavior MetalLineTemplate { get; private set; }
     public static VolumetricLineStripBehavior MetalLineStripTemplate { get; private set; }
 
-    // Holds all Magnetics in scene
+    // Holds all Magnetics and Allomancers in scene
+    public static List<AllomanticIronSteel> Allomancers { get; private set; }
     public static List<Magnetic> MagneticsInScene { get; private set; }
 
     public static int Layer_IgnoreCamera { get; private set; }
+    public static int Layer_IgnoreCameraVertically { get; private set; }
     public static int Layer_BlueLines { get; private set; }
     public static int Layer_BlueLinesVisible { get; private set; }
 
@@ -30,8 +32,10 @@ public class GameManager : MonoBehaviour {
         Font_Heebo = Resources.Load<Font>("Fonts/Heebo-Medium");
         MetalLineTemplate = Resources.Load<VolumetricLineBehavior>("MetalLineTemplate");
         MetalLineStripTemplate = Resources.Load<VolumetricLineStripBehavior>("MetalLineStripTemplate");
+        Allomancers = new List<AllomanticIronSteel>();
         MagneticsInScene = new List<Magnetic>();
         Layer_IgnoreCamera = ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ignore Camera")) | (1 << LayerMask.NameToLayer("Ignore Player")));
+        Layer_IgnoreCameraVertically = ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ignore Camera Vertically")) | (1 << LayerMask.NameToLayer("Ignore Player")));
         Layer_BlueLines = LayerMask.NameToLayer("Blue Lines");
         Layer_BlueLinesVisible = LayerMask.NameToLayer("Blue Lines Visible");
         //SceneManager.sceneLoaded += Clear;
@@ -42,11 +46,23 @@ public class GameManager : MonoBehaviour {
         SceneManager.LoadScene(SceneSelectMenu.sceneTitleScreen);
     }
 
+    public static void AddAllomancer(AllomanticIronSteel allomancer) {
+        Allomancers.Add(allomancer);
+    }
+
+    public static void RemoveAllomancer(AllomanticIronSteel allomancer) {
+        Allomancers.Remove(allomancer);
+    }
+
     public static void AddMagnetic(Magnetic magnetic) {
         MagneticsInScene.Add(magnetic);
     }
 
     public static void RemoveMagnetic(Magnetic magnetic) {
+        // Remove from all allomancers
+        foreach (AllomanticIronSteel allomancer in Allomancers) {
+            allomancer.RemoveTarget(magnetic);
+        }
         MagneticsInScene.Remove(magnetic);
     }
 

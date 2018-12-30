@@ -18,7 +18,6 @@ public class CoinPouch : MonoBehaviour {
     }
 
     public void AddCoin(Coin coin) {
-        Player.PlayerIronSteel.RemoveTarget(coin, true);
         Destroy(coin.gameObject);
         Count++;
     }

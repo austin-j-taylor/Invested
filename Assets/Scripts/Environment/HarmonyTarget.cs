@@ -54,10 +54,10 @@ public class HarmonyTarget : MonoBehaviour {
     private void FixedUpdate() {
         if (!playerHasEntered) {
             // Pull sphere towards center of Harmony Target
-            Vector3 distanceToInner = inner.position - harmonySphere.position;
-            float sqrDistance = distanceToInner.sqrMagnitude;
+            Vector3 distance = inner.position - harmonySphere.position;
+            float sqrDistance = distance.sqrMagnitude;
             if (sqrDistance > distanceThreshold) {
-                rb.AddForce(forceConstantFar * distanceToInner.normalized * sqrDistance, ForceMode.Acceleration);
+                rb.AddForce(forceConstantFar * distance.normalized * sqrDistance, ForceMode.Acceleration);
             }
         } else {
             // Pull player towards center of Harmony Target

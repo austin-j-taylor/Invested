@@ -1,8 +1,13 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TriggerBeadTutorial : TriggerBead
-{
+/*
+ * A TriggerBead that proceeds the Tutorial when triggered.
+ */
+public class TriggerBeadTutorial : TriggerBead {
 
+    protected override void Trigger() {
+
+    }
 }

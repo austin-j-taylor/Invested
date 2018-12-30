@@ -8,6 +8,7 @@ public class MetalReserveMeters : MonoBehaviour {
     private const float maxMass = 100;
     private const float lowThreshold = .15f;
     private const float criticalMassThreshold = 1f; // When reserve is < 1g, always flash red
+    private const float timeToFade = 5;
 
     private MetalReserveElement iron;
     private MetalReserveElement steel;
@@ -38,8 +39,10 @@ public class MetalReserveMeters : MonoBehaviour {
         ironAnimator.SetBool("IsLow", iron.fill.fillAmount < lowThreshold);
         // The -.001f is to account for floating-point error
         ironAnimator.SetBool("IsDraining", iron.reserve.Rate < AllomanticIronSteel.gramsPerSecondPassiveBurn - .001f || iron.reserve.Mass < criticalMassThreshold && iron.reserve.Mass != 0);
+        ironAnimator.SetBool("IsVisible", Time.time - iron.reserve.TimeLastChanged < timeToFade);
         steelAnimator.SetBool("IsLow", steel.fill.fillAmount < lowThreshold);
         steelAnimator.SetBool("IsDraining", steel.reserve.Rate < AllomanticIronSteel.gramsPerSecondPassiveBurn - .001f || steel.reserve.Mass < criticalMassThreshold && steel.reserve.Mass != 0);
+        steelAnimator.SetBool("IsVisible", Time.time - steel.reserve.TimeLastChanged < timeToFade);
     }
 
     public void Clear() {

@@ -183,6 +183,7 @@ public class AllomanticIronSteel : MonoBehaviour {
         SteelReserve = gameObject.AddComponent<MetalReserve>();
         PullTargets = new TargetArray(maxNumberOfTargets);
         PushTargets = new TargetArray(maxNumberOfTargets);
+        GameManager.AddAllomancer(this);
     }
 
     public virtual void Clear(bool clearTargets = true) {
@@ -599,7 +600,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     /*
      * Remove a target, regardless of it being a pull or push target.
      */
-    public bool RemoveTarget(Magnetic target, bool startWithPullTargets) {
+    public bool RemoveTarget(Magnetic target, bool startWithPullTargets = false) {
         // Try to remove target from both arrays, if necessary
         if (startWithPullTargets) {
             if (PullTargets.RemoveTarget(target)) {
