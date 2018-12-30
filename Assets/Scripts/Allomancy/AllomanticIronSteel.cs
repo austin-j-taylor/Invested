@@ -107,11 +107,11 @@ public class AllomanticIronSteel : MonoBehaviour {
     // The passive burn rate of the allomancer.
     protected float IronPassiveBurn { get; set; }
     protected float SteelPassiveBurn { get; set; }
-    public float GreaterBurnRate {
-        get {
-            return Mathf.Max(IronBurnRateTarget, SteelBurnRateTarget);
-        }
-    }
+    //public float GreaterBurnRate {
+    //    get {
+    //        return Mathf.Max(IronBurnRateTarget, SteelBurnRateTarget);
+    //    }
+    //}
     public float GreaterPassiveBurn {
         get {
             return Mathf.Max(IronPassiveBurn, SteelPassiveBurn);

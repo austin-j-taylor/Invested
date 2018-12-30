@@ -8,13 +8,15 @@ public class BurnRateMeter : MonoBehaviour {
 
     // Constants for Burn Rate Meter
     private const float minAngle = .12f;
-    private const float maxAngle = 1f - 2 * minAngle;
+    //private const float maxAngle = 1f - 2 * minAngle;
+    private const float maxAngle = 0.3735f - minAngle;
 
     private Text actualForceText;
     private Text sumForceText;
     private Text playerInputText;
     private Text metalLineCountText;
     private Image burnRateImage;
+    private Image burnRateAlternateImage;
 
     void Awake() {
         Text[] texts = GetComponentsInChildren<Text>();
@@ -23,8 +25,9 @@ public class BurnRateMeter : MonoBehaviour {
         sumForceText = texts[2];
         metalLineCountText = texts[3];
 
-        burnRateImage = GetComponent<Image>();
-        burnRateImage.color = burnRateImage.color;
+        Image[] images = GetComponentsInChildren<Image>();
+        burnRateImage = images[0];
+        burnRateAlternateImage = images[1];
         Clear();
     }
 
@@ -34,6 +37,7 @@ public class BurnRateMeter : MonoBehaviour {
         sumForceText.text = "";
         metalLineCountText.text = "";
         burnRateImage.fillAmount = minAngle;
+        burnRateAlternateImage.fillAmount = minAngle;
     }
 
     // Clear unwanted fields after changing settings
@@ -55,21 +59,21 @@ public class BurnRateMeter : MonoBehaviour {
      *  targetForce only appears in the playerInputText field.
      *  The force calculated from rate as a % of the net force is used for the blue circle bar and the ActualForceText field.
      */
-    public void SetBurnRateMeterForceMagnitude(Vector3 allomanticForce, Vector3 normalForce, float rate, float targetForce) {
+    public void SetBurnRateMeterForceMagnitude(Vector3 allomanticForce, Vector3 normalForce, float rate, float rateAlternate, float targetForce) {
         playerInputText.text = HUD.ForceString(targetForce, Player.PlayerIronSteel.Mass);
 
         SetActualForceText((allomanticForce + normalForce).magnitude);
         SetSumForceText(allomanticForce, normalForce);
-        SetFillPercent(rate);
+        SetFillPercent(rate, rateAlternate);
     }
 
     // Set the meter using the Percentage display configuration.
-    public void SetBurnRateMeterPercentage(Vector3 allomanticForce, Vector3 normalForce, float rate) {
-        playerInputText.text = (int)Mathf.Round(rate * 100) + "%";
+    public void SetBurnRateMeterPercentage(Vector3 allomanticForce, Vector3 normalForce, float rate, float rateAlternate) {
+        playerInputText.text = (int)Mathf.Round(Mathf.Max(rate, rateAlternate) * 100) + "%";
 
         SetActualForceText((allomanticForce + normalForce).magnitude);
         SetSumForceText(allomanticForce, normalForce);
-        SetFillPercent(rate);
+        SetFillPercent(rate, rateAlternate);
     }
 
     private void SetActualForceText(float forceActual) {
@@ -84,8 +88,9 @@ public class BurnRateMeter : MonoBehaviour {
         }
     }
 
-    private void SetFillPercent(float percent) {
-        burnRateImage.fillAmount = minAngle + (percent) * (maxAngle);
+    private void SetFillPercent(float rate, float rateAlternate) {
+        burnRateImage.fillAmount = minAngle + (rate) * (maxAngle);
+        burnRateAlternateImage.fillAmount = minAngle + (rateAlternate) * (maxAngle);
     }
 
     public void SetForceTextColorStrong() {

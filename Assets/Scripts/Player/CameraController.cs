@@ -118,10 +118,13 @@ public class CameraController : MonoBehaviour {
         externalLookAtTarget = null;
         firstPersonCamera.transform.localPosition = Vector3.zero;
         Vector3 eulers = Player.PlayerInstance.transform.eulerAngles;
-        eulers.x = 0;
-        eulers.z = 0;
+        //eulers.x = 0;
+        //eulers.z = 0;
         playerLookAtTarget.rotation = Quaternion.Euler(eulers);
-        currentY = playerLookAtTarget.localEulerAngles.x + 15; // Tilted downward a little
+        currentY = playerLookAtTarget.localEulerAngles.x; // Tilted downward a little
+        Debug.Log(currentY);
+        if (currentY >= 180)
+            currentY -= 360;
         currentX = playerLookAtTarget.localEulerAngles.y;
         if (Player.PlayerIronSteel.IsBurningIronSteel) // Update blue lines when the camera is reset
             Player.PlayerIronSteel.SearchForMetals();
