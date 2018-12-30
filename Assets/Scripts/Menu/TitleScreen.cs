@@ -27,7 +27,6 @@ public class TitleScreen : MonoBehaviour {
 
     private void OnClickedSettings() {
         MainMenu.OpenSettingsMenu();
-        Close();
     }
 
     private void OnClickedQuit() {

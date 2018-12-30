@@ -122,7 +122,6 @@ public class CameraController : MonoBehaviour {
         //eulers.z = 0;
         playerLookAtTarget.rotation = Quaternion.Euler(eulers);
         currentY = playerLookAtTarget.localEulerAngles.x; // Tilted downward a little
-        Debug.Log(currentY);
         if (currentY >= 180)
             currentY -= 360;
         currentX = playerLookAtTarget.localEulerAngles.y;

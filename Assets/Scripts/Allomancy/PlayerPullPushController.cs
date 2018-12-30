@@ -466,13 +466,11 @@ public class PlayerPullPushController : AllomanticIronSteel {
         if (HasPullTarget || HasPushTarget) {
             if (IronPulling) {
                 GamepadController.SetRumbleRight(IronBurnRateTarget * GamepadController.rumbleFactor);
-                Debug.Log(IronBurnRateTarget);
             } else {
                 GamepadController.SetRumbleRight(0);
             }
             if (SteelPushing) {
                 GamepadController.SetRumbleLeft(SteelBurnRateTarget * GamepadController.rumbleFactor);
-                Debug.Log(SteelBurnRateTarget);
             } else {
                 GamepadController.SetRumbleLeft(0);
             }
