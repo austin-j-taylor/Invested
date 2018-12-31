@@ -65,24 +65,25 @@ public class PlayerPullPushController : AllomanticIronSteel {
         if (!PauseMenu.IsPaused) {
 
             // Start and Stop Burning metals
-
-            // Start burning
-            if (!Keybinds.Negate()) {
-                if (Keybinds.SelectDown() && HasIron)
-                    StartBurning(true);
-                else if (Keybinds.SelectAlternateDown() && HasSteel)
-                    StartBurning(false);
-            }
-
-            // Stop burning altogether, hide metal lines
-            if (Keybinds.Negate()) {
-                timeToStopBurning += Time.deltaTime;
-                if (Keybinds.Select() && Keybinds.SelectAlternate() && timeToStopBurning > timeToHoldDown) {
-                    StopBurning();
+            if (IsBurningIronSteel) {
+                // Stop burning
+                if (Keybinds.Negate()) {
+                    timeToStopBurning += Time.deltaTime;
+                    if (Keybinds.Select() && Keybinds.SelectAlternate() && timeToStopBurning > timeToHoldDown) {
+                        StopBurning();
+                        timeToStopBurning = 0;
+                    }
+                } else {
                     timeToStopBurning = 0;
                 }
             } else {
-                timeToStopBurning = 0;
+                // Start burning
+                if (!Keybinds.Negate()) {
+                    if (Keybinds.SelectDown() && HasIron)
+                        StartBurning(true);
+                    else if (Keybinds.SelectAlternateDown() && HasSteel)
+                        StartBurning(false);
+                }
             }
 
             // Could have stopped burning above. Check if the Allomancer is still burning.
@@ -452,6 +453,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
      *      Set, not lerped - there's more precision there.
      */
     private void LerpToBurnRates() {
+        Debug.Log(ironBurnRateLerp);
         IronBurnRateTarget = Mathf.Lerp(IronBurnRateTarget, ironBurnRateLerp, burnRateLerpConstant);
         SteelBurnRateTarget = Mathf.Lerp(SteelBurnRateTarget, steelBurnRateLerp, burnRateLerpConstant);
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {

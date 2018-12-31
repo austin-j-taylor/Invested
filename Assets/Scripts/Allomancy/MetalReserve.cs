@@ -6,13 +6,11 @@
 public class MetalReserve : MonoBehaviour {
 
     private const float maxCapacity = 500; // stomach can hold up to .5kg of metal, why not
-    private const float significanceThreshold = 0;
 
     public bool IsEndless { get; set; } = false; // If true, this reserve will never run out
     
     private double mass = 0;
     private double lastMass = 0;
-    public float TimeLastChanged { get; private set; } = -1000;
     public double Rate { get; private set; } = 0; // in grams / second
     public double Mass {
         get {
@@ -33,14 +31,12 @@ public class MetalReserve : MonoBehaviour {
     private void FixedUpdate() {
         Rate = (Mass - lastMass) / Time.fixedDeltaTime;
         lastMass = Mass;
-
-        if (Rate < significanceThreshold)
-            TimeLastChanged = Time.time;
     }
 
     // Updates both mass and lastMass to the newMass, so rate doesn't get confused from the sudden change
     public void SetMass(float newMass) {
         mass = newMass;
         lastMass = newMass;
+        Rate = 0;
     }
 }
