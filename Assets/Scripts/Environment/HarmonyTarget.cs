@@ -9,6 +9,7 @@ public class HarmonyTarget : MonoBehaviour {
     private const float forceConstantClose = 10000f;
 
     private bool playerHasEntered;
+    private bool controllingPlayer;
 
     private Rigidbody rb;
     private Animator anim;
@@ -34,6 +35,7 @@ public class HarmonyTarget : MonoBehaviour {
         harmonySphere.gameObject.AddComponent<HarmonySphere>();
 
         playerHasEntered = false;
+        controllingPlayer = false;
     }
 
     private void LateUpdate() {
@@ -59,7 +61,7 @@ public class HarmonyTarget : MonoBehaviour {
             if (sqrDistance > distanceThreshold) {
                 rb.AddForce(forceConstantFar * distance.normalized * sqrDistance, ForceMode.Acceleration);
             }
-        } else {
+        } else if (controllingPlayer) {
             // Pull player towards center of Harmony Target
             Vector3 distance = Player.PlayerIronSteel.CenterOfMass - inner.position;
             Player.PlayerIronSteel.GetComponent<Rigidbody>().AddForce(-forceConstantClose * distance, ForceMode.Force);
@@ -74,6 +76,7 @@ public class HarmonyTarget : MonoBehaviour {
 
     private void BeginAnimation() {
         playerHasEntered = true;
+        controllingPlayer = true;
         Player.CanControlPlayer = false;
         Player.PlayerIronSteel.StopBurning();
         harmonySphere.GetComponent<Collider>().enabled = false;
@@ -91,7 +94,6 @@ public class HarmonyTarget : MonoBehaviour {
         foreach (Renderer renderer in symbolRenderers)
             renderer.material = GameManager.Material_Ettmetal_Glowing;
 
-
         // Open menus
         LevelCompletedScreen.OpenScreen();
     }
@@ -105,4 +107,14 @@ public class HarmonyTarget : MonoBehaviour {
         }
     }
 
+    public void ReleasePlayer() {
+        controllingPlayer = false;
+        anim.SetTrigger("PlayerExits");
+        Player.CanControlPlayer = true;
+        HUD.EnableHUD();
+        Player.PlayerInstance.GetComponent<Rigidbody>().useGravity = SettingsMenu.settingsData.playerGravity == 1;
+        CameraController.SetExternalSource(null, null);
+
+        Destroy(harmonySphere.gameObject);
+    }
 }

@@ -3,22 +3,33 @@ using UnityEngine.UI;
 
 public class LevelCompletedScreen : MonoBehaviour {
 
-    private Button resetButton;
+    private Button continueButton;
+    private Button returnButton;
 
     private static GameObject levelCompletedScreen;
-    
+
     // Use this for initialization
     void Start() {
-        resetButton = GetComponentInChildren<Button>();
-        resetButton.onClick.AddListener(ClickReset);
+        Button[] buttons = GetComponentsInChildren<Button>();
+        continueButton = buttons[0];
+        returnButton = buttons[1];
+
+        continueButton.onClick.AddListener(ClickContinue);
+        returnButton.onClick.AddListener(ClickReturn);
 
         levelCompletedScreen = gameObject;
         gameObject.SetActive(false);
     }
 
-    private void ClickReset() {
-        SceneSelectMenu.ReloadScene();
+    private void ClickContinue() {
+        FindObjectOfType<HarmonyTarget>().ReleasePlayer();
         gameObject.SetActive(false);
+    }
+
+    private void ClickReturn() {
+        SceneSelectMenu.LoadScene(SceneSelectMenu.sceneTitleScreen);
+        gameObject.SetActive(false);
+        MainMenu.OpenSceneSelectMenu();
     }
 
     public static void OpenScreen() {

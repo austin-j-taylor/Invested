@@ -216,8 +216,14 @@ public class CameraController : MonoBehaviour {
     }
 
     public static void SetExternalSource(Transform position, Transform lookAt) {
-        externalPositionTarget = position;
-        externalLookAtTarget = lookAt;
+        if(position == null) {
+            externalPositionTarget = null;
+            externalLookAtTarget = null;
+            LockCamera();
+        } else {
+            externalPositionTarget = position;
+            externalLookAtTarget = lookAt;
+        }
     }
 
     private void ClampY() {

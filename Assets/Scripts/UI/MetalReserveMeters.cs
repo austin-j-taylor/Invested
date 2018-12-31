@@ -8,7 +8,7 @@ public class MetalReserveMeters : MonoBehaviour {
     private const float maxMass = 100;
     private const float lowThreshold = .15f;
     private const float criticalMassThreshold = 1f; // When reserve is < 1g, always flash red
-    private const float timeToFade = 3;
+    private const float timeToFade = 5;
 
     private MetalReserveElement iron;
     private MetalReserveElement steel;

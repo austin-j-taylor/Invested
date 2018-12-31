@@ -453,7 +453,6 @@ public class PlayerPullPushController : AllomanticIronSteel {
      *      Set, not lerped - there's more precision there.
      */
     private void LerpToBurnRates() {
-        Debug.Log(ironBurnRateLerp);
         IronBurnRateTarget = Mathf.Lerp(IronBurnRateTarget, ironBurnRateLerp, burnRateLerpConstant);
         SteelBurnRateTarget = Mathf.Lerp(SteelBurnRateTarget, steelBurnRateLerp, burnRateLerpConstant);
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
