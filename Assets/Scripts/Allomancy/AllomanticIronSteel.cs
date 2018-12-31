@@ -515,14 +515,19 @@ public class AllomanticIronSteel : MonoBehaviour {
         netTargetsForce = target.LastNetForceOnTarget.magnitude;
     }
 
-    protected virtual void StartBurning(bool startIron) {
-        if (!IsBurningIronSteel && (HasIron || HasSteel)) {
-            IsBurningIronSteel = true;
-            // Set burn rates to slow burn, to start
-            IronBurnRateTarget = .1f;
-            SteelBurnRateTarget = .1f;
-            lastWasPulling = startIron;
-        }
+    /*
+     * Start burning iron or steel. Passively burn iron or steel, depending on startIron.
+     * Return true if successfully began burning metals, false otherwise.
+     */
+    protected virtual bool StartBurning(bool startIron) {
+        if (IsBurningIronSteel || startIron && !HasIron || !startIron && !HasSteel)
+            return false;
+        IsBurningIronSteel = true;
+        // Set burn rates to a low burn
+        IronBurnRateTarget = .1f;
+        SteelBurnRateTarget = .1f;
+        lastWasPulling = startIron;
+        return true;
     }
 
     public virtual void StopBurning() {
@@ -566,8 +571,7 @@ public class AllomanticIronSteel : MonoBehaviour {
      * If it's a pushTarget, remove it from pushTargets and move it to pullTargets
      */
     public void AddPullTarget(Magnetic target) {
-        if (!IsBurningIronSteel)
-            StartBurning(true);
+        StartBurning(true);
         if (HasIron) {
             if (PushTargets.IsTarget(target)) {
                 PushTargets.RemoveTarget(target, false);
@@ -584,8 +588,7 @@ public class AllomanticIronSteel : MonoBehaviour {
      * If it's a pullTarget, remove it from pullTargets and move it to pushTargets
      */
     public void AddPushTarget(Magnetic target) {
-        if (!IsBurningIronSteel)
-            StartBurning(false);
+        StartBurning(false);
         if (HasSteel) {
             if (PullTargets.IsTarget(target)) {
                 PullTargets.RemoveTarget(target, false);

@@ -79,9 +79,9 @@ public class PlayerPullPushController : AllomanticIronSteel {
             } else {
                 // Start burning
                 if (!Keybinds.Negate()) {
-                    if (Keybinds.SelectDown() && HasIron)
+                    if (Keybinds.SelectDown())
                         StartBurning(true);
-                    else if (Keybinds.SelectAlternateDown() && HasSteel)
+                    else if (Keybinds.SelectAlternateDown())
                         StartBurning(false);
                 }
             }
@@ -229,8 +229,9 @@ public class PlayerPullPushController : AllomanticIronSteel {
         }
     }
 
-    protected override void StartBurning(bool startIron) {
-        base.StartBurning(startIron);
+    protected override bool StartBurning(bool startIron) {
+        if (!base.StartBurning(startIron))
+            return false;
         GamepadController.Shake(.1f, .1f, .3f);
         UpdateBurnRateMeter();
         HUD.BurnRateMeter.SetMetalLineCountText(PullTargets.Size.ToString());
@@ -241,6 +242,8 @@ public class PlayerPullPushController : AllomanticIronSteel {
         forceMagnitudeTarget = 600;
 
         SearchForMetals(); // first frame of blue lines
+
+        return true;
     }
 
     public override void StopBurning() {
