@@ -57,6 +57,7 @@ public class SceneSelectMenu : MonoBehaviour {
     }
 
     public void Close() {
+        MainMenu.OpenTitleScreen();
         gameObject.SetActive(false);
     }
 

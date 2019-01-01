@@ -17,8 +17,8 @@ public class PlayerPullPushController : AllomanticIronSteel {
     private const float verticalImportanceFactor = .35f;
     private const float importanceRatio = (horizontalImportanceFactor / verticalImportanceFactor) * (horizontalImportanceFactor / verticalImportanceFactor);
     private const float targetFocusFalloffConstant = 128;       // Determines how quickly blue lines blend from in-focus to out-of-focus
-    private const float targetFocusLowerBound = .2f;            // Determines the luminosity of blue lines that are out of foucus
-    private const float targetFocusOffScreenBound = .15f;      // Determines the luminosity of blue lines that are off-screen
+    private const float targetFocusLowerBound = .3f;            // Determines the luminosity of blue lines that are out of foucus
+    private const float targetFocusOffScreenBound = .225f;      // Determines the luminosity of blue lines that are off-screen
     private const float targetLowTransition = .06f;
     private const float targetLowCurvePosition = .02f;
 

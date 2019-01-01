@@ -61,6 +61,7 @@ public class SettingsMenu : MonoBehaviour {
 
     // Settings
     private Text titleText;
+    private Text tooltipText;
     private Transform settingsHeader;
     private Button glossaryButton;
     private Button gameplayButton;
@@ -89,8 +90,9 @@ public class SettingsMenu : MonoBehaviour {
         settingsData = gameObject.AddComponent<SettingsData>();
 
         // Settings Header
-        titleText = transform.GetChild(1).GetComponent<Text>();
-        settingsHeader = transform.GetChild(2);
+        titleText = transform.Find("TitleText").GetComponent<Text>();
+        settingsHeader = transform.Find("SettingsHeader");
+        tooltipText = settingsHeader.Find("Tooltip").GetComponent<Text>();
         Button[] settingsHeaderButtons = settingsHeader.GetComponentsInChildren<Button>();
         glossaryButton = settingsHeaderButtons[0];
         gameplayButton = settingsHeaderButtons[1];
@@ -99,23 +101,23 @@ public class SettingsMenu : MonoBehaviour {
         allomancyButton = settingsHeaderButtons[4];
         worldButton = settingsHeaderButtons[5];
         // Glossary
-        glossaryHeader = transform.GetChild(3);
+        glossaryHeader = transform.Find("GlossaryHeader");
         // Gameplay Header
-        gameplayHeader = transform.GetChild(4);
+        gameplayHeader = transform.Find("GameplayHeader");
         // Interface Header
-        interfaceHeader = transform.GetChild(5);
+        interfaceHeader = transform.Find("InterfaceHeader");
         // Graphics Header
-        graphicsHeader = transform.GetChild(6);
+        graphicsHeader = transform.Find("GraphicsHeader");
         // Allomancy Header
-        allomancyHeader = transform.GetChild(7);
+        allomancyHeader = transform.Find("AllomancyHeader");
         // World Header
-        worldHeader = transform.GetChild(8);
+        worldHeader = transform.Find("WorldHeader");
         // Close Button
-        closeButton = transform.GetChild(9).GetComponent<Button>();
+        closeButton = transform.Find("CloseButton").GetComponent<Button>();
 
         closeText = closeButton.GetComponentInChildren<Text>();
-        discardButton = transform.GetChild(10).GetComponent<Button>();
-        resetToDefaultsButton = transform.GetChild(11).GetComponent<Button>();
+        discardButton = transform.Find("Discardbutton").GetComponent<Button>();
+        resetToDefaultsButton = transform.Find("ResetToDefaultsButton").GetComponent<Button>();
         resetToDefaultsText = resetToDefaultsButton.GetComponentInChildren<Text>();
 
         // Command listeners assignment
@@ -252,6 +254,10 @@ public class SettingsMenu : MonoBehaviour {
         titleText.text = s_settings;
         worldHeader.gameObject.SetActive(false);
         CloseHeader();
+    }
+
+    public void SetTooltip(string tip) {
+        tooltipText.text = tip;
     }
 
     // Returns true if calling this returns to the Title Screen

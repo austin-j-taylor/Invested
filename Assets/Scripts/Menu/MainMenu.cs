@@ -34,7 +34,6 @@ public class MainMenu : MonoBehaviour {
         if(Keybinds.EscapeDown()) {
             if(sceneSelectMenu.IsOpen) {
                 CloseSceneSelectMenu();
-                OpenTitleScreen();
             } else if(settingsMenu.IsOpen) {
                 if (settingsMenu.BackAndSaveSettings())
                     OpenTitleScreen();

@@ -21,7 +21,6 @@ public class SettingsData : MonoBehaviour {
     // Gameplay
     public int controlScheme;
     public int gamepadRumble; // 0 for Disabled, 1 for Enabled
-    public int pushControlStyle; // 0 for percentage, 1 for magnitude
     public int cameraFirstPerson; // 0 for third person, 1 for first person
     public int cameraClamping; // 0 for Unclamped, 1 for Clamped
     public int cameraInvertX; // 0 for disabled, 1 for inverted
@@ -46,6 +45,7 @@ public class SettingsData : MonoBehaviour {
     public int motionBlur;
     public int bloom;
     // Allomancy
+    public int pushControlStyle; // 0 for percentage, 1 for magnitude
     public int anchoredBoost; // 0 for Disabled, 1 for ANF, 2 for EWF
     public int normalForceMin; // 0 for Disabled, 1 for zero, 2 for zero and negate
     public int normalForceMax; // 0 for Disabled, 1 for AF
@@ -114,10 +114,6 @@ public class SettingsData : MonoBehaviour {
                     gamepadRumble = data;
                     return true;
                 }
-            case "pushControlStyle": {
-                    pushControlStyle = data;
-                    return true;
-                }
             case "cameraFirstPerson": {
                     cameraFirstPerson = data;
                     return true;
@@ -184,6 +180,10 @@ public class SettingsData : MonoBehaviour {
                 }
             case "hudMasses": {
                     hudMasses = data;
+                    return true;
+                }
+            case "pushControlStyle": {
+                    pushControlStyle = data;
                     return true;
                 }
             case "anchoredBoost": {
@@ -282,9 +282,6 @@ public class SettingsData : MonoBehaviour {
             case "gamepadRumble": {
                     return gamepadRumble;
                 }
-            case "pushControlStyle": {
-                    return pushControlStyle;
-                }
             case "cameraFirstPerson": {
                     return cameraFirstPerson;
                 }
@@ -335,6 +332,9 @@ public class SettingsData : MonoBehaviour {
                 }
             case "hudMasses": {
                     return hudMasses;
+                }
+            case "pushControlStyle": {
+                    return pushControlStyle;
                 }
             case "anchoredBoost": {
                     return anchoredBoost;
