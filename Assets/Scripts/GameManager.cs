@@ -5,7 +5,8 @@ using UnityEngine;
 using VolumetricLines;
 /*
  * At startup, loads the Title Screen scene
- * Also holds all Resources
+ * Stores all Resources.
+ * Stores string fields used by TriggerBeadPopups.
  */
 public class GameManager : MonoBehaviour {
 
@@ -25,6 +26,8 @@ public class GameManager : MonoBehaviour {
     public static int Layer_BlueLines { get; private set; }
     public static int Layer_BlueLinesVisible { get; private set; }
 
+    public static List<string>[] TriggerBeadMessages { get; private set; }
+
     void Awake() {
         //Material_TargetHighlight = Resources.Load<Material>("Materials/targetHighlightMaterial");
         //Material_Gebaude = Resources.Load<Material>("Materials/Gebaude");
@@ -43,6 +46,19 @@ public class GameManager : MonoBehaviour {
     }
 
     private void Start() {
+        // TriggerBeadPopup strings
+        TriggerBeadMessages = new List<string>[2];
+        TriggerBeadMessages[0] = new List<string> {
+            "Ein " + TextCodes.Push,
+            "Zwei " + TextCodes.WASD,
+            "Drei " + TextCodes.KeyCoinshotMode
+        };
+        TriggerBeadMessages[1] = new List<string> {
+            "Vier " + TextCodes.Pull,
+            "Funf " + TextCodes.WASD,
+            "Sechs "  + TextCodes.KeyCoinshotMode
+        };
+
         SceneManager.LoadScene(SceneSelectMenu.sceneTitleScreen);
     }
 

@@ -10,13 +10,19 @@ public abstract class TriggerBead : Magnetic {
     private const float distanceThreshold = .001f;
     private const float forceConstant = 20f;
 
+    private Rigidbody rb;
+
+    private void Start() {
+        rb = GetComponentInChildren<Rigidbody>();
+    }
+
     private void FixedUpdate() {
         // Pull sphere towards center
         Vector3 distance = transform.parent.position - transform.position;
         float sqrDistance = distance.sqrMagnitude;
         if (sqrDistance > distanceThreshold) {
             // Square relationship between force and distance
-            Rb.AddForce(forceConstant * distance.normalized * sqrDistance, ForceMode.Acceleration);
+            rb.AddForce(forceConstant * distance.normalized * sqrDistance, ForceMode.Acceleration);
         }
     }
 

@@ -31,6 +31,9 @@ public class HUD : MonoBehaviour {
     public static TargetOverlayController TargetOverlayController {
         get; private set;
     }
+    public static MessageOverlayController MessageOverlayController {
+        get; private set;
+    }
 
     void Awake() {
         hudGameObject = gameObject;
@@ -40,6 +43,7 @@ public class HUD : MonoBehaviour {
         fPSText = texts[1];
         BurnRateMeter = GetComponentInChildren<BurnRateMeter>();
         TargetOverlayController = GetComponentInChildren<TargetOverlayController>();
+        MessageOverlayController = GetComponentInChildren<MessageOverlayController>();
         MetalReserveMeters = GetComponentInChildren<MetalReserveMeters>();
     }
 
@@ -73,6 +77,7 @@ public class HUD : MonoBehaviour {
             BurnRateMeter.Clear();
             TargetOverlayController.Clear();
             MetalReserveMeters.Clear();
+            MessageOverlayController.Clear();
         }
     }
 
