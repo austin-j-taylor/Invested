@@ -26,10 +26,23 @@ public class PlayerMovementController : MonoBehaviour {
         }
     }
 
+    private bool jumpQueued = false;
+
     private void Awake() {
         rb = GetComponent<Rigidbody>();
         groundedChecker = transform.GetComponentInChildren<PlayerGroundedChecker>();
     }
+
+    private void Update() {
+        if (IsGrounded && Keybinds.JumpDown()) {
+            // Queue a jump for the next FixedUpdate
+            // Actual jumping done in FixedUpdate to stay in synx with PlayerGroundedChecker
+            jumpQueued = true;
+        } else {
+            jumpQueued = false;
+        }
+    }
+
     void FixedUpdate() {
         if (Player.CanControlPlayer) {
             Vector3 movement = new Vector3(Keybinds.Horizontal(), 0f, Keybinds.Vertical());
@@ -45,7 +58,8 @@ public class PlayerMovementController : MonoBehaviour {
             
             if (IsGrounded) {
                 // Jump
-                if (Keybinds.JumpDown()) {
+                if (jumpQueued) {
+                    jumpQueued = false;
                     rb.AddForce(jumpHeight, ForceMode.Impulse);
                     groundedChecker.AddForceToTouchingCollider(-jumpHeight);
                 }
@@ -75,6 +89,7 @@ public class PlayerMovementController : MonoBehaviour {
     }
 
     public void Clear() {
+        jumpQueued = false;
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         rb.useGravity = SettingsMenu.settingsData.playerGravity == 1;

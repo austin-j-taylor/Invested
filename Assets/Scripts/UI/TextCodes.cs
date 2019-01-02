@@ -12,39 +12,39 @@ using System.Collections;
 public class TextCodes : MonoBehaviour {
 
     // String constants (prefixed with s_)
-    private const string s_Mouse_Button_4 = "Mouse Button 4";
-    private const string s_Mouse_Button_5 = "Mouse Button 5";
-    private const string s_E = "E";
-    private const string s_Q = "Q";
-    private const string s_Left_Trigger = "Left Trigger";
-    private const string s_Right_Trigger = "Right Trigger";
-    private const string s_Left_Bumper = "Left Bumper";
-    private const string s_Right_Bumper = "Right Bumper";
-    private const string s_Left_Click = "Left Click";
-    private const string s_Right_Click = "Right Click";
-    private const string s_Up_Down_on_the_D_Pad = "Up/Down on the D-Pad";
-    private const string s_Left_Right_on_the_D_Pad = "Left/Right on the D-Pad";
+    public const string s_Mouse_Button_4 = "Mouse Button 4";
+    public const string s_Mouse_Button_5 = "Mouse Button 5";
+    public const string s_E = "E";
+    public const string s_Q = "Q";
+    public const string s_Left_Trigger = "Left Trigger";
+    public const string s_Right_Trigger = "Right Trigger";
+    public const string s_Left_Bumper = "Left Bumper";
+    public const string s_Right_Bumper = "Right Bumper";
+    public const string s_Left_Click = "Left Click";
+    public const string s_Right_Click = "Right Click";
+    public const string s_Up_Down_on_the_D_Pad = "Up/Down on the D-Pad";
+    public const string s_Left_Right_on_the_D_Pad = "Left/Right on the D-Pad";
 
-    private const string s_Press_ = "Press ";
-    private const string s_Hold_ = "Hold ";
-    private const string s_Use_ = "Use ";
-    private const string s_Tap_ = "Tap ";
-    private const string s_Scroll_ = "Scroll ";
-    private const string s_Leftdashclick_ = "Left-click ";
-    private const string s_Rightdashclick_ = "Right-click ";
+    public const string s_Press_ = "Press ";
+    public const string s_Hold_ = "Hold ";
+    public const string s_Use_ = "Use ";
+    public const string s_Tap_ = "Tap ";
+    public const string s_Scroll_ = "Scroll ";
+    public const string s_Leftdashclick_ = "Left-click ";
+    public const string s_Rightdashclick_ = "Right-click ";
 
 
     GameObject[] tester;
     private void Update() {
         tester = GameObject.FindGameObjectsWithTag("Testing");
-        tester[0].GetComponent<Text>().text = KeyLook + " to look around.";
-        tester[1].GetComponent<Text>().text = KeyMove + " to move.";
-        tester[2].GetComponent<Text>().text = KeyJump + " to jump.";
-        tester[3].GetComponent<Text>().text = KeyStartBurning + " to start burning " + Iron + " or " + Steel + ".";
-        tester[4].GetComponent<Text>().text = s_Press_ + KeySelect + " to select a metal to be a " + Pull_target + ".";
-        tester[5].GetComponent<Text>().text = s_Press_ + KeySelectAlternate + " to select a metal to be a " + Push_target + ".";
-        tester[6].GetComponent<Text>().text = KeyPull + " to " + Pull + ".";
-        tester[7].GetComponent<Text>().text = KeyPush + " to " + Push + ".";
+        //tester[0].GetComponent<Text>().text = KeyLook + " to look around.";
+        //tester[1].GetComponent<Text>().text = KeyMove + " to move.";
+        //tester[2].GetComponent<Text>().text = KeyJump + " to jump.";
+        //tester[3].GetComponent<Text>().text = KeyStartBurning + " to start burning " + Iron + " or " + Steel + ".";
+        //tester[4].GetComponent<Text>().text = s_Press_ + KeySelect + " to select a metal to be a " + Pull_target + ".";
+        //tester[5].GetComponent<Text>().text = s_Press_ + KeySelectAlternate + " to select a metal to be a " + Push_target + ".";
+        //tester[6].GetComponent<Text>().text = KeyPull + " to " + Pull + ".";
+        //tester[7].GetComponent<Text>().text = KeyPush + " to " + Push + ".";
         tester[8].GetComponent<Text>().text = KeyNumberOfTargets + " to change your " + Gray("max number of " + Push_Pull_targets + ".");
         tester[9].GetComponent<Text>().text = "While holding " + KeyNegate
             + ":\n\t\t• " + s_Press_ + KeySelect + " while looking at a " + Pull_target

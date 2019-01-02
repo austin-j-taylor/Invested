@@ -27,6 +27,11 @@ public class CameraController : MonoBehaviour {
     private static float currentY = 0;
     private static bool cameraIsLocked;
 
+    public static bool HasNotMovedCamera {
+        get {
+            return currentX == 0 && currentY == 0;
+        }
+    }
 
     // Returns the horizontal direction the camera is facing (only in the x/z plane)
     public static Quaternion CameraDirection {

@@ -127,12 +127,8 @@ public class AllomanticIronSteel : MonoBehaviour {
             return ironPulling;
         }
         set {
-            if (value) {
-                //lastWasPulling = true;
-            } else {
+            if (!value) {
                 if (ironPulling) {
-                    //lastWasPulling = true;
-                    //lastWasPushing = false;
                     if (HasPullTarget)
                         StopOnPullTargets();
                     else
@@ -147,12 +143,8 @@ public class AllomanticIronSteel : MonoBehaviour {
             return steelPushing;
         }
         set {
-            if (value) {
-                //lastWasPushing = true;
-            } else {
+            if (!value) {
                 if (steelPushing) {
-                    //lastWasPushing = true;
-                    //lastWasPulling = false;
                     if (HasPushTarget)
                         StopOnPushTargets();
                     else
@@ -526,7 +518,10 @@ public class AllomanticIronSteel : MonoBehaviour {
         // Set burn rates to a low burn
         IronBurnRateTarget = .1f;
         SteelBurnRateTarget = .1f;
-        lastWasPulling = startIron;
+        if(startIron)
+            lastWasPulling = true;
+        else
+            lastWasPushing = true;
         return true;
     }
 
@@ -537,6 +532,8 @@ public class AllomanticIronSteel : MonoBehaviour {
             IronBurnRateTarget = 0;
             SteelBurnRateTarget = 0;
             IsBurningIronSteel = false;
+            lastWasPulling = false;
+            lastWasPushing = false;
         }
     }
 

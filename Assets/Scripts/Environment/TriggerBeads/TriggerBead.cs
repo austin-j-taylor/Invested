@@ -26,9 +26,8 @@ public abstract class TriggerBead : Magnetic {
         }
     }
 
-    private void OnTriggerEnter(Collider other) {
+    protected virtual void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Player")) {
-            Destroy(transform.parent.gameObject);
             Trigger();
         }
     }

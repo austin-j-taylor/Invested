@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8140382642745452310}
   m_Layer: 0
-  m_Name: TriggerBead
+  m_Name: TriggerBeadPopupMessage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -23,9 +23,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8140382642745452311}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 1.3200002, z: 0}
-  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
+  m_LocalScale: {x: 0.20000002, y: 0.19999999, z: 0.2}
   m_Children:
   - {fileID: 8140382642289707644}
   m_Father: {fileID: 0}
@@ -41,7 +41,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8140382642289707644}
   - component: {fileID: 8140382642289707642}
-  - component: {fileID: 6331830928733110251}
+  - component: {fileID: 7745534605246073035}
   - component: {fileID: 8140382642289707640}
   - component: {fileID: 8140382642289707641}
   - component: {fileID: 8140382642289707646}
@@ -83,7 +83,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 2
---- !u!114 &6331830928733110251
+--- !u!114 &7745534605246073035
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -92,12 +92,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 8140382643570912023}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f81e4dba6a98758489351d884e739e85, type: 3}
+  m_Script: {fileID: 11500000, guid: d7e0ac3f5c05783458f57f702e2dfe4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   netMass: 0
   magneticMass: 0.00001
-  index: 0
+  overhead: {fileID: 0}
+  message: 
 --- !u!33 &8140382642289707640
 MeshFilter:
   m_ObjectHideFlags: 0

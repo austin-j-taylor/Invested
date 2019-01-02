@@ -5,10 +5,13 @@
  */
 public class TriggerBeadPopup : TriggerBead {
 
+    public TriggerBeadOverhead overhead;
+
     [HideInInspector]
     public string message;
 
     protected override void Trigger() {
-        HUD.MessageOverlayController.Text.text = (message);
+        HUD.MessageOverlayController.Text.text = message;
+        overhead.StopTriggerCoroutines();
     }
 }
