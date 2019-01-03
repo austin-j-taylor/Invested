@@ -139,7 +139,7 @@ public class Magnetic : MonoBehaviour {
         }
     }
 
-    private void Awake() {
+    protected void Awake() {
         if (GetComponent<Renderer>())
             highlightedTargetOutline = gameObject.AddComponent<Outline>();
         blueLine = Instantiate(GameManager.MetalLineTemplate);

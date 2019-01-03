@@ -8,10 +8,11 @@ public class TriggerBeadOverhead : MonoBehaviour {
     public enum Section { tutorial1 = 0, tutorial2 = 3 };
 
     public Section section;
+    public Coroutine currentListenerCoroutine;
 
     protected TriggerBeadPopupMessage[] beadMessages;
     protected TriggerBeadPopupListener[] beadListeners;
-
+    
     // Use this for initialization
     void Start() {
         beadMessages = GetComponentsInChildren<TriggerBeadPopupMessage>();
@@ -35,13 +36,6 @@ public class TriggerBeadOverhead : MonoBehaviour {
                 beadListeners[i].messages[j] = GameManager.TriggerBeadMessages[(int)section + 1 + i][messagesIndex];
                 messagesIndex++;
             }
-        }
-    }
-
-    // When one TriggerBeadPopup is entered, make sure no other TriggerBeadListeners are still running to update the MessageOverlay later on.
-    public void StopTriggerCoroutines() {
-        for (int i = 0; i < beadListeners.Length; i++) {
-            beadListeners[i].StopActionCoroutine();
         }
     }
 }

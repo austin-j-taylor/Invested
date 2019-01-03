@@ -154,6 +154,7 @@ public class SettingsMenu : MonoBehaviour {
     public void Open() {
         gameObject.SetActive(true);
         resetToDefaultsButton.gameObject.SetActive(true);
+        tooltipText.text = "";
     }
 
     public void Close() {
