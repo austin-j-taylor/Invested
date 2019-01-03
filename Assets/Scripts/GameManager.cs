@@ -26,8 +26,6 @@ public class GameManager : MonoBehaviour {
     public static int Layer_BlueLines { get; private set; }
     public static int Layer_BlueLinesVisible { get; private set; }
 
-    public static List<string>[] TriggerBeadMessages { get; private set; }
-
     void Awake() {
         //Material_TargetHighlight = Resources.Load<Material>("Materials/targetHighlightMaterial");
         //Material_Gebaude = Resources.Load<Material>("Materials/Gebaude");
@@ -46,30 +44,6 @@ public class GameManager : MonoBehaviour {
     }
 
     private void Start() {
-        // TriggerBeadPopup strings
-        TriggerBeadMessages = new List<string>[4];
-        TriggerBeadMessages[0] = new List<string> {
-            TextCodes.KeyPull + " to " + TextCodes.Pull + ".",
-            TextCodes.KeyPush + " to " + TextCodes.Push + "."
-        };
-        TriggerBeadMessages[1] = new List<string> {
-            TextCodes.KeyLook + " to look around.\n\n" + TextCodes.KeyMove + " to move.",
-            TextCodes.KeyJump + " to jump.\n\n\n\tCollect that small bead up over the ledge.",
-
-        };
-        TriggerBeadMessages[2] = new List<string> {
-            TextCodes.KeyStartBurning + "\n\tto start burning " + TextCodes.Iron + " or " + TextCodes.Steel + ".",
-            TextCodes.s_Press_ + TextCodes.KeySelect + "\n\tto select a metal to be a " + TextCodes.Pull_target + ".\n" +
-                TextCodes.s_Press_ + TextCodes.KeySelectAlternate + "\n\tto select a metal to be a " + TextCodes.Push_target + ".",
-            TextCodes.KeyPull + " to " + TextCodes.Pull + ".\n" +
-                TextCodes.KeyPush + " to " + TextCodes.Push + "."
-        };
-        TriggerBeadMessages[3] = new List<string> {
-            "Vier " + TextCodes.Pull,
-            "Funf " + TextCodes.WASD,
-            "Sechs "  + TextCodes.KeyCoinshotMode
-        };
-
         SceneManager.LoadScene(SceneSelectMenu.sceneTitleScreen);
     }
 

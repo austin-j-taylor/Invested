@@ -25,7 +25,6 @@ public class TriggerBeadPopupListener : TriggerBeadPopup {
         Destroy(gameObject);
     }
 
-
     private class ActionListener : MonoBehaviour {
 
         TriggerBeadPopupListener parent;
@@ -39,7 +38,7 @@ public class TriggerBeadPopupListener : TriggerBeadPopup {
         }
 
         IEnumerator WaitForAction() {
-
+            
             switch (parent.actions[index]) {
                 case Action.MoveWASD: {
                         while (Player.PlayerInstance.GetComponent<Rigidbody>().velocity == Vector3.zero) {
@@ -69,7 +68,7 @@ public class TriggerBeadPopupListener : TriggerBeadPopup {
 
             // When one TriggerBeadPopup is entered, make sure no other TriggerBead listeners are still running to update the MessageOverlay later on.
             if (parent.overhead.currentListenerCoroutine == activeCoroutine) {
-                if(parent.clearAfter != null && index < parent.clearAfter.Length && parent.clearAfter[index]) {
+                if (parent.clearAfter != null && index < parent.clearAfter.Length && parent.clearAfter[index]) {
                     HUD.MessageOverlayController.Text.text = parent.messages[index];
                 } else {
                     HUD.MessageOverlayController.Text.text = HUD.MessageOverlayController.Text.text + "\n\n" + parent.messages[index];

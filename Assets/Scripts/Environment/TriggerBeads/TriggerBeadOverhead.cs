@@ -12,28 +12,31 @@ public class TriggerBeadOverhead : MonoBehaviour {
 
     protected TriggerBeadPopupMessage[] beadMessages;
     protected TriggerBeadPopupListener[] beadListeners;
+
+    private Messages messages;
     
     // Use this for initialization
     void Start() {
         beadMessages = GetComponentsInChildren<TriggerBeadPopupMessage>();
+        messages = ScriptableObject.CreateInstance(typeof(Messages)) as Messages;
 
         // Assume messages.length = number of TriggerBeads in scene with same section number
-        if (beadMessages.Length == GameManager.TriggerBeadMessages[(int)section].Count)
+        if (beadMessages.Length == messages.TriggerBeadMessages[(int)section].Count)
             for (int i = 0; i < beadMessages.Length; i++) {
-                beadMessages[i].message = GameManager.TriggerBeadMessages[(int)section][i];
+                beadMessages[i].message = messages.TriggerBeadMessages[(int)section][i];
                 beadMessages[i].overhead = this;
             } else {
-            Debug.LogError("Error: beads.Length != messages.Length: " + beadMessages.Length + " != " + GameManager.TriggerBeadMessages[(int)section].Count);
+            Debug.LogError("Error: beads.Length != messages.Length: " + beadMessages.Length + " != " + messages.TriggerBeadMessages[(int)section].Count);
         }
 
         beadListeners = GetComponentsInChildren<TriggerBeadPopupListener>();
         for (int i = 0; i < beadListeners.Length; i++) {
             int messagesIndex = 0;
-            beadListeners[i].message = GameManager.TriggerBeadMessages[(int)section + 1 + i][messagesIndex];
+            beadListeners[i].message = messages.TriggerBeadMessages[(int)section + 1 + i][messagesIndex];
             beadListeners[i].overhead = this;
             messagesIndex++;
             for (int j = 0; j < beadListeners[i].actions.Length; j++) {
-                beadListeners[i].messages[j] = GameManager.TriggerBeadMessages[(int)section + 1 + i][messagesIndex];
+                beadListeners[i].messages[j] = messages.TriggerBeadMessages[(int)section + 1 + i][messagesIndex];
                 messagesIndex++;
             }
         }
