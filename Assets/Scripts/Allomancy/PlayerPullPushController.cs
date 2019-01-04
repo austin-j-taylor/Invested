@@ -313,11 +313,12 @@ public class PlayerPullPushController : AllomanticIronSteel {
 
 
     private float SetLineProperties(Magnetic target) {
-        float allomanticForce = CalculateAllomanticForce(target, this).magnitude;
+        Vector3 allomanticForceVector = CalculateAllomanticForce(target, this);
+        float allomanticForce = allomanticForceVector.magnitude;
         // If using Percentage force mode, burn rate affects your range for burning
         if (SettingsMenu.settingsData.pushControlStyle == 0)
             allomanticForce *= GreaterPassiveBurn;
-
+        
         allomanticForce -= SettingsMenu.settingsData.metalDetectionThreshold; // blue metal lines will fade to a luminocity of 0 when the force is on the edge of the threshold
 
         if (allomanticForce <= 0) {
@@ -342,7 +343,9 @@ public class PlayerPullPushController : AllomanticIronSteel {
             distance = 1;
         }
         if (SettingsMenu.settingsData.renderblueLines == 1) {
-            float closeness = Mathf.Exp(-blueLineStartupFactor * Mathf.Pow(1 / allomanticForce, blueLineBrightnessFactor));
+            //float closeness = Mathf.Exp(-blueLineChangeFactor * Mathf.Pow(1 / allomanticForce, blueLineBrightnessFactor));
+            //float closeness = .125f * Mathf.Pow(allomanticForce, .25f);
+            float closeness = blueLineBrightnessFactor * Mathf.Pow(allomanticForce, blueLineChangeFactor);
             // Make lines in-focus if near the center of the screen
             // If nearly off-screen, instead make lines dimmer
             if (screenPosition.z < 0) { // behind player

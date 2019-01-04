@@ -17,6 +17,9 @@ public class GameManager : MonoBehaviour {
     public static VolumetricLineBehavior MetalLineTemplate { get; private set; }
     public static VolumetricLineStripBehavior MetalLineStripTemplate { get; private set; }
 
+    // Objects
+    public static Coin Prefab_Coin;
+
     // Holds all Magnetics and Allomancers in scene
     public static List<AllomanticIronSteel> Allomancers { get; private set; }
     public static List<Magnetic> MagneticsInScene { get; private set; }
@@ -33,6 +36,9 @@ public class GameManager : MonoBehaviour {
         Font_Heebo = Resources.Load<Font>("Fonts/Heebo-Medium");
         MetalLineTemplate = Resources.Load<VolumetricLineBehavior>("MetalLineTemplate");
         MetalLineStripTemplate = Resources.Load<VolumetricLineStripBehavior>("MetalLineStripTemplate");
+
+        Prefab_Coin = Resources.Load<Coin>("Objects/Imperial1-Boxing");
+
         Allomancers = new List<AllomanticIronSteel>();
         MagneticsInScene = new List<Magnetic>();
         Layer_IgnoreCamera = ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ignore Camera")) | (1 << LayerMask.NameToLayer("Ignore Player")));

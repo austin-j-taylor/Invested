@@ -19,6 +19,7 @@ public class Player : Entity {
     public static Magnetic PlayerMagnetic { get; private set; }
     public Hand CoinHand { get; private set; }
     private static bool canControlPlayer = false;
+    private static bool godMode = false;
     public static bool CanControlPlayer {
         get {
             return canControlPlayer;
@@ -28,6 +29,21 @@ public class Player : Entity {
             if (!value) {
                 PlayerIronSteel.SoftClear();
             }
+        }
+    }
+    public static bool GodMode { // Player does not run out of metals
+        get {
+            return godMode;
+        }
+        private set {
+            if (value) {
+                PlayerIronSteel.IronReserve.IsEndless = true;
+                PlayerIronSteel.SteelReserve.IsEndless = true;
+            } else {
+                PlayerIronSteel.IronReserve.IsEndless = false;
+                PlayerIronSteel.SteelReserve.IsEndless = false;
+            }
+            godMode = value;
         }
     }
 
@@ -83,6 +99,10 @@ public class Player : Entity {
             PlayerIronSteel.Clear();
             GetComponentInChildren<MeshRenderer>().material = playerMaterial;
             CanControlPlayer = true;
+            if (scene.buildIndex == SceneSelectMenu.sceneLevel01)
+                GodMode = true;
+            else
+                GodMode = false;
 
             GameObject spawn = GameObject.FindGameObjectWithTag("PlayerSpawn");
             if (spawn && CameraController.ActiveCamera) { // if CameraController.Awake has been called

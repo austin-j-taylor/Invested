@@ -29,8 +29,12 @@ public class MetalReserve : MonoBehaviour {
     }
 
     private void FixedUpdate() {
-        Rate = (Mass - lastMass) / Time.fixedDeltaTime;
-        lastMass = Mass;
+        if(IsEndless) {
+            Rate = 0;
+        } else {
+            Rate = (Mass - lastMass) / Time.fixedDeltaTime;
+            lastMass = Mass;
+        }
     }
 
     // Updates both mass and lastMass to the newMass, so rate doesn't get confused from the sudden change

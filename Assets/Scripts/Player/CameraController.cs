@@ -10,6 +10,7 @@ using UnityEngine;
 public class CameraController : MonoBehaviour {
 
     private const float playerLookAtTargetHeight = 1.25f;
+    private const float playerLookAtTargetFirstPersonHeight = 1;
     private const float distanceFromHitWall = .125f;//.5f;
     private const float wallDistanceCheck = 4;
     private const float lerpConstant = 5;
@@ -164,8 +165,6 @@ public class CameraController : MonoBehaviour {
 
                     for (int i = 0; i < 9; i++)
                         destinations[i] = origins[i] + directionToTarget;
-
-
                 }
 
                 smallestIndex = -1;
@@ -186,6 +185,55 @@ public class CameraController : MonoBehaviour {
                 if(smallestIndex > -1) { // A collision has occured
                     ActiveCamera.transform.position = smallestHit.point + (ActiveCamera.transform.position - origins[smallestIndex]);
                     Debug.DrawLine(destinations[smallestIndex], smallestHit.point, Color.red);
+                }
+            } else {
+                Vector3 pos = Vector3.zero;
+                pos.y = playerLookAtTargetFirstPersonHeight;
+                playerLookAtTarget.transform.localPosition = pos;
+                
+                Vector3[] origins = new Vector3[9];
+                origins[0] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, 0, ActiveCamera.nearClipPlane));
+                origins[1] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, .5f, ActiveCamera.nearClipPlane));
+                origins[2] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, 1, ActiveCamera.nearClipPlane));
+                origins[3] = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, 0, ActiveCamera.nearClipPlane));
+                origins[4] = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, .5f, ActiveCamera.nearClipPlane));
+                origins[5] = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, 1, ActiveCamera.nearClipPlane));
+                origins[6] = ActiveCamera.ViewportToWorldPoint(new Vector3(1, 0, ActiveCamera.nearClipPlane));
+                origins[7] = ActiveCamera.ViewportToWorldPoint(new Vector3(1, .5f, ActiveCamera.nearClipPlane));
+                origins[8] = ActiveCamera.ViewportToWorldPoint(new Vector3(1, 1, ActiveCamera.nearClipPlane));
+
+                Vector3 directionToTarget = playerLookAtTarget.position - origins[4]; // center
+                float distanceToTarget = directionToTarget.magnitude;
+
+                Vector3[] destinations = new Vector3[9];
+                for (int i = 0; i < 9; i++)
+                    destinations[i] = origins[i] + directionToTarget;
+                
+                // Check if lookAtTarget would be clipping into a ceiling
+                Vector3[] playerDestinations = new Vector3[9];
+                for(int i = 0; i < 9; i++) {
+                    playerDestinations[i] = destinations[i] - playerLookAtTarget.localPosition;
+                }
+
+                int smallestIndex = -1;
+                RaycastHit smallestHit = new RaycastHit();
+                float smallestDistance = playerLookAtTargetHeight;
+
+                for (int i = 0; i < 9; i++) {
+                    // Check height of lookAtTarget
+                    if (Physics.Raycast(playerDestinations[i], Vector3.up, out RaycastHit hit, (destinations[i] - playerDestinations[i]).magnitude, GameManager.Layer_IgnoreCameraVertically)) {
+                        float distance = (playerDestinations[i] - hit.point).magnitude;
+                        Debug.DrawLine(playerDestinations[i], hit.point, Color.green);
+                        if (distance < smallestDistance) {
+                            smallestIndex = i;
+                            smallestHit = hit;
+                            smallestDistance = distance;
+                        }
+                    }
+                }
+
+                if (smallestIndex > -1) { // A collision has occured
+                    playerLookAtTarget.position = smallestHit.point + (playerLookAtTarget.position - destinations[smallestIndex]) - new Vector3(0, .00001f, 0);
                 }
             }
         }

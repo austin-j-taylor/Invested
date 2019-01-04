@@ -6,8 +6,10 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class AllomanticIronSteel : MonoBehaviour {
 
-    public const float chargePower = 1f / 8f;
     public const int maxNumberOfTargets = 10;
+    // Force calculation constants
+    public const float chargePower = 1f / 8f;
+    public const float lineOfSightFactor = 1f / 8f;
     // Actual "Burn Rates" of iron and steel
     private const double gramsIronPerSecondPerNewton = .001f;
     private const double gramsSteelPerSecondPerNewton = gramsIronPerSecondPerNewton;
@@ -17,9 +19,8 @@ public class AllomanticIronSteel : MonoBehaviour {
     public const float highLineColor = .85f;
     public const float blueLineFirstPersonWidth = .02f;
     public const float blueLineThirdPersonWidth = .04f;
-    protected const float blueLineStartupFactor = 2f;
-    protected const float blueLineBrightnessFactor = 1;
-
+    protected const float blueLineChangeFactor = 1 / 2f;
+    protected const float blueLineBrightnessFactor = 1 / 32f;
     // Simple metal boolean constants for passing to methods
     private const bool steel = false;
     private const bool iron = true;
@@ -294,6 +295,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     /*
      * Calculates the maximum possible Allomantic Force between the allomancer and target.
      * Does not account for ABPs or burn rate.
+     * Accounts for if a wall blocks line-of-sight with the target.
      */
     public static Vector3 CalculateAllomanticForce(Magnetic target, AllomanticIronSteel allomancer) {
         return allomancer.CalculateAllomanticForce(target.CenterOfMass, target.Charge); ;
@@ -317,8 +319,12 @@ public class AllomanticIronSteel : MonoBehaviour {
                     break;
                 }
         }
+
+        // If the target is blocked by a wall, reduce the force.
         // Do the final calculation
-        return SettingsMenu.settingsData.allomanticConstant * Strength * Charge * targetCharge * distanceFactor;
+        return SettingsMenu.settingsData.allomanticConstant * Strength * Charge * targetCharge * distanceFactor
+                * (Physics.Raycast(targetCenterOfMass, -positionDifference, (targetCenterOfMass - CenterOfMass).magnitude, GameManager.Layer_IgnoreCamera) ?
+                lineOfSightFactor : 1); // If there is something blocking line-of-sight, the force is reduced.
     }
 
     /* 

@@ -74,7 +74,7 @@ public class NonPlayerPushPullController : AllomanticIronSteel {
 
         //allomanticForce -= (allomancer.MaxRange == 0 ? SettingsMenu.settingsData.metalDetectionThreshold : allomancer.MaxRange); // blue metal lines will fade to a luminocity of 0 when the force is on the edge of the threshold
 
-        float closeness = Mathf.Exp(-blueLineStartupFactor * Mathf.Pow(1 / allomanticForce, blueLineBrightnessFactor));
+        float closeness = Mathf.Exp(-blueLineChangeFactor * Mathf.Pow(1 / allomanticForce, blueLineBrightnessFactor));
 
         lines[index].GetComponent<MeshRenderer>().enabled = true;
         lines[index].StartPos = array[index].CenterOfMass;
