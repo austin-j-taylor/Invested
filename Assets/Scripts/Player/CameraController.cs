@@ -137,7 +137,7 @@ public class CameraController : MonoBehaviour {
                     // Check height of lookAtTarget
                     if (Physics.Raycast(playerDestinations[i], Vector3.up, out RaycastHit hit, (destinations[i] - playerDestinations[i]).magnitude, GameManager.Layer_IgnoreCamera)) {
                         float distance = (playerDestinations[i] - hit.point).magnitude;
-                        Debug.DrawLine(playerDestinations[i], hit.point, Color.green);
+                        //Debug.DrawLine(playerDestinations[i], hit.point, Color.green);
                         if (distance < smallestDistance) {
                             smallestIndex = i;
                             smallestHit = hit;
@@ -175,7 +175,7 @@ public class CameraController : MonoBehaviour {
                 for (int i = 0; i < 9; i++) {
                     if (Physics.Raycast(destinations[i], -directionToTarget, out RaycastHit hit, distanceToTarget, GameManager.Layer_IgnoreCamera)) {
                         float distance = (hit.point - destinations[i]).magnitude;
-                        Debug.DrawLine(destinations[i], hit.point, Color.yellow);
+                        //Debug.DrawLine(destinations[i], hit.point, Color.yellow);
                         if (distance < smallestDistance) {
                             smallestIndex = i;
                             smallestHit = hit;
@@ -186,7 +186,7 @@ public class CameraController : MonoBehaviour {
 
                 if (smallestIndex > -1) { // A collision has occured
                     ActiveCamera.transform.position = smallestHit.point + (ActiveCamera.transform.position - origins[smallestIndex]);
-                    Debug.DrawLine(destinations[smallestIndex], smallestHit.point, Color.red);
+                    //Debug.DrawLine(destinations[smallestIndex], smallestHit.point, Color.red);
                 }
             } else {
                 Vector3 pos = Vector3.zero;
@@ -225,7 +225,7 @@ public class CameraController : MonoBehaviour {
                     // Check height of lookAtTarget
                     if (Physics.Raycast(playerDestinations[i], Vector3.up, out RaycastHit hit, (destinations[i] - playerDestinations[i]).magnitude, GameManager.Layer_IgnoreCamera)) {
                         float distance = (playerDestinations[i] - hit.point).magnitude;
-                        Debug.DrawLine(playerDestinations[i], hit.point, Color.green);
+                        //Debug.DrawLine(playerDestinations[i], hit.point, Color.green);
                         if (distance < smallestDistance) {
                             smallestIndex = i;
                             smallestHit = hit;

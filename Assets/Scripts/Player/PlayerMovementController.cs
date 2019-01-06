@@ -15,7 +15,6 @@ public class PlayerMovementController : MonoBehaviour {
     private const float dragAirborne = .2f;
     private const float dragGrounded = 3f;
     private const float dragNoControl = 10f;
-    private readonly Vector3 jumpHeight = new Vector3(0, 400f, 0);
 
     private Rigidbody rb;
     private PlayerGroundedChecker groundedChecker;
@@ -60,8 +59,7 @@ public class PlayerMovementController : MonoBehaviour {
                 // Jump
                 if (jumpQueued) {
                     jumpQueued = false;
-                    rb.AddForce(jumpHeight, ForceMode.Impulse);
-                    groundedChecker.AddForceToTouchingCollider(-jumpHeight);
+                    groundedChecker.Jump(movement);
                 }
                 // Apply drag
                 if (movement.sqrMagnitude > 0 || Player.PlayerIronSteel.IronPulling || Player.PlayerIronSteel.SteelPushing) {

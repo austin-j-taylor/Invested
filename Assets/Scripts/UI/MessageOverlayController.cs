@@ -52,7 +52,7 @@ public class MessageOverlayController : MonoBehaviour {
         };
         TriggerBeadMessages[1] = new List<string> {
             TextCodes.KeyLook + " to look around.\n\n" + TextCodes.KeyMove + " to move.",
-            TextCodes.KeyJump + " to jump.\n\n\n\tCollect that small bead up over the ledge.",
+            TextCodes.KeyJump + " to jump.",
 
         };
         TriggerBeadMessages[2] = new List<string> {
