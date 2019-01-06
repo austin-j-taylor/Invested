@@ -34,6 +34,9 @@ public class HUD : MonoBehaviour {
     public static MessageOverlayController MessageOverlayController {
         get; private set;
     }
+    public static HelpOverlayController HelpOverlayController {
+        get; private set;
+    }
 
     void Awake() {
         hudGameObject = gameObject;
@@ -44,6 +47,7 @@ public class HUD : MonoBehaviour {
         BurnRateMeter = GetComponentInChildren<BurnRateMeter>();
         TargetOverlayController = GetComponentInChildren<TargetOverlayController>();
         MessageOverlayController = GetComponentInChildren<MessageOverlayController>();
+        HelpOverlayController = GetComponentInChildren<HelpOverlayController>();
         MetalReserveMeters = GetComponentInChildren<MetalReserveMeters>();
     }
 

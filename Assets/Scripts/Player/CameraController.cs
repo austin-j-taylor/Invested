@@ -59,12 +59,14 @@ public class CameraController : MonoBehaviour {
         transform.position = playerBody.transform.position;
         playerLookAtTarget.rotation = Quaternion.Euler(0, currentX, 0);
 
-        if (cameraIsLocked) {
-            if (externalPositionTarget) {
+        if (externalPositionTarget) {
+            if (cameraIsLocked) {
                 // Called when the Camera is being controlled by some other source, i.e. HarmonyTarget
                 ActiveCamera.transform.position = Vector3.Lerp(ActiveCamera.transform.position, externalPositionTarget.position, lerpConstant * Time.deltaTime);
                 ActiveCamera.transform.LookAt(externalLookAtTarget);
-            } else {
+            }
+        } else {
+            if (cameraIsLocked) {
                 float deltaX;
                 float deltaY;
                 if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
@@ -83,12 +85,12 @@ public class CameraController : MonoBehaviour {
                 currentY += deltaY;
                 if (SettingsMenu.settingsData.cameraClamping == 1)
                     ClampY();
-                UpdateCamera();
             }
+            UpdateCamera();
         }
     }
 
-    private static void UpdateCamera() {
+    public static void UpdateCamera() {
         if (!externalPositionTarget) {
             // Horizontal rotation (rotates playerBody body left and right)
             // Vertical rotation (rotates camera up and down body)
@@ -102,7 +104,7 @@ public class CameraController : MonoBehaviour {
                 Vector3 pos = Vector3.zero;
                 pos.y = playerLookAtTargetHeight;
                 playerLookAtTarget.transform.localPosition = pos;
-                
+
                 Vector3[] origins = new Vector3[9];
                 origins[0] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, 0, ActiveCamera.nearClipPlane));
                 origins[1] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, .5f, ActiveCamera.nearClipPlane));
@@ -120,10 +122,10 @@ public class CameraController : MonoBehaviour {
                 Vector3[] destinations = new Vector3[9];
                 for (int i = 0; i < 9; i++)
                     destinations[i] = origins[i] + directionToTarget;
-                
+
                 // Check if lookAtTarget would be clipping into a ceiling
                 Vector3[] playerDestinations = new Vector3[9];
-                for(int i = 0; i < 9; i++) {
+                for (int i = 0; i < 9; i++) {
                     playerDestinations[i] = destinations[i] - playerLookAtTarget.localPosition;
                 }
 
@@ -133,7 +135,7 @@ public class CameraController : MonoBehaviour {
 
                 for (int i = 0; i < 9; i++) {
                     // Check height of lookAtTarget
-                    if (Physics.Raycast(playerDestinations[i], Vector3.up, out RaycastHit hit, (destinations[i] - playerDestinations[i]).magnitude, GameManager.Layer_IgnoreCameraVertically)) {
+                    if (Physics.Raycast(playerDestinations[i], Vector3.up, out RaycastHit hit, (destinations[i] - playerDestinations[i]).magnitude, GameManager.Layer_IgnoreCamera)) {
                         float distance = (playerDestinations[i] - hit.point).magnitude;
                         Debug.DrawLine(playerDestinations[i], hit.point, Color.green);
                         if (distance < smallestDistance) {
@@ -169,10 +171,10 @@ public class CameraController : MonoBehaviour {
 
                 smallestIndex = -1;
                 smallestDistance = wallDistanceCheck;
-                
+
                 for (int i = 0; i < 9; i++) {
-                    if(Physics.Raycast(destinations[i], -directionToTarget, out RaycastHit hit, distanceToTarget, GameManager.Layer_IgnoreCamera)) {
-                        float distance = (hit.point - playerLookAtTarget.position).magnitude;
+                    if (Physics.Raycast(destinations[i], -directionToTarget, out RaycastHit hit, distanceToTarget, GameManager.Layer_IgnoreCamera)) {
+                        float distance = (hit.point - destinations[i]).magnitude;
                         Debug.DrawLine(destinations[i], hit.point, Color.yellow);
                         if (distance < smallestDistance) {
                             smallestIndex = i;
@@ -182,7 +184,7 @@ public class CameraController : MonoBehaviour {
                     }
                 }
 
-                if(smallestIndex > -1) { // A collision has occured
+                if (smallestIndex > -1) { // A collision has occured
                     ActiveCamera.transform.position = smallestHit.point + (ActiveCamera.transform.position - origins[smallestIndex]);
                     Debug.DrawLine(destinations[smallestIndex], smallestHit.point, Color.red);
                 }
@@ -190,7 +192,7 @@ public class CameraController : MonoBehaviour {
                 Vector3 pos = Vector3.zero;
                 pos.y = playerLookAtTargetFirstPersonHeight;
                 playerLookAtTarget.transform.localPosition = pos;
-                
+
                 Vector3[] origins = new Vector3[9];
                 origins[0] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, 0, ActiveCamera.nearClipPlane));
                 origins[1] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, .5f, ActiveCamera.nearClipPlane));
@@ -208,10 +210,10 @@ public class CameraController : MonoBehaviour {
                 Vector3[] destinations = new Vector3[9];
                 for (int i = 0; i < 9; i++)
                     destinations[i] = origins[i] + directionToTarget;
-                
+
                 // Check if lookAtTarget would be clipping into a ceiling
                 Vector3[] playerDestinations = new Vector3[9];
-                for(int i = 0; i < 9; i++) {
+                for (int i = 0; i < 9; i++) {
                     playerDestinations[i] = destinations[i] - playerLookAtTarget.localPosition;
                 }
 
@@ -221,7 +223,7 @@ public class CameraController : MonoBehaviour {
 
                 for (int i = 0; i < 9; i++) {
                     // Check height of lookAtTarget
-                    if (Physics.Raycast(playerDestinations[i], Vector3.up, out RaycastHit hit, (destinations[i] - playerDestinations[i]).magnitude, GameManager.Layer_IgnoreCameraVertically)) {
+                    if (Physics.Raycast(playerDestinations[i], Vector3.up, out RaycastHit hit, (destinations[i] - playerDestinations[i]).magnitude, GameManager.Layer_IgnoreCamera)) {
                         float distance = (playerDestinations[i] - hit.point).magnitude;
                         Debug.DrawLine(playerDestinations[i], hit.point, Color.green);
                         if (distance < smallestDistance) {
@@ -239,18 +241,22 @@ public class CameraController : MonoBehaviour {
         }
     }
 
-    public static void Clear() {
+    public static void Clear(bool resetRotation = true) {
         externalPositionTarget = null;
         externalLookAtTarget = null;
         firstPersonCamera.transform.localPosition = Vector3.zero;
-        Vector3 eulers = Player.PlayerInstance.transform.eulerAngles;
-        //eulers.x = 0;
-        //eulers.z = 0;
-        playerLookAtTarget.rotation = Quaternion.Euler(eulers);
-        currentY = playerLookAtTarget.localEulerAngles.x; // Tilted downward a little
-        if (currentY >= 180)
-            currentY -= 360;
-        currentX = playerLookAtTarget.localEulerAngles.y;
+        if(resetRotation) {
+            Vector3 eulers = Player.PlayerInstance.transform.eulerAngles;
+            eulers.x = 0;
+            eulers.z = 0;
+            playerLookAtTarget.rotation = Quaternion.Euler(eulers);
+
+            currentY = playerLookAtTarget.localEulerAngles.x;
+            if (currentY >= 180)
+                currentY -= 360;
+            currentX = playerLookAtTarget.localEulerAngles.y;
+        }
+
         if (Player.PlayerIronSteel.IsBurningIronSteel) // Update blue lines when the camera is reset
             Player.PlayerIronSteel.SearchForMetals();
         UpdateCamera();
@@ -269,7 +275,7 @@ public class CameraController : MonoBehaviour {
     }
 
     public static void SetExternalSource(Transform position, Transform lookAt) {
-        if(position == null) {
+        if (position == null) {
             externalPositionTarget = null;
             externalLookAtTarget = null;
             LockCamera();
@@ -288,7 +294,7 @@ public class CameraController : MonoBehaviour {
         thirdPersonCamera.gameObject.SetActive(true);
         thirdPersonCamera.cullingMask = firstPersonCamera.cullingMask;
         ActiveCamera = thirdPersonCamera;
-        Clear();
+        Clear(false);
     }
 
     public void SetFirstPerson() {
@@ -296,6 +302,6 @@ public class CameraController : MonoBehaviour {
         firstPersonCamera.gameObject.SetActive(true);
         firstPersonCamera.cullingMask = thirdPersonCamera.cullingMask;
         ActiveCamera = firstPersonCamera;
-        Clear();
+        Clear(false);
     }
 }

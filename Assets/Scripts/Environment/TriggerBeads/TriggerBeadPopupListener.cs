@@ -3,7 +3,7 @@ using System.Collections;
 
 /*
  * A TriggerBead that opens a single message over the HUD when triggered,
- *      then waits for the player to do some action before displaying the rest of the  message.
+ *      then waits for the player to execute some action(s) before displaying the rest of the message.
  */
 public class TriggerBeadPopupListener : TriggerBeadPopup {
 
@@ -11,75 +11,65 @@ public class TriggerBeadPopupListener : TriggerBeadPopup {
 
     public Action[] actions;
     public bool[] clearAfter;
-    [HideInInspector]
-    public string[] messages;
     
-    private void Start() {
-        messages = new string[actions.Length];
-    }
+    private int coroutinePosition = 0;
 
     protected override void Trigger() {
         base.Trigger();
-        transform.parent.gameObject.AddComponent<ActionListener>();
+        StartCoroutine(WaitForAction());
         // Await for player action
-        Destroy(gameObject);
+    }
+    
+    public override string GetText() {
+        int clearIndex = 0;
+        if (clearAfter != null) {
+            for (int i = 0; i < clearAfter.Length; i++) {
+                if (clearAfter[i]) {
+                    clearIndex = i + 1;
+                }
+            }
+        }
+        string text = "";
+        for (int i = clearIndex; i <= coroutinePosition; i++) {
+            text += HUD.MessageOverlayController.TriggerBeadMessages[section][i] + "\n\n";
+        }
+        return text;
     }
 
-    private class ActionListener : MonoBehaviour {
-
-        TriggerBeadPopupListener parent;
-        private Coroutine activeCoroutine;
-        private int index = 0;
-
-        public void Awake() {
-            parent = transform.GetChild(0).GetComponent<TriggerBeadPopupListener>();
-            activeCoroutine = StartCoroutine(WaitForAction());
-            parent.overhead.currentListenerCoroutine = activeCoroutine;
+    IEnumerator WaitForAction() {
+        switch (actions[coroutinePosition]) {
+            case Action.MoveWASD: {
+                    while (Player.PlayerInstance.GetComponent<Rigidbody>().velocity == Vector3.zero) {
+                        yield return null;
+                    }
+                    break;
+                }
+            case Action.StartBurningIronSteel: {
+                    while (!Player.PlayerIronSteel.IsBurningIronSteel) {
+                        yield return null;
+                    }
+                    break;
+                }
+            case Action.SelectDown: {
+                    while (!Keybinds.SelectDown() && !Keybinds.SelectAlternateDown()) {
+                        yield return null;
+                    }
+                    break;
+                }
+            case Action.PushPull: {
+                    while (!Keybinds.IronPulling() && !Keybinds.SteelPushing()) {
+                        yield return null;
+                    }
+                    break;
+                }
         }
 
-        IEnumerator WaitForAction() {
-            
-            switch (parent.actions[index]) {
-                case Action.MoveWASD: {
-                        while (Player.PlayerInstance.GetComponent<Rigidbody>().velocity == Vector3.zero) {
-                            yield return null;
-                        }
-                        break;
-                    }
-                case Action.StartBurningIronSteel: {
-                        while (!Player.PlayerIronSteel.IsBurningIronSteel) {
-                            yield return null;
-                        }
-                        break;
-                    }
-                case Action.SelectDown: {
-                        while (!Keybinds.SelectDown() && !Keybinds.SelectAlternateDown()) {
-                            yield return null;
-                        }
-                        break;
-                    }
-                case Action.PushPull: {
-                        while (!Keybinds.IronPulling() && !Keybinds.SteelPushing()) {
-                            yield return null;
-                        }
-                        break;
-                    }
-            }
-
-            // When one TriggerBeadPopup is entered, make sure no other TriggerBead listeners are still running to update the MessageOverlay later on.
-            if (parent.overhead.currentListenerCoroutine == activeCoroutine) {
-                if (parent.clearAfter != null && index < parent.clearAfter.Length && parent.clearAfter[index]) {
-                    HUD.MessageOverlayController.Text.text = parent.messages[index];
-                } else {
-                    HUD.MessageOverlayController.Text.text = HUD.MessageOverlayController.Text.text + "\n\n" + parent.messages[index];
-                }
-                index++;
-                if (index < parent.messages.Length) {
-                    activeCoroutine = StartCoroutine(WaitForAction());
-                    parent.overhead.currentListenerCoroutine = activeCoroutine;
-                }
-            } else { // If player has collected another TriggerBead listener while this one was running
-                Destroy(gameObject);
+        // When one TriggerBeadPopup is entered, make sure no other TriggerBead listeners are still running to update the MessageOverlay later on.
+        if (HUD.MessageOverlayController.CurrentPopup == this) {
+            coroutinePosition++;
+            HUD.MessageOverlayController.MessageText.text = GetText();
+            if (coroutinePosition < HUD.MessageOverlayController.TriggerBeadMessages[section].Count - 1) {
+                StartCoroutine(WaitForAction());
             }
         }
     }

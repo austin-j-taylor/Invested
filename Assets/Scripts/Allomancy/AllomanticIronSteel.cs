@@ -19,8 +19,8 @@ public class AllomanticIronSteel : MonoBehaviour {
     public const float highLineColor = .85f;
     public const float blueLineFirstPersonWidth = .02f;
     public const float blueLineThirdPersonWidth = .04f;
-    protected const float blueLineChangeFactor = 1 / 2f;
-    protected const float blueLineBrightnessFactor = 1 / 32f;
+    protected const float blueLineChangeFactor = 1 / 4f;
+    protected const float blueLineBrightnessFactor = 1 / 6f;
     // Simple metal boolean constants for passing to methods
     private const bool steel = false;
     private const bool iron = true;

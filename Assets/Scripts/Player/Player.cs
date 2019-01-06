@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /*
- * Represents the player.
+ * Controls all aspects of the Player not related to Allomancy.
  */
 public class Player : Entity {
 
@@ -14,9 +14,11 @@ public class Player : Entity {
     private PlayerMovementController movementController;
     private Material playerMaterial;
 
+    // Player components that need to be referenced elsewhere
     public static Player PlayerInstance { get; private set; }
     public static PlayerPullPushController PlayerIronSteel { get; private set; }
     public static Magnetic PlayerMagnetic { get; private set; }
+
     public Hand CoinHand { get; private set; }
     private static bool canControlPlayer = false;
     private static bool godMode = false;
@@ -84,6 +86,10 @@ public class Player : Entity {
         if (Keybinds.EscapeDown() && !PauseMenu.IsPaused) {
             PauseMenu.Pause();
         }
+        // Displaying Help Overlay
+        if(Keybinds.ToggleHelpOverlay()) {
+            HUD.HelpOverlayController.HelpText.enabled = !HUD.HelpOverlayController.HelpText.enabled;
+        }
     }
 
     // Reset certain values BEFORE the player enters a new scene
@@ -112,6 +118,7 @@ public class Player : Entity {
             }
         }
     }
+
     public override void OnHit(float damage) {
         base.OnHit(damage);
     }

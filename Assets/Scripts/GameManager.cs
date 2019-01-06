@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour {
     public static List<Magnetic> MagneticsInScene { get; private set; }
 
     public static int Layer_IgnoreCamera { get; private set; }
-    public static int Layer_IgnoreCameraVertically { get; private set; }
+    //public static int Layer_IgnoreCameraVertically { get; private set; }
     public static int Layer_BlueLines { get; private set; }
     public static int Layer_BlueLinesVisible { get; private set; }
 
@@ -42,7 +42,7 @@ public class GameManager : MonoBehaviour {
         Allomancers = new List<AllomanticIronSteel>();
         MagneticsInScene = new List<Magnetic>();
         Layer_IgnoreCamera = ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ignore Camera")) | (1 << LayerMask.NameToLayer("Ignore Player")));
-        Layer_IgnoreCameraVertically = ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ignore Camera Vertically")) | (1 << LayerMask.NameToLayer("Ignore Player")));
+        //Layer_IgnoreCameraVertically = ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ignore Camera Vertically")) | (1 << LayerMask.NameToLayer("Ignore Player")));
         Layer_BlueLines = LayerMask.NameToLayer("Blue Lines");
         Layer_BlueLinesVisible = LayerMask.NameToLayer("Blue Lines Visible");
         //SceneManager.sceneLoaded += Clear;

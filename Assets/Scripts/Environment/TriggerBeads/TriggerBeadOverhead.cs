@@ -1,44 +1,31 @@
 ﻿using UnityEngine;
 
 /*
- * Oversees a series of TriggerBeadPopups. 
+ * Oversees a series of TriggerBeadPopups.
+ *      Assigns TriggerBeadPopup section and index fields based on their order in the scene,
+ *      which correspond to strings stored in MessageOverlayController.
  */
 public class TriggerBeadOverhead : MonoBehaviour {
 
     public enum Section { tutorial1 = 0, tutorial2 = 3 };
 
     public Section section;
-    public Coroutine currentListenerCoroutine;
-
-    protected TriggerBeadPopupMessage[] beadMessages;
-    protected TriggerBeadPopupListener[] beadListeners;
-
-    private Messages messages;
     
-    // Use this for initialization
     void Start() {
-        beadMessages = GetComponentsInChildren<TriggerBeadPopupMessage>();
-        messages = ScriptableObject.CreateInstance(typeof(Messages)) as Messages;
+        TriggerBeadPopupMessage[] beadMessages = GetComponentsInChildren<TriggerBeadPopupMessage>();
 
         // Assume messages.length = number of TriggerBeads in scene with same section number
-        if (beadMessages.Length == messages.TriggerBeadMessages[(int)section].Count)
-            for (int i = 0; i < beadMessages.Length; i++) {
-                beadMessages[i].message = messages.TriggerBeadMessages[(int)section][i];
-                beadMessages[i].overhead = this;
-            } else {
-            Debug.LogError("Error: beads.Length != messages.Length: " + beadMessages.Length + " != " + messages.TriggerBeadMessages[(int)section].Count);
+        for (int i = 0; i < beadMessages.Length; i++) {
+            beadMessages[i].section = (int)section;
+            beadMessages[i].index = i;
+            beadMessages[i].overhead = this;
         }
 
-        beadListeners = GetComponentsInChildren<TriggerBeadPopupListener>();
+        TriggerBeadPopupListener[] beadListeners = GetComponentsInChildren<TriggerBeadPopupListener>();
         for (int i = 0; i < beadListeners.Length; i++) {
-            int messagesIndex = 0;
-            beadListeners[i].message = messages.TriggerBeadMessages[(int)section + 1 + i][messagesIndex];
+            beadListeners[i].section = (int)section + i + 1;
+            beadListeners[i].index = 0;
             beadListeners[i].overhead = this;
-            messagesIndex++;
-            for (int j = 0; j < beadListeners[i].actions.Length; j++) {
-                beadListeners[i].messages[j] = messages.TriggerBeadMessages[(int)section + 1 + i][messagesIndex];
-                messagesIndex++;
-            }
         }
     }
 }

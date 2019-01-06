@@ -1,14 +1,15 @@
 using cakeslice;
 using UnityEngine;
 using VolumetricLines;
+
 /*
- * Signifies that this object is magnetic. It can be Pushed or Pulled.
+ * Signifies that this object is magnetic. This object can be Pushed or Pulled.
  * The RigidBody mass of this object signifies the total mass of this object, and the "magneticMass" field indicates
  *      the mass of this object that is actually magnetic (i.e. A person may weigh 60kg (RigidBody mass) but only have 3kg worth of metal on them, implying 57kg of non-metal.)
- * If the magneticMass field is left to be 0, then the object is considered to be wholly magnetic (i.e. a RigidBody mass of 60kg with 60kg worth of metal) and uses the RigidBody mass
- * If the object does not have a RigidBody attached, then fall back to the netMass field for the netMass.
+ * If the magneticMass field is left to be 0, then the object is considered to be wholly magnetic (i.e. a RigidBody mass of 60kg with 60kg worth of metal) and uses the RigidBody mass for the magnetic mass.
+ * If the object does not have a RigidBody attached, then fall back to the netMass field for the net mass of the object.
  *      If the netMass field is left to be 0, an error is thrown. 
- *      If magneticMass is left to be 0, then the object is considered to be wholly magnetic and simply uses netMass.
+ *      If magneticMass is left to be 0, then the object is considered to be wholly magnetic and uses netMass for the magnetic mass.
  */
 public class Magnetic : MonoBehaviour {
     private const float metalLinesLerpConstant = .30f;
@@ -196,6 +197,10 @@ public class Magnetic : MonoBehaviour {
     private void OnDestroy() {
         Destroy(blueLine);
         GameManager.RemoveMagnetic(this);
+    }
+
+    private void OnDisable() {
+        OnDestroy();
     }
 
     public virtual void AddForce(Vector3 netForce) {

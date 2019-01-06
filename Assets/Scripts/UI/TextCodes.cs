@@ -4,10 +4,10 @@ using System.Collections;
 /*
  * Contains several static fields referenced in on-screen text.
  * For example, if a text field says "You can Pull metals", the word "Pull" should be in blue.
- * Typing "You can " + TextCodes.Pull + " metals.
+ *      -> "You can " + TextCodes.Pull + " metals."
  * 
  * Also contains strings that will return a certain controller button depending on the control scheme
- *      i.e. will return "s_Mouse_Button_4" or "Q" or "Left Bumper" depending on the control scheme
+ *      i.e. will return "Mouse Button 4" or "Q" or "Left Bumper" depending on the control scheme.
  */
 public class TextCodes : MonoBehaviour {
 
@@ -122,6 +122,11 @@ public class TextCodes : MonoBehaviour {
             return Push + '/' + Pull;
         }
     }
+    public static string Pull_or_Push {
+        get {
+            return Pull + " or " + Push;
+        }
+    }
     public static string Pull_target {
         get {
             return LightBlue("Pull-target");
@@ -145,6 +150,11 @@ public class TextCodes : MonoBehaviour {
     public static string Push_Pull_targets {
         get {
             return Push + '/' + LightBlue("Pull-targets");
+        }
+    }
+    public static string Pull_or_Push_target {
+        get {
+            return Pull + LightBlue("-") +" or " + Red("Push-target");
         }
     }
     public static string CoinshotMode {
@@ -276,6 +286,14 @@ public class TextCodes : MonoBehaviour {
                 return s_Hold_ + LeftTrigger;
             else
                 return s_Hold_ + RightClick;
+        }
+    }
+    public static string KeyPullOrPush {
+        get {
+            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+                return s_Hold_ + RightTrigger + " or " + LeftTrigger;
+            else
+                return s_Hold_ + LeftClick + " or " + RightClick;
         }
     }
     public static string KeySelect {

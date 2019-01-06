@@ -177,6 +177,14 @@ public static class Keybinds {
         }
     }
 
+    public static bool ToggleHelpOverlay() {
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+            return Input.GetButtonDown("GamepadBack");
+        } else {
+            return Input.GetKeyDown(KeyCode.H);
+        }
+    }
+
     // Only Gamepad
 
     public static float LeftTrigger() {

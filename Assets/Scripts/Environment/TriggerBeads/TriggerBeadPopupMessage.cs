@@ -6,9 +6,5 @@ using System.Collections;
  *      then destroys itself.
  */
 public class TriggerBeadPopupMessage : TriggerBeadPopup {
-    
-    protected override void Trigger() {
-        base.Trigger();
-        Destroy(gameObject);
-    }
+    // Currently only exists to differentiate from TriggerBeadPopupListener
 }

@@ -1,8 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/*
+ * Controls the HUD elements that follow push- and pull-targets.
+ *  These include elements for Mass, Net Force, Allomantic Force, and Anchored Push Boost Force.
+ */
 public class TargetOverlayController : MonoBehaviour {
 
     private const float pixelDelta = 20;
