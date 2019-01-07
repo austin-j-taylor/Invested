@@ -51,7 +51,11 @@ public class TriggerBeadPopupListener : TriggerBeadPopup {
                     break;
                 }
             case Action.SelectDown: {
-                    while (!Keybinds.SelectDown() && !Keybinds.SelectAlternateDown()) {
+                    bool selected = false;
+                    bool selectedAlternate = false;
+                    while (!selected || !selectedAlternate) {
+                        selected = selected || Keybinds.SelectDown();
+                        selectedAlternate = selectedAlternate || Keybinds.SelectAlternateDown();
                         yield return null;
                     }
                     break;
