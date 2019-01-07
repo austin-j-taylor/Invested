@@ -16,14 +16,31 @@ public class PlayerGroundedChecker : MonoBehaviour {
     public bool IsGrounded { get; private set; } = false;
 
     private bool isInCollider = false;
+    private ParticleSystem particleSystem;
     private Collider standingOnCollider = null;
     private Vector3 point;
     private Vector3 normal;
+
+    private void Awake() {
+        particleSystem = transform.parent.GetComponentInChildren<ParticleSystem>();
+    }
 
     private void FixedUpdate() {
         IsGrounded = isInCollider;
         isInCollider = false;
         GetComponent<Rigidbody>().velocity = Vector3.zero;
+    }
+
+    // Debug
+    Vector3 lastJump;
+    Vector3 lastForce;
+    Vector3 lastMovement;
+    private void Update() {
+        Debug.DrawLine(Player.PlayerInstance.transform.position + new Vector3(0, 1, 0), Player.PlayerInstance.transform.position + new Vector3(0, 1, 0) + lastJump, Color.blue);
+        Debug.DrawLine(Player.PlayerInstance.transform.position + new Vector3(0, 1, 0), Player.PlayerInstance.transform.position + new Vector3(0, 1, 0) + lastMovement, Color.yellow);
+        Debug.DrawLine(Player.PlayerInstance.transform.position + new Vector3(0, 1, 0), Player.PlayerInstance.transform.position + new Vector3(0, 1, 0) + lastForce, Color.green);
+
+        particleSystem.transform.rotation = Quaternion.identity;
     }
 
     //private void OnTriggerStay(Collider other) {
@@ -54,22 +71,13 @@ public class PlayerGroundedChecker : MonoBehaviour {
             }
     }
 
-    // Debug
-    Vector3 lastJump;
-    Vector3 lastForce;
-    Vector3 lastMovement;
-    private void Update() {
-        Debug.DrawLine(Player.PlayerInstance.transform.position + new Vector3(0, 1, 0), Player.PlayerInstance.transform.position + new Vector3(0, 1, 0) + lastJump, Color.blue);
-        Debug.DrawLine(Player.PlayerInstance.transform.position + new Vector3(0, 1, 0), Player.PlayerInstance.transform.position + new Vector3(0, 1, 0) + lastMovement, Color.yellow);
-        Debug.DrawLine(Player.PlayerInstance.transform.position + new Vector3(0, 1, 0), Player.PlayerInstance.transform.position + new Vector3(0, 1, 0) + lastForce, Color.green);
-    }
-
     public void Jump(Vector3 movement) {
         Rigidbody targetRb = standingOnCollider.attachedRigidbody;
         Vector3 force = normal;
 
-        // If moving into a wall
+        // If Pewter Jumping
         if (movement.sqrMagnitude > 0f) {
+
 
             if (Vector3.Dot(force, movement) < -0.01f) {
                 float angle = Vector3.Angle(movement, force);
@@ -82,6 +90,8 @@ public class PlayerGroundedChecker : MonoBehaviour {
 
             force = force * jumpHeight + movement * jumpDirectionModifier;
             Vector3.ClampMagnitude(force, jumpPewterMagnitude);
+
+            //particleSystem.Play();
 
         } else {
             force *= jumpHeight;
