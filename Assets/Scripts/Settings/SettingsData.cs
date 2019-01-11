@@ -62,24 +62,32 @@ public class SettingsData : MonoBehaviour {
     public int playerGravity; // 0 for Disabled, 1 for Enabled
     public int playerAirResistance; // 0 for Disabled, 1 for Enabled
 
+    TextAsset textAsset;
+
     private void Awake() {
         LoadSettings();
     }
 
     public void LoadSettings() {
-        StreamReader reader = new StreamReader(configFileName, true);
-        string jSONText = reader.ReadToEnd();
-        reader.Close();
+        //StreamReader reader = new StreamReader(configFileName, true);
+        //reader.Close();
+
+        textAsset = Resources.Load<TextAsset>("config");
+        
+        string jSONText = textAsset.text;
 
         JsonUtility.FromJsonOverwrite(jSONText, this);
     }
 
     public void SaveSettings() {
-        string jSONText = JsonUtility.ToJson(this, true);
+        //string jSONText = JsonUtility.ToJson(this, true);
 
-        StreamWriter writer = new StreamWriter(configFileName, false);
-        writer.Write(jSONText);
-        writer.Close();
+        //StreamWriter writer = new StreamWriter(configFileName, false);
+        //writer.Write(jSONText);
+        //writer.Close();
+
+
+
     }
 
     public void ResetToDefaults() {

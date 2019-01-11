@@ -99,34 +99,29 @@ public static class Keybinds {
 
     // Both Keyboard and Gamepad
     public static bool EscapeDown() {
-        return Input.GetKeyDown(KeyCode.Escape) || Input.GetButtonDown("GamepadStart");
+        return Input.GetButtonDown("Cancel") || Input.GetButtonDown("GamepadStart");
     }
 
     public static float Horizontal() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-            return Input.GetAxis("GamepadHorizontal");
+            return Input.GetAxis("Horizontal");
         else
             return Input.GetAxisRaw("Horizontal");
     }
 
     public static float Vertical() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-            return Input.GetAxis("GamepadVertical");
+            return Input.GetAxis("Vertical");
         else
             return Input.GetAxisRaw("Vertical");
     }
 
     public static bool Jump() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-            return Input.GetButton("GamepadA");
-        else
-            return Input.GetKey(KeyCode.Space);
+            return Input.GetButton("Jump");
     }
+
     public static bool JumpDown() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-            return Input.GetButtonDown("GamepadA");
-        else
-            return Input.GetKeyDown(KeyCode.Space);
+        return Input.GetButtonDown("Jump");
     }
 
     public static bool WithdrawCoinDown() {

@@ -28,6 +28,8 @@ public class MainMenu : MonoBehaviour {
         settingsMenu.Close();
         sceneSelectMenu.Close();
         HUD.DisableHUD();
+
+        SceneSelectMenu.LoadScene(SceneSelectMenu.sceneSandbox);
     }
 
     private void Update() {
