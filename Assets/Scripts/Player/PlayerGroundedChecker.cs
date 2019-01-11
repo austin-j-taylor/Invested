@@ -73,7 +73,7 @@ public class PlayerGroundedChecker : MonoBehaviour {
         if (!collision.collider.isTrigger) {
             OnCollisionStay(collision);
             if (Vector3.Project(vel, normal).magnitude > fallDamageSpeedThreshold) {
-                particleDirection = Quaternion.LookRotation(normal);
+                particleDirection = Quaternion.LookRotation(-normal);
                 particleSystem.transform.rotation = particleDirection;
                 particleSystem.Play();
             }
@@ -112,7 +112,7 @@ public class PlayerGroundedChecker : MonoBehaviour {
             force = force * jumpHeight + movement * jumpDirectionModifier;
             Vector3.ClampMagnitude(force, jumpPewterMagnitude);
 
-            particleDirection = Quaternion.LookRotation(force);
+            particleDirection = Quaternion.LookRotation(-force);
             particleSystem.transform.rotation = particleDirection;
             particleSystem.Play();
 
