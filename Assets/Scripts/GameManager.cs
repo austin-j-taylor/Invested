@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour {
         //Material_Gebaude = Resources.Load<Material>("Materials/Gebaude");
         Material_Ettmetal_Glowing = Resources.Load<Material>("Materials/Ettmetal_glowing");
         Font_Heebo = Resources.Load<Font>("Fonts/Heebo-Medium");
-        MetalLineTemplate = Resources.Load<VolumetricLineBehavior>("MetalLineTemplate");
+        MetalLineTemplate = Resources.Load<VolumetricLineBehavior>("MetalLineSingleTemplate");
         MetalLineStripTemplate = Resources.Load<VolumetricLineStripBehavior>("MetalLineStripTemplate");
 
         Prefab_Coin = Resources.Load<Coin>("Objects/Imperial1-Boxing");

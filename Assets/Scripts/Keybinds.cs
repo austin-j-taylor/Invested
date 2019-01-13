@@ -20,99 +20,29 @@ public static class Keybinds {
 
     // Both Keyboard and Gamepad (Specifics for M45/KQE)
     public static bool SelectDown() {
-        switch (SettingsMenu.settingsData.controlScheme) {
-            case SettingsData.MK54: {
                     return Input.GetButtonDown("Mouse4");
-                }
-            case SettingsData.MK45: {
-                    return Input.GetButtonDown("Mouse3");
-                }
-            case SettingsData.MKEQ: {
-                    return Input.GetKeyDown(KeyCode.E);
-                }
-            case SettingsData.MKQE: {
-                    return Input.GetKeyDown(KeyCode.Q);
-                }
-            default: {
-                    return Input.GetButtonDown("RightBumper");
-                }
-        }
     }
     public static bool Select() {
-        switch (SettingsMenu.settingsData.controlScheme) {
-            case SettingsData.MK54: {
                     return Input.GetButton("Mouse4");
-                }
-            case SettingsData.MK45: {
-                    return Input.GetButton("Mouse3");
-                }
-            case SettingsData.MKEQ: {
-                    return Input.GetKey(KeyCode.E);
-                }
-            case SettingsData.MKQE: {
-                    return Input.GetKey(KeyCode.Q);
-                }
-            default: {
-                    return Input.GetButton("RightBumper");
-                }
-        }
     }
 
     public static bool SelectAlternate() {
-        switch (SettingsMenu.settingsData.controlScheme) {
-            case SettingsData.MK54: {
                     return Input.GetButton("Mouse3");
-                }
-            case SettingsData.MK45: {
-                    return Input.GetButton("Mouse4");
-                }
-            case SettingsData.MKEQ: {
-                    return Input.GetKey(KeyCode.Q);
-                }
-            case SettingsData.MKQE: {
-                    return Input.GetKey(KeyCode.E);
-                }
-            default: {
-                    return Input.GetButton("LeftBumper");
-                }
-        }
     }
     public static bool SelectAlternateDown() {
-        switch (SettingsMenu.settingsData.controlScheme) {
-            case SettingsData.MK54: {
                     return Input.GetButtonDown("Mouse3");
-                }
-            case SettingsData.MK45: {
-                    return Input.GetButtonDown("Mouse4");
-                }
-            case SettingsData.MKEQ: {
-                    return Input.GetKeyDown(KeyCode.Q);
-                }
-            case SettingsData.MKQE: {
-                    return Input.GetKeyDown(KeyCode.E);
-                }
-            default: {
-                    return Input.GetButtonDown("LeftBumper");
-                }
-        }
     }
 
     // Both Keyboard and Gamepad
     public static bool EscapeDown() {
-        return Input.GetButtonDown("Cancel") || Input.GetButtonDown("GamepadStart");
+        return Input.GetButtonDown("Cancel");
     }
 
     public static float Horizontal() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-            return Input.GetAxis("Horizontal");
-        else
             return Input.GetAxisRaw("Horizontal");
     }
 
     public static float Vertical() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-            return Input.GetAxis("Vertical");
-        else
             return Input.GetAxisRaw("Vertical");
     }
 
@@ -125,59 +55,33 @@ public static class Keybinds {
     }
 
     public static bool WithdrawCoinDown() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-            return Input.GetButtonDown("GamepadX");
-        else
             return Input.GetKeyDown(KeyCode.LeftControl);
     }
 
     public static bool NegateDown() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-            return Input.GetButtonDown("GamepadY");
-        else
-            return Input.GetKeyDown(KeyCode.LeftShift);
+            return Input.GetButtonDown("Left Shift");
     }
     public static bool Negate() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-            return Input.GetButton("GamepadY");
-        else
-            return Input.GetKey(KeyCode.LeftShift);
+            return Input.GetButton("Left Shift");
     }
     public static bool StopBurnUp() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-            return Input.GetButtonUp("GamepadY");
-        else
-            return Input.GetKeyUp(KeyCode.LeftShift);
+            return Input.GetButtonUp("Left Shift");
     }
 
     public static float LeftBurnRate() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-            return Input.GetAxis("LeftTrigger");
-        else
             return Input.GetButton("Mouse1") ? 1 : 0;
     }
 
     public static float RightBurnRate() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-            return Input.GetAxis("RightTrigger");
-        else
             return Input.GetButton("Mouse0") ? 1 : 0;
     }
 
     public static bool ToggleCoinshotMode() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
-            return Input.GetButtonDown("GamepadRightJoystickClick");
-        } else {
             return Input.GetKeyDown(KeyCode.C);
-        }
     }
 
     public static bool ToggleHelpOverlay() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
-            return Input.GetButtonDown("GamepadBack");
-        } else {
             return Input.GetKeyDown(KeyCode.H);
-        }
     }
 
     // Only Gamepad

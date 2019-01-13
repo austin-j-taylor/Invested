@@ -35,13 +35,13 @@ public class PlayerGroundedChecker : MonoBehaviour {
     }
 
     // Debug
-    Vector3 lastJump;
-    Vector3 lastForce;
-    Vector3 lastMovement;
+    //Vector3 lastJump;
+    //Vector3 lastForce;
+    //Vector3 lastMovement;
     private void Update() {
-        Debug.DrawLine(Player.PlayerInstance.transform.position + new Vector3(0, 1, 0), Player.PlayerInstance.transform.position + new Vector3(0, 1, 0) + lastJump, Color.blue);
-        Debug.DrawLine(Player.PlayerInstance.transform.position + new Vector3(0, 1, 0), Player.PlayerInstance.transform.position + new Vector3(0, 1, 0) + lastMovement, Color.yellow);
-        Debug.DrawLine(Player.PlayerInstance.transform.position + new Vector3(0, 1, 0), Player.PlayerInstance.transform.position + new Vector3(0, 1, 0) + lastForce, Color.green);
+        //Debug.DrawLine(Player.PlayerInstance.transform.position + new Vector3(0, 1, 0), Player.PlayerInstance.transform.position + new Vector3(0, 1, 0) + lastJump, Color.blue);
+        //Debug.DrawLine(Player.PlayerInstance.transform.position + new Vector3(0, 1, 0), Player.PlayerInstance.transform.position + new Vector3(0, 1, 0) + lastMovement, Color.yellow);
+        //Debug.DrawLine(Player.PlayerInstance.transform.position + new Vector3(0, 1, 0), Player.PlayerInstance.transform.position + new Vector3(0, 1, 0) + lastForce, Color.green);
 
         if (normal != null)
             particleSystem.transform.rotation = particleDirection;
@@ -107,7 +107,7 @@ public class PlayerGroundedChecker : MonoBehaviour {
                 if (movement.y < 0)
                     movement.y = -movement.y;
             }
-            lastForce = force.normalized;
+            //lastForce = force.normalized;
 
             force = force * jumpHeight + movement * jumpDirectionModifier;
             Vector3.ClampMagnitude(force, jumpPewterMagnitude);
@@ -120,8 +120,8 @@ public class PlayerGroundedChecker : MonoBehaviour {
             force *= jumpHeight;
         }
 
-        lastJump = force.normalized;
-        lastMovement = movement.normalized;
+        //lastJump = force.normalized;
+        //lastMovement = movement.normalized;
 
         Player.PlayerInstance.GetComponent<Rigidbody>().AddForce(force, ForceMode.Impulse);
         // Apply force and torque to target
