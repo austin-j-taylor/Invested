@@ -272,7 +272,7 @@ public class SpikePit : MonoBehaviour {
     }
 
     private void OnTriggerStay(Collider other) {
-        if (other.CompareTag("PlayerBody") && anim.enabled) {
+        if (other.CompareTag("PlayerBody") && !other.isTrigger && anim.enabled) {
             anim.SetTrigger("PlayerEntersHome");
         }
     }

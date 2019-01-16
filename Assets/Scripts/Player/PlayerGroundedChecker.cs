@@ -30,8 +30,6 @@ public class PlayerGroundedChecker : MonoBehaviour {
 
     private void FixedUpdate() {
         IsGrounded = isInCollider;
-        isInCollider = false;
-        GetComponent<Rigidbody>().velocity = Vector3.zero;
     }
 
     // Debug
@@ -47,49 +45,59 @@ public class PlayerGroundedChecker : MonoBehaviour {
             particleSystem.transform.rotation = particleDirection;
     }
 
-    //private void OnTriggerStay(Collider other) {
-    //    if (!isInCollider) // Only check first collision this frame
-    //        if (!other.isTrigger) {
-    //            isInCollider = true;
-    //            standingOnCollider = other;
-
-    //            if (Physics.SphereCast(transform.position, GetComponent<SphereCollider>().radius, new Vector3(.01f, .01f, .01f), out RaycastHit hit)) {
-    //                Debug.Log("found" + transform.position);
-    //                point = hit.point;
-    //                Debug.DrawLine(Player.PlayerInstance.transform.position, hit.point, Color.red);
-
-    //                normal = hit.normal;
-    //            } else {
-    //                Debug.Log("missed");
-    //            }
-    //        }
-    //}
-
     /*
      * If the player enters a collision with a high velocity, they should take damage (eventually. Now, just show some particle effects.)
      */
     private void OnCollisionEnter(Collision collision) {
-        Vector3 vel = Player.PlayerInstance.GetComponent<Rigidbody>().velocity;
         if (!collision.collider.isTrigger) {
+
+
             OnCollisionStay(collision);
+
+            // If this was a hard fall, show a particle effect.
+            Vector3 vel = Player.PlayerInstance.GetComponent<Rigidbody>().velocity;
             if (Vector3.Project(vel, normal).magnitude > fallDamageSpeedThreshold) {
                 particleDirection = Quaternion.LookRotation(-normal);
                 particleSystem.transform.rotation = particleDirection;
                 particleSystem.Play();
             }
-        } else {
-            Debug.Log("trigger");
         }
     }
 
+    /*
+     * As long as the player is touching a surface, the player will be able to jump off of that surface.
+     */
     private void OnCollisionStay(Collision collision) {
-        if (!isInCollider) // Only check first collision this frame
+        if (standingOnCollider == null)
+            standingOnCollider = collision.collider;
+
+        if (collision.collider == standingOnCollider) // Only check first collision
             if (!collision.collider.isTrigger) {
                 isInCollider = true;
-                standingOnCollider = collision.collider;
+                //Debug.Log(point);
                 point = collision.GetContact(0).point;
                 normal = collision.GetContact(0).normal;
             }
+    }
+
+    /*
+     * If the player's body stops touching a surface, they can still jump off of it for a brief time...
+     */
+    //private void OnCollisionExit(Collision collision) {
+    //    if (collision.collider == standingOnCollider) {
+
+    //    }
+    //}
+
+    /*
+     * ...Until the player gets slightly farther away from the surface.
+     * This facilitates wall-jumping, because the player may not be perfectly touching the wall when they try to jump.
+     */
+    private void OnTriggerExit(Collider other) {
+        if (other == standingOnCollider) {
+            isInCollider = false;
+            standingOnCollider = null;
+        }
     }
 
     public void Jump(Vector3 movement) {
@@ -126,7 +134,7 @@ public class PlayerGroundedChecker : MonoBehaviour {
         Player.PlayerInstance.GetComponent<Rigidbody>().AddForce(force, ForceMode.Impulse);
         // Apply force and torque to target
         if (targetRb) {
-            Vector3 radius = point - targetRb.centerOfMass;
+            Vector3 radius = point - targetRb.worldCenterOfMass;
 
             targetRb.AddForce(-force, ForceMode.Impulse);
             targetRb.AddTorque(Vector3.Cross(radius, -force));

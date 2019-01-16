@@ -35,7 +35,7 @@ public class PlayerMovementController : MonoBehaviour {
     private void Update() {
         if (IsGrounded && Keybinds.JumpDown()) {
             // Queue a jump for the next FixedUpdate
-            // Actual jumping done in FixedUpdate to stay in synx with PlayerGroundedChecker
+            // Actual jumping done in FixedUpdate to stay in sync with PlayerGroundedChecker
             jumpQueued = true;
         } else {
             jumpQueued = false;
