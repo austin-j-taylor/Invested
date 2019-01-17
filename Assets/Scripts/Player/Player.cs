@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
  */
 public class Player : Entity {
 
-    private const float coinCooldown = 1f / 4;
+    private const float coinCooldown = 1f / 8;
 
     //private Animator animator;
     private PlayerMovementController movementController;

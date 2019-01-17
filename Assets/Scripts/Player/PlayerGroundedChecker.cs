@@ -9,15 +9,15 @@ using UnityEngine;
  */
 public class PlayerGroundedChecker : MonoBehaviour {
 
-    private const float fallDamageSpeedThreshold = 7; // any fall speed above 7 m/s -> painful
+    private const float fallDamageForceThreshold = 10; // any fall force above this -> painful
 
     private const float jumpHeight = 400;
     private const float jumpPewterMagnitude = 600;
     private const float jumpDirectionModifier = 350;
+    private readonly Vector3 particleSystemPosition = new Vector3(0, -.2f, 0);
 
-    public bool IsGrounded { get; private set; } = false;
-
-    private bool isInCollider = false;
+    public bool IsGrounded { get { return standingOnCollider != null; } }
+    
     private ParticleSystem particleSystem;
     private Collider standingOnCollider = null;
     private Vector3 point;
@@ -28,21 +28,19 @@ public class PlayerGroundedChecker : MonoBehaviour {
         particleSystem = transform.parent.GetComponentInChildren<ParticleSystem>();
     }
 
-    private void FixedUpdate() {
-        IsGrounded = isInCollider;
-    }
-
     // Debug
-    Vector3 lastJump;
-    Vector3 lastForce;
-    Vector3 lastMovement;
+    //Vector3 lastJump;
+    //Vector3 lastForce;
+    //Vector3 lastMovement;
     private void Update() {
-        Debug.DrawLine(Player.PlayerInstance.transform.position + new Vector3(0, 1, 0), Player.PlayerInstance.transform.position + new Vector3(0, 1, 0) + lastJump, Color.blue);
-        Debug.DrawLine(Player.PlayerInstance.transform.position + new Vector3(0, 1, 0), Player.PlayerInstance.transform.position + new Vector3(0, 1, 0) + lastMovement, Color.yellow);
-        Debug.DrawLine(Player.PlayerInstance.transform.position + new Vector3(0, 1, 0), Player.PlayerInstance.transform.position + new Vector3(0, 1, 0) + lastForce, Color.green);
+        //Debug.DrawLine(Player.PlayerInstance.transform.position + new Vector3(0, 1, 0), Player.PlayerInstance.transform.position + new Vector3(0, 1, 0) + lastJump, Color.blue);
+        //Debug.DrawLine(Player.PlayerInstance.transform.position + new Vector3(0, 1, 0), Player.PlayerInstance.transform.position + new Vector3(0, 1, 0) + lastMovement, Color.yellow);
+        //Debug.DrawLine(Player.PlayerInstance.transform.position + new Vector3(0, 1, 0), Player.PlayerInstance.transform.position + new Vector3(0, 1, 0) + lastForce, Color.green);
 
-        if (normal != null)
+        if (normal != null) {
             particleSystem.transform.rotation = particleDirection;
+            particleSystem.transform.position = Player.PlayerInstance.transform.position + particleSystemPosition;
+        }
     }
 
     /*
@@ -50,14 +48,14 @@ public class PlayerGroundedChecker : MonoBehaviour {
      */
     private void OnCollisionEnter(Collision collision) {
         if (!collision.collider.isTrigger) {
-
-
+            
             OnCollisionStay(collision);
 
             // If this was a hard fall, show a particle effect.
             Vector3 vel = Player.PlayerInstance.GetComponent<Rigidbody>().velocity;
-            if (Vector3.Project(vel, normal).magnitude > fallDamageSpeedThreshold) {
-                particleDirection = Quaternion.LookRotation(-normal);
+            Vector3 thisNormal = collision.GetContact(0).normal;
+            if (Vector3.Project(collision.impulse, thisNormal).magnitude * Time.fixedDeltaTime > fallDamageForceThreshold) {
+                particleDirection = Quaternion.LookRotation(-thisNormal);
                 particleSystem.transform.rotation = particleDirection;
                 particleSystem.Play();
             }
@@ -73,8 +71,6 @@ public class PlayerGroundedChecker : MonoBehaviour {
 
         if (collision.collider == standingOnCollider) // Only check first collision
             if (!collision.collider.isTrigger) {
-                isInCollider = true;
-                //Debug.Log(point);
                 point = collision.GetContact(0).point;
                 normal = collision.GetContact(0).normal;
             }
@@ -82,20 +78,11 @@ public class PlayerGroundedChecker : MonoBehaviour {
 
     /*
      * If the player's body stops touching a surface, they can still jump off of it for a brief time...
-     */
-    //private void OnCollisionExit(Collision collision) {
-    //    if (collision.collider == standingOnCollider) {
-
-    //    }
-    //}
-
-    /*
      * ...Until the player gets slightly farther away from the surface.
      * This facilitates wall-jumping, because the player may not be perfectly touching the wall when they try to jump.
      */
     private void OnTriggerExit(Collider other) {
         if (other == standingOnCollider) {
-            isInCollider = false;
             standingOnCollider = null;
         }
     }
@@ -106,8 +93,6 @@ public class PlayerGroundedChecker : MonoBehaviour {
 
         // If Pewter Jumping
         if (movement.sqrMagnitude > 0f) {
-
-
             if (Vector3.Dot(force, movement) < -0.01f) {
                 float angle = Vector3.Angle(movement, force);
                 angle -= 90;
@@ -115,7 +100,7 @@ public class PlayerGroundedChecker : MonoBehaviour {
                 if (movement.y < 0)
                     movement.y = -movement.y;
             }
-            lastForce = force.normalized;
+            //lastForce = force.normalized;
 
             force = force * jumpHeight + movement * jumpDirectionModifier;
             Vector3.ClampMagnitude(force, jumpPewterMagnitude);
@@ -128,8 +113,8 @@ public class PlayerGroundedChecker : MonoBehaviour {
             force *= jumpHeight;
         }
 
-        lastJump = force.normalized;
-        lastMovement = movement.normalized;
+        //lastJump = force.normalized;
+        //lastMovement = movement.normalized;
 
         Player.PlayerInstance.GetComponent<Rigidbody>().AddForce(force, ForceMode.Impulse);
         // Apply force and torque to target
