@@ -36,6 +36,7 @@ public class SettingsData : MonoBehaviour {
     public int pushTargetLineColor; // 0 for blue, 1 for red
     public int forceUnits; // 0 for G's, 1 for Newtons
     public int forceComplexity; // 0 for net only, 1 for full sums
+    public int hudEnabled; // 0 for Disabled, 1 for Enabled
     public int hudForces; // 0 for Disabled, 1 for Enabled
     public int hudMasses; // 0 for Disabled, 1 for Enabled
     public int fpsCounter; // 0 for Disabled, 1 for Enabled
@@ -50,7 +51,7 @@ public class SettingsData : MonoBehaviour {
     public int normalForceMin; // 0 for Disabled, 1 for zero, 2 for zero and negate
     public int normalForceMax; // 0 for Disabled, 1 for AF
     public int normalForceEquality; // 0 for Unequal, 1 for Equal
-    public int exponentialWithVelocitySignage; // 0 for Both Directions Decrease Force, 1 for Only Backwards Decreases force, 2 for Backwards Decreases & Forwards Increases
+    public int exponentialWithVelocitySignage; // 0 for Both Directions Decrease Force, 1 for Only Backwards Decreases force, 2 for Only Towards Decreases force, 3 for Backwards Decreases & Forwards Increases
     public int exponentialWithVelocityRelativity; // 0 for Relative, 1 for Absolute
     public float velocityConstant;
     public int forceDistanceRelationship; // 0 for Linear, 1 for Inverse Square, 2 for Exponential with Distance
@@ -154,6 +155,18 @@ public class SettingsData : MonoBehaviour {
                     forceComplexity = data;
                     return true;
                 }
+            case "hudForces": {
+                    hudForces = data;
+                    return true;
+                }
+            case "hudEnabled": {
+                    hudEnabled = data;
+                    return true;
+                }
+            case "hudMasses": {
+                    hudMasses = data;
+                    return true;
+                }
             case "fpsCounter": {
                     fpsCounter = data;
                     return true;
@@ -172,14 +185,6 @@ public class SettingsData : MonoBehaviour {
                 }
             case "bloom": {
                     bloom = data;
-                    return true;
-                }
-            case "hudForces": {
-                    hudForces = data;
-                    return true;
-                }
-            case "hudMasses": {
-                    hudMasses = data;
                     return true;
                 }
             case "pushControlStyle": {
@@ -312,6 +317,15 @@ public class SettingsData : MonoBehaviour {
             case "forceComplexity": {
                     return forceComplexity;
                 }
+            case "hudForces": {
+                    return hudForces;
+                }
+            case "hudEnabled": {
+                    return hudEnabled;
+                }
+            case "hudMasses": {
+                    return hudMasses;
+                }
             case "fpsCounter": {
                     return fpsCounter;
                 }
@@ -326,12 +340,6 @@ public class SettingsData : MonoBehaviour {
                 }
             case "bloom": {
                     return bloom;
-                }
-            case "hudForces": {
-                    return hudForces;
-                }
-            case "hudMasses": {
-                    return hudMasses;
                 }
             case "pushControlStyle": {
                     return pushControlStyle;

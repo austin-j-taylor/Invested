@@ -74,6 +74,15 @@ public class HUD : MonoBehaviour {
         hudGameObject.SetActive(false);
     }
 
+    // Used by Settings to make HUD visible or invisible
+    public void ShowHUD() {
+        GetComponent<CanvasGroup>().alpha = 1;
+    }
+
+    public void HideHUD() {
+        GetComponent<CanvasGroup>().alpha = 0;
+    }
+
     // Clears the values currently on the HUD
     public static void ResetHUD() {
         EnableHUD();

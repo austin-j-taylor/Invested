@@ -156,7 +156,7 @@ public class AllomanticIronSteel : MonoBehaviour {
         }
     }
     public bool IsBurningIronSteel { get; protected set; } = false;
-    public float Strength { get; protected set; } = 1; // Allomantic Strength
+    public float Strength { get; set; } = 1; // Allomantic Strength
     public float Charge { get; private set; } // Allomantic Charge
     public Vector3 CenterOfMass {
         get {
@@ -455,7 +455,16 @@ public class AllomanticIronSteel : MonoBehaviour {
                                 }
                                 break;
                             }
-                        default: {
+                        case 2: {
+                                if (Vector3.Dot(rb.velocity, direction) < 0) {
+                                    velocityFactorTarget *= 0;
+                                }
+                                if (Vector3.Dot(target.Velocity, direction) > 0) {
+                                    velocityFactorAllomancer *= 0;
+                                }
+                                break;
+                            }
+                        case 3: {
                                 if (Vector3.Dot(rb.velocity, direction) > 0) {
                                     velocityFactorTarget *= -1;
                                 }
