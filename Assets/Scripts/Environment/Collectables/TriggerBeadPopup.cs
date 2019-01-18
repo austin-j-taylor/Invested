@@ -20,11 +20,16 @@ public class TriggerBeadPopup : TriggerBead {
         GetComponent<Magnetic>().enabled = false;
     }
 
+    public virtual string GetHeader() {
+        return HUD.MessageOverlayController.TriggerBeadMessages[section][0];
+    }
+
     public virtual string GetText() {
         return HUD.MessageOverlayController.TriggerBeadMessages[section][index];
     }
 
     public void Close() {
         Destroy(transform.parent.gameObject);
+        HUD.MessageOverlayController.CurrentPopup = null;
     }
 }

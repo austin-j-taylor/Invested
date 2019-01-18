@@ -12,19 +12,19 @@ public class TriggerBeadOverhead : MonoBehaviour {
     public Section section;
     
     void Start() {
-        TriggerBeadPopupMessage[] beadMessages = GetComponentsInChildren<TriggerBeadPopupMessage>();
+        //TriggerBeadPopupMessage[] beadMessages = GetComponentsInChildren<TriggerBeadPopupMessage>();
 
-        // Assume messages.length = number of TriggerBeads in scene with same section number
-        for (int i = 0; i < beadMessages.Length; i++) {
-            beadMessages[i].section = (int)section;
-            beadMessages[i].index = i;
-            beadMessages[i].overhead = this;
-        }
+        //// Assume messages.length = number of TriggerBeads in scene with same section number
+        //for (int i = 0; i < beadMessages.Length; i++) {
+        //    beadMessages[i].section = (int)section;
+        //    beadMessages[i].index = 1 + i;
+        //    beadMessages[i].overhead = this;
+        //}
 
         TriggerBeadPopupListener[] beadListeners = GetComponentsInChildren<TriggerBeadPopupListener>();
         for (int i = 0; i < beadListeners.Length; i++) {
-            beadListeners[i].section = (int)section + i + 1;
-            beadListeners[i].index = 0;
+            beadListeners[i].section = (int)section + i;
+            beadListeners[i].index = 1;
             beadListeners[i].overhead = this;
         }
     }

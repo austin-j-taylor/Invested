@@ -64,6 +64,14 @@ public class MetalReserveMeters : MonoBehaviour {
         timeLastChangedSteel = -100;
     }
 
+    // Called to flash the reserve meters on screen
+    public void AlertIron() {
+        timeLastChangedIron = Time.time;
+    }
+    public void AlertSteel() {
+        timeLastChangedSteel = Time.time;
+    }
+
     private class MetalReserveElement : MonoBehaviour {
 
         public MetalReserve reserve;

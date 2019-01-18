@@ -87,8 +87,8 @@ public class Player : Entity {
             PauseMenu.Pause();
         }
         // Displaying Help Overlay
-        if(Keybinds.ToggleHelpOverlay()) {
-            HUD.HelpOverlayController.HelpText.enabled = !HUD.HelpOverlayController.HelpText.enabled;
+        if (Keybinds.ToggleHelpOverlay()) {
+            HUD.HelpOverlayController.Toggle();
         }
     }
 
@@ -105,10 +105,10 @@ public class Player : Entity {
             PlayerIronSteel.Clear();
             GetComponentInChildren<MeshRenderer>().material = playerMaterial;
             CanControlPlayer = true;
-            if (scene.buildIndex == SceneSelectMenu.sceneLevel01)
-                GodMode = true;
-            else
-                GodMode = false;
+            //if (scene.buildIndex == SceneSelectMenu.sceneLevel01)
+            //    GodMode = true;
+            //else
+            GodMode = false;
 
             GameObject spawn = GameObject.FindGameObjectWithTag("PlayerSpawn");
             if (spawn && CameraController.ActiveCamera) { // if CameraController.Awake has been called

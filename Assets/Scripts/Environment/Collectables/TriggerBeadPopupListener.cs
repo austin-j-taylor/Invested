@@ -7,11 +7,11 @@ using System.Collections;
  */
 public class TriggerBeadPopupListener : TriggerBeadPopup {
 
-    public enum Action { MoveWASD, StartBurningIronSteel, SelectDown, PushPull };
+    public enum Action { MoveWASD, StartBurningIronSteel, SelectDown, PushPull, Deselect, Help };
 
     public Action[] actions;
     public bool[] clearAfter;
-    
+
     private int coroutinePosition = 0;
 
     protected override void Trigger() {
@@ -19,7 +19,7 @@ public class TriggerBeadPopupListener : TriggerBeadPopup {
         StartCoroutine(WaitForAction());
         // Await for player action
     }
-    
+
     public override string GetText() {
         int clearIndex = 0;
         if (clearAfter != null) {
@@ -30,9 +30,16 @@ public class TriggerBeadPopupListener : TriggerBeadPopup {
             }
         }
         string text = "";
-        for (int i = clearIndex; i <= coroutinePosition; i++) {
-            text += HUD.MessageOverlayController.TriggerBeadMessages[section][i] + "\n\n";
+        if (coroutinePosition < clearIndex) {
+            for (int i = 1; i <= coroutinePosition + 1; i++) { // Skip Header string
+                text += HUD.MessageOverlayController.TriggerBeadMessages[section][i] + "\n\n";
+            }
+        } else {
+            for (int i = 1 + clearIndex; i <= coroutinePosition + 1; i++) { // Skip Header string
+                text += HUD.MessageOverlayController.TriggerBeadMessages[section][i] + "\n\n";
+            }
         }
+
         return text;
     }
 
@@ -61,9 +68,27 @@ public class TriggerBeadPopupListener : TriggerBeadPopup {
                     break;
                 }
             case Action.PushPull: {
-                    while (!Keybinds.IronPulling() && !Keybinds.SteelPushing()) {
+                    bool pulled = false;
+                    bool pushed = false;
+                    while (!pulled || !pushed) {
+                        pulled = pulled || Keybinds.IronPulling();
+                        pushed = pushed || Keybinds.SteelPushing();
                         yield return null;
                     }
+                    break;
+                }
+            case Action.Deselect: {
+                    while (!(Keybinds.Negate() && Keybinds.Select()) && !(Keybinds.Negate() && Keybinds.SelectAlternate())) {
+                        yield return null;
+                    }
+                    break;
+                }
+            case Action.Help: {
+                    while (!Keybinds.ToggleHelpOverlay()) {
+                        yield return null;
+                    }
+                    // Close Message
+                    Close();
                     break;
                 }
         }
@@ -72,7 +97,8 @@ public class TriggerBeadPopupListener : TriggerBeadPopup {
         if (HUD.MessageOverlayController.CurrentPopup == this) {
             coroutinePosition++;
             HUD.MessageOverlayController.MessageText.text = GetText();
-            if (coroutinePosition < HUD.MessageOverlayController.TriggerBeadMessages[section].Count - 1) {
+            HUD.MessageOverlayController.HeaderText.text = GetHeader();
+            if (coroutinePosition < HUD.MessageOverlayController.TriggerBeadMessages[section].Count - 2 || coroutinePosition < actions.Length) {
                 StartCoroutine(WaitForAction());
             }
         }
