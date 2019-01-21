@@ -37,7 +37,9 @@ public class Magnetic : MonoBehaviour {
         }
     }
     public Vector3 LastPosition { get; private set; }
-    public Vector3 LastVelocity { get; private set; }
+    public Vector3 LastVelocity { get; set; }
+    public float LastExpectedVelocityChange { get; set; }
+    public float LastExpectedEnergyUsed { get; set; }
     public Vector3 LastExpectedAcceleration {
         get {
             return lastExpectedAcceleration;
@@ -176,6 +178,8 @@ public class Magnetic : MonoBehaviour {
         LastPosition = transform.position;
         LastVelocity = Vector3.zero;
         LastExpectedAcceleration = Vector3.zero;
+        LastExpectedVelocityChange = 0;
+        LastExpectedEnergyUsed = 0;
         LastAllomanticForce = Vector3.zero;
         LastMaxPossibleAllomanticForce = Vector3.zero;
         LastAnchoredPushBoostFromAllomancer = Vector3.zero;
@@ -187,6 +191,8 @@ public class Magnetic : MonoBehaviour {
         StopBeingPullPushed();
         LastVelocity = Vector3.zero;
         LastExpectedAcceleration = Vector3.zero;
+        LastExpectedVelocityChange = 0;
+        LastExpectedEnergyUsed = 0;
         LastAllomanticForce = Vector3.zero;
         LastMaxPossibleAllomanticForce = Vector3.zero;
         LastAnchoredPushBoostFromAllomancer = Vector3.zero;

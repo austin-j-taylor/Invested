@@ -47,7 +47,7 @@ public class SettingsData : MonoBehaviour {
     public int bloom;
     // Allomancy
     public int pushControlStyle; // 0 for percentage, 1 for magnitude
-    public int anchoredBoost; // 0 for Disabled, 1 for ANF, 2 for EWF
+    public int anchoredBoost; // 0 for Disabled, 1 for ANF, 2 for EWF, 3 for DP
     public int normalForceMin; // 0 for Disabled, 1 for zero, 2 for zero and negate
     public int normalForceMax; // 0 for Disabled, 1 for AF
     public int normalForceEquality; // 0 for Unequal, 1 for Equal

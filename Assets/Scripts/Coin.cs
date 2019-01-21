@@ -82,9 +82,10 @@ public class Coin : Magnetic {
     public override void AddForce(Vector3 netForce) {
         // Calculate drag from its new velocity
         // Effectively caps the max velocity of the coin without affecting the ANF.
-        Vector3 newNetForce = Vector3.ClampMagnitude(
-            -(Vector3.Project(Rb.velocity, netForce.normalized) + (netForce / NetMass * Time.fixedDeltaTime)) * drag, netForce.magnitude
-        ) + netForce;
+        Vector3 newNetForce = netForce;
+        //Vector3 newNetForce = Vector3.ClampMagnitude(
+        //    -(Vector3.Project(Rb.velocity, netForce.normalized) + (netForce / NetMass * Time.fixedDeltaTime)) * drag, netForce.magnitude
+        //) + netForce;
         if (collisionCollider) { // If in a collision..
             if (isStuck) { // and is stuck...
                 if (!IsStuckByFriction(netForce)) { // ... but friction is too weak to keep the coin stuck in the target.
@@ -100,6 +101,8 @@ public class Coin : Magnetic {
 
         LastExpectedAcceleration = newNetForce / NetMass; // LastPosition, LastVelocity are updated
         Rb.AddForce(newNetForce);
+        Debug.Log(netForce);
+        Debug.Log(newNetForce);
     }
 
     public override void StopBeingPullPushed() {

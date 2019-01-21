@@ -79,6 +79,8 @@ public class AllomanticIronSteel : MonoBehaviour {
 
     // Used for calculating the acceleration over the last frame for pushing/pulling
     private Vector3 lastAllomancerVelocity = Vector3.zero;
+    private float lastExpectedAllomancerVelocityChange = 0;
+    private float LastExpectedAllomancerEnergyUsed = 0;
     private Vector3 lastExpectedAllomancerAcceleration = Vector3.zero;
 
     // Used in calculation of Net force on allomancer, AF on allomancer, and APB on allomancer this/last frame
@@ -196,6 +198,7 @@ public class AllomanticIronSteel : MonoBehaviour {
         PullTargets.Clear(true, clearTargets);
         PushTargets.Clear(true, clearTargets);
         lastExpectedAllomancerAcceleration = Vector3.zero;
+        lastExpectedAllomancerVelocityChange = 0;
         LastNetForceOnAllomancer = Vector3.zero;
         LastAllomanticForce = Vector3.zero;
         LastAnchoredPushBoost = Vector3.zero;
@@ -327,6 +330,15 @@ public class AllomanticIronSteel : MonoBehaviour {
                 lineOfSightFactor : 1); // If there is something blocking line-of-sight, the force is reduced.
     }
 
+    public float alloWasted;
+    public float targWasted;
+    public float alloAccess;
+    public float targAccess;
+    public float alloExpectedAccel;
+    public float targetExpectedAccel;
+    public float alloImpAccel;
+    public float targetImpAccel;
+
     /* 
      * Calculates the Allomantic Force and Anchored Push Boost that would affect this target, if it were Pushed or Pulled.
      * 
@@ -350,137 +362,210 @@ public class AllomanticIronSteel : MonoBehaviour {
         //      SUCH THAT the sum of the pushes on each target will equal a single push on an imaginary target with a mass equal to the sum of each target's mass.
 
         float effectiveCharge = target.Charge / sumOfCharges * netMagneticCharge;
-
-        Vector3 allomanticForce = CalculateAllomanticForce(target.CenterOfMass, effectiveCharge) * (target.LastWasPulled ? 1 : -1) /* / (usingIronTargets ? PullCount : PushCount) */;
-        Vector3 direction = allomanticForce.normalized;
-
-        thisFrameMaximumNetForce += allomanticForce;
-        target.LastMaxPossibleAllomanticForce = allomanticForce;
-
-        // Make the AF proportional to the burn rate
-        allomanticForce *= (target.LastWasPulled ? IronBurnRateTarget : SteelBurnRateTarget);
+        Vector3 allomanticForce;
+        Vector3 direction;
 
         Vector3 restitutionForceFromTarget;
         Vector3 restitutionForceFromAllomancer;
 
-        switch (SettingsMenu.settingsData.anchoredBoost) {
-            case 0: { // Disabled
-                    restitutionForceFromTarget = Vector3.zero;
-                    restitutionForceFromAllomancer = Vector3.zero;
-                    break;
-                }
-            case 1: { // ANF
-                    if (pulling && !IronPulling || !pulling && !SteelPushing) { // If not actively pushing/pulling on this target, let the APB = AF for both target and allomancer
-                        restitutionForceFromTarget = allomanticForce;
-                        restitutionForceFromAllomancer = -allomanticForce;
-                    } else {
-                        if (target.IsStatic || target.IsPerfectlyAnchored) { // If target is perfectly anchored, pushes are perfectly resisted. Its ANF = AF.
+        if (SettingsMenu.settingsData.anchoredBoost == 3) {
+
+
+            // Calculate the expected distribution of energy.
+            // This is the energy that, without anchors, will be fully added to the system.
+            // With anchors, only a portion of this energy will be added to the system.
+            // Next frame, that remaining unused energy will be added in the next section.
+            float maxEnergy = 10;
+
+            lastExpectedAllomancerVelocityChange = Mathf.Sqrt(2 * maxEnergy / (Mass + Mass * Mass / target.MagneticMass));
+            target.LastExpectedVelocityChange = Mathf.Sqrt(2 * maxEnergy / (target.MagneticMass + target.MagneticMass * target.MagneticMass / Mass));
+
+            float allomancerExpectedEnergyUsed = .5f * Mass * lastExpectedAllomancerVelocityChange * lastExpectedAllomancerVelocityChange;
+            float targetExpectedEnergyUsed = .5f * target.MagneticMass * target.LastExpectedVelocityChange * target.LastExpectedVelocityChange;
+
+            // Add the unused energy from the last frame
+            float lastAllomancerVelocityChange = (rb.velocity - lastAllomancerVelocity).magnitude;
+            float lastTargetVelocityChange = (target.Velocity - target.LastVelocity).magnitude;
+            
+            float allomancerEnergyWasted = LastExpectedAllomancerEnergyUsed * (1 - Mathf.Clamp01(lastAllomancerVelocityChange / lastExpectedAllomancerVelocityChange));
+            float targetEnergyWasted = target.LastExpectedEnergyUsed * (1 - Mathf.Clamp01(lastTargetVelocityChange / target.LastExpectedVelocityChange));
+
+
+            float allomancerEnergy = allomancerExpectedEnergyUsed + targetEnergyWasted;
+            float targetEnergy = targetExpectedEnergyUsed + allomancerEnergyWasted;
+
+            float allomancerVelocityChange = Mathf.Sqrt(2 * allomancerEnergy / Mass);
+            float targetVelocityChange = Mathf.Sqrt(2 * targetEnergy / target.MagneticMass);
+
+            Vector3 forceOfAllomancerPower = Mass * allomancerVelocityChange / Time.deltaTime * (target.CenterOfMass - CenterOfMass).normalized * (target.LastWasPulled ? 1 : -1);
+            Vector3 forceOfTargetPower = target.MagneticMass * targetVelocityChange / Time.deltaTime * (target.CenterOfMass - CenterOfMass).normalized * (target.LastWasPulled ? 1 : -1);
+
+            Vector3 fullForce;
+            if (Mass * allomancerVelocityChange > target.MagneticMass * targetVelocityChange)
+                fullForce = forceOfAllomancerPower;
+            else
+                fullForce = forceOfTargetPower;
+
+            allomanticForce = Mass * lastExpectedAllomancerVelocityChange / Time.deltaTime * (target.CenterOfMass - CenterOfMass).normalized * (target.LastWasPulled ? 1 : -1);
+            // inherently equal to target.MagneticMass * target...VelocityChange / ...
+
+            // Restitution forces represent the components of the Improved Apparent force that come from the opposite's wasted energy
+            //float proportionAllomancer = allomanticForce.magnitude / (target.MagneticMass * allomancerVelocityChange / Time.deltaTime);
+            //float proportionTarget = allomanticForce.magnitude / (target.MagneticMass * targetVelocityChange / Time.deltaTime);
+
+
+            //restitutionForceFromTarget = allomanticForce / proportionTarget;
+            //restitutionForceFromAllomancer = -allomanticForce / proportionAllomancer;
+            restitutionForceFromTarget = fullForce - allomanticForce;
+            restitutionForceFromAllomancer = -(fullForce - allomanticForce);
+
+
+            // Update expected, unanchored energy distribution for next frame
+            LastExpectedAllomancerEnergyUsed = allomancerExpectedEnergyUsed;
+            target.LastExpectedEnergyUsed = targetExpectedEnergyUsed;
+
+            alloWasted = 1 - Mathf.Clamp01(lastAllomancerVelocityChange / lastExpectedAllomancerVelocityChange);
+            targWasted = 1 - Mathf.Clamp01(lastTargetVelocityChange / target.LastExpectedVelocityChange);
+            alloAccess = allomancerEnergy;
+            targAccess = targetEnergy;
+            alloExpectedAccel = lastExpectedAllomancerVelocityChange;
+            targetExpectedAccel = target.LastExpectedVelocityChange;
+            alloImpAccel = allomancerVelocityChange;
+            targetImpAccel = targetVelocityChange;
+
+            //target.LastVelocity = target.Velocity;
+
+        } else {
+            allomanticForce = CalculateAllomanticForce(target.CenterOfMass, effectiveCharge) * (target.LastWasPulled ? 1 : -1) /* / (usingIronTargets ? PullCount : PushCount) */;
+            direction = allomanticForce.normalized;
+
+            thisFrameMaximumNetForce += allomanticForce;
+            target.LastMaxPossibleAllomanticForce = allomanticForce;
+
+            // Make the AF proportional to the burn rate
+            allomanticForce *= (target.LastWasPulled ? IronBurnRateTarget : SteelBurnRateTarget);
+
+
+            switch (SettingsMenu.settingsData.anchoredBoost) {
+                case 0: { // Disabled
+                        restitutionForceFromTarget = Vector3.zero;
+                        restitutionForceFromAllomancer = Vector3.zero;
+                        break;
+                    }
+                case 1: { // ANF
+                        if (pulling && !IronPulling || !pulling && !SteelPushing) { // If not actively pushing/pulling on this target, let the APB = AF for both target and allomancer
                             restitutionForceFromTarget = allomanticForce;
+                            restitutionForceFromAllomancer = -allomanticForce;
                         } else {
-                            // Calculate Allomantic Normal Forces
-                            // Target is partially anchored
-                            //calculate changes from the last frame
-                            Vector3 newTargetVelocity = target.Velocity;
-                            Vector3 lastTargetAcceleration = (newTargetVelocity - target.LastVelocity) / Time.fixedDeltaTime;
-                            Vector3 unaccountedForTargetAcceleration = lastTargetAcceleration - target.LastExpectedAcceleration;// + Physics.gravity;
-                            restitutionForceFromTarget = Vector3.Project(unaccountedForTargetAcceleration * target.NetMass, direction);
+                            if (target.IsStatic || target.IsPerfectlyAnchored) { // If target is perfectly anchored, pushes are perfectly resisted. Its ANF = AF.
+                                restitutionForceFromTarget = allomanticForce;
+                            } else {
+                                // Calculate Allomantic Normal Forces
+                                // Target is partially anchored
+                                //calculate changes from the last frame
+                                Vector3 lastTargetAcceleration = (target.Velocity - target.LastVelocity) / Time.fixedDeltaTime;
+                                Vector3 unaccountedForTargetAcceleration = lastTargetAcceleration - target.LastExpectedAcceleration;// + Physics.gravity;
+                                restitutionForceFromTarget = Vector3.Project(unaccountedForTargetAcceleration * target.NetMass, direction);
+                            }
+                            Vector3 lastAllomancerAcceleration = (rb.velocity - lastAllomancerVelocity) / Time.fixedDeltaTime;
+                            Vector3 unaccountedForAllomancerAcceleration = lastAllomancerAcceleration - lastExpectedAllomancerAcceleration;
+                            restitutionForceFromAllomancer = Vector3.Project(unaccountedForAllomancerAcceleration * rb.mass, direction);
                         }
-                        Vector3 lastAllomancerAcceleration = (rb.velocity - lastAllomancerVelocity) / Time.fixedDeltaTime;
-                        Vector3 unaccountedForAllomancerAcceleration = lastAllomancerAcceleration - lastExpectedAllomancerAcceleration;
-                        restitutionForceFromAllomancer = Vector3.Project(unaccountedForAllomancerAcceleration * rb.mass, direction);
-                    }
-                    if (SettingsMenu.settingsData.normalForceMax == 1) {
-                        restitutionForceFromTarget = Vector3.ClampMagnitude(restitutionForceFromTarget, allomanticForce.magnitude);
-                        restitutionForceFromAllomancer = Vector3.ClampMagnitude(restitutionForceFromAllomancer, allomanticForce.magnitude);
-                    }
+                        if (SettingsMenu.settingsData.normalForceMax == 1) {
+                            restitutionForceFromTarget = Vector3.ClampMagnitude(restitutionForceFromTarget, allomanticForce.magnitude);
+                            restitutionForceFromAllomancer = Vector3.ClampMagnitude(restitutionForceFromAllomancer, allomanticForce.magnitude);
+                        }
 
-                    // Prevents the ANF from being negative relative to the AF and prevents the ANF from ever decreasing the AF below its original value
-                    switch (SettingsMenu.settingsData.normalForceMin) {
-                        case 0: {
-                                break;
-                            }
-                        case 1: {
-                                if (Vector3.Dot(restitutionForceFromAllomancer, allomanticForce) > 0) {
-                                    restitutionForceFromAllomancer = Vector3.zero;
+                        // Prevents the ANF from being negative relative to the AF and prevents the ANF from ever decreasing the AF below its original value
+                        switch (SettingsMenu.settingsData.normalForceMin) {
+                            case 0: {
+                                    break;
                                 }
-                                if (Vector3.Dot(restitutionForceFromTarget, allomanticForce) < 0) {
-                                    restitutionForceFromTarget = Vector3.zero;
+                            case 1: {
+                                    if (Vector3.Dot(restitutionForceFromAllomancer, allomanticForce) > 0) {
+                                        restitutionForceFromAllomancer = Vector3.zero;
+                                    }
+                                    if (Vector3.Dot(restitutionForceFromTarget, allomanticForce) < 0) {
+                                        restitutionForceFromTarget = Vector3.zero;
+                                    }
+                                    break;
                                 }
-                                break;
-                            }
-                        default: {
-                                if (Vector3.Dot(restitutionForceFromAllomancer, allomanticForce) > 0) {
-                                    restitutionForceFromAllomancer = -restitutionForceFromAllomancer;
+                            default: {
+                                    if (Vector3.Dot(restitutionForceFromAllomancer, allomanticForce) > 0) {
+                                        restitutionForceFromAllomancer = -restitutionForceFromAllomancer;
+                                    }
+                                    if (Vector3.Dot(restitutionForceFromTarget, allomanticForce) < 0) {
+                                        restitutionForceFromTarget = -restitutionForceFromTarget;
+                                    }
+                                    break;
                                 }
-                                if (Vector3.Dot(restitutionForceFromTarget, allomanticForce) < 0) {
-                                    restitutionForceFromTarget = -restitutionForceFromTarget;
-                                }
-                                break;
-                            }
-                    }
+                        }
 
-                    // Makes the ANF on the target and Allomancer equal
-                    if (SettingsMenu.settingsData.normalForceEquality == 1) {
-                        if (restitutionForceFromAllomancer.magnitude > restitutionForceFromTarget.magnitude) {
-                            restitutionForceFromTarget = -restitutionForceFromAllomancer;
+                        // Makes the ANF on the target and Allomancer equal
+                        if (SettingsMenu.settingsData.normalForceEquality == 1) {
+                            if (restitutionForceFromAllomancer.magnitude > restitutionForceFromTarget.magnitude) {
+                                restitutionForceFromTarget = -restitutionForceFromAllomancer;
+                            } else {
+                                restitutionForceFromAllomancer = -restitutionForceFromTarget;
+                            }
+                        }
+
+                        break;
+                    }
+                default: { // EWV
+                          // The restitutionForceFromTarget is actually negative, rather than positive, unlike in ANF mode. It contains the percentage of the AF that is subtracted from the AF to get the net AF.
+                        float velocityFactorTarget;
+                        float velocityFactorAllomancer;
+                        if (SettingsMenu.settingsData.exponentialWithVelocityRelativity == 1) {
+                            velocityFactorTarget = 1 - Mathf.Exp(-(Vector3.Project(target.Velocity, direction).magnitude / SettingsMenu.settingsData.velocityConstant));
+                            velocityFactorAllomancer = 1 - Mathf.Exp(-(Vector3.Project(rb.velocity, direction).magnitude / SettingsMenu.settingsData.velocityConstant));
                         } else {
-                            restitutionForceFromAllomancer = -restitutionForceFromTarget;
+                            velocityFactorTarget = 1 - Mathf.Exp(-(Vector3.Project(rb.velocity - target.Velocity, direction).magnitude / SettingsMenu.settingsData.velocityConstant));
+                            velocityFactorAllomancer = 1 - Mathf.Exp(-(Vector3.Project(target.Velocity - rb.velocity, direction).magnitude / SettingsMenu.settingsData.velocityConstant));
                         }
-                    }
+                        switch (SettingsMenu.settingsData.exponentialWithVelocitySignage) {
+                            case 0: {
+                                    // Do nothing
+                                    break;
+                                }
+                            case 1: {
+                                    if (Vector3.Dot(rb.velocity, direction) > 0) {
+                                        velocityFactorTarget *= 0;
+                                    }
+                                    if (Vector3.Dot(target.Velocity, direction) < 0) {
+                                        velocityFactorAllomancer *= 0;
+                                    }
+                                    break;
+                                }
+                            case 2: {
+                                    if (Vector3.Dot(rb.velocity, direction) < 0) {
+                                        velocityFactorTarget *= 0;
+                                    }
+                                    if (Vector3.Dot(target.Velocity, direction) > 0) {
+                                        velocityFactorAllomancer *= 0;
+                                    }
+                                    break;
+                                }
+                            case 3: {
+                                    if (Vector3.Dot(rb.velocity, direction) > 0) {
+                                        velocityFactorTarget *= -1;
+                                    }
+                                    if (Vector3.Dot(target.Velocity, direction) < 0) {
+                                        velocityFactorAllomancer *= -1;
+                                    }
+                                    break;
+                                }
+                        }
 
-                    break;
-                }
-            default: { // EWV
-                    // The restitutionForceFromTarget is actually negative, rather than positive, unlike in ANF mode. It contains the percentage of the AF that is subtracted from the AF to get the net AF.
-                    float velocityFactorTarget;
-                    float velocityFactorAllomancer;
-                    if (SettingsMenu.settingsData.exponentialWithVelocityRelativity == 1) {
-                        velocityFactorTarget = 1 - Mathf.Exp(-(Vector3.Project(target.Velocity, direction).magnitude / SettingsMenu.settingsData.velocityConstant));
-                        velocityFactorAllomancer = 1 - Mathf.Exp(-(Vector3.Project(rb.velocity, direction).magnitude / SettingsMenu.settingsData.velocityConstant));
-                    } else {
-                        velocityFactorTarget = 1 - Mathf.Exp(-(Vector3.Project(rb.velocity - target.Velocity, direction).magnitude / SettingsMenu.settingsData.velocityConstant));
-                        velocityFactorAllomancer = 1 - Mathf.Exp(-(Vector3.Project(target.Velocity - rb.velocity, direction).magnitude / SettingsMenu.settingsData.velocityConstant));
-                    }
-                    switch (SettingsMenu.settingsData.exponentialWithVelocitySignage) {
-                        case 0: {
-                                // Do nothing
-                                break;
-                            }
-                        case 1: {
-                                if (Vector3.Dot(rb.velocity, direction) > 0) {
-                                    velocityFactorTarget *= 0;
-                                }
-                                if (Vector3.Dot(target.Velocity, direction) < 0) {
-                                    velocityFactorAllomancer *= 0;
-                                }
-                                break;
-                            }
-                        case 2: {
-                                if (Vector3.Dot(rb.velocity, direction) < 0) {
-                                    velocityFactorTarget *= 0;
-                                }
-                                if (Vector3.Dot(target.Velocity, direction) > 0) {
-                                    velocityFactorAllomancer *= 0;
-                                }
-                                break;
-                            }
-                        case 3: {
-                                if (Vector3.Dot(rb.velocity, direction) > 0) {
-                                    velocityFactorTarget *= -1;
-                                }
-                                if (Vector3.Dot(target.Velocity, direction) < 0) {
-                                    velocityFactorAllomancer *= -1;
-                                }
-                                break;
-                            }
-                    }
+                        restitutionForceFromAllomancer = allomanticForce * velocityFactorAllomancer;
+                        restitutionForceFromTarget = allomanticForce * -velocityFactorTarget;
 
-                    restitutionForceFromAllomancer = allomanticForce * velocityFactorAllomancer;
-                    restitutionForceFromTarget = allomanticForce * -velocityFactorTarget;
-
-                    break;
-                }
+                        break;
+                    }
+            }
         }
+
+
 
         thisFrameAllomanticForce += allomanticForce;
         thisFrameAnchoredPushBoost += restitutionForceFromTarget;

@@ -102,12 +102,12 @@ public class ButtonSetting : Setting {
         if (childrenHeaders.Length != 0) {
             for (int i = 0; i < optionsCount; i++) {
                 if (i != data) { // This is not the active option. Disable all childrenHeaders.
-                    if (childrenHeaders[i]) {
+                    if (i < childrenHeaders.Length && childrenHeaders[i]) {
                         childrenHeaders[i].gameObject.SetActive(false);
                     }
                 }
             }
-            if (childrenHeaders[data]) { // This option is active. Enable all childrenHeaders of that index.
+            if (data < childrenHeaders.Length && childrenHeaders[data]) { // This option is active. Enable all childrenHeaders of that index.
                 childrenHeaders[data].gameObject.SetActive(true);
                 Setting[] childrenForThisOption = childrenHeaders[data].GetComponentsInChildren<Setting>();
                 foreach (Setting child in childrenForThisOption) {
