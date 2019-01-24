@@ -620,22 +620,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2788236ad887d40a34d1c55803b2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allomanticsForce: 0
-  netAllomancersForce: 0
-  netTargetsForce: 0
-  allomanticsForces: {x: 0, y: 0, z: 0}
-  resititutionFromTargetsForce: {x: 0, y: 0, z: 0}
-  resititutionFromPlayersForce: {x: 0, y: 0, z: 0}
-  percentOfTargetForceReturned: 0
-  percentOfAllomancerForceReturned: 0
-  alloWasted: 0
-  targWasted: 0
-  alloAccess: 0
-  targAccess: 0
-  alloExpectedAccel: 0
-  targetExpectedAccel: 0
-  alloImpAccel: 0
-  targetImpAccel: 0
   pullLines: []
   pushLines: []
 --- !u!54 &21936592
@@ -1620,22 +1604,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2788236ad887d40a34d1c55803b2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allomanticsForce: 0
-  netAllomancersForce: 0
-  netTargetsForce: 0
-  allomanticsForces: {x: 0, y: 0, z: 0}
-  resititutionFromTargetsForce: {x: 0, y: 0, z: 0}
-  resititutionFromPlayersForce: {x: 0, y: 0, z: 0}
-  percentOfTargetForceReturned: 0
-  percentOfAllomancerForceReturned: 0
-  alloWasted: 0
-  targWasted: 0
-  alloAccess: 0
-  targAccess: 0
-  alloExpectedAccel: 0
-  targetExpectedAccel: 0
-  alloImpAccel: 0
-  targetImpAccel: 0
   pullLines: []
   pushLines: []
 --- !u!54 &70713252
@@ -1868,22 +1836,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2788236ad887d40a34d1c55803b2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allomanticsForce: 0
-  netAllomancersForce: 0
-  netTargetsForce: 0
-  allomanticsForces: {x: 0, y: 0, z: 0}
-  resititutionFromTargetsForce: {x: 0, y: 0, z: 0}
-  resititutionFromPlayersForce: {x: 0, y: 0, z: 0}
-  percentOfTargetForceReturned: 0
-  percentOfAllomancerForceReturned: 0
-  alloWasted: 0
-  targWasted: 0
-  alloAccess: 0
-  targAccess: 0
-  alloExpectedAccel: 0
-  targetExpectedAccel: 0
-  alloImpAccel: 0
-  targetImpAccel: 0
   pullLines: []
   pushLines: []
 --- !u!54 &80069393
@@ -2126,7 +2078,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 87303584}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 4.3500004}
+  m_LocalPosition: {x: 0, y: 0, z: 3.35}
   m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_Children: []
   m_Father: {fileID: 2076190469}
@@ -2140,13 +2092,13 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 87303584}
   serializedVersion: 2
-  m_Mass: 0.03
+  m_Mass: 10
   m_Drag: 0
   m_AngularDrag: 0
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 6
+  m_Constraints: 118
   m_CollisionDetection: 2
 --- !u!114 &87303587
 MonoBehaviour:
@@ -2169,7 +2121,7 @@ SphereCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 87303584}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 5db0271fa0ad0854e806551f43389c55, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -3128,22 +3080,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2788236ad887d40a34d1c55803b2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allomanticsForce: 0
-  netAllomancersForce: 0
-  netTargetsForce: 0
-  allomanticsForces: {x: 0, y: 0, z: 0}
-  resititutionFromTargetsForce: {x: 0, y: 0, z: 0}
-  resititutionFromPlayersForce: {x: 0, y: 0, z: 0}
-  percentOfTargetForceReturned: 0
-  percentOfAllomancerForceReturned: 0
-  alloWasted: 0
-  targWasted: 0
-  alloAccess: 0
-  targAccess: 0
-  alloExpectedAccel: 0
-  targetExpectedAccel: 0
-  alloImpAccel: 0
-  targetImpAccel: 0
   pullLines: []
   pushLines: []
 --- !u!54 &106716195
@@ -4899,22 +4835,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2788236ad887d40a34d1c55803b2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allomanticsForce: 0
-  netAllomancersForce: 0
-  netTargetsForce: 0
-  allomanticsForces: {x: 0, y: 0, z: 0}
-  resititutionFromTargetsForce: {x: 0, y: 0, z: 0}
-  resititutionFromPlayersForce: {x: 0, y: 0, z: 0}
-  percentOfTargetForceReturned: 0
-  percentOfAllomancerForceReturned: 0
-  alloWasted: 0
-  targWasted: 0
-  alloAccess: 0
-  targAccess: 0
-  alloExpectedAccel: 0
-  targetExpectedAccel: 0
-  alloImpAccel: 0
-  targetImpAccel: 0
   pullLines: []
   pushLines: []
 --- !u!54 &208778332
@@ -12364,22 +12284,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2788236ad887d40a34d1c55803b2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allomanticsForce: 0
-  netAllomancersForce: 0
-  netTargetsForce: 0
-  allomanticsForces: {x: 0, y: 0, z: 0}
-  resititutionFromTargetsForce: {x: 0, y: 0, z: 0}
-  resititutionFromPlayersForce: {x: 0, y: 0, z: 0}
-  percentOfTargetForceReturned: 0
-  percentOfAllomancerForceReturned: 0
-  alloWasted: 0
-  targWasted: 0
-  alloAccess: 0
-  targAccess: 0
-  alloExpectedAccel: 0
-  targetExpectedAccel: 0
-  alloImpAccel: 0
-  targetImpAccel: 0
   pullLines: []
   pushLines: []
 --- !u!54 &482586909
@@ -14965,22 +14869,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2788236ad887d40a34d1c55803b2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allomanticsForce: 0
-  netAllomancersForce: 0
-  netTargetsForce: 0
-  allomanticsForces: {x: 0, y: 0, z: 0}
-  resititutionFromTargetsForce: {x: 0, y: 0, z: 0}
-  resititutionFromPlayersForce: {x: 0, y: 0, z: 0}
-  percentOfTargetForceReturned: 0
-  percentOfAllomancerForceReturned: 0
-  alloWasted: 0
-  targWasted: 0
-  alloAccess: 0
-  targAccess: 0
-  alloExpectedAccel: 0
-  targetExpectedAccel: 0
-  alloImpAccel: 0
-  targetImpAccel: 0
   pullLines: []
   pushLines: []
 --- !u!54 &592386527
@@ -15576,7 +15464,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 653513717}
   m_LocalRotation: {x: -0, y: 0.70844597, z: -0, w: -0.7057651}
-  m_LocalPosition: {x: 100.2, y: 37, z: -99.3}
+  m_LocalPosition: {x: 160.2, y: 37, z: -99.1}
   m_LocalScale: {x: 30.00012, y: 74, z: 187.58516}
   m_Children: []
   m_Father: {fileID: 433462912}
@@ -23437,22 +23325,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2788236ad887d40a34d1c55803b2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allomanticsForce: 0
-  netAllomancersForce: 0
-  netTargetsForce: 0
-  allomanticsForces: {x: 0, y: 0, z: 0}
-  resititutionFromTargetsForce: {x: 0, y: 0, z: 0}
-  resititutionFromPlayersForce: {x: 0, y: 0, z: 0}
-  percentOfTargetForceReturned: 0
-  percentOfAllomancerForceReturned: 0
-  alloWasted: 0
-  targWasted: 0
-  alloAccess: 0
-  targAccess: 0
-  alloExpectedAccel: 0
-  targetExpectedAccel: 0
-  alloImpAccel: 0
-  targetImpAccel: 0
   pullLines: []
   pushLines: []
 --- !u!54 &930944176
@@ -26078,22 +25950,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2788236ad887d40a34d1c55803b2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allomanticsForce: 0
-  netAllomancersForce: 0
-  netTargetsForce: 0
-  allomanticsForces: {x: 0, y: 0, z: 0}
-  resititutionFromTargetsForce: {x: 0, y: 0, z: 0}
-  resititutionFromPlayersForce: {x: 0, y: 0, z: 0}
-  percentOfTargetForceReturned: 0
-  percentOfAllomancerForceReturned: 0
-  alloWasted: 0
-  targWasted: 0
-  alloAccess: 0
-  targAccess: 0
-  alloExpectedAccel: 0
-  targetExpectedAccel: 0
-  alloImpAccel: 0
-  targetImpAccel: 0
   pullLines: []
   pushLines: []
 --- !u!54 &1044521752
@@ -26973,22 +26829,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2788236ad887d40a34d1c55803b2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allomanticsForce: 0
-  netAllomancersForce: 0
-  netTargetsForce: 0
-  allomanticsForces: {x: 0, y: 0, z: 0}
-  resititutionFromTargetsForce: {x: 0, y: 0, z: 0}
-  resititutionFromPlayersForce: {x: 0, y: 0, z: 0}
-  percentOfTargetForceReturned: 0
-  percentOfAllomancerForceReturned: 0
-  alloWasted: 0
-  targWasted: 0
-  alloAccess: 0
-  targAccess: 0
-  alloExpectedAccel: 0
-  targetExpectedAccel: 0
-  alloImpAccel: 0
-  targetImpAccel: 0
   pullLines: []
   pushLines: []
 --- !u!54 &1073300530
@@ -27706,6 +27546,7 @@ GameObject:
   - component: {fileID: 1094817440}
   - component: {fileID: 1094817439}
   - component: {fileID: 1094817438}
+  - component: {fileID: 1094817441}
   m_Layer: 0
   m_Name: Wall
   m_TagString: Untagged
@@ -27721,7 +27562,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1094817436}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -5}
+  m_LocalPosition: {x: 0, y: 0, z: -4}
   m_LocalScale: {x: 5, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2076190469}
@@ -27734,7 +27575,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1094817436}
-  m_Material: {fileID: 13400000, guid: 60fd1a299e274c8488ac63ad07f83d29, type: 2}
+  m_Material: {fileID: 13400000, guid: 5db0271fa0ad0854e806551f43389c55, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -27785,6 +27626,22 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1094817436}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!54 &1094817441
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1094817436}
+  serializedVersion: 2
+  m_Mass: 10
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 118
+  m_CollisionDetection: 0
 --- !u!1 &1097089430
 GameObject:
   m_ObjectHideFlags: 0
@@ -29800,22 +29657,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2788236ad887d40a34d1c55803b2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allomanticsForce: 0
-  netAllomancersForce: 0
-  netTargetsForce: 0
-  allomanticsForces: {x: 0, y: 0, z: 0}
-  resititutionFromTargetsForce: {x: 0, y: 0, z: 0}
-  resititutionFromPlayersForce: {x: 0, y: 0, z: 0}
-  percentOfTargetForceReturned: 0
-  percentOfAllomancerForceReturned: 0
-  alloWasted: 0
-  targWasted: 0
-  alloAccess: 0
-  targAccess: 0
-  alloExpectedAccel: 0
-  targetExpectedAccel: 0
-  alloImpAccel: 0
-  targetImpAccel: 0
   pullLines: []
   pushLines: []
 --- !u!54 &1160657351
@@ -31909,22 +31750,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2788236ad887d40a34d1c55803b2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allomanticsForce: 0
-  netAllomancersForce: 0
-  netTargetsForce: 0
-  allomanticsForces: {x: 0, y: 0, z: 0}
-  resititutionFromTargetsForce: {x: 0, y: 0, z: 0}
-  resititutionFromPlayersForce: {x: 0, y: 0, z: 0}
-  percentOfTargetForceReturned: 0
-  percentOfAllomancerForceReturned: 0
-  alloWasted: 0
-  targWasted: 0
-  alloAccess: 0
-  targAccess: 0
-  alloExpectedAccel: 0
-  targetExpectedAccel: 0
-  alloImpAccel: 0
-  targetImpAccel: 0
   pullLines: []
   pushLines: []
 --- !u!54 &1280146156
@@ -33615,22 +33440,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2788236ad887d40a34d1c55803b2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allomanticsForce: 0
-  netAllomancersForce: 0
-  netTargetsForce: 0
-  allomanticsForces: {x: 0, y: 0, z: 0}
-  resititutionFromTargetsForce: {x: 0, y: 0, z: 0}
-  resititutionFromPlayersForce: {x: 0, y: 0, z: 0}
-  percentOfTargetForceReturned: 0
-  percentOfAllomancerForceReturned: 0
-  alloWasted: 0
-  targWasted: 0
-  alloAccess: 0
-  targAccess: 0
-  alloExpectedAccel: 0
-  targetExpectedAccel: 0
-  alloImpAccel: 0
-  targetImpAccel: 0
   pullLines: []
   pushLines: []
 --- !u!54 &1320474259
@@ -33754,22 +33563,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2788236ad887d40a34d1c55803b2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allomanticsForce: 0
-  netAllomancersForce: 0
-  netTargetsForce: 0
-  allomanticsForces: {x: 0, y: 0, z: 0}
-  resititutionFromTargetsForce: {x: 0, y: 0, z: 0}
-  resititutionFromPlayersForce: {x: 0, y: 0, z: 0}
-  percentOfTargetForceReturned: 0
-  percentOfAllomancerForceReturned: 0
-  alloWasted: 0
-  targWasted: 0
-  alloAccess: 0
-  targAccess: 0
-  alloExpectedAccel: 0
-  targetExpectedAccel: 0
-  alloImpAccel: 0
-  targetImpAccel: 0
   pullLines: []
   pushLines: []
 --- !u!54 &1336246389
@@ -35867,7 +35660,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b083df3923656e4b8dbd2801b9ba592, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  netMass: 100
+  netMass: 60
   magneticMass: 0
 --- !u!1 &1412679079
 GameObject:
@@ -38467,22 +38260,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2788236ad887d40a34d1c55803b2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allomanticsForce: 0
-  netAllomancersForce: 0
-  netTargetsForce: 0
-  allomanticsForces: {x: 0, y: 0, z: 0}
-  resititutionFromTargetsForce: {x: 0, y: 0, z: 0}
-  resititutionFromPlayersForce: {x: 0, y: 0, z: 0}
-  percentOfTargetForceReturned: 0
-  percentOfAllomancerForceReturned: 0
-  alloWasted: 0
-  targWasted: 0
-  alloAccess: 0
-  targAccess: 0
-  alloExpectedAccel: 0
-  targetExpectedAccel: 0
-  alloImpAccel: 0
-  targetImpAccel: 0
   pullLines: []
   pushLines: []
 --- !u!54 &1509855938
@@ -39558,22 +39335,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2788236ad887d40a34d1c55803b2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allomanticsForce: 0
-  netAllomancersForce: 0
-  netTargetsForce: 0
-  allomanticsForces: {x: 0, y: 0, z: 0}
-  resititutionFromTargetsForce: {x: 0, y: 0, z: 0}
-  resititutionFromPlayersForce: {x: 0, y: 0, z: 0}
-  percentOfTargetForceReturned: 0
-  percentOfAllomancerForceReturned: 0
-  alloWasted: 0
-  targWasted: 0
-  alloAccess: 0
-  targAccess: 0
-  alloExpectedAccel: 0
-  targetExpectedAccel: 0
-  alloImpAccel: 0
-  targetImpAccel: 0
   pullLines: []
   pushLines: []
 --- !u!54 &1534417900
@@ -45628,22 +45389,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2788236ad887d40a34d1c55803b2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allomanticsForce: 0
-  netAllomancersForce: 0
-  netTargetsForce: 0
-  allomanticsForces: {x: 0, y: 0, z: 0}
-  resititutionFromTargetsForce: {x: 0, y: 0, z: 0}
-  resititutionFromPlayersForce: {x: 0, y: 0, z: 0}
-  percentOfTargetForceReturned: 0
-  percentOfAllomancerForceReturned: 0
-  alloWasted: 0
-  targWasted: 0
-  alloAccess: 0
-  targAccess: 0
-  alloExpectedAccel: 0
-  targetExpectedAccel: 0
-  alloImpAccel: 0
-  targetImpAccel: 0
   pullLines: []
   pushLines: []
 --- !u!54 &1780318109
@@ -46248,7 +45993,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b083df3923656e4b8dbd2801b9ba592, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  netMass: 100
+  netMass: 60
   magneticMass: 0
 --- !u!65 &1806808110
 BoxCollider:
@@ -46412,7 +46157,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b083df3923656e4b8dbd2801b9ba592, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  netMass: 100
+  netMass: 60
   magneticMass: 0
 --- !u!1 &1814527426
 GameObject:
@@ -47199,22 +46944,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2788236ad887d40a34d1c55803b2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allomanticsForce: 0
-  netAllomancersForce: 0
-  netTargetsForce: 0
-  allomanticsForces: {x: 0, y: 0, z: 0}
-  resititutionFromTargetsForce: {x: 0, y: 0, z: 0}
-  resititutionFromPlayersForce: {x: 0, y: 0, z: 0}
-  percentOfTargetForceReturned: 0
-  percentOfAllomancerForceReturned: 0
-  alloWasted: 0
-  targWasted: 0
-  alloAccess: 0
-  targAccess: 0
-  alloExpectedAccel: 0
-  targetExpectedAccel: 0
-  alloImpAccel: 0
-  targetImpAccel: 0
   pullLines: []
   pushLines: []
 --- !u!54 &1858594999
@@ -47338,22 +47067,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2788236ad887d40a34d1c55803b2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allomanticsForce: 0
-  netAllomancersForce: 0
-  netTargetsForce: 0
-  allomanticsForces: {x: 0, y: 0, z: 0}
-  resititutionFromTargetsForce: {x: 0, y: 0, z: 0}
-  resititutionFromPlayersForce: {x: 0, y: 0, z: 0}
-  percentOfTargetForceReturned: 0
-  percentOfAllomancerForceReturned: 0
-  alloWasted: 0
-  targWasted: 0
-  alloAccess: 0
-  targAccess: 0
-  alloExpectedAccel: 0
-  targetExpectedAccel: 0
-  alloImpAccel: 0
-  targetImpAccel: 0
   pullLines: []
   pushLines: []
 --- !u!54 &1861730610
@@ -48044,6 +47757,97 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1888613725}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &1910672943
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1910672944}
+  - component: {fileID: 1910672947}
+  - component: {fileID: 1910672946}
+  - component: {fileID: 1910672945}
+  m_Layer: 0
+  m_Name: Cube
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1910672944
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1910672943}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 8}
+  m_LocalScale: {x: 10, y: 1, z: 1.5}
+  m_Children: []
+  m_Father: {fileID: 2076190469}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1910672945
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1910672943}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &1910672946
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1910672943}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: c6a747977ddd50b448dc0f61a6d8cc2c, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 0
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!33 &1910672947
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1910672943}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1910911864
 GameObject:
@@ -49182,7 +48986,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1980592807}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 5}
+  m_LocalPosition: {x: 0, y: 0, z: 4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 2076190469}
@@ -49200,22 +49004,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2788236ad887d40a34d1c55803b2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allomanticsForce: 0
-  netAllomancersForce: 0
-  netTargetsForce: 0
-  allomanticsForces: {x: 0, y: 0, z: 0}
-  resititutionFromTargetsForce: {x: 0, y: 0, z: 0}
-  resititutionFromPlayersForce: {x: 0, y: 0, z: 0}
-  percentOfTargetForceReturned: 0
-  percentOfAllomancerForceReturned: 0
-  alloWasted: 0
-  targWasted: 0
-  alloAccess: 0
-  targAccess: 0
-  alloExpectedAccel: 0
-  targetExpectedAccel: 0
-  alloImpAccel: 0
-  targetImpAccel: 0
   pullLines: []
   pushLines: []
 --- !u!54 &1980592810
@@ -49226,13 +49014,13 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1980592807}
   serializedVersion: 2
-  m_Mass: 30
+  m_Mass: 100
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 118
   m_CollisionDetection: 2
 --- !u!65 &1980592811
 BoxCollider:
@@ -50323,22 +50111,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2788236ad887d40a34d1c55803b2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allomanticsForce: 0
-  netAllomancersForce: 0
-  netTargetsForce: 0
-  allomanticsForces: {x: 0, y: 0, z: 0}
-  resititutionFromTargetsForce: {x: 0, y: 0, z: 0}
-  resititutionFromPlayersForce: {x: 0, y: 0, z: 0}
-  percentOfTargetForceReturned: 0
-  percentOfAllomancerForceReturned: 0
-  alloWasted: 0
-  targWasted: 0
-  alloAccess: 0
-  targAccess: 0
-  alloExpectedAccel: 0
-  targetExpectedAccel: 0
-  alloImpAccel: 0
-  targetImpAccel: 0
   pullLines: []
   pushLines: []
 --- !u!54 &2037773736
@@ -50746,7 +50518,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2076190468
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -50775,6 +50547,7 @@ Transform:
   - {fileID: 1980592808}
   - {fileID: 87303585}
   - {fileID: 1094817437}
+  - {fileID: 1910672944}
   m_Father: {fileID: 0}
   m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

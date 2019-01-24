@@ -110,7 +110,7 @@ public class HUD : MonoBehaviour {
 
     // Returns a string reading the sum of an Allomantic Force and Allomantic Normal Force in Newtons or G's
     // e.g. "650N + 250N"
-    public static string AllomanticSumString(Vector3 allomanticForce, Vector3 normalForce, float mass, bool invert = false) {
+    public static string AllomanticSumString(Vector3 allomanticForce, Vector3 normalForce, float mass, int sigFigs = 2, bool invert = false) {
         string plusSign;
         if (invert && Vector3.Dot(allomanticForce, normalForce) <= 0 || !invert && Vector3.Dot(allomanticForce, normalForce) >= 0) {
             plusSign = TextCodes.Blue("+");
@@ -119,11 +119,11 @@ public class HUD : MonoBehaviour {
         }
 
         if (SettingsMenu.settingsData.forceUnits == 1) {
-            return RoundStringToSigFigs(allomanticForce.magnitude).ToString() + " " + plusSign + " " + RoundStringToSigFigs(normalForce.magnitude).ToString() + "N";
+            return RoundStringToSigFigs(allomanticForce.magnitude, sigFigs) + " " + plusSign + " " + RoundStringToSigFigs(normalForce.magnitude, sigFigs) + "N";
         } else {
-            return System.Math.Round(allomanticForce.magnitude / mass / 9.81f, 2).ToString()
+            return System.Math.Round(allomanticForce.magnitude / mass / 9.81f, sigFigs).ToString()
                 + " " + plusSign + " " +
-                System.Math.Round(normalForce.magnitude / mass / 9.81f, 2).ToString() + "G's";
+                System.Math.Round(normalForce.magnitude / mass / 9.81f, sigFigs).ToString() + "G's";
         }
     }
 
@@ -139,7 +139,7 @@ public class HUD : MonoBehaviour {
         }
         // divide it down to the right number of digits, round to int, multiply it back up
         int tenPower = (int)Mathf.Pow(10, (int)Mathf.Log10(mag) + 1 - sigFigs);
-        int low = (int)(num / tenPower);
+        int low = (int)Mathf.Round(num / tenPower);
         return (low * tenPower).ToString();
     }
 

@@ -101,8 +101,6 @@ public class Coin : Magnetic {
 
         LastExpectedAcceleration = newNetForce / NetMass; // LastPosition, LastVelocity are updated
         Rb.AddForce(newNetForce);
-        Debug.Log(netForce);
-        Debug.Log(newNetForce);
     }
 
     public override void StopBeingPullPushed() {

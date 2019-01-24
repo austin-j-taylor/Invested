@@ -129,7 +129,7 @@ public class TargetOverlayController : MonoBehaviour {
                 actualForce[i].transform.position = positionActualForce;
                 actualForce[i].text = HUD.ForceString(target.LastNetForceOnTarget.magnitude, target.NetMass);
                 if(refreshSum)
-                    sumForce[i].text = HUD.AllomanticSumString(target.LastAllomanticForce, target.LastAnchoredPushBoostFromAllomancer, target.NetMass, true);
+                    sumForce[i].text = HUD.AllomanticSumString(target.LastAllomanticForce, target.LastAnchoredPushBoostFromAllomancer, target.NetMass, 2, true);
             } else { // Target is not on screen
                 sumForce[i].text = "";
                 actualForce[i].text = "";
