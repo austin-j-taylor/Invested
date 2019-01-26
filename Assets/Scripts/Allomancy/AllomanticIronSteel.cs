@@ -366,8 +366,8 @@ public class AllomanticIronSteel : MonoBehaviour {
             // This is the energy that, without anchors, will be fully added to the system.
             // With anchors, only a portion of this energy will effectively be added to the system.
             // Next frame, that remaining unused energy will be added in the next section.
-            float maxEnergy = 100 * Time.timeScale * Time.timeScale;// Simulation physics
-            //float maxEnergy = CalculateAllomanticForce(target.CenterOfMass, target.Charge).magnitude * Time.fixedDeltaTime * Time.timeScale;
+            //float maxEnergy = 100 * Time.timeScale * Time.timeScale;// Simulation physics
+            float maxEnergy = CalculateAllomanticForce(target.CenterOfMass, target.Charge).magnitude * Time.fixedDeltaTime * Time.timeScale;
 
             float allomancerExpectedVelocityChange = Mathf.Sqrt(2 * maxEnergy / (Mass + Mass * Mass / target.MagneticMass));
             float targetExpectedVelocityChange = Mathf.Sqrt(2 * maxEnergy / (target.MagneticMass + target.MagneticMass * target.MagneticMass / Mass));
@@ -377,6 +377,15 @@ public class AllomanticIronSteel : MonoBehaviour {
             // Add the unused energy from the last frame
             float lastAllomancerVelocityChange = (rb.velocity - lastAllomancerVelocity).magnitude;
             float lastTargetVelocityChange = (target.Velocity - target.LastVelocity).magnitude;
+
+            // If velocity change was in the opposite direction of the expected velocity change, the target is being resisted extremely hard.
+            // All energy is being wasted (and then some!)
+
+
+
+
+
+
 
             float allomancerEnergyWasted = (lastExpectedAllomancerVelocityChange == 0 || pulling && !IronPulling || !pulling && !steelPushing) ? 0 : LastExpectedAllomancerEnergyUsed * (1 - Mathf.Clamp01(lastAllomancerVelocityChange / lastExpectedAllomancerVelocityChange));
             float targetEnergyWasted = (target.LastExpectedVelocityChange == 0 || pulling && !IronPulling || !pulling && !steelPushing) ? 0 : target.LastExpectedEnergyUsed * (1 - Mathf.Clamp01(lastTargetVelocityChange / target.LastExpectedVelocityChange));
@@ -397,8 +406,8 @@ public class AllomanticIronSteel : MonoBehaviour {
             else
                 fullForce = forceOfTargetPower;
 
-            allomanticForce = Mass * lastExpectedAllomancerVelocityChange / Time.fixedDeltaTime * (target.CenterOfMass - CenterOfMass).normalized * (target.LastWasPulled ? 1 : -1);
             //allomanticForce = (LastAllomanticForce + Mass * lastExpectedAllomancerVelocityChange / Time.fixedDeltaTime * (target.CenterOfMass - CenterOfMass).normalized * (target.LastWasPulled ? 1 : -1)) / 2;
+            allomanticForce = Mass * lastExpectedAllomancerVelocityChange / Time.fixedDeltaTime * (target.CenterOfMass - CenterOfMass).normalized * (target.LastWasPulled ? 1 : -1);
             // inherently equal to target.MagneticMass * target...VelocityChange / ...
 
             // Restitution forces represent the components of the Improved Apparent force that come from the opposite's wasted energy
@@ -406,6 +415,7 @@ public class AllomanticIronSteel : MonoBehaviour {
             //restitutionForceFromAllomancer = (target.LastAnchoredPushBoostFromAllomancer - (fullForce - allomanticForce)) / 2;
             restitutionForceFromTarget = fullForce - allomanticForce;
             restitutionForceFromAllomancer = -(fullForce - allomanticForce);
+            Time.timeScale = .1f;
 
             // Update expected, unanchored energy distribution for next frame
             if (pulling && !IronPulling || !pulling && !steelPushing) {
