@@ -79,7 +79,7 @@ public class AllomanticIronSteel : MonoBehaviour {
 
     // Used for calculating the acceleration over the last frame for pushing/pulling
     public Vector3 lastAllomancerVelocity { get; private set; } = Vector3.zero;
-    private float lastExpectedAllomancerVelocityChange = 0;
+    private Vector3 lastExpectedAllomancerVelocityChange = Vector3.zero;
     private float LastExpectedAllomancerEnergyUsed = 0;
     private Vector3 lastExpectedAllomancerAcceleration = Vector3.zero;
 
@@ -198,7 +198,7 @@ public class AllomanticIronSteel : MonoBehaviour {
         PullTargets.Clear(true, clearTargets);
         PushTargets.Clear(true, clearTargets);
         lastExpectedAllomancerAcceleration = Vector3.zero;
-        lastExpectedAllomancerVelocityChange = 0;
+        lastExpectedAllomancerVelocityChange = Vector3.zero;
         LastExpectedAllomancerEnergyUsed = 0;
         lastAllomancerVelocity = Vector3.zero;
         LastNetForceOnAllomancer = Vector3.zero;
@@ -366,61 +366,70 @@ public class AllomanticIronSteel : MonoBehaviour {
             // This is the energy that, without anchors, will be fully added to the system.
             // With anchors, only a portion of this energy will effectively be added to the system.
             // Next frame, that remaining unused energy will be added in the next section.
-            //float maxEnergy = 100 * Time.timeScale * Time.timeScale;// Simulation physics
-            float maxEnergy = CalculateAllomanticForce(target.CenterOfMass, target.Charge).magnitude * Time.fixedDeltaTime * Time.timeScale;
+            Vector3 maxEnergy = 100 * Time.timeScale * Time.timeScale * (target.CenterOfMass - CenterOfMass).normalized * (target.LastWasPulled ? 1 : -1);// Simulation physics
+            //Vector3 maxEnergy = CalculateAllomanticForce(target.CenterOfMass, target.Charge) * Time.fixedDeltaTime * Time.timeScale * (target.LastWasPulled ? 1 : -1);
+            direction = maxEnergy.normalized;
 
-            float allomancerExpectedVelocityChange = Mathf.Sqrt(2 * maxEnergy / (Mass + Mass * Mass / target.MagneticMass));
-            float targetExpectedVelocityChange = Mathf.Sqrt(2 * maxEnergy / (target.MagneticMass + target.MagneticMass * target.MagneticMass / Mass));
-            float allomancerExpectedEnergyUsed = .5f * Mass * lastExpectedAllomancerVelocityChange * allomancerExpectedVelocityChange;
-            float targetExpectedEnergyUsed = .5f * target.MagneticMass * target.LastExpectedVelocityChange * targetExpectedVelocityChange;
+            Vector3 allomancerExpectedVelocityChange = Mathf.Sqrt(2 * maxEnergy.magnitude / (Mass + Mass * Mass / target.MagneticMass)) * direction;
+            Vector3 targetExpectedVelocityChange = Mathf.Sqrt(2 * maxEnergy.magnitude / (target.MagneticMass + target.MagneticMass * target.MagneticMass / Mass)) * -direction;
+            float allomancerExpectedEnergyUsed = .5f * Mass * lastExpectedAllomancerVelocityChange.sqrMagnitude;
+            float targetExpectedEnergyUsed = .5f * target.MagneticMass * target.LastExpectedVelocityChange.sqrMagnitude;
 
             // Add the unused energy from the last frame
-            float lastAllomancerVelocityChange = (rb.velocity - lastAllomancerVelocity).magnitude;
-            float lastTargetVelocityChange = (target.Velocity - target.LastVelocity).magnitude;
+            Vector3 lastAllomancerVelocityChange = (rb.velocity - lastAllomancerVelocity);
+            Vector3 lastTargetVelocityChange = (target.Velocity - target.LastVelocity);
 
             // If velocity change was in the opposite direction of the expected velocity change, the target is being resisted extremely hard.
             // All energy is being wasted (and then some!)
 
 
+            float allomancerEnergyWasted;
+            float targetEnergyWasted;
+            // This would be too spicy of a ternary operator, so I'm leaving it as if-statements
+            if(pulling && !IronPulling || !pulling && !steelPushing) {
+                allomancerEnergyWasted = 0;
+                targetEnergyWasted = 0;
+            } else {
+                if(lastExpectedAllomancerVelocityChange == Vector3.zero)
+                    allomancerEnergyWasted = 0;
+                else
+                    allomancerEnergyWasted = LastExpectedAllomancerEnergyUsed * (1 - Mathf.Clamp01(lastAllomancerVelocityChange.magnitude / lastExpectedAllomancerVelocityChange.magnitude));
+                if(target.LastExpectedVelocityChange == Vector3.zero)
+                    targetEnergyWasted = 0;
+                else
+                    targetEnergyWasted = target.LastExpectedEnergyUsed * (1 - Mathf.Clamp01(lastTargetVelocityChange.magnitude / target.LastExpectedVelocityChange.magnitude));
 
+            }
 
-
-
-
-            float allomancerEnergyWasted = (lastExpectedAllomancerVelocityChange == 0 || pulling && !IronPulling || !pulling && !steelPushing) ? 0 : LastExpectedAllomancerEnergyUsed * (1 - Mathf.Clamp01(lastAllomancerVelocityChange / lastExpectedAllomancerVelocityChange));
-            float targetEnergyWasted = (target.LastExpectedVelocityChange == 0 || pulling && !IronPulling || !pulling && !steelPushing) ? 0 : target.LastExpectedEnergyUsed * (1 - Mathf.Clamp01(lastTargetVelocityChange / target.LastExpectedVelocityChange));
-            
             float allomancerEnergy = allomancerExpectedEnergyUsed + targetEnergyWasted;
             float targetEnergy = targetExpectedEnergyUsed + allomancerEnergyWasted;
 
             float allomancerVelocityChange = Mathf.Sqrt(2 * allomancerEnergy / Mass);
             float targetVelocityChange = Mathf.Sqrt(2 * targetEnergy / target.MagneticMass);
 
-            Vector3 forceOfAllomancerPower = Mass * allomancerVelocityChange / Time.fixedDeltaTime * (target.CenterOfMass - CenterOfMass).normalized * (target.LastWasPulled ? 1 : -1);
-            Vector3 forceOfTargetPower = target.MagneticMass * targetVelocityChange / Time.fixedDeltaTime * (target.CenterOfMass - CenterOfMass).normalized * (target.LastWasPulled ? 1 : -1);
+            float forceOfAllomancerPower = Mass * allomancerVelocityChange / Time.fixedDeltaTime;
+            float forceOfTargetPower = target.MagneticMass * targetVelocityChange / Time.fixedDeltaTime;
 
             // Whichever change in energy corresponds to a greater force is set to be the force experienced by both
             Vector3 fullForce;
-            if (Mass * allomancerVelocityChange > target.MagneticMass * targetVelocityChange)
-                fullForce = forceOfAllomancerPower;
+            if (forceOfAllomancerPower > forceOfTargetPower)
+                fullForce = forceOfAllomancerPower * direction;
             else
-                fullForce = forceOfTargetPower;
+                fullForce = forceOfTargetPower * direction;
 
-            //allomanticForce = (LastAllomanticForce + Mass * lastExpectedAllomancerVelocityChange / Time.fixedDeltaTime * (target.CenterOfMass - CenterOfMass).normalized * (target.LastWasPulled ? 1 : -1)) / 2;
-            allomanticForce = Mass * lastExpectedAllomancerVelocityChange / Time.fixedDeltaTime * (target.CenterOfMass - CenterOfMass).normalized * (target.LastWasPulled ? 1 : -1);
-            // inherently equal to target.MagneticMass * target...VelocityChange / ...
-
+            // allomantic force is inherently equal to target.MagneticMass * target...VelocityChange / ...
             // Restitution forces represent the components of the Improved Apparent force that come from the opposite's wasted energy
+            //allomanticForce = (LastAllomanticForce + Mass * allomancerExpectedVelocityChange / Time.fixedDeltaTime ) / 2;
             //restitutionForceFromTarget = (target.LastAnchoredPushBoostFromTarget + fullForce - allomanticForce) / 2;
             //restitutionForceFromAllomancer = (target.LastAnchoredPushBoostFromAllomancer - (fullForce - allomanticForce)) / 2;
+            allomanticForce = Mass * allomancerExpectedVelocityChange / Time.fixedDeltaTime;
             restitutionForceFromTarget = fullForce - allomanticForce;
             restitutionForceFromAllomancer = -(fullForce - allomanticForce);
-            Time.timeScale = .1f;
 
             // Update expected, unanchored energy distribution for next frame
             if (pulling && !IronPulling || !pulling && !steelPushing) {
-                lastExpectedAllomancerVelocityChange = 0;
-                target.LastExpectedVelocityChange = 0;
+                lastExpectedAllomancerVelocityChange = Vector3.zero;
+                target.LastExpectedVelocityChange = Vector3.zero;
             } else {
                 lastExpectedAllomancerVelocityChange = allomancerExpectedVelocityChange;
                 target.LastExpectedVelocityChange = targetExpectedVelocityChange;
