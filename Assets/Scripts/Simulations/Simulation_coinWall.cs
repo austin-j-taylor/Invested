@@ -11,6 +11,7 @@ public class Simulation_coinWall : MonoBehaviour {
     private Rigidbody alloWall;
 
     private float counter;
+    private bool cleared;
     //private Vector3 wallLastVelocity = Vector3.zero;
 
     private Text[] texts;
@@ -23,6 +24,7 @@ public class Simulation_coinWall : MonoBehaviour {
         alloWall = transform.Find("AlloWall").GetComponent<Rigidbody>();
 
         counter = 0;
+        cleared = false;
 
         allomancer.PushTargets.MaxRange = -1;
         allomancer.AddPushTarget(coin);
@@ -57,25 +59,27 @@ public class Simulation_coinWall : MonoBehaviour {
             if (counter > .5f) {
                 allomancer.SteelPushing = true;
                 allomancer.SteelBurnRateTarget = 1;
-                if (counter > 2) {
-                    if (counter > 4) {
-                        if(counter > 6) {
-                            if (counter > 8) {
-                                if (counter > 10) {
-                                    SceneSelectMenu.ReloadScene();
-                                }
-                                texts[texts.Length - 5].text = "Wall: Removed";
-                                texts[texts.Length - 6].text = "Coin: " + TextCodes.Gray("Unanchored");
-                                coinWall.gameObject.SetActive(false);
-                            }
-                        }
-                        alloWall.gameObject.SetActive(false);
-                        texts[texts.Length - 8].text = "Wall: Removed";
-                    } else {
-                        texts[texts.Length - 5].text = "Wall: " + TextCodes.Gray("Unanchored");
-                        texts[texts.Length - 6].text = "Coin: " + TextCodes.Blue("Partially Anchored");
-                        coinWall.isKinematic = false;
-                    }
+                if(counter > 2 && counter < 3) {
+                    texts[texts.Length - 5].text = "Wall: " + TextCodes.Gray("Unanchored");
+                    texts[texts.Length - 6].text = "Coin: " + TextCodes.Blue("Partially Anchored");
+                    coinWall.isKinematic = false;
+                } else if(counter > 3 && counter < 4) {
+                    texts[texts.Length - 5].text = "Wall: Removed";
+                    texts[texts.Length - 6].text = "Coin: " + TextCodes.Gray("Unanchored");
+                    coinWall.gameObject.SetActive(false);
+                } else if(counter > 4 && counter < 5) {
+                    alloWall.gameObject.SetActive(false);
+                    texts[texts.Length - 8].text = "Wall: Removed";
+                } else if(counter > 5 && counter < 6 && !cleared) {
+                    cleared = true;
+                    coinWall.gameObject.SetActive(true);
+                    coinWall.isKinematic = true;
+                    coinWall.transform.localPosition = new Vector3(0, 0, -4f);
+                    coin.transform.localPosition = new Vector3(0, 0, 3.35f);
+                    coin.Clear();   
+                    texts[texts.Length - 5].text = "Wall: " + TextCodes.LightBlue("Anchored");
+                } else if(counter > 6 && counter > 7) {
+                    SceneSelectMenu.ReloadScene();
                 }
             }
 
@@ -111,10 +115,10 @@ public class Simulation_coinWall : MonoBehaviour {
             }
             if (coin.GetComponent<Rigidbody>().velocity.magnitude < .01f) {
                 texts[5].text = "0";
-                texts[texts.Length - 5].text = "Coin: " + TextCodes.LightBlue("Anchored");
+                texts[texts.Length - 6].text = "Coin: " + TextCodes.LightBlue("Anchored");
             } else {
-                if (counter < 4) {
-                    texts[texts.Length - 5].text = "Coin: " + TextCodes.Gray("Unanchored");
+                if (counter < 2) {
+                    texts[texts.Length - 6].text = "Coin: " + TextCodes.Gray("Unanchored");
                 }
                 texts[5].text = HUD.RoundStringToSigFigs(coin.GetComponent<Rigidbody>().velocity.magnitude, 2);
             }

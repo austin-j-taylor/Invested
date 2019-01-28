@@ -26,6 +26,9 @@ public class Simulation_duel : MonoBehaviour {
         }
         texts = GameObject.FindGameObjectWithTag("Canvas").transform.Find("Simulations").Find("duel").GetComponentsInChildren<Text>();
 
+        Time.timeScale = .1f;
+        Time.fixedDeltaTime = Time.timeScale * 1 / 60f;
+
 
         //allomancers[7].Strength = 1.2f;
         //allomancers[8].Strength = 1.2f;
@@ -42,7 +45,7 @@ public class Simulation_duel : MonoBehaviour {
                 str = "Pair " + (i / 2 + 1) + ":\n";
             else
                 str = "\n";
-            texts[i].text = str + "mass = " + allomancers[i].Mass + "kg\nStrength = " + allomancers[i].Strength + "\nForce: " + HUD.RoundStringToSigFigs(allomancers[i].LastNetForceOnAllomancer.magnitude, 2) + "N";
+            texts[i].text = str + "mass = " + allomancers[i].Mass + "kg\nStrength = " + allomancers[i].Strength + "\nForce: " + HUD.AllomanticSumString(allomancers[i].LastAllomanticForce, allomancers[i].LastAnchoredPushBoost, allomancers[i].Mass, 2);
         }
     }
 }
