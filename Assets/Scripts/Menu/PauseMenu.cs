@@ -15,8 +15,6 @@ public class PauseMenu : MonoBehaviour {
     private Button resetButton;
     private Button quitButton;
 
-    private static float defaultTimeScale = 1;
-
     private static GameObject pauseMenu;
 
     // Use this for initialization
@@ -33,8 +31,6 @@ public class PauseMenu : MonoBehaviour {
         settingsButton.onClick.AddListener(ClickSettings);
         resetButton.onClick.AddListener(ClickReset);
         quitButton.onClick.AddListener(ClickQuit);
-
-        defaultTimeScale = Time.timeScale;
 
         pauseMenu = gameObject;
         gameObject.SetActive(false);
@@ -63,7 +59,7 @@ public class PauseMenu : MonoBehaviour {
         settingsMenu.Close();
 
         CameraController.LockCamera();
-        Time.timeScale = defaultTimeScale;
+        Time.timeScale = SettingsMenu.settingsData.timeScale;
         pauseMenu.SetActive(false);
         IsPaused = false;
     }

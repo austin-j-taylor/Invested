@@ -52,7 +52,6 @@ public class SettingsData : MonoBehaviour {
     public int normalForceMax; // 0 for Disabled, 1 for AF
     public int normalForceEquality; // 0 for Unequal, 1 for Equal
     public int exponentialWithVelocitySignage; // 0 for Both Directions Decrease Force, 1 for Only Away Decreases force, 2 for Only Towards Decreases force, 3 for Backwards Decreases & Forwards Increases
-    public int exponentialWithVelocityRelativity; // 0 for Relative, 1 for Absolute
     public float velocityConstant;
     public int forceDistanceRelationship; // 0 for Linear, 1 for Inverse Square, 2 for Exponential with Distance
     public float distanceConstant;
@@ -62,6 +61,7 @@ public class SettingsData : MonoBehaviour {
     // World
     public int playerGravity; // 0 for Disabled, 1 for Enabled
     public int playerAirResistance; // 0 for Disabled, 1 for Enabled
+    public float timeScale;
 
     private void Awake() {
         LoadSettings();
@@ -73,6 +73,8 @@ public class SettingsData : MonoBehaviour {
         reader.Close();
 
         JsonUtility.FromJsonOverwrite(jSONText, this);
+
+        Time.fixedDeltaTime = timeScale / 60;
     }
 
     public void SaveSettings() {
@@ -81,6 +83,8 @@ public class SettingsData : MonoBehaviour {
         StreamWriter writer = new StreamWriter(configFileName, false);
         writer.Write(jSONText);
         writer.Close();
+
+        Time.fixedDeltaTime = SettingsMenu.settingsData.timeScale / 60;
     }
 
     public void ResetToDefaults() {
@@ -211,10 +215,6 @@ public class SettingsData : MonoBehaviour {
                     exponentialWithVelocitySignage = data;
                     return true;
                 }
-            case "exponentialWithVelocityRelativity": {
-                    exponentialWithVelocityRelativity = data;
-                    return true;
-                }
             case "forceDistanceRelationship": {
                     forceDistanceRelationship = data;
                     return true;
@@ -270,6 +270,10 @@ public class SettingsData : MonoBehaviour {
                 }
             case "metalDetectionThreshold": {
                     metalDetectionThreshold = data;
+                    return true;
+                }
+            case "timeScale": {
+                    timeScale = data;
                     return true;
                 }
             default: {
@@ -359,9 +363,6 @@ public class SettingsData : MonoBehaviour {
             case "exponentialWithVelocitySignage": {
                     return exponentialWithVelocitySignage;
                 }
-            case "exponentialWithVelocityRelativity": {
-                    return exponentialWithVelocityRelativity;
-                }
             case "forceDistanceRelationship": {
                     return forceDistanceRelationship;
                 }
@@ -406,6 +407,9 @@ public class SettingsData : MonoBehaviour {
                 }
             case "metalDetectionThreshold": {
                     return metalDetectionThreshold;
+                }
+            case "timeScale": {
+                    return timeScale;
                 }
             default: {
                     Debug.LogError("GetDataFloat with invalid ID: " + name);

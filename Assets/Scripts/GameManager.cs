@@ -51,6 +51,10 @@ public class GameManager : MonoBehaviour {
         SceneManager.LoadScene(SceneSelectMenu.sceneTitleScreen);
     }
 
+    private void Clear(Scene scene) {
+        MagneticsInScene = new List<Magnetic>();
+    }
+
     public static void AddAllomancer(AllomanticIronSteel allomancer) {
         Allomancers.Add(allomancer);
     }
@@ -69,9 +73,5 @@ public class GameManager : MonoBehaviour {
             allomancer.RemoveTarget(magnetic);
         }
         MagneticsInScene.Remove(magnetic);
-    }
-
-    private void Clear(Scene scene) {
-        MagneticsInScene = new List<Magnetic>();
     }
 }

@@ -123,7 +123,7 @@ public class Simulation_coinWall : MonoBehaviour {
                 texts[5].text = HUD.RoundStringToSigFigs(coin.GetComponent<Rigidbody>().velocity.magnitude, 2);
             }
 
-            float alloEnergy = .5f * allomancer.Mass * (allomancer.lastAllomancerVelocity - allomancer.GetComponent<Rigidbody>().velocity).sqrMagnitude / (Time.timeScale * Time.timeScale);
+            float alloEnergy = .5f * allomancer.Mass * (allomancer.LastAllomancerVelocity - allomancer.GetComponent<Rigidbody>().velocity).sqrMagnitude / (Time.timeScale * Time.timeScale);
             float coinEnergy = .5f * coin.MagneticMass * (coin.LastVelocity - coin.GetComponent<Rigidbody>().velocity).sqrMagnitude / (Time.timeScale * Time.timeScale);
             if (alloEnergy < .001f) {
                 alloEnergy = 0;
