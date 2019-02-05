@@ -9,7 +9,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     public const int maxNumberOfTargets = 10;
     // Force calculation constants
     public const float chargePower = 1f / 8f;
-    public const float lineOfSightFactor = 1f / 8f;
+    public const float lineOfSightFactor = 3/4f; // If a target is blocked by a wall, pushes are at 75% strength
     // Actual "Burn Rates" of iron and steel
     private const double gramsIronPerSecondPerNewton = .001f;
     private const double gramsSteelPerSecondPerNewton = gramsIronPerSecondPerNewton;
@@ -337,11 +337,11 @@ public class AllomanticIronSteel : MonoBehaviour {
                     break;
                 }
         }
-
         // If the target is blocked by a wall, reduce the force.
         // Do the final calculation
+
         return SettingsMenu.settingsData.allomanticConstant * Strength * Charge * targetCharge * distanceFactor
-                * (Physics.Raycast(targetCenterOfMass, -positionDifference, (targetCenterOfMass - CenterOfMass).magnitude, GameManager.Layer_IgnoreCamera) ?
+                * ((Physics.Raycast(targetCenterOfMass, -positionDifference, out RaycastHit hit, (targetCenterOfMass - CenterOfMass).magnitude, GameManager.Layer_IgnoreCamera) && hit.transform != transform) ?
                 lineOfSightFactor : 1); // If there is something blocking line-of-sight, the force is reduced.
     }
 

@@ -21,7 +21,7 @@ public class TriggerBeadOverhead : MonoBehaviour {
         //    beadMessages[i].overhead = this;
         //}
 
-        TriggerBeadPopupListener[] beadListeners = GetComponentsInChildren<TriggerBeadPopupListener>();
+        TriggerBeadPopupListener[] beadListeners = GetComponentsInChildren<TriggerBeadPopupListener>(true);
         for (int i = 0; i < beadListeners.Length; i++) {
             beadListeners[i].section = (int)section + i;
             beadListeners[i].index = 1;

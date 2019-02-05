@@ -209,7 +209,12 @@ public class Magnetic : MonoBehaviour {
     }
 
     private void OnDisable() {
-        OnDestroy();
+        DisableBlueLine();
+        GameManager.RemoveMagnetic(this);
+    }
+
+    private void OnEnable() {
+        GameManager.AddMagnetic(this);
     }
 
     public virtual void AddForce(Vector3 netForce) {
@@ -246,6 +251,7 @@ public class Magnetic : MonoBehaviour {
     }
 
     public void DisableBlueLine() {
-        blueLine.GetComponent<MeshRenderer>().enabled = false;
+        if (blueLine)
+            blueLine.GetComponent<MeshRenderer>().enabled = false;
     }
 }

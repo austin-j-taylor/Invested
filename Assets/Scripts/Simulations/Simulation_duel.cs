@@ -26,8 +26,8 @@ public class Simulation_duel : MonoBehaviour {
         }
         texts = GameObject.FindGameObjectWithTag("Canvas").transform.Find("Simulations").Find("duel").GetComponentsInChildren<Text>();
 
-        Time.timeScale = 1f;
-        Time.fixedDeltaTime = Time.timeScale * 1 / 60f;
+        //Time.timeScale = 1f;
+        //Time.fixedDeltaTime = Time.timeScale * 1 / 60f;
 
 
         //allomancers[7].Strength = 1.2f;

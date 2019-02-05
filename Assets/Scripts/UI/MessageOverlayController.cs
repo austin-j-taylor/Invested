@@ -77,9 +77,17 @@ public class MessageOverlayController : MonoBehaviour {
             TextCodes.KeyHelp + " to toggle the Help Overlay."
         };
         TriggerBeadMessages[2] = new List<string> {
-            "Targeting Multiple Metals",
-            TextCodes.KeyNumberOfTargets + " to change your " + TextCodes.Gray("max number of " + TextCodes.Push_Pull_targets + ".")
+            "Pulling",
+            "Cross the pit by " + TextCodes.Pulling + " yourself accross."
         };
+        TriggerBeadMessages[3] = new List<string> {
+            "Pushing",
+            "Cross the pit by " + TextCodes.Pushing + " yourself accross."
+        };
+        //TriggerBeadMessages[2] = new List<string> {
+        //    "Targeting Multiple Metals",
+        //    TextCodes.KeyNumberOfTargets + " to change your " + TextCodes.Gray("max number of " + TextCodes.Push_Pull_targets + ".")
+        //};
         // after teaching to deselect
         //"If you have both " + TextCodes.Pull_targets + " and " + TextCodes.Push_targets + ", " + TextCodes.Pulling + " and " + TextCodes.Pushing + " will only operate on their respective targets.\n" +
         //    "If you have selected only " + TextCodes.Pull_targets + " or only " + TextCodes.Push_targets +", " + TextCodes.Pulling + " and " + TextCodes.Pushing + "will operate on any target."

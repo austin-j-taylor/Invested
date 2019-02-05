@@ -277,17 +277,18 @@ public class PlayerPullPushController : AllomanticIronSteel {
         Magnetic centerObject = null;
 
         for (int i = 0; i < GameManager.MagneticsInScene.Count; i++) {
-
             Magnetic target = GameManager.MagneticsInScene[i];
-            float weightedDistanceFromCenter = SetLineProperties(target);
+            if(target.isActiveAndEnabled && target.GetComponentInChildren<Renderer>().enabled) {
+                float weightedDistanceFromCenter = SetLineProperties(target);
 
-            // If looking for the object at the center of the screen
-            // If the Magnetic could be targeted
-            if (targetedLineColors && weightedDistanceFromCenter < 1) {
-                // IF the new Magnetic is closer to the center of the screen than the previous most-center Magnetic
-                if (weightedDistanceFromCenter < smallestDistanceFromCenter) {
-                    smallestDistanceFromCenter = weightedDistanceFromCenter;
-                    centerObject = target;
+                // If looking for the object at the center of the screen
+                // If the Magnetic could be targeted
+                if (targetedLineColors && weightedDistanceFromCenter < 1) {
+                    // IF the new Magnetic is closer to the center of the screen than the previous most-center Magnetic
+                    if (weightedDistanceFromCenter < smallestDistanceFromCenter) {
+                        smallestDistanceFromCenter = weightedDistanceFromCenter;
+                        centerObject = target;
+                    }
                 }
             }
         }
