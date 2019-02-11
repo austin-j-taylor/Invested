@@ -164,6 +164,7 @@ public class SpikePit : MonoBehaviour {
                 progress += Time.deltaTime / animationTime * slerpTime;
                 slerpTime = Mathf.Min(1, slerpTime + Time.deltaTime * slerpTimeChargeupPath);
                 if (progress < 1f) {
+                    // Change position of spike and childed player
                     splineDragging.FollowCurve(spikeTarget.transform, progress, false);
 
                     // If the spike was pulled away from its path, force the spike back towards the path
@@ -272,7 +273,7 @@ public class SpikePit : MonoBehaviour {
     }
 
     private void OnTriggerStay(Collider other) {
-        if (other.CompareTag("PlayerBody") && !other.isTrigger && anim.enabled) {
+        if (other.CompareTag("Player") && !other.isTrigger && anim.enabled) {
             anim.SetTrigger("PlayerEntersHome");
         }
     }

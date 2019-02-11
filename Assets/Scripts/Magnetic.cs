@@ -112,21 +112,21 @@ public class Magnetic : MonoBehaviour {
     // The magnetic mass of this object
     public float MagneticMass { get { return magneticMass; } }
     // If the object has a Rigidbody, this is the real centerOfMass. Otherwise, it is just the transform position.
-    // if the object is made of multiple colliders, find the center of volume of all of those colliders.
+    //// if the object is made of multiple colliders, find the center of volume of all of those colliders.
     // If the object has only one collider, the local center of mass is calculated at startup.
     private Vector3 centerOfMass;
     public Vector3 CenterOfMass {
         get {
             if (HasColliders && !IsStatic) {
-                Vector3 centers = colliders[0].bounds.center;
-                int triggerCount = 0;
-                for (int i = 1; i < colliders.Length; i++) {
-                    if (!colliders[i].isTrigger)
-                        centers += colliders[i].bounds.center;
-                    else
-                        triggerCount++;
-                }
-                return centers / (colliders.Length - triggerCount);
+                //Vector3 centers = colliders[0].bounds.center;
+                //int triggerCount = 0;
+                //for (int i = 1; i < colliders.Length; i++) {
+                //    if (!colliders[i].isTrigger)
+                //        centers += colliders[i].bounds.center;
+                //    else
+                //        triggerCount++;
+                //}
+                return transform.TransformPoint(centerOfMass);
             } else if (IsStatic) {
                 // no collider or rigidbody, so center of mass is set to transform.position as a default
                 return transform.position;
@@ -241,7 +241,7 @@ public class Magnetic : MonoBehaviour {
     }
 
     public void SetBlueLine(Vector3 endPos, float width, float lsf, Color color) {
-        blueLine.GetComponent<MeshRenderer>().enabled = true;
+        blueLine.gameObject.SetActive(true);
         blueLine.StartPos = CenterOfMass;
         blueLine.EndPos = endPos;
         blueLine.LineWidth = width;
@@ -252,6 +252,6 @@ public class Magnetic : MonoBehaviour {
 
     public void DisableBlueLine() {
         if (blueLine)
-            blueLine.GetComponent<MeshRenderer>().enabled = false;
+            blueLine.gameObject.SetActive(false);
     }
 }

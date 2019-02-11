@@ -161,7 +161,7 @@ public class AllomanticIronSteel : MonoBehaviour {
     public float Charge { get; private set; } // Allomantic Charge
     public Vector3 CenterOfMass {
         get {
-            return rb.worldCenterOfMass;
+            return transform.TransformPoint(rb.centerOfMass);
         }
     }
     public float Mass {

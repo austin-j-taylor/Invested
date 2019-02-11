@@ -51,6 +51,9 @@ public class PauseMenu : MonoBehaviour {
         GamepadController.SetRumble(0, 0);
         Time.timeScale = 0f;
 
+        // Update blue lines for this frame (workaround)
+        Player.PlayerIronSteel.SearchForMetals();
+
         pauseMenu.SetActive(true);
         IsPaused = true;
     }

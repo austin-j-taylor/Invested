@@ -39,17 +39,17 @@ public class NonPlayerPushPullController : AllomanticIronSteel {
         }
     }
 
-    private void Update() {
+    private void LateUpdate() {
         if (!PauseMenu.IsPaused) {
             for (int i = 0; i < maxNumberOfTargets; i++) {
                 // Non-existent target, disable blue line
                 if (PullTargets[i] != Player.PlayerMagnetic || !IronPulling) {
-                    pullLines[i].GetComponent<MeshRenderer>().enabled = false;
+                    pullLines[i].gameObject.SetActive(false);
                 } else {
                     UpdateLines(true, i);
                 }
                 if (PushTargets[i] != Player.PlayerMagnetic || !SteelPushing) {
-                    pushLines[i].GetComponent<MeshRenderer>().enabled = false;
+                    pushLines[i].gameObject.SetActive(false);
                 } else {
                     UpdateLines(false, i);
                 }
@@ -76,7 +76,7 @@ public class NonPlayerPushPullController : AllomanticIronSteel {
 
         float closeness = Mathf.Exp(-blueLineChangeFactor * Mathf.Pow(1 / allomanticForce, blueLineBrightnessFactor));
 
-        lines[index].GetComponent<MeshRenderer>().enabled = true;
+        lines[index].gameObject.SetActive(true);
         lines[index].StartPos = array[index].CenterOfMass;
         lines[index].EndPos = CenterOfMass;
         lines[index].LineWidth = array[index].Charge * (SettingsMenu.settingsData.cameraFirstPerson == 0 ? blueLineThirdPersonWidth : blueLineFirstPersonWidth);
