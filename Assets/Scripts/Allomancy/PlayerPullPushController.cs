@@ -54,16 +54,15 @@ public class PlayerPullPushController : AllomanticIronSteel {
     }
 
     public void SoftClear() {
-        RemoveAllTargets();
-        IronPulling = false;
-        SteelPushing = false;
         if (HasHighlightedTarget)
             HighlightedTarget.RemoveTargetGlow();
+        IronPulling = false;
+        SteelPushing = false;
+        RemoveAllTargets();
     }
 
     private void LateUpdate() {
         if (!PauseMenu.IsPaused) {
-
             // Start and Stop Burning metals
             if (IsBurningIronSteel) {
                 // Stop burning
@@ -278,7 +277,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
 
         for (int i = 0; i < GameManager.MagneticsInScene.Count; i++) {
             Magnetic target = GameManager.MagneticsInScene[i];
-            if(target.isActiveAndEnabled) {
+            if(target.isActiveAndEnabled && target != Player.PlayerMagnetic) {
                 float weightedDistanceFromCenter = SetLineProperties(target);
 
                 // If looking for the object at the center of the screen
