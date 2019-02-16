@@ -91,11 +91,6 @@ public class MessageOverlayController : MonoBehaviour {
         // after teaching to deselect
         //"If you have both " + TextCodes.Pull_targets + " and " + TextCodes.Push_targets + ", " + TextCodes.Pulling + " and " + TextCodes.Pushing + " will only operate on their respective targets.\n" +
         //    "If you have selected only " + TextCodes.Pull_targets + " or only " + TextCodes.Push_targets +", " + TextCodes.Pulling + " and " + TextCodes.Pushing + "will operate on any target."
-        TriggerBeadMessages[3] = new List<string> {
-            "Vier " + TextCodes.Pull,
-            "Funf " + TextCodes.WASD,
-            "Sechs "  + TextCodes.KeyCoinshotMode
-        };
 
         UpdateText();
     }
