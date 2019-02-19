@@ -230,24 +230,47 @@ public class Magnetic : MonoBehaviour {
         isBeingPushPulled = false;
     }
 
+    //private Color previousEmission;
+
     public void AddTargetGlow() {
-        if (SettingsMenu.settingsData.highlightedTargetOutline == 1 && highlightedTargetOutline)
-            highlightedTargetOutline.Enable();
+        if (SettingsMenu.settingsData.highlightedTargetOutline == 1 && highlightedTargetOutline) {
+            Renderer renderer = GetComponentInChildren<Renderer>();
+            if (renderer) {
+                //previousEmission = renderer.material.GetColor("_EmissionColor");
+                renderer.material.SetColor("_EmissionColor", new Color(0, .35f, 1f) * Mathf.LinearToGammaSpace(2));
+                renderer.material.EnableKeyword("_EMISSION");
+            }
+            //highlightedTargetOutline.Enable();
+        }
     }
 
     public void RemoveTargetGlow() {
-        if (highlightedTargetOutline)
-            highlightedTargetOutline.Disable();
+        if (highlightedTargetOutline) {
+            Renderer renderer = GetComponentInChildren<Renderer>();
+            if (renderer) {
+                renderer.material.DisableKeyword("_EMISSION");
+            }
+            //highlightedTargetOutline.Disable();
+        }
     }
 
     public void SetBlueLine(Vector3 endPos, float width, float lsf, Color color) {
-        blueLine.gameObject.SetActive(true);
-        blueLine.StartPos = CenterOfMass;
-        blueLine.EndPos = endPos;
-        blueLine.LineWidth = width;
-        lightSaberFactor = Mathf.Lerp(lightSaberFactor, lsf, metalLinesLerpConstant);
-        blueLine.LightSaberFactor = lightSaberFactor;
-        blueLine.LineColor = color;
+        if (blueLine) {
+            blueLine.gameObject.SetActive(true);
+            blueLine.StartPos = CenterOfMass;
+            blueLine.EndPos = endPos;
+            blueLine.LineWidth = width;
+            lightSaberFactor = Mathf.Lerp(lightSaberFactor, lsf, metalLinesLerpConstant);
+            blueLine.LightSaberFactor = lightSaberFactor;
+            blueLine.LineColor = color;
+        } else {
+            Debug.Log("Null: " + gameObject);
+            Debug.Log("equa: " + (gameObject == Player.PlayerInstance.gameObject));
+            Debug.Log("Null: " + name);
+            Debug.Log("Null: " + tag);
+            Debug.Log("Null: " + blueLine);
+            Debug.Log("Null: " + GameManager.MagneticsInScene.Contains(this));
+        }
     }
 
     public void DisableBlueLine() {
