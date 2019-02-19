@@ -12,7 +12,8 @@ public class Player : Entity {
 
     //private Animator animator;
     private PlayerMovementController movementController;
-    private Material playerMaterial;
+    private Material frameMaterial;
+    private Renderer playerFrame;
 
     // Player components that need to be referenced elsewhere
     public static Player PlayerInstance { get; private set; }
@@ -56,8 +57,14 @@ public class Player : Entity {
     void Awake() {
         movementController = GetComponentInChildren<PlayerMovementController>();
         //animator = GetComponent<Animator>();
+
+        foreach (Renderer rend in GetComponentsInChildren<Renderer>()) {
+            if (rend.CompareTag("PlayerFrame")) {
+                playerFrame = rend;
+                frameMaterial = playerFrame.material;
+            }
+        }
         PlayerInstance = this;
-        playerMaterial = GetComponentInChildren<MeshRenderer>().material;
         PlayerIronSteel = GetComponentInChildren<PlayerPullPushController>();
         PlayerMagnetic = GetComponentInChildren<Magnetic>();
         Health = 100;
@@ -94,6 +101,7 @@ public class Player : Entity {
 
     // Reset certain values BEFORE the player enters a new scene
     public void ClearPlayerBeforeSceneChange(Scene scene) {
+        GetComponentInChildren<AllomechanicalGlower>().RemoveAllEmissions();
         movementController.Clear();
         PlayerIronSteel.Clear(false);
     }
@@ -103,7 +111,7 @@ public class Player : Entity {
         if (mode == LoadSceneMode.Single) { // Not loading all of the scenes, as it does at startup
             CoinHand.Clear();
             PlayerIronSteel.Clear();
-            GetComponentInChildren<MeshRenderer>().material = playerMaterial;
+            SetFrameMaterial(frameMaterial);
             CanControlPlayer = true;
             //if (scene.buildIndex == SceneSelectMenu.sceneLevel01)
             //    GodMode = true;
@@ -121,5 +129,9 @@ public class Player : Entity {
 
     public override void OnHit(float damage) {
         base.OnHit(damage);
+    }
+
+    public void SetFrameMaterial(Material mat) {
+        playerFrame.GetComponent<Renderer>().material = mat;
     }
 }

@@ -255,6 +255,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
         ironBurnRateLerp = 0;
         forceMagnitudeTarget = 0;
         GamepadController.SetRumble(0, 0);
+        GetComponentInChildren<AllomechanicalGlower>().RemoveAllEmissions();
         DisableRenderingBlueLines();
         RefreshHUD();
     }

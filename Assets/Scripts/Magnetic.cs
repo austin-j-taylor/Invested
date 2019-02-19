@@ -22,6 +22,7 @@ public class Magnetic : MonoBehaviour {
     private bool lastWasPulled;
     protected bool isBeingPushPulled;
     private float lightSaberFactor;
+    private Color defaultEmissionColor;
     private Outline highlightedTargetOutline;
     private VolumetricLineBehavior blueLine;
     private Collider[] colliders;
@@ -142,8 +143,12 @@ public class Magnetic : MonoBehaviour {
     }
 
     protected void Awake() {
-        if (GetComponent<Renderer>())
+        Renderer renderer = GetComponent<Renderer>();
+        if (renderer) {
             highlightedTargetOutline = gameObject.AddComponent<Outline>();
+            if(renderer.material.IsKeywordEnabled("_EMISSION"))
+                defaultEmissionColor = renderer.material.GetColor("_EmissionColor");
+        }
         blueLine = Instantiate(GameManager.MetalLineTemplate);
         Rb = GetComponentInParent<Rigidbody>();
         colliders = GetComponentsInChildren<Collider>();
@@ -230,7 +235,7 @@ public class Magnetic : MonoBehaviour {
         isBeingPushPulled = false;
     }
 
-    //private Color previousEmission;
+    private Color previousEmission;
 
     public void AddTargetGlow() {
         if (SettingsMenu.settingsData.highlightedTargetOutline == 1 && highlightedTargetOutline) {
@@ -242,13 +247,17 @@ public class Magnetic : MonoBehaviour {
             }
             //highlightedTargetOutline.Enable();
         }
+
     }
 
     public void RemoveTargetGlow() {
         if (highlightedTargetOutline) {
             Renderer renderer = GetComponentInChildren<Renderer>();
             if (renderer) {
-                renderer.material.DisableKeyword("_EMISSION");
+                if(defaultEmissionColor == null)
+                    renderer.material.DisableKeyword("_EMISSION");
+                else
+                    renderer.material.SetColor("_EmissionColor", defaultEmissionColor);
             }
             //highlightedTargetOutline.Disable();
         }

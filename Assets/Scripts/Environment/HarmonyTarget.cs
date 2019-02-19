@@ -90,7 +90,8 @@ public class HarmonyTarget : MonoBehaviour {
     }
 
     private void EndAnimation() {
-        Player.PlayerInstance.GetComponentInChildren<MeshRenderer>().material = harmonySphere.GetComponent<Renderer>().material;
+        Player.PlayerInstance.SetFrameMaterial(harmonySphere.GetComponent<Renderer>().material);
+        //Player.PlayerInstance.GetComponentInChildren<MeshRenderer>().material = harmonySphere.GetComponent<Renderer>().material;
         foreach (Renderer renderer in symbolRenderers)
             renderer.material = GameManager.Material_Ettmetal_Glowing;
 
