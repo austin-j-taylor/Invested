@@ -11,7 +11,7 @@ public class AllomechanicalGlower : MonoBehaviour {
     
     private Color[] glowColors = {
             new Color(0, .35f, 1f),
-            new Color(.8f, .1f, 0f)
+            new Color(.7f, .025f, 0f)
     };
 
     [SerializeField]

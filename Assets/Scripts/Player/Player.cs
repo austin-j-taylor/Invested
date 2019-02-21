@@ -1,12 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /*
  * Controls all aspects of the Player not related to Allomancy.
  */
-public class Player : Entity {
+public class Player : PewterEntity {
 
     private const float coinCooldown = 1f / 8;
 
@@ -18,6 +16,7 @@ public class Player : Entity {
     // Player components that need to be referenced elsewhere
     public static Player PlayerInstance { get; private set; }
     public static PlayerPullPushController PlayerIronSteel { get; private set; }
+    public static AllomanticPewterController PlayerPewter { get; private set; }
     public static Magnetic PlayerMagnetic { get; private set; }
 
     public Hand CoinHand { get; private set; }
@@ -66,6 +65,7 @@ public class Player : Entity {
         }
         PlayerInstance = this;
         PlayerIronSteel = GetComponentInChildren<PlayerPullPushController>();
+        PlayerPewter = GetComponentInChildren<AllomanticPewterController>();
         PlayerMagnetic = GetComponentInChildren<Magnetic>();
         Health = 100;
         CoinHand = GetComponentInChildren<Hand>();
@@ -104,6 +104,7 @@ public class Player : Entity {
         GetComponentInChildren<AllomechanicalGlower>().RemoveAllEmissions();
         movementController.Clear();
         PlayerIronSteel.Clear(false);
+        PlayerPewter.Clear();
     }
 
     // Reset certain values AFTER the player enters a new scene
@@ -125,10 +126,6 @@ public class Player : Entity {
                 CameraController.Clear();
             }
         }
-    }
-
-    public override void OnHit(float damage) {
-        base.OnHit(damage);
     }
 
     public void SetFrameMaterial(Material mat) {

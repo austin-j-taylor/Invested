@@ -12,75 +12,73 @@ public class MetalReserveMeters : MonoBehaviour {
 
     private MetalReserveElement iron;
     private MetalReserveElement steel;
-    private Animator ironAnimator;
-    private Animator steelAnimator;
-
-    private float timeLastChangedIron = -1000;
-    private float timeLastChangedSteel = -1000;
-
+    private MetalReserveElement pewter;
+    
     private void Start() {
-        iron = transform.GetChild(0).gameObject.AddComponent<MetalReserveElement>();
-        ironAnimator = iron.GetComponent<Animator>();
+        iron = transform.Find("Iron").gameObject.AddComponent<MetalReserveElement>();
         iron.metalColor = new Color(0, .5f, 1);
         iron.reserve = Player.PlayerIronSteel.IronReserve;
 
-        steel = transform.GetChild(1).gameObject.AddComponent<MetalReserveElement>();
-        steelAnimator = steel.GetComponent<Animator>();
+        steel = transform.Find("Steel").gameObject.AddComponent<MetalReserveElement>();
         steel.metalColor = new Color(1, 0, 0);
         steel.reserve = Player.PlayerIronSteel.SteelReserve;
+
+        pewter = transform.Find("Pewter").gameObject.AddComponent<MetalReserveElement>();
+        pewter.metalColor = new Color(1, 0, 0);
+        pewter.reserve = Player.PlayerPewter.PewterReserve;
     }
 
-    private void Update() {
-        if (iron.reserve.Rate < 0)
-            timeLastChangedIron = Time.time;
-        if(steel.reserve.Rate < 0)
-            timeLastChangedSteel = Time.time;
+    private void LateUpdate() {
+        UpdateReserve(iron);
+        UpdateReserve(steel);
+        UpdateReserve(pewter);
+        UpdateReserveIronSteel(iron);
+        UpdateReserveIronSteel(steel);
+    }
 
-        iron.massText.text = HUD.RoundStringToSigFigs((float)iron.reserve.Mass, 3) + "g";
-        iron.rateText.text = HUD.RoundStringToSigFigs((float)iron.reserve.Rate * 1000, 2) + "mg/s";
-        iron.fill.fillAmount = (float)iron.reserve.Mass / maxMass;
+    private void UpdateReserve(MetalReserveElement element) {
+        if (element.reserve.Rate < 0)
+            element.timeLastChanged = Time.time;
 
-        steel.massText.text = HUD.RoundStringToSigFigs((float)steel.reserve.Mass, 3) + "g";
-        steel.rateText.text = HUD.RoundStringToSigFigs((float)steel.reserve.Rate * 1000, 2) + "mg/s";
-        steel.fill.fillAmount = (float)steel.reserve.Mass / maxMass;
+        element.massText.text = HUD.RoundStringToSigFigs((float)element.reserve.Mass, 3) + "g";
+        element.rateText.text = HUD.RoundStringToSigFigs((float)element.reserve.Rate * 1000, 2) + "mg/s";
+        element.fill.fillAmount = (float)element.reserve.Mass / maxMass;
 
-        ironAnimator.SetBool("IsLow", iron.fill.fillAmount < lowThreshold);
+        element.animator.SetBool("IsLow", element.fill.fillAmount < lowThreshold);
+        element.animator.SetBool("IsVisible", Time.time - element.timeLastChanged < timeToFade);
+    }
+
+    private void UpdateReserveIronSteel(MetalReserveElement element) {
         // The -.001f is to account for floating-point error
-        ironAnimator.SetBool("IsDraining", iron.reserve.Rate < AllomanticIronSteel.gramsPerSecondPassiveBurn - .001f || iron.reserve.Mass < criticalMassThreshold && iron.reserve.Mass != 0);
-        ironAnimator.SetBool("IsVisible", Time.time - timeLastChangedIron < timeToFade);
-        steelAnimator.SetBool("IsLow", steel.fill.fillAmount < lowThreshold);
-        steelAnimator.SetBool("IsDraining", steel.reserve.Rate < AllomanticIronSteel.gramsPerSecondPassiveBurn - .001f || steel.reserve.Mass < criticalMassThreshold && steel.reserve.Mass != 0);
-        steelAnimator.SetBool("IsVisible", Time.time - timeLastChangedSteel < timeToFade);
+        element.animator.SetBool("IsDraining", element.reserve.Rate < AllomanticIronSteel.gramsPerSecondPassiveBurn - .001f || element.reserve.Mass < criticalMassThreshold && element.reserve.Mass != 0);
     }
 
     public void Clear() {
         iron.Clear();
         steel.Clear();
-        ironAnimator.SetBool("IsVisible", false);
-        ironAnimator.Play("MetalReserve_Invisible", ironAnimator.GetLayerIndex("Visibility"));
-        steelAnimator.SetBool("IsVisible", false);
-        steelAnimator.Play("MetalReserve_Invisible", steelAnimator.GetLayerIndex("Visibility"));
-        timeLastChangedIron = -100;
-        timeLastChangedSteel = -100;
+        pewter.Clear();
     }
 
     // Called to flash the reserve meters on screen
     public void AlertIron() {
-        timeLastChangedIron = Time.time;
+        iron.Alert();
     }
     public void AlertSteel() {
-        timeLastChangedSteel = Time.time;
+        steel.Alert();
     }
 
     private class MetalReserveElement : MonoBehaviour {
 
         public MetalReserve reserve;
+        public float timeLastChanged = -100;
+        public Animator animator;
         public Color metalColor;
         public Image fill;
         public Text massText;
         public Text rateText;
 
         private void Awake() {
+            animator = GetComponent<Animator>();
             fill = transform.GetChild(1).GetComponentInChildren<Image>();
             massText = transform.GetChild(2).GetComponent<Text>();
             rateText = transform.GetChild(3).GetComponent<Text>();
@@ -89,6 +87,13 @@ public class MetalReserveMeters : MonoBehaviour {
         public void Clear() {
             massText.text = "";
             rateText.text = "";
+            animator.SetBool("IsVisible", false);
+            animator.Play("MetalReserve_Invisible", animator.GetLayerIndex("Visibility"));
+            timeLastChanged = -100;
+        }
+
+        public void Alert() {
+            timeLastChanged = Time.time;
         }
     }
 }
