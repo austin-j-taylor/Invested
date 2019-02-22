@@ -29,6 +29,9 @@ public class MetalReserve : MonoBehaviour {
             return IsEndless || mass > 0;
         }
     }
+    public bool IsDraining {
+        get { return Rate < 0; }
+    }
 
     private void FixedUpdate() {
         if(IsEndless) {

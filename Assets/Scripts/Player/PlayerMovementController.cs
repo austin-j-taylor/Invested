@@ -9,12 +9,13 @@ using UnityEngine;
 
 public class PlayerMovementController : MonoBehaviour {
 
-    private const float acceleration = 5f;
-    private const float maxRunningSpeed = 7.5f;
+    private const float defaultAcceleration = 5f;
+    private const float defaultRunningSpeed = 7.5f;
     private const float airControlFactor = .06f;
     private const float dragAirborne = .2f;
     private const float dragGrounded = 3f;
     private const float dragNoControl = 10f;
+    private const float fallDamageForceThreshold = 10; // any fall force above this -> painful
 
     private Rigidbody rb;
     private PlayerGroundedChecker groundedChecker;
@@ -25,7 +26,25 @@ public class PlayerMovementController : MonoBehaviour {
         }
     }
 
-    private bool jumpQueued = false;
+    private bool jumpQueued;
+    private bool lastWasSprinting;
+
+
+    /*
+     * If the player enters a collision with a high velocity, they should take damage (eventually. Now, just show some particle effects.)
+     */
+    private void OnCollisionEnter(Collision collision) {
+        if (!collision.collider.isTrigger) {
+            // If this was a hard fall, show a particle effect.
+            Vector3 vel = Player.PlayerInstance.GetComponent<Rigidbody>().velocity;
+            Vector3 thisNormal = collision.GetContact(0).normal;
+            if (Vector3.Project(collision.impulse, thisNormal).magnitude * Time.fixedDeltaTime > fallDamageForceThreshold) {
+                // Take fall damage
+                Player.PlayerInstance.OnHit(collision.impulse.magnitude);
+                Player.PlayerPewter.HitSurface(-thisNormal);
+            }
+        }
+    }
 
     private void Awake() {
         rb = GetComponent<Rigidbody>();
@@ -33,6 +52,9 @@ public class PlayerMovementController : MonoBehaviour {
     }
 
     private void Update() {
+        if(!Keybinds.Sprint()) {
+            lastWasSprinting = false;
+        }
         if (IsGrounded && Keybinds.JumpDown()) {
             // Queue a jump for the next FixedUpdate
             // Actual jumping done in FixedUpdate to stay in sync with PlayerGroundedChecker
@@ -54,7 +76,7 @@ public class PlayerMovementController : MonoBehaviour {
                     movement = -movement;
                 }
             }
-            
+
             if (IsGrounded) {
                 // Jump
                 if (jumpQueued) {
@@ -70,24 +92,45 @@ public class PlayerMovementController : MonoBehaviour {
                     rb.drag = SettingsMenu.settingsData.playerAirResistance * dragGrounded;
                 }
             } else { // is airborne
+
                 rb.drag = SettingsMenu.settingsData.playerAirResistance * dragAirborne;
                 movement *= airControlFactor;
             }
-            if (movement.magnitude > 0) {
-                movement *= acceleration * Mathf.Max(maxRunningSpeed - Vector3.Project(rb.velocity, movement.normalized).magnitude, 0);
+            
+            if (movement.sqrMagnitude > 0) {
+                if(IsGrounded) {
+                    float sprintMovement = Player.PlayerPewter.Sprint(movement, lastWasSprinting);
+                    lastWasSprinting = true;
+                    if (sprintMovement == 0) {
+                        // if airborne or not Sprinting, move normally.
+                        movement *= MovementMagnitude(movement);
+                    } else {
+                        // if sprinting
+                        movement *= sprintMovement;
+                    }
+                } else {
+                    // if airborne or not Sprinting, move normally.
+                    movement *= MovementMagnitude(movement);
+                }
                 rb.AddForce(movement, ForceMode.Acceleration);
             }
         } else {
             //if (IsGrounded) {
-                rb.drag = SettingsMenu.settingsData.playerAirResistance * dragNoControl;
+            rb.drag = SettingsMenu.settingsData.playerAirResistance * dragNoControl;
             //} else {
             //    rb.drag = SettingsMenu.settingsData.playerAirResistance * airDrag;
             //}
         }
     }
 
+    // Convert a movement vector into real player movement based on current velocity
+    private float MovementMagnitude(Vector3 movement) {
+        return defaultAcceleration * Mathf.Max(defaultRunningSpeed - Vector3.Project(rb.velocity, movement.normalized).magnitude, 0);
+    }
+
     public void Clear() {
         jumpQueued = false;
+        lastWasSprinting = false;
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         rb.useGravity = SettingsMenu.settingsData.playerGravity == 1;

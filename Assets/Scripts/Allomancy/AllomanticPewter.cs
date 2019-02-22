@@ -2,28 +2,42 @@
 using System.Collections;
 
 /*
- * Controls all aspects of Allomantic Pewter, including shielding.
+ * Controls all aspects of Allomantic Pewter.
+ * Controls the particle system associated with using pewter.
  */
 
-public class AllomanticPewterController : MonoBehaviour {
+public class AllomanticPewter : MonoBehaviour {
 
+    protected const float gramsPewterPerSecondPassive = 1;
+    protected const float gramsPewterPerFall = 2f;
+    protected const float timePewterPerFall = 1f;
+    
     public MetalReserve PewterReserve { get; private set; }
-    public float mT = 2;
-    public float mM = 10;
+    
+    protected Rigidbody rb;
+    protected ParticleSystem particleSystem;
+    protected Quaternion particleDirection;
+
+    protected bool UsingPewter {
+        get {
+            return Keybinds.Sprint() && PewterReserve.HasMass;
+        }
+    }
+
     private void Awake() {
         PewterReserve = gameObject.AddComponent<MetalReserve>();
+        rb = GetComponent<Rigidbody>();
+        particleSystem = transform.parent.GetComponentInChildren<ParticleSystem>();
     }
 
-    private void Update() {
-        if(Keybinds.SelectDown()) {
-            Debug.Log(Drain(mM, mT));
-        }
-        Debug.Log(PewterReserve.Mass);
-    }
-
-    public void Clear() {
+    public virtual void Clear() {
         StopAllCoroutines();
-        PewterReserve.SetMass(20);
+    }
+
+    private void FixedUpdate() {
+        if (UsingPewter) {
+            PewterReserve.Mass -= gramsPewterPerSecondPassive * Time.fixedDeltaTime;
+        }
     }
 
     /*
@@ -62,5 +76,15 @@ public class AllomanticPewterController : MonoBehaviour {
 
         // Drain remaining amount of mass
         PewterReserve.Mass -= totalMass - massDrained;
+    }
+
+    // When taking damage, attempt to shield it
+    public float OnHit(float damage) {
+        if(PewterReserve.IsDraining) {
+            Drain(gramsPewterPerFall, timePewterPerFall);
+            return 0;
+        } else {
+            return damage;
+        }
     }
 }

@@ -211,6 +211,16 @@ public class TextCodes : MonoBehaviour {
             return Gray("Ctrl");
         }
     }
+    public static string LeftAlt {
+        get {
+            return Gray("Left Alt");
+        }
+    }
+    public static string Tab {
+        get {
+            return Gray("Tab");
+        }
+    }
     public static string WASD {
         get {
             return Gray("W/A/S/D");
@@ -360,16 +370,16 @@ public class TextCodes : MonoBehaviour {
         get {
             switch (SettingsMenu.settingsData.controlScheme) {
                 case SettingsData.MK54: {
-                        return s_Hold_ + Shift + ", " + LightBlue(s_Mouse_Button_5) + ", and " + LightRed(s_Mouse_Button_4);
+                        return s_Hold_ + Tab + ", " + LightBlue(s_Mouse_Button_5) + ", and " + LightRed(s_Mouse_Button_4);
                     }
                 case SettingsData.MK45: {
-                        return s_Hold_ + Shift + ", " + LightBlue(s_Mouse_Button_4) + ", and " + LightRed(s_Mouse_Button_5);
+                        return s_Hold_ + Tab + ", " + LightBlue(s_Mouse_Button_4) + ", and " + LightRed(s_Mouse_Button_5);
                     }
                 case SettingsData.MKEQ: {
-                        return s_Hold_ + Shift + ", " + LightBlue(s_E) + ", and " + LightRed(s_Q);
+                        return s_Hold_ + Tab + ", " + LightBlue(s_E) + ", and " + LightRed(s_Q);
                     }
                 case SettingsData.MKQE: {
-                        return s_Hold_ + Shift + ", " + LightBlue(s_Q) + ", and " + LightRed(s_E);
+                        return s_Hold_ + Tab + ", " + LightBlue(s_Q) + ", and " + LightRed(s_E);
                     }
                 default: {
                         return s_Hold_ + Y + ", " + LightBlue(s_Right_Bumper) + ", and " + LightRed(s_Left_Bumper);
@@ -390,7 +400,7 @@ public class TextCodes : MonoBehaviour {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
                 return Y;
             else
-                return Shift;
+                return Tab;
         }
     }
     public static string KeyPushPullStrength {
@@ -438,7 +448,7 @@ public class TextCodes : MonoBehaviour {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
                 return "Double-tap " + Y;
             else
-                return "Double-tap " + Shift;
+                return "Double-tap " + Tab;
         }
     }
     public static string KeyCoinshotMode {

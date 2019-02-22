@@ -8,21 +8,27 @@ public class AllomechanicalGlower : MonoBehaviour {
     // Metal/color indices
     private const int iron = 0;
     private const int steel = 1;
+    private const int pewter = 2;
     
     private Color[] glowColors = {
             new Color(0, .35f, 1f),
-            new Color(.7f, .025f, 0f)
+            new Color(.7f, .025f, 0f),
+            new Color(.75f, .25f, 0f)
     };
 
     [SerializeField]
     private Renderer[] irons;
     [SerializeField]
     private Renderer[] steels;
+    [SerializeField]
+    private Renderer[] pewters;
 
     private AllomanticIronSteel allomancer;
+    private AllomanticPewter allomancerPewter;
 
     private void Start() {
         allomancer = Player.PlayerIronSteel;
+        allomancerPewter = Player.PlayerPewter;
     }
     
     void LateUpdate()
@@ -30,7 +36,7 @@ public class AllomechanicalGlower : MonoBehaviour {
         if (allomancer.IsBurningIronSteel) {
             if (allomancer.IronPulling) {
                 foreach (Renderer rend in irons) {
-                    EnableEmission(rend.material, glowColors[iron], allomancer.IronBurnRateTarget);
+                    EnableEmission(rend.material, glowColors[iron], 1 + allomancer.IronBurnRateTarget);
                 }
             } else {
                 foreach (Renderer rend in irons) {
@@ -39,7 +45,7 @@ public class AllomechanicalGlower : MonoBehaviour {
             }
             if (allomancer.SteelPushing) {
                 foreach (Renderer rend in steels) {
-                    EnableEmission(rend.material, glowColors[steel], allomancer.SteelBurnRateTarget);
+                    EnableEmission(rend.material, glowColors[steel], 1 + allomancer.SteelBurnRateTarget);
                 }
             } else {
                 foreach (Renderer rend in steels) {
@@ -47,11 +53,20 @@ public class AllomechanicalGlower : MonoBehaviour {
                 }
             }
         }
+        if (allomancerPewter.PewterReserve.IsDraining) {
+            foreach (Renderer rend in pewters) {
+                EnableEmission(rend.material, glowColors[pewter], -2 * (float)allomancerPewter.PewterReserve.Rate);
+            }
+        } else {
+            foreach (Renderer rend in pewters) {
+                DisableEmission(rend.material);
+            }
+        }
     }
 
     // Enables the emissions of the material specified by mat.
     private void EnableEmission(Material mat, Color glow, float rate) {
-        mat.SetColor("_EmissionColor", glow * Mathf.LinearToGammaSpace(1 + intensity * rate));
+        mat.SetColor("_EmissionColor", glow * Mathf.LinearToGammaSpace(intensity * rate));
         mat.EnableKeyword("_EMISSION");
     }
 

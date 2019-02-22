@@ -11,8 +11,10 @@ public class Vials : MonoBehaviour {
         if(!other.isTrigger && other.CompareTag("Player")) {
             Player.PlayerIronSteel.IronReserve.Fill(volume);
             Player.PlayerIronSteel.SteelReserve.Fill(volume);
+            Player.PlayerPewter.PewterReserve.Fill(volume);
             HUD.MetalReserveMeters.AlertIron();
             HUD.MetalReserveMeters.AlertSteel();
+            HUD.MetalReserveMeters.AlertPewter();
 
             if (!persistent)
                 Destroy(gameObject);

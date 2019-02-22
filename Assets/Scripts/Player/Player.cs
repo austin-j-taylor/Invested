@@ -16,7 +16,7 @@ public class Player : PewterEntity {
     // Player components that need to be referenced elsewhere
     public static Player PlayerInstance { get; private set; }
     public static PlayerPullPushController PlayerIronSteel { get; private set; }
-    public static AllomanticPewterController PlayerPewter { get; private set; }
+    public static PlayerPewterController PlayerPewter { get; private set; }
     public static Magnetic PlayerMagnetic { get; private set; }
 
     public Hand CoinHand { get; private set; }
@@ -53,7 +53,8 @@ public class Player : PewterEntity {
     // In coinshot mode, clicking down to ironpull while pushing throws a coin, similar to conventional first-person shooters.
     private bool coinshotMode = false;
 
-    void Awake() {
+    protected override void Awake() {
+        base.Awake();
         movementController = GetComponentInChildren<PlayerMovementController>();
         //animator = GetComponent<Animator>();
 
@@ -65,7 +66,7 @@ public class Player : PewterEntity {
         }
         PlayerInstance = this;
         PlayerIronSteel = GetComponentInChildren<PlayerPullPushController>();
-        PlayerPewter = GetComponentInChildren<AllomanticPewterController>();
+        PlayerPewter = GetComponentInChildren<PlayerPewterController>();
         PlayerMagnetic = GetComponentInChildren<Magnetic>();
         Health = 100;
         CoinHand = GetComponentInChildren<Hand>();

@@ -9,56 +9,16 @@ using UnityEngine;
  */
 public class PlayerGroundedChecker : MonoBehaviour {
 
-    private const float fallDamageForceThreshold = 10; // any fall force above this -> painful
-
-    private const float jumpHeight = 400;
-    private const float jumpPewterMagnitude = 600;
-    private const float jumpDirectionModifier = 350;
-    private readonly Vector3 particleSystemPosition = new Vector3(0, -.2f, 0);
 
     public bool IsGrounded { get { return standingOnCollider != null; } }
     
-    private ParticleSystem particleSystem;
     private Collider standingOnCollider = null;
     private Vector3 point;
     private Vector3 normal;
-    private Quaternion particleDirection;
-
-    private void Awake() {
-        particleSystem = transform.parent.GetComponentInChildren<ParticleSystem>();
-    }
-
-    // Debug
-    //Vector3 lastJump;
-    //Vector3 lastForce;
-    //Vector3 lastMovement;
-    private void Update() {
-        //Debug.DrawLine(Player.PlayerInstance.transform.position + new Vector3(0, 1, 0), Player.PlayerInstance.transform.position + new Vector3(0, 1, 0) + lastJump, Color.blue);
-        //Debug.DrawLine(Player.PlayerInstance.transform.position + new Vector3(0, 1, 0), Player.PlayerInstance.transform.position + new Vector3(0, 1, 0) + lastMovement, Color.yellow);
-        //Debug.DrawLine(Player.PlayerInstance.transform.position + new Vector3(0, 1, 0), Player.PlayerInstance.transform.position + new Vector3(0, 1, 0) + lastForce, Color.green);
-
-        if (normal != null) {
-            particleSystem.transform.rotation = particleDirection;
-            particleSystem.transform.position = Player.PlayerInstance.transform.position + particleSystemPosition;
-        }
-    }
-
-    /*
-     * If the player enters a collision with a high velocity, they should take damage (eventually. Now, just show some particle effects.)
-     */
+    
     private void OnCollisionEnter(Collision collision) {
         if (!collision.collider.isTrigger) {
-            
             OnCollisionStay(collision);
-
-            // If this was a hard fall, show a particle effect.
-            Vector3 vel = Player.PlayerInstance.GetComponent<Rigidbody>().velocity;
-            Vector3 thisNormal = collision.GetContact(0).normal;
-            if (Vector3.Project(collision.impulse, thisNormal).magnitude * Time.fixedDeltaTime > fallDamageForceThreshold) {
-                particleDirection = Quaternion.LookRotation(-thisNormal);
-                particleSystem.transform.rotation = particleDirection;
-                particleSystem.Play();
-            }
         }
     }
 
@@ -89,33 +49,8 @@ public class PlayerGroundedChecker : MonoBehaviour {
 
     public void Jump(Vector3 movement) {
         Rigidbody targetRb = standingOnCollider.attachedRigidbody;
-        Vector3 force = normal;
-
-        // If Pewter Jumping
-        if (movement.sqrMagnitude > 0f) {
-            if (Vector3.Dot(force, movement) < -0.01f) {
-                float angle = Vector3.Angle(movement, force);
-                angle -= 90;
-                movement = Quaternion.AngleAxis(angle, Vector3.Cross(Vector3.up, force)) * movement;
-                if (movement.y < 0)
-                    movement.y = -movement.y;
-            }
-            //lastForce = force.normalized;
-
-            force = force * jumpHeight + movement * jumpDirectionModifier;
-            Vector3.ClampMagnitude(force, jumpPewterMagnitude);
-
-            particleDirection = Quaternion.LookRotation(-force);
-            particleSystem.transform.rotation = particleDirection;
-            particleSystem.Play();
-
-        } else {
-            force *= jumpHeight;
-        }
-
-        //lastJump = force.normalized;
-        //lastMovement = movement.normalized;
-
+        Vector3 force = Player.PlayerPewter.Jump(movement, normal);
+        
         Player.PlayerInstance.GetComponent<Rigidbody>().AddForce(force, ForceMode.Impulse);
         // Apply force and torque to target
         if (targetRb) {

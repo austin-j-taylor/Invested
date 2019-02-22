@@ -129,6 +129,19 @@ public static class Keybinds {
             return Input.GetKeyDown(KeyCode.Space);
     }
 
+    public static bool Sprint() {
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            return Input.GetButton("GamepadB");
+        else
+            return Input.GetKey(KeyCode.LeftShift);
+    }
+    public static bool SprintDown() {
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            return Input.GetButtonDown("GamepadB");
+        else
+            return Input.GetKeyDown(KeyCode.LeftShift);
+    }
+
     public static bool WithdrawCoinDown() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
             return Input.GetButtonDown("GamepadX");
@@ -140,19 +153,19 @@ public static class Keybinds {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
             return Input.GetButtonDown("GamepadY");
         else
-            return Input.GetKeyDown(KeyCode.LeftShift);
+            return Input.GetKeyDown(KeyCode.Tab);
     }
     public static bool Negate() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
             return Input.GetButton("GamepadY");
         else
-            return Input.GetKey(KeyCode.LeftShift);
+            return Input.GetKey(KeyCode.Tab);
     }
     public static bool StopBurnUp() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
             return Input.GetButtonUp("GamepadY");
         else
-            return Input.GetKeyUp(KeyCode.LeftShift);
+            return Input.GetKeyUp(KeyCode.Tab);
     }
 
     public static float LeftBurnRate() {
