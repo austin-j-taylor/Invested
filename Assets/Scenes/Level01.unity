@@ -2844,6 +2844,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1838c6240529292498e0c54f1511a1f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bronzes:
+  - {fileID: 466950323909886445}
+  - {fileID: 1792997309}
+  - {fileID: 422823251}
+  - {fileID: 1108068393}
+  - {fileID: 1719594173}
+  - {fileID: 550053491}
 --- !u!114 &241397241
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2857,7 +2864,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   netMass: 0
-  magneticMass: 0.00001
+  magneticMass: 1e-10
 --- !u!54 &241397242
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -6706,7 +6713,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1.1, y: 1.1, z: 1.1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &710967228
 MeshRenderer:

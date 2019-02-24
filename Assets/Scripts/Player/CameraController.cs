@@ -257,7 +257,7 @@ public class CameraController : MonoBehaviour {
             currentX = playerLookAtTarget.localEulerAngles.y;
         }
 
-        if (Player.PlayerIronSteel.IsBurningIronSteel) // Update blue lines when the camera is reset
+        if (Player.PlayerIronSteel.IsBurning) // Update blue lines when the camera is reset
             Player.PlayerIronSteel.SearchForMetals();
         UpdateCamera();
     }

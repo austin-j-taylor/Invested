@@ -62,7 +62,7 @@ public class TriggerBeadPopupListener : TriggerBeadPopup {
                         break;
                     }
                 case Action.StartBurningIronSteel: {
-                        while (!Player.PlayerIronSteel.IsBurningIronSteel) {
+                        while (!Player.PlayerIronSteel.IsBurning) {
                             yield return null;
                         }
                         break;

@@ -24,7 +24,7 @@ public class PlayerPewterController : AllomanticPewter {
     }
 
     public float Sprint(Vector3 movement, bool lastWasSprinting) {
-        if (UsingPewter) {
+        if (IsBurning) {
             if(!lastWasSprinting) {
                 particleDirection = Quaternion.LookRotation(-movement);
                 particleSystem.transform.rotation = particleDirection;
@@ -40,7 +40,7 @@ public class PlayerPewterController : AllomanticPewter {
      * Returns the force of the jump.
      */
     public Vector3 Jump(Vector3 movement, Vector3 force) {
-        if(UsingPewter) {
+        if(IsBurning) {
             Drain(gramsPewterPerJump, timePewterPerJump);
 
             particleSystem.transform.rotation = particleDirection;

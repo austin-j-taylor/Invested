@@ -7,7 +7,7 @@ using System.Collections;
  */
 public abstract class Allomancer : MonoBehaviour {
 
-    public abstract bool IsBurningMetal();
+    public bool IsBurning { get; protected set; } = false;
     //public abstract bool BurnRate();
 
 }

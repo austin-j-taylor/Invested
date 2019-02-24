@@ -19,26 +19,34 @@ public class AllomanticPewter : Allomancer {
     protected ParticleSystem particleSystem;
     protected Quaternion particleDirection;
 
-    protected bool UsingPewter {
-        get {
-            return Keybinds.Sprint() && PewterReserve.HasMass;
-        }
-    }
-
     private void Awake() {
         PewterReserve = gameObject.AddComponent<MetalReserve>();
         rb = GetComponent<Rigidbody>();
         particleSystem = transform.parent.GetComponentInChildren<ParticleSystem>();
+
+        GameManager.AddAllomancer(this);
     }
 
     public virtual void Clear() {
         StopAllCoroutines();
     }
 
+    private void Update() {
+        if(Keybinds.Sprint() && PewterReserve.HasMass) {
+            IsBurning = true;
+        } else {
+            IsBurning = false;
+        }
+    }
+
     private void FixedUpdate() {
-        if (UsingPewter) {
+        if (IsBurning) {
             PewterReserve.Mass -= gramsPewterPerSecondPassive * Time.fixedDeltaTime;
         }
+    }
+
+    private void OnDestroy() {
+        GameManager.RemoveAllomancer(this);
     }
 
     /*

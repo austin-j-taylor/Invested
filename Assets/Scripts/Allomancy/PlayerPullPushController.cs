@@ -64,7 +64,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
     private void LateUpdate() {
         if (!PauseMenu.IsPaused) {
             // Start and Stop Burning metals
-            if (IsBurningIronSteel) {
+            if (IsBurning) {
                 // Stop burning
                 if (Keybinds.Negate()) {
                     timeToStopBurning += Time.deltaTime;
@@ -86,7 +86,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
             }
 
             // Could have stopped burning above. Check if the Allomancer is still burning.
-            if (IsBurningIronSteel) {
+            if (IsBurning) {
 
                 // Change Burn Rate Targets, Number of Targets
 
@@ -140,7 +140,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
                 
                 if (Player.CanControlPlayer) {
                     // Could have stopped burning above. Check if the Allomancer is still burning.
-                    if (IsBurningIronSteel) {
+                    if (IsBurning) {
                         // Swap pull- and push- targets
                         if (Keybinds.NegateDown() && timeToSwapBurning > Time.time) {
                             // Double-tapped, Swap targets
@@ -216,7 +216,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
                         RefreshHUD();
                     }
                 } else { // If the player is not in control, but still burning metals, show blue lines to metals.
-                    if (IsBurningIronSteel) {
+                    if (IsBurning) {
 
                         SearchForMetals(false);
                         LerpToBurnRates();
@@ -493,7 +493,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
     }
 
     private void UpdateBurnRateMeter() {
-        if (IsBurningIronSteel) {
+        if (IsBurning) {
             if (SettingsMenu.settingsData.pushControlStyle == 1) // Magnitude
                 HUD.BurnRateMeter.SetBurnRateMeterForceMagnitude(LastAllomanticForce, LastAnchoredPushBoost, IronBurnRateTarget, SteelBurnRateTarget, forceMagnitudeTarget);
             else if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
@@ -554,7 +554,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
     }
 
     public void EnableRenderingBlueLines() {
-        if (IsBurningIronSteel)
+        if (IsBurning)
             CameraController.ActiveCamera.cullingMask = ~0;
     }
 

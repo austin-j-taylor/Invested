@@ -10,7 +10,7 @@ public class AllomechanicalGlower : MonoBehaviour {
     private const int steel = 1;
     private const int pewter = 2;
     
-    private Color[] glowColors = {
+    private readonly Color[] glowColors = {
             new Color(0, .35f, 1f),
             new Color(.7f, .025f, 0.05f),
             new Color(.75f, .25f, 0f)
@@ -33,7 +33,7 @@ public class AllomechanicalGlower : MonoBehaviour {
     
     void LateUpdate()
     {
-        if (allomancer.IsBurningIronSteel) {
+        if (allomancer.IsBurning) {
             if (allomancer.IronPulling) {
                 foreach (Renderer rend in irons) {
                     EnableEmission(rend.material, glowColors[iron], 1 + 2 * allomancer.IronBurnRateTarget);

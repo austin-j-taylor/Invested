@@ -49,7 +49,7 @@ public class BurnRateMeter : MonoBehaviour {
 
     // Hide the burn meter if the player is not burning iron/steel
     public void HardRefresh() {
-        if(!Player.PlayerIronSteel.IsBurningIronSteel) {
+        if(!Player.PlayerIronSteel.IsBurning) {
             Clear();
         }
     }

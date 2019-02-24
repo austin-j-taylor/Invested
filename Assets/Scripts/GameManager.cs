@@ -21,7 +21,7 @@ public class GameManager : MonoBehaviour {
     public static Coin Prefab_Coin;
 
     // Holds all Magnetics and Allomancers in scene
-    public static List<AllomanticIronSteel> Allomancers { get; private set; }
+    public static List<Allomancer> Allomancers { get; private set; }
     public static List<Magnetic> MagneticsInScene { get; private set; }
 
     // Masks that represent certain layers to ignore for Raycasting
@@ -38,7 +38,7 @@ public class GameManager : MonoBehaviour {
 
         Prefab_Coin = Resources.Load<Coin>("Objects/Imperial1-Boxing");
 
-        Allomancers = new List<AllomanticIronSteel>();
+        Allomancers = new List<Allomancer>();
         MagneticsInScene = new List<Magnetic>();
         Layer_IgnorePlayer = ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ignore Player")));
         Layer_IgnoreCamera = ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ignore Camera")) | (1 << LayerMask.NameToLayer("Ignore Player")));
@@ -55,11 +55,11 @@ public class GameManager : MonoBehaviour {
         MagneticsInScene = new List<Magnetic>();
     }
 
-    public static void AddAllomancer(AllomanticIronSteel allomancer) {
+    public static void AddAllomancer(Allomancer allomancer) {
         Allomancers.Add(allomancer);
     }
 
-    public static void RemoveAllomancer(AllomanticIronSteel allomancer) {
+    public static void RemoveAllomancer(Allomancer allomancer) {
         Allomancers.Remove(allomancer);
     }
 
@@ -69,8 +69,11 @@ public class GameManager : MonoBehaviour {
 
     public static void RemoveMagnetic(Magnetic magnetic) {
         // Remove from all allomancers
-        foreach (AllomanticIronSteel allomancer in Allomancers) {
-            allomancer.RemoveTarget(magnetic);
+        foreach (Allomancer allomancer in Allomancers) {
+            AllomanticIronSteel ironSteel = allomancer.GetComponent<AllomanticIronSteel>();
+            if (ironSteel) {
+                ironSteel.RemoveTarget(magnetic);
+            }
         }
         MagneticsInScene.Remove(magnetic);
     }

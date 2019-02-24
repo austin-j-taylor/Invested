@@ -156,7 +156,7 @@ public class AllomanticIronSteel : Allomancer {
             steelPushing = value;
         }
     }
-    public bool IsBurningIronSteel { get; protected set; } = false;
+
     public float Strength { get; set; } = 1; // Allomantic Strength
     public float Charge { get; private set; } // Allomantic Charge
     public Vector3 CenterOfMass {
@@ -181,7 +181,7 @@ public class AllomanticIronSteel : Allomancer {
     }
 
     public virtual void Clear(bool clearTargets = true) {
-        IsBurningIronSteel = false;
+        IsBurning = false;
 
         if (clearTargets) {
             IronPulling = false;
@@ -208,7 +208,7 @@ public class AllomanticIronSteel : Allomancer {
 
     private void FixedUpdate() {
         if (!PauseMenu.IsPaused) {
-            if (IsBurningIronSteel) {
+            if (IsBurning) {
                 // Remove all targets that are out of pushing range
                 // For Mouse/Keyboard, Iron and Steel burn rates are equal, so it's somewhat redundant to specify
                 PullTargets.RemoveAllOutOfRange(IronBurnRateTarget, this);
@@ -294,6 +294,10 @@ public class AllomanticIronSteel : Allomancer {
                 lastExpectedAllomancerAcceleration = LastNetForceOnAllomancer / rb.mass;
             }
         }
+    }
+
+    private void OnDestroy() {
+        GameManager.RemoveAllomancer(this);
     }
 
     /*
@@ -567,9 +571,9 @@ public class AllomanticIronSteel : Allomancer {
      * Return true if successfully began burning metals, false otherwise.
      */
     protected virtual bool StartBurning(bool startIron) {
-        if (IsBurningIronSteel || startIron && !HasIron || !startIron && !HasSteel)
+        if (IsBurning || startIron && !HasIron || !startIron && !HasSteel)
             return false;
-        IsBurningIronSteel = true;
+        IsBurning = true;
         // Set burn rates to a low burn
         IronBurnRateTarget = .1f;
         SteelBurnRateTarget = .1f;
@@ -581,12 +585,12 @@ public class AllomanticIronSteel : Allomancer {
     }
 
     public virtual void StopBurning() {
-        if (IsBurningIronSteel) {
+        if (IsBurning) {
             PullTargets.Clear();
             PushTargets.Clear();
             IronBurnRateTarget = 0;
             SteelBurnRateTarget = 0;
-            IsBurningIronSteel = false;
+            IsBurning = false;
             lastWasPulling = false;
             lastWasPushing = false;
         }

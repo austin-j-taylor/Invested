@@ -61,7 +61,7 @@ public class HUD : MonoBehaviour {
             fPSText.text = "";
         }
         coinCountText.text = Player.PlayerInstance.CoinHand.Pouch.Count.ToString();
-        if (Player.PlayerIronSteel.IsBurningIronSteel) {
+        if (Player.PlayerIronSteel.IsBurning) {
             TargetOverlayController.SoftRefresh();
         }
     }
