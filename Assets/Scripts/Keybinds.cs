@@ -141,12 +141,20 @@ public static class Keybinds {
         else
             return Input.GetKeyDown(KeyCode.LeftShift);
     }
+    
+    public static bool Walk() {
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+            return false;
+        } else {
+            return Input.GetKey(KeyCode.LeftControl);
+        }
+    }
 
     public static bool WithdrawCoinDown() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
             return Input.GetButtonDown("GamepadX");
         else
-            return Input.GetKeyDown(KeyCode.LeftControl);
+            return Input.GetButtonDown("Mouse2");
     }
 
     public static bool NegateDown() {

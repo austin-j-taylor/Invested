@@ -46,7 +46,10 @@ public class PlayerPewterController : AllomanticPewter {
             particleSystem.transform.rotation = particleDirection;
             particleSystem.transform.position = Player.PlayerInstance.transform.position + particleSystemPosition;
 
-            if (Vector3.Dot(force, movement) < -0.01f) {
+            if(movement.sqrMagnitude <= .01f) { // Vertical jump
+                movement = Vector3.up;
+
+            } else if (Vector3.Dot(force, movement) < -0.01f) {
                 float angle = Vector3.Angle(movement, force);
                 angle -= 90;
                 movement = Quaternion.AngleAxis(angle, Vector3.Cross(Vector3.up, force)) * movement;
@@ -66,14 +69,5 @@ public class PlayerPewterController : AllomanticPewter {
         }
 
         return force;
-    }
-
-    /*
-     * Show particle effects of hitting a surface.
-     */
-    public void HitSurface(Vector3 normal) {
-        particleDirection = Quaternion.LookRotation(normal);
-        particleSystem.transform.rotation = particleDirection;
-        particleSystem.Play();
     }
 }

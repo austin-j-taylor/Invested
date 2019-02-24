@@ -11,11 +11,11 @@ public class PlayerMovementController : MonoBehaviour {
 
     private const float defaultAcceleration = 5f;
     private const float defaultRunningSpeed = 7.5f;
+    private const float movementFactor = .15f;
     private const float airControlFactor = .06f;
     private const float dragAirborne = .2f;
     private const float dragGrounded = 3f;
     private const float dragNoControl = 10f;
-    private const float fallDamageForceThreshold = 10; // any fall force above this -> painful
 
     private Rigidbody rb;
     private PlayerGroundedChecker groundedChecker;
@@ -28,24 +28,7 @@ public class PlayerMovementController : MonoBehaviour {
 
     private bool jumpQueued;
     private bool lastWasSprinting;
-
-
-    /*
-     * If the player enters a collision with a high velocity, they should take damage (eventually. Now, just show some particle effects.)
-     */
-    private void OnCollisionEnter(Collision collision) {
-        if (!collision.collider.isTrigger) {
-            // If this was a hard fall, show a particle effect.
-            Vector3 vel = Player.PlayerInstance.GetComponent<Rigidbody>().velocity;
-            Vector3 thisNormal = collision.GetContact(0).normal;
-            if (Vector3.Project(collision.impulse, thisNormal).magnitude * Time.fixedDeltaTime > fallDamageForceThreshold) {
-                // Take fall damage
-                Player.PlayerInstance.OnHit(collision.impulse.magnitude);
-                Player.PlayerPewter.HitSurface(-thisNormal);
-            }
-        }
-    }
-
+    
     private void Awake() {
         rb = GetComponent<Rigidbody>();
         groundedChecker = transform.GetComponentInChildren<PlayerGroundedChecker>();
@@ -75,6 +58,11 @@ public class PlayerMovementController : MonoBehaviour {
                 if (angle > 1) { // flips to 180 when camera is upside-down
                     movement = -movement;
                 }
+            }
+
+            // If Walking, reduce movment
+            if(Keybinds.Walk()) {
+                movement *= movementFactor;
             }
 
             if (IsGrounded) {

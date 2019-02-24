@@ -6,14 +6,15 @@ using System.Collections;
  * Controls the particle system associated with using pewter.
  */
 
-public class AllomanticPewter : MonoBehaviour {
+[RequireComponent(typeof(Rigidbody))]
+public class AllomanticPewter : Allomancer {
 
     protected const float gramsPewterPerSecondPassive = 1;
     protected const float gramsPewterPerFall = 2f;
     protected const float timePewterPerFall = 1f;
-    
+
     public MetalReserve PewterReserve { get; private set; }
-    
+
     protected Rigidbody rb;
     protected ParticleSystem particleSystem;
     protected Quaternion particleDirection;
@@ -64,10 +65,10 @@ public class AllomanticPewter : MonoBehaviour {
         // Because this is not actually a continuous function, checking t < maxTime will
         // not guarantee that the right amount of mass is consumed.
         // Thus:
-        while(massDrained + deltaMass < totalMass && t < maxtime) {
+        while (massDrained + deltaMass < totalMass && t < maxtime) {
             massDrained += deltaMass;
             PewterReserve.Mass -= deltaMass;
-            
+
             yield return new WaitForFixedUpdate();
 
             t += Time.fixedDeltaTime;
@@ -79,12 +80,21 @@ public class AllomanticPewter : MonoBehaviour {
     }
 
     // When taking damage, attempt to shield it
-    public float OnHit(float damage) {
-        if(PewterReserve.IsDraining) {
+    public float OnHit(float damage, bool automaticallyShield = false) {
+        if (automaticallyShield || PewterReserve.IsDraining) {
             Drain(gramsPewterPerFall, timePewterPerFall);
             return 0;
         } else {
             return damage;
         }
+    }
+
+    /*
+     * Show particle effects of hitting a surface.
+     */
+    public void HitSurface(Vector3 normal) {
+        particleDirection = Quaternion.LookRotation(normal);
+        particleSystem.transform.rotation = particleDirection;
+        particleSystem.Play();
     }
 }

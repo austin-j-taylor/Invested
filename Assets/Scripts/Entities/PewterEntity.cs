@@ -12,6 +12,21 @@ public class PewterEntity : Entity {
         pewter = GetComponent<AllomanticPewter>();
     }
 
+
+    /*
+     * If the allomancer enters a collision with a high velocity,
+     * they should take damage (eventually. Now, just show some particle effects.)
+     */
+    protected override void OnCollisionEnter(Collision collision) {
+        // If this was a hard fall, show a particle effect.
+        Vector3 vel = Player.PlayerInstance.GetComponent<Rigidbody>().velocity;
+        Vector3 thisNormal = collision.GetContact(0).normal;
+        if (Vector3.Project(collision.impulse, thisNormal).magnitude * Time.fixedDeltaTime > fallDamageForceThreshold) {
+            pewter.HitSurface(-thisNormal);
+            pewter.OnHit(collision.impulse.magnitude, true);
+        }
+    }
+
     /*
      * When taking damage, use pewter, if available.
      */

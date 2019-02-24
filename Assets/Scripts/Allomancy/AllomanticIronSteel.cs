@@ -4,7 +4,7 @@ using UnityEngine;
  * Should be attached to any Allomancer.
  */
 [RequireComponent(typeof(Rigidbody))]
-public class AllomanticIronSteel : MonoBehaviour {
+public class AllomanticIronSteel : Allomancer {
 
     public const int maxNumberOfTargets = 10;
     // Force calculation constants
