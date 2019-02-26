@@ -7,7 +7,7 @@ using System.Collections;
  */
 public class SeekerCube : MonoBehaviour {
 
-    private const float radius = 5;
+    private const float radius = 3;
     private const float duration = 5;
     private const float maxRotationSpeedLow = .3f;
     private const float maxRotationSpeedHigh = 30f;
@@ -36,10 +36,9 @@ public class SeekerCube : MonoBehaviour {
                 GetComponentInChildren<MeshRenderer>().material = GameManager.Material_Ettmetal_Glowing;
                 GetComponentInChildren<Light>().intensity = 1.5f;
                 EnableEmissions(4);
-                rb.angularVelocity = Vector3.zero;
+                rb.angularVelocity = rb.angularVelocity / 2;
                 rb.constraints = RigidbodyConstraints.None;
-                rb.useGravity = true;
-                rb.AddForce(new Vector3(0, 1, 0), ForceMode.VelocityChange);
+                rb.AddForce(new Vector3(0, -4, 0), ForceMode.VelocityChange);
                 finished = true;
             }
         } else {
@@ -69,7 +68,7 @@ public class SeekerCube : MonoBehaviour {
 
     private void FixedUpdate() {
         if (finished) {
-
+            rb.AddForce(new Vector3(0, 9.81f, 0), ForceMode.Acceleration);
         } else {
             rb.AddTorque(transform.rotation * torque * (1 + 2 * counter / duration)); 
         }
