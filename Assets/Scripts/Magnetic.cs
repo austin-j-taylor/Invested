@@ -12,7 +12,9 @@ using VolumetricLines;
  *      If magneticMass is left to be 0, then the object is considered to be wholly magnetic and uses netMass for the magnetic mass.
  */
 public class Magnetic : MonoBehaviour {
+
     private const float metalLinesLerpConstant = .30f;
+    private readonly Color brightBlue = new Color(0, .25f, 1);
 
     [SerializeField]
     private float netMass = 0;
@@ -263,6 +265,7 @@ public class Magnetic : MonoBehaviour {
         }
     }
 
+    // Set properties of the blue line pointing to this metal
     public void SetBlueLine(Vector3 endPos, float width, float lsf, Color color) {
         if (blueLine) {
             blueLine.gameObject.SetActive(true);
@@ -280,6 +283,11 @@ public class Magnetic : MonoBehaviour {
             Debug.Log("Null: " + blueLine);
             Debug.Log("Null: " + GameManager.MagneticsInScene.Contains(this));
         }
+    }
+
+    // Brighten this particular metal's blue line
+    public void BrightenLine() {
+        blueLine.LineColor = brightBlue;
     }
 
     public void DisableBlueLine() {

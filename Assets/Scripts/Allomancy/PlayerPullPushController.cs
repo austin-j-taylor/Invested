@@ -275,23 +275,46 @@ public class PlayerPullPushController : AllomanticIronSteel {
     public Magnetic SearchForMetals(bool targetedLineColors = true) {
         float smallestDistanceFromCenter = 1f;
         Magnetic centerObject = null;
+        bool mustCalculateCenter = true;
+
+        // If the player is directly looking at a magnetic's collider
+        //if (Physics.SphereCast(CameraController.ActiveCamera.transform.position, .5f, CameraController.ActiveCamera.transform.forward, out RaycastHit hit, 500, GameManager.Layer_IgnorePlayer)) {
+        if (Physics.Raycast(CameraController.ActiveCamera.transform.position, CameraController.ActiveCamera.transform.forward, out RaycastHit hit, 500, GameManager.Layer_IgnorePlayer)) {
+            Magnetic target = hit.collider.GetComponentInParent<Magnetic>();
+            if (target) {
+                centerObject = target;
+                mustCalculateCenter = false;
+            }
+        }
+        
+        // If the player is not directly looking at a magnetic, select the one closest to the center of the screen
 
         for (int i = 0; i < GameManager.MagneticsInScene.Count; i++) {
             Magnetic target = GameManager.MagneticsInScene[i];
             if(target.isActiveAndEnabled && target != Player.PlayerMagnetic) {
-                float weightedDistanceFromCenter = SetLineProperties(target);
+                if (mustCalculateCenter) { // If player is not directly looking at magnetic, calculate which is closest
+                    float weightedDistanceFromCenter = SetLineProperties(target);
 
-                // If looking for the object at the center of the screen
-                // If the Magnetic could be targeted
-                if (targetedLineColors && weightedDistanceFromCenter < 1) {
-                    // IF the new Magnetic is closer to the center of the screen than the previous most-center Magnetic
-                    if (weightedDistanceFromCenter < smallestDistanceFromCenter) {
-                        smallestDistanceFromCenter = weightedDistanceFromCenter;
-                        centerObject = target;
+                    // If looking for the object at the center of the screen
+                    // If the Magnetic could be targeted
+                    if (targetedLineColors && weightedDistanceFromCenter < 1) {
+                        // IF the new Magnetic is closer to the center of the screen than the previous most-center Magnetic
+                        if (weightedDistanceFromCenter < smallestDistanceFromCenter) {
+                            smallestDistanceFromCenter = weightedDistanceFromCenter;
+                            centerObject = target;
+                        }
                     }
+                } else { // If player is directly looking at magnetic, just set line properties
+                    SetLineProperties(target);
                 }
             }
         }
+        if (centerObject) {
+            // Make the blue line to the center object brighter
+            centerObject.BrightenLine();
+        }
+
+
         if (targetedLineColors) {
             // Update metal lines for Pull/PushTargets
             if (PullingOnPullTargets) {
@@ -312,7 +335,10 @@ public class PlayerPullPushController : AllomanticIronSteel {
         return centerObject;
     }
 
-
+    /*
+     * Checks several factors and sets the properties of the blue line pointing to target.
+     * These factors are described in the above function.
+     */
     private float SetLineProperties(Magnetic target) {
         Vector3 allomanticForceVector = CalculateAllomanticForce(target, this);
         float allomanticForce = allomanticForceVector.magnitude;
