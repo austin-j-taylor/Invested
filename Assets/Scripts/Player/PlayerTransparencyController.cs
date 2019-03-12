@@ -19,23 +19,26 @@ public class PlayerTransparencyController : MonoBehaviour {
     }
     
     void LateUpdate() {
-        
-        float distance = (CameraController.ActiveCamera.transform.position - Player.PlayerInstance.transform.position).magnitude;
-        float percent = 0;
-        // If camera is physically near the player, fade slowly to transparent
-        if (SettingsMenu.settingsData.cameraFirstPerson == 0 && distance < threshold) {
-            percent = ((distance * distance) / (threshold * threshold));
-        }
-        // If the camera is directly looking at the player, set the transparency to a constant amount
-        if (Physics.Raycast(CameraController.ActiveCamera.transform.position, CameraController.ActiveCamera.transform.forward, out RaycastHit hit, distance, 1 << LayerMask.NameToLayer("Player"))) {
-            // If reticle is on player, immediately fade to transparent
-            percent = (lookAtTransparency);
-        }
-        // Assign fade/opaque Rendering Mode
-        if (percent > 0)
-            SetAllFade(percent);
-        else // Do not fade camera at all
+        if (Player.CanControlPlayer) {
+            float distance = (CameraController.ActiveCamera.transform.position - Player.PlayerInstance.transform.position).magnitude;
+            float percent = 0;
+            // If camera is physically near the player, fade slowly to transparent
+            if (SettingsMenu.settingsData.cameraFirstPerson == 0 && distance < threshold) {
+                percent = ((distance * distance) / (threshold * threshold));
+            }
+            // If the camera is directly looking at the player, set the transparency to a constant amount
+            if (Physics.Raycast(CameraController.ActiveCamera.transform.position, CameraController.ActiveCamera.transform.forward, out RaycastHit hit, distance, 1 << LayerMask.NameToLayer("Player"))) {
+                // If reticle is on player, immediately fade to transparent
+                percent = (lookAtTransparency);
+            }
+            // Assign fade/opaque Rendering Mode
+            if (percent > 0)
+                SetAllFade(percent);
+            else // Do not fade camera at all
+                SetAllOpaque();
+        } else {
             SetAllOpaque();
+        }
 
     }
 

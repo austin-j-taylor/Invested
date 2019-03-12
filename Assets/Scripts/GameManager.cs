@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour {
     public static int Layer_BlueLinesVisible { get; private set; }
 
     void Awake() {
-        Material_Ettmetal_Glowing = Resources.Load<Material>("Materials/Ettmetal_glowing");
+        Material_Ettmetal_Glowing = Resources.Load<Material>("Materials/CompilationShaders/Ettmetal_glowing");
         Font_Heebo = Resources.Load<Font>("Fonts/Heebo-Medium");
         MetalLineTemplate = Resources.Load<VolumetricLineBehavior>("MetalLineTemplate");
         MetalLineStripTemplate = Resources.Load<VolumetricLineStripBehavior>("MetalLineStripTemplate");
