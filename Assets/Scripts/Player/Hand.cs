@@ -75,9 +75,4 @@ public class Hand : MonoBehaviour {
     public void CatchCoin(Coin coin) {
         Pouch.AddCoin(coin);
     }
-
-    public void Clear() {
-        Pouch.Clear();
-    }
-
 }

@@ -79,7 +79,7 @@ public class Coin : Magnetic {
         }
     }
 
-    public override void AddForce(Vector3 netForce) {
+    public override void AddForce(Vector3 netForce, Vector3 allomanticForce) {
         // Calculate drag from its new velocity
         // Effectively caps the max velocity of the coin without affecting the ANF.
         //Vector3 newNetForce = netForce;
@@ -88,11 +88,13 @@ public class Coin : Magnetic {
         ) + netForce;
         if (collisionCollider) { // If in a collision..
             if (isStuck) { // and is stuck...
-                if (!IsStuckByFriction(netForce)) { // ... but friction is too weak to keep the coin stuck in the target.
+                if (!IsStuckByFriction(netForce) && !IsStuckByFriction(allomanticForce)) { // ... but friction is too weak to keep the coin stuck in the target.
+                                                                                           // Check both netForce and allomanticForce because the APB may decrease
+                                                                                           // the netForce, even when the allomanticForce would be good enough for friction
                     UnStick();
                 }
             } else { // and is not yet stuck from the previous pushes...
-                isStuck = IsStuckByFriction(netForce);
+                isStuck = IsStuckByFriction(netForce) || IsStuckByFriction(allomanticForce);
                 if (isStuck) { // but this push would stick the coin.
                     CreateJoint(collisionCollider.GetComponent<Rigidbody>());
                 }
@@ -128,6 +130,9 @@ public class Coin : Magnetic {
         return IsStuckByFriction(allomanticForce, allomanticForce);
     }
     private bool IsStuckByFriction(Vector3 allomanticForce, Vector3 direction) {
+        Debug.Log("----");
+        Debug.Log(Vector3.Dot(direction.normalized, collisionNormal));
+        Debug.Log(Vector3.Project(allomanticForce, collisionNormal).sqrMagnitude);
         return Vector3.Dot(direction.normalized, collisionNormal) < dotThreshold && Vector3.Project(allomanticForce, collisionNormal).sqrMagnitude > stuckThreshold;
     }
 

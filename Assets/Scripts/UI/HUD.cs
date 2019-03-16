@@ -10,22 +10,18 @@ public class HUD : MonoBehaviour {
     public static readonly Color weakBlue = new Color(0, .75f, 1, 1);
     public static readonly Color strongBlue = new Color(0, 1f, 1, 1);
 
-    private static Text coinCountText;
     private static Text fPSText;
 
     private float deltaTimeFPS = 0.0f;
     private static GameObject hudGameObject;
 
-    //public static string CoinCountText {
-    //    set {
-    //        coinCountText.text = value;
-    //    }
-    //}
-
     public static BurnRateMeter BurnRateMeter {
         get; private set;
     }
     public static MetalReserveMeters MetalReserveMeters {
+        get; private set;
+    }
+    public static ThrowingAmmoMeter ThrowingAmmoMeter {
         get; private set;
     }
     public static TargetOverlayController TargetOverlayController {
@@ -40,12 +36,10 @@ public class HUD : MonoBehaviour {
 
     void Awake() {
         hudGameObject = gameObject;
-
-        Text[] texts = GetComponentsInChildren<Text>();
-        coinCountText = texts[0];
-        fPSText = texts[1];
+        fPSText = GetComponentInChildren<Text>();
         BurnRateMeter = GetComponentInChildren<BurnRateMeter>();
         TargetOverlayController = GetComponentInChildren<TargetOverlayController>();
+        ThrowingAmmoMeter = GetComponentInChildren<ThrowingAmmoMeter>();
         MessageOverlayController = GetComponentInChildren<MessageOverlayController>();
         HelpOverlayController = GetComponentInChildren<HelpOverlayController>();
         MetalReserveMeters = GetComponentInChildren<MetalReserveMeters>();
@@ -60,7 +54,6 @@ public class HUD : MonoBehaviour {
         } else {
             fPSText.text = "";
         }
-        coinCountText.text = Player.PlayerInstance.CoinHand.Pouch.Count.ToString();
         if (Player.PlayerIronSteel.IsBurning) {
             TargetOverlayController.SoftRefresh();
         }
@@ -89,6 +82,7 @@ public class HUD : MonoBehaviour {
         if (BurnRateMeter) {
             BurnRateMeter.Clear();
             TargetOverlayController.Clear();
+            ThrowingAmmoMeter.Clear();
             MetalReserveMeters.Clear();
             MessageOverlayController.Clear();
         }

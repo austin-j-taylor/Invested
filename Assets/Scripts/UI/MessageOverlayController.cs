@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using static TextCodes;
 
 /*
  * Displays a message over the HUD. Stores strings that represent these messages.
@@ -9,7 +10,7 @@ using System.Collections.Generic;
  */
 public class MessageOverlayController : MonoBehaviour {
 
-    private const int numberOfMessages = 4;
+    private const int numberOfMessages = 11;
 
     public Text HeaderText { get; private set; }
     public Text MessageText { get; private set; }
@@ -57,40 +58,71 @@ public class MessageOverlayController : MonoBehaviour {
     }
 
     // The string "constants" used by TriggerBeadPopups.
+    // Must be assigned at runtime because changing the control scheme changes the contents of each string
+    // Not the most efficient, but hey, at least it's not Java
     public void UpdateMessages() {
         // TriggerBeadPopup strings
         TriggerBeadMessages[0] = new List<string> {
             "Movement",
-            TextCodes.KeyLook + " to look around.\n\n" + TextCodes.KeyMove + " to move.",
-            TextCodes.KeyJump + " to jump.\n\n\tCollect the glowing bead.",
+            KeyLook + " to look around.\n\n" + KeyMove + " to move.",
+            KeyJump + " to jump.\n\n\tCollect the vial of metals and the glowing bead.",
 
         };
         TriggerBeadMessages[1] = new List<string> {
             "Pushing & Pulling Basics",
-            TextCodes.KeyStartBurning + "\n\t\tto start burning " + TextCodes.Iron + " or " + TextCodes.Steel + ".",
-            TextCodes.s_Press_ + TextCodes.KeySelect + "\n\t\tto select a metal to be a " + TextCodes.Pull_target + ".\n" +
-                TextCodes.s_Press_ + TextCodes.KeySelectAlternate + "\n\t\tto select a metal to be a " + TextCodes.Push_target + ".",
-            TextCodes.KeyPull + " to " + TextCodes.Pull + ".\n" +
-                TextCodes.KeyPush + " to " + TextCodes.Push + ".",
-            "While holding " + TextCodes.KeyNegate + ", " + TextCodes.s_Press_ + TextCodes.KeySelect + "\n\t\t to deselect a " + TextCodes.Pull_target +
-                ".\nLikewise for " + TextCodes.KeySelectAlternate + " and " + TextCodes.Push_targets + ".",
-            TextCodes.KeyHelp + " to toggle the Help Overlay."
+            KeyStartBurning + "\n\t\tto start burning " + Iron + " or " + Steel + ".",
+            s_Press_ + KeySelect + "\n\t\tto select a metal to be a " + Pull_target + ".\n" +
+                s_Press_ + KeySelectAlternate + "\n\t\tto select a metal to be a " + Push_target + ".",
+            KeyPull + " to " + Pull + ".\n" +
+                KeyPush + " to " + Push + ".",
+            "While holding " + KeyNegate + ", " + s_Press_ + KeySelect + "\n\t\t to deselect a " + Pull_target +
+                ".\nLikewise for " + KeySelectAlternate + " and " + Push_targets + ".",
+            KeyHelp + " to toggle the Help Overlay.\nPlay around a bit before proceeding."
         };
         TriggerBeadMessages[2] = new List<string> {
             "Pulling",
-            "Cross the pit by " + TextCodes.Pulling + " yourself accross."
+            "Cross the pit by " + Pulling + " yourself accross."
         };
         TriggerBeadMessages[3] = new List<string> {
             "Pushing",
-            "Cross the pit by " + TextCodes.Pushing + " yourself accross."
+            "Cross the pit by " + Pushing + " yourself accross."
         };
-        //TriggerBeadMessages[2] = new List<string> {
-        //    "Targeting Multiple Metals",
-        //    TextCodes.KeyNumberOfTargets + " to change your " + TextCodes.Gray("max number of " + TextCodes.Push_Pull_targets + ".")
-        //};
+        TriggerBeadMessages[4] = new List<string> {
+            "Advanced Pushing & Pulling",
+            KeyNumberOfTargets + " to change your " + Gray("max number of " + Push_Pull_targets + ".") +
+                "\nYou can target multiple metals by increasing this number.",
+            KeyPushPullStrength + " to change " + Push_Pull + " " + BurnPercentage +
+                ".\nUse this to vary the strength of your " + Pushes_and_Pulls + ".",
+                "\n\n\tLook up. Balance in the air near the " + O_SeekerCube + "."
+        };
+        TriggerBeadMessages[5] = new List<string> {
+            "Advanced Pushing & Pulling",
+            KeyStopBurning + " to stop burning " + Gray("Iron and Steel.")
+        };
+        TriggerBeadMessages[6] = new List<string> {
+            "Advanced Movement",
+            KeyWalk + " to walk slowly."
+        };
+        TriggerBeadMessages[7] = new List<string> {
+            "Advanced Movement - Pewter",
+            KeySprint + " to burn " + Pewter + ". While burning " + Pewter  + ":\n\t\t• Move to " + Sprint + ".\n\t\t• Jump to " + PewterJump + "."
+        };
+        TriggerBeadMessages[8] = new List<string> {
+            "Advanced Movement - Pewter",
+            PewterJump + " while not trying to " + Sprint + " to jump straight up and higher."
+        };
+        TriggerBeadMessages[9] = new List<string> {
+            "Advanced Movement - Pewter",
+            PewterJump + " while touching a wall and:\n\t\t• trying to move away from the wall to kick off of the wall.\n\t\t• trying to move into the wall to wall jump up.\n\n\tWall jump up the crevice."
+        };
+        TriggerBeadMessages[10] = new List<string> {
+            "Coins",
+            "Collect the " + O_Coins + ".",
+            "throw it"
+        };
         // after teaching to deselect
-        //"If you have both " + TextCodes.Pull_targets + " and " + TextCodes.Push_targets + ", " + TextCodes.Pulling + " and " + TextCodes.Pushing + " will only operate on their respective targets.\n" +
-        //    "If you have selected only " + TextCodes.Pull_targets + " or only " + TextCodes.Push_targets +", " + TextCodes.Pulling + " and " + TextCodes.Pushing + "will operate on any target."
+        //"If you have both " + Pull_targets + " and " + Push_targets + ", " + Pulling + " and " + Pushing + " will only operate on their respective targets.\n" +
+        //    "If you have selected only " + Pull_targets + " or only " + Push_targets +", " + Pulling + " and " + Pushing + "will operate on any target."
 
         UpdateText();
     }

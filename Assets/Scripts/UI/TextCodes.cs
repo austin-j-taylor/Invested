@@ -37,14 +37,6 @@ public class TextCodes : MonoBehaviour {
     GameObject[] tester;
     private void Update() {
         tester = GameObject.FindGameObjectsWithTag("Testing");
-        //tester[8].GetComponent<Text>().text = KeyNumberOfTargets + " to change your " + Gray("max number of " + Push_Pull_targets + ".");
-        //tester[9].GetComponent<Text>().text = "While holding " + KeyNegate
-        //    + ":\n\t\t• " + s_Press_ + KeySelect + " while looking at a " + Pull_target
-        //    + " to deselect it.\n\t\t• " + s_Tap_ + KeySelect + " while not looking at a " + Pull_target + " to deselect your oldest " + Pull_target
-        //    + ".\n\t\tLikewise for " + KeySelectAlternate + " and " + Push_targets + ".";
-        //tester[10].GetComponent<Text>().text = KeyPushPullStrength + " to change " + Push_Pull + Gray(" strength") + '.';
-        //tester[11].GetComponent<Text>().text = KeyPassiveBurn + " to change which metal you passively burn.";
-        //tester[12].GetComponent<Text>().text = KeyStopBurning + " to stop burning " + Gray("Iron and Steel.");
         tester[13].GetComponent<Text>().text = KeyThrow + " to throw a coin in front of you. Try " + Pushing + " on it as you throw.";
         tester[14].GetComponent<Text>().text = KeyDrop + " to drop a coin at your feet. Try " + Pushing + " on it."
             + "\n\t\t• " + KeyDropDirection + " while dropping a coin will drop the coin in the opposite direction.";
@@ -77,6 +69,12 @@ public class TextCodes : MonoBehaviour {
     public static string Gold(string s) {
         return "<color=#fff080>" + s + "</color>";
     }
+    public static string Orange(string s) {
+        return "<color=#bf3f00>" + s + "</color>";
+    }
+    public static string Bronze(string s) {
+        return "<color=#ff9f00>" + s + "</color>";
+    }
 
     // Known words that should always appear in a specific color
     public static string Iron {
@@ -89,9 +87,19 @@ public class TextCodes : MonoBehaviour {
             return Gray("Steel");
         }
     }
+    public static string Pewter {
+        get {
+            return Gray("Pewter");
+        }
+    }
     public static string Pull {
         get {
             return MidBlue("Pull");
+        }
+    }
+    public static string Pulls {
+        get {
+            return MidBlue("Pulls");
         }
     }
     public static string Pulling {
@@ -102,6 +110,11 @@ public class TextCodes : MonoBehaviour {
     public static string Push {
         get {
             return Red("Push");
+        }
+    }
+    public static string Pushes {
+        get {
+            return Red("Pushes");
         }
     }
     public static string Pushing {
@@ -117,6 +130,11 @@ public class TextCodes : MonoBehaviour {
     public static string Pull_or_Push {
         get {
             return Pull + " or " + Push;
+        }
+    }
+    public static string Pushes_and_Pulls {
+        get {
+            return Pushes + " and " + Pulls;
         }
     }
     public static string Pull_target {
@@ -152,6 +170,37 @@ public class TextCodes : MonoBehaviour {
     public static string CoinshotMode {
         get {
             return Gold("Coinshot mode");
+        }
+    }
+    public static string BurnPercentage {
+        get {
+            return Gray("Burn Percentage");
+        }
+    }
+    public static string Sprint {
+        get {
+            return Orange("Sprint");
+        }
+    }
+    public static string PewterJump {
+        get {
+            return Orange("Pewter Jump");
+        }
+    }
+    // Objects, prefixed with "O_"
+    public static string O_SeekerCube {
+        get {
+            return Bronze("Seeker Cube");
+        }
+    }
+    public static string O_Coin {
+        get {
+            return Gold("Coin");
+        }
+    }
+    public static string O_Coins {
+        get {
+            return Gold("Coins");
         }
     }
 
@@ -263,6 +312,22 @@ public class TextCodes : MonoBehaviour {
                 return s_Use_ + WASD;
         }
     }
+    public static string KeyWalk {
+        get {
+            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+                return s_Use_ + theLeftJoystick;
+            else
+                return s_Hold_ + Ctrl;
+        }
+    }
+    public static string KeySprint {
+        get {
+            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+                return s_Hold_ + "XXX";
+            else
+                return s_Hold_ + Shift;
+        }
+    }
     public static string KeyLook {
         get {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
@@ -370,16 +435,16 @@ public class TextCodes : MonoBehaviour {
         get {
             switch (SettingsMenu.settingsData.controlScheme) {
                 case SettingsData.MK54: {
-                        return s_Hold_ + Tab + ", " + LightBlue(s_Mouse_Button_5) + ", and " + LightRed(s_Mouse_Button_4);
+                        return "Decrease " + BurnPercentage + " to 0% or " + s_Hold_ + Tab + ", " + LightBlue(s_Mouse_Button_5) + ", and " + LightRed(s_Mouse_Button_4);
                     }
                 case SettingsData.MK45: {
-                        return s_Hold_ + Tab + ", " + LightBlue(s_Mouse_Button_4) + ", and " + LightRed(s_Mouse_Button_5);
+                        return "Decrease " + BurnPercentage + " to 0% or " + s_Hold_ + Tab + ", " + LightBlue(s_Mouse_Button_4) + ", and " + LightRed(s_Mouse_Button_5);
                     }
                 case SettingsData.MKEQ: {
-                        return s_Hold_ + Tab + ", " + LightBlue(s_E) + ", and " + LightRed(s_Q);
+                        return "Decrease " + BurnPercentage + " to 0% or " + s_Hold_ + Tab + ", " + LightBlue(s_E) + ", and " + LightRed(s_Q);
                     }
                 case SettingsData.MKQE: {
-                        return s_Hold_ + Tab + ", " + LightBlue(s_Q) + ", and " + LightRed(s_E);
+                        return "Decrease " + BurnPercentage + " to 0% or " + s_Hold_ + Tab + ", " + LightBlue(s_Q) + ", and " + LightRed(s_E);
                     }
                 default: {
                         return s_Hold_ + Y + ", " + LightBlue(s_Right_Bumper) + ", and " + LightRed(s_Left_Bumper);
@@ -416,7 +481,7 @@ public class TextCodes : MonoBehaviour {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
                 return s_Press_ + Gray("Up/Down") + " on the D-Pad";
             else
-                return s_Press_ + "and scroll " + theScrollWheel;
+                return s_Press_ + KeyNegate + " and scroll " + theScrollWheel;
         }
     }
     public static string KeyThrow {

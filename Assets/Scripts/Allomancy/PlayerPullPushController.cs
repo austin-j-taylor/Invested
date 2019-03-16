@@ -47,8 +47,6 @@ public class PlayerPullPushController : AllomanticIronSteel {
     }
 
     public override void Clear(bool clearTargets = true) {
-        IronReserve.SetMass(150);
-        SteelReserve.SetMass(150);
         DisableRenderingBlueLines();
         base.Clear(clearTargets);
     }

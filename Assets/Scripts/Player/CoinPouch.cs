@@ -30,6 +30,10 @@ public class CoinPouch : MonoBehaviour {
     }
 
     public void Clear() {
+        Count = 0;
+    }
+
+    public void Fill() {
         Count = startingCoinCount;
     }
 }

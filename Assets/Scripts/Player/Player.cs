@@ -111,13 +111,24 @@ public class Player : PewterEntity {
     // Reset certain values AFTER the player enters a new scene
     private void ClearPlayerAfterSceneChange(Scene scene, LoadSceneMode mode) {
         if (mode == LoadSceneMode.Single) { // Not loading all of the scenes, as it does at startup
-            CoinHand.Clear();
             PlayerIronSteel.Clear();
             SetFrameMaterial(frameMaterial);
             CanControlPlayer = true;
             //if (scene.buildIndex == SceneSelectMenu.sceneLevel01)
             //    GodMode = true;
             //else
+            if (scene.buildIndex == SceneSelectMenu.sceneLevel01) {
+                CoinHand.Pouch.Clear();
+                PlayerIronSteel.IronReserve.SetMass(0);
+                PlayerIronSteel.SteelReserve.SetMass(0);
+                PlayerPewter.PewterReserve.SetMass(0);
+            } else {
+                // For every scene except the tutorial, give metals and coins at the start.
+                CoinHand.Pouch.Fill();
+                PlayerIronSteel.IronReserve.SetMass(150);
+                PlayerIronSteel.SteelReserve.SetMass(150);
+                PlayerPewter.PewterReserve.SetMass(100);
+            }
             GodMode = false;
 
             GameObject spawn = GameObject.FindGameObjectWithTag("PlayerSpawn");
