@@ -77,7 +77,7 @@ public class MessageOverlayController : MonoBehaviour {
                 KeyPush + " to " + Push + ".",
             "While holding " + KeyNegate + ", " + s_Press_ + KeySelect + "\n\t\t to deselect a " + Pull_target +
                 ".\nLikewise for " + KeySelectAlternate + " and " + Push_targets + ".",
-            KeyHelp + " to toggle the Help Overlay.\nPlay around a bit before proceeding."
+            KeyHelp + " to toggle the " + HelpOverlay + ".\nPlay around a bit before proceeding."
         };
         TriggerBeadMessages[2] = new List<string> {
             "Pulling",
@@ -113,16 +113,25 @@ public class MessageOverlayController : MonoBehaviour {
         };
         TriggerBeadMessages[9] = new List<string> {
             "Advanced Movement - Pewter",
-            PewterJump + " while touching a wall and:\n\t\t• trying to move away from the wall to kick off of the wall.\n\t\t• trying to move into the wall to wall jump up.\n\n\tWall jump up the crevice."
+            PewterJump + " while touching a wall\n\t\t• while trying to move away from the wall to kick off of the wall\n\t\t• while trying to move into the wall to wall jump up\n\n\tWall jump up the crevice."
         };
         TriggerBeadMessages[10] = new List<string> {
             "Coins",
-            "Collect the " + O_Coins + ".",
-            "throw it"
+            KeyPull + " near " + O_Coins + " to pick them up.",
+            KeyThrow + " to toss a coin in front of you. Try " + Pushing + " on it as you throw.", 
+            KeyDrop + " to drop a coin at your feet. Try " + Pushing + " on it.\n\t\t• " +
+                KeyDropDirection + " while dropping a coin to toss the coin away from that direction.\n\n\tScale the wall using " + O_Coins + " and " + PewterJumping + 
+                ".\n\n\t(Hint: multi-targeting is your best friend when using coins.)\n\t(" + KeyHelp + " to toggle the " + HelpOverlay + ".)"
         };
+
+
         // after teaching to deselect
         //"If you have both " + Pull_targets + " and " + Push_targets + ", " + Pulling + " and " + Pushing + " will only operate on their respective targets.\n" +
         //    "If you have selected only " + Pull_targets + " or only " + Push_targets +", " + Pulling + " and " + Pushing + "will operate on any target."
+
+        //KeyCoinshotMode + " to activate " + CoinshotMode
+        //    + ".\n\t\t• While in " + CoinshotMode + ", " + KeyCoinshotThrow
+        //    + " to throw coins.\n\t\t" + KeyCoinshotMode + " again to disable " + CoinshotMode + ".";
 
         UpdateText();
     }

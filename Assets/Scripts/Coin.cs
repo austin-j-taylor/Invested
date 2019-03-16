@@ -130,9 +130,6 @@ public class Coin : Magnetic {
         return IsStuckByFriction(allomanticForce, allomanticForce);
     }
     private bool IsStuckByFriction(Vector3 allomanticForce, Vector3 direction) {
-        Debug.Log("----");
-        Debug.Log(Vector3.Dot(direction.normalized, collisionNormal));
-        Debug.Log(Vector3.Project(allomanticForce, collisionNormal).sqrMagnitude);
         return Vector3.Dot(direction.normalized, collisionNormal) < dotThreshold && Vector3.Project(allomanticForce, collisionNormal).sqrMagnitude > stuckThreshold;
     }
 

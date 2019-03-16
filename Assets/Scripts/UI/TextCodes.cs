@@ -32,21 +32,7 @@ public class TextCodes : MonoBehaviour {
     public const string s_Scroll_ = "Scroll ";
     public const string s_Leftdashclick_ = "Left-click ";
     public const string s_Rightdashclick_ = "Right-click ";
-
-
-    GameObject[] tester;
-    private void Update() {
-        tester = GameObject.FindGameObjectsWithTag("Testing");
-        tester[13].GetComponent<Text>().text = KeyThrow + " to throw a coin in front of you. Try " + Pushing + " on it as you throw.";
-        tester[14].GetComponent<Text>().text = KeyDrop + " to drop a coin at your feet. Try " + Pushing + " on it."
-            + "\n\t\t• " + KeyDropDirection + " while dropping a coin will drop the coin in the opposite direction.";
-        tester[15].GetComponent<Text>().text = Pull + " a coin into you to " + Gray("catch") + " it.";
-        //tester[16].GetComponent<Text>().text = KeySwap + " to swap your " + Push_targets + " and " + Pull_targets + ".";
-        tester[17].GetComponent<Text>().text = KeyCoinshotMode + " to activate " + CoinshotMode
-            + ".\n\t\t• While in " + CoinshotMode + ", " + KeyCoinshotThrow
-            + " to throw coins.\n\t\t" + KeyCoinshotMode + " again to disable " + CoinshotMode + ".";
-    }
-
+    
     // Methods that accept strings as arguments and return strings colored in their respective color
     public static string Blue(string s) {
         return "<color=#0080ff>" + s + "</color>";
@@ -70,7 +56,7 @@ public class TextCodes : MonoBehaviour {
         return "<color=#fff080>" + s + "</color>";
     }
     public static string Orange(string s) {
-        return "<color=#bf3f00>" + s + "</color>";
+        return "<color=#ff9d60>" + s + "</color>";
     }
     public static string Bronze(string s) {
         return "<color=#ff9f00>" + s + "</color>";
@@ -182,9 +168,24 @@ public class TextCodes : MonoBehaviour {
             return Orange("Sprint");
         }
     }
+    public static string Sprinting {
+        get {
+            return Orange("Sprinting");
+        }
+    }
     public static string PewterJump {
         get {
             return Orange("Pewter Jump");
+        }
+    }
+    public static string PewterJumping {
+        get {
+            return Orange("Pewter Jumping");
+        }
+    }
+    public static string HelpOverlay {
+        get {
+            return Gray("Help Overlay");
         }
     }
     // Objects, prefixed with "O_"
@@ -489,7 +490,7 @@ public class TextCodes : MonoBehaviour {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
                 return s_Press_ + X;
             else
-                return s_Press_ + Ctrl;
+                return s_Press_ + theScrollWheel;
         }
     }
     public static string KeyDrop {
@@ -497,15 +498,15 @@ public class TextCodes : MonoBehaviour {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
                 return s_Hold_ + A + " and press " + X;
             else
-                return s_Hold_ + Space + " and press " + Ctrl;
+                return s_Hold_ + Space + " and press " + theScrollWheel;
         }
     }
     public static string KeyDropDirection {
         get {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-                return "Tilting " + theLeftJoystick;
+                return s_Use_ + theLeftJoystick;
             else
-                return "Holding " + WASD;
+                return s_Hold_ + WASD;
         }
     }
     public static string KeySwap {

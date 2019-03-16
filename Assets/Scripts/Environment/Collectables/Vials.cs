@@ -3,9 +3,9 @@
 public class Vials : MonoBehaviour {
 
     [SerializeField]
-    private bool persistent;
+    private bool persistent = true;
     [SerializeField]
-    private float volume;
+    private float volume = 150;
     
     private void OnTriggerEnter(Collider other) {
         if(!other.isTrigger && other.CompareTag("Player")) {

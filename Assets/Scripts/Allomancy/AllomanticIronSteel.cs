@@ -552,7 +552,7 @@ public class AllomanticIronSteel : Allomancer {
      */
     private void AddForce(Magnetic target) {
 
-        target.AddForce(target.LastNetForceOnTarget, target.LastAllomanticForce);
+        target.AddForce(target.LastNetForceOnTarget, target.LastAllomanticForceOnTarget);
         rb.AddForce(target.LastNetForceOnAllomancer);
 
         //// Debug
