@@ -12,7 +12,7 @@ public class CameraController : MonoBehaviour {
     private const float playerLookAtTargetHeight = 1.25f;
     private const float playerLookAtTargetFirstPersonHeight = 1;
     private const float distanceFromHitWall = .125f;//.5f;
-    private const float wallDistanceCheck = 4;
+    private const float wallDistanceCheck = 3;
     private const float lerpConstant = 5;
     private static readonly Vector3 distancefromPlayer = new Vector3(0, 0, -wallDistanceCheck);
     public static Camera ActiveCamera { get; private set; }

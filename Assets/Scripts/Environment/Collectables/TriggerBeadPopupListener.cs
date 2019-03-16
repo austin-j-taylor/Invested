@@ -7,7 +7,7 @@ using System.Collections;
  */
 public class TriggerBeadPopupListener : TriggerBeadPopup {
 
-    public enum Action { MoveWASD, StartBurningIronSteel, SelectDown, PushPull, Deselect, Help, ChangeNumberOfTargets, ChangeBurnPercentage, StopBurningIronSteel, CollectCoin, ThrowCoin };
+    public enum Action { MoveWASD, StartBurningIronSteel, SelectDown, PushPull, Deselect, Help, ChangeNumberOfTargets, ChangeBurnPercentage, StopBurningIronSteel, CollectCoin, ThrowCoin, ThrowCoinDown };
 
     public Action[] actions;
     public bool[] clearAfter;
@@ -128,6 +128,12 @@ public class TriggerBeadPopupListener : TriggerBeadPopup {
                     }
                 case Action.ThrowCoin: {
                         while (!Keybinds.WithdrawCoinDown()) {
+                            yield return null;
+                        }
+                        break;
+                    }
+                case Action.ThrowCoinDown: {
+                        while (!Keybinds.WithdrawCoinDown() || !Keybinds.Jump()) {
                             yield return null;
                         }
                         break;

@@ -113,14 +113,14 @@ public class MessageOverlayController : MonoBehaviour {
         };
         TriggerBeadMessages[9] = new List<string> {
             "Advanced Movement - Pewter",
-            PewterJump + " while touching a wall\n\t\t• while trying to move away from the wall to kick off of the wall\n\t\t• while trying to move into the wall to wall jump up\n\n\tWall jump up the crevice."
+            PewterJump + " while touching a wall\n\t\t• while trying to move away from the wall to kick off of the wall\n\t\t• while trying to move into the wall to wall jump up\n\n\tWall jump up the crevice.\n\n\t" + Pewter + " burns quickly, so refill at a vial if you run out."
         };
         TriggerBeadMessages[10] = new List<string> {
             "Coins",
             KeyPull + " near " + O_Coins + " to pick them up.",
             KeyThrow + " to toss a coin in front of you. Try " + Pushing + " on it as you throw.", 
-            KeyDrop + " to drop a coin at your feet. Try " + Pushing + " on it.\n\t\t• " +
-                KeyDropDirection + " while dropping a coin to toss the coin away from that direction.\n\n\tScale the wall using " + O_Coins + " and " + PewterJumping + 
+            KeyDrop + " to drop a coin at your feet. Try " + Pushing + " on it.",
+            "\t\t• " + KeyDropDirection + " while dropping a coin to toss the coin away from that direction.\n\n\tScale the wall using " + O_Coins + " and " + PewterJumping + 
                 ".\n\n\t(Hint: multi-targeting is your best friend when using coins.)\n\t(" + KeyHelp + " to toggle the " + HelpOverlay + ".)"
         };
 
