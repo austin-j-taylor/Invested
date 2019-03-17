@@ -10,18 +10,22 @@ public class PauseMenu : MonoBehaviour {
 
     private static SettingsMenu settingsMenu;
 
+    private static Transform buttonsHeader;
     private Button unpauseButton;
     private Button settingsButton;
     private Button resetButton;
     private Button quitButton;
 
-    private static GameObject pauseMenu;
+    private static PauseMenu instance;
 
     // Use this for initialization
     void Awake() {
+        instance = this;
+
         settingsMenu = transform.parent.GetComponentInChildren<SettingsMenu>();
 
-        Button[] buttons = GetComponentsInChildren<Button>();
+        buttonsHeader = transform.Find("Buttons");
+        Button[] buttons = buttonsHeader.GetComponentsInChildren<Button>();
         unpauseButton = buttons[0];
         settingsButton = buttons[1];
         resetButton = buttons[2];
@@ -32,10 +36,10 @@ public class PauseMenu : MonoBehaviour {
         resetButton.onClick.AddListener(ClickReset);
         quitButton.onClick.AddListener(ClickQuit);
 
-        pauseMenu = gameObject;
         gameObject.SetActive(false);
         IsPaused = false;
     }
+
     private void LateUpdate() {
         if (Keybinds.EscapeDown()) {
             if (settingsMenu.IsOpen) {
@@ -46,6 +50,15 @@ public class PauseMenu : MonoBehaviour {
         }
     }
 
+    public static void Open() {
+        buttonsHeader.gameObject.SetActive(true);
+        MainMenu.FocusOnCurrentMenu(instance.transform);
+    }
+
+    public static void Close() {
+        buttonsHeader.gameObject.SetActive(false);
+    }
+
     public static void Pause() {
         CameraController.UnlockCamera();
         GamepadController.SetRumble(0, 0);
@@ -54,24 +67,30 @@ public class PauseMenu : MonoBehaviour {
         // Update blue lines for this frame (workaround)
         Player.PlayerIronSteel.SearchForMetals();
 
-        pauseMenu.SetActive(true);
+        instance.gameObject.SetActive(true);
+        Open();
         IsPaused = true;
     }
 
     public static void UnPause() {
-        settingsMenu.Close();
+        if (IsPaused) {
+            settingsMenu.Close();
 
-        CameraController.LockCamera();
-        Time.timeScale = SettingsMenu.settingsData.timeScale;
-        pauseMenu.SetActive(false);
-        IsPaused = false;
+            CameraController.LockCamera();
+            Time.timeScale = SettingsMenu.settingsData.timeScale;
+            Close();
+            instance.gameObject.SetActive(false);
+            IsPaused = false;
+        }
     }
+
 
     private void ClickUnpause() {
         UnPause();
     }
 
     private void ClickSettings() {
+        Close();
         settingsMenu.Open();
     }
 

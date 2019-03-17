@@ -206,6 +206,7 @@ public class TextCodes : MonoBehaviour {
     }
 
     // Known inputs that should always appear in a specific color
+    // Gamepad
     public static string LeftClick {
         get {
             return MidBlue(s_Left_Click);
@@ -241,6 +242,32 @@ public class TextCodes : MonoBehaviour {
             return "the " + Gray("right joystick");
         }
     }
+    public static string Start {
+        get {
+            return Gray("Start");
+        }
+    }
+    public static string A {
+        get {
+            return Gray("A");
+        }
+    }
+    public static string B {
+        get {
+            return Gray("B");
+        }
+    }
+    public static string X {
+        get {
+            return Gray("X");
+        }
+    }
+    public static string Y {
+        get {
+            return Gray("Y");
+        }
+    }
+    // Mouse/Keyboard
     public static string theMouse {
         get {
             return "the " + Gray("mouse");
@@ -276,6 +303,11 @@ public class TextCodes : MonoBehaviour {
             return Gray("W/A/S/D");
         }
     }
+    public static string Escape {
+        get {
+            return Gray("Escape");
+        }
+    }
     public static string H {
         get {
             return Gray("H");
@@ -284,21 +316,6 @@ public class TextCodes : MonoBehaviour {
     public static string C {
         get {
             return Gold("C");
-        }
-    }
-    public static string A {
-        get {
-            return Gray("A");
-        }
-    }
-    public static string X {
-        get {
-            return Gray("X");
-        }
-    }
-    public static string Y {
-        get {
-            return Gray("Y");
         }
     }
 
@@ -324,7 +341,7 @@ public class TextCodes : MonoBehaviour {
     public static string KeySprint {
         get {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-                return s_Hold_ + "XXX";
+                return s_Hold_ + B;
             else
                 return s_Hold_ + Shift;
         }
@@ -528,17 +545,17 @@ public class TextCodes : MonoBehaviour {
     public static string KeyCoinshotThrow {
         get {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-                return "hold " + LeftTrigger + " and press " + RightTrigger + " (or vice-versa)";
+                return s_Hold_ + LeftTrigger + " and press " + RightTrigger + " (or vice-versa)";
             else
-                return "hold " + RightClick + " and press " + LeftClick + " (or vice-versa)";
+                return s_Hold_ + RightClick + " and press " + LeftClick + " (or vice-versa)";
         }
     }
     public static string KeyHelp {
         get {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-                return s_Press_ + "UNIMPLEMENTED";
+                return s_Press_ + Start + " > Settings > Interface > Help Overlay";
             else
-                return s_Press_ + H;
+                return s_Press_ + Escape + " > Settings > Interface > Help Overlay or " + s_Press_ + H;
         }
     }
 

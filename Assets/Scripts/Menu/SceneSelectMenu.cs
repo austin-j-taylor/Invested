@@ -22,6 +22,8 @@ public class SceneSelectMenu : MonoBehaviour {
     }
 
     private Text tooltip;
+    private Transform levelsHeader;
+    private Transform sandboxesHeader;
     private Button luthadelButton;
     private Button shootingGroundsButton;
     private Button sandboxButton;
@@ -31,14 +33,17 @@ public class SceneSelectMenu : MonoBehaviour {
 
     void Start() {
         tooltip = transform.Find("Tooltip").GetComponent<Text>();
+        levelsHeader = transform.Find("Levels").transform;
+        sandboxesHeader = transform.Find("Sandboxes").transform;
 
-        Button[] buttons = GetComponentsInChildren<Button>();
-        luthadelButton = buttons[0];
-        shootingGroundsButton = buttons[1];
-        sandboxButton = buttons[2];
-        southernMountainsButton = buttons[3];
-        level01Button = buttons[4];
-        backButton = buttons[buttons.Length - 1];
+        Button[] buttonsLevels = levelsHeader.GetComponentsInChildren<Button>();
+        Button[] buttonsSandboxes = sandboxesHeader.GetComponentsInChildren<Button>();
+        luthadelButton = buttonsSandboxes[0];
+        shootingGroundsButton = buttonsSandboxes[1];
+        sandboxButton = buttonsSandboxes[2];
+        southernMountainsButton = buttonsSandboxes[3];
+        level01Button = buttonsLevels[0];
+        backButton = transform.Find("Back").GetComponent<Button>();
         
         luthadelButton.onClick.AddListener(OnClickedLuthadel);
         shootingGroundsButton.onClick.AddListener(OnClickedShootingGrounds);
@@ -54,11 +59,12 @@ public class SceneSelectMenu : MonoBehaviour {
     public void Open() {
         gameObject.SetActive(true);
         tooltip.text = "";
+        MainMenu.FocusOnCurrentMenu(transform);
     }
 
     public void Close() {
-        MainMenu.OpenTitleScreen();
         gameObject.SetActive(false);
+        MainMenu.OpenTitleScreen();
     }
 
     public static void LoadScene(int scene) {
@@ -66,9 +72,9 @@ public class SceneSelectMenu : MonoBehaviour {
         Player.PlayerInstance.transform.parent = GameObject.FindGameObjectWithTag("GameController").transform;
         if (scene == sceneTitleScreen) {
             MainMenu.Open();
-            MainMenu.OpenSceneSelectMenu();
+            //MainMenu.OpenSceneSelectMenu();
         }
-
+        
         SceneManager.LoadScene(scene);
     }
 
@@ -81,16 +87,17 @@ public class SceneSelectMenu : MonoBehaviour {
             PauseMenu.UnPause();
 
             if (scene.buildIndex != sceneTitleScreen) {
-                Close();
+                //Close();
                 MainMenu.Close();
 
                 Player.PlayerInstance.gameObject.SetActive(true);
                 CameraController.LockCamera();
                 HUD.ResetHUD();
-
             } else {
                 Player.PlayerInstance.gameObject.SetActive(false);
                 CameraController.UnlockCamera();
+                if(isActiveAndEnabled)
+                    MainMenu.FocusOnCurrentMenu(transform);
             }
         }
     }

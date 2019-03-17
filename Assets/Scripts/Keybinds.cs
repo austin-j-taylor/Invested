@@ -104,14 +104,14 @@ public static class Keybinds {
 
     public static float Horizontal() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-            return Input.GetAxis("GamepadHorizontal");
+            return Input.GetAxis("Horizontal");
         else
             return Input.GetAxisRaw("Horizontal");
     }
 
     public static float Vertical() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-            return Input.GetAxis("GamepadVertical");
+            return Input.GetAxis("Vertical");
         else
             return Input.GetAxisRaw("Vertical");
     }
@@ -200,7 +200,7 @@ public static class Keybinds {
 
     public static bool ToggleHelpOverlay() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
-            return Input.GetButtonDown("GamepadBack");
+            return false;
         } else {
             return Input.GetKeyDown(KeyCode.H);
         }

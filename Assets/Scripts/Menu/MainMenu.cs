@@ -1,18 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class MainMenu : MonoBehaviour {
 
     private static MainMenu instance;
-    
+    private static Transform canvas;
+    private static EventSystem eventSystem;
+
     private TitleScreen titleScreen;
     private SettingsMenu settingsMenu;
     private SceneSelectMenu sceneSelectMenu;
 
+    public static bool IsOpen {
+        get {
+            return instance.gameObject.activeSelf;
+        }
+    }
+
     private void Awake() {
         instance = this;
+        canvas = GameObject.FindGameObjectWithTag("Canvas").transform;
+        eventSystem = GameObject.FindGameObjectWithTag("GameController").GetComponent<EventSystem>();
+
         titleScreen = GetComponentInChildren<TitleScreen>();
         settingsMenu = transform.parent.GetComponentInChildren<SettingsMenu>();
         sceneSelectMenu = GetComponentInChildren<SceneSelectMenu>();
@@ -28,6 +38,8 @@ public class MainMenu : MonoBehaviour {
         settingsMenu.Close();
         sceneSelectMenu.Close();
         HUD.DisableHUD();
+        
+        Open();
     }
 
     private void Update() {
@@ -45,6 +57,7 @@ public class MainMenu : MonoBehaviour {
 
     public static void Open() {
         instance.gameObject.SetActive(true);
+        FocusOnCurrentMenu(instance.transform);
     }
 
     public static void Close() {
@@ -52,28 +65,35 @@ public class MainMenu : MonoBehaviour {
     }
 
     public static void OpenTitleScreen() {
-        CloseSettingsMenu();
         instance.titleScreen.Open();
-    }
-
-    public static void CloseTitleScreen() {
-        instance.titleScreen.Close();
+        FocusOnCurrentMenu(instance.titleScreen.transform);
     }
 
     public static void OpenSceneSelectMenu() {
-        CloseTitleScreen();
+        instance.titleScreen.Close();
         instance.sceneSelectMenu.Open();
     }
 
     public static void CloseSceneSelectMenu() {
         instance.sceneSelectMenu.Close();
+        //instance.titleScreen.Open();
     }
 
     public static void OpenSettingsMenu() {
+        instance.titleScreen.Close();
         instance.settingsMenu.Open();
     }
 
     public static void CloseSettingsMenu() {
         instance.settingsMenu.Close();
+        instance.titleScreen.Open();
+    }
+
+    // Finds the first button, slider, etc. in the newly opened menu for gamepad and keyboard control of the menu
+    // Works for Title Screen and Scene Select Menu
+    public static void FocusOnCurrentMenu(Transform parent) {
+        Selectable child = parent.GetComponentInChildren<Selectable>();
+        if(child)
+            eventSystem.SetSelectedGameObject(child.gameObject);
     }
 }

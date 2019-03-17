@@ -155,6 +155,7 @@ public class SettingsMenu : MonoBehaviour {
         gameObject.SetActive(true);
         resetToDefaultsButton.gameObject.SetActive(true);
         tooltipText.text = "";
+        MainMenu.FocusOnCurrentMenu(transform);
     }
 
     public void Close() {
@@ -167,6 +168,11 @@ public class SettingsMenu : MonoBehaviour {
         CloseAllomancy();
         CloseWorld();
         gameObject.SetActive(false);
+        if(!PauseMenu.IsPaused) {
+            MainMenu.OpenTitleScreen();
+        } else {
+            PauseMenu.Open();
+        }
     }
 
     private void OpenHeader() {
@@ -175,6 +181,7 @@ public class SettingsMenu : MonoBehaviour {
         discardButton.gameObject.SetActive(true);
         resetToDefaultsButton.gameObject.SetActive(false);
         closeText.text = s_save;
+        MainMenu.FocusOnCurrentMenu(settingsHeader.parent);
     }
 
     private void CloseHeader() {
@@ -182,6 +189,7 @@ public class SettingsMenu : MonoBehaviour {
         discardButton.gameObject.SetActive(false);
         resetToDefaultsButton.gameObject.SetActive(true);
         closeText.text = s_back;
+        MainMenu.FocusOnCurrentMenu(settingsHeader);
     }
 
     private void OpenGlossary() {
@@ -189,6 +197,7 @@ public class SettingsMenu : MonoBehaviour {
         glossaryHeader.gameObject.SetActive(true);
         settingsHeader.gameObject.SetActive(false);
         resetToDefaultsButton.gameObject.SetActive(false);
+        MainMenu.FocusOnCurrentMenu(settingsHeader.parent);
     }
 
     private void CloseGlossary() {
@@ -268,7 +277,7 @@ public class SettingsMenu : MonoBehaviour {
         return BackSettings();
     }
 
-    // Returns true if calling this returns to the Title Screen
+    // Returns true if calling this returns to the Title Screen or Pause Menu
     private bool BackSettings() {
         if (IsGlossaryOpen)
             CloseGlossary();

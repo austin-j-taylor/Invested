@@ -40,6 +40,7 @@ public class SettingsData : MonoBehaviour {
     public int hudForces; // 0 for Disabled, 1 for Enabled
     public int hudMasses; // 0 for Disabled, 1 for Enabled
     public int fpsCounter; // 0 for Disabled, 1 for Enabled
+    public int helpOverlay; // 0 for Disabled, 1 for Enabled
     // Graphics
     public int antialiasing;
     public int ambientOcclusion;
@@ -173,6 +174,10 @@ public class SettingsData : MonoBehaviour {
                 }
             case "fpsCounter": {
                     fpsCounter = data;
+                    return true;
+                }
+            case "helpOverlay": {
+                    helpOverlay = data;
                     return true;
                 }
             case "antialiasing": {
@@ -332,6 +337,9 @@ public class SettingsData : MonoBehaviour {
                 }
             case "fpsCounter": {
                     return fpsCounter;
+                }
+            case "helpOverlay": {
+                    return helpOverlay;
                 }
             case "antialiasing": {
                     return antialiasing;

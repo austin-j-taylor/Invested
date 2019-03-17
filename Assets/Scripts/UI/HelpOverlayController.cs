@@ -50,4 +50,16 @@ public class HelpOverlayController : MonoBehaviour {
         HelpTextLeft.enabled = open;
         HelpTextRight.enabled = open;
     }
+
+    public void Enable() {
+        open = true;
+        HelpTextLeft.enabled = true;
+        HelpTextRight.enabled = true;
+    }
+
+    public void Disable() {
+        open = false;
+        HelpTextLeft.enabled = false;
+        HelpTextRight.enabled = false;
+    }
 }
