@@ -9,13 +9,13 @@ public class HelpOverlayController : MonoBehaviour {
 
     public Text HelpTextLeft { get; private set; }
     public Text HelpTextRight { get; private set; }
-
-    bool open;
+    
+    public bool IsOpen { get; private set; }
 
     void Awake() {
         HelpTextLeft = transform.Find("HelpTextLeft").GetComponent<Text>();
         HelpTextRight = transform.Find("HelpTextRight").GetComponent<Text>();
-        open = false;
+        IsOpen = false;
         HelpTextLeft.enabled = false;
         HelpTextRight.enabled = false;
         UpdateText();
@@ -46,19 +46,19 @@ public class HelpOverlayController : MonoBehaviour {
     }
 
     public void Toggle() {
-        open = !open;
-        HelpTextLeft.enabled = open;
-        HelpTextRight.enabled = open;
+        IsOpen = !IsOpen;
+        HelpTextLeft.enabled = IsOpen;
+        HelpTextRight.enabled = IsOpen;
     }
 
     public void Enable() {
-        open = true;
+        IsOpen = true;
         HelpTextLeft.enabled = true;
         HelpTextRight.enabled = true;
     }
 
     public void Disable() {
-        open = false;
+        IsOpen = false;
         HelpTextLeft.enabled = false;
         HelpTextRight.enabled = false;
     }

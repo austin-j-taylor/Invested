@@ -8,8 +8,8 @@ using System.IO;
 [System.Serializable]
 public class SettingsData : MonoBehaviour {
 
-    private const string configFileName = "config.json";
-    private const string defaultConfigFileName = "default_config.json";
+    private const string configFileName = "Assets/Data/config.json";
+    private const string defaultConfigFileName = "Assets/Data/default_config.json";
 
     // Constants for setting states
     public const int MK54 = 0; // Mouse/Keyboard with Select and SelectAlternate on 5 and 4, etc.

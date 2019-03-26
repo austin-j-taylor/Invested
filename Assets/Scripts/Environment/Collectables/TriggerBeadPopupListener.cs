@@ -94,7 +94,7 @@ public class TriggerBeadPopupListener : TriggerBeadPopup {
                         break;
                     }
                 case Action.Help: {
-                        while (!Keybinds.ToggleHelpOverlay()) {
+                        while (!HUD.HelpOverlayController.IsOpen) {
                             yield return null;
                         }
                         // Close Message

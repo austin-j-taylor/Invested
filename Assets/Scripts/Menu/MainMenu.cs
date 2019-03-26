@@ -8,6 +8,7 @@ public class MainMenu : MonoBehaviour {
     private static Transform canvas;
     private static EventSystem eventSystem;
 
+    private ControlSchemeScreen controlSchemeScreen;
     private TitleScreen titleScreen;
     private SettingsMenu settingsMenu;
     private SceneSelectMenu sceneSelectMenu;
@@ -23,6 +24,7 @@ public class MainMenu : MonoBehaviour {
         canvas = GameObject.FindGameObjectWithTag("Canvas").transform;
         eventSystem = GameObject.FindGameObjectWithTag("GameController").GetComponent<EventSystem>();
 
+        controlSchemeScreen = GetComponentInChildren<ControlSchemeScreen>();
         titleScreen = GetComponentInChildren<TitleScreen>();
         settingsMenu = transform.parent.GetComponentInChildren<SettingsMenu>();
         sceneSelectMenu = GetComponentInChildren<SceneSelectMenu>();
@@ -40,6 +42,11 @@ public class MainMenu : MonoBehaviour {
         HUD.DisableHUD();
         
         Open();
+        if(FlagsController.ControlSchemeChosen) {
+            OpenTitleScreen();
+        } else {
+            OpenControlSchemeScreen();
+        }
     }
 
     private void Update() {
@@ -62,6 +69,16 @@ public class MainMenu : MonoBehaviour {
 
     public static void Close() {
         instance.gameObject.SetActive(false);
+    }
+
+    public static void OpenControlSchemeScreen() {
+        instance.controlSchemeScreen.Open();
+        FocusOnCurrentMenu(instance.controlSchemeScreen.transform);
+    }
+
+    public static void CloseControlSchemeScreen() {
+        instance.controlSchemeScreen.Close();
+        OpenTitleScreen();
     }
 
     public static void OpenTitleScreen() {

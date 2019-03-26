@@ -35,5 +35,6 @@ public class LevelCompletedScreen : MonoBehaviour {
     public static void OpenScreen() {
         levelCompletedScreen.SetActive(true);
         CameraController.UnlockCamera();
+        MainMenu.FocusOnCurrentMenu(levelCompletedScreen.transform);
     }
 }
