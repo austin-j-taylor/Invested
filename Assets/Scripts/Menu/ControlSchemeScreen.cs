@@ -4,10 +4,10 @@
  */
 public class ControlSchemeScreen : MonoBehaviour {
 
-
+    public static FlagsController flagsData;
 
     private void Awake() {
-        
+        flagsData = gameObject.AddComponent<FlagsController>();
     }
 
     public void Open() {

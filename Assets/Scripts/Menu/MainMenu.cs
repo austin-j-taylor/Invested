@@ -39,6 +39,7 @@ public class MainMenu : MonoBehaviour {
         Player.PlayerInstance.gameObject.SetActive(false);
         settingsMenu.Close();
         sceneSelectMenu.Close();
+        titleScreen.Close();
         HUD.DisableHUD();
         
         Open();
