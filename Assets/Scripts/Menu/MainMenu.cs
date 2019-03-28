@@ -39,19 +39,20 @@ public class MainMenu : MonoBehaviour {
         Player.PlayerInstance.gameObject.SetActive(false);
         settingsMenu.Close();
         sceneSelectMenu.Close();
-        titleScreen.Close();
         HUD.DisableHUD();
         
         Open();
         if(FlagsController.ControlSchemeChosen) {
+            controlSchemeScreen.Close();
             OpenTitleScreen();
         } else {
+            titleScreen.Close();
             OpenControlSchemeScreen();
         }
     }
 
     private void Update() {
-        if(Keybinds.EscapeDown()) {
+        if(Keybinds.EscapeDown() && !controlSchemeScreen.IsOpen) {
             if(sceneSelectMenu.IsOpen) {
                 CloseSceneSelectMenu();
             } else if(settingsMenu.IsOpen) {

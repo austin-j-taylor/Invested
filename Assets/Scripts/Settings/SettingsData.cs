@@ -78,7 +78,7 @@ public class SettingsData : MonoBehaviour {
         Time.fixedDeltaTime = timeScale / 60;
     }
 
-    public void SaveSettings() {
+    public void SaveSettings() {        
         string jSONText = JsonUtility.ToJson(this, true);
 
         StreamWriter writer = new StreamWriter(configFileName, false);

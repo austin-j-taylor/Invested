@@ -69,12 +69,12 @@ public class SettingsMenu : MonoBehaviour {
     private Button graphicsButton;
     private Button allomancyButton;
     private Button worldButton;
-    private Transform glossaryHeader;
-    private Transform gameplayHeader;
-    private Transform interfaceHeader;
-    private Transform graphicsHeader;
-    private Transform allomancyHeader;
-    private Transform worldHeader;
+    private static Transform glossaryHeader;
+    private static Transform gameplayHeader;
+    private static Transform interfaceHeader;
+    private static Transform graphicsHeader;
+    private static Transform allomancyHeader;
+    private static Transform worldHeader;
     private Button closeButton;
     private Text closeText;
     private Button discardButton;
@@ -144,12 +144,20 @@ public class SettingsMenu : MonoBehaviour {
         resetToDefaultsButton.gameObject.SetActive(false);
     }
 
+    // Refresh Settings and Refresh Particular Settings to update button texts
     private void RefreshSettings() {
         foreach (Setting setting in settings) {
             setting.RefreshData();
             setting.RefreshText();
         }
     }
+    public static void RefreshSettingHelpOverlay() {
+        ButtonSetting helpOverlay = interfaceHeader.Find("HelpOverlayLabel").GetComponent<ButtonSetting>();
+        helpOverlay.RefreshData();
+        helpOverlay.RefreshText();
+    }
+
+    // Open, Close, and OnClicks
 
     public void Open() {
         gameObject.SetActive(true);

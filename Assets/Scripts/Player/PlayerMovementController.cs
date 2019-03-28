@@ -35,9 +35,6 @@ public class PlayerMovementController : MonoBehaviour {
     }
 
     private void Update() {
-        if(!Keybinds.Sprint()) {
-            lastWasSprinting = false;
-        }
         if (IsGrounded && Keybinds.JumpDown()) {
             // Queue a jump for the next FixedUpdate
             // Actual jumping done in FixedUpdate to stay in sync with PlayerGroundedChecker
@@ -88,12 +85,13 @@ public class PlayerMovementController : MonoBehaviour {
             if (movement.sqrMagnitude > 0) {
                 if(IsGrounded) {
                     float sprintMovement = Player.PlayerPewter.Sprint(movement, lastWasSprinting);
-                    lastWasSprinting = true;
                     if (sprintMovement == 0) {
                         // if airborne or not Sprinting, move normally.
+                        lastWasSprinting = false;
                         movement *= MovementMagnitude(movement);
                     } else {
                         // if sprinting
+                        lastWasSprinting = true;
                         movement *= sprintMovement;
                     }
                 } else {

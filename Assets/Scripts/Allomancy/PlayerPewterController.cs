@@ -16,7 +16,13 @@ public class PlayerPewterController : AllomanticPewter {
     protected const float timePewterPerJump = 1.5f;
     private readonly Vector3 particleSystemPosition = new Vector3(0, -.2f, 0);
 
-
+    private void Update() {
+        if (Keybinds.Sprint() && PewterReserve.HasMass) {
+            IsSprinting = true;
+        } else {
+            IsSprinting = false;
+        }
+    }
 
     public override void Clear() {
         PewterReserve.SetMass(100);
@@ -24,7 +30,7 @@ public class PlayerPewterController : AllomanticPewter {
     }
 
     public float Sprint(Vector3 movement, bool lastWasSprinting) {
-        if (IsBurning) {
+        if (IsSprinting) {
             if(!lastWasSprinting) {
                 particleDirection = Quaternion.LookRotation(-movement);
                 particleSystem.transform.rotation = particleDirection;
@@ -37,10 +43,11 @@ public class PlayerPewterController : AllomanticPewter {
 
     /*
      * If burning pewter, executes a pewter jump.
+     * If not burning, executes a normal jump.
      * Returns the force of the jump.
      */
     public Vector3 Jump(Vector3 movement, Vector3 force) {
-        if(IsBurning) {
+        if(IsSprinting) {
             Drain(gramsPewterPerJump, timePewterPerJump);
 
             particleSystem.transform.rotation = particleDirection;

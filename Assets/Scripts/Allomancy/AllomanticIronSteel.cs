@@ -181,7 +181,7 @@ public class AllomanticIronSteel : Allomancer {
     }
 
     public virtual void Clear(bool clearTargets = true) {
-        IsBurning = false;
+        base.Clear();
 
         if (clearTargets) {
             IronPulling = false;

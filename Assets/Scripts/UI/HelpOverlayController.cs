@@ -10,14 +10,20 @@ public class HelpOverlayController : MonoBehaviour {
     public Text HelpTextLeft { get; private set; }
     public Text HelpTextRight { get; private set; }
     
-    public bool IsOpen { get; private set; }
+    public bool IsOpen {
+        get {
+            return SettingsMenu.settingsData.helpOverlay == 1;
+        }
+        private set {
+            SettingsMenu.settingsData.helpOverlay = value ? 1 : 0;
+        }
+    }
 
     void Awake() {
         HelpTextLeft = transform.Find("HelpTextLeft").GetComponent<Text>();
         HelpTextRight = transform.Find("HelpTextRight").GetComponent<Text>();
         IsOpen = false;
-        HelpTextLeft.enabled = false;
-        HelpTextRight.enabled = false;
+        //SetVisible(IsOpen);
         UpdateText();
     }
 
@@ -32,7 +38,7 @@ public class HelpOverlayController : MonoBehaviour {
             ":\n\t\t• " + s_Press_ + KeySelect + " while looking at a " + Pull_target +
             " to deselect it.\n\t\t• " + s_Tap_ + KeySelect + " while not looking at a " + Pull_target + " to deselect your oldest " + Pull_target +
             ".\n\t\tLikewise for " + KeySelectAlternate + " and " + Push_targets + ".";
-        HelpTextRight.text = 
+        HelpTextRight.text =
             KeyPushPullStrength + " to change " + Push_Pull + " " + BurnPercentage + "\n" +
             KeyNumberOfTargets + " to change your " + Gray("max number of " + Push_Pull_targets + ".\n") +
             KeySwap + " to swap your " + Push_targets + " and " + Pull_targets + ".\n" +
@@ -45,21 +51,23 @@ public class HelpOverlayController : MonoBehaviour {
             ;
     }
 
+    // Not called by Button
     public void Toggle() {
-        IsOpen = !IsOpen;
-        HelpTextLeft.enabled = IsOpen;
-        HelpTextRight.enabled = IsOpen;
+        SetVisible(!IsOpen);
+        SettingsMenu.RefreshSettingHelpOverlay();
+    }
+
+    private void SetVisible(bool open) {
+        IsOpen = open;
+        HelpTextLeft.gameObject.SetActive(open);
+        HelpTextRight.gameObject.SetActive(open);
     }
 
     public void Enable() {
-        IsOpen = true;
-        HelpTextLeft.enabled = true;
-        HelpTextRight.enabled = true;
+        SetVisible(true);
     }
 
     public void Disable() {
-        IsOpen = false;
-        HelpTextLeft.enabled = false;
-        HelpTextRight.enabled = false;
+        SetVisible(false);
     }
 }

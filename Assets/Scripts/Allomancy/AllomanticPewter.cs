@@ -9,11 +9,22 @@ using System.Collections;
 [RequireComponent(typeof(Rigidbody))]
 public class AllomanticPewter : Allomancer {
 
-    protected const float gramsPewterPerSecondPassive = 1;
+    protected const float gramsPewterPerSecondSprint = 1;
     protected const float gramsPewterPerFall = 2f;
     protected const float timePewterPerFall = 1f;
 
     public MetalReserve PewterReserve { get; private set; }
+    protected bool IsSprinting { get; set; } = false;
+    protected bool IsDraining { get; set; } = false;
+    public override bool IsBurning {
+        get {
+            return IsSprinting || IsDraining;
+        }
+        protected set {
+            IsSprinting = false;
+            IsDraining = false;
+        }
+    }
 
     protected Rigidbody rb;
     protected ParticleSystem particleSystem;
@@ -27,22 +38,17 @@ public class AllomanticPewter : Allomancer {
         GameManager.AddAllomancer(this);
     }
 
-    public virtual void Clear() {
+    public override void Clear() {
+        IsSprinting = false;
         StopAllCoroutines();
-    }
-
-    private void Update() {
-        if(Keybinds.Sprint() && PewterReserve.HasMass) {
-            IsBurning = true;
-        } else {
-            IsBurning = false;
-        }
+        base.Clear();
     }
 
     private void FixedUpdate() {
-        if (IsBurning) {
-            PewterReserve.Mass -= gramsPewterPerSecondPassive * Time.fixedDeltaTime;
+        if (IsSprinting) {
+            PewterReserve.Mass -= gramsPewterPerSecondSprint * Time.fixedDeltaTime;
         }
+        // IsBurning mass drain is done through Drain()
     }
 
     private void OnDestroy() {
@@ -74,6 +80,7 @@ public class AllomanticPewter : Allomancer {
         // not guarantee that the right amount of mass is consumed.
         // Thus:
         while (massDrained + deltaMass < totalMass && t < maxtime) {
+            IsDraining = true; // Repeatedly assigned in case of multiple coroutines are running at once and one finishes, setting IsDraining to false
             massDrained += deltaMass;
             PewterReserve.Mass -= deltaMass;
 
@@ -85,6 +92,7 @@ public class AllomanticPewter : Allomancer {
 
         // Drain remaining amount of mass
         PewterReserve.Mass -= totalMass - massDrained;
+        IsDraining = false;
     }
 
     // When taking damage, attempt to shield it
