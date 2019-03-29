@@ -11,11 +11,11 @@ public static class Keybinds {
     private static float triggerDeadband = 0.01f;
 
     public static bool IronPulling() {
-        return RightBurnRate() > triggerDeadband;
+        return RightBurnPercentage() > triggerDeadband;
     }
 
     public static bool SteelPushing() {
-        return LeftBurnRate() > triggerDeadband;
+        return LeftBurnPercentage() > triggerDeadband;
     }
 
     // Both Keyboard and Gamepad (Specifics for M45/KQE)
@@ -176,14 +176,14 @@ public static class Keybinds {
             return Input.GetKeyUp(KeyCode.Tab);
     }
 
-    public static float LeftBurnRate() {
+    public static float LeftBurnPercentage() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
             return Input.GetAxis("LeftTrigger");
         else
             return Input.GetButton("Mouse1") ? 1 : 0;
     }
 
-    public static float RightBurnRate() {
+    public static float RightBurnPercentage() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
             return Input.GetAxis("RightTrigger");
         else

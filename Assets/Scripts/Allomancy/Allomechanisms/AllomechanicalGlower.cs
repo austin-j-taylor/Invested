@@ -36,7 +36,7 @@ public class AllomechanicalGlower : MonoBehaviour {
         if (allomancer.IsBurning) {
             if (allomancer.IronPulling) {
                 foreach (Renderer rend in irons) {
-                    EnableEmission(rend.material, glowColors[iron], 1 + 2 * allomancer.IronBurnRateTarget);
+                    EnableEmission(rend.material, glowColors[iron], 1 + 2 * allomancer.IronBurnPercentageTarget);
                 }
             } else {
                 foreach (Renderer rend in irons) {
@@ -45,7 +45,7 @@ public class AllomechanicalGlower : MonoBehaviour {
             }
             if (allomancer.SteelPushing) {
                 foreach (Renderer rend in steels) {
-                    EnableEmission(rend.material, glowColors[steel], 1 + 2 * allomancer.SteelBurnRateTarget);
+                    EnableEmission(rend.material, glowColors[steel], 1 + 2 * allomancer.SteelBurnPercentageTarget);
                 }
             } else {
                 foreach (Renderer rend in steels) {

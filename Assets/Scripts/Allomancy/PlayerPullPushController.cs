@@ -23,7 +23,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
     private const float targetLowCurvePosition = .02f;
 
     // Other Constants
-    private const float burnRateLerpConstant = .30f;
+    private const float burnPercentageLerpConstant = .30f;
     private const int blueLineLayer = 10;
     private const float metalLinesLerpConstant = .30f;
 
@@ -31,10 +31,10 @@ public class PlayerPullPushController : AllomanticIronSteel {
     private float timeToStopBurning = 0f;
     private float timeToSwapBurning = 0f;
 
-    // Lerp goals for burn rate targets
+    // Lerp goals for burn percentage targets
     // These are displayed in the Burn Rate Meter
-    private float ironBurnRateLerp = 0;
-    private float steelBurnRateLerp = 0;
+    private float ironBurnPercentageLerp = 0;
+    private float steelBurnPercentageLerp = 0;
     // for Magnitude control style
     private float forceMagnitudeTarget = 600;
 
@@ -61,7 +61,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
 
     /*
      * Read inputs for selecting targets.
-     * Update burn rates.
+     * Update burn percentages.
      * Update blue lines pointing from player to metal.
      */
     private void LateUpdate() {
@@ -91,9 +91,8 @@ public class PlayerPullPushController : AllomanticIronSteel {
             // Could have stopped burning above. Check if the Allomancer is still burning.
             if (IsBurning) {
 
-                // Change Burn Rate Targets, Number of Targets
-
-                // Check scrollwheel for changing the max number of targets and burn rate, or DPad if using gamepad
+                // Change Burn Percentage Targets, Number of Targets
+                // Check scrollwheel for changing the max number of targets and burn percentage, or DPad if using gamepad
                 float scrollValue = 0;
                 if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) { // Gamepad
                     scrollValue = Keybinds.DPadYAxis();
@@ -105,7 +104,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
                         scrollValue = Keybinds.ScrollWheelAxis();
                     } else {
                         if (SettingsMenu.settingsData.pushControlStyle == 0) {
-                            ChangeBurnRateTarget(Keybinds.ScrollWheelAxis());
+                            ChangeBurnPercentageTarget(Keybinds.ScrollWheelAxis());
                         } else {
                             ChangeTargetForceMagnitude(Keybinds.ScrollWheelAxis());
                         }
@@ -118,11 +117,11 @@ public class PlayerPullPushController : AllomanticIronSteel {
                     DecrementNumberOfTargets();
                 }
 
-                // Assign Burn rate targets based on the previously changed burn rate/target magnitudes
+                // Assign Burn percentage targets based on the previously changed burn percentage/target magnitudes
                 if (SettingsMenu.settingsData.pushControlStyle == 0) { // Percentage
                     if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) { // Gamepad
-                        SetPullRateTarget(Keybinds.RightBurnRate());
-                        SetPushRateTarget(Keybinds.LeftBurnRate());
+                        SetPullPercentageTarget(Keybinds.RightBurnPercentage());
+                        SetPushPercentageTarget(Keybinds.LeftBurnPercentage());
                     }
                 } else { // Magnitude
                     if (HasPullTarget || HasPushTarget) {
@@ -130,15 +129,15 @@ public class PlayerPullPushController : AllomanticIronSteel {
                         //Debug.Log(player.LastMaximumNetForce);
 
                         float maxNetForce = (LastMaximumNetForce).magnitude;
-                        SetPullRateTarget(forceMagnitudeTarget / maxNetForce);
-                        SetPushRateTarget(forceMagnitudeTarget / maxNetForce);
+                        SetPullPercentageTarget(forceMagnitudeTarget / maxNetForce);
+                        SetPushPercentageTarget(forceMagnitudeTarget / maxNetForce);
                     } else {
-                        SetPullRateTarget(0);
-                        SetPushRateTarget(0);
+                        SetPullPercentageTarget(0);
+                        SetPushPercentageTarget(0);
                     }
                 }
 
-                LerpToBurnRates();
+                LerpToBurnPercentages();
                 UpdateBurnRateMeter();
                 
                 if (Player.CanControlPlayer) {
@@ -222,7 +221,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
                     if (IsBurning) {
 
                         SearchForMetals(false);
-                        LerpToBurnRates();
+                        LerpToBurnPercentages();
                         UpdateBurnRateMeter();
                         RefreshHUD();
                     }
@@ -239,8 +238,8 @@ public class PlayerPullPushController : AllomanticIronSteel {
         HUD.BurnRateMeter.SetMetalLineCountText(PullTargets.Size.ToString());
         if (SettingsMenu.settingsData.renderblueLines == 1)
             EnableRenderingBlueLines();
-        ironBurnRateLerp = 1;
-        steelBurnRateLerp = 1;
+        ironBurnPercentageLerp = 1;
+        steelBurnPercentageLerp = 1;
         forceMagnitudeTarget = 600;
 
         SearchForMetals(); // first frame of blue lines
@@ -254,8 +253,8 @@ public class PlayerPullPushController : AllomanticIronSteel {
             HighlightedTarget.RemoveTargetGlow();
             HighlightedTarget = null;
         }
-        steelBurnRateLerp = 0;
-        ironBurnRateLerp = 0;
+        steelBurnPercentageLerp = 0;
+        ironBurnPercentageLerp = 0;
         forceMagnitudeTarget = 0;
         GamepadController.SetRumble(0, 0);
         GetComponentInChildren<AllomechanicalGlower>().RemoveAllEmissions();
@@ -321,16 +320,16 @@ public class PlayerPullPushController : AllomanticIronSteel {
         if (targetedLineColors) {
             // Update metal lines for Pull/PushTargets
             if (PullingOnPullTargets) {
-                PullTargets.UpdateBlueLines(true, IronBurnRateTarget, CenterOfMass);
+                PullTargets.UpdateBlueLines(true, IronBurnPercentageTarget, CenterOfMass);
             } else if (PushingOnPullTargets) {
-                PullTargets.UpdateBlueLines(true, SteelBurnRateTarget, CenterOfMass);
+                PullTargets.UpdateBlueLines(true, SteelBurnPercentageTarget, CenterOfMass);
             } else if (HasPullTarget) {
                 PullTargets.UpdateBlueLines(true, 0, CenterOfMass);
             }
             if (PullingOnPushTargets) {
-                PushTargets.UpdateBlueLines(false, IronBurnRateTarget, CenterOfMass);
+                PushTargets.UpdateBlueLines(false, IronBurnPercentageTarget, CenterOfMass);
             } else if (PushingOnPushTargets) {
-                PushTargets.UpdateBlueLines(false, SteelBurnRateTarget, CenterOfMass);
+                PushTargets.UpdateBlueLines(false, SteelBurnPercentageTarget, CenterOfMass);
             } else if (HasPushTarget) {
                 PushTargets.UpdateBlueLines(false, 0, CenterOfMass);
             }
@@ -345,7 +344,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
     private float SetLineProperties(Magnetic target) {
         Vector3 allomanticForceVector = CalculateAllomanticForce(target);
         float allomanticForce = allomanticForceVector.magnitude;
-        // If using Percentage force mode, burn rate affects your range for burning
+        // If using Percentage force mode, burn percentage affects your range for burning
         if (SettingsMenu.settingsData.pushControlStyle == 0)
             allomanticForce *= GreaterPassiveBurn;
         
@@ -443,80 +442,80 @@ public class PlayerPullPushController : AllomanticIronSteel {
             StopBurning();
     }
 
-    // Increments or decrements the current burn rate
-    private void ChangeBurnRateTarget(float change) {
+    // Increments or decrements the current burn percentage
+    private void ChangeBurnPercentageTarget(float change) {
         if (change > 0) {
             change = .10f;
-            if (ironBurnRateLerp < .09f || steelBurnRateLerp < .09f) {
+            if (ironBurnPercentageLerp < .09f || steelBurnPercentageLerp < .09f) {
                 change /= 10f;
             }
         } else if (change < 0) {
             change = -.10f;
-            if (ironBurnRateLerp <= .10f || steelBurnRateLerp <= .10f) {
+            if (ironBurnPercentageLerp <= .10f || steelBurnPercentageLerp <= .10f) {
                 change /= 10f;
             }
         }
-        SetPullRateTarget(Mathf.Clamp(ironBurnRateLerp + change, 0, 1));
-        SetPushRateTarget(Mathf.Clamp(steelBurnRateLerp + change, 0, 1));
+        SetPullPercentageTarget(Mathf.Clamp(ironBurnPercentageLerp + change, 0, 1));
+        SetPushPercentageTarget(Mathf.Clamp(steelBurnPercentageLerp + change, 0, 1));
     }
 
-    // Sets the lerp goal for iron burn rate
-    private void SetPullRateTarget(float rate) {
-        if (rate > .005f) {
-            ironBurnRateLerp = Mathf.Min(1, rate);
+    // Sets the lerp goal for iron burn percentage
+    private void SetPullPercentageTarget(float percentage) {
+        if (percentage > .005f) {
+            ironBurnPercentageLerp = Mathf.Min(1, percentage);
         } else {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-                ironBurnRateLerp = 1;
+                ironBurnPercentageLerp = 1;
             else
-                ironBurnRateLerp = 0;
+                ironBurnPercentageLerp = 0;
         }
     }
-    // Sets the lerp goal for steel burn rate
-    private void SetPushRateTarget(float rate) {
-        if (rate > .005f) {
-            steelBurnRateLerp = Mathf.Min(1, rate);
+    // Sets the lerp goal for steel burn percentage
+    private void SetPushPercentageTarget(float percentage) {
+        if (percentage > .005f) {
+            steelBurnPercentageLerp = Mathf.Min(1, percentage);
         } else {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-                steelBurnRateLerp = 1;
+                steelBurnPercentageLerp = 1;
             else
-                steelBurnRateLerp = 0;
+                steelBurnPercentageLerp = 0;
         }
     }
 
     /*
-     * Lerps from the current burn rate to the burn rate target for both metals.
-     * If the player is not Pulling or Pushing, that burn rate is instead set to 0.
+     * Lerps from the current burn percentage to the burn percentage target for both metals.
+     * If the player is not Pulling or Pushing, that burn percentage is instead set to 0.
      *      Set, not lerped - there's more precision there.
      */
-    private void LerpToBurnRates() {
-        IronBurnRateTarget = Mathf.Lerp(IronBurnRateTarget, ironBurnRateLerp, burnRateLerpConstant);
-        SteelBurnRateTarget = Mathf.Lerp(SteelBurnRateTarget, steelBurnRateLerp, burnRateLerpConstant);
+    private void LerpToBurnPercentages() {
+        IronBurnPercentageTarget = Mathf.Lerp(IronBurnPercentageTarget, ironBurnPercentageLerp, burnPercentageLerpConstant);
+        SteelBurnPercentageTarget = Mathf.Lerp(SteelBurnPercentageTarget, steelBurnPercentageLerp, burnPercentageLerpConstant);
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
             IronPassiveBurn = 1;
             SteelPassiveBurn = 1;
         } else {
-            IronPassiveBurn = IronBurnRateTarget;
-            SteelPassiveBurn = SteelBurnRateTarget;
+            IronPassiveBurn = IronBurnPercentageTarget;
+            SteelPassiveBurn = SteelBurnPercentageTarget;
         }
 
         // Gamepad rumble
         if (HasPullTarget || HasPushTarget) {
             if (IronPulling) {
-                GamepadController.SetRumbleRight(IronBurnRateTarget * GamepadController.rumbleFactor);
+                GamepadController.SetRumbleRight(IronBurnPercentageTarget * GamepadController.rumbleFactor);
             } else {
                 GamepadController.SetRumbleRight(0);
             }
             if (SteelPushing) {
-                GamepadController.SetRumbleLeft(SteelBurnRateTarget * GamepadController.rumbleFactor);
+                GamepadController.SetRumbleLeft(SteelBurnPercentageTarget * GamepadController.rumbleFactor);
             } else {
                 GamepadController.SetRumbleLeft(0);
             }
         } else {
             GamepadController.SetRumble(0, 0);
         }
-        // If using the Percentage control scheme and the target burn rate is 0 (and not using a gamepad, which will very often be 0)
+        // If using the Percentage control scheme and the target burn percentage is 0 (and not using a gamepad, which will very often be 0)
         //      Then stop burning metals
-        if (SettingsMenu.settingsData.pushControlStyle == 0 && SettingsMenu.settingsData.controlScheme != SettingsData.Gamepad && (IronBurnRateTarget < .001f && SteelBurnRateTarget < .001f)) {
+        if (SettingsMenu.settingsData.pushControlStyle == 0 && SettingsMenu.settingsData.controlScheme != SettingsData.Gamepad && (IronBurnPercentageTarget < .001f && SteelBurnPercentageTarget < .001f)) {
             StopBurning();
         }
     }
@@ -524,28 +523,28 @@ public class PlayerPullPushController : AllomanticIronSteel {
     private void UpdateBurnRateMeter() {
         if (IsBurning) {
             if (SettingsMenu.settingsData.pushControlStyle == 1) // Magnitude
-                HUD.BurnRateMeter.SetBurnRateMeterForceMagnitude(LastAllomanticForce, LastAnchoredPushBoost, IronBurnRateTarget, SteelBurnRateTarget, forceMagnitudeTarget);
+                HUD.BurnRateMeter.SetBurnRateMeterForceMagnitude(LastAllomanticForce, LastAnchoredPushBoost, IronBurnPercentageTarget, SteelBurnPercentageTarget, forceMagnitudeTarget);
             else if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
                 if (SteelPushing) {
                     if (IronPulling) {
                         HUD.BurnRateMeter.SetBurnRateMeterPercentage(LastAllomanticForce, LastAnchoredPushBoost,
-                            IronBurnRateTarget, SteelBurnRateTarget);
+                            IronBurnPercentageTarget, SteelBurnPercentageTarget);
                     } else {
                         HUD.BurnRateMeter.SetBurnRateMeterPercentage(LastAllomanticForce, LastAnchoredPushBoost,
-                            0, SteelBurnRateTarget);
+                            0, SteelBurnPercentageTarget);
                     }
                 } else {
                     if(IronPulling) {
                         HUD.BurnRateMeter.SetBurnRateMeterPercentage(LastAllomanticForce, LastAnchoredPushBoost,
-                            IronBurnRateTarget, 0);
+                            IronBurnPercentageTarget, 0);
                     } else {
                 HUD.BurnRateMeter.SetBurnRateMeterPercentage(LastAllomanticForce, LastAnchoredPushBoost,
-                    IronBurnRateTarget, SteelBurnRateTarget);
+                    IronBurnPercentageTarget, SteelBurnPercentageTarget);
                     }
                 }
             } else {
                 HUD.BurnRateMeter.SetBurnRateMeterPercentage(LastAllomanticForce, LastAnchoredPushBoost,
-                    IronBurnRateTarget, SteelBurnRateTarget);
+                    IronBurnPercentageTarget, SteelBurnPercentageTarget);
             }
         } else {
             HUD.BurnRateMeter.Clear();

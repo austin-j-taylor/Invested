@@ -66,7 +66,7 @@ public class Simulation_coinWall : MonoBehaviour {
             counter += Time.deltaTime / Time.timeScale;
             if (counter > .5f) {
                 allomancer.SteelPushing = true;
-                allomancer.SteelBurnRateTarget = 1;
+                allomancer.SteelBurnPercentageTarget = 1;
                 if(counter > 4 && counter < 6) {
                     texts[texts.Length - 5].text = "Wall: " + TextCodes.Gray("Unanchored");
                     texts[texts.Length - 6].text = "Coin: " + TextCodes.Blue("Partially Anchored");

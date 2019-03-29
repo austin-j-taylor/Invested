@@ -10,7 +10,7 @@ public class AllomanticIronSteel : Allomancer {
     // Force calculation constants
     public const float chargePower = 1f / 8f;
     public const float lineOfSightFactor = 3 / 4f; // If a target is blocked by a wall, pushes are at 75% strength
-    // Actual "Burn Rates" of iron and steel
+    // Metal burn rates
     private const double gramsIronPerSecondPerNewton = .001f;
     private const double gramsSteelPerSecondPerNewton = gramsIronPerSecondPerNewton;
     public const double gramsPerSecondPassiveBurn = -.005f; // 5 mg/s for passively burning iron or steel to see metal lines
@@ -89,7 +89,7 @@ public class AllomanticIronSteel : Allomancer {
     private Vector3 thisFrameAllomanticForce = Vector3.zero;
     public Vector3 LastAnchoredPushBoost { get; private set; } = Vector3.zero;
     private Vector3 thisFrameAnchoredPushBoost = Vector3.zero;
-    // Maximum possible Net Force on allomancer, regardless of burn rate
+    // Maximum possible Net Force on allomancer, regardless of burn percentage
     public Vector3 LastMaximumNetForce { get; private set; } = Vector3.zero;
     private Vector3 thisFrameMaximumNetForce = Vector3.zero;
 
@@ -102,18 +102,13 @@ public class AllomanticIronSteel : Allomancer {
     public Vector3 resititutionFromPlayersForce;
     public float percentOfTargetForceReturned;
     public float percentOfAllomancerForceReturned;
-    // Metal burn rates
-    // Used when burning metals, but not necessarily immediately Pushing or Pulling. Hence, they are "targets" and not the actual burn rate of the Allomancer.
-    public float IronBurnRateTarget { get; set; }
-    public float SteelBurnRateTarget { get; set; }
-    // The passive burn rate of the allomancer.
+    // Metal burn percentages
+    // Used when burning metals, but not necessarily immediately Pushing or Pulling. Hence, they are "targets" and not the actual burn percentage of the Allomancer.
+    public float IronBurnPercentageTarget { get; set; }
+    public float SteelBurnPercentageTarget { get; set; }
+    // The passive burn percentages of the allomancer.
     protected float IronPassiveBurn { get; set; }
     protected float SteelPassiveBurn { get; set; }
-    //public float GreaterBurnRate {
-    //    get {
-    //        return Mathf.Max(IronBurnRateTarget, SteelBurnRateTarget);
-    //    }
-    //}
     public float GreaterPassiveBurn {
         get {
             return Mathf.Max(IronPassiveBurn, SteelPassiveBurn);
@@ -190,8 +185,8 @@ public class AllomanticIronSteel : Allomancer {
             ironPulling = false;
             steelPushing = false;
         }
-        IronBurnRateTarget = 0;
-        SteelBurnRateTarget = 0;
+        IronBurnPercentageTarget = 0;
+        SteelBurnPercentageTarget = 0;
         IronPassiveBurn = 0;
         SteelPassiveBurn = 0;
         PullTargets.Clear(true, clearTargets);
@@ -214,9 +209,9 @@ public class AllomanticIronSteel : Allomancer {
         if (!PauseMenu.IsPaused) {
             if (IsBurning) {
                 // Remove all targets that are out of pushing range
-                // For Mouse/Keyboard, Iron and Steel burn rates are equal, so it's somewhat redundant to specify
-                PullTargets.RemoveAllOutOfRange(IronBurnRateTarget, this);
-                PushTargets.RemoveAllOutOfRange(SteelBurnRateTarget, this);
+                // For Mouse/Keyboard, Iron and Steel burn percentages are equal, so it's somewhat redundant to specify
+                PullTargets.RemoveAllOutOfRange(IronBurnPercentageTarget, this);
+                PushTargets.RemoveAllOutOfRange(SteelBurnPercentageTarget, this);
 
                 // Calculate net charges to know how pushes will be distributed amongst targets
                 float netPullTargetsCharge = PullTargets.NetCharge();
@@ -307,7 +302,7 @@ public class AllomanticIronSteel : Allomancer {
 
     /*
      * Calculates the maximum possible Allomantic Force between the allomancer and target.
-     * Does not account for ABPs or burn rate.
+     * Does not account for ABPs or burn percentage.
      * Accounts for no line-of-sight with the target decreasing force.
      * 
      *  Formula:
@@ -393,8 +388,8 @@ public class AllomanticIronSteel : Allomancer {
             thisFrameMaximumNetForce += allomanticForce;
             target.LastMaxPossibleAllomanticForce = allomanticForce;
 
-            // Make the AF proportional to the burn rate
-            allomanticForce *= (target.LastWasPulled ? IronBurnRateTarget : SteelBurnRateTarget);
+            // Make the AF proportional to the burn percentage
+            allomanticForce *= (target.LastWasPulled ? IronBurnPercentageTarget : SteelBurnPercentageTarget);
 
             switch (SettingsMenu.settingsData.anchoredBoost) {
                 case 0: { // Disabled
@@ -552,16 +547,16 @@ public class AllomanticIronSteel : Allomancer {
         thisFrameAllomanticForce += allomanticForce;
         thisFrameAnchoredPushBoost += restitutionForceFromTarget;
         if (target.LastWasPulled) {
-            if (IronBurnRateTarget == 0) {
+            if (IronBurnPercentageTarget == 0) {
                 thisFrameMaximumNetForce += restitutionForceFromTarget;
             } else {
-                thisFrameMaximumNetForce += restitutionForceFromTarget / IronBurnRateTarget;
+                thisFrameMaximumNetForce += restitutionForceFromTarget / IronBurnPercentageTarget;
             }
         } else {
-            if (SteelBurnRateTarget == 0) {
+            if (SteelBurnPercentageTarget == 0) {
                 thisFrameMaximumNetForce += restitutionForceFromTarget;
             } else {
-                thisFrameMaximumNetForce += restitutionForceFromTarget / SteelBurnRateTarget;
+                thisFrameMaximumNetForce += restitutionForceFromTarget / SteelBurnPercentageTarget;
             }
         }
         target.LastAllomanticForce = allomanticForce;
@@ -597,9 +592,9 @@ public class AllomanticIronSteel : Allomancer {
         if (IsBurning || startIron && !HasIron || !startIron && !HasSteel)
             return false;
         IsBurning = true;
-        // Set burn rates to a low burn
-        IronBurnRateTarget = .1f;
-        SteelBurnRateTarget = .1f;
+        // Set burn percentages to a low burn
+        IronBurnPercentageTarget = .1f;
+        SteelBurnPercentageTarget = .1f;
         if (startIron)
             lastWasPulling = true;
         else
@@ -611,8 +606,8 @@ public class AllomanticIronSteel : Allomancer {
         if (IsBurning) {
             PullTargets.Clear();
             PushTargets.Clear();
-            IronBurnRateTarget = 0;
-            SteelBurnRateTarget = 0;
+            IronBurnPercentageTarget = 0;
+            SteelBurnPercentageTarget = 0;
             IsBurning = false;
             lastWasPulling = false;
             lastWasPushing = false;

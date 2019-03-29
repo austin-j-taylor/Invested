@@ -8,7 +8,7 @@ using System.Collections;
 public abstract class Allomancer : MonoBehaviour {
 
     public virtual bool IsBurning { get; protected set; } = false;
-    //public abstract bool BurnRate();
+    //public abstract bool BurnPercentage();
     public virtual void Clear() {
         IsBurning = false;
     }

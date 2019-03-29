@@ -108,7 +108,7 @@ public class TriggerBeadPopupListener : TriggerBeadPopup {
                         break;
                     }
                 case Action.ChangeBurnPercentage: {
-                        while (Player.PlayerIronSteel.IronBurnRateTarget > .99f && Player.PlayerIronSteel.SteelBurnRateTarget > .99f) {
+                        while (Player.PlayerIronSteel.IronBurnPercentageTarget > .99f && Player.PlayerIronSteel.SteelBurnPercentageTarget > .99f) {
                             yield return null;
                         }
                         break;

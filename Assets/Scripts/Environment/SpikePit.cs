@@ -97,7 +97,7 @@ public class SpikePit : MonoBehaviour {
                     // add player as a pull target
                     spike.AddPullTarget(Player.PlayerMagnetic);
                     spike.IronPulling = true;
-                    spike.IronBurnRateTarget = .2f;
+                    spike.IronBurnPercentageTarget = .2f;
                     spike.PullTargets.MaxRange = -1;
                 }
                 if (angle < angleEqualThreshold) {
@@ -110,7 +110,7 @@ public class SpikePit : MonoBehaviour {
                     spikeRb.drag = dragChasing;
                     spikeRb.velocity = Vector3.zero;
                     spikeRb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-                    spike.IronBurnRateTarget = .75f;
+                    spike.IronBurnPercentageTarget = .75f;
                 }
             }
 
@@ -154,7 +154,7 @@ public class SpikePit : MonoBehaviour {
 
                     splineDragging.SetInitialPoint(transform.InverseTransformPoint(spike.transform.position), spikeRb.velocity.normalized);
 
-                    spike.IronBurnRateTarget = 0;
+                    spike.IronBurnPercentageTarget = 0;
                     spike.IronPulling = false;
                 }
             }
@@ -203,7 +203,7 @@ public class SpikePit : MonoBehaviour {
 
                     spike.AddPushTarget(Player.PlayerMagnetic);
                     spike.SteelPushing = true;
-                    spike.SteelBurnRateTarget = .5f;
+                    spike.SteelBurnPercentageTarget = .5f;
                     spike.PushTargets.MaxRange = 3;
                 }
             }

@@ -28,10 +28,10 @@ public class Simulation_coinGround : MonoBehaviour {
 
         allomancerTop.PushTargets.MaxRange = -1;
         allomancerTop.AddPushTarget(coinTop);
-        allomancerTop.SteelBurnRateTarget = 1;
+        allomancerTop.SteelBurnPercentageTarget = 1;
         allomancerBottom.PushTargets.MaxRange = -1;
         allomancerBottom.AddPushTarget(coinBottom);
-        allomancerBottom.SteelBurnRateTarget = 1;
+        allomancerBottom.SteelBurnPercentageTarget = 1;
 
         texts = GameObject.FindGameObjectWithTag("Canvas").transform.Find("Simulations").Find("coinGround").GetComponentsInChildren<Text>();
 
@@ -85,9 +85,9 @@ public class Simulation_coinGround : MonoBehaviour {
                     rb.useGravity = true;
                 }
                 allomancerTop.SteelPushing = true;
-                allomancerTop.SteelBurnRateTarget = 1;
+                allomancerTop.SteelBurnPercentageTarget = 1;
                 allomancerBottom.SteelPushing = true;
-                allomancerBottom.SteelBurnRateTarget = 1;
+                allomancerBottom.SteelBurnPercentageTarget = 1;
             } else {
                 counter += Time.deltaTime / Time.timeScale;
             }

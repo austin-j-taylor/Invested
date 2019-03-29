@@ -20,7 +20,7 @@ public class Simulation_duel : MonoBehaviour {
         for(int i = 0; i < allomancers.Length; i++) {
             allomancers[i].AddPushTarget(spheres[i / 2]);
             allomancers[i].SteelPushing = true;
-            allomancers[i].SteelBurnRateTarget = 1;
+            allomancers[i].SteelBurnPercentageTarget = 1;
             allomancers[i].PullTargets.MaxRange = 50;
             allomancers[i].PushTargets.MaxRange = 50;
         }
