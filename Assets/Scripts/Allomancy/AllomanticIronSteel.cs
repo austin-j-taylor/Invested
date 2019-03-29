@@ -1,7 +1,7 @@
 using UnityEngine;
 /*
  * Controls Ironpulling and Steelpushing.
- * Should be attached to any Allomancer.
+ * Should be attached to any Allomancer using Iron or Steel.
  */
 [RequireComponent(typeof(Rigidbody))]
 public class AllomanticIronSteel : Allomancer {
@@ -9,7 +9,7 @@ public class AllomanticIronSteel : Allomancer {
     public const int maxNumberOfTargets = 10;
     // Force calculation constants
     public const float chargePower = 1f / 8f;
-    public const float lineOfSightFactor = 3/4f; // If a target is blocked by a wall, pushes are at 75% strength
+    public const float lineOfSightFactor = 3 / 4f; // If a target is blocked by a wall, pushes are at 75% strength
     // Actual "Burn Rates" of iron and steel
     private const double gramsIronPerSecondPerNewton = .001f;
     private const double gramsSteelPerSecondPerNewton = gramsIronPerSecondPerNewton;
@@ -206,6 +206,10 @@ public class AllomanticIronSteel : Allomancer {
         LastMaximumNetForce = Vector3.zero;
     }
 
+    /*
+     * Every frame: Calculate and apply forces to targets being pushed on.
+     *      Drain metal reserves.
+     */
     private void FixedUpdate() {
         if (!PauseMenu.IsPaused) {
             if (IsBurning) {
@@ -296,19 +300,30 @@ public class AllomanticIronSteel : Allomancer {
         }
     }
 
-    private void OnDestroy() {
-        GameManager.RemoveAllomancer(this);
+    // Public function for CalculateAllomanticForce that only needs one argument
+    public Vector3 CalculateAllomanticForce(Magnetic target) {
+        return CalculateAllomanticForce(target.CenterOfMass, target.Charge); ;
     }
 
     /*
      * Calculates the maximum possible Allomantic Force between the allomancer and target.
      * Does not account for ABPs or burn rate.
-     * Accounts for if a wall blocks line-of-sight with the target.
+     * Accounts for no line-of-sight with the target decreasing force.
+     * 
+     *  Formula:
+     *      F = A * S * C * d * w 
+     *      
+     *      F: Allomantic Force
+     *      A: Allomantic Constant (~1000, subject to change)
+     *      S: Allomantic Strength (1), a constant, different for each Allomancer
+     *      C: Allomantic Charge (8th root of (Allomancer mass * target mass)), different for each Allomancer-target pair.
+     *          Is the effect of mass on the force.
+     *      d: Distance factor (between 0% and 100%)
+     *          Is the effect of the distance between the target and Allomancer on the force.
+     *      w: Wall factor (either 100% or 75%)
+     *          If the target is behind a wall, the force is 75% as strong.
+     *          
      */
-    public static Vector3 CalculateAllomanticForce(Magnetic target, AllomanticIronSteel allomancer) {
-        return allomancer.CalculateAllomanticForce(target.CenterOfMass, target.Charge); ;
-    }
-
     private Vector3 CalculateAllomanticForce(Vector3 targetCenterOfMass, float targetCharge) {
         Vector3 distanceFactor;
         Vector3 positionDifference = targetCenterOfMass - CenterOfMass;
@@ -327,91 +342,51 @@ public class AllomanticIronSteel : Allomancer {
                     break;
                 }
         }
+
         // If the target is blocked by a wall, reduce the force.
         // Do the final calculation
-
         return SettingsMenu.settingsData.allomanticConstant * Strength * Charge * targetCharge * distanceFactor
                 * ((Physics.Raycast(targetCenterOfMass, -positionDifference, out RaycastHit hit, (targetCenterOfMass - CenterOfMass).magnitude, GameManager.Layer_IgnoreCamera) && hit.transform != transform) ?
                 lineOfSightFactor : 1); // If there is something blocking line-of-sight, the force is reduced.
     }
 
     /* 
-     * Calculates the Allomantic Force and Anchored Push Boost that would affect this target, if it were Pushed or Pulled.
+     * Calculates the Net Force between the allomancer and target, if it were Pushed or Pulled.
      * 
-     * Pushing and Pulling
-     * 
-     * Formula subject to change:
-     * F =  C * Burn rate * sixteenth or eighth root of (Allomancer mass * target mass) 
-     *      / squared distance between the two
-     *      / (depending on my mood) number of targets currently being pushed on
-     *              (i.e. push on one target => 100% of the push going to them, push on three targets => 33% of each push going to each, etc. Not thought out very in-depth.)
-     *  C: the Allomantic Constant.
-     *  
-     *  With the ANF, a push against a perfectly anchored metal structure is exactly twice as powerful as a push against a completely unanchored, freely-moving metal structure
-     */
+     * Formula:
+     *      N = p * F + B
+     *      
+     *      N: Net Force
+     *      p: Burn percentage (between 0% and 100%). Decided by the Allomancer to vary Push strength.
+     *      F: Allomantic Force (see above function)
+     *      B: Anchored Push Boost (between 0 and F in magnitude, usually)
+     *          Is the reason that anchored targets provide stronger Pushes than unanchored Pushes.
+     *          
+     * */
     private void CalculateForce(Magnetic target, float netMagneticCharge, float sumOfCharges, bool pulling) {
         target.LastWasPulled = pulling;
 
-        // When pushing on multiple targets, you are effectively pushing on a mass equal to the sum of the masses of each target.
-        // This effective mass is netMagneticMass, and is used here to calculate the effective charge against which the allomancer can push for this specific target
-        //      SUCH THAT the sum of the pushes on each target will equal a single push on an imaginary target with a mass equal to the sum of each target's mass.
-
+        /*
+         * If you're Pushing on one target, then start Pushing on another, 
+         *      your Push on each individually will decrease, but the net Push on you will increase.
+         * Specifically:
+         * When pushing on multiple targets, you are effectively pushing on a mass equal to the sum of the masses of each target.
+         * This net mass is used here to calculate the effective charge against which the allomancer can Push for this specific target
+         *      SUCH THAT the sum of the pushes on each target will equal a single push on an imaginary target
+         *          with a mass equal to the sum of each target's mass.
+         * 
+         */
         float effectiveCharge = target.Charge / sumOfCharges * netMagneticCharge;
+
         Vector3 allomanticForce;
         Vector3 direction;
 
         Vector3 restitutionForceFromTarget;
         Vector3 restitutionForceFromAllomancer;
-        
-        if (SettingsMenu.settingsData.anchoredBoost == 3) {
-            // Calculate the expected distribution of energy. This is affected by timeScale; if running at timeScale = .1, you are viewing the world 10x faster, and you have only 10% of Pres's power each unit time.
-            // This is the energy that, without anchors, will be fully added to the system.
-            // With anchors, only a portion of this energy will effectively be added to the system.
-            // Next frame, that remaining unused energy will be added in the next section.
-            //Vector3 maxEnergy = 100 * Time.timeScale * Time.timeScale * (target.CenterOfMass - CenterOfMass).normalized * (target.LastWasPulled ? 1 : -1);// Simulation physics
-            Vector3 maxEnergy = CalculateAllomanticForce(target.CenterOfMass, effectiveCharge) * Time.fixedDeltaTime * Time.timeScale * (target.LastWasPulled ? 1 : -1);
-            direction = maxEnergy.normalized;
 
-            Vector3 allomancerExpectedVelocityChange = Mathf.Sqrt(2 * maxEnergy.magnitude / (Mass + Mass * Mass / target.MagneticMass)) * direction;
-            Vector3 targetExpectedVelocityChange = Mathf.Sqrt(2 * maxEnergy.magnitude / (target.MagneticMass + target.MagneticMass * target.MagneticMass / Mass)) * -direction;
-            float allomancerExpectedEnergyUsed = .5f * Mass * allomancerExpectedVelocityChange.sqrMagnitude;
-            float targetExpectedEnergyUsed = .5f * target.MagneticMass * targetExpectedVelocityChange.sqrMagnitude;
+        if (SettingsMenu.settingsData.anchoredBoost != 3) {
+            // APB: Disabled, Allomantic Normal Force, or Exponential with Velocity
 
-            // Add the unused energy from the last frame
-            Vector3 lastAllomancerVelocityChange = (rb.velocity - LastAllomancerVelocity);
-            Vector3 lastTargetVelocityChange = (target.Velocity - target.LastVelocity);
-            
-            float allomancerEnergy = allomancerExpectedEnergyUsed;
-            float targetEnergy = targetExpectedEnergyUsed;
-            if (pulling && IronPulling || !pulling && SteelPushing) {
-                if (Vector3.Dot(allomancerExpectedVelocityChange, lastAllomancerVelocityChange) > 0) {
-                    targetEnergy += allomancerExpectedEnergyUsed * (1 - Mathf.Clamp01(lastAllomancerVelocityChange.magnitude / allomancerExpectedVelocityChange.magnitude));
-                }
-                if (Vector3.Dot(targetExpectedVelocityChange, lastTargetVelocityChange) > 0) {
-                    allomancerEnergy += targetExpectedEnergyUsed * (1 - Mathf.Clamp01(lastTargetVelocityChange.magnitude / targetExpectedVelocityChange.magnitude));
-                }
-            }
-
-            float forceOfAllomancerPower = Mass * Mathf.Sqrt(2 * allomancerEnergy / Mass) / Time.fixedDeltaTime;
-            float forceOfTargetPower = target.MagneticMass * Mathf.Sqrt(2 * targetEnergy / target.MagneticMass) / Time.fixedDeltaTime;
-
-            // Whichever change in energy corresponds to a greater force is set to be the force experienced by both
-            Vector3 fullForce;
-            if (forceOfAllomancerPower > forceOfTargetPower)
-                fullForce = forceOfAllomancerPower * direction;
-            else
-                fullForce = forceOfTargetPower * direction;
-
-            // allomantic force is inherently equal to target.MagneticMass * target...VelocityChange / ...
-            // Restitution forces represent the components of the Improved Apparent force that come from the opposite's wasted energy
-            //allomanticForce = (LastAllomanticForce + Mass * allomancerExpectedVelocityChange / Time.fixedDeltaTime) / 2;
-            //restitutionForceFromTarget = (target.LastAnchoredPushBoostFromTarget + fullForce - allomanticForce) / 2;
-            //restitutionForceFromAllomancer = (target.LastAnchoredPushBoostFromAllomancer - (fullForce - allomanticForce)) / 2;
-            allomanticForce = Mass * allomancerExpectedVelocityChange / Time.fixedDeltaTime;
-            restitutionForceFromTarget = fullForce - allomanticForce;
-            restitutionForceFromAllomancer = -(fullForce - allomanticForce);
-
-        } else {
             allomanticForce = CalculateAllomanticForce(target.CenterOfMass, effectiveCharge) * (target.LastWasPulled ? 1 : -1) /* / (usingIronTargets ? PullCount : PushCount) */;
             direction = allomanticForce.normalized;
 
@@ -420,7 +395,7 @@ public class AllomanticIronSteel : Allomancer {
 
             // Make the AF proportional to the burn rate
             allomanticForce *= (target.LastWasPulled ? IronBurnRateTarget : SteelBurnRateTarget);
-            
+
             switch (SettingsMenu.settingsData.anchoredBoost) {
                 case 0: { // Disabled
                         restitutionForceFromTarget = Vector3.zero;
@@ -522,9 +497,57 @@ public class AllomanticIronSteel : Allomancer {
                         break;
                     }
             }
+        } else {
+            // APB: Distributed Energy
+            // Experimental and has much messier math than other APBs
+
+            // Calculate the expected distribution of energy. This is affected by timeScale; if running at timeScale = .1, you are viewing the world 10x faster, and you have only 10% of Pres's power each unit time.
+            // This is the energy that, without anchors, will be fully added to the system.
+            // With anchors, only a portion of this energy will effectively be added to the system.
+            // Next frame, that remaining unused energy will be added in the next section.
+            //Vector3 maxEnergy = 100 * Time.timeScale * Time.timeScale * (target.CenterOfMass - CenterOfMass).normalized * (target.LastWasPulled ? 1 : -1);// Simulation physics
+            Vector3 maxEnergy = CalculateAllomanticForce(target.CenterOfMass, effectiveCharge) * Time.fixedDeltaTime * Time.timeScale * (target.LastWasPulled ? 1 : -1);
+            direction = maxEnergy.normalized;
+
+            Vector3 allomancerExpectedVelocityChange = Mathf.Sqrt(2 * maxEnergy.magnitude / (Mass + Mass * Mass / target.MagneticMass)) * direction;
+            Vector3 targetExpectedVelocityChange = Mathf.Sqrt(2 * maxEnergy.magnitude / (target.MagneticMass + target.MagneticMass * target.MagneticMass / Mass)) * -direction;
+            float allomancerExpectedEnergyUsed = .5f * Mass * allomancerExpectedVelocityChange.sqrMagnitude;
+            float targetExpectedEnergyUsed = .5f * target.MagneticMass * targetExpectedVelocityChange.sqrMagnitude;
+
+            // Add the unused energy from the last frame
+            Vector3 lastAllomancerVelocityChange = (rb.velocity - LastAllomancerVelocity);
+            Vector3 lastTargetVelocityChange = (target.Velocity - target.LastVelocity);
+
+            float allomancerEnergy = allomancerExpectedEnergyUsed;
+            float targetEnergy = targetExpectedEnergyUsed;
+            if (pulling && IronPulling || !pulling && SteelPushing) {
+                if (Vector3.Dot(allomancerExpectedVelocityChange, lastAllomancerVelocityChange) > 0) {
+                    targetEnergy += allomancerExpectedEnergyUsed * (1 - Mathf.Clamp01(lastAllomancerVelocityChange.magnitude / allomancerExpectedVelocityChange.magnitude));
+                }
+                if (Vector3.Dot(targetExpectedVelocityChange, lastTargetVelocityChange) > 0) {
+                    allomancerEnergy += targetExpectedEnergyUsed * (1 - Mathf.Clamp01(lastTargetVelocityChange.magnitude / targetExpectedVelocityChange.magnitude));
+                }
+            }
+
+            float forceOfAllomancerPower = Mass * Mathf.Sqrt(2 * allomancerEnergy / Mass) / Time.fixedDeltaTime;
+            float forceOfTargetPower = target.MagneticMass * Mathf.Sqrt(2 * targetEnergy / target.MagneticMass) / Time.fixedDeltaTime;
+
+            // Whichever change in energy corresponds to a greater force is set to be the force experienced by both
+            Vector3 fullForce;
+            if (forceOfAllomancerPower > forceOfTargetPower)
+                fullForce = forceOfAllomancerPower * direction;
+            else
+                fullForce = forceOfTargetPower * direction;
+
+            // allomantic force is inherently equal to target.MagneticMass * target...VelocityChange / ...
+            // Restitution forces represent the components of the Improved Apparent force that come from the opposite's wasted energy
+            //allomanticForce = (LastAllomanticForce + Mass * allomancerExpectedVelocityChange / Time.fixedDeltaTime) / 2;
+            //restitutionForceFromTarget = (target.LastAnchoredPushBoostFromTarget + fullForce - allomanticForce) / 2;
+            //restitutionForceFromAllomancer = (target.LastAnchoredPushBoostFromAllomancer - (fullForce - allomanticForce)) / 2;
+            allomanticForce = Mass * allomancerExpectedVelocityChange / Time.fixedDeltaTime;
+            restitutionForceFromTarget = fullForce - allomanticForce;
+            restitutionForceFromAllomancer = -(fullForce - allomanticForce);
         }
-
-
 
         thisFrameAllomanticForce += allomanticForce;
         thisFrameAnchoredPushBoost += restitutionForceFromTarget;
@@ -555,7 +578,7 @@ public class AllomanticIronSteel : Allomancer {
         target.AddForce(target.LastNetForceOnTarget, target.LastAllomanticForceOnTarget);
         rb.AddForce(target.LastNetForceOnAllomancer);
 
-        //// Debug
+        // Debug
         allomanticsForce = target.LastAllomanticForce.magnitude;
         allomanticsForces = target.LastAllomanticForce;
         netAllomancersForce = target.LastNetForceOnAllomancer.magnitude;
@@ -568,7 +591,7 @@ public class AllomanticIronSteel : Allomancer {
 
     /*
      * Start burning iron or steel. Passively burn iron or steel, depending on startIron.
-     * Return true if successfully began burning metals, false otherwise.
+     * Return true if not already burning metals and successfully started burning, false otherwise
      */
     protected virtual bool StartBurning(bool startIron) {
         if (IsBurning || startIron && !HasIron || !startIron && !HasSteel)
@@ -577,7 +600,7 @@ public class AllomanticIronSteel : Allomancer {
         // Set burn rates to a low burn
         IronBurnRateTarget = .1f;
         SteelBurnRateTarget = .1f;
-        if(startIron)
+        if (startIron)
             lastWasPulling = true;
         else
             lastWasPushing = true;

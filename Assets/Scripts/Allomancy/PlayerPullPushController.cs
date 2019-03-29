@@ -59,6 +59,11 @@ public class PlayerPullPushController : AllomanticIronSteel {
         RemoveAllTargets();
     }
 
+    /*
+     * Read inputs for selecting targets.
+     * Update burn rates.
+     * Update blue lines pointing from player to metal.
+     */
     private void LateUpdate() {
         if (!PauseMenu.IsPaused) {
             // Start and Stop Burning metals
@@ -338,7 +343,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
      * These factors are described in the above function.
      */
     private float SetLineProperties(Magnetic target) {
-        Vector3 allomanticForceVector = CalculateAllomanticForce(target, this);
+        Vector3 allomanticForceVector = CalculateAllomanticForce(target);
         float allomanticForce = allomanticForceVector.magnitude;
         // If using Percentage force mode, burn rate affects your range for burning
         if (SettingsMenu.settingsData.pushControlStyle == 0)

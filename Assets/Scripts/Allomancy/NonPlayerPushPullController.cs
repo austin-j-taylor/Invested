@@ -70,7 +70,7 @@ public class NonPlayerPushPullController : AllomanticIronSteel {
             lines = pushLines;
         }
 
-        float allomanticForce = CalculateAllomanticForce(array[index], this).magnitude;
+        float allomanticForce = CalculateAllomanticForce(array[index]).magnitude;
 
         //allomanticForce -= (allomancer.MaxRange == 0 ? SettingsMenu.settingsData.metalDetectionThreshold : allomancer.MaxRange); // blue metal lines will fade to a luminocity of 0 when the force is on the edge of the threshold
 

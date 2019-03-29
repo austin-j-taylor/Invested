@@ -51,10 +51,6 @@ public class AllomanticPewter : Allomancer {
         // IsBurning mass drain is done through Drain()
     }
 
-    private void OnDestroy() {
-        GameManager.RemoveAllomancer(this);
-    }
-
     /*
      * Drains totalMass grams of pewter over maxtime seconds.
      * This essentially finds a curve such that:

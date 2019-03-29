@@ -12,4 +12,8 @@ public abstract class Allomancer : MonoBehaviour {
     public virtual void Clear() {
         IsBurning = false;
     }
+
+    private void OnDestroy() {
+        GameManager.RemoveAllomancer(this);
+    }
 }
