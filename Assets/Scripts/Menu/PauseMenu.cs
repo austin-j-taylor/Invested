@@ -24,7 +24,7 @@ public class PauseMenu : MonoBehaviour {
 
         settingsMenu = transform.parent.GetComponentInChildren<SettingsMenu>();
 
-        buttonsHeader = transform.Find("Buttons");
+        buttonsHeader = transform.Find("Header");
         Button[] buttons = buttonsHeader.GetComponentsInChildren<Button>();
         unpauseButton = buttons[0];
         settingsButton = buttons[1];

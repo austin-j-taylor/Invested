@@ -187,7 +187,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8520962554050226463}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 13.23, y: 40.63, z: -2.36}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -244,6 +244,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 0
   magneticMass: 1e-10
+  childMagnetics:
+  - {fileID: 8520962554654276437}
 --- !u!1 &8520962554372096440
 GameObject:
   m_ObjectHideFlags: 0
@@ -425,7 +427,7 @@ Light:
   m_Type: 2
   m_Color: {r: 1, g: 0.6249814, b: 0, a: 1}
   m_Intensity: 1
-  m_Range: 10
+  m_Range: 15
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:

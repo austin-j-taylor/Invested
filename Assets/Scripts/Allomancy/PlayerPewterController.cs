@@ -12,7 +12,7 @@ public class PlayerPewterController : AllomanticPewter {
     private const float jumpHeight = 400;
     private const float jumpPewterMagnitude = 600;
     private const float jumpDirectionModifier = 350;
-    protected const float gramsPewterPerJump = 3f;
+    protected const float gramsPewterPerJump = 1f;
     protected const float timePewterPerJump = 1.5f;
     private readonly Vector3 particleSystemPosition = new Vector3(0, -.2f, 0);
 

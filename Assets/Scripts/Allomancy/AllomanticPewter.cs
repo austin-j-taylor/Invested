@@ -9,7 +9,7 @@ using System.Collections;
 [RequireComponent(typeof(Rigidbody))]
 public class AllomanticPewter : Allomancer {
 
-    protected const float gramsPewterPerSecondSprint = 1;
+    protected const float gramsPewterPerSecondSprint = .5f;
     protected const float gramsPewterPerFall = 2f;
     protected const float timePewterPerFall = 1f;
 
