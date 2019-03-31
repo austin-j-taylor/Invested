@@ -235,7 +235,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
             return false;
         GamepadController.Shake(.1f, .1f, .3f);
         UpdateBurnRateMeter();
-        HUD.BurnRateMeter.SetMetalLineCountText(PullTargets.Size.ToString());
+        HUD.BurnPercentageMeter.SetMetalLineCountText(PullTargets.Size.ToString());
         if (SettingsMenu.settingsData.renderblueLines == 1)
             EnableRenderingBlueLines();
         ironBurnPercentageLerp = 1;
@@ -414,14 +414,14 @@ public class PlayerPullPushController : AllomanticIronSteel {
         PullTargets.IncrementSize();
         PushTargets.IncrementSize();
 
-        HUD.BurnRateMeter.SetMetalLineCountText(PullTargets.Size.ToString());
+        HUD.BurnPercentageMeter.SetMetalLineCountText(PullTargets.Size.ToString());
     }
 
     private void DecrementNumberOfTargets() {
         PullTargets.DecrementSize();
         PushTargets.DecrementSize();
 
-        HUD.BurnRateMeter.SetMetalLineCountText(PullTargets.Size.ToString());
+        HUD.BurnPercentageMeter.SetMetalLineCountText(PullTargets.Size.ToString());
         RefreshHUD();
     }
 
@@ -523,31 +523,31 @@ public class PlayerPullPushController : AllomanticIronSteel {
     private void UpdateBurnRateMeter() {
         if (IsBurning) {
             if (SettingsMenu.settingsData.pushControlStyle == 1) // Magnitude
-                HUD.BurnRateMeter.SetBurnRateMeterForceMagnitude(LastAllomanticForce, LastAnchoredPushBoost, IronBurnPercentageTarget, SteelBurnPercentageTarget, forceMagnitudeTarget);
+                HUD.BurnPercentageMeter.SetBurnRateMeterForceMagnitude(LastAllomanticForce, LastAnchoredPushBoost, IronBurnPercentageTarget, SteelBurnPercentageTarget, forceMagnitudeTarget);
             else if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
                 if (SteelPushing) {
                     if (IronPulling) {
-                        HUD.BurnRateMeter.SetBurnRateMeterPercentage(LastAllomanticForce, LastAnchoredPushBoost,
+                        HUD.BurnPercentageMeter.SetBurnRateMeterPercentage(LastAllomanticForce, LastAnchoredPushBoost,
                             IronBurnPercentageTarget, SteelBurnPercentageTarget);
                     } else {
-                        HUD.BurnRateMeter.SetBurnRateMeterPercentage(LastAllomanticForce, LastAnchoredPushBoost,
+                        HUD.BurnPercentageMeter.SetBurnRateMeterPercentage(LastAllomanticForce, LastAnchoredPushBoost,
                             0, SteelBurnPercentageTarget);
                     }
                 } else {
                     if(IronPulling) {
-                        HUD.BurnRateMeter.SetBurnRateMeterPercentage(LastAllomanticForce, LastAnchoredPushBoost,
+                        HUD.BurnPercentageMeter.SetBurnRateMeterPercentage(LastAllomanticForce, LastAnchoredPushBoost,
                             IronBurnPercentageTarget, 0);
                     } else {
-                HUD.BurnRateMeter.SetBurnRateMeterPercentage(LastAllomanticForce, LastAnchoredPushBoost,
+                HUD.BurnPercentageMeter.SetBurnRateMeterPercentage(LastAllomanticForce, LastAnchoredPushBoost,
                     IronBurnPercentageTarget, SteelBurnPercentageTarget);
                     }
                 }
             } else {
-                HUD.BurnRateMeter.SetBurnRateMeterPercentage(LastAllomanticForce, LastAnchoredPushBoost,
+                HUD.BurnPercentageMeter.SetBurnRateMeterPercentage(LastAllomanticForce, LastAnchoredPushBoost,
                     IronBurnPercentageTarget, SteelBurnPercentageTarget);
             }
         } else {
-            HUD.BurnRateMeter.Clear();
+            HUD.BurnPercentageMeter.Clear();
         }
     }
 
@@ -555,7 +555,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
     private void RefreshHUD() {
         RefreshHUDColorsOnly();
         HUD.TargetOverlayController.HardRefresh();
-        HUD.BurnRateMeter.HardRefresh();
+        HUD.BurnPercentageMeter.HardRefresh();
     }
 
     // Refreshes the colors of the text of target labels and the burn rate meter.
@@ -563,21 +563,21 @@ public class PlayerPullPushController : AllomanticIronSteel {
 
         if (PullingOnPullTargets || PushingOnPullTargets) {
             HUD.TargetOverlayController.SetPullTextColorStrong();
-            HUD.BurnRateMeter.SetForceTextColorStrong();
+            HUD.BurnPercentageMeter.SetForceTextColorStrong();
         } else {
             HUD.TargetOverlayController.SetPullTextColorWeak();
         }
         if (PullingOnPushTargets || PushingOnPushTargets) {
             HUD.TargetOverlayController.SetPushTextColorStrong();
-            HUD.BurnRateMeter.SetForceTextColorStrong();
+            HUD.BurnPercentageMeter.SetForceTextColorStrong();
         } else {
             HUD.TargetOverlayController.SetPushTextColorWeak();
         }
 
         if (IronPulling || SteelPushing) {
-            HUD.BurnRateMeter.SetForceTextColorStrong();
+            HUD.BurnPercentageMeter.SetForceTextColorStrong();
         } else {
-            HUD.BurnRateMeter.SetForceTextColorWeak();
+            HUD.BurnPercentageMeter.SetForceTextColorWeak();
         }
     }
 

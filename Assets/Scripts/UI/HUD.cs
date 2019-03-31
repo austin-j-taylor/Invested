@@ -15,7 +15,7 @@ public class HUD : MonoBehaviour {
     private float deltaTimeFPS = 0.0f;
     private static GameObject hudGameObject;
 
-    public static BurnRateMeter BurnRateMeter {
+    public static BurnPercentageMeter BurnPercentageMeter {
         get; private set;
     }
     public static MetalReserveMeters MetalReserveMeters {
@@ -37,7 +37,7 @@ public class HUD : MonoBehaviour {
     void Awake() {
         hudGameObject = gameObject;
         fPSText = GetComponentInChildren<Text>();
-        BurnRateMeter = GetComponentInChildren<BurnRateMeter>();
+        BurnPercentageMeter = GetComponentInChildren<BurnPercentageMeter>();
         TargetOverlayController = GetComponentInChildren<TargetOverlayController>();
         ThrowingAmmoMeter = GetComponentInChildren<ThrowingAmmoMeter>();
         MessageOverlayController = GetComponentInChildren<MessageOverlayController>();
@@ -79,8 +79,8 @@ public class HUD : MonoBehaviour {
     // Clears the values currently on the HUD
     public static void ResetHUD() {
         EnableHUD();
-        if (BurnRateMeter) {
-            BurnRateMeter.Clear();
+        if (BurnPercentageMeter) {
+            BurnPercentageMeter.Clear();
             TargetOverlayController.Clear();
             ThrowingAmmoMeter.Clear();
             MetalReserveMeters.Clear();
@@ -139,7 +139,7 @@ public class HUD : MonoBehaviour {
 
     // Clear unwanted fields after changing settings
     public void InterfaceRefresh() {
-        BurnRateMeter.InterfaceRefresh();
+        BurnPercentageMeter.InterfaceRefresh();
         TargetOverlayController.InterfaceRefresh();
     }
 }

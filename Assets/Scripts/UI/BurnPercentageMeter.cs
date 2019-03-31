@@ -2,9 +2,9 @@ using UnityEngine;
 using UnityEngine.UI;
 
 /*
- * Controls the circular Burn Rate Meter.
+ * Controls the circular Burn Percentage Meter.
  */
-public class BurnRateMeter : MonoBehaviour {
+public class BurnPercentageMeter : MonoBehaviour {
 
     // Constants for Burn Rate Meter
     private const float minAngle = .12f;
