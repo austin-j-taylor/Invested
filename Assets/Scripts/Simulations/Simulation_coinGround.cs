@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class Simulation_coinGround : MonoBehaviour {
+public class Simulation_coinGround : Simulation {
 
     //private float timeToReset;
     private NonPlayerPushPullController allomancerTop;
@@ -15,8 +14,8 @@ public class Simulation_coinGround : MonoBehaviour {
 
     private Text[] texts;
     private const int right = 20;
-
-    void Start() {
+    
+    public override void StartSimulation() {
         allomancerTop = transform.Find("AllomancerTop").GetComponent<NonPlayerPushPullController>();
         coinTop = transform.Find("CoinTop").GetComponentInChildren<Magnetic>();
         allomancerBottom = transform.Find("AllomancerBottom").GetComponent<NonPlayerPushPullController>();
@@ -33,7 +32,7 @@ public class Simulation_coinGround : MonoBehaviour {
         allomancerBottom.AddPushTarget(coinBottom);
         allomancerBottom.SteelBurnPercentageTarget = 1;
 
-        texts = GameObject.FindGameObjectWithTag("Canvas").transform.Find("Simulations").Find("coinGround").GetComponentsInChildren<Text>();
+        texts = HUDSimulations.CoinGround.GetComponentsInChildren<Text>();
 
         if (SettingsMenu.settingsData.anchoredBoost == 1) {
             texts[texts.Length - 6].text = "Allomantic Normal Force";
@@ -77,7 +76,7 @@ public class Simulation_coinGround : MonoBehaviour {
     }
 
     private void FixedUpdate() {
-        if (!PauseMenu.IsPaused) {
+        if (allomancerTop && !PauseMenu.IsPaused) {
 
             if (counter > 2) {
                 Rigidbody[] rbs = GetComponentsInChildren<Rigidbody>();

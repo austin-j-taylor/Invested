@@ -66,6 +66,8 @@ public class HUD : MonoBehaviour {
     public static void DisableHUD() {
         hudGameObject.SetActive(false);
     }
+    // Ready HUD elements for a certain simulation
+
 
     // Used by Settings to make HUD visible or invisible
     public void ShowHUD() {

@@ -1,10 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using VolumetricLines;
 
-public class Simulation_duel : MonoBehaviour {
+public class Simulation_duel : Simulation {
 
     //private float timeToReset;
     private NonPlayerPushPullController[] allomancers;
@@ -12,19 +9,18 @@ public class Simulation_duel : MonoBehaviour {
 
     private Text[] texts;
 
-    // Use this for initialization
-    void Start() {
+    public override void StartSimulation() {
         allomancers = GetComponentsInChildren<NonPlayerPushPullController>();
         spheres = GetComponentsInChildren<Magnetic>();
-        
-        for(int i = 0; i < allomancers.Length; i++) {
+
+        for (int i = 0; i < allomancers.Length; i++) {
             allomancers[i].AddPushTarget(spheres[i / 2]);
             allomancers[i].SteelPushing = true;
             allomancers[i].SteelBurnPercentageTarget = 1;
             allomancers[i].PullTargets.MaxRange = 50;
             allomancers[i].PushTargets.MaxRange = 50;
         }
-        texts = GameObject.FindGameObjectWithTag("Canvas").transform.Find("Simulations").Find("duel").GetComponentsInChildren<Text>();
+        texts = HUDSimulations.Duel.GetComponentsInChildren<Text>();
 
         //Time.timeScale = 1f;
         //Time.fixedDeltaTime = Time.timeScale * 1 / 60f;
@@ -39,13 +35,15 @@ public class Simulation_duel : MonoBehaviour {
     }
 
     private void Update() {
-        for (int i = 0; i < 10; i++) {
-            string str = "";
-            if (i % 2 == 0)
-                str = "Pair " + (i / 2 + 1) + ":\n";
-            else
-                str = "\n";
-            texts[i].text = str + "mass = " + allomancers[i].Mass + "kg\nStrength = " + allomancers[i].Strength + "\nForce: " + HUD.AllomanticSumString(allomancers[i].LastAllomanticForce, allomancers[i].LastAnchoredPushBoost, allomancers[i].Mass, 2);
+        if (allomancers != null) {
+            for (int i = 0; i < 10; i++) {
+                string str = "";
+                if (i % 2 == 0)
+                    str = "Pair " + (i / 2 + 1) + ":\n";
+                else
+                    str = "\n";
+                texts[i].text = str + "mass = " + allomancers[i].Mass + "kg\nStrength = " + allomancers[i].Strength + "\nForce: " + HUD.AllomanticSumString(allomancers[i].LastAllomanticForce, allomancers[i].LastAnchoredPushBoost, allomancers[i].Mass, 2);
+            }
         }
     }
 }

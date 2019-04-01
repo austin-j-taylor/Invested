@@ -1,8 +1,7 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class Simulation_coinWall : MonoBehaviour {
+public class Simulation_coinWall : Simulation {
 
     //private float timeToReset;
     private NonPlayerPushPullController allomancer;
@@ -15,9 +14,9 @@ public class Simulation_coinWall : MonoBehaviour {
     //private Vector3 wallLastVelocity = Vector3.zero;
 
     private Text[] texts;
+    
 
-    // Use this for initialization
-    void Start() {
+    public override void StartSimulation() {
         allomancer = GetComponentInChildren<NonPlayerPushPullController>();
         coin = GetComponentInChildren<Magnetic>();
         coinWall = transform.Find("CoinWall").GetComponent<Rigidbody>();
@@ -28,7 +27,7 @@ public class Simulation_coinWall : MonoBehaviour {
 
         allomancer.PushTargets.MaxRange = -1;
         allomancer.AddPushTarget(coin);
-        texts = GameObject.FindGameObjectWithTag("Canvas").transform.Find("Simulations").Find("coinWall").GetComponentsInChildren<Text>();
+        texts = HUDSimulations.CoinWall.GetComponentsInChildren<Text>();
         
         texts[texts.Length - 8].text = "Wall: " + TextCodes.LightBlue("Anchored");
         texts[texts.Length - 7].text = "Allomancer: " + TextCodes.Gray("Unanchored");
@@ -62,7 +61,7 @@ public class Simulation_coinWall : MonoBehaviour {
     }
 
     private void FixedUpdate() {
-        if (allomancer.HasPushTarget && !PauseMenu.IsPaused) {
+        if (allomancer && allomancer.HasPushTarget && !PauseMenu.IsPaused) {
             counter += Time.deltaTime / Time.timeScale;
             if (counter > .5f) {
                 allomancer.SteelPushing = true;
