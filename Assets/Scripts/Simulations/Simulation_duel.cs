@@ -9,7 +9,13 @@ public class Simulation_duel : Simulation {
 
     private Text[] texts;
 
+    private void Awake() {
+        ResetTime = 3;
+    }
+
     public override void StartSimulation() {
+        base.StartSimulation();
+
         allomancers = GetComponentsInChildren<NonPlayerPushPullController>();
         spheres = GetComponentsInChildren<Magnetic>();
 

@@ -3,6 +3,8 @@ using UnityEngine.UI;
 
 public class Simulation_coinGround : Simulation {
 
+    private const int right = 20;
+
     //private float timeToReset;
     private NonPlayerPushPullController allomancerTop;
     private NonPlayerPushPullController allomancerBottom;
@@ -13,9 +15,14 @@ public class Simulation_coinGround : Simulation {
     private float groundHeight;
 
     private Text[] texts;
-    private const int right = 20;
-    
+
+    private void Awake() {
+        ResetTime = 20;
+    }
+
     public override void StartSimulation() {
+        base.StartSimulation();
+
         allomancerTop = transform.Find("AllomancerTop").GetComponent<NonPlayerPushPullController>();
         coinTop = transform.Find("CoinTop").GetComponentInChildren<Magnetic>();
         allomancerBottom = transform.Find("AllomancerBottom").GetComponent<NonPlayerPushPullController>();
@@ -119,9 +126,9 @@ public class Simulation_coinGround : Simulation {
                 texts[1].text = "0";
             } else {
                 if (allomancerTop.LastNetForceOnAllomancer.magnitude > threshold) {
-                    texts[0].text = TextCodes.Red(HUD.RoundStringToSigFigs(allomancerTop.LastNetForceOnAllomancer.magnitude, 3));
+                    texts[0].text = TextCodes.Red(HUD.ForceString(allomancerTop.LastNetForceOnAllomancer.magnitude, allomancerTop.Mass, 3));
                 } else {
-                    texts[0].text = HUD.RoundStringToSigFigs(allomancerTop.LastNetForceOnAllomancer.magnitude, 3);
+                    texts[0].text = HUD.ForceString(allomancerTop.LastNetForceOnAllomancer.magnitude, allomancerTop.Mass, 3);
                 }
                 texts[1].text = HUD.AllomanticSumString(allomancerTop.LastAllomanticForce, allomancerTop.LastAnchoredPushBoost, allomancerTop.Mass, 3);
             }
@@ -131,9 +138,9 @@ public class Simulation_coinGround : Simulation {
                 texts[1 + right].text = "0";
             } else {
                 if (allomancerBottom.LastNetForceOnAllomancer.magnitude > threshold) {
-                    texts[0 + right].text = TextCodes.Red(HUD.RoundStringToSigFigs(allomancerBottom.LastNetForceOnAllomancer.magnitude, 3));
+                    texts[0 + right].text = TextCodes.Red(HUD.ForceString(allomancerBottom.LastNetForceOnAllomancer.magnitude, allomancerBottom.Mass, 3));
                 } else {
-                    texts[0 + right].text = HUD.RoundStringToSigFigs(allomancerBottom.LastNetForceOnAllomancer.magnitude, 3);
+                    texts[0 + right].text = HUD.ForceString(allomancerBottom.LastNetForceOnAllomancer.magnitude, allomancerBottom.Mass, 3);
                 }
                 texts[1 + right].text = HUD.AllomanticSumString(allomancerBottom.LastAllomanticForce, allomancerBottom.LastAnchoredPushBoost, allomancerBottom.Mass, 3);
             }

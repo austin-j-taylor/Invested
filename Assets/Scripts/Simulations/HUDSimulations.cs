@@ -3,11 +3,13 @@ using UnityEngine.SceneManagement;
 
 public class HUDSimulations : MonoBehaviour {
 
+    private enum SimulationType { Duel, CoinWall, CoinGround }
+
     public static Transform Duel, CoinWall, CoinGround;
 
     private Transform simulations;
 
-    private void Awake() {
+    private void Start() {
         simulations = transform.GetChild(0);
         Duel = simulations.GetChild(0);
         CoinWall = simulations.GetChild(1);
@@ -18,36 +20,35 @@ public class HUDSimulations : MonoBehaviour {
     }
 
     private void RefreshHUD(Scene scene, LoadSceneMode mode = 0) {
-        Debug.Log(mode + " " + scene.buildIndex);
         if (mode == LoadSceneMode.Single) { // Not loading all of the scenes, as it does at startup
-            simulations.gameObject.SetActive(false);
 
             switch (scene.buildIndex) {
                 case SceneSelectMenu.sceneSimulationDuel:
-                    simulations.gameObject.SetActive(true);
+                    ReadySimulation();
                     Duel.gameObject.SetActive(true);
-                    CoinWall.gameObject.SetActive(false);
-                    CoinGround.gameObject.SetActive(false);
-                    FindObjectOfType<Simulation>().GetComponent<Simulation>().StartSimulation();
                     break;
                 case SceneSelectMenu.sceneSimulationWall:
-                    simulations.gameObject.SetActive(true);
-                    Duel.gameObject.SetActive(false);
+                    ReadySimulation();
                     CoinWall.gameObject.SetActive(true);
-                    CoinGround.gameObject.SetActive(false);
-                    FindObjectOfType<Simulation>().StartSimulation();
                     break;
                 case SceneSelectMenu.sceneSimulationGround:
-                    simulations.gameObject.SetActive(true);
-                    Duel.gameObject.SetActive(false);
-                    CoinWall.gameObject.SetActive(false);
+                    ReadySimulation();
                     CoinGround.gameObject.SetActive(true);
-                    FindObjectOfType<Simulation>().StartSimulation();
                     break;
                 default: // A normal, non-simulation scene was opened
                     simulations.gameObject.SetActive(false);
-                    break;
+                    return;
             }
+
+            HUD.HideHUD();
+            FindObjectOfType<Simulation>().StartSimulation();
         }
+    }
+
+    private void ReadySimulation() {
+        simulations.gameObject.SetActive(true);
+        Duel.gameObject.SetActive(false);
+        CoinWall.gameObject.SetActive(false);
+        CoinGround.gameObject.SetActive(false);
     }
 }

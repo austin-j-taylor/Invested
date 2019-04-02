@@ -14,15 +14,20 @@ public class Simulation_coinWall : Simulation {
     //private Vector3 wallLastVelocity = Vector3.zero;
 
     private Text[] texts;
-    
+
+    private void Awake() {
+        ResetTime = 14;
+    }
 
     public override void StartSimulation() {
+        base.StartSimulation();
+
         allomancer = GetComponentInChildren<NonPlayerPushPullController>();
         coin = GetComponentInChildren<Magnetic>();
         coinWall = transform.Find("CoinWall").GetComponent<Rigidbody>();
         alloWall = transform.Find("AlloWall").GetComponent<Rigidbody>();
 
-        counter = -1.5f;
+        counter = 0;
         cleared = false;
 
         allomancer.PushTargets.MaxRange = -1;
@@ -62,7 +67,7 @@ public class Simulation_coinWall : Simulation {
 
     private void FixedUpdate() {
         if (allomancer && allomancer.HasPushTarget && !PauseMenu.IsPaused) {
-            counter += Time.deltaTime / Time.timeScale;
+            counter += Time.deltaTime;
             if (counter > .5f) {
                 allomancer.SteelPushing = true;
                 allomancer.SteelBurnPercentageTarget = 1;
@@ -85,8 +90,6 @@ public class Simulation_coinWall : Simulation {
                     coin.transform.localPosition = new Vector3(0, 0, 3.35f);
                     coin.Clear();   
                     texts[texts.Length - 5].text = "Wall: " + TextCodes.LightBlue("Anchored");
-                } else if(counter > 14) {
-                    SceneSelectMenu.ReloadScene();
                 }
             }
 
@@ -105,9 +108,9 @@ public class Simulation_coinWall : Simulation {
                 texts[9].text = "0";
             } else {
                 if (allomancer.LastNetForceOnAllomancer.magnitude > threshold) {
-                    texts[3].text = TextCodes.Red(HUD.RoundStringToSigFigs(allomancer.LastNetForceOnAllomancer.magnitude, 3));
+                    texts[3].text = TextCodes.Red(HUD.ForceString(allomancer.LastNetForceOnAllomancer.magnitude, allomancer.Mass, 3));
                 } else {
-                    texts[3].text = HUD.RoundStringToSigFigs(allomancer.LastNetForceOnAllomancer.magnitude, 3);
+                    texts[3].text = HUD.ForceString(allomancer.LastNetForceOnAllomancer.magnitude, allomancer.Mass, 3);
                 }
                 texts[9].text = HUD.AllomanticSumString(allomancer.LastAllomanticForce, allomancer.LastAnchoredPushBoost, allomancer.Mass, 3);
             }

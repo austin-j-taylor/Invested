@@ -34,5 +34,7 @@ public class ThrowingAmmoMeter : MonoBehaviour {
     public void Clear() {
         timeLastChanged = -100;
         lastCount = 0;
+        anim.SetBool("IsVisible", true);
+        anim.Play("MetalReserve_Invisible", anim.GetLayerIndex("Visibility"));
     }
 }

@@ -60,6 +60,7 @@ public class HUD : MonoBehaviour {
     }
 
     public static void EnableHUD() {
+        ShowHUD();
         hudGameObject.SetActive(true);
     }
 
@@ -70,28 +71,30 @@ public class HUD : MonoBehaviour {
 
 
     // Used by Settings to make HUD visible or invisible
-    public void ShowHUD() {
-        GetComponent<CanvasGroup>().alpha = 1;
+    public static void ShowHUD() {
+        hudGameObject.GetComponent<CanvasGroup>().alpha = 1;
     }
 
-    public void HideHUD() {
-        GetComponent<CanvasGroup>().alpha = 0;
+    public static void HideHUD() {
+        hudGameObject.GetComponent<CanvasGroup>().alpha = 0;
     }
 
     // Clears the values currently on the HUD
     public static void ResetHUD() {
-        EnableHUD();
-        if (BurnPercentageMeter) {
-            BurnPercentageMeter.Clear();
-            TargetOverlayController.Clear();
-            ThrowingAmmoMeter.Clear();
-            MetalReserveMeters.Clear();
-            MessageOverlayController.Clear();
+        if (SettingsMenu.settingsData.hudEnabled == 1) {
+            EnableHUD();
+            if (BurnPercentageMeter) {
+                BurnPercentageMeter.Clear();
+                TargetOverlayController.Clear();
+                ThrowingAmmoMeter.Clear();
+                MetalReserveMeters.Clear();
+                MessageOverlayController.Clear();
+            }
         }
     }
 
     // Returns a string reading a single Force in Newtons or G's
-    public static string ForceString(float force, float mass) {
+    public static string ForceString(float force, float mass, int sigFigs = 2) {
         if(SettingsMenu.settingsData.forceUnits == 1) {
             return RoundStringToSigFigs(force).ToString() + "N";
         } else {
