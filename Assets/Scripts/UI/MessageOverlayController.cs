@@ -10,7 +10,7 @@ using static TextCodes;
  */
 public class MessageOverlayController : MonoBehaviour {
 
-    private const int numberOfMessages = 11;
+    private const int numberOfMessages = 12;
 
     public Text HeaderText { get; private set; }
     public Text MessageText { get; private set; }
@@ -65,29 +65,32 @@ public class MessageOverlayController : MonoBehaviour {
         TriggerBeadMessages[0] = new List<string> {
             "Movement",
             KeyLook + " to look around.\n\n" + KeyMove + " to move.",
-            KeyJump + " to jump.\n\n\tCollect the vial of metals and the glowing bead.",
-
+            KeyJump + " to jump.\n\n\tCollect the vial of metals and the glowing bead."
         };
         TriggerBeadMessages[1] = new List<string> {
+            "Pulling",
+            KeyStartBurning + "\n\t\tto start burning " + Iron + ".",
+            s_Press_ + KeySelect + "\n\t\tto select a metal to be a " + Pull_target + ".\n",
+            KeyPull + " to " + Pull + ".\n"
+        };
+        TriggerBeadMessages[2] = new List<string> {
             "Pushing & Pulling Basics",
-            KeyStartBurning + "\n\t\tto start burning " + Iron + " or " + Steel + ".",
-            s_Press_ + KeySelect + "\n\t\tto select a metal to be a " + Pull_target + ".\n" +
-                s_Press_ + KeySelectAlternate + "\n\t\tto select a metal to be a " + Push_target + ".",
+            s_Press_ + KeySelectAlternate + "\n\t\tto select a metal to be a " + Push_target + ".",
             KeyPull + " to " + Pull + ".\n" +
                 KeyPush + " to " + Push + ".",
             "While holding " + KeyNegate + ", " + s_Press_ + KeySelect + "\n\t\t to deselect a " + Pull_target +
                 ".\nLikewise for " + KeySelectAlternate + " and " + Push_targets + ".",
             KeyHelp + " to toggle the " + HelpOverlay + ".\nPlay around a bit before proceeding."
         };
-        TriggerBeadMessages[2] = new List<string> {
+        TriggerBeadMessages[3] = new List<string> {
             "Pulling",
             "Cross the pit by " + Pulling + " yourself accross."
         };
-        TriggerBeadMessages[3] = new List<string> {
+        TriggerBeadMessages[4] = new List<string> {
             "Pushing",
             "Cross the pit by " + Pushing + " yourself accross."
         };
-        TriggerBeadMessages[4] = new List<string> {
+        TriggerBeadMessages[5] = new List<string> {
             "Advanced Pushing & Pulling",
             KeyNumberOfTargets + " to change your " + Gray("max number of " + Push_Pull_targets + ".") +
                 "\nYou can target multiple metals by increasing this number.",
@@ -95,27 +98,27 @@ public class MessageOverlayController : MonoBehaviour {
                 ".\nUse this to vary the strength of your " + Pushes_and_Pulls + ".",
                 "\n\n\tLook up. Balance in the air near the " + O_SeekerCube + "."
         };
-        TriggerBeadMessages[5] = new List<string> {
+        TriggerBeadMessages[6] = new List<string> {
             "Advanced Pushing & Pulling",
             KeyStopBurning + " to stop burning " + Gray("Iron and Steel.")
         };
-        TriggerBeadMessages[6] = new List<string> {
+        TriggerBeadMessages[7] = new List<string> {
             "Advanced Movement",
             KeyWalk + " to walk slowly."
         };
-        TriggerBeadMessages[7] = new List<string> {
+        TriggerBeadMessages[8] = new List<string> {
             "Advanced Movement - Pewter",
             KeySprint + " to burn " + Pewter + ". While burning " + Pewter  + ":\n\t\t• Move to " + Sprint + ".\n\t\t• Jump to " + PewterJump + "."
         };
-        TriggerBeadMessages[8] = new List<string> {
+        TriggerBeadMessages[9] = new List<string> {
             "Advanced Movement - Pewter",
             PewterJump + " while not trying to " + Sprint + " to jump straight up and higher."
         };
-        TriggerBeadMessages[9] = new List<string> {
+        TriggerBeadMessages[10] = new List<string> {
             "Advanced Movement - Pewter",
             PewterJump + " while touching a wall\n\t\t• while trying to move away from the wall to kick off of the wall\n\t\t• while trying to move into the wall to wall jump up\n\n\tWall jump up the crevice.\n\n\t" + Pewter + " burns quickly, so refill at a vial if you run out."
         };
-        TriggerBeadMessages[10] = new List<string> {
+        TriggerBeadMessages[11] = new List<string> {
             "Coins",
             KeyPull + " near " + O_Coins + " to pick them up.",
             KeyThrow + " to toss a coin in front of you. Try " + Pushing + " on it as you throw.", 

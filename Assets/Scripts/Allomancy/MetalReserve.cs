@@ -50,7 +50,11 @@ public class MetalReserve : MonoBehaviour {
     }
 
     // Fill this reserve with the amount volume
-    public void Fill(double volume) {
-        SetMass(mass + volume);
+    // If noMoreThan is above 0, don't fill more than that amount
+    public void Fill(double volume, double noMoreThan = 0) {
+        if (noMoreThan > 0 && mass + volume > noMoreThan)
+            SetMass(noMoreThan);
+        else
+            SetMass(mass + volume);
     }
 }
