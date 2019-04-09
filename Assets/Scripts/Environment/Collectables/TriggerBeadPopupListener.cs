@@ -9,7 +9,7 @@ public class TriggerBeadPopupListener : TriggerBeadPopup {
 
     public enum Action { MoveWASD, StartBurningIronSteel, SelectSteel, PushPull,
         Deselect, Help, ChangeNumberOfTargets, ChangeBurnPercentage, StopBurningIronSteel,
-        CollectCoin, ThrowCoin, ThrowCoinDown, SelectIron
+        CollectCoin, ThrowCoin, ThrowCoinDown, SelectIron, BurnPewter
     };
 
     public Action[] actions;
@@ -87,7 +87,11 @@ public class TriggerBeadPopupListener : TriggerBeadPopup {
                         break;
                     }
                 case Action.Deselect: {
-                        while (!(Keybinds.Negate() && Keybinds.Select()) && !(Keybinds.Negate() && Keybinds.SelectAlternate())) {
+                        bool select = false;
+                        bool alternate = false;
+                        while (!select || !alternate) {
+                            select = select || (Keybinds.Negate() && Keybinds.Select());
+                            alternate = alternate || (Keybinds.Negate() && Keybinds.SelectAlternate());
                             yield return null;
                         }
                         break;
@@ -135,10 +139,17 @@ public class TriggerBeadPopupListener : TriggerBeadPopup {
                         while (!Keybinds.WithdrawCoinDown() || !Keybinds.Jump()) {
                             yield return null;
                         }
+                        FlagsController.HelpOverlayFull = true;
                         break;
                     }
                 case Action.SelectIron: {
                         while (!Keybinds.SelectDown()) {
+                            yield return null;
+                        }
+                        break;
+                    }
+                case Action.BurnPewter: {
+                        while (!Player.PlayerPewter.IsSprinting) {
                             yield return null;
                         }
                         break;

@@ -65,11 +65,11 @@ public class MessageOverlayController : MonoBehaviour {
         TriggerBeadMessages[0] = new List<string> {
             "Movement",
             KeyLook + " to look around.\n\n" + KeyMove + " to move.",
-            KeyJump + " to jump.\n\n\tCollect the vial of metals and the glowing bead."
+            KeyJump + " to jump.\n\n\tCollect the vial of iron and the glowing bead."
         };
         TriggerBeadMessages[1] = new List<string> {
             "Pulling",
-            KeyStartBurning + "\n\t\tto start burning " + Iron + ".",
+            KeyStartBurningIron + "\n\t\tto start burning " + Iron + ".",
             s_Press_ + KeySelect + "\n\t\tto select a metal to be a " + Pull_target + ".\n",
             KeyPull + " to " + Pull + ".\n"
         };
@@ -108,7 +108,8 @@ public class MessageOverlayController : MonoBehaviour {
         };
         TriggerBeadMessages[8] = new List<string> {
             "Advanced Movement - Pewter",
-            KeySprint + " to burn " + Pewter + ". While burning " + Pewter  + ":\n\t\t• Move to " + Sprint + ".\n\t\t• Jump to " + PewterJump + "."
+            KeySprint + " to burn " + Pewter + ".",
+            "While burning " + Pewter  + ":\n\t\t• Move to " + Sprint + ".\n\t\t• Jump to " + PewterJump + "."
         };
         TriggerBeadMessages[9] = new List<string> {
             "Advanced Movement - Pewter",

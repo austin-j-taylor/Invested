@@ -30,7 +30,7 @@ public class ControlSchemeScreen : MonoBehaviour {
         
         mouseKeyboardButton.onClick.AddListener(OnClickedMouseKeyboard);
         gamepadButton.onClick.AddListener(OnClickedGamepad);
-        mkEQButton.onClick.AddListener(OnClickedMKQE);
+        mkEQButton.onClick.AddListener(OnClickedMKEQ);
         mk54Button.onClick.AddListener(OnClickedMK54);
         mkEQButton.gameObject.SetActive(false);
         mk54Button.gameObject.SetActive(false);
@@ -59,8 +59,8 @@ public class ControlSchemeScreen : MonoBehaviour {
         SettingsMenu.settingsData.controlScheme = SettingsData.Gamepad;
         Close();
     }
-    public void OnClickedMKQE() {
-        SettingsMenu.settingsData.controlScheme = SettingsData.MKQE;
+    public void OnClickedMKEQ() {
+        SettingsMenu.settingsData.controlScheme = SettingsData.MKEQ;
         Close();
     }
     public void OnClickedMK54() {

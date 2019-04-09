@@ -12,6 +12,7 @@ using System.Collections;
 public class TextCodes : MonoBehaviour {
 
     // String constants (prefixed with s_)
+    public const string s_Mouse_Button_3 = "Mouse Button 3";
     public const string s_Mouse_Button_4 = "Mouse Button 4";
     public const string s_Mouse_Button_5 = "Mouse Button 5";
     public const string s_E = "E";
@@ -225,6 +226,11 @@ public class TextCodes : MonoBehaviour {
     public static string LeftTrigger {
         get {
             return Red(s_Left_Trigger);
+        }
+    }
+    public static string mouseButton3 {
+        get {
+            return Gray(s_Mouse_Button_3);
         }
     }
     public static string theScrollWheel {
@@ -449,6 +455,27 @@ public class TextCodes : MonoBehaviour {
             }
         }
     }
+    public static string KeyStartBurningIron {
+        get {
+            switch (SettingsMenu.settingsData.controlScheme) {
+                case SettingsData.MK54: {
+                        return s_Press_ + LightBlue(s_Mouse_Button_5);
+                    }
+                case SettingsData.MK45: {
+                        return s_Press_ + LightBlue(s_Mouse_Button_4);
+                    }
+                case SettingsData.MKEQ: {
+                        return s_Press_ + LightBlue(s_E);
+                    }
+                case SettingsData.MKQE: {
+                        return s_Press_ + LightBlue(s_Q);
+                    }
+                default: {
+                        return s_Press_ + LightBlue(s_Right_Bumper);
+                    }
+            }
+        }
+    }
     public static string KeyStopBurning {
         get {
             switch (SettingsMenu.settingsData.controlScheme) {
@@ -507,7 +534,7 @@ public class TextCodes : MonoBehaviour {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
                 return s_Press_ + X;
             else
-                return s_Press_ + theScrollWheel;
+                return s_Press_ + mouseButton3;
         }
     }
     public static string KeyDrop {
@@ -515,7 +542,7 @@ public class TextCodes : MonoBehaviour {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
                 return s_Hold_ + A + " and press " + X;
             else
-                return s_Hold_ + Space + " and press " + theScrollWheel;
+                return s_Hold_ + Space + " and press " + mouseButton3;
         }
     }
     public static string KeyDropDirection {
@@ -555,7 +582,7 @@ public class TextCodes : MonoBehaviour {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
                 return s_Press_ + Start + " > Settings > Interface > Help Overlay";
             else
-                return s_Press_ + Escape + " > Settings > Interface > Help Overlay or " + s_Press_ + H;
+                return s_Press_ + H + " or " + s_Press_ + Escape + " > Settings > Interface > Help Overlay";
         }
     }
 

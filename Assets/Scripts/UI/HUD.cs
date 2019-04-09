@@ -98,7 +98,7 @@ public class HUD : MonoBehaviour {
         if(SettingsMenu.settingsData.forceUnits == 1) {
             return RoundStringToSigFigs(force).ToString() + "N";
         } else {
-            return System.Math.Round(force / mass / 9.81, 2).ToString() + "G's";
+            return RoundStringToSigFigs(force / mass / 9.81f, sigFigs) + "G's";
         }
     }
 
@@ -120,9 +120,9 @@ public class HUD : MonoBehaviour {
         if (SettingsMenu.settingsData.forceUnits == 1) {
             return RoundStringToSigFigs(allomanticForce.magnitude, sigFigs) + " " + plusSign + " " + RoundStringToSigFigs(normalForce.magnitude, sigFigs) + "N";
         } else {
-            return System.Math.Round(allomanticForce.magnitude / mass / 9.81f, sigFigs).ToString()
+            return RoundStringToSigFigs(allomanticForce.magnitude / mass / 9.81f, sigFigs)
                 + " " + plusSign + " " +
-                System.Math.Round(normalForce.magnitude / mass / 9.81f, sigFigs).ToString() + "G's";
+                RoundStringToSigFigs(normalForce.magnitude / mass / 9.81f, sigFigs) + "G's";
         }
     }
 

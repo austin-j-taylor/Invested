@@ -5,10 +5,11 @@ using System.IO;
 [System.Serializable]
 public class FlagsController : MonoBehaviour {
 
-    private const string flagsFileName = "Assets/Data/flags.json";
+    private const string flagsFileName = "Data/flags.json";
 
     // Flags
     public bool controlSchemeChosen;
+    public bool helpOverlayFull;
 
     private static FlagsController instance;
 
@@ -17,8 +18,20 @@ public class FlagsController : MonoBehaviour {
             return instance.controlSchemeChosen;
         }
         set {
-            instance.controlSchemeChosen = true;
+            instance.controlSchemeChosen = value;
             instance.SaveSettings();
+            HUD.HelpOverlayController.UpdateText();
+        }
+    }
+
+    public static bool HelpOverlayFull {
+        get {
+            return instance.helpOverlayFull;
+        }
+        set {
+            instance.helpOverlayFull = value;
+            instance.SaveSettings();
+            HUD.HelpOverlayController.UpdateText();
         }
     }
 

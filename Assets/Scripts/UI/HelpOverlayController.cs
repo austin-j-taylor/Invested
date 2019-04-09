@@ -23,32 +23,44 @@ public class HelpOverlayController : MonoBehaviour {
         HelpTextLeft = transform.Find("HelpTextLeft").GetComponent<Text>();
         HelpTextRight = transform.Find("HelpTextRight").GetComponent<Text>();
         IsOpen = false;
-        //SetVisible(IsOpen);
-        UpdateText();
     }
 
     public void UpdateText() {
-        HelpTextLeft.text = KeyHelp + " to toggle the " + HelpOverlay + ".\n\n" +
-            KeyLook + " to look.\n" +
-                KeyMove + " to move" + ((SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) ? ".\n" : " (" + KeyWalk + " to move slowly).\n") +
-                KeyJump + " to jump.\n\n" +
-            KeyStartBurning + "\n\t\tto start burning and select " + Push_Pull_targets + ".\n" +
-            KeyPullOrPush + " to " + Pull_or_Push + ".\n\n" +
-            "While holding " + KeyNegate +
-            ":\n\t\t• " + s_Press_ + KeySelect + " while looking at a " + Pull_target +
-            " to deselect it.\n\t\t• " + s_Tap_ + KeySelect + " while not looking at a " + Pull_target + " to deselect your oldest " + Pull_target +
-            ".\n\t\tLikewise for " + KeySelectAlternate + " and " + Push_targets + ".";
-        HelpTextRight.text =
-            KeyPushPullStrength + " to change " + Push_Pull + " " + BurnPercentage + "\n" +
-            KeyNumberOfTargets + " to change your " + Gray("max number of " + Push_Pull_targets + ".\n") +
-            KeySwap + " to swap your " + Push_targets + " and " + Pull_targets + ".\n" +
-            KeyStopBurning + " to stop burning " + Gray("Iron and Steel") + ".\n\n" +
-            KeyThrow + " to toss a coin.\n" +
-            KeyDrop + " to drop a coin at your feet.\n\t\t• " + KeyDropDirection + " while dropping a coin to toss the coin away from that direction.\n\n" +
-            KeySprint + " to burn " + Pewter + " for " + Sprinting + " and " + PewterJumping + "."
+        if(FlagsController.HelpOverlayFull) {
 
+            HelpTextLeft.text = KeyHelp + " to toggle the " + HelpOverlay + ".\n\n" +
+                KeyLook + " to look.\n" +
+                    KeyMove + " to move" + ((SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) ? ".\n" : " (" + KeyWalk + " to move slowly).\n") +
+                    KeyJump + " to jump.\n\n" +
+                KeyStartBurning + "\n\t\tto start burning and select " + Push_Pull_targets + ".\n" +
+                KeyPullOrPush + " to " + Pull_or_Push + ".\n\n" +
+                "While holding " + KeyNegate +
+                ":\n\t\t• " + s_Press_ + KeySelect + " while looking at a " + Pull_target +
+                " to deselect it.\n\t\t• " + s_Tap_ + KeySelect + " while not looking at a " + Pull_target + " to deselect your oldest " + Pull_target +
+                ".\n\t\tLikewise for " + KeySelectAlternate + " and " + Push_targets + ".";
 
+            HelpTextRight.text =
+                KeyPushPullStrength + " to change " + Push_Pull + " " + BurnPercentage + "\n" +
+                KeyNumberOfTargets + " to change your " + Gray("max number of " + Push_Pull_targets + ".\n") +
+                KeySwap + " to swap your " + Push_targets + " and " + Pull_targets + ".\n" +
+                KeyStopBurning + " to stop burning " + Gray("Iron and Steel") + ".\n\n" +
+                KeyThrow + " to toss a " + O_Coin + ".\n" +
+                KeyDrop + " to drop a " + O_Coin + " at your feet.\n\t\t• " + KeyDropDirection + " while dropping a " + O_Coin + " to toss the coin away from that direction.\n\n" +
+                KeySprint + " to burn " + Pewter + " for " + Sprinting + " and " + PewterJumping + "."
             ;
+        } else {
+            HelpTextLeft.text = KeyHelp + " to toggle the " + HelpOverlay + ".\n\n" +
+                KeyLook + " to look.\n" +
+                    KeyMove + " to move.\n"+
+                    KeyJump + " to jump.\n\n" +
+                KeyStartBurning + "\n\t\tto start burning and select " + Push_Pull_targets + ".\n" +
+                KeyPullOrPush + " to " + Pull_or_Push + ".\n\n" +
+                "While holding " + KeyNegate +
+                ":\n\t\t• " + s_Press_ + KeySelect + " while looking at a " + Pull_target +
+                " to deselect it.\n\t\t• " + s_Press_ + KeySelectAlternate + " while looking at a " + Push_target + " to deselect it."
+            ;
+            HelpTextRight.text = string.Empty;
+        }
     }
 
     // Not called by Button

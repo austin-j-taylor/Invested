@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.52929664, g: 0.52929664, b: 0.59570324, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -164,6 +164,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &259414
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -277,6 +278,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &674216
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -390,6 +392,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1345329
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -503,6 +506,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1665195
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -613,6 +617,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 200
   magneticMass: 0
+  childMagnetics: []
 --- !u!65 &3187561
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -722,6 +727,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &3444695
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -835,6 +841,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &20513975
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -948,6 +955,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &29118016
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1061,6 +1069,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &30061067
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1174,6 +1183,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &30082689
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1287,6 +1297,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &34194546
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1400,6 +1411,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &38106425
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1510,6 +1522,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 200
   magneticMass: 0
+  childMagnetics: []
 --- !u!65 &39188318
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1619,6 +1632,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &44026999
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1732,6 +1746,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &46196407
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1845,6 +1860,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &49174616
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2049,6 +2065,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &52954798
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2162,6 +2179,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &53546177
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2275,6 +2293,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &56124056
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2388,6 +2407,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &63297087
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2501,6 +2521,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &66702149
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2614,6 +2635,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &67248414
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2727,6 +2749,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &69982322
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2840,6 +2863,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &70746336
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2953,6 +2977,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &72256051
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -3066,6 +3091,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &72577044
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -3270,6 +3296,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &83180996
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -3383,6 +3410,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &90231236
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -3496,6 +3524,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &93055112
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -3609,6 +3638,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &93486568
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -3722,6 +3752,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &95418533
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -3835,6 +3866,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &96764735
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4039,6 +4071,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &103458667
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4152,6 +4185,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &104090916
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4281,7 +4315,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!1 &105336712
 GameObject:
@@ -4334,6 +4368,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &105336715
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4447,6 +4482,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &105438087
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4560,6 +4596,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &106103533
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4673,6 +4710,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &106223302
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4786,6 +4824,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &106571382
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -4899,6 +4938,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &111657225
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -5012,6 +5052,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &115816133
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -5125,6 +5166,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &117045383
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -5388,6 +5430,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &123081839
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -5501,6 +5544,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &125525991
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -5597,6 +5641,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 500
   magneticMass: 0
+  childMagnetics: []
 --- !u!65 &127555953
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -5720,6 +5765,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &130068925
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -5833,6 +5879,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &133541260
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -5946,6 +5993,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &137613237
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -6059,6 +6107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &143440039
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -6263,6 +6312,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &145061206
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -6376,6 +6426,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &145411988
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -6489,6 +6540,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &145737945
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -6602,6 +6654,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &146082726
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -6715,6 +6768,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &146867078
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -6828,6 +6882,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &147077611
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -7032,6 +7087,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &149555269
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -7208,6 +7264,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &152152561
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -7321,6 +7378,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &155904972
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -7434,6 +7492,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &155959781
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -7547,6 +7606,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &157291166
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -7660,6 +7720,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &158794723
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -7773,6 +7834,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &159766744
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -7886,6 +7948,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &160246954
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -7999,6 +8062,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &163090455
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -8112,6 +8176,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &171043461
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -8225,6 +8290,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &173561749
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -8338,6 +8404,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &175650022
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -8451,6 +8518,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &179504840
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -8564,6 +8632,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &180960710
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -8677,6 +8746,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &182400463
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -8882,6 +8952,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &191110165
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -8995,6 +9066,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &192711267
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -9108,6 +9180,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &197102300
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -9221,6 +9294,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &198558841
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -9334,6 +9408,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &198900077
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -9447,6 +9522,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &199588900
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -9560,6 +9636,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &199822833
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -9673,6 +9750,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &212205037
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -9877,6 +9955,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &214451944
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -9990,6 +10069,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &224260764
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -10150,6 +10230,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &231882441
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -10354,6 +10435,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &235713579
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -10649,6 +10731,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &247948930
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -10944,6 +11027,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &261883477
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -11057,6 +11141,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &268538140
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -11261,6 +11346,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &274013500
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -11374,6 +11460,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &275398179
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -11487,6 +11574,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &277856500
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -11663,6 +11751,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &282884243
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -11776,6 +11865,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &283548514
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -11889,6 +11979,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &296778270
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -12093,6 +12184,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &300338609
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -12206,6 +12298,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &301389175
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -12319,6 +12412,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &301664469
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -12432,6 +12526,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &303829439
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -12545,6 +12640,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &303884050
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -12749,6 +12845,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &307140146
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -12862,6 +12959,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &312146588
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -13067,6 +13165,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &324895642
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -13180,6 +13279,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &325656612
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -13293,6 +13393,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &325719388
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -13406,6 +13507,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &327269763
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -13610,6 +13712,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &328264641
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -13723,6 +13826,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &331057981
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -13836,6 +13940,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &336260744
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -13949,6 +14054,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &338309116
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -14062,6 +14168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &339185623
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -14266,6 +14373,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &343378979
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -14442,6 +14550,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &345676144
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -14555,6 +14664,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &346641760
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -14759,6 +14869,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &348451427
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -14872,6 +14983,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &350244854
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -14985,6 +15097,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &356811676
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -15098,6 +15211,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &359828921
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -15211,6 +15325,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &367741031
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -15324,6 +15439,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &370844779
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -15437,6 +15553,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &374344369
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -15550,6 +15667,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &374696653
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -15663,6 +15781,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &382845851
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -15776,6 +15895,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &386298048
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -15889,6 +16009,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &388016563
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -16002,6 +16123,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &391352372
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -16206,6 +16328,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &396004890
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -16410,6 +16533,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &399274754
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -16523,6 +16647,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &399946208
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -16636,6 +16761,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &405319672
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -16749,6 +16875,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &415053437
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -16862,6 +16989,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &418860459
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -17066,6 +17194,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &420929482
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -17345,6 +17474,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &424281503
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -17458,6 +17588,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &426112309
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -17571,6 +17702,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &427550904
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -17866,6 +17998,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &433924626
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -17979,6 +18112,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &435513639
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -18092,6 +18226,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &436462838
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -18205,6 +18340,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &440775341
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -18409,6 +18545,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &445012734
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -18522,6 +18659,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &449443663
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -18635,6 +18773,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &452643066
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -18748,6 +18887,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &456568293
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -18861,6 +19001,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &456799044
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -18974,6 +19115,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &458203372
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -19087,6 +19229,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &458702494
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -19200,6 +19343,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &463456181
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -19313,6 +19457,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &463772695
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -19426,6 +19571,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &466724966
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -19539,6 +19685,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &470161295
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -19652,6 +19799,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &470597492
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -19765,6 +19913,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &470732208
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -19969,6 +20118,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &472037794
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -20082,6 +20232,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &474754179
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -20258,6 +20409,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &478365326
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -20371,6 +20523,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &483477440
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -20484,6 +20637,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &496523753
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -20597,6 +20751,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &496854931
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -20710,6 +20865,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &497097377
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -20823,6 +20979,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &497122480
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -21027,6 +21184,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &505371814
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -21231,6 +21389,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &510300549
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -21344,6 +21503,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &510771675
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -21457,6 +21617,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &516450333
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -21570,6 +21731,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &516532262
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -21683,6 +21845,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &520668753
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -21978,6 +22141,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &523148427
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -22091,6 +22255,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &529987427
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -22204,6 +22369,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &533359440
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -22317,6 +22483,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &534478377
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -22493,6 +22660,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &535544028
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -22606,6 +22774,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &535651703
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -22719,6 +22888,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &540115135
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -22832,6 +23002,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &542457337
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -22945,6 +23116,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &544320189
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -23058,6 +23230,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &547516689
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -23171,6 +23344,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &548012887
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -23284,6 +23458,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &548237151
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -23397,6 +23572,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &551264787
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -23510,6 +23686,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &551426675
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -23623,6 +23800,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &557262764
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -23736,6 +23914,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &557999502
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -23849,6 +24028,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &564434884
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -24053,6 +24233,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &569224568
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -24257,6 +24438,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &572940785
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -24370,6 +24552,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &575088081
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -24576,6 +24759,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &580548629
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -24689,6 +24873,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &581996370
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -24893,6 +25078,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &596712864
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -25006,6 +25192,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &602275479
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -25119,6 +25306,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &603475807
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -25232,6 +25420,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &604189845
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -25345,6 +25534,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &607938113
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -25458,6 +25648,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &609009007
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -25571,6 +25762,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &610637304
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -25684,6 +25876,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &613086096
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -25871,6 +26064,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 200
   magneticMass: 0
+  childMagnetics: []
 --- !u!65 &626357743
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -26091,6 +26285,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &630379595
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -26295,6 +26490,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &632438517
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -26499,6 +26695,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &652395402
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -26703,6 +26900,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &661329857
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -26816,6 +27014,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &662609999
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -26929,6 +27128,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &666419859
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -27133,6 +27333,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &675759943
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -27246,6 +27447,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &680557967
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -27359,6 +27561,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &680764682
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -27472,6 +27675,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &684017995
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -27585,6 +27789,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &685671863
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -27698,6 +27903,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &686623225
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -27811,6 +28017,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &697095871
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -27924,6 +28131,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &700206605
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -28128,6 +28336,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &712423476
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -28241,6 +28450,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &713483064
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -28354,6 +28564,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &716742616
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -28467,6 +28678,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &719575541
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -28580,6 +28792,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &722535892
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -28693,6 +28906,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &730335524
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -28806,6 +29020,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &735596451
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -28919,6 +29134,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &739324743
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -29032,6 +29248,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &740447249
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -29145,6 +29362,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &747375220
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -29258,6 +29476,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &748177014
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -29371,6 +29590,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &751101182
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -29484,6 +29704,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &751764504
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -29597,6 +29818,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &761192188
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -29687,7 +29909,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
 --- !u!1 &766997477
 GameObject:
@@ -29740,6 +29962,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &766997480
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -29839,7 +30062,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4958656091128614, guid: 5dc43a83ec5fd1e4caae54511e33da1f, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5dc43a83ec5fd1e4caae54511e33da1f, type: 3}
@@ -29894,6 +30117,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &775906377
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -30098,6 +30322,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &779506921
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -30211,6 +30436,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &782717183
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -30324,6 +30550,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &785972828
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -30437,6 +30664,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &786134425
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -30641,6 +30869,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &797027134
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -30754,6 +30983,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &797549601
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -30867,6 +31097,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &800060538
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -30980,6 +31211,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &803580398
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -31184,6 +31416,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &810551352
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -31360,6 +31593,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &813346452
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -31473,6 +31707,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &814797828
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -31586,6 +31821,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &815000206
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -31699,6 +31935,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &816673975
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -31812,6 +32049,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &819602731
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -31925,6 +32163,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &820216733
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -32035,6 +32274,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 200
   magneticMass: 0
+  childMagnetics: []
 --- !u!65 &824679493
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -32144,6 +32384,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &828568683
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -32257,6 +32498,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &829324617
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -32461,6 +32703,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &833097604
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -32574,6 +32817,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &833609687
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -32778,6 +33022,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &838659333
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -32891,6 +33136,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &843287271
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -33004,6 +33250,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &847303751
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -33117,6 +33364,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &848503963
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -33321,6 +33569,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &852988489
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -33434,6 +33683,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &858091523
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -33638,6 +33888,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &860344602
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -33751,6 +34002,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &862549612
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -33847,6 +34099,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 200
   magneticMass: 0
+  childMagnetics: []
 --- !u!65 &866123601
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -33970,6 +34223,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &869599376
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -34083,6 +34337,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &871120663
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -34350,6 +34605,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &874552148
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -34463,6 +34719,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &878173939
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -34576,6 +34833,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &879316731
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -34780,6 +35038,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &892438397
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -34893,6 +35152,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &897666162
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -35006,6 +35266,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &902617469
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -35119,6 +35380,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &906143737
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -35362,6 +35624,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &912463952
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -35475,6 +35738,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &916155429
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -35588,6 +35852,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &920716526
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -35701,6 +35966,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &921544927
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -35814,6 +36080,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &921697425
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -35927,6 +36194,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &922428736
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -36040,6 +36308,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &923101510
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -36153,6 +36422,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &924607094
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -36266,6 +36536,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &931837410
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -36395,7 +36666,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 53.18, y: 0, z: 0}
 --- !u!1 &932955947
 GameObject:
@@ -36448,6 +36719,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &932955950
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -36561,6 +36833,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &933407662
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -36674,6 +36947,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &934495493
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -36787,6 +37061,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &934803056
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -36900,6 +37175,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &935096756
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -37013,6 +37289,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &938418789
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -37126,6 +37403,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &938922377
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -37239,6 +37517,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &942348075
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -37352,6 +37631,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &944628184
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -37556,6 +37836,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &947390902
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -37669,6 +37950,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &949788526
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -37782,6 +38064,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &950186668
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -37986,6 +38269,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &953489703
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -38099,6 +38383,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &958156345
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -38212,6 +38497,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &958473689
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -38381,6 +38667,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &964225601
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -38494,6 +38781,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &966245413
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -38607,6 +38895,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &968316442
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -38720,6 +39009,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &976052395
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -38924,6 +39214,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &983329050
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -39037,6 +39328,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &985443277
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -39150,6 +39442,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &989187380
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -39263,6 +39556,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1000431486
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -39467,6 +39761,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1009329174
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -39580,6 +39875,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1010814531
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -39756,6 +40052,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1022360468
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -39869,6 +40166,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1023222601
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -39982,6 +40280,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1024162268
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -40095,6 +40394,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1030234175
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -40299,6 +40599,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1035046206
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -40503,6 +40804,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1043642924
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -40616,6 +40918,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1050491058
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -40820,6 +41123,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1051364343
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -40933,6 +41237,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1054273509
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -41137,6 +41442,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1066077157
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -41237,7 +41543,7 @@ Transform:
   - {fileID: 1705630170}
   - {fileID: 627380524}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1072523010
 GameObject:
@@ -41273,6 +41579,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 200
   magneticMass: 0
+  childMagnetics: []
 --- !u!65 &1072523012
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -41396,6 +41703,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1074204955
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -41509,6 +41817,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1077889247
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -41622,6 +41931,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1083154292
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -41826,6 +42136,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1092268564
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -41936,6 +42247,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 200
   magneticMass: 0
+  childMagnetics: []
 --- !u!65 &1092720682
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -42045,6 +42357,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1092911396
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -42158,6 +42471,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1093604223
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -42271,6 +42585,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1094113872
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -42384,6 +42699,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1097160190
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -42497,6 +42813,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1098799432
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -42610,6 +42927,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1099357446
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -42723,6 +43041,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1102967074
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -42822,7 +43141,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4575750941033308, guid: 0760d4293a6ab164da4414b5805b7f1c, type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 114596233911085964, guid: 0760d4293a6ab164da4414b5805b7f1c,
         type: 3}
@@ -42897,6 +43216,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1105137806
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -43010,6 +43330,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1107888660
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -43123,6 +43444,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1111887958
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -43236,6 +43558,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1118875624
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -43349,6 +43672,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1119729898
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -43462,6 +43786,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1125991747
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -43575,6 +43900,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1126790134
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -43688,6 +44014,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1127140794
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -43892,6 +44219,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1131551168
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -44005,6 +44333,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1138970175
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -44118,6 +44447,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1139801430
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -44231,6 +44561,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1141429678
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -44344,6 +44675,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1142291410
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -44457,6 +44789,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1145836907
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -44570,6 +44903,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1145865909
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -44683,6 +45017,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1147815662
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -44796,6 +45131,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1149414740
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -44989,6 +45325,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1153346284
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -45284,6 +45621,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1161587242
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -45397,6 +45735,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1161819858
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -45510,6 +45849,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1162903348
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -45623,6 +45963,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1165422444
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -45827,6 +46168,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1169884184
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -45940,6 +46282,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1171265249
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -46053,6 +46396,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1171803063
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -46229,6 +46573,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1175163705
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -46342,6 +46687,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1176420831
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -46455,6 +46801,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1179192655
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -46568,6 +46915,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1179384564
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -46863,6 +47211,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1185726667
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -46976,6 +47325,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1188647046
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -47089,6 +47439,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1188918965
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -47202,6 +47553,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1192794347
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -47315,6 +47667,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1193170711
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -47428,6 +47781,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1193190579
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -47541,6 +47895,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1194552149
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -47654,6 +48009,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1198905931
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -47767,6 +48123,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1202065170
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -47880,6 +48237,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1203126172
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -48175,6 +48533,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1219626037
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -48288,6 +48647,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1220713829
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -48401,6 +48761,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1221657759
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -48577,6 +48938,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1223380750
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -48690,6 +49052,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1230281787
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -48803,6 +49166,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1235037846
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -48916,6 +49280,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1239645902
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -49029,6 +49394,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1244784752
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -49142,6 +49508,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1245457731
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -49255,6 +49622,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1245780176
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -49368,6 +49736,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1250300330
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -49481,6 +49850,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1250830234
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -49594,6 +49964,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1251397619
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -49707,6 +50078,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1252930940
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -49820,6 +50192,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1254405558
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -50024,6 +50397,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1258167385
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -50137,6 +50511,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1258388812
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -50250,6 +50625,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1260461496
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -50363,6 +50739,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1262286505
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -50476,6 +50853,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1263546149
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -50680,6 +51058,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1268430705
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -50793,6 +51172,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1274273071
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -50906,6 +51286,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1274856021
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -51019,6 +51400,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1275363212
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -51132,6 +51514,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1281098798
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -51245,6 +51628,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1290599840
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -51358,6 +51742,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1293212614
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -51471,6 +51856,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1296525407
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -51584,6 +51970,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1297588960
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -51697,6 +52084,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1297998974
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -51810,6 +52198,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1306983514
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -51923,6 +52312,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1307458455
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -52036,6 +52426,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1308717602
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -52149,6 +52540,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1314173389
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -52259,6 +52651,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 500
   magneticMass: 0
+  childMagnetics: []
 --- !u!65 &1318575160
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -52368,6 +52761,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1319782127
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -52481,6 +52875,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1319872371
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -52659,6 +53054,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1327001538
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -52863,6 +53259,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1327693001
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -52976,6 +53373,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1329357997
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -53089,6 +53487,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1334334126
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -53202,6 +53601,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1335174683
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -53315,6 +53715,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1341086594
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -53519,6 +53920,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1348472635
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -53632,6 +54034,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1348881231
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -53745,6 +54148,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1350807710
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -53858,6 +54262,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1351780791
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -53971,6 +54376,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1354098764
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -54084,6 +54490,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1356763523
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -54288,6 +54695,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1361640117
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -54492,6 +54900,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1374764284
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -54605,6 +55014,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1375821748
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -54900,6 +55310,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1384572188
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -55104,6 +55515,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1387252627
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -55217,6 +55629,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1390357739
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -55576,6 +55989,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1397349641
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -55689,6 +56103,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1398063880
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -55802,6 +56217,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1404487171
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -55915,6 +56331,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1404742586
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -56028,6 +56445,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1409200503
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -56141,6 +56559,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1413769709
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -56254,6 +56673,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1419088807
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -56367,6 +56787,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1419231474
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -56480,6 +56901,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1421330467
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -56593,6 +57015,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1423666845
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -56706,6 +57129,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1424944091
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -56819,6 +57243,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1426984665
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -56932,6 +57357,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1432142652
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -57045,6 +57471,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1432989753
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -57158,6 +57585,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1435904152
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -57271,6 +57699,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1439738801
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -57384,6 +57813,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1440937176
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -57497,6 +57927,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1449191321
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -57610,6 +58041,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1457223956
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -57723,6 +58155,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1468022609
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -57836,6 +58269,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1472986400
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -57949,6 +58383,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1473900714
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -58108,6 +58543,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 500
   magneticMass: 0
+  childMagnetics: []
 --- !u!65 &1480605168
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -58231,6 +58667,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1481245728
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -58344,6 +58781,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1481267879
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -58457,6 +58895,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1487955456
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -58570,6 +59009,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1493947362
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -58683,6 +59123,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1496421471
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -58796,6 +59237,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1502093998
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -59000,6 +59442,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1518693001
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -59113,6 +59556,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1519250480
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -59226,6 +59670,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1519814790
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -59339,6 +59784,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1520060360
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -59452,6 +59898,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1521647730
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -59656,6 +60103,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1522259614
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -59769,6 +60217,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1523985184
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -59882,6 +60331,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1524905199
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -59995,6 +60445,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1528608257
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -60108,6 +60559,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1530229110
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -60312,6 +60764,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1531153969
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -60425,6 +60878,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1532676764
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -60538,6 +60992,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1534257869
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -60651,6 +61106,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1535839232
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -60764,6 +61220,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1542960313
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -61059,6 +61516,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1546052770
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -61172,6 +61630,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1548749682
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -61285,6 +61744,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1552380966
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -61398,6 +61858,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1553279214
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -61511,6 +61972,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1558545963
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -61624,6 +62086,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1564089020
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -61737,6 +62200,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1569759862
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -61850,6 +62314,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1571694716
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -61963,6 +62428,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1571891724
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -62076,6 +62542,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1572495883
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -62189,6 +62656,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1574275661
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -62251,6 +62719,100 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1574275658}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1001 &1576150031
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 874909464556676535, guid: 1589cd97bc7e27c448191031f2fced22,
+        type: 3}
+      propertyPath: m_Name
+      value: Vial
+      objectReference: {fileID: 0}
+    - target: {fileID: 874909464556676532, guid: 1589cd97bc7e27c448191031f2fced22,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 14.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 874909464556676532, guid: 1589cd97bc7e27c448191031f2fced22,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 874909464556676532, guid: 1589cd97bc7e27c448191031f2fced22,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 874909464556676532, guid: 1589cd97bc7e27c448191031f2fced22,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 874909464556676532, guid: 1589cd97bc7e27c448191031f2fced22,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 874909464556676532, guid: 1589cd97bc7e27c448191031f2fced22,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 874909464556676532, guid: 1589cd97bc7e27c448191031f2fced22,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 874909464556676532, guid: 1589cd97bc7e27c448191031f2fced22,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 874909464556676532, guid: 1589cd97bc7e27c448191031f2fced22,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 874909464556676532, guid: 1589cd97bc7e27c448191031f2fced22,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 874909464556676532, guid: 1589cd97bc7e27c448191031f2fced22,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 874909464556676532, guid: 1589cd97bc7e27c448191031f2fced22,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 874909464556676532, guid: 1589cd97bc7e27c448191031f2fced22,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3062565781281829204, guid: 1589cd97bc7e27c448191031f2fced22,
+        type: 3}
+      propertyPath: fillIron
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3062565781281829204, guid: 1589cd97bc7e27c448191031f2fced22,
+        type: 3}
+      propertyPath: fillSteel
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3062565781281829204, guid: 1589cd97bc7e27c448191031f2fced22,
+        type: 3}
+      propertyPath: fillPewter
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1589cd97bc7e27c448191031f2fced22, type: 3}
 --- !u!1 &1580112544
 GameObject:
   m_ObjectHideFlags: 0
@@ -62393,6 +62955,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1582249207
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -62506,6 +63069,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1592661790
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -62711,6 +63275,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1595290056
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -62821,6 +63386,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 500
   magneticMass: 0
+  childMagnetics: []
 --- !u!65 &1597214859
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -62930,6 +63496,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1600995859
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -63043,6 +63610,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1604859598
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -63156,6 +63724,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1605068555
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -63360,6 +63929,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1606394964
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -63473,6 +64043,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1614360351
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -63586,6 +64157,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1614392647
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -63699,6 +64271,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1620339510
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -63812,6 +64385,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1622873209
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -63925,6 +64499,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1627810280
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -64038,6 +64613,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1630469625
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -64151,6 +64727,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1631285186
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -64355,6 +64932,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1633981082
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -64468,6 +65046,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1635663802
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -64581,6 +65160,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1637076349
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -64694,6 +65274,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1643371988
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -64807,6 +65388,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1643845864
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -64920,6 +65502,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1647337955
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -65033,6 +65616,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1647680775
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -65146,6 +65730,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1651301965
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -65259,6 +65844,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1652051382
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -65372,6 +65958,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1652913110
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -65485,6 +66072,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1652979462
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -65598,6 +66186,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1653979946
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -65802,6 +66391,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1656111469
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -66188,6 +66778,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1663602827
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -66301,6 +66892,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1665512254
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -66414,6 +67006,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1667592949
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -66527,6 +67120,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1667857998
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -66640,6 +67234,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1674592193
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -66753,6 +67348,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1674708614
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -66866,6 +67462,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1687536844
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -66979,6 +67576,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1692855653
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -67092,6 +67690,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1693425198
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -67205,6 +67804,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1697891560
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -67318,6 +67918,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1698093084
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -68143,6 +68744,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1718981512
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -68256,6 +68858,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1722115853
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -68369,6 +68972,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1728354940
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -68482,6 +69086,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1730212992
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -68595,6 +69200,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1736382129
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -68799,6 +69405,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1738258118
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -68912,6 +69519,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1740509332
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -69025,6 +69633,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1742783661
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -69138,6 +69747,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1749046523
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -69251,6 +69861,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1751098207
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -69455,6 +70066,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1752169638
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -69568,6 +70180,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1758882941
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -69681,6 +70294,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1759838205
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -69794,6 +70408,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1764407841
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -69907,6 +70522,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1768439800
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -70020,6 +70636,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1770557927
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -70133,6 +70750,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1775407770
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -70491,6 +71109,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1783850740
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -70663,6 +71282,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1786386393
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -70867,6 +71487,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1788664072
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -70980,6 +71601,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1791215888
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -71093,6 +71715,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1792839558
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -71189,6 +71812,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 200
   magneticMass: 0
+  childMagnetics: []
 --- !u!65 &1793654963
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -71410,6 +72034,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1794952775
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -71523,6 +72148,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1795932154
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -71636,6 +72262,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1796720923
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -71749,6 +72376,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1798485405
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -71953,6 +72581,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1805013983
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -72066,6 +72695,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1809857260
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -72179,6 +72809,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1810764146
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -72292,6 +72923,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1821550580
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -72405,6 +73037,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1829342863
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -72518,6 +73151,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1830011401
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -72631,6 +73265,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1835452433
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -72744,6 +73379,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1835728160
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -72857,6 +73493,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1836811624
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -73061,6 +73698,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1850907607
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -73356,6 +73994,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1859480631
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -73469,6 +74108,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1861274692
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -73726,6 +74366,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1865276197
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -73839,6 +74480,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1870398991
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -73952,6 +74594,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1871345712
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -74156,6 +74799,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1876380838
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -74269,6 +74913,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1883357889
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -74382,6 +75027,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1884290473
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -74495,6 +75141,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1884425543
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -74608,6 +75255,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1887908315
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -74721,6 +75369,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1892226425
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -74834,6 +75483,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1893078015
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -75038,6 +75688,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1894660746
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -75242,6 +75893,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1903980954
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -75355,6 +76007,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1905176901
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -75468,6 +76121,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1905581802
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -75581,6 +76235,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1906540178
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -75694,6 +76349,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1906805718
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -75807,6 +76463,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1910453610
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -75920,6 +76577,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1916352588
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -76033,6 +76691,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1918949609
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -76146,6 +76805,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1920600297
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -76259,6 +76919,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1923304004
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -76372,6 +77033,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1927550784
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -76576,6 +77238,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1937036329
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -76689,6 +77352,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1946292093
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -76802,6 +77466,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1946602102
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -76915,6 +77580,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1953246239
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -77028,6 +77694,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1958371585
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -77141,6 +77808,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1959882732
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -77254,6 +77922,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1960749874
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -77367,6 +78036,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1961527386
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -77480,6 +78150,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1965687235
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -77593,6 +78264,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1966793638
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -77706,6 +78378,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1967604536
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -77819,6 +78492,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1969880773
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -77932,6 +78606,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1970366445
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -78136,6 +78811,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1974126941
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -78249,6 +78925,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1974277857
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -78362,6 +79039,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1976691390
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -78475,6 +79153,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1979212152
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -78770,6 +79449,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1987756667
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -78946,6 +79626,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1992251431
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -79059,6 +79740,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1996528600
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -79263,6 +79945,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &1999015618
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -79376,6 +80059,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2004571981
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -79489,6 +80173,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2004779803
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -79693,6 +80378,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2008382280
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -79897,6 +80583,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2028878207
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -80010,6 +80697,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2028885902
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -80123,6 +80811,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2030759057
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -80236,6 +80925,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2031901186
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -80349,6 +81039,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2034769245
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -80462,6 +81153,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2036719356
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -80575,6 +81267,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2041711872
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -80688,6 +81381,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2048447758
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -80801,6 +81495,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2049702669
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -80914,6 +81609,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2050117243
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -81027,6 +81723,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2055732607
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -81231,6 +81928,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2065840721
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -81344,6 +82042,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2071107216
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -81457,6 +82156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2071426785
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -81570,6 +82270,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2073369145
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -81774,6 +82475,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2076687688
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -81887,6 +82589,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2084824372
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -82159,6 +82862,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2089807268
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -82272,6 +82976,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2090432837
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -82385,6 +83090,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2091421114
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -82498,6 +83204,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2097047954
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -82611,6 +83318,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2101064402
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -82724,6 +83432,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2104057940
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -82837,6 +83546,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2113382408
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -82950,6 +83660,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2113840791
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -83154,6 +83865,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2121269178
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -83358,6 +84070,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2129375654
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -83471,6 +84184,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2133453772
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -83584,6 +84298,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2134547876
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -83788,6 +84503,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2135876378
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -83901,6 +84617,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2136144477
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -84014,6 +84731,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2139814540
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -84127,6 +84845,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2142148075
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -84331,6 +85050,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 20
   magneticMass: 0
+  childMagnetics: []
 --- !u!136 &2144905153
 CapsuleCollider:
   m_ObjectHideFlags: 0

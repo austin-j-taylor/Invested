@@ -14,8 +14,8 @@ public class AllomanticPewter : Allomancer {
     protected const float timePewterPerFall = 1f;
 
     public MetalReserve PewterReserve { get; private set; }
-    protected bool IsSprinting { get; set; } = false;
-    protected bool IsDraining { get; set; } = false;
+    public bool IsSprinting { get; protected set; } = false;
+    public bool IsDraining { get; protected set; } = false;
     public override bool IsBurning {
         get {
             return IsSprinting || IsDraining;
