@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3970763150763668709}
   - component: {fileID: 3970763150763668710}
   - component: {fileID: 3970763150763668711}
-  - component: {fileID: 1908342568586306655}
+  - component: {fileID: 3970763150763668708}
   m_Layer: 14
   m_Name: FacilityWire
   m_TagString: Untagged
@@ -59,7 +59,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: fdf62f6fb36b161449dacd4385a1e083, type: 2}
+  - {fileID: 2100000, guid: 773d74392902e334a81e7a4c20378776, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -92,19 +92,41 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &1908342568586306655
-MonoBehaviour:
+--- !u!108 &3970763150763668708
+Light:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3970763150763668705}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  netMass: 0
-  magneticMass: 0
-  childMagnetics: []
-  density: 6000
+  serializedVersion: 8
+  m_Type: 2
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 1
+  m_Range: 10
+  m_SpotAngle: 30
+  m_CookieSize: 10
+  m_Shadows:
+    m_Type: 0
+    m_Resolution: -1
+    m_CustomResolution: -1
+    m_Strength: 1
+    m_Bias: 0.05
+    m_NormalBias: 0.4
+    m_NearPlane: 0.2
+  m_Cookie: {fileID: 0}
+  m_DrawHalo: 0
+  m_Flare: {fileID: 0}
+  m_RenderMode: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_Lightmapping: 2
+  m_LightShadowCasterMode: 0
+  m_AreaSize: {x: 1, y: 1}
+  m_BounceIntensity: 1
+  m_ColorTemperature: 6570
+  m_UseColorTemperature: 0
+  m_ShadowRadius: 0
+  m_ShadowAngle: 0

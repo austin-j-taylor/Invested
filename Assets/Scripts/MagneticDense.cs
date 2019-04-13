@@ -11,7 +11,24 @@ public class MagneticDense : Magnetic
     private float density;
 
     protected new void Awake() {
-        GetComponentInParent<Rigidbody>().SetDensity(density);
+
+        if (netMass == 0) {
+            Rb = GetComponentInParent<Rigidbody>();
+
+            if (!Rb) {
+                Rb = gameObject.AddComponent<Rigidbody>();
+                Rb.SetDensity(density);
+                netMass = Rb.mass;
+                
+                DestroyImmediate(Rb);
+                IsStatic = true;
+            } else {
+                Rb.SetDensity(density);
+            }
+        } else {
+            GetComponentInParent<Rigidbody>().SetDensity(density);
+        }
+
         base.Awake();
     }
 }

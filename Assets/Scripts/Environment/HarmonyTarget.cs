@@ -5,12 +5,15 @@ using UnityEngine;
 public class HarmonyTarget : MonoBehaviour {
 
     private const float distanceThreshold = .001f;
+    private const float distanceThresholdPulling = 10f;
     private const float forceConstantFar = 40f;
     private const float forceConstantClose = 10000f;
 
     private bool playerHasEntered;
     private bool controllingPlayer;
+    private Vector3 zeroRotation;
 
+    private NonPlayerPushPullController allomancer;
     private Rigidbody rb;
     private Animator anim;
     private Renderer[] symbolRenderers;
@@ -21,7 +24,12 @@ public class HarmonyTarget : MonoBehaviour {
     private Transform cameraPositionTarget;
     private Transform cameraLookAtTarget;
 
-    private void Awake() {
+    private void Start() {
+        allomancer = GetComponentInChildren<NonPlayerPushPullController>();
+        allomancer.Strength = 1f;
+        allomancer.PullTargets.MaxRange = distanceThresholdPulling;
+        allomancer.IronBurnPercentageTarget = 1;
+
         rb = GetComponentInChildren<Rigidbody>();
         anim = GetComponent<Animator>();
         harmonySphere = rb.GetComponent<Transform>();
@@ -36,6 +44,7 @@ public class HarmonyTarget : MonoBehaviour {
 
         playerHasEntered = false;
         controllingPlayer = false;
+        zeroRotation = transform.eulerAngles;
     }
 
     private void LateUpdate() {
@@ -44,12 +53,23 @@ public class HarmonyTarget : MonoBehaviour {
             Vector3 distancetoPlayer = harmonySphere.position - CameraController.ActiveCamera.transform.position;// player.transform.position;
             float angle = 180 + Mathf.Atan2(distancetoPlayer.x, distancetoPlayer.z) * Mathf.Rad2Deg;
             Vector3 newRotation = Vector3.zero;
-            //angle = Mathf.LerpAngle(inner.eulerAngles.y, angle, Time.deltaTime * 10f);
+            ////angle = Mathf.LerpAngle(inner.eulerAngles.y, angle, Time.deltaTime * 10f);
 
             newRotation.y = angle;
-            transform.eulerAngles = newRotation;
-            outerLeft.eulerAngles -= newRotation;
-            outerRight.eulerAngles -= newRotation;
+            //transform.localEulerAngles = newRotation;
+            outerLeft.localEulerAngles -= newRotation;
+            outerRight.localEulerAngles -= newRotation;
+
+            transform.LookAt(CameraController.ActiveCamera.transform.position);
+
+            // If player is nearby, Pull on them
+
+            if (distancetoPlayer.magnitude < distanceThresholdPulling) {
+                if(!allomancer.HasPullTarget) {
+                    allomancer.AddPullTarget(Player.PlayerMagnetic);
+                }
+                allomancer.IronPulling = true;
+            }
         }
     }
 

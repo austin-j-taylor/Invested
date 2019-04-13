@@ -17,7 +17,7 @@ public class Magnetic : MonoBehaviour {
     private readonly Color brightBlue = new Color(0, .25f, 1);
 
     [SerializeField]
-    private float netMass = 0;
+    protected float netMass = 0;
     [SerializeField]
     private float magneticMass = 0;
     // Assigned in the editor. Marks children that should also glow when this target is highlighted.
@@ -64,7 +64,7 @@ public class Magnetic : MonoBehaviour {
     // The allomantic force, excluding the burn rate.
     public Vector3 LastMaxPossibleAllomanticForce { get; set; }
 
-    public bool IsStatic { get; private set; }
+    public bool IsStatic { get; protected set; }
     public bool HasColliders { get; private set; }
 
     public bool LastWasPulled {
@@ -154,7 +154,6 @@ public class Magnetic : MonoBehaviour {
         }
         defaultEmissionColor = new Color[childMagnetics.Length];
         blueLine = Instantiate(GameManager.MetalLineTemplate);
-        Rb = GetComponentInParent<Rigidbody>();
         colliders = GetComponentsInChildren<Collider>();
         if (gameObject.layer != LayerMask.NameToLayer("Undetectable Magnetic"))
             GameManager.AddMagnetic(this);
@@ -162,7 +161,10 @@ public class Magnetic : MonoBehaviour {
         lastWasPulled = false;
         isBeingPushPulled = false;
         IsHighlighted = false;
-        IsStatic = Rb == null;
+        if (!IsStatic) { // assigned by MagneticDense
+            Rb = GetComponentInParent<Rigidbody>();
+            IsStatic = (Rb == null);
+        }
         HasColliders = colliders.Length > 0;
 
         if (IsStatic) { // No RigidBody attached

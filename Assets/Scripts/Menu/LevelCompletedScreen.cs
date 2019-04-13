@@ -11,8 +11,8 @@ public class LevelCompletedScreen : MonoBehaviour {
     // Use this for initialization
     void Start() {
         Button[] buttons = GetComponentsInChildren<Button>();
-        continueButton = buttons[0];
-        returnButton = buttons[1];
+        returnButton = buttons[0];
+        continueButton = buttons[1];
 
         continueButton.onClick.AddListener(ClickContinue);
         returnButton.onClick.AddListener(ClickReturn);
