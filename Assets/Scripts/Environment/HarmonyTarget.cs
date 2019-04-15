@@ -8,10 +8,12 @@ public class HarmonyTarget : MonoBehaviour {
     private const float distanceThresholdPulling = 10f;
     private const float forceConstantFar = 40f;
     private const float forceConstantClose = 10000f;
-
+    private const float lerpConstant = 7;
+    private const float timeToLerpBack = 2;
+    
     private bool playerHasEntered;
     private bool controllingPlayer;
-    private Vector3 zeroRotation;
+    private Quaternion zeroRotation;
 
     private NonPlayerPushPullController allomancer;
     private Rigidbody rb;
@@ -41,10 +43,10 @@ public class HarmonyTarget : MonoBehaviour {
 
         symbolRenderers = GetComponentsInChildren<Renderer>();
         harmonySphere.gameObject.AddComponent<HarmonySphere>();
-
+        
         playerHasEntered = false;
         controllingPlayer = false;
-        zeroRotation = transform.eulerAngles;
+        zeroRotation = transform.rotation;
     }
 
     private void LateUpdate() {
@@ -70,6 +72,8 @@ public class HarmonyTarget : MonoBehaviour {
                 }
                 allomancer.IronPulling = true;
             }
+        } else {
+            transform.rotation = Quaternion.Slerp(transform.rotation, zeroRotation, Time.deltaTime * lerpConstant);
         }
     }
 
@@ -106,7 +110,6 @@ public class HarmonyTarget : MonoBehaviour {
         //Player.PlayerIronSteel.StopBurning();
         Player.PlayerInstance.GetComponent<Rigidbody>().useGravity = false;
         CameraController.SetExternalSource(cameraPositionTarget, cameraLookAtTarget);
-
     }
 
     private void EndAnimation() {
@@ -116,7 +119,7 @@ public class HarmonyTarget : MonoBehaviour {
             renderer.material = GameManager.Material_Ettmetal_Glowing;
 
         // Open menus
-        LevelCompletedScreen.OpenScreen();
+        LevelCompletedScreen.OpenScreen(this);
     }
 
     private class HarmonySphere : MonoBehaviour {
@@ -135,6 +138,7 @@ public class HarmonyTarget : MonoBehaviour {
         HUD.EnableHUD();
         Player.PlayerInstance.GetComponent<Rigidbody>().useGravity = SettingsMenu.settingsData.playerGravity == 1;
         CameraController.SetExternalSource(null, null);
+        CameraController.TimeToLerp = timeToLerpBack;
 
         Destroy(harmonySphere.gameObject);
     }

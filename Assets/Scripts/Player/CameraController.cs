@@ -13,7 +13,8 @@ public class CameraController : MonoBehaviour {
     private const float playerLookAtTargetFirstPersonHeight = 1;
     private const float distanceFromHitWall = .125f;//.5f;
     private const float wallDistanceCheck = 3;
-    private const float lerpConstant = 5;
+    private const float lerpConstantPosition = 5;
+    private const float lerpConstantRotation = 15;
     private static readonly Vector3 distancefromPlayer = new Vector3(0, 0, -wallDistanceCheck);
     public static Camera ActiveCamera { get; private set; }
 
@@ -33,6 +34,18 @@ public class CameraController : MonoBehaviour {
             return currentX == 0 && currentY == 0;
         }
     }
+    // Assigned when the camera should lerp to its target, rather than immediately go to it
+    public static float TimeToLerp {
+        get {
+            return timeToLerp;
+        }
+        set {
+            timeToLerp = 0;
+            maxTimeToLerp = value;
+        }
+    }
+    private static float timeToLerp;
+    private static float maxTimeToLerp;
 
     // Returns the horizontal direction the camera is facing (only in the x/z plane)
     public static Quaternion CameraDirection {
@@ -62,8 +75,9 @@ public class CameraController : MonoBehaviour {
         if (externalPositionTarget) {
             if (cameraIsLocked) {
                 // Called when the Camera is being controlled by some other source, i.e. HarmonyTarget
-                ActiveCamera.transform.position = Vector3.Lerp(ActiveCamera.transform.position, externalPositionTarget.position, lerpConstant * Time.deltaTime);
-                ActiveCamera.transform.LookAt(externalLookAtTarget);
+                ActiveCamera.transform.position = Vector3.Lerp(ActiveCamera.transform.position, externalPositionTarget.position, lerpConstantPosition * Time.deltaTime);
+                //ActiveCamera.transform.LookAt(externalLookAtTarget);
+                ActiveCamera.transform.rotation = Quaternion.Lerp(ActiveCamera.transform.rotation, Quaternion.LookRotation(externalLookAtTarget.position - ActiveCamera.transform.position, Vector3.up), lerpConstantRotation * Time.deltaTime);
             }
         } else {
             if (cameraIsLocked) {
@@ -95,11 +109,28 @@ public class CameraController : MonoBehaviour {
             // Horizontal rotation (rotates playerBody body left and right)
             // Vertical rotation (rotates camera up and down body)
             Quaternion verticalRotation = Quaternion.Euler(currentY, 0, 0);
-            ActiveCamera.transform.localRotation = verticalRotation;
+
+            // If an external target was recently used, the camera should lerp back
+            if (timeToLerp < maxTimeToLerp) {
+                ActiveCamera.transform.localRotation = Quaternion.Slerp(ActiveCamera.transform.localRotation, verticalRotation, lerpConstantRotation * Time.deltaTime);
+            } else {
+                ActiveCamera.transform.localRotation = verticalRotation;
+            }
 
             if (SettingsMenu.settingsData.cameraFirstPerson == 0) {
+                // Third person
 
-                Vector3 wantedPosition = verticalRotation * distancefromPlayer; // local
+                // Decide position the camera should try to be at
+                Vector3 wantedPosition; // local
+                // If an external target was recently used, the camera should lerp back
+                if (timeToLerp < maxTimeToLerp) {
+                    float distance = timeToLerp / maxTimeToLerp;
+                    wantedPosition = Vector3.Slerp(ActiveCamera.transform.localPosition, verticalRotation * distancefromPlayer, lerpConstantPosition * Time.deltaTime);
+                    timeToLerp += Time.deltaTime;
+                } else {
+                    wantedPosition = verticalRotation * distancefromPlayer;
+                }
+
                 ActiveCamera.transform.localPosition = wantedPosition;
                 Vector3 pos = Vector3.zero;
                 pos.y = playerLookAtTargetHeight;
@@ -189,6 +220,8 @@ public class CameraController : MonoBehaviour {
                     //Debug.DrawLine(destinations[smallestIndex], smallestHit.point, Color.red);
                 }
             } else {
+                // First person
+                
                 Vector3 pos = Vector3.zero;
                 pos.y = playerLookAtTargetFirstPersonHeight;
                 playerLookAtTarget.transform.localPosition = pos;
@@ -242,6 +275,7 @@ public class CameraController : MonoBehaviour {
     }
 
     public static void Clear(bool resetRotation = true) {
+        TimeToLerp = -100;
         externalPositionTarget = null;
         externalLookAtTarget = null;
         firstPersonCamera.transform.localPosition = Vector3.zero;

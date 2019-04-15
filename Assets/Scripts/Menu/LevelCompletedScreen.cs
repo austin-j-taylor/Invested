@@ -8,6 +8,8 @@ public class LevelCompletedScreen : MonoBehaviour {
 
     private static GameObject levelCompletedScreen;
 
+    public static HarmonyTarget InTarget { get; set; }
+
     // Use this for initialization
     void Start() {
         Button[] buttons = GetComponentsInChildren<Button>();
@@ -22,7 +24,7 @@ public class LevelCompletedScreen : MonoBehaviour {
     }
 
     private void ClickContinue() {
-        FindObjectOfType<HarmonyTarget>().ReleasePlayer();
+        InTarget.ReleasePlayer();
         gameObject.SetActive(false);
     }
 
@@ -32,7 +34,8 @@ public class LevelCompletedScreen : MonoBehaviour {
         MainMenu.OpenSceneSelectMenu();
     }
 
-    public static void OpenScreen() {
+    public static void OpenScreen(HarmonyTarget target) {
+        InTarget = target;
         levelCompletedScreen.SetActive(true);
         CameraController.UnlockCamera();
         MainMenu.FocusOnCurrentMenu(levelCompletedScreen.transform);
