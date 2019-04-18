@@ -24,6 +24,7 @@ public class PlayerMovementController : MonoBehaviour {
 
     private Rigidbody rb;
     private PlayerGroundedChecker groundedChecker;
+    private PIDController pid;
 
     public bool IsGrounded {
         get {
@@ -37,6 +38,7 @@ public class PlayerMovementController : MonoBehaviour {
     private void Awake() {
         rb = GetComponent<Rigidbody>();
         groundedChecker = transform.GetComponentInChildren<PlayerGroundedChecker>();
+        pid = GetComponent<PIDController>();
         rb.maxAngularVelocity = maxRollingAngularSpeed;
         // Makes the ball "hit the ground running" - if it's spinning and it hits the ground, a high MOI will m
         rb.inertiaTensor = new Vector3(momentOfInertiaMagnitude, momentOfInertiaMagnitude, momentOfInertiaMagnitude);
