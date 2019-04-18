@@ -30,7 +30,7 @@ public class AllomanticPewter : Allomancer {
     protected ParticleSystem particleSystem;
     protected Quaternion particleDirection;
 
-    private void Awake() {
+    protected virtual void Awake() {
         PewterReserve = gameObject.AddComponent<MetalReserve>();
         rb = GetComponent<Rigidbody>();
         particleSystem = transform.parent.GetComponentInChildren<ParticleSystem>();
@@ -44,7 +44,7 @@ public class AllomanticPewter : Allomancer {
         base.Clear();
     }
 
-    private void FixedUpdate() {
+    protected virtual void FixedUpdate() {
         if (IsSprinting) {
             PewterReserve.Mass -= gramsPewterPerSecondSprint * Time.fixedDeltaTime;
         }

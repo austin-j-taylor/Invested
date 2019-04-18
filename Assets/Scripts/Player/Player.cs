@@ -16,7 +16,7 @@ public class Player : PewterEntity {
     // Player components that need to be referenced elsewhere
     public static Player PlayerInstance { get; private set; }
     public static PlayerPullPushController PlayerIronSteel { get; private set; }
-    public static PlayerPewterController PlayerPewter { get; private set; }
+    public static AllomanticPewter PlayerPewter { get; private set; }
     public static Magnetic PlayerMagnetic { get; private set; }
 
     public Hand CoinHand { get; private set; }
@@ -66,7 +66,7 @@ public class Player : PewterEntity {
         }
         PlayerInstance = this;
         PlayerIronSteel = GetComponentInChildren<PlayerPullPushController>();
-        PlayerPewter = GetComponentInChildren<PlayerPewterController>();
+        PlayerPewter = GetComponentInChildren<AllomanticPewter>();
         PlayerMagnetic = GetComponentInChildren<Magnetic>();
         Health = 100;
         CoinHand = GetComponentInChildren<Hand>();
