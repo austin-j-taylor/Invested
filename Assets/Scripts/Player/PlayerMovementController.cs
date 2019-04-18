@@ -9,17 +9,18 @@ using UnityEngine;
 
 public class PlayerMovementController : MonoBehaviour {
 
-    private const float defaultAcceleration = 5f;
-    private const float defaultRunningSpeed = 7.5f;
-    private const float defaultAngularVelocity = defaultAcceleration * torqueFactor;
-    private const float defaultRunningAngularVelocity = defaultRunningSpeed * torqueFactor;
-    private const float torqueFactor = 4;
+    private const float rollingAcceleration = 5f;
+    private const float maxRollingSpeed = 7.5f;
+    private const float maxRollingAngularSpeed = 20;
+    private const float maxSprintingAngularVelocity = 30;
+    private const float torqueFactor = 8;
     private const float movementFactor = .15f;
     private const float airControlFactor = .06f;
     private const float dotFactor = 10;
     private const float dragAirborne = .2f;
     private const float dragGrounded = 3f;
     private const float dragNoControl = 10f;
+    private const float momentOfInertiaMagnitude = 5;
 
     private Rigidbody rb;
     private PlayerGroundedChecker groundedChecker;
@@ -31,12 +32,14 @@ public class PlayerMovementController : MonoBehaviour {
     }
 
     private bool jumpQueued;
-    private bool lastWasSprinting;
+    private bool lastWasSprintingOnGround;
     
     private void Awake() {
         rb = GetComponent<Rigidbody>();
         groundedChecker = transform.GetComponentInChildren<PlayerGroundedChecker>();
-        rb.maxAngularVelocity = defaultAngularVelocity;
+        rb.maxAngularVelocity = maxRollingAngularSpeed;
+        // Makes the ball "hit the ground running" - if it's spinning and it hits the ground, a high MOI will m
+        rb.inertiaTensor = new Vector3(momentOfInertiaMagnitude, momentOfInertiaMagnitude, momentOfInertiaMagnitude);
     }
 
     private void Update() {
@@ -69,7 +72,6 @@ public class PlayerMovementController : MonoBehaviour {
             if(Keybinds.Walk()) {
                 movement *= movementFactor;
             }
-
 
             if (IsGrounded) {
                 // if a Jump is queued
@@ -105,74 +107,52 @@ public class PlayerMovementController : MonoBehaviour {
                 //movement *= airControlFactor;
             }
 
-
-
             if (movement.sqrMagnitude > 0) { // If moving at all
-                //if (IsGrounded) { // and on the ground
+                // Apply Pewter Sprint, if possible
 
-                    // If on a wall, rotate movement to be on that wall's plane
-                    //float angle = Vector3.Angle(movement, groundedChecker.Normal) - 90;
-                    //movement = Quaternion.AngleAxis(angle, Vector3.Cross(Vector3.up, groundedChecker.Normal)) * movement;
-                    //if (movement.y < 0)
-                    //    movement.y = -movement.y;
-
-                    // Apply Pewter Sprint, if possible
-                    float sprintMovement = Player.PlayerPewter.Sprint(movement, lastWasSprinting);
-                    if (sprintMovement == 0) {
-                        // if airborne or not Sprinting, move normally.
-                        lastWasSprinting = false;
-                        movement *= MovementMagnitude(movement);
-                        rb.maxAngularVelocity = defaultAngularVelocity;
-                    } else {
-                        // if sprinting
-                        lastWasSprinting = true;
-                        movement *= sprintMovement;
-                        rb.maxAngularVelocity = defaultRunningAngularVelocity;
-                    }
-                //} else {
-                //    // if airborne or not Sprinting, move normally.
-                //    movement *= MovementMagnitude(movement);
-                //}
+                if(Player.PlayerPewter.IsSprinting) {
+                    // if sprinting
+                    movement *= Player.PlayerPewter.Sprint(movement, !lastWasSprintingOnGround && IsGrounded);
+                    rb.maxAngularVelocity = maxSprintingAngularVelocity;
+                    lastWasSprintingOnGround = IsGrounded; // only show particles if we've hit the ground
+                } else {
+                    // not Sprinting, move normally.
+                    movement = MovementMagnitude(movement);
+                    rb.maxAngularVelocity = maxRollingAngularSpeed;
+                    lastWasSprintingOnGround = false;
+                }
 
                 // Convert movement to torque
                 Vector3 torque = Vector3.Cross(IsGrounded ? groundedChecker.Normal : Vector3.up, movement) * torqueFactor;
-                Debug.DrawRay(transform.position, rb.angularVelocity, Color.red);
 
                 float dot = Vector3.Dot(torque, rb.angularVelocity);
                 if(dot < 0) {
-                    float velocityFactor = 2 - Mathf.Exp(dot / dotFactor);
-                    Debug.Log("facotr:" + velocityFactor);
-                    Debug.Log(dot);
-                    torque *= velocityFactor;
+                    torque *= 2 - Mathf.Exp(dot / dotFactor);
                 }
-
 
                 // Apply torque to player
                 rb.AddTorque(torque, ForceMode.Acceleration);
+                // Apply a small amount of the movement force to player for tighter controls & air movement
+                rb.AddForce(movement * airControlFactor, ForceMode.Acceleration);
+
+                // Debug
+                Debug.DrawRay(transform.position, rb.angularVelocity, Color.red);
                 Debug.DrawRay(transform.position, torque, Color.white);
                 Debug.DrawRay(transform.position, movement, Color.blue);
-
-                // Apply a small amount of the movement force to player for tighter controls & air movement
-                //rb.AddForce(movement * movementFactor, ForceMode.Acceleration);
-
             }
         } else {
-            //if (IsGrounded) {
             rb.drag = SettingsMenu.settingsData.playerAirResistance * dragNoControl;
-            //} else {
-            //    rb.drag = SettingsMenu.settingsData.playerAirResistance * airDrag;
-            //}
         }
     }
 
     // Convert a movement vector into real player movement based on current velocity
-    private float MovementMagnitude(Vector3 movement) {
-        return defaultAcceleration * Mathf.Max(defaultRunningSpeed - Vector3.Project(rb.velocity, movement.normalized).magnitude, 0);
+    private Vector3 MovementMagnitude(Vector3 movement) {
+        return movement * rollingAcceleration * Mathf.Max(maxRollingSpeed - Vector3.Project(rb.velocity, movement.normalized).magnitude, 0);
     }
 
     public void Clear() {
         jumpQueued = false;
-        lastWasSprinting = false;
+        lastWasSprintingOnGround = false;
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         rb.useGravity = SettingsMenu.settingsData.playerGravity == 1;

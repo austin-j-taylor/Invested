@@ -9,9 +9,9 @@ public class PlayerPewterController : AllomanticPewter {
 
     private const float pewterAcceleration = 5.5f;
     private const float pewterRunningSpeed = 12.5f;
-    private const float jumpHeight = 400;
-    private const float jumpPewterMagnitude = 600;
-    private const float jumpDirectionModifier = 350;
+    private const float jumpHeight = 300;
+    private const float jumpDirectionModifier = 400;
+    private const float jumpPewterMagnitude = 500;
     protected const float gramsPewterPerJump = 1f;
     protected const float timePewterPerJump = 1.5f;
     private readonly Vector3 particleSystemPosition = new Vector3(0, -.2f, 0);
@@ -29,16 +29,13 @@ public class PlayerPewterController : AllomanticPewter {
         base.Clear();
     }
 
-    public float Sprint(Vector3 movement, bool lastWasSprinting) {
-        if (IsSprinting) {
-            if(!lastWasSprinting) {
-                particleDirection = Quaternion.LookRotation(-movement);
-                particleSystem.transform.rotation = particleDirection;
-                particleSystem.Play();
-            }
-            return pewterAcceleration * Mathf.Max(pewterRunningSpeed - Vector3.Project(rb.velocity, movement.normalized).magnitude, 0);
+    public float Sprint(Vector3 movement, bool showParticles) {
+        if(showParticles) {
+            particleDirection = Quaternion.LookRotation(-movement);
+            particleSystem.transform.rotation = particleDirection;
+            particleSystem.Play();
         }
-        return 0;
+        return pewterAcceleration * Mathf.Max(pewterRunningSpeed - Vector3.Project(rb.velocity, movement.normalized).magnitude, 0);
     }
 
     /*
@@ -46,9 +43,9 @@ public class PlayerPewterController : AllomanticPewter {
      * If not burning, executes a normal jump.
      * Returns the force of the jump.
      * 
-     * force: the normal vector of the surface being jumped off of
+     * normal: the normal vector of the surface being jumped off of
      */
-    public Vector3 Jump(Vector3 movement, Vector3 force) {
+    public Vector3 Jump(Vector3 movement, Vector3 normal) {
         if(IsSprinting) {
             Drain(gramsPewterPerJump, timePewterPerJump);
 
@@ -57,25 +54,24 @@ public class PlayerPewterController : AllomanticPewter {
 
             if(movement.sqrMagnitude <= .01f) { // Vertical jump
                 movement = Vector3.up;
-
-            } else if (Vector3.Dot(force, movement) < -0.01f) {
-                float angle = Vector3.Angle(movement, force) - 90;
-                movement = Quaternion.AngleAxis(angle, Vector3.Cross(Vector3.up, force)) * movement;
+                // If movement is going INTO the wall, we must be jumping up it
+            } else if (Vector3.Dot(normal, movement) < -0.01f) {
+                float angle = Vector3.Angle(movement, normal) - 90;
+                movement = Quaternion.AngleAxis(angle, Vector3.Cross(Vector3.up, normal)) * movement;
                 if (movement.y < 0)
                     movement.y = -movement.y;
             }
-            //lastForce = force.normalized;
+            //lastnormal = normal.normalized;
 
-            force = force * jumpHeight + movement * jumpDirectionModifier;
-            Vector3.ClampMagnitude(force, jumpPewterMagnitude);
+            Vector3 force = normal * jumpHeight + movement * jumpDirectionModifier;
+            force = Vector3.ClampMagnitude(force, jumpPewterMagnitude);
 
             particleDirection = Quaternion.LookRotation(-force);
             particleSystem.transform.rotation = particleDirection;
             particleSystem.Play();
-        } else {
-            force *= jumpHeight;
-        }
 
-        return force;
+            return force;
+        }
+        return normal * jumpHeight;
     }
 }
