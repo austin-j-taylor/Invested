@@ -61,26 +61,30 @@ public class NonPlayerPushPullController : AllomanticIronSteel {
     private void UpdateLines(bool pulling, int index) {
 
         TargetArray array;
-        VolumetricLineBehavior[] lines;
+        Magnetic target;
+        float percentage;
+        VolumetricLineBehavior line;
         if (pulling) {
-            array = PullTargets;
-            lines = pullLines;
+            target = PullTargets[index];
+            line = pullLines[index];
+            percentage = IronBurnPercentageTarget;
         } else {
-            array = PushTargets;
-            lines = pushLines;
+            target = PushTargets[index];
+            line = pushLines[index];
+            percentage = SteelBurnPercentageTarget;
         }
 
-        float allomanticForce = CalculateAllomanticForce(array[index]).magnitude;
+        float allomanticForce = CalculateAllomanticForce(target).magnitude;
 
         //allomanticForce -= (allomancer.MaxRange == 0 ? SettingsMenu.settingsData.metalDetectionThreshold : allomancer.MaxRange); // blue metal lines will fade to a luminocity of 0 when the force is on the edge of the threshold
 
         float closeness = Mathf.Exp(-blueLineChangeFactor * Mathf.Pow(1 / allomanticForce, blueLineBrightnessFactor));
 
-        lines[index].gameObject.SetActive(true);
-        lines[index].StartPos = array[index].CenterOfMass;
-        lines[index].EndPos = CenterOfMass;
-        lines[index].LineWidth = array[index].Charge * (SettingsMenu.settingsData.cameraFirstPerson == 0 ? blueLineThirdPersonWidth : blueLineFirstPersonWidth);
-        lines[index].LightSaberFactor = 1;
-        lines[index].LineColor = pulling ? new Color(0, closeness * lowLineColor, closeness * highLineColor, 1) : TargetArray.targetedRedLine * closeness;
+        line.gameObject.SetActive(true);
+        line.StartPos = target.CenterOfMass;
+        line.EndPos = CenterOfMass;
+        line.LineWidth = target.Charge * (SettingsMenu.settingsData.cameraFirstPerson == 0 ? blueLineThirdPersonWidth : blueLineFirstPersonWidth);
+        line.LightSaberFactor = Mathf.Exp(-target.LastMaxPossibleAllomanticForce.magnitude * percentage / TargetArray.lightSaberConstant);
+        line.LineColor = pulling ? new Color(0, closeness * lowLineColor, closeness * highLineColor, 1) : TargetArray.targetedRedLine * closeness;
     }
 }

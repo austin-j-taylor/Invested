@@ -45,6 +45,8 @@ public class PlayerPewterController : AllomanticPewter {
      * If burning pewter, executes a pewter jump.
      * If not burning, executes a normal jump.
      * Returns the force of the jump.
+     * 
+     * force: the normal vector of the surface being jumped off of
      */
     public Vector3 Jump(Vector3 movement, Vector3 force) {
         if(IsSprinting) {
@@ -57,8 +59,7 @@ public class PlayerPewterController : AllomanticPewter {
                 movement = Vector3.up;
 
             } else if (Vector3.Dot(force, movement) < -0.01f) {
-                float angle = Vector3.Angle(movement, force);
-                angle -= 90;
+                float angle = Vector3.Angle(movement, force) - 90;
                 movement = Quaternion.AngleAxis(angle, Vector3.Cross(Vector3.up, force)) * movement;
                 if (movement.y < 0)
                     movement.y = -movement.y;

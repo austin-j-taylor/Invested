@@ -398,7 +398,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
                 target.Charge * (SettingsMenu.settingsData.cameraFirstPerson == 0 ? blueLineThirdPersonWidth : blueLineFirstPersonWidth),
                 1,
                 new Color(0, closeness * lowLineColor, closeness * highLineColor, 1)
-                );
+            );
         }
         return distance;
     }

@@ -7,8 +7,8 @@ using UnityEngine;
  */
 public class TargetArray {
 
+    public const float lightSaberConstant = 1024;
     private const float blueLineTargetedWidthFactor = .06f;
-    private const float lightSaberConstant = 1024;
     public static readonly Color targetedRedLine = new Color(1, 0, 1);
     private static readonly Color targetedGreenLine = new Color(0, 1, 0);
     private static readonly Color targetedBlueLine = new Color(0, 0, 1);

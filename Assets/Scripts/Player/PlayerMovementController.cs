@@ -32,6 +32,7 @@ public class PlayerMovementController : MonoBehaviour {
     private void Awake() {
         rb = GetComponent<Rigidbody>();
         groundedChecker = transform.GetComponentInChildren<PlayerGroundedChecker>();
+        rb.maxAngularVelocity = float.PositiveInfinity;
     }
 
     private void Update() {
@@ -63,11 +64,25 @@ public class PlayerMovementController : MonoBehaviour {
             }
 
             if (IsGrounded) {
-                // Jump
+                // if a Jump is queued
                 if (jumpQueued) {
                     jumpQueued = false;
-                    groundedChecker.Jump(movement);
+
+                    Rigidbody targetRb = groundedChecker.StandingOnCollider.attachedRigidbody;
+
+                    // Apply Pewter Jump, if possible
+                    Vector3 force = Player.PlayerPewter.Jump(movement, groundedChecker.Normal);
+
+                    rb.AddForce(force, ForceMode.Impulse);
+                    // Apply force and torque to target
+                    if (targetRb) {
+                        Vector3 radius = groundedChecker.Point - targetRb.worldCenterOfMass;
+
+                        targetRb.AddForce(-force, ForceMode.Impulse);
+                        targetRb.AddTorque(Vector3.Cross(radius, -force));
+                    }
                 }
+
                 // Apply drag
                 if (movement.sqrMagnitude > 0 || Player.PlayerIronSteel.IronPulling || Player.PlayerIronSteel.SteelPushing) {
                     // You: "why use ints to represent binary values that should be represented by booleans"
@@ -76,14 +91,25 @@ public class PlayerMovementController : MonoBehaviour {
                 } else {
                     rb.drag = SettingsMenu.settingsData.playerAirResistance * dragGrounded;
                 }
-            } else { // is airborne
+            } else { // If airborne, reduce movement magnitude
 
                 rb.drag = SettingsMenu.settingsData.playerAirResistance * dragAirborne;
-                movement *= airControlFactor;
+                //movement *= airControlFactor;
             }
             
-            if (movement.sqrMagnitude > 0) {
-                if(IsGrounded) {
+            if (movement.sqrMagnitude > 0) { // If moving at all
+                if (IsGrounded) { // and on the ground
+
+                    // If on a wall, rotate movement to be on that wall's plane
+                    //if (Vector3.Dot(groundedChecker.Normal, movement) < -0.01f) {
+                        float angle = Vector3.Angle(movement, groundedChecker.Normal) - 90;
+                        movement = Quaternion.AngleAxis(angle, Vector3.Cross(Vector3.up, groundedChecker.Normal)) * movement;
+                        if (movement.y < 0)
+                            movement.y = -movement.y;
+                    Debug.DrawRay(transform.position, movement, Color.red);
+                    //}
+
+                    // Apply Pewter Sprint, if possible
                     float sprintMovement = Player.PlayerPewter.Sprint(movement, lastWasSprinting);
                     if (sprintMovement == 0) {
                         // if airborne or not Sprinting, move normally.
@@ -98,7 +124,12 @@ public class PlayerMovementController : MonoBehaviour {
                     // if airborne or not Sprinting, move normally.
                     movement *= MovementMagnitude(movement);
                 }
-                rb.AddForce(movement, ForceMode.Acceleration);
+
+                // Apply movement to player
+                Vector3 torque = Vector3.Cross((IsGrounded) ? groundedChecker.Normal : Vector3.up, movement) * 4;
+                //Vector3 torque = Vector3.Cross(groundedChecker.Normal, movement) * 4;
+                rb.AddTorque(torque, ForceMode.Acceleration);
+                Debug.DrawRay(transform.position, torque, Color.white);
             }
         } else {
             //if (IsGrounded) {
