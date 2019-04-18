@@ -11,8 +11,12 @@ public class PlayerMovementController : MonoBehaviour {
 
     private const float defaultAcceleration = 5f;
     private const float defaultRunningSpeed = 7.5f;
+    private const float defaultAngularVelocity = defaultAcceleration * torqueFactor;
+    private const float defaultRunningAngularVelocity = defaultRunningSpeed * torqueFactor;
+    private const float torqueFactor = 4;
     private const float movementFactor = .15f;
     private const float airControlFactor = .06f;
+    private const float dotFactor = 10;
     private const float dragAirborne = .2f;
     private const float dragGrounded = 3f;
     private const float dragNoControl = 10f;
@@ -32,7 +36,7 @@ public class PlayerMovementController : MonoBehaviour {
     private void Awake() {
         rb = GetComponent<Rigidbody>();
         groundedChecker = transform.GetComponentInChildren<PlayerGroundedChecker>();
-        rb.maxAngularVelocity = float.PositiveInfinity;
+        rb.maxAngularVelocity = defaultAngularVelocity;
     }
 
     private void Update() {
@@ -47,8 +51,11 @@ public class PlayerMovementController : MonoBehaviour {
 
     void FixedUpdate() {
         if (Player.CanControlPlayer) {
+            // Convert user input to movement vector
             Vector3 movement = new Vector3(Keybinds.Horizontal(), 0f, Keybinds.Vertical());
+            // Rotate movement to be in direction of camera and clamp magnitude
             movement = CameraController.CameraDirection * Vector3.ClampMagnitude(movement, 1);
+
 
             // If is unclamped and upside-down, keep movement in an intuitive direction for the player
             if (SettingsMenu.settingsData.cameraClamping == 0) {
@@ -62,6 +69,7 @@ public class PlayerMovementController : MonoBehaviour {
             if(Keybinds.Walk()) {
                 movement *= movementFactor;
             }
+
 
             if (IsGrounded) {
                 // if a Jump is queued
@@ -96,18 +104,17 @@ public class PlayerMovementController : MonoBehaviour {
                 rb.drag = SettingsMenu.settingsData.playerAirResistance * dragAirborne;
                 //movement *= airControlFactor;
             }
-            
+
+
+
             if (movement.sqrMagnitude > 0) { // If moving at all
-                if (IsGrounded) { // and on the ground
+                //if (IsGrounded) { // and on the ground
 
                     // If on a wall, rotate movement to be on that wall's plane
-                    //if (Vector3.Dot(groundedChecker.Normal, movement) < -0.01f) {
-                        float angle = Vector3.Angle(movement, groundedChecker.Normal) - 90;
-                        movement = Quaternion.AngleAxis(angle, Vector3.Cross(Vector3.up, groundedChecker.Normal)) * movement;
-                        if (movement.y < 0)
-                            movement.y = -movement.y;
-                    Debug.DrawRay(transform.position, movement, Color.red);
-                    //}
+                    //float angle = Vector3.Angle(movement, groundedChecker.Normal) - 90;
+                    //movement = Quaternion.AngleAxis(angle, Vector3.Cross(Vector3.up, groundedChecker.Normal)) * movement;
+                    //if (movement.y < 0)
+                    //    movement.y = -movement.y;
 
                     // Apply Pewter Sprint, if possible
                     float sprintMovement = Player.PlayerPewter.Sprint(movement, lastWasSprinting);
@@ -115,21 +122,39 @@ public class PlayerMovementController : MonoBehaviour {
                         // if airborne or not Sprinting, move normally.
                         lastWasSprinting = false;
                         movement *= MovementMagnitude(movement);
+                        rb.maxAngularVelocity = defaultAngularVelocity;
                     } else {
                         // if sprinting
                         lastWasSprinting = true;
                         movement *= sprintMovement;
+                        rb.maxAngularVelocity = defaultRunningAngularVelocity;
                     }
-                } else {
-                    // if airborne or not Sprinting, move normally.
-                    movement *= MovementMagnitude(movement);
+                //} else {
+                //    // if airborne or not Sprinting, move normally.
+                //    movement *= MovementMagnitude(movement);
+                //}
+
+                // Convert movement to torque
+                Vector3 torque = Vector3.Cross(IsGrounded ? groundedChecker.Normal : Vector3.up, movement) * torqueFactor;
+                Debug.DrawRay(transform.position, rb.angularVelocity, Color.red);
+
+                float dot = Vector3.Dot(torque, rb.angularVelocity);
+                if(dot < 0) {
+                    float velocityFactor = 2 - Mathf.Exp(dot / dotFactor);
+                    Debug.Log("facotr:" + velocityFactor);
+                    Debug.Log(dot);
+                    torque *= velocityFactor;
                 }
 
-                // Apply movement to player
-                Vector3 torque = Vector3.Cross((IsGrounded) ? groundedChecker.Normal : Vector3.up, movement) * 4;
-                //Vector3 torque = Vector3.Cross(groundedChecker.Normal, movement) * 4;
+
+                // Apply torque to player
                 rb.AddTorque(torque, ForceMode.Acceleration);
                 Debug.DrawRay(transform.position, torque, Color.white);
+                Debug.DrawRay(transform.position, movement, Color.blue);
+
+                // Apply a small amount of the movement force to player for tighter controls & air movement
+                //rb.AddForce(movement * movementFactor, ForceMode.Acceleration);
+
             }
         } else {
             //if (IsGrounded) {
