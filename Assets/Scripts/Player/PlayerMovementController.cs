@@ -11,14 +11,15 @@ using UnityEngine;
 
 public class PlayerMovementController : AllomanticPewter {
 
+    private const float radius = .26f;
     // Rolling
-    private const float rollingAcceleration = 5f;
-    private const float maxRollingSpeed = 7.5f;
-    private const float maxRollingAngularSpeed = 20;
+    public const float rollingAcceleration = 5f;
+    public const float maxRollingSpeed = 7.5f / radius;
+    private const float maxRollingAngularSpeed = Mathf.Infinity; // maxRollingSpeed;
     // Pewter
     private const float pewterAcceleration = 5.5f;
     private const float maxSprintingSpeed = 12.5f;
-    private const float maxSprintingAngularVelocity = 30;
+    private const float maxSprintingAngularVelocity = Mathf.Infinity;
     // Pewter burning
     protected const float gramsPewterPerJump = 1f;
     protected const float timePewterPerJump = 1.5f;
@@ -28,20 +29,26 @@ public class PlayerMovementController : AllomanticPewter {
     private const float jumpPewterMagnitude = 500;
 
     // Factors
-    private const float torqueFactor = 8;
     private const float movementFactor = .15f;
     private const float airControlFactor = .06f;
     private const float dotFactor = 10;
     // Air resistance
-    private const float dragAirborne = .2f;
-    private const float dragGrounded = 3f;
+    private const float dragAirborneLinear = .2f;
+    private const float dragGroundedLinear = 3f;
+    [SerializeField]
+    private  float dragAirborneAngular = 1.5f;
+    [SerializeField]
+    private  float dragGroundedAngular = 5f;
     private const float dragNoControl = 10f;
     // Misc
     private const float momentOfInertiaMagnitude = 5;
+    private const float momentOfInertiaMagnitudeWalking = 50;
     private readonly Vector3 particleSystemPosition = new Vector3(0, -.2f, 0);
-    
+    private readonly Vector3 inertiaTensorRunning = new Vector3(momentOfInertiaMagnitude, momentOfInertiaMagnitude, momentOfInertiaMagnitude);
+    private readonly Vector3 inertiaTensorWalking = new Vector3(momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking);
+
     private PlayerGroundedChecker groundedChecker;
-    private PIDController pid;
+    private PIDController_Vector3 pidSpeed;
 
     public bool IsGrounded {
         get {
@@ -55,13 +62,11 @@ public class PlayerMovementController : AllomanticPewter {
     protected override void Awake() {
         base.Awake();
         groundedChecker = transform.GetComponentInChildren<PlayerGroundedChecker>();
-        pid = GetComponent<PIDController>();
+        pidSpeed = GetComponent<PIDController_Vector3>();
         rb.maxAngularVelocity = maxRollingAngularSpeed;
-        // Makes the ball "hit the ground running" - if it's spinning and it hits the ground, a high MOI will m
-        rb.inertiaTensor = new Vector3(momentOfInertiaMagnitude, momentOfInertiaMagnitude, momentOfInertiaMagnitude);
-    }
+}
 
-    private void Update() {
+private void Update() {
         // Check if jumping
         if (IsGrounded && Keybinds.JumpDown()) {
             // Queue a jump for the next FixedUpdate
@@ -99,6 +104,9 @@ public class PlayerMovementController : AllomanticPewter {
             // If Walking, reduce movment
             if(Keybinds.Walk()) {
                 movement *= movementFactor;
+                rb.inertiaTensor = inertiaTensorWalking;
+            } else {
+                rb.inertiaTensor = inertiaTensorRunning;
             }
 
             if (IsGrounded) {
@@ -145,17 +153,20 @@ public class PlayerMovementController : AllomanticPewter {
                     }
                 }
 
-                // Apply drag
+                // If moving or pushing or pulling, apply weaker drag
                 if (movement.sqrMagnitude > 0 || Player.PlayerIronSteel.IronPulling || Player.PlayerIronSteel.SteelPushing) {
                     // You: "why use ints to represent binary values that should be represented by booleans"
                     // Me, an intellectual:
-                    rb.drag = SettingsMenu.settingsData.playerAirResistance * dragAirborne;
+                    rb.drag = SettingsMenu.settingsData.playerAirResistance * dragAirborneLinear;
                 } else {
-                    rb.drag = SettingsMenu.settingsData.playerAirResistance * dragGrounded;
+                    // If not moving and not pushing or pulling, apply stronger drag and pull player to a stop
+                    rb.drag = SettingsMenu.settingsData.playerAirResistance * dragGroundedLinear;
+                    rb.angularDrag = dragGroundedAngular;
                 }
             } else { // If airborne, reduce movement magnitude
 
-                rb.drag = SettingsMenu.settingsData.playerAirResistance * dragAirborne;
+                rb.drag = SettingsMenu.settingsData.playerAirResistance * dragAirborneLinear;
+                rb.angularDrag = dragAirborneAngular;
                 //movement *= airControlFactor;
             }
 
@@ -170,26 +181,29 @@ public class PlayerMovementController : AllomanticPewter {
                         particleSystem.transform.rotation = particleDirection;
                         particleSystem.Play();
                     }
-                    Debug.Log(movement);
                     movement *= pewterAcceleration * Mathf.Max(maxSprintingSpeed - Vector3.Project(rb.velocity, movement.normalized).magnitude, 0);
                     rb.maxAngularVelocity = maxSprintingAngularVelocity;
                     lastWasSprintingOnGround = IsGrounded; // only show particles after hitting the ground
-                    Debug.Log(movement);
                 } else {
                     // not Sprinting, move normally.
-                    movement = MovementMagnitude(movement);
+                    //movement = MovementMagnitude(movement);
                     rb.maxAngularVelocity = maxRollingAngularSpeed;
                     lastWasSprintingOnGround = false;
                 }
 
                 // Convert movement to torque
                 //Vector3 torque = Vector3.Cross(IsGrounded ? groundedChecker.Normal : Vector3.up, movement) * torqueFactor;
-                Vector3 torque = Vector3.Cross(Vector3.up, movement) * torqueFactor;
+                Vector3 torque = Vector3.Cross(Vector3.up, movement);
 
-                float dot = Vector3.Dot(torque, rb.angularVelocity);
-                if(dot < 0) {
-                    torque *= 2 - Mathf.Exp(dot / dotFactor);
-                }
+                Vector3 feedback = Vector3.Project(rb.angularVelocity, torque.normalized);
+                Vector3 target = torque * maxRollingSpeed;
+                torque = pidSpeed.Step(feedback, target);
+                Debug.Log("speed    : " + rb.velocity.magnitude);
+
+                //float dot = Vector3.Dot(torque, rb.angularVelocity);
+                //if(dot < 0) {
+                //    torque *= 2 - Mathf.Exp(dot / dotFactor);
+                //}
                 // Apply torque to player
                 rb.AddTorque(torque, ForceMode.Acceleration);
                 // Apply a small amount of the movement force to player for tighter controls & air movement
@@ -207,13 +221,21 @@ public class PlayerMovementController : AllomanticPewter {
 
     // Convert a movement vector into real player movement based on current velocity
     private Vector3 MovementMagnitude(Vector3 movement) {
-        return movement * rollingAcceleration * Mathf.Max(maxRollingSpeed - Vector3.Project(rb.velocity, movement.normalized).magnitude, 0);
+        //Vector3 feedback = Vector3.Project(rb.velocity, movement.normalized);
+        //Vector3 target = movement * maxRollingSpeed;
+        //Vector3 command = pidSpeed.Step(feedback, target);
+
+        //return command;
+        return movement;
+        //return movement * rollingAcceleration * Mathf.Max(maxRollingSpeed - Vector3.Project(rb.velocity, movement.normalized).magnitude, 0);
     }
+    
 
     public override void Clear() {
         PewterReserve.SetMass(100);
         jumpQueued = false;
         lastWasSprintingOnGround = false;
+        rb.inertiaTensor = inertiaTensorRunning;
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         rb.useGravity = SettingsMenu.settingsData.playerGravity == 1;

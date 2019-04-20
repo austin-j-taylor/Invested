@@ -1,17 +1,53 @@
 fileFormatVersion: 2
-guid: 6a02bbd97dc836b49ad360f32abe865e
+guid: c1d2fa9ae3068a1458e302ee47768f0b
 ModelImporter:
-  serializedVersion: 22
-  fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
-    2100000: Material__Lamp_hollow_png
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: Lamp_frame
-    7400000: Default Take
-    9500000: //RootNode
-    2186277476908879412: ImportLogs
+  serializedVersion: 25
+  internalIDToNameTable:
+  - first:
+      1: 100000
+    second: Fluid
+  - first:
+      1: 100002
+    second: //RootNode
+  - first:
+      1: 100004
+    second: Vial
+  - first:
+      4: 400000
+    second: Fluid
+  - first:
+      4: 400002
+    second: //RootNode
+  - first:
+      4: 400004
+    second: Vial
+  - first:
+      21: 2100000
+    second: unnamed
+  - first:
+      23: 2300000
+    second: Fluid
+  - first:
+      23: 2300002
+    second: Vial
+  - first:
+      33: 3300000
+    second: Fluid
+  - first:
+      33: 3300002
+    second: Vial
+  - first:
+      43: 4300000
+    second: Fluid
+  - first:
+      43: 4300002
+    second: Vial
+  - first:
+      74: 7400000
+    second: Default Take
+  - first:
+      95: 9500000
+    second: //RootNode
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -46,6 +82,7 @@ ModelImporter:
     globalScale: 1
     meshCompression: 0
     addColliders: 0
+    useSRGBMaterialColor: 1
     importVisibility: 1
     importBlendShapes: 1
     importCameras: 1
@@ -53,10 +90,13 @@ ModelImporter:
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
-    optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
     preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
@@ -68,10 +108,14 @@ ModelImporter:
     normalImportMode: 0
     tangentImportMode: 3
     normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
   importAnimation: 1
   copyAvatar: 0
   humanDescription:
-    serializedVersion: 2
+    serializedVersion: 3
     human: []
     skeleton: []
     armTwist: 0.5
@@ -81,8 +125,8 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
+    globalScale: 1
     rootMotionBoneName: 
-    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
