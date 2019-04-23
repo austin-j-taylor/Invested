@@ -18,7 +18,8 @@ public class PlayerMovementController : AllomanticPewter {
     private const float maxRollingAngularSpeed = Mathf.Infinity; // maxRollingSpeed;
     // Pewter
     private const float pewterAcceleration = 5.5f;
-    private const float maxSprintingSpeed = 12.5f;
+    private const float maxSprintingSpeed = 12.5f / radius;
+    private const float pewterSpeedFactor = maxSprintingSpeed / maxRollingSpeed;
     private const float maxSprintingAngularVelocity = Mathf.Infinity;
     // Pewter burning
     protected const float gramsPewterPerJump = 1f;
@@ -30,7 +31,7 @@ public class PlayerMovementController : AllomanticPewter {
 
     // Factors
     private const float movementFactor = .15f;
-    private const float airControlFactor = .06f;
+    private const float airControlFactor = .3f;
     private const float dotFactor = 10;
     // Air resistance
     private const float dragAirborneLinear = .2f;
@@ -181,7 +182,7 @@ private void Update() {
                         particleSystem.transform.rotation = particleDirection;
                         particleSystem.Play();
                     }
-                    movement *= pewterAcceleration * Mathf.Max(maxSprintingSpeed - Vector3.Project(rb.velocity, movement.normalized).magnitude, 0);
+                    //movement *= pewterAcceleration * Mathf.Max(maxSprintingSpeed - Vector3.Project(rb.velocity, movement.normalized).magnitude, 0);
                     rb.maxAngularVelocity = maxSprintingAngularVelocity;
                     lastWasSprintingOnGround = IsGrounded; // only show particles after hitting the ground
                 } else {
@@ -197,6 +198,9 @@ private void Update() {
 
                 Vector3 feedback = Vector3.Project(rb.angularVelocity, torque.normalized);
                 Vector3 target = torque * maxRollingSpeed;
+                if (IsSprinting)
+                    target *= pewterSpeedFactor;
+
                 torque = pidSpeed.Step(feedback, target);
                 Debug.Log("speed    : " + rb.velocity.magnitude);
 
@@ -207,7 +211,7 @@ private void Update() {
                 // Apply torque to player
                 rb.AddTorque(torque, ForceMode.Acceleration);
                 // Apply a small amount of the movement force to player for tighter controls & air movement
-                rb.AddForce(movement * airControlFactor, ForceMode.Acceleration);
+                rb.AddForce(movement * airControlFactor * rollingAcceleration, ForceMode.Acceleration);
 
                 // Debug
                 Debug.DrawRay(transform.position, rb.angularVelocity, Color.red);

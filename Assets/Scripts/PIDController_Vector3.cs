@@ -52,14 +52,14 @@ public class PIDController_Vector3 : MonoBehaviour {
             command = last_command - maxDelta * delta.normalized;
         }
 
-        Debug.Log("P:        " + cmd_P + " -> " + cmd_P.magnitude);
-        Debug.Log("I:        " + cmd_I + " -> " + cmd_I.magnitude);
-        Debug.Log("D:        " + cmd_D + " -> " + cmd_D.magnitude);
-        Debug.Log("delta:    " + delta + " -> " + delta.magnitude);
-        Debug.Log("reference:" + reference + " -> " + reference.magnitude);
-        Debug.Log("feedback: " + feedback + " -> " + feedback.magnitude);
-        Debug.Log("error:    " + error + " -> " + error.magnitude);
-        Debug.Log("command:  " + command + " -> " + command.magnitude);
+        //Debug.Log("P:        " + cmd_P + " -> " + cmd_P.magnitude);
+        //Debug.Log("I:        " + cmd_I + " -> " + cmd_I.magnitude);
+        //Debug.Log("D:        " + cmd_D + " -> " + cmd_D.magnitude);
+        //Debug.Log("delta:    " + delta + " -> " + delta.magnitude);
+        //Debug.Log("reference:" + reference + " -> " + reference.magnitude);
+        //Debug.Log("feedback: " + feedback + " -> " + feedback.magnitude);
+        //Debug.Log("error:    " + error + " -> " + error.magnitude);
+        //Debug.Log("command:  " + command + " -> " + command.magnitude);
 
         lastWasStepped = true;
         last_error = error;
