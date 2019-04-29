@@ -12,10 +12,8 @@ public class CameraController : MonoBehaviour {
     private const float playerLookAtTargetHeight = 1.25f;
     private const float playerLookAtTargetFirstPersonHeight = 1;
     private const float distanceFromHitWall = .125f;//.5f;
-    private const float wallDistanceCheck = 3;
     private const float lerpConstantPosition = 5;
     private const float lerpConstantRotation = 15;
-    private static readonly Vector3 distancefromPlayer = new Vector3(0, 0, -wallDistanceCheck);
     public static Camera ActiveCamera { get; private set; }
 
     private static Camera thirdPersonCamera;
@@ -125,10 +123,10 @@ public class CameraController : MonoBehaviour {
                 // If an external target was recently used, the camera should lerp back
                 if (timeToLerp < maxTimeToLerp) {
                     float distance = timeToLerp / maxTimeToLerp;
-                    wantedPosition = Vector3.Slerp(ActiveCamera.transform.localPosition, verticalRotation * distancefromPlayer, lerpConstantPosition * Time.deltaTime);
+                    wantedPosition = Vector3.Slerp(ActiveCamera.transform.localPosition, verticalRotation * new Vector3(0, 0, -SettingsMenu.settingsData.cameraDistance), lerpConstantPosition * Time.deltaTime);
                     timeToLerp += Time.deltaTime;
                 } else {
-                    wantedPosition = verticalRotation * distancefromPlayer;
+                    wantedPosition = verticalRotation * new Vector3(0, 0, -SettingsMenu.settingsData.cameraDistance);
                 }
 
                 ActiveCamera.transform.localPosition = wantedPosition;
@@ -201,7 +199,7 @@ public class CameraController : MonoBehaviour {
                 }
 
                 smallestIndex = -1;
-                smallestDistance = wallDistanceCheck;
+                smallestDistance = SettingsMenu.settingsData.cameraDistance;
 
                 for (int i = 0; i < 9; i++) {
                     if (Physics.Raycast(destinations[i], -directionToTarget, out RaycastHit hit, distanceToTarget, GameManager.Layer_IgnoreCamera)) {
@@ -221,7 +219,19 @@ public class CameraController : MonoBehaviour {
                 }
             } else {
                 // First person
-                
+                // Decide position the camera should try to be at
+                Vector3 wantedPosition = Vector3.zero; // local
+                // If an external target was recently used, the camera should lerp back
+                if (timeToLerp < maxTimeToLerp) {
+                    float distance = timeToLerp / maxTimeToLerp;
+                    wantedPosition = Vector3.Slerp(ActiveCamera.transform.localPosition, Vector3.zero, lerpConstantPosition * Time.deltaTime);
+                    timeToLerp += Time.deltaTime;
+
+                    ActiveCamera.transform.localPosition = wantedPosition;
+                } else {
+
+                }
+
                 Vector3 pos = Vector3.zero;
                 pos.y = playerLookAtTargetFirstPersonHeight;
                 playerLookAtTarget.transform.localPosition = pos;

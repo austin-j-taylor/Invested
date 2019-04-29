@@ -202,7 +202,7 @@ private void Update() {
                     target *= pewterSpeedFactor;
 
                 torque = pidSpeed.Step(feedback, target);
-                Debug.Log("speed    : " + rb.velocity.magnitude);
+                //Debug.Log("speed    : " + rb.velocity.magnitude);
 
                 //float dot = Vector3.Dot(torque, rb.angularVelocity);
                 //if(dot < 0) {

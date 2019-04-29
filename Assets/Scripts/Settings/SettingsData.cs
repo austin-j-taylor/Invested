@@ -22,6 +22,7 @@ public class SettingsData : MonoBehaviour {
     public int controlScheme;
     public int gamepadRumble; // 0 for Disabled, 1 for Enabled
     public int cameraFirstPerson; // 0 for third person, 1 for first person
+    public float cameraDistance;
     public int cameraClamping; // 0 for Unclamped, 1 for Clamped
     public int cameraInvertX; // 0 for disabled, 1 for inverted
     public int cameraInvertY;
@@ -241,6 +242,10 @@ public class SettingsData : MonoBehaviour {
 
     public bool SetData(string name, float data) {
         switch (name) {
+            case "cameraDistance": {
+                    cameraDistance = data;
+                    return true;
+                }
             case "mouseSensitivityX": {
                     mouseSensitivityX = data;
                     return true;
@@ -389,6 +394,9 @@ public class SettingsData : MonoBehaviour {
 
     public float GetDataFloat(string name) {
         switch (name) {
+            case "cameraDistance": {
+                    return cameraDistance;
+                }
             case "mouseSensitivityX": {
                     return mouseSensitivityX;
                 }

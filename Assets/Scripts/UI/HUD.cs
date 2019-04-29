@@ -60,22 +60,21 @@ public class HUD : MonoBehaviour {
     }
 
     public static void EnableHUD() {
-        ShowHUD();
-        hudGameObject.SetActive(true);
+        hudGameObject.GetComponent<CanvasGroup>().alpha = 1;
     }
 
     public static void DisableHUD() {
-        hudGameObject.SetActive(false);
+        hudGameObject.GetComponent<CanvasGroup>().alpha = 0;
     }
     // Ready HUD elements for a certain simulation
 
 
     // Used by Settings to make HUD visible or invisible
-    public static void ShowHUD() {
+    public void ShowHUD() {
         hudGameObject.GetComponent<CanvasGroup>().alpha = 1;
     }
 
-    public static void HideHUD() {
+    public void HideHUD() {
         hudGameObject.GetComponent<CanvasGroup>().alpha = 0;
     }
 

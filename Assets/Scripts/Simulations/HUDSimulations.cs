@@ -40,7 +40,7 @@ public class HUDSimulations : MonoBehaviour {
                     return;
             }
 
-            HUD.HideHUD();
+            HUD.DisableHUD();
             FindObjectOfType<Simulation>().StartSimulation();
         }
     }
