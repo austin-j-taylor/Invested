@@ -69,9 +69,14 @@ public class PlayerPullPushController : AllomanticIronSteel {
             // Start and Stop Burning metals
             if (IsBurning) {
                 // Stop burning
+                if(Keybinds.StopBurning()) {
+                    StopBurning();
+                    timeToStopBurning = 0;
+                } else 
                 if (Keybinds.Negate()) {
                     timeToStopBurning += Time.deltaTime;
                     if (Keybinds.Select() && Keybinds.SelectAlternate() && timeToStopBurning > timeToHoldDown) {
+                        //if (Keybinds.IronPulling() && Keybinds.SteelPushing() && timeToStopBurning > timeToHoldDown) {
                         StopBurning();
                         timeToStopBurning = 0;
                     }

@@ -57,8 +57,8 @@ public class PIDController_Vector3 : MonoBehaviour {
         //Debug.Log("D:        " + cmd_D + " -> " + cmd_D.magnitude);
         //Debug.Log("delta:    " + delta + " -> " + delta.magnitude);
         //Debug.Log("reference:" + reference + " -> " + reference.magnitude);
-        //Debug.Log("feedback: " + feedback + " -> " + feedback.magnitude);
-        //Debug.Log("error:    " + error + " -> " + error.magnitude);
+        Debug.Log("feedback: " + feedback + " -> " + feedback.magnitude);
+        Debug.Log("error:    " + error + " -> " + error.magnitude);
         //Debug.Log("command:  " + command + " -> " + command.magnitude);
 
         lastWasStepped = true;

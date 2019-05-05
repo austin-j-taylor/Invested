@@ -169,11 +169,11 @@ public static class Keybinds {
         else
             return Input.GetKey(KeyCode.Tab);
     }
-    public static bool StopBurnUp() {
+    public static bool StopBurning() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-            return Input.GetButtonUp("GamepadY");
+            return false;
         else
-            return Input.GetKeyUp(KeyCode.Tab);
+            return Input.GetKey(KeyCode.X);
     }
 
     public static float LeftBurnPercentage() {

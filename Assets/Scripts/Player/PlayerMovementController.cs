@@ -39,17 +39,27 @@ public class PlayerMovementController : AllomanticPewter {
     [SerializeField]
     private  float dragAirborneAngular = 1.5f;
     [SerializeField]
-    private  float dragGroundedAngular = 5f;
+    private float dragGroundedAngular = 5f;
     private const float dragNoControl = 10f;
+    // Friction
+    [SerializeField]
+    private float frictionDynamicRolling = 5f;
+    [SerializeField]
+    private float frictionDynamicSprinting = 10f;
     // Misc
-    private const float momentOfInertiaMagnitude = 5;
-    private const float momentOfInertiaMagnitudeWalking = 50;
+    [SerializeField]
+    private float momentOfInertiaMagnitude = 5;
+    [SerializeField]
+    private float momentOfInertiaMagnitudeSprinting = 50;
+    [SerializeField]
+    private float momentOfInertiaMagnitudeWalking = 50;
     private readonly Vector3 particleSystemPosition = new Vector3(0, -.2f, 0);
-    private readonly Vector3 inertiaTensorRunning = new Vector3(momentOfInertiaMagnitude, momentOfInertiaMagnitude, momentOfInertiaMagnitude);
-    private readonly Vector3 inertiaTensorWalking = new Vector3(momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking);
+    //private  Vector3 inertiaTensorRunning = new Vector3(momentOfInertiaMagnitude, momentOfInertiaMagnitude, momentOfInertiaMagnitude);
+    //private  Vector3 inertiaTensorWalking = new Vector3(momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking);
 
     private PlayerGroundedChecker groundedChecker;
     private PIDController_Vector3 pidSpeed;
+    private PhysicMaterial physicsMaterial;
 
     public bool IsGrounded {
         get {
@@ -65,6 +75,7 @@ public class PlayerMovementController : AllomanticPewter {
         groundedChecker = transform.GetComponentInChildren<PlayerGroundedChecker>();
         pidSpeed = GetComponent<PIDController_Vector3>();
         rb.maxAngularVelocity = maxRollingAngularSpeed;
+        physicsMaterial = GetComponent<Collider>().material;
 }
 
 private void Update() {
@@ -105,9 +116,9 @@ private void Update() {
             // If Walking, reduce movment
             if(Keybinds.Walk()) {
                 movement *= movementFactor;
-                rb.inertiaTensor = inertiaTensorWalking;
+                rb.inertiaTensor = new Vector3(momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking);
             } else {
-                rb.inertiaTensor = inertiaTensorRunning;
+                rb.inertiaTensor = new Vector3(momentOfInertiaMagnitude, momentOfInertiaMagnitude, momentOfInertiaMagnitude);
             }
 
             if (IsGrounded) {
@@ -185,11 +196,14 @@ private void Update() {
                     //movement *= pewterAcceleration * Mathf.Max(maxSprintingSpeed - Vector3.Project(rb.velocity, movement.normalized).magnitude, 0);
                     rb.maxAngularVelocity = maxSprintingAngularVelocity;
                     lastWasSprintingOnGround = IsGrounded; // only show particles after hitting the ground
+                    physicsMaterial.dynamicFriction = frictionDynamicSprinting;
+                    rb.inertiaTensor = new Vector3(momentOfInertiaMagnitudeSprinting, momentOfInertiaMagnitudeSprinting, momentOfInertiaMagnitudeSprinting);
                 } else {
                     // not Sprinting, move normally.
                     //movement = MovementMagnitude(movement);
                     rb.maxAngularVelocity = maxRollingAngularSpeed;
                     lastWasSprintingOnGround = false;
+                    physicsMaterial.dynamicFriction = frictionDynamicRolling;
                 }
 
                 // Convert movement to torque
@@ -239,7 +253,7 @@ private void Update() {
         PewterReserve.SetMass(100);
         jumpQueued = false;
         lastWasSprintingOnGround = false;
-        rb.inertiaTensor = inertiaTensorRunning;
+        //rb.inertiaTensor = inertiaTensorRunning;
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         rb.useGravity = SettingsMenu.settingsData.playerGravity == 1;

@@ -476,20 +476,41 @@ public class TextCodes : MonoBehaviour {
             }
         }
     }
+    //public static string KeyStopBurning {
+    //    get {
+    //        switch (SettingsMenu.settingsData.controlScheme) {
+    //            case SettingsData.MK54: {
+    //                    return "Decrease " + BurnPercentage + " to 0% or " + s_Hold_ + Tab + ", " + LightBlue(s_Mouse_Button_5) + ", and " + LightRed(s_Mouse_Button_4);
+    //                }
+    //            case SettingsData.MK45: {
+    //                    return "Decrease " + BurnPercentage + " to 0% or " + s_Hold_ + Tab + ", " + LightBlue(s_Mouse_Button_4) + ", and " + LightRed(s_Mouse_Button_5);
+    //                }
+    //            case SettingsData.MKEQ: {
+    //                    return "Decrease " + BurnPercentage + " to 0% or " + s_Hold_ + Tab + ", " + LightBlue(s_E) + ", and " + LightRed(s_Q);
+    //                }
+    //            case SettingsData.MKQE: {
+    //                    return "Decrease " + BurnPercentage + " to 0% or " + s_Hold_ + Tab + ", " + LightBlue(s_Q) + ", and " + LightRed(s_E);
+    //                }
+    //            default: {
+    //                    return s_Hold_ + Y + ", " + LightBlue(s_Right_Bumper) + ", and " + LightRed(s_Left_Bumper);
+    //                }
+    //        }
+    //    }
+    //}
     public static string KeyStopBurning {
         get {
             switch (SettingsMenu.settingsData.controlScheme) {
                 case SettingsData.MK54: {
-                        return "Decrease " + BurnPercentage + " to 0% or " + s_Hold_ + Tab + ", " + LightBlue(s_Mouse_Button_5) + ", and " + LightRed(s_Mouse_Button_4);
+                        return "Decrease " + BurnPercentage + " to 0% or " + s_Press_ + Gray("X") + " or " + s_Hold_ + Tab + ", " + LightBlue(s_Mouse_Button_5) + ", and " + LightRed(s_Mouse_Button_4);
                     }
                 case SettingsData.MK45: {
-                        return "Decrease " + BurnPercentage + " to 0% or " + s_Hold_ + Tab + ", " + LightBlue(s_Mouse_Button_4) + ", and " + LightRed(s_Mouse_Button_5);
+                        return "Decrease " + BurnPercentage + " to 0% or " + s_Press_ + Gray("X") + " or " + s_Hold_ + Tab + ", " + LightBlue(s_Mouse_Button_4) + ", and " + LightRed(s_Mouse_Button_5);
                     }
                 case SettingsData.MKEQ: {
-                        return "Decrease " + BurnPercentage + " to 0% or " + s_Hold_ + Tab + ", " + LightBlue(s_E) + ", and " + LightRed(s_Q);
+                        return "Decrease " + BurnPercentage + " to 0% or " + s_Press_ + Gray("X") + " or " + s_Hold_ + Tab + ", " + LightBlue(s_E) + ", and " + LightRed(s_Q);
                     }
                 case SettingsData.MKQE: {
-                        return "Decrease " + BurnPercentage + " to 0% or " + s_Hold_ + Tab + ", " + LightBlue(s_Q) + ", and " + LightRed(s_E);
+                        return "Decrease " + BurnPercentage + " to 0% or " + s_Press_ + Gray("X") + " or " + s_Hold_ + Tab + ", " + LightBlue(s_Q) + ", and " + LightRed(s_E);
                     }
                 default: {
                         return s_Hold_ + Y + ", " + LightBlue(s_Right_Bumper) + ", and " + LightRed(s_Left_Bumper);

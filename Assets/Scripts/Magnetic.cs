@@ -123,6 +123,24 @@ public class Magnetic : MonoBehaviour {
     private Vector3 centerOfMass;
     public Vector3 CenterOfMass {
         get {
+            if(IsStatic) {
+                if(HasColliders) {
+                    return transform.TransformPoint(centerOfMass);
+                } else {
+                    // no collider or rigidbody, so center of mass is set to transform.position as a default
+                    return transform.position;
+                }
+            } else {
+                if (HasColliders) {
+                    // Not static, has colliders
+                    return transform.TransformPoint(centerOfMass);
+                } else {
+                    // no collider or rigidbody, so center of mass is set to transform.position as a default
+                    return transform.position;
+                }
+            }
+
+
             if (HasColliders && !IsStatic) {
                 //Vector3 centers = colliders[0].bounds.center;
                 //int triggerCount = 0;
@@ -137,6 +155,7 @@ public class Magnetic : MonoBehaviour {
                 // no collider or rigidbody, so center of mass is set to transform.position as a default
                 return transform.position;
             } else {
+                // Not static, has colliders
                 return transform.TransformPoint(centerOfMass);
             }
         }
@@ -173,6 +192,19 @@ public class Magnetic : MonoBehaviour {
             }
             if (magneticMass == 0) {
                 magneticMass = netMass;
+            }
+            if(HasColliders) {
+                //Vector3 centers = colliders[0].bounds.center;
+                //int triggerCount = 0;
+                //for (int i = 1; i < colliders.Length; i++) {
+                //    if (!colliders[i].isTrigger)
+                //        centers += colliders[i].bounds.center;
+                //    else
+                //        triggerCount++;
+                //}
+                //centerOfMass = transform.InverseTransformPoint(centers / (colliders.Length - triggerCount));
+                //centerOfMass = transform.InverseTransformPoint(GetComponentInChildren<Renderer>().bounds.center);
+                centerOfMass = Vector3.zero;
             }
         } else { // RigidBody attached, which has its own mass, which replaces netMass
             netMass = Rb.mass;
