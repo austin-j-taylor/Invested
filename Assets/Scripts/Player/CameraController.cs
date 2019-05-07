@@ -71,12 +71,10 @@ public class CameraController : MonoBehaviour {
         playerLookAtTarget.rotation = Quaternion.Euler(0, currentX, 0);
 
         if (externalPositionTarget) {
-            if (cameraIsLocked) {
-                // Called when the Camera is being controlled by some other source, i.e. HarmonyTarget
-                ActiveCamera.transform.position = Vector3.Lerp(ActiveCamera.transform.position, externalPositionTarget.position, lerpConstantPosition * Time.deltaTime);
-                //ActiveCamera.transform.LookAt(externalLookAtTarget);
-                ActiveCamera.transform.rotation = Quaternion.Lerp(ActiveCamera.transform.rotation, Quaternion.LookRotation(externalLookAtTarget.position - ActiveCamera.transform.position, Vector3.up), lerpConstantRotation * Time.deltaTime);
-            }
+            // Called when the Camera is being controlled by some other source, i.e. HarmonyTarget
+            ActiveCamera.transform.position = Vector3.Lerp(ActiveCamera.transform.position, externalPositionTarget.position, lerpConstantPosition * Time.deltaTime);
+            //ActiveCamera.transform.LookAt(externalLookAtTarget);
+            ActiveCamera.transform.rotation = Quaternion.Lerp(ActiveCamera.transform.rotation, Quaternion.LookRotation(externalLookAtTarget.position - ActiveCamera.transform.position, Vector3.up), lerpConstantRotation * Time.deltaTime);
         } else {
             if (cameraIsLocked) {
                 float deltaX;

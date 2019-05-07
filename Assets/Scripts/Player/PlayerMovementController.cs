@@ -15,12 +15,10 @@ public class PlayerMovementController : AllomanticPewter {
     // Rolling
     public const float rollingAcceleration = 5f;
     public const float maxRollingSpeed = 7.5f / radius;
-    private const float maxRollingAngularSpeed = Mathf.Infinity; // maxRollingSpeed;
     // Pewter
     private const float pewterAcceleration = 5.5f;
     private const float maxSprintingSpeed = 12.5f / radius;
     private const float pewterSpeedFactor = maxSprintingSpeed / maxRollingSpeed;
-    private const float maxSprintingAngularVelocity = Mathf.Infinity;
     // Pewter burning
     protected const float gramsPewterPerJump = 1f;
     protected const float timePewterPerJump = 1.5f;
@@ -37,7 +35,7 @@ public class PlayerMovementController : AllomanticPewter {
     private const float dragAirborneLinear = .2f;
     private const float dragGroundedLinear = 3f;
     [SerializeField]
-    private  float dragAirborneAngular = 1.5f;
+    private float dragAirborneAngular = 1.5f;
     [SerializeField]
     private float dragGroundedAngular = 5f;
     private const float dragNoControl = 10f;
@@ -58,7 +56,8 @@ public class PlayerMovementController : AllomanticPewter {
     //private  Vector3 inertiaTensorWalking = new Vector3(momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking);
 
     private PlayerGroundedChecker groundedChecker;
-    private PIDController_Vector3 pidSpeed;
+    private PIDController_float pidSpeed;
+    private PIDController_Vector3 pidHeading;
     private PhysicMaterial physicsMaterial;
 
     public bool IsGrounded {
@@ -73,12 +72,13 @@ public class PlayerMovementController : AllomanticPewter {
     protected override void Awake() {
         base.Awake();
         groundedChecker = transform.GetComponentInChildren<PlayerGroundedChecker>();
-        pidSpeed = GetComponent<PIDController_Vector3>();
-        rb.maxAngularVelocity = maxRollingAngularSpeed;
+        pidSpeed = GetComponent<PIDController_float>();
+        pidHeading = GetComponent<PIDController_Vector3>();
+        rb.maxAngularVelocity = Mathf.Infinity;
         physicsMaterial = GetComponent<Collider>().material;
-}
+    }
 
-private void Update() {
+    private void Update() {
         // Check if jumping
         if (IsGrounded && Keybinds.JumpDown()) {
             // Queue a jump for the next FixedUpdate
@@ -114,7 +114,7 @@ private void Update() {
             }
 
             // If Walking, reduce movment
-            if(Keybinds.Walk()) {
+            if (Keybinds.Walk()) {
                 movement *= movementFactor;
                 rb.inertiaTensor = new Vector3(momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking);
             } else {
@@ -185,7 +185,7 @@ private void Update() {
             if (movement.sqrMagnitude > 0) { // If moving at all
                 // Apply Pewter Sprint, if possible
 
-                if(IsSprinting) {
+                if (IsSprinting) {
                     // if sprinting
                     // Play particles if just sprinting on the ground for the first time
                     if (!lastWasSprintingOnGround && IsGrounded) {
@@ -194,28 +194,34 @@ private void Update() {
                         particleSystem.Play();
                     }
                     //movement *= pewterAcceleration * Mathf.Max(maxSprintingSpeed - Vector3.Project(rb.velocity, movement.normalized).magnitude, 0);
-                    rb.maxAngularVelocity = maxSprintingAngularVelocity;
                     lastWasSprintingOnGround = IsGrounded; // only show particles after hitting the ground
                     physicsMaterial.dynamicFriction = frictionDynamicSprinting;
                     rb.inertiaTensor = new Vector3(momentOfInertiaMagnitudeSprinting, momentOfInertiaMagnitudeSprinting, momentOfInertiaMagnitudeSprinting);
                 } else {
                     // not Sprinting, move normally.
                     //movement = MovementMagnitude(movement);
-                    rb.maxAngularVelocity = maxRollingAngularSpeed;
                     lastWasSprintingOnGround = false;
                     physicsMaterial.dynamicFriction = frictionDynamicRolling;
                 }
 
                 // Convert movement to torque
                 //Vector3 torque = Vector3.Cross(IsGrounded ? groundedChecker.Normal : Vector3.up, movement) * torqueFactor;
-                Vector3 torque = Vector3.Cross(Vector3.up, movement);
+                Vector3 torque = Vector3.Cross(Vector3.up, movement) * maxRollingSpeed;
 
-                Vector3 feedback = Vector3.Project(rb.angularVelocity, torque.normalized);
-                Vector3 target = torque * maxRollingSpeed;
+                // Angular speed
+                float feedbackSpeed = rb.angularVelocity.magnitude;
+                float targetSpeed = torque.magnitude;
+                Vector3 targetHeading = torque.normalized;
+                Vector3 feedbackHeading = Vector3.Project(rb.angularVelocity.normalized, torque.normalized);
+
                 if (IsSprinting)
-                    target *= pewterSpeedFactor;
+                    targetSpeed *= pewterSpeedFactor;
 
-                torque = pidSpeed.Step(feedback, target);
+                //float cmdSpeed = pidSpeed.Step(feedbackSpeed, targetSpeed);
+                Vector3 cmdHeading = pidHeading.Step(feedbackHeading, targetHeading).normalized;
+
+                torque = cmdHeading * 500;// cmdSpeed;
+
                 //Debug.Log("speed    : " + rb.velocity.magnitude);
 
                 //float dot = Vector3.Dot(torque, rb.angularVelocity);
@@ -247,7 +253,7 @@ private void Update() {
         return movement;
         //return movement * rollingAcceleration * Mathf.Max(maxRollingSpeed - Vector3.Project(rb.velocity, movement.normalized).magnitude, 0);
     }
-    
+
 
     public override void Clear() {
         PewterReserve.SetMass(100);
