@@ -15,10 +15,12 @@ public class PlayerMovementController : AllomanticPewter {
     // Rolling
     public const float rollingAcceleration = 5f;
     public const float maxRollingSpeed = 7.5f / radius;
+    private const float maxRollingAngularSpeed = Mathf.Infinity; // maxRollingSpeed;
     // Pewter
     private const float pewterAcceleration = 5.5f;
     private const float maxSprintingSpeed = 12.5f / radius;
     private const float pewterSpeedFactor = maxSprintingSpeed / maxRollingSpeed;
+    private const float maxSprintingAngularVelocity = Mathf.Infinity;
     // Pewter burning
     protected const float gramsPewterPerJump = 1f;
     protected const float timePewterPerJump = 1.5f;
@@ -56,8 +58,7 @@ public class PlayerMovementController : AllomanticPewter {
     //private  Vector3 inertiaTensorWalking = new Vector3(momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking);
 
     private PlayerGroundedChecker groundedChecker;
-    private PIDController_float pidSpeed;
-    private PIDController_Vector3 pidHeading;
+    private PIDController_Vector3 pidSpeed;
     private PhysicMaterial physicsMaterial;
 
     public bool IsGrounded {
@@ -72,9 +73,8 @@ public class PlayerMovementController : AllomanticPewter {
     protected override void Awake() {
         base.Awake();
         groundedChecker = transform.GetComponentInChildren<PlayerGroundedChecker>();
-        pidSpeed = GetComponent<PIDController_float>();
-        pidHeading = GetComponent<PIDController_Vector3>();
-        rb.maxAngularVelocity = Mathf.Infinity;
+        pidSpeed = GetComponent<PIDController_Vector3>();
+        rb.maxAngularVelocity = maxRollingAngularSpeed;
         physicsMaterial = GetComponent<Collider>().material;
     }
 
@@ -101,17 +101,17 @@ public class PlayerMovementController : AllomanticPewter {
         if (Player.CanControlPlayer) {
             // Convert user input to movement vector
             Vector3 movement = new Vector3(Keybinds.Horizontal(), 0f, Keybinds.Vertical());
-            // Rotate movement to be in direction of camera and clamp magnitude
-            movement = CameraController.CameraDirection * Vector3.ClampMagnitude(movement, 1);
-
 
             // If is unclamped and upside-down, keep movement in an intuitive direction for the player
-            if (SettingsMenu.settingsData.cameraClamping == 0) {
-                float angle = CameraController.ActiveCamera.transform.localEulerAngles.y;
-                if (angle > 1) { // flips to 180 when camera is upside-down
-                    movement = -movement;
-                }
+            // Rotate movement to be in direction of camera and clamp magnitude
+            if (SettingsMenu.settingsData.cameraClamping == 0 && CameraController.UpsideDown) {
+                movement.x = -movement.x;
+                movement = CameraController.CameraDirection * Vector3.ClampMagnitude(movement, 1);
+                movement = -movement;
+            } else {
+                movement = CameraController.CameraDirection * Vector3.ClampMagnitude(movement, 1);
             }
+
 
             // If Walking, reduce movment
             if (Keybinds.Walk()) {
@@ -194,34 +194,28 @@ public class PlayerMovementController : AllomanticPewter {
                         particleSystem.Play();
                     }
                     //movement *= pewterAcceleration * Mathf.Max(maxSprintingSpeed - Vector3.Project(rb.velocity, movement.normalized).magnitude, 0);
+                    rb.maxAngularVelocity = maxSprintingAngularVelocity;
                     lastWasSprintingOnGround = IsGrounded; // only show particles after hitting the ground
                     physicsMaterial.dynamicFriction = frictionDynamicSprinting;
                     rb.inertiaTensor = new Vector3(momentOfInertiaMagnitudeSprinting, momentOfInertiaMagnitudeSprinting, momentOfInertiaMagnitudeSprinting);
                 } else {
                     // not Sprinting, move normally.
                     //movement = MovementMagnitude(movement);
+                    rb.maxAngularVelocity = maxRollingAngularSpeed;
                     lastWasSprintingOnGround = false;
                     physicsMaterial.dynamicFriction = frictionDynamicRolling;
                 }
 
                 // Convert movement to torque
                 //Vector3 torque = Vector3.Cross(IsGrounded ? groundedChecker.Normal : Vector3.up, movement) * torqueFactor;
-                Vector3 torque = Vector3.Cross(Vector3.up, movement) * maxRollingSpeed;
+                Vector3 torque = Vector3.Cross(Vector3.up, movement);
 
-                // Angular speed
-                float feedbackSpeed = rb.angularVelocity.magnitude;
-                float targetSpeed = torque.magnitude;
-                Vector3 targetHeading = torque.normalized;
-                Vector3 feedbackHeading = Vector3.Project(rb.angularVelocity.normalized, torque.normalized);
-
+                Vector3 feedback = rb.angularVelocity;
+                Vector3 target = torque * maxRollingSpeed;
                 if (IsSprinting)
-                    targetSpeed *= pewterSpeedFactor;
+                    target *= pewterSpeedFactor;
 
-                //float cmdSpeed = pidSpeed.Step(feedbackSpeed, targetSpeed);
-                Vector3 cmdHeading = pidHeading.Step(feedbackHeading, targetHeading).normalized;
-
-                torque = cmdHeading * 500;// cmdSpeed;
-
+                torque = pidSpeed.Step(feedback, target);
                 //Debug.Log("speed    : " + rb.velocity.magnitude);
 
                 //float dot = Vector3.Dot(torque, rb.angularVelocity);
@@ -231,7 +225,7 @@ public class PlayerMovementController : AllomanticPewter {
                 // Apply torque to player
                 rb.AddTorque(torque, ForceMode.Acceleration);
                 // Apply a small amount of the movement force to player for tighter controls & air movement
-                rb.AddForce(movement * airControlFactor * rollingAcceleration, ForceMode.Acceleration);
+                rb.AddForce((CameraController.UpsideDown ? -movement : movement) * airControlFactor * rollingAcceleration, ForceMode.Acceleration);
 
                 // Debug
                 Debug.DrawRay(transform.position, rb.angularVelocity, Color.red);

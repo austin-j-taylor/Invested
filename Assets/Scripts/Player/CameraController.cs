@@ -9,7 +9,7 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour {
 
-    private const float playerLookAtTargetHeight = 1.25f;
+    private const float playerLookAtTargetReferenceHeight = 1.25f;
     private const float playerLookAtTargetFirstPersonHeight = 1;
     private const float distanceFromHitWall = .125f;//.5f;
     private const float lerpConstantPosition = 5;
@@ -25,11 +25,17 @@ public class CameraController : MonoBehaviour {
 
     private static float currentX = 0;
     private static float currentY = 0;
+    private static float playerLookAtTargetHeight = playerLookAtTargetReferenceHeight;
     private static bool cameraIsLocked;
 
     public static bool HasNotMovedCamera {
         get {
             return currentX == 0 && currentY == 0;
+        }
+    }
+    public static bool UpsideDown {
+        get {
+            return currentY < -89.99f || currentY > 89.99f;
         }
     }
     // Assigned when the camera should lerp to its target, rather than immediately go to it
@@ -91,10 +97,23 @@ public class CameraController : MonoBehaviour {
                     deltaX = -deltaX;
                 if (SettingsMenu.settingsData.cameraInvertY == 0)
                     deltaY = -deltaY;
-                currentX += deltaX;
-                currentY += deltaY;
-                if (SettingsMenu.settingsData.cameraClamping == 1)
+                if (SettingsMenu.settingsData.cameraClamping == 1) {
+                    currentX += deltaX;
+                    currentY += deltaY;
                     ClampY();
+                } else {
+                    // If camera is upside-down, invert X controls, invert camera target
+                    currentY += deltaY;
+                    ModY();
+                    if(UpsideDown) {
+                        currentX -= deltaX;
+                        playerLookAtTargetHeight = -playerLookAtTargetReferenceHeight;
+                    } else {
+                        currentX += deltaX;
+                        playerLookAtTargetHeight = playerLookAtTargetReferenceHeight;
+                    }
+
+                }
             }
             UpdateCamera();
         }
@@ -154,17 +173,18 @@ public class CameraController : MonoBehaviour {
                 Vector3[] playerDestinations = new Vector3[9];
                 for (int i = 0; i < 9; i++) {
                     playerDestinations[i] = destinations[i] - playerLookAtTarget.localPosition;
+                    Debug.DrawLine(playerDestinations[i], destinations[i], Color.white);
                 }
 
                 int smallestIndex = -1;
                 RaycastHit smallestHit = new RaycastHit();
-                float smallestDistance = playerLookAtTargetHeight;
+                float smallestDistance = playerLookAtTargetReferenceHeight;
 
                 for (int i = 0; i < 9; i++) {
                     // Check height of lookAtTarget
-                    if (Physics.Raycast(playerDestinations[i], Vector3.up, out RaycastHit hit, (destinations[i] - playerDestinations[i]).magnitude, GameManager.Layer_IgnoreCamera)) {
+                    if (Physics.Raycast(playerDestinations[i], UpsideDown ? Vector3.down : Vector3.up, out RaycastHit hit, (destinations[i] - playerDestinations[i]).magnitude, GameManager.Layer_IgnoreCamera)) {
                         float distance = (playerDestinations[i] - hit.point).magnitude;
-                        //Debug.DrawLine(playerDestinations[i], hit.point, Color.green);
+                        Debug.DrawLine(playerDestinations[i], hit.point, Color.green);
                         if (distance < smallestDistance) {
                             smallestIndex = i;
                             smallestHit = hit;
@@ -174,7 +194,7 @@ public class CameraController : MonoBehaviour {
                 }
 
                 if (smallestIndex > -1) { // A collision has occured
-                    playerLookAtTarget.position = smallestHit.point + (playerLookAtTarget.position - destinations[smallestIndex]) - new Vector3(0, .00001f, 0);
+                    playerLookAtTarget.position = smallestHit.point + (playerLookAtTarget.position - destinations[smallestIndex]) + (UpsideDown ? new Vector3(0, .00001f, 0) : new Vector3(0, -.00001f, 0));
                     Debug.DrawLine(playerDestinations[smallestIndex], smallestHit.point, Color.red);
 
                     // Recalculate based on new lookAtTarget position
@@ -192,8 +212,9 @@ public class CameraController : MonoBehaviour {
                     directionToTarget = playerLookAtTarget.position - origins[4]; // center
                     distanceToTarget = directionToTarget.magnitude;
 
-                    for (int i = 0; i < 9; i++)
+                    for (int i = 0; i < 9; i++) {
                         destinations[i] = origins[i] + directionToTarget;
+                    }
                 }
 
                 smallestIndex = -1;
@@ -202,7 +223,7 @@ public class CameraController : MonoBehaviour {
                 for (int i = 0; i < 9; i++) {
                     if (Physics.Raycast(destinations[i], -directionToTarget, out RaycastHit hit, distanceToTarget, GameManager.Layer_IgnoreCamera)) {
                         float distance = (hit.point - destinations[i]).magnitude;
-                        //Debug.DrawLine(destinations[i], hit.point, Color.yellow);
+                        Debug.DrawLine(destinations[i], hit.point, Color.yellow);
                         if (distance < smallestDistance) {
                             smallestIndex = i;
                             smallestHit = hit;
@@ -213,7 +234,7 @@ public class CameraController : MonoBehaviour {
 
                 if (smallestIndex > -1) { // A collision has occured
                     ActiveCamera.transform.position = smallestHit.point + (ActiveCamera.transform.position - origins[smallestIndex]);
-                    //Debug.DrawLine(destinations[smallestIndex], smallestHit.point, Color.red);
+                    Debug.DrawLine(destinations[smallestIndex], smallestHit.point, Color.red);
                 }
             } else {
                 // First person
@@ -266,7 +287,7 @@ public class CameraController : MonoBehaviour {
                     // Check height of lookAtTarget
                     if (Physics.Raycast(playerDestinations[i], Vector3.up, out RaycastHit hit, (destinations[i] - playerDestinations[i]).magnitude, GameManager.Layer_IgnoreCamera)) {
                         float distance = (playerDestinations[i] - hit.point).magnitude;
-                        //Debug.DrawLine(playerDestinations[i], hit.point, Color.green);
+                        Debug.DrawLine(playerDestinations[i], hit.point, Color.green);
                         if (distance < smallestDistance) {
                             smallestIndex = i;
                             smallestHit = hit;
@@ -283,6 +304,7 @@ public class CameraController : MonoBehaviour {
     }
 
     public static void Clear(bool resetRotation = true) {
+        playerLookAtTargetHeight = playerLookAtTargetReferenceHeight;
         TimeToLerp = -100;
         externalPositionTarget = null;
         externalLookAtTarget = null;
@@ -294,9 +316,8 @@ public class CameraController : MonoBehaviour {
             playerLookAtTarget.rotation = Quaternion.Euler(eulers);
 
             currentY = playerLookAtTarget.localEulerAngles.x;
-            if (currentY >= 180)
-                currentY -= 360;
             currentX = playerLookAtTarget.localEulerAngles.y;
+            ModY();
         }
 
         if (Player.PlayerIronSteel.IsBurning) // Update blue lines when the camera is reset
@@ -329,6 +350,12 @@ public class CameraController : MonoBehaviour {
 
     private void ClampY() {
         currentY = Mathf.Clamp(currentY, -89.99f, 89.99f); // (controls top, controls bottom)
+    }
+    private static void ModY() {
+        if (currentY >= 270)
+            currentY -= 360;
+        else if (currentY <= -270)
+            currentY += 360;
     }
 
     public void SetThirdPerson() {
