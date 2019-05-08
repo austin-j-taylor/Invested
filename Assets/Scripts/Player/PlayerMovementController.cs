@@ -69,6 +69,7 @@ public class PlayerMovementController : AllomanticPewter {
 
     private bool jumpQueued;
     private bool lastWasSprintingOnGround;
+    private bool invertGravity = false;
 
     protected override void Awake() {
         base.Awake();
@@ -97,6 +98,11 @@ public class PlayerMovementController : AllomanticPewter {
 
     protected override void FixedUpdate() {
         base.FixedUpdate();
+
+        // Apply the Fun Inverse Gravity
+        if(invertGravity) {
+            rb.AddForce(-2 * Physics.gravity, ForceMode.Acceleration);
+        }
 
         if (Player.CanControlPlayer) {
             // Convert user input to movement vector
@@ -264,8 +270,14 @@ public class PlayerMovementController : AllomanticPewter {
 
     public void EnableGravity() {
         rb.useGravity = true;
+        invertGravity = false;
     }
     public void DisableGravity() {
         rb.useGravity = false;
+        invertGravity = false;
+    }
+    public void InvertGravity() {
+        rb.useGravity = true;
+        invertGravity = true;
     }
 }
