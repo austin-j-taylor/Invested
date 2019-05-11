@@ -30,7 +30,7 @@ public class HelpOverlayController : MonoBehaviour {
 
             HelpTextLeft.text = KeyHelp + " to toggle the " + HelpOverlay + ".\n\n" +
                 KeyLook + " to look.\n" +
-                    KeyMove + " to move" + ((SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) ? ".\n" : " (" + KeyWalk + " to move slowly).\n") +
+                    KeyMove + " to move.\n\t\t• " + KeyWalk + " to move slowly and anchor yourself.\n" +
                     KeyJump + " to jump.\n\n" +
                 KeyStartBurning + "\n\t\tto start burning and select " + Push_Pull_targets + ".\n" +
                 KeyPullOrPush + " to " + Pull_or_Push + ".\n\n" +
@@ -56,8 +56,8 @@ public class HelpOverlayController : MonoBehaviour {
                 KeyStartBurning + "\n\t\tto start burning and select " + Push_Pull_targets + ".\n" +
                 KeyPullOrPush + " to " + Pull_or_Push + ".\n\n" +
                 "While holding " + KeyNegate +
-                ":\n\t\t• " + s_Press_ + KeySelect + " while looking at a " + Pull_target +
-                " to deselect it.\n\t\t• " + s_Press_ + KeySelectAlternate + " while looking at a " + Push_target + " to deselect it."
+                ":\n\t\t• " + s_Press_ + KeySelect + " to deselect a " + Pull_target +
+                ".\n\t\t• " + s_Press_ + KeySelectAlternate + " to deselect a " + Push_target + "."
             ;
             HelpTextRight.text = string.Empty;
         }

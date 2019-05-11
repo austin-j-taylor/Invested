@@ -41,7 +41,7 @@ public class PauseMenu : MonoBehaviour {
     }
 
     private void LateUpdate() {
-        if (Keybinds.EscapeDown()) {
+        if (Keybinds.ExitMenu()) {
             if (settingsMenu.IsOpen) {
                 settingsMenu.BackAndSaveSettings();
             } else {

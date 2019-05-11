@@ -52,7 +52,7 @@ public class MainMenu : MonoBehaviour {
     }
 
     private void Update() {
-        if(Keybinds.EscapeDown() && !controlSchemeScreen.IsOpen) {
+        if(Keybinds.ExitMenu() && !controlSchemeScreen.IsOpen) {
             if(sceneSelectMenu.IsOpen) {
                 CloseSceneSelectMenu();
             } else if(settingsMenu.IsOpen) {

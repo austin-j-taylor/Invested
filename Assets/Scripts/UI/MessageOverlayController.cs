@@ -104,7 +104,7 @@ public class MessageOverlayController : MonoBehaviour {
         };
         TriggerBeadMessages[7] = new List<string> {
             "Advanced Movement",
-            KeyWalk + " to walk slowly."
+            KeyWalk + " to anchor yourself. This increases your moment of inertia and makes you move slower."
         };
         TriggerBeadMessages[8] = new List<string> {
             "Advanced Movement - Pewter",

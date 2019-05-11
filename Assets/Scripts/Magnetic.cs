@@ -141,23 +141,23 @@ public class Magnetic : MonoBehaviour {
             }
 
 
-            if (HasColliders && !IsStatic) {
-                //Vector3 centers = colliders[0].bounds.center;
-                //int triggerCount = 0;
-                //for (int i = 1; i < colliders.Length; i++) {
-                //    if (!colliders[i].isTrigger)
-                //        centers += colliders[i].bounds.center;
-                //    else
-                //        triggerCount++;
-                //}
-                return transform.TransformPoint(centerOfMass);
-            } else if (IsStatic) {
-                // no collider or rigidbody, so center of mass is set to transform.position as a default
-                return transform.position;
-            } else {
-                // Not static, has colliders
-                return transform.TransformPoint(centerOfMass);
-            }
+            //if (HasColliders && !IsStatic) {
+            //    //Vector3 centers = colliders[0].bounds.center;
+            //    //int triggerCount = 0;
+            //    //for (int i = 1; i < colliders.Length; i++) {
+            //    //    if (!colliders[i].isTrigger)
+            //    //        centers += colliders[i].bounds.center;
+            //    //    else
+            //    //        triggerCount++;
+            //    //}
+            //    return transform.TransformPoint(centerOfMass);
+            //} else if (IsStatic) {
+            //    // no collider or rigidbody, so center of mass is set to transform.position as a default
+            //    return transform.position;
+            //} else {
+            //    // Not static, has colliders
+            //    return transform.TransformPoint(centerOfMass);
+            //}
         }
     }
     public virtual bool IsPerfectlyAnchored { // Only relevant for low-mass targets

@@ -11,14 +11,17 @@ public class Hand : MonoBehaviour {
     private const float keyboardSteepAngle = 2f / 3f;
     private const float coinSize = .05f;
     private float distanceToHand;
+    public readonly Vector3 coinThrowSpeed = new Vector3(0, 0, 5);
 
     private Transform centerOfMass;
+    private AllomanticIronSteel allomancer;
     public CoinPouch Pouch { get; private set; }
 
     // Use this for initialization
     void Awake() {
         centerOfMass = transform.parent;
         Pouch = GetComponent<CoinPouch>();
+        allomancer = GetComponentInParent<AllomanticIronSteel>();
         distanceToHand = transform.localPosition.magnitude;
     }
 
@@ -59,6 +62,15 @@ public class Hand : MonoBehaviour {
             } else {
                 coin = Pouch.RemoveCoin(transform.position);
             }
+
+            // If the wielder of this pouch is not simultaneously Pushing on the coin, add their velocity to the coin
+            // The intent is that the coin would realisticially always start with the allomancer's velocity,
+            //      but that throws off the aim of the coin.
+            if(!allomancer.SteelPushing) {
+                coin.GetComponent<Rigidbody>().velocity = allomancer.GetComponent<Rigidbody>().velocity + transform.rotation * coinThrowSpeed;
+            }
+
+
             return coin;
         }
         return null;

@@ -248,6 +248,11 @@ public class TextCodes : MonoBehaviour {
             return "the " + Gray("right joystick");
         }
     }
+    public static string Back {
+        get {
+            return Gray("Back");
+        }
+    }
     public static string Start {
         get {
             return Gray("Start");
@@ -339,7 +344,7 @@ public class TextCodes : MonoBehaviour {
     public static string KeyWalk {
         get {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-                return s_Use_ + theLeftJoystick;
+                return "Click in " + Gray("the left joystick");
             else
                 return s_Hold_ + Ctrl;
         }
@@ -601,7 +606,7 @@ public class TextCodes : MonoBehaviour {
     public static string KeyHelp {
         get {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-                return s_Press_ + Start + " > Settings > Interface > Help Overlay";
+                return s_Press_ + Back + " or " + s_Press_ +  Start + " > Settings > Interface > Help Overlay";
             else
                 return s_Press_ + H + " or " + s_Press_ + Escape + " > Settings > Interface > Help Overlay";
         }

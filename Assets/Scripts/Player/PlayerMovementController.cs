@@ -46,6 +46,8 @@ public class PlayerMovementController : AllomanticPewter {
     private float frictionDynamicRolling = 5f;
     [SerializeField]
     private float frictionDynamicSprinting = 10f;
+    [SerializeField]
+    private float frictionDynamicWalking = 15f;
     // Misc
     [SerializeField]
     private float momentOfInertiaMagnitude = 5;
@@ -119,13 +121,6 @@ public class PlayerMovementController : AllomanticPewter {
             }
 
 
-            // If Walking, reduce movment
-            if (Keybinds.Walk()) {
-                movement *= movementFactor;
-                rb.inertiaTensor = new Vector3(momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking);
-            } else {
-                rb.inertiaTensor = new Vector3(momentOfInertiaMagnitude, momentOfInertiaMagnitude, momentOfInertiaMagnitude);
-            }
 
             if (IsGrounded) {
                 // if a Jump is queued
@@ -144,7 +139,7 @@ public class PlayerMovementController : AllomanticPewter {
                         particleSystem.transform.position = Player.PlayerInstance.transform.position + particleSystemPosition;
 
                         if (movement.sqrMagnitude <= .01f) { // Vertical jump
-                            movement = Vector3.up;
+                            movement = Vector3.up; // groundedChecker.Normal;
                             // If movement is going INTO the wall, we must be jumping up it
                         } else if (Vector3.Dot(groundedChecker.Normal, movement) < -0.01f) {
                             float angle = Vector3.Angle(movement, groundedChecker.Normal) - 90;
@@ -209,7 +204,16 @@ public class PlayerMovementController : AllomanticPewter {
                     //movement = MovementMagnitude(movement);
                     rb.maxAngularVelocity = maxRollingAngularSpeed;
                     lastWasSprintingOnGround = false;
-                    physicsMaterial.dynamicFriction = frictionDynamicRolling;
+
+                    // If Walking, reduce movment
+                    if (Keybinds.Walk()) {
+                        movement *= movementFactor;
+                        rb.inertiaTensor = new Vector3(momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking);
+                        physicsMaterial.dynamicFriction = frictionDynamicWalking;
+                    } else {
+                        rb.inertiaTensor = new Vector3(momentOfInertiaMagnitude, momentOfInertiaMagnitude, momentOfInertiaMagnitude);
+                        physicsMaterial.dynamicFriction = frictionDynamicRolling;
+                    }
                 }
 
                 // Convert movement to torque

@@ -61,7 +61,7 @@ public class SettingsData : MonoBehaviour {
     public float maxPushRange;
     public float metalDetectionThreshold;
     // World
-    public int playerGravity; // 0 for Disabled, 1 for Enabled
+    public int playerGravity; // 0 for Disabled, 1 for Enabled, 2 for Inverted
     public int playerAirResistance; // 0 for Disabled, 1 for Enabled
     public float timeScale;
 

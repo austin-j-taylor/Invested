@@ -101,6 +101,9 @@ public static class Keybinds {
     public static bool EscapeDown() {
         return Input.GetKeyDown(KeyCode.Escape) || Input.GetButtonDown("GamepadStart");
     }
+    public static bool ExitMenu() {
+        return Input.GetButtonDown("Cancel") || Input.GetButtonDown("GamepadStart");
+    }
 
     public static float Horizontal() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
@@ -144,7 +147,7 @@ public static class Keybinds {
     
     public static bool Walk() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
-            return false;
+            return Input.GetButton("GamepadLeftJoystickClick");
         } else {
             return Input.GetKey(KeyCode.LeftControl);
         }
@@ -200,7 +203,7 @@ public static class Keybinds {
 
     public static bool ToggleHelpOverlay() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
-            return false;
+            return Input.GetButtonDown("GamepadBack"); ;
         } else {
             return Input.GetKeyDown(KeyCode.H);
         }
