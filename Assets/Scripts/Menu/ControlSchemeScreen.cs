@@ -42,6 +42,8 @@ public class ControlSchemeScreen : MonoBehaviour {
 
     public void Close() {
         SettingsMenu.settingsData.SaveSettings();
+        HUD.MessageOverlayController.UpdateMessages();
+        HUD.HelpOverlayController.UpdateText();
         FlagsController.ControlSchemeChosen = true;
         gameObject.SetActive(false);
         MainMenu.OpenTitleScreen();

@@ -43,7 +43,11 @@ public class HelpOverlayController : MonoBehaviour {
                 KeyPushPullStrength + " to change " + Push_Pull + " " + BurnPercentage + "\n" +
                 KeyNumberOfTargets + " to change your " + Gray("max number of " + Push_Pull_targets + ".\n") +
                 KeySwap + " to swap your " + Push_targets + " and " + Pull_targets + ".\n" +
-                KeyStopBurning + " to stop burning " + Gray("Iron and Steel") + ".\n\n" +
+                KeyStopBurning + " to stop burning " + Gray("Iron and Steel") +
+                (SettingsMenu.settingsData.controlScheme == SettingsData.MKQE || SettingsMenu.settingsData.controlScheme == SettingsData.MKEQ ?
+                    "\n\t(Your keyboard may not support that last option.)\n\n" :
+                    ".\n\n"
+                ) + 
                 KeyThrow + " to toss a " + O_Coin + ".\n" +
                 KeyDrop + " to drop a " + O_Coin + " at your feet.\n\t\t• " + KeyDropDirection + " while dropping a " + O_Coin + " to toss the coin away from that direction.\n\n" +
                 KeySprint + " to burn " + Pewter + " for " + Sprinting + " and " + PewterJumping + "."

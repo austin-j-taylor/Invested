@@ -75,7 +75,8 @@ public class MessageOverlayController : MonoBehaviour {
         };
         TriggerBeadMessages[2] = new List<string> {
             "Pushing & Pulling Basics",
-            s_Press_ + KeySelectAlternate + "\n\t\tto select a metal to be a " + Push_target + ".",
+            s_Press_ + KeySelect + " to select a metal to be a " + Pull_target + ".\n" + 
+            s_Press_ + KeySelectAlternate + " to select a metal to be a " + Push_target + ".",
             KeyPull + " to " + Pull + ".\n" +
                 KeyPush + " to " + Push + ".",
             "While holding " + KeyNegate + ", " + s_Press_ + KeySelect + "\n\t\t to deselect a " + Pull_target +
@@ -100,7 +101,11 @@ public class MessageOverlayController : MonoBehaviour {
         };
         TriggerBeadMessages[6] = new List<string> {
             "Advanced Pushing & Pulling",
-            KeyStopBurning + " to stop burning " + Gray("Iron and Steel.")
+            KeyStopBurning + " to stop burning " + Gray("Iron and Steel") +
+                (SettingsMenu.settingsData.controlScheme == SettingsData.MKQE || SettingsMenu.settingsData.controlScheme == SettingsData.MKEQ ? 
+                    ".\n\t(Your keyboard may not support that last option.)" :
+                    "."
+                )
         };
         TriggerBeadMessages[7] = new List<string> {
             "Advanced Movement",
@@ -124,7 +129,7 @@ public class MessageOverlayController : MonoBehaviour {
             KeyPull + " near " + O_Coins + " to pick them up.",
             KeyThrow + " to toss a coin in front of you. Try " + Pushing + " on it as you throw.", 
             KeyDrop + " to drop a coin at your feet. Try " + Pushing + " on it.",
-            "\t\t• " + KeyDropDirection + " while dropping a coin to toss the coin away from that direction.\n\n\tScale the wall using " + O_Coins + " and " + PewterJumping + 
+            "\t\t• " + KeyDropDirection + " while dropping a coin to toss the coin away from that direction.\n\n\tScale the wall using " + O_Coins + " and " + Pewter + 
                 ".\n\n\t(Hint: multi-targeting is your best friend when using coins.)\n\t(" + KeyHelp + " to toggle the " + HelpOverlay + ".)"
         };
 

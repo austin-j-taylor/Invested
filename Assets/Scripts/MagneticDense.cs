@@ -8,7 +8,7 @@ using UnityEngine;
 public class MagneticDense : Magnetic
 {
     [SerializeField]
-    private float density;
+    private float density = 0;
 
     protected new void Awake() {
 

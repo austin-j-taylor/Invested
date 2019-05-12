@@ -16,7 +16,7 @@ public class TriggerBeadPopupListener : TriggerBeadPopup {
     public bool[] clearAfter;
 
     [SerializeField]
-    private TriggerBead nextBead;
+    private TriggerBead nextBead = null;
     [SerializeField]
     private bool activeAtStart = true;
     private int coroutinePosition = 0;

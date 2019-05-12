@@ -6,7 +6,7 @@ using UnityEngine.PostProcessing;
 public class GraphicsController : MonoBehaviour {
 
     [SerializeField]
-    PostProcessingProfile profile;
+    PostProcessingProfile profile = null;
 
 	// Use this for initialization
 	void Start () {

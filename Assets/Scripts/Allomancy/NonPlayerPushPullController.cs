@@ -59,8 +59,7 @@ public class NonPlayerPushPullController : AllomanticIronSteel {
     }
 
     private void UpdateLines(bool pulling, int index) {
-
-        TargetArray array;
+        
         Magnetic target;
         float percentage;
         VolumetricLineBehavior line;

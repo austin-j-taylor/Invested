@@ -20,21 +20,25 @@ public class Vials : MonoBehaviour {
     Animator anim;
     new Light light;
 
-    // If I didn't have to do this every frame, I would. Unity Animator is extremely annoying.
+    bool empty = false;
+
+    // Must update every frame after animator does its hardest to fight me
     private void LateUpdate() {
-        if (fillIron) {
-            if (!fillSteel && !fillPewter) {
-                // pure iron
-                light.color = iron;
+        if (!empty) {
+            if (fillIron) {
+                if (!fillSteel && !fillPewter) {
+                    // pure iron
+                    light.color = iron;
+                }
+            } else if (fillSteel) {
+                if (!fillPewter) {
+                    // pure steel
+                    light.color = steel;
+                }
+            } else if (fillPewter) {
+                // pure pewter
+                light.color = pewter;
             }
-        } else if (fillSteel) {
-            if (!fillPewter) {
-                // pure steel
-                light.color = steel;
-            }
-        } else if (fillPewter) {
-            // pure pewter
-            light.color = pewter;
         }
     }
 
@@ -65,23 +69,38 @@ public class Vials : MonoBehaviour {
 
     }
 
-    private void OnTriggerEnter(Collider other) {
-        if(!other.isTrigger && other.CompareTag("Player")) {
-            if(fillIron) {
-                Player.PlayerIronSteel.IronReserve.Fill(volume, persistent ? volume : 0);
-                HUD.MetalReserveMeters.AlertIron();
-            }
-            if(fillSteel) {
-                Player.PlayerIronSteel.SteelReserve.Fill(volume, persistent ? volume : 0);
-                HUD.MetalReserveMeters.AlertSteel();
-            }
-            if(fillPewter) {
-                Player.PlayerPewter.PewterReserve.Fill(volume, persistent ? volume : 0);
-                HUD.MetalReserveMeters.AlertPewter();
-            }
+    private void OnCollisionEnter(Collision collision) {
+        if (!empty) {
+            Collider other = collision.collider;
+            if (!other.isTrigger && other.CompareTag("Player")) {
+                if (fillIron) {
+                    Player.PlayerIronSteel.IronReserve.Fill(volume, persistent ? volume : 0);
+                    HUD.MetalReserveMeters.AlertIron();
+                }
+                if (fillSteel) {
+                    Player.PlayerIronSteel.SteelReserve.Fill(volume, persistent ? volume : 0);
+                    HUD.MetalReserveMeters.AlertSteel();
+                }
+                if (fillPewter) {
+                    Player.PlayerPewter.PewterReserve.Fill(volume, persistent ? volume : 0);
+                    HUD.MetalReserveMeters.AlertPewter();
+                }
 
-            if (!persistent)
-                Destroy(gameObject);
+                if (persistent) {
+                    anim.SetTrigger("Empty");
+                } else {
+                    empty = true;
+                    Destroy(transform.parent.Find("Fluid").gameObject);
+                    anim.enabled = false;
+                    light.enabled = false;
+                    Collider col = GetComponent<Collider>();
+                    col.isTrigger = false;
+                    //gameObject.layer = LayerMask.NameToLayer("Ignore Player");
+                    Rigidbody rb = gameObject.AddComponent<Rigidbody>();
+                    rb.mass = 1;
+
+                }
+            }
         }
     }
 }

@@ -9,7 +9,7 @@ using System.Collections;
 public class PIDController_Vector3 : MonoBehaviour {
 
     [SerializeField]
-    float gainP, gainI, gainD, maxDelta;
+    float gainP = 25, gainI = 0, gainD = 0, maxDelta = 50;
 
     bool updating, lastWasStepped;
     

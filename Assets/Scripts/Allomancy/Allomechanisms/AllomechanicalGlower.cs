@@ -15,12 +15,9 @@ public class AllomechanicalGlower : MonoBehaviour {
             new Color(.7f, .025f, 0.05f),
             new Color(.75f, .25f, 0f)
     };
-
-    [SerializeField]
+    
     private Renderer[] irons;
-    [SerializeField]
     private Renderer[] steels;
-    [SerializeField]
     private Renderer[] pewters;
 
     private AllomanticIronSteel allomancer;
@@ -29,6 +26,9 @@ public class AllomechanicalGlower : MonoBehaviour {
     private void Start() {
         allomancer = Player.PlayerIronSteel;
         allomancerPewter = Player.PlayerPewter;
+        irons = transform.Find("Irons").GetComponentsInChildren<Renderer>();
+        steels = transform.Find("Steels").GetComponentsInChildren<Renderer>();
+        pewters = transform.Find("Pewters").GetComponentsInChildren<Renderer>();
     }
     
     void LateUpdate()

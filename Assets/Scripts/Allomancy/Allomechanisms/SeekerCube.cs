@@ -17,7 +17,6 @@ public class SeekerCube : MonoBehaviour {
     private readonly Color glowColor = new Color(.75f, .15f, 0f);
 
     private Rigidbody rb;
-    [SerializeField]
     private Renderer[] bronzes;
 
     private float counter;
@@ -25,6 +24,7 @@ public class SeekerCube : MonoBehaviour {
 
     private void Awake() {
         rb = GetComponent<Rigidbody>();
+        bronzes = transform.Find("Frame/Bronzes").GetComponentsInChildren<Renderer>();
         counter = 0;
         finished = false;
     }
