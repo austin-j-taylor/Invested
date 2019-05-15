@@ -27,7 +27,8 @@ public class Hand : MonoBehaviour {
 
     // If the player is holding down Jump, throw the coin downwards biased against the player's movement.
     // If the player is not jumping, the hand follows the camera.
-    void LateUpdate() {
+    void Update() {
+        Debug.DrawLine(start, tragectory + start);
         if (Keybinds.Jump()) {
             float vertical = -Keybinds.Vertical() * baseSteepAngle;
             float horizontal = -Keybinds.Horizontal() * baseSteepAngle;
@@ -50,9 +51,12 @@ public class Hand : MonoBehaviour {
             }
         }
     }
-
+    public Vector3 tragectory;
+    public Vector3 start;
     public Coin WithdrawCoinToHand() {
-        LateUpdate();
+        Update();
+        start = transform.position;
+        tragectory = (transform.position - transform.parent.position) * 50;
         if (Pouch.Count > 0) {
             Coin coin;
             // Raycast towards the hand. If the raycast hits something, spawn the coin there to prevent it from going through walls.
@@ -66,10 +70,11 @@ public class Hand : MonoBehaviour {
             // If the wielder of this pouch is not simultaneously Pushing on the coin, add their velocity to the coin
             // The intent is that the coin would realisticially always start with the allomancer's velocity,
             //      but that throws off the aim of the coin.
-            if(!allomancer.SteelPushing) {
+            if (!allomancer.SteelPushing) {
                 coin.GetComponent<Rigidbody>().velocity = allomancer.GetComponent<Rigidbody>().velocity + transform.rotation * coinThrowSpeed;
+            } else {
+                coin.GetComponent<Rigidbody>().velocity = transform.rotation * coinThrowSpeed;
             }
-
 
             return coin;
         }

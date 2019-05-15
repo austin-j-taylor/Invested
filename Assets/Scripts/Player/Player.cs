@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
  */
 public class Player : PewterEntity {
 
-    private const float coinCooldown = 1f / 8;
+    private const float coinCooldown = 1f / 10;
 
     //private Animator animator;
     private PlayerMovementController movementController;
@@ -81,7 +81,7 @@ public class Player : PewterEntity {
                     coinshotMode = !coinshotMode;
                 }
                 // On throwing a coin
-                if ((coinshotMode && Keybinds.IronPulling() && Keybinds.SteelPushing() || Keybinds.WithdrawCoinDown()) && lastCoinThrowTime + coinCooldown < Time.time) {
+                if ((coinshotMode && Keybinds.IronPulling() && Keybinds.SteelPushing() || Keybinds.WithdrawCoinDown()) && lastCoinThrowTime + (coinCooldown * Time.timeScale )< Time.time) {
                     lastCoinThrowTime = Time.time;
                     PlayerIronSteel.AddPushTarget(CoinHand.WithdrawCoinToHand());
                 }
