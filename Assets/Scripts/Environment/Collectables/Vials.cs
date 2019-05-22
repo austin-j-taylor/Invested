@@ -18,7 +18,7 @@ public class Vials : MonoBehaviour {
     readonly Color pewter = new Color(1, .5f, .2f);
 
     Animator anim;
-    new Light light;
+    Light light;
 
     bool empty = false;
 

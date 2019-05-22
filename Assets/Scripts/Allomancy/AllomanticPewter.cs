@@ -27,7 +27,7 @@ public class AllomanticPewter : Allomancer {
     }
 
     protected Rigidbody rb;
-    protected new ParticleSystem particleSystem;
+    protected ParticleSystem particleSystem;
     protected Quaternion particleDirection;
 
     protected virtual void Awake() {

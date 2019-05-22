@@ -5,7 +5,7 @@ using UnityEngine;
  */
 [RequireComponent(typeof(Rigidbody))]
 public class AllomanticIronSteel : Allomancer {
-
+     
     public const int maxNumberOfTargets = 10;
     // Force calculation constants
     public const float chargePower = 1f / 8f;

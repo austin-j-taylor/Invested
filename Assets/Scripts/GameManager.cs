@@ -25,7 +25,6 @@ public class GameManager : MonoBehaviour {
     public static List<Magnetic> MagneticsInScene { get; private set; }
 
     // Masks that represent certain layers to ignore for Raycasting
-    // NOT the actual layers
     public static int Layer_IgnorePlayer { get; private set; }
     public static int Layer_IgnoreCamera { get; private set; }
     public static int Layer_BlueLines { get; private set; }

@@ -44,7 +44,7 @@ public class Hand : MonoBehaviour {
         } else {
             // Rotate hand to look towards reticle target
             RaycastHit hit;
-            if (Physics.Raycast(CameraController.ActiveCamera.transform.position, CameraController.ActiveCamera.transform.forward, out hit, 1000, GameManager.Layer_IgnoreCamera)) {
+            if (Physics.Raycast(CameraController.ActiveCamera.transform.position, CameraController.ActiveCamera.transform.forward, out hit, 1000, GameManager.Layer_IgnorePlayer)) {
                 centerOfMass.LookAt(hit.point);
             } else {
                 centerOfMass.eulerAngles = CameraController.ActiveCamera.transform.eulerAngles;
