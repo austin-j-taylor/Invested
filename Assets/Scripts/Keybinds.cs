@@ -10,10 +10,40 @@ public static class Keybinds {
     private static float timeToHoldDPadX = 0f;
     private static float triggerDeadband = 0.01f;
 
+    // Only used for convert Gamepad axes to binary buttons
+    private static bool lastWasPulling = false;
+    private static bool lastWasPushing = false;
+
+    public static bool PullDown() {
+        if(SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+            if (Input.GetAxis("RightTrigger") > triggerDeadband) {
+                if(lastWasPulling) {
+                    return true;
+                }
+                lastWasPulling = true;
+            }
+        } else {
+            return Input.GetButtonDown("Mouse0");
+        }
+        return false;
+    }
+    public static bool PushDown() {
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+            if (Input.GetAxis("LeftTrigger") > triggerDeadband) {
+                if (lastWasPushing) {
+                    return true;
+                }
+                lastWasPushing = true;
+            }
+        } else {
+            return Input.GetButtonDown("Mouse1");
+        }
+        return false;
+    }
+
     public static bool IronPulling() {
         return RightBurnPercentage() > triggerDeadband;
     }
-
     public static bool SteelPushing() {
         return LeftBurnPercentage() > triggerDeadband;
     }

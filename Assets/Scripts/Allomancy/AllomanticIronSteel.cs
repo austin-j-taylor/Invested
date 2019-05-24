@@ -22,8 +22,8 @@ public class AllomanticIronSteel : Allomancer {
     protected const float blueLineChangeFactor = 1 / 4f;
     protected const float blueLineBrightnessFactor = 1 / 6f;
     // Simple metal boolean constants for passing to methods
-    private const bool steel = false;
-    private const bool iron = true;
+    protected const bool steel = false;
+    protected const bool iron = true;
 
     protected Rigidbody rb;
 
@@ -94,14 +94,14 @@ public class AllomanticIronSteel : Allomancer {
     private Vector3 thisFrameMaximumNetForce = Vector3.zero;
 
     //// Debug variables for viewing values in the Unity editor
-    public float allomanticsForce;
-    public float netAllomancersForce;
-    public float netTargetsForce;
-    public Vector3 allomanticsForces;
-    public Vector3 resititutionFromTargetsForce;
-    public Vector3 resititutionFromPlayersForce;
-    public float percentOfTargetForceReturned;
-    public float percentOfAllomancerForceReturned;
+    //public float allomanticsForce;
+    //public float netAllomancersForce;
+    //public float netTargetsForce;
+    //public Vector3 allomanticsForces;
+    //public Vector3 resititutionFromTargetsForce;
+    //public Vector3 resititutionFromPlayersForce;
+    //public float percentOfTargetForceReturned;
+    //public float percentOfAllomancerForceReturned;
     // Metal burn percentages
     // Used when burning metals, but not necessarily immediately Pushing or Pulling. Hence, they are "targets" and not the actual burn percentage of the Allomancer.
     public float IronBurnPercentageTarget { get; set; }
@@ -162,6 +162,19 @@ public class AllomanticIronSteel : Allomancer {
     public float Mass {
         get {
             return rb.mass;
+        }
+    }
+
+    // True when the player has no targets selected, so pushing/pulling will act on whatever they are looking at
+    private Magnetic vacuousTarget;
+    protected Magnetic VacuousTarget {
+        get {
+            return vacuousTarget;
+        }
+    }
+    protected bool VacuouslyTargeting {
+        get {
+            return vacuousTarget != null;
         }
     }
 
@@ -574,14 +587,14 @@ public class AllomanticIronSteel : Allomancer {
         rb.AddForce(target.LastNetForceOnAllomancer);
 
         // Debug
-        allomanticsForce = target.LastAllomanticForce.magnitude;
-        allomanticsForces = target.LastAllomanticForce;
-        netAllomancersForce = target.LastNetForceOnAllomancer.magnitude;
-        resititutionFromTargetsForce = target.LastAnchoredPushBoostFromTarget;
-        resititutionFromPlayersForce = target.LastAnchoredPushBoostFromAllomancer;
-        percentOfTargetForceReturned = resititutionFromTargetsForce.magnitude / allomanticsForce;
-        percentOfAllomancerForceReturned = resititutionFromPlayersForce.magnitude / allomanticsForce;
-        netTargetsForce = target.LastNetForceOnTarget.magnitude;
+        //allomanticsForce = target.LastAllomanticForce.magnitude;
+        //allomanticsForces = target.LastAllomanticForce;
+        //netAllomancersForce = target.LastNetForceOnAllomancer.magnitude;
+        //resititutionFromTargetsForce = target.LastAnchoredPushBoostFromTarget;
+        //resititutionFromPlayersForce = target.LastAnchoredPushBoostFromAllomancer;
+        //percentOfTargetForceReturned = resititutionFromTargetsForce.magnitude / allomanticsForce;
+        //percentOfAllomancerForceReturned = resititutionFromPlayersForce.magnitude / allomanticsForce;
+        //netTargetsForce = target.LastNetForceOnTarget.magnitude;
     }
 
     /*
@@ -647,6 +660,10 @@ public class AllomanticIronSteel : Allomancer {
     public void AddPullTarget(Magnetic target) {
         StartBurning(true);
         if (HasIron) {
+            if(VacuouslyTargeting) {
+                SetVacuousTarget(null);
+            }
+
             if (PushTargets.IsTarget(target)) {
                 PushTargets.RemoveTarget(target, false);
             }
@@ -664,6 +681,10 @@ public class AllomanticIronSteel : Allomancer {
     public void AddPushTarget(Magnetic target) {
         StartBurning(false);
         if (HasSteel) {
+            if (VacuouslyTargeting) {
+                SetVacuousTarget(null);
+            }
+
             if (PullTargets.IsTarget(target)) {
                 PullTargets.RemoveTarget(target, false);
             }
@@ -704,5 +725,22 @@ public class AllomanticIronSteel : Allomancer {
 
     public void RemovePushTargetAt(int index) {
         PushTargets.RemoveTargetAt(index);
+    }
+
+    // Assign a vacuous target when none others are selected.
+    // If target is null, stop vacuously targeting.
+    protected void SetVacuousTarget(Magnetic target, bool usingIron = true) {
+        RemovePullTargetAt(0);
+        RemovePushTargetAt(0);
+        vacuousTarget = target;
+        if(target == null) {
+            // do nothing. Stop vacuously targeting.
+        } else {
+            if (usingIron) {
+                PullTargets.AddTarget(target, this);
+            } else {
+                PushTargets.AddTarget(target, this);
+            }
+        }
     }
 }

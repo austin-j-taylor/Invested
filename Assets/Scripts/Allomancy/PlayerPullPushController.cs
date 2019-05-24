@@ -56,6 +56,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
             HighlightedTarget.RemoveTargetGlow();
         IronPulling = false;
         SteelPushing = false;
+        SetVacuousTarget(null);
         RemoveAllTargets();
     }
 
@@ -176,24 +177,43 @@ public class PlayerPullPushController : AllomanticIronSteel {
 
                         // Check input for target selection
                         bool selecting = (Keybinds.Select() || Keybinds.SelectAlternate()) && !Keybinds.Negate();
+
                         Magnetic target = SearchForMetals();
 
                         if (target != null) {
                             // highlight the potential target you would select, if you targeted it
                             if (target != HighlightedTarget) {
-                                if (HasHighlightedTarget)
+                                // Remove old target
+                                if (HasHighlightedTarget) {
                                     HighlightedTarget.RemoveTargetGlow();
+                                }
                                 target.AddTargetGlow();
                                 HighlightedTarget = target;
                             }
                         } else {
                             // no target near center of screen; remove highlighted target
-                            if (HasHighlightedTarget)
+                            if (HasHighlightedTarget) {
                                 HighlightedTarget.RemoveTargetGlow();
+                            }
                             HighlightedTarget = null;
                         }
 
                         // Add/Remove Targets
+
+                        // If vacuously targeting (or should be),
+                        if (VacuouslyTargeting || (!HasPullTarget && !HasPushTarget)) {
+                            // If starting to pull/push again, replace that old vacuous target with the new target
+                            if (Keybinds.PullDown()) {
+
+                                SetVacuousTarget(target, iron);
+                            } else if(Keybinds.PushDown()) {
+                                SetVacuousTarget(target, steel);
+                            }
+                            // If releasing push/pull, remove vacuous target
+                            if(!Keybinds.IronPulling() && !Keybinds.SteelPushing()) {
+                                SetVacuousTarget(null);
+                            }
+                        }
 
                         if (Keybinds.Select() || Keybinds.SelectAlternate()) {
                             // Select or Deselect pullTarget and/or pushTarget
@@ -219,7 +239,9 @@ public class PlayerPullPushController : AllomanticIronSteel {
                                     }
                                 }
                             }
+
                         }
+                        Debug.Log(VacuouslyTargeting);
                         RefreshHUD();
                     }
                 } else { // If the player is not in control, but still burning metals, show blue lines to metals.
