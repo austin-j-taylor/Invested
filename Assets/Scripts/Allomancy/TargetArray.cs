@@ -254,11 +254,11 @@ public class TargetArray {
         if(MaxRange == 0) {
             for (int i = 0; i < Count; i++) {
                 if (SettingsMenu.settingsData.pushControlStyle == 0 && SettingsMenu.settingsData.controlScheme != SettingsData.Gamepad) {
-                    if (allomancer.CalculateAllomanticForce(targets[i]).magnitude * burnRate < SettingsMenu.settingsData.metalDetectionThreshold) {
+                    if (!targets[i].IsInRange(allomancer, burnRate)) {
                         RemoveTargetAt(i);
                     }
                 } else { // If using the Magnitude control style (or gamepad), burn rate does not affect the range of targets
-                    if (allomancer.CalculateAllomanticForce(targets[i]).magnitude < SettingsMenu.settingsData.metalDetectionThreshold) {
+                    if (!targets[i].IsInRange(allomancer, 1)) {
                         RemoveTargetAt(i);
                     }
                 }

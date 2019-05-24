@@ -288,7 +288,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
         //if (Physics.SphereCast(CameraController.ActiveCamera.transform.position, .5f, CameraController.ActiveCamera.transform.forward, out RaycastHit hit, 500, GameManager.Layer_IgnorePlayer)) {
         if (Physics.Raycast(CameraController.ActiveCamera.transform.position, CameraController.ActiveCamera.transform.forward, out RaycastHit hit, 500, GameManager.Layer_IgnorePlayer)) {
             Magnetic target = hit.collider.GetComponentInParent<Magnetic>();
-            if (target) {
+            if (target && target.IsInRange(this, GreaterPassiveBurn)) {
                 centerObject = target;
                 mustCalculateCenter = false;
             }
@@ -306,6 +306,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
                     // If the Magnetic could be targeted
                     if (targetedLineColors && weightedDistanceFromCenter < 1) {
                         // IF the new Magnetic is closer to the center of the screen than the previous most-center Magnetic
+                        // and IF the new Magnetic is in range
                         if (weightedDistanceFromCenter < smallestDistanceFromCenter) {
                             smallestDistanceFromCenter = weightedDistanceFromCenter;
                             centerObject = target;

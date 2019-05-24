@@ -75,9 +75,6 @@ public class Player : PewterEntity {
     }
 
     void Update() {
-        if (Input.GetButtonDown("Mouse0"))
-            GetComponent<AudioSource>().Play();
-
         if (CanControlPlayer) {
             if (!PauseMenu.IsPaused) {
                 if (Keybinds.ToggleCoinshotMode()) {

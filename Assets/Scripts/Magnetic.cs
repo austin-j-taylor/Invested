@@ -325,4 +325,9 @@ public class Magnetic : MonoBehaviour {
         if (blueLine)
             blueLine.gameObject.SetActive(false);
     }
+
+    // Checks if the Allomancer would be able to sense this Magnetic with ironsight
+    public bool IsInRange(AllomanticIronSteel allomancer, float burnRate) {
+        return allomancer.CalculateAllomanticForce(this).magnitude * burnRate > SettingsMenu.settingsData.metalDetectionThreshold;
+    }
 }
