@@ -39,20 +39,30 @@ public class FlagsController : MonoBehaviour {
         instance = this;
         LoadSettings();
     }
-    
-    public void LoadSettings() {
-        StreamReader reader = new StreamReader(flagsFileName, true);
-        string jSONText = reader.ReadToEnd();
-        reader.Close();
 
-        JsonUtility.FromJsonOverwrite(jSONText, this);
+    public void LoadSettings() {
+        try {
+            StreamReader reader = new StreamReader(flagsFileName, true);
+            string jSONText = reader.ReadToEnd();
+            reader.Close();
+
+            JsonUtility.FromJsonOverwrite(jSONText, this);
+
+        } catch (DirectoryNotFoundException e) {
+            Debug.LogError(e.Message);
+        }
     }
 
     public void SaveSettings() {
-        string jSONText = JsonUtility.ToJson(this, true);
+        try {
+            string jSONText = JsonUtility.ToJson(this, true);
 
-        StreamWriter writer = new StreamWriter(flagsFileName, false);
-        writer.Write(jSONText);
-        writer.Close();
+            StreamWriter writer = new StreamWriter(flagsFileName, false);
+            writer.Write(jSONText);
+            writer.Close();
+
+        } catch (DirectoryNotFoundException e) {
+            Debug.LogError(e.Message);
+        }
     }
 }

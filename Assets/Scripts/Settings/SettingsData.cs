@@ -70,36 +70,57 @@ public class SettingsData : MonoBehaviour {
     }
 
     public void LoadSettings() {
-        StreamReader reader = new StreamReader(configFileName, true);
-        string jSONText = reader.ReadToEnd();
-        reader.Close();
+        try {
+            StreamReader reader = new StreamReader(configFileName, true);
 
-        JsonUtility.FromJsonOverwrite(jSONText, this);
+            string jSONText = reader.ReadToEnd();
+            reader.Close();
 
-        Time.timeScale = timeScale;
+            JsonUtility.FromJsonOverwrite(jSONText, this);
+
+            Time.timeScale = timeScale;
+
+        } catch (DirectoryNotFoundException e) {
+            Debug.LogError(e.Message);
+            timeScale = 1;
+            Time.timeScale = timeScale;
+        }
+
         Time.fixedDeltaTime = timeScale / 60;
     }
 
-    public void SaveSettings() {        
-        string jSONText = JsonUtility.ToJson(this, true);
+    public void SaveSettings() {
+        try {
+            string jSONText = JsonUtility.ToJson(this, true);
 
-        StreamWriter writer = new StreamWriter(configFileName, false);
-        writer.Write(jSONText);
-        writer.Close();
-        
+            StreamWriter writer = new StreamWriter(configFileName, false);
+            writer.Write(jSONText);
+            writer.Close();
+
+
+        } catch (DirectoryNotFoundException e) {
+            Debug.LogError(e.Message);
+            timeScale = 1;
+        }
+
         Time.fixedDeltaTime = timeScale / 60;
     }
 
     public void ResetToDefaults() {
-        StreamReader reader = new StreamReader(defaultConfigFileName, true);
-        reader.ReadLine(); // get rid of comments in first line
-        reader.ReadLine();
-        string jSONText = reader.ReadToEnd();
-        reader.Close();
+        try {
+            StreamReader reader = new StreamReader(defaultConfigFileName, true);
+            reader.ReadLine(); // get rid of comments in first line
+            reader.ReadLine();
+            string jSONText = reader.ReadToEnd();
+            reader.Close();
 
-        JsonUtility.FromJsonOverwrite(jSONText, this);
+            JsonUtility.FromJsonOverwrite(jSONText, this);
 
-        SaveSettings();
+            SaveSettings();
+
+        } catch (DirectoryNotFoundException e) {
+            Debug.LogError(e.Message);
+        }
     }
 
     /*

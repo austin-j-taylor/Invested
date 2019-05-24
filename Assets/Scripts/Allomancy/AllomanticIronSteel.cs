@@ -730,17 +730,17 @@ public class AllomanticIronSteel : Allomancer {
     // Assign a vacuous target when none others are selected.
     // If target is null, stop vacuously targeting.
     protected void SetVacuousTarget(Magnetic target, bool usingIron = true) {
-        RemovePullTargetAt(0);
-        RemovePushTargetAt(0);
-        vacuousTarget = target;
-        if(target == null) {
-            // do nothing. Stop vacuously targeting.
-        } else {
-            if (usingIron) {
-                PullTargets.AddTarget(target, this);
-            } else {
-                PushTargets.AddTarget(target, this);
-            }
-        }
+        //    RemovePullTargetAt(0);
+        //    RemovePushTargetAt(0);
+        //    vacuousTarget = target;
+        //    if(target == null) {
+        //        // do nothing. Stop vacuously targeting.
+        //    } else {
+        //        if (usingIron) {
+        //            PullTargets.AddTarget(target, this);
+        //        } else {
+        //            PushTargets.AddTarget(target, this);
+        //        }
+        //    }
     }
 }

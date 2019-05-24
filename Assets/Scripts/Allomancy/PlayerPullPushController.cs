@@ -241,7 +241,6 @@ public class PlayerPullPushController : AllomanticIronSteel {
                             }
 
                         }
-                        Debug.Log(VacuouslyTargeting);
                         RefreshHUD();
                     }
                 } else { // If the player is not in control, but still burning metals, show blue lines to metals.
