@@ -14,7 +14,8 @@ public class TargetArray {
     private static readonly Color targetedBlueLine = new Color(0, 0, 1);
     private static readonly Color targetedLightBlueLine = new Color(0, .5f, 1f);
 
-    protected Magnetic[] targets;
+    private Magnetic[] targets;
+    private Magnetic vacuousTarget; // When no targets are selected, the vacuous target may still be Pushed on.
 
     public int Size { get; private set; } = 1;
     public int Count { get; private set; } = 0;

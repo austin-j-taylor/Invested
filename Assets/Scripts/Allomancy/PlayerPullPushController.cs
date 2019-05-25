@@ -153,6 +153,8 @@ public class PlayerPullPushController : AllomanticIronSteel {
                         if (Keybinds.NegateDown() && timeToSwapBurning > Time.time) {
                             // Double-tapped, Swap targets
                             PullTargets.SwapContents(PushTargets);
+                            // If vacuously targeting, swap statuses of vacuous targets
+                            SwapVacuousTargets();
                         } else {
                             if (Keybinds.NegateDown()) {
                                 timeToSwapBurning = Time.time + timeDoubleTapWindow;
@@ -201,20 +203,27 @@ public class PlayerPullPushController : AllomanticIronSteel {
                         // Add/Remove Targets
 
                         // If vacuously targeting (or should be),
-                        if (VacuouslyTargeting || (!HasPullTarget && !HasPushTarget)) {
+                        if(VacuouslyPullTargeting || !HasPullTarget) {
                             // If starting to pull/push again, replace that old vacuous target with the new target
                             if (Keybinds.PullDown()) {
-
                                 SetVacuousTarget(target, iron);
-                            } else if(Keybinds.PushDown()) {
-                                SetVacuousTarget(target, steel);
                             }
                             // If releasing push/pull, remove vacuous target
-                            if(!Keybinds.IronPulling() && !Keybinds.SteelPushing()) {
-                                SetVacuousTarget(null);
+                            if (!Keybinds.IronPulling()) {
+                                SetVacuousTarget(null, iron);
+                            }
+                        }
+                        // Repeat for steel
+                        if (VacuouslyPushTargeting || !HasPushTarget) {
+                            if (Keybinds.PushDown()) {
+                                SetVacuousTarget(target, steel);
+                            }
+                            if (!Keybinds.SteelPushing()) {
+                                SetVacuousTarget(null, steel);
                             }
                         }
 
+                        // Manual target selection
                         if (Keybinds.Select() || Keybinds.SelectAlternate()) {
                             // Select or Deselect pullTarget and/or pushTarget
                             if (Keybinds.Select() && HasIron) { // Selecting pull target

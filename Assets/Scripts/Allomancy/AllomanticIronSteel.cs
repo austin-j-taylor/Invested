@@ -164,17 +164,16 @@ public class AllomanticIronSteel : Allomancer {
             return rb.mass;
         }
     }
-
-    // True when the player has no targets selected, so pushing/pulling will act on whatever they are looking at
-    private Magnetic vacuousTarget;
-    protected Magnetic VacuousTarget {
+    protected Magnetic VacuousPullTarget { get; private set; }
+    protected Magnetic VacuousPushTarget { get; private set; }
+    protected bool VacuouslyPullTargeting {
         get {
-            return vacuousTarget;
+            return VacuousPullTarget != null;
         }
     }
-    protected bool VacuouslyTargeting {
+    protected bool VacuouslyPushTargeting {
         get {
-            return vacuousTarget != null;
+            return VacuousPushTarget != null;
         }
     }
 
@@ -660,8 +659,8 @@ public class AllomanticIronSteel : Allomancer {
     public void AddPullTarget(Magnetic target) {
         StartBurning(true);
         if (HasIron) {
-            if(VacuouslyTargeting) {
-                SetVacuousTarget(null);
+            if(VacuouslyPullTargeting) {
+                SetVacuousTarget(null, iron);
             }
 
             if (PushTargets.IsTarget(target)) {
@@ -681,8 +680,8 @@ public class AllomanticIronSteel : Allomancer {
     public void AddPushTarget(Magnetic target) {
         StartBurning(false);
         if (HasSteel) {
-            if (VacuouslyTargeting) {
-                SetVacuousTarget(null);
+            if (VacuouslyPushTargeting) {
+                SetVacuousTarget(null, steel);
             }
 
             if (PullTargets.IsTarget(target)) {
@@ -730,17 +729,30 @@ public class AllomanticIronSteel : Allomancer {
     // Assign a vacuous target when none others are selected.
     // If target is null, stop vacuously targeting.
     protected void SetVacuousTarget(Magnetic target, bool usingIron = true) {
-        //    RemovePullTargetAt(0);
-        //    RemovePushTargetAt(0);
-        //    vacuousTarget = target;
-        //    if(target == null) {
-        //        // do nothing. Stop vacuously targeting.
-        //    } else {
-        //        if (usingIron) {
-        //            PullTargets.AddTarget(target, this);
-        //        } else {
-        //            PushTargets.AddTarget(target, this);
-        //        }
-        //    }
+        if (target == null) {
+            if (usingIron) {
+                RemovePullTargetAt(0);
+                VacuousPullTarget = null;
+            } else {
+                RemovePushTargetAt(0);
+                VacuousPushTarget = null;
+            }
+        } else {
+            if (usingIron) {
+                RemovePullTargetAt(0);
+                VacuousPullTarget = target;
+                PullTargets.AddTarget(target, this);
+            } else {
+                RemovePushTargetAt(0);
+                VacuousPushTarget = target;
+                PushTargets.AddTarget(target, this);
+            }
+        }
+    }
+
+    protected void SwapVacuousTargets() {
+        Magnetic temp = VacuousPullTarget;
+        VacuousPullTarget = VacuousPushTarget;
+        VacuousPushTarget = temp;
     }
 }
