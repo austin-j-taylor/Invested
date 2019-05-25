@@ -3,8 +3,8 @@
 Invested is a physics simulation and game made in the Unity engine. It is a personal interpretation and emulation of the physics of Allomancy, a magic system from the novel "Mistborn" by Brandon Sanderson.
 
 ## Downloads
-[Windows](https://www.dropbox.com/s/6o152qparaoede7/Invested.zip?dl=1) 
-[Mac](https://www.dropbox.com/s/94brafk3ew55tdb/Invested%20for%20Mac.zip?dl=1) Highly experimental. I don't have a Mac so I honestly don't know if this works. Let me know if you're available for testing.
+- [Windows](https://www.dropbox.com/s/6o152qparaoede7/Invested.zip?dl=1)
+- [Mac](https://www.dropbox.com/s/94brafk3ew55tdb/Invested%20for%20Mac.zip?dl=1) - Highly experimental. I don't have a Mac, so let me know if you're available for testing.
 
 Here are some videos of the game:
 - [Overview](https://gfycat.com/boldenchantedamethystgemclam)
