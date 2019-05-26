@@ -18,18 +18,20 @@ public class Player : PewterEntity {
     public static PlayerPullPushController PlayerIronSteel { get; private set; }
     public static AllomanticPewter PlayerPewter { get; private set; }
     public static Magnetic PlayerMagnetic { get; private set; }
+    private static FeruchemicalZinc PlayerZinc { get; set; }
 
     public Hand CoinHand { get; private set; }
     private static bool canControlPlayer = false;
     private static bool godMode = false;
     public static bool CanControlPlayer {
         get {
-            return canControlPlayer;
+            return canControlPlayer && !PauseMenu.IsPaused;
         }
         set {
             canControlPlayer = value;
             if (!value) {
                 PlayerIronSteel.SoftClear();
+                PlayerZinc.Clear();
             }
         }
     }
@@ -68,6 +70,7 @@ public class Player : PewterEntity {
         PlayerIronSteel = GetComponentInChildren<PlayerPullPushController>();
         PlayerPewter = GetComponentInChildren<AllomanticPewter>();
         PlayerMagnetic = GetComponentInChildren<Magnetic>();
+        PlayerZinc = GetComponent<FeruchemicalZinc>();
         Health = 100;
         CoinHand = GetComponentInChildren<Hand>();
         SceneManager.sceneLoaded += ClearPlayerAfterSceneChange;
@@ -76,15 +79,13 @@ public class Player : PewterEntity {
 
     void Update() {
         if (CanControlPlayer) {
-            if (!PauseMenu.IsPaused) {
-                if (Keybinds.ToggleCoinshotMode()) {
-                    coinshotMode = !coinshotMode;
-                }
-                // On throwing a coin
-                if ((coinshotMode && Keybinds.IronPulling() && Keybinds.SteelPushing() || Keybinds.WithdrawCoinDown()) && lastCoinThrowTime + (coinCooldown * Time.timeScale )< Time.time) {
-                    lastCoinThrowTime = Time.time;
-                    PlayerIronSteel.AddPushTarget(CoinHand.WithdrawCoinToHand());
-                }
+            if (Keybinds.ToggleCoinshotMode()) {
+                coinshotMode = !coinshotMode;
+            }
+            // On throwing a coin
+            if ((coinshotMode && Keybinds.IronPulling() && Keybinds.SteelPushing() || Keybinds.WithdrawCoinDown()) && lastCoinThrowTime + (coinCooldown * Time.timeScale )< Time.time) {
+                lastCoinThrowTime = Time.time;
+                PlayerIronSteel.AddPushTarget(CoinHand.WithdrawCoinToHand());
             }
         }
     }
@@ -106,6 +107,7 @@ public class Player : PewterEntity {
         movementController.Clear();
         PlayerIronSteel.Clear(false);
         PlayerPewter.Clear();
+        PlayerZinc.Clear();
     }
 
     // Reset certain values AFTER the player enters a new scene

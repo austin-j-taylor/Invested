@@ -100,11 +100,9 @@ public class Simulation_coinGround : Simulation {
 
             // Lower the timescale until the coin hits the ground
             if (coinTop.transform.position.y - groundHeight - .125f > .01f) {
-                Time.timeScale = .05f;
-                Time.fixedDeltaTime = Time.timeScale / 60;
+                TimeController.CurrentTimeScale = .05f;
             } else {
-                Time.timeScale = SettingsMenu.settingsData.timeScale;
-                Time.fixedDeltaTime = Time.timeScale / 60;
+                TimeController.CurrentTimeScale = SettingsMenu.settingsData.timeScale;
             }
             texts[texts.Length - 3].text = "Time scale: " + HUD.RoundStringToSigFigs(Time.timeScale);
 

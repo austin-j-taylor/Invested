@@ -78,15 +78,13 @@ public class SettingsData : MonoBehaviour {
 
             JsonUtility.FromJsonOverwrite(jSONText, this);
 
-            Time.timeScale = timeScale;
+            TimeController.CurrentTimeScale = timeScale;
 
         } catch (DirectoryNotFoundException e) {
             Debug.LogError(e.Message);
             timeScale = 1;
-            Time.timeScale = timeScale;
+            TimeController.CurrentTimeScale = timeScale;
         }
-
-        Time.fixedDeltaTime = timeScale / 60;
     }
 
     public void SaveSettings() {
@@ -103,7 +101,7 @@ public class SettingsData : MonoBehaviour {
             timeScale = 1;
         }
 
-        Time.fixedDeltaTime = timeScale / 60;
+        TimeController.CurrentTimeScale = timeScale;
     }
 
     public void ResetToDefaults() {

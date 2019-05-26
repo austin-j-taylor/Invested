@@ -194,14 +194,15 @@ public static class Keybinds {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
             return Input.GetButtonDown("GamepadY");
         else
-            return Input.GetKeyDown(KeyCode.Tab);
+            return Input.GetKeyDown(KeyCode.R);
     }
     public static bool Negate() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
             return Input.GetButton("GamepadY");
         else
-            return Input.GetKey(KeyCode.Tab);
+            return Input.GetKey(KeyCode.R);
     }
+
     public static bool StopBurning() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
             return false;
@@ -238,6 +239,23 @@ public static class Keybinds {
             return Input.GetKeyDown(KeyCode.H);
         }
     }
+
+
+    public static bool ZincTimeDown() {
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+            return false;// Input.GetButtonDown("GamepadBack"); ;
+        } else {
+            return Input.GetKeyDown(KeyCode.Tab);
+        }
+    }
+    public static bool ZincTime() {
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+            return false;// Input.GetButtonDown("GamepadBack"); ;
+        } else {
+            return Input.GetKey(KeyCode.Tab);
+        }
+    }
+
 
     // Only Gamepad
 

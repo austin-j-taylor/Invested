@@ -104,7 +104,7 @@ public class SceneSelectMenu : MonoBehaviour {
             if (scene.buildIndex != sceneTitleScreen) {
                 //Close();
                 MainMenu.Close();
-                Time.fixedDeltaTime = SettingsMenu.settingsData.timeScale / 60;
+                TimeController.CurrentTimeScale = SettingsMenu.settingsData.timeScale;
 
                 Player.PlayerInstance.gameObject.SetActive(true);
                 CameraController.LockCamera();

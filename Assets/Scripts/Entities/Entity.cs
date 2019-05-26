@@ -5,8 +5,8 @@ using System.Collections;
 * Controls the health of an entity. Makes the entity take damage whenever it collides with another object.
 */
 public class Entity : MonoBehaviour {
-    
-    protected const float fallDamageForceThreshold = 10; // any fall force above this -> painful
+
+    protected const float fallDamageSquareSpeedThreshold = 150; // any fall speed above this -> painful
 
     private double health;
     private double maxHealth;
@@ -61,7 +61,7 @@ public class Entity : MonoBehaviour {
     protected virtual void OnCollisionEnter(Collision collision) {
         Vector3 vel = Player.PlayerInstance.GetComponent<Rigidbody>().velocity;
         Vector3 thisNormal = collision.GetContact(0).normal;
-        if (Vector3.Project(collision.impulse, thisNormal).magnitude * Time.fixedDeltaTime > fallDamageForceThreshold) {
+        if (Vector3.Project(collision.relativeVelocity, thisNormal).sqrMagnitude > fallDamageSquareSpeedThreshold) {
             OnHit(collision.impulse.magnitude);
         }
     }

@@ -10,8 +10,10 @@ using VolumetricLines;
  */
 public class GameManager : MonoBehaviour {
 
-    //public static Material Material_TargetHighlight { get; private set; }
-    //public static Material Material_Gebaude { get; private set; }
+    // Sub-controllers
+    public static GraphicsController GraphicsController { get; private set; }
+
+    // Resurces
     public static Material Material_Ettmetal_Glowing { get; private set; }
     public static Font Font_Heebo { get; private set; }
     public static VolumetricLineBehavior MetalLineTemplate { get; private set; }
@@ -31,6 +33,8 @@ public class GameManager : MonoBehaviour {
     public static int Layer_BlueLinesVisible { get; private set; }
 
     void Awake() {
+        GraphicsController = GetComponent<GraphicsController>();
+
         Material_Ettmetal_Glowing = Resources.Load<Material>("Materials/CompilationShaders/Ettmetal_glowing");
         Font_Heebo = Resources.Load<Font>("Fonts/Heebo-Medium");
         MetalLineTemplate = Resources.Load<VolumetricLineBehavior>("MetalLineTemplate");

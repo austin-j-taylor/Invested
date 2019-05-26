@@ -19,9 +19,9 @@ public class PewterEntity : Entity {
      */
     protected override void OnCollisionEnter(Collision collision) {
         // If this was a hard fall, show a particle effect.
-        Vector3 vel = Player.PlayerInstance.GetComponent<Rigidbody>().velocity;
         Vector3 thisNormal = collision.GetContact(0).normal;
-        if (Vector3.Project(collision.impulse, thisNormal).magnitude * Time.fixedDeltaTime > fallDamageForceThreshold) {
+        Debug.Log(collision.relativeVelocity.sqrMagnitude + " to " + Vector3.Project(collision.relativeVelocity, thisNormal).sqrMagnitude);
+        if (Vector3.Project(collision.relativeVelocity, thisNormal).sqrMagnitude > fallDamageSquareSpeedThreshold) {
             pewter.HitSurface(-thisNormal);
             pewter.OnHit(collision.impulse.magnitude, true);
         }
