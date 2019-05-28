@@ -13,12 +13,17 @@ public class HUD : MonoBehaviour {
     private static Text fPSText;
 
     private float deltaTimeFPS = 0.0f;
-    private static GameObject hudGameObject;
 
+    public static GameObject HudGameObject {
+        get; private set;
+    }
     public static BurnPercentageMeter BurnPercentageMeter {
         get; private set;
     }
     public static MetalReserveMeters MetalReserveMeters {
+        get; private set;
+    }
+    public static ZincMeterController ZincMeterController {
         get; private set;
     }
     public static ThrowingAmmoMeter ThrowingAmmoMeter {
@@ -35,7 +40,7 @@ public class HUD : MonoBehaviour {
     }
 
     void Awake() {
-        hudGameObject = gameObject;
+        HudGameObject = gameObject;
         fPSText = GetComponentInChildren<Text>();
         BurnPercentageMeter = GetComponentInChildren<BurnPercentageMeter>();
         TargetOverlayController = GetComponentInChildren<TargetOverlayController>();
@@ -43,6 +48,7 @@ public class HUD : MonoBehaviour {
         MessageOverlayController = GetComponentInChildren<MessageOverlayController>();
         HelpOverlayController = GetComponentInChildren<HelpOverlayController>();
         MetalReserveMeters = GetComponentInChildren<MetalReserveMeters>();
+        ZincMeterController = GetComponentInChildren<ZincMeterController>();
     }
 
 	void LateUpdate() {
@@ -60,22 +66,22 @@ public class HUD : MonoBehaviour {
     }
 
     public static void EnableHUD() {
-        hudGameObject.GetComponent<CanvasGroup>().alpha = 1;
+        HudGameObject.GetComponent<CanvasGroup>().alpha = 1;
     }
 
     public static void DisableHUD() {
-        hudGameObject.GetComponent<CanvasGroup>().alpha = 0;
+        HudGameObject.GetComponent<CanvasGroup>().alpha = 0;
     }
     // Ready HUD elements for a certain simulation
 
 
     // Used by Settings to make HUD visible or invisible
     public void ShowHUD() {
-        hudGameObject.GetComponent<CanvasGroup>().alpha = 1;
+        HudGameObject.GetComponent<CanvasGroup>().alpha = 1;
     }
 
     public void HideHUD() {
-        hudGameObject.GetComponent<CanvasGroup>().alpha = 0;
+        HudGameObject.GetComponent<CanvasGroup>().alpha = 0;
     }
 
     // Clears the values currently on the HUD
@@ -88,6 +94,7 @@ public class HUD : MonoBehaviour {
                 ThrowingAmmoMeter.Clear();
                 MetalReserveMeters.Clear();
                 MessageOverlayController.Clear();
+                ZincMeterController.Clear();
             }
         }
     }

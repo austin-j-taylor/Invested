@@ -18,7 +18,7 @@ public class Player : PewterEntity {
     public static PlayerPullPushController PlayerIronSteel { get; private set; }
     public static AllomanticPewter PlayerPewter { get; private set; }
     public static Magnetic PlayerMagnetic { get; private set; }
-    private static FeruchemicalZinc PlayerZinc { get; set; }
+    public static FeruchemicalZinc PlayerZinc { get; set; }
 
     public Hand CoinHand { get; private set; }
     private static bool canControlPlayer = false;
