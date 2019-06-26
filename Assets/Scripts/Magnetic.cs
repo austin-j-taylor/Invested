@@ -12,9 +12,11 @@ using VolumetricLines;
  *      If magneticMass is left to be 0, then the object is considered to be wholly magnetic and uses netMass for the magnetic mass.
  */
 public class Magnetic : MonoBehaviour {
-
+    [SerializeField]
+    public float wieght;
+    public float radis;
     private const float metalLinesLerpConstant = .30f;
-    private readonly Color brightBlue = new Color(0, .25f, 1);
+    private readonly Color brightBlue = new Color(0, .3f, .85f);
 
     [SerializeField]
     protected float netMass = 0;

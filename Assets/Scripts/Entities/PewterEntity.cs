@@ -18,11 +18,14 @@ public class PewterEntity : Entity {
      * they should take damage (eventually. Now, just show some particle effects.)
      */
     protected override void OnCollisionEnter(Collision collision) {
-        // If this was a hard fall, show a particle effect.
-        Vector3 thisNormal = collision.GetContact(0).normal;
-        if (Vector3.Project(collision.relativeVelocity, thisNormal).sqrMagnitude > fallDamageSquareSpeedThreshold) {
-            pewter.HitSurface(-thisNormal);
-            pewter.OnHit(collision.impulse.magnitude, true);
+        // just ignore the player pulling coins into themself
+        if (!collision.collider.CompareTag("Coin")) {
+            // If this was a hard fall, show a particle effect.
+            Vector3 thisNormal = collision.GetContact(0).normal;
+            if (Vector3.Project(collision.relativeVelocity, thisNormal).sqrMagnitude > fallDamageSquareSpeedThreshold) {
+                pewter.HitSurface(-thisNormal);
+                pewter.OnHit(collision.impulse.magnitude, true);
+            }
         }
     }
 

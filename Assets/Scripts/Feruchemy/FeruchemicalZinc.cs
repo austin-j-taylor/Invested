@@ -8,9 +8,9 @@ using System.Collections;
 public class FeruchemicalZinc : MonoBehaviour {
 
     // The maximum time that zinc will slow down for
-    private const float maxTime = 10;
+    private const float maxTime = 8;
 
-    private float slowPercent = 0.1f; // the time scale that zinc slows time down to
+    private float slowPercent = 1 / 8f; // the time scale that zinc slows time down to
 
     private bool inZincTime;
     // percentage of available zinc

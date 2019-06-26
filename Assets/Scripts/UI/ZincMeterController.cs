@@ -9,8 +9,8 @@ public class ZincMeterController : MonoBehaviour {
     private const bool down = false;
 
     private const float timeToFade = .0001f;//1;
-    private const float highX = -28.25f;
-    private const float highY = 40.291f;
+    private const float highX = -28.25f / 2;
+    private const float highY = 40.291f / 2;
     private const float speedFactor = .2f;
 
     private readonly Vector2 lowTop = new Vector2(-highX, -highY);

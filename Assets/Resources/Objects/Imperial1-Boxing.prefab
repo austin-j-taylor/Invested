@@ -15,8 +15,8 @@ GameObject:
   - component: {fileID: 23038824907362904}
   - component: {fileID: 65406625091925594}
   m_Layer: 9
-  m_Name: Imperial 1-Boxing
-  m_TagString: Untagged
+  m_Name: Imperial1-Boxing
+  m_TagString: Coin
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -63,8 +63,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9913c335b09fa054381d87f73d8bedc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  wieght: 0
+  radis: 0
   netMass: 0
   magneticMass: 0
+  childMagnetics: []
 --- !u!33 &33185363050400424
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -98,6 +101,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
