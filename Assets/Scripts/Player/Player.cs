@@ -31,7 +31,7 @@ public class Player : PewterEntity {
             canControlPlayer = value;
             if (!value) {
                 PlayerIronSteel.SoftClear();
-                PlayerZinc.Clear();
+                //PlayerZinc.Clear();
             }
         }
     }
@@ -53,7 +53,7 @@ public class Player : PewterEntity {
 
     private float lastCoinThrowTime = 0;
     // In coinshot mode, clicking down to ironpull while pushing throws a coin, similar to conventional first-person shooters.
-    private bool coinshotMode = false;
+    public static bool CoinshotMode { get; private set; } = false;
 
     protected override void Awake() {
         base.Awake();
@@ -80,10 +80,10 @@ public class Player : PewterEntity {
     void Update() {
         if (CanControlPlayer) {
             if (Keybinds.ToggleCoinshotMode()) {
-                coinshotMode = !coinshotMode;
+                CoinshotMode = !CoinshotMode;
             }
             // On throwing a coin
-            if ((coinshotMode && Keybinds.IronPulling() && Keybinds.SteelPushing() || Keybinds.WithdrawCoinDown()) && lastCoinThrowTime + (coinCooldown * Time.timeScale )< Time.time) {
+            if ((CoinshotMode && Keybinds.IronPulling() && Keybinds.SteelPushing() || Keybinds.WithdrawCoinDown()) && lastCoinThrowTime + (coinCooldown * Time.timeScale )< Time.time) {
                 lastCoinThrowTime = Time.time;
                 PlayerIronSteel.AddPushTarget(CoinHand.WithdrawCoinToHand());
             }

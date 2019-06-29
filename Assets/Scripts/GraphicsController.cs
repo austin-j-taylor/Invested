@@ -18,6 +18,8 @@ public class GraphicsController : MonoBehaviour {
         profile.antialiasing.enabled = SettingsMenu.settingsData.antialiasing == 1;
         profile.ambientOcclusion.enabled = SettingsMenu.settingsData.ambientOcclusion == 1;
         profile.motionBlur.enabled = SettingsMenu.settingsData.motionBlur == 1;
+        profile.chromaticAberration.enabled = false;
+        profile.vignette.enabled = false;
 
         aberrationSettings = profile.chromaticAberration.settings;
         vignetteSettings = profile.vignette.settings;

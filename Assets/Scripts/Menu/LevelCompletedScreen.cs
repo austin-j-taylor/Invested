@@ -9,6 +9,11 @@ public class LevelCompletedScreen : MonoBehaviour {
     private static GameObject levelCompletedScreen;
 
     public static HarmonyTarget InTarget { get; set; }
+    public static bool IsOpen {
+        get {
+            return levelCompletedScreen.activeSelf;
+        }
+    }
 
     // Use this for initialization
     void Start() {

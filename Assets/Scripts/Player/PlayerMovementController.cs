@@ -82,19 +82,21 @@ public class PlayerMovementController : AllomanticPewter {
     }
 
     private void Update() {
-        // Check if jumping
-        if (IsGrounded && Keybinds.JumpDown()) {
-            // Queue a jump for the next FixedUpdate
-            // Actual jumping done in FixedUpdate to stay in sync with PlayerGroundedChecker
-            jumpQueued = true;
-        } else {
-            jumpQueued = false;
-        }
-        // Check if sprinting
-        if (Keybinds.Sprint() && PewterReserve.HasMass) {
-            IsSprinting = true;
-        } else {
-            IsSprinting = false;
+        if (Player.CanControlPlayer) {
+            // Check if jumping
+            if (IsGrounded && Keybinds.JumpDown()) {
+                // Queue a jump for the next FixedUpdate
+                // Actual jumping done in FixedUpdate to stay in sync with PlayerGroundedChecker
+                jumpQueued = true;
+            } else {
+                jumpQueued = false;
+            }
+            // Check if sprinting
+            if (Keybinds.Sprint() && PewterReserve.HasMass) {
+                IsSprinting = true;
+            } else {
+                IsSprinting = false;
+            }
         }
     }
 

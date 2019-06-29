@@ -165,7 +165,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
 
                         // Search for Metals
 
-                        bool pulling = Keybinds.IronPulling() && HasIron;
+                        bool pulling = Keybinds.IronPulling() && HasIron;// && !(Player.CoinshotMode && Keybinds.SteelPushing()); // in coinshot mode, you cannot push and pull simultaneously
                         bool pushing = Keybinds.SteelPushing() && HasSteel;
                         // If you are trying to push and pull and only have pullTargets, only push. And vice versa
                         if (!HasPushTarget && HasPullTarget) {

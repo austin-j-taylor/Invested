@@ -76,7 +76,9 @@ public class PauseMenu : MonoBehaviour {
         if (IsPaused) {
             settingsMenu.Close();
 
-            CameraController.LockCamera();
+            if(!LevelCompletedScreen.IsOpen) {
+                CameraController.LockCamera();
+            }
             Time.timeScale = TimeController.CurrentTimeScale;
             Close();
             instance.gameObject.SetActive(false);

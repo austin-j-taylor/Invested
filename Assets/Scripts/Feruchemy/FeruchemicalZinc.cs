@@ -51,7 +51,7 @@ public class FeruchemicalZinc : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        if (Player.CanControlPlayer) {
+        if (!PauseMenu.IsPaused) {
             if (inZincTime) {
                 Rate = -Time.deltaTime / slowPercent / maxTime;
                 Reserve += Rate;
@@ -60,12 +60,12 @@ public class FeruchemicalZinc : MonoBehaviour {
                     Rate = 0;
                 }
 
-                if(!Keybinds.ZincTime() || Reserve == 0) {
+                if (!Keybinds.ZincTime() || Reserve == 0 || !Player.CanControlPlayer) {
                     inZincTime = false;
                     endReserve = Reserve;
                     HUD.ZincMeterController.SideEnabled = false;
                     TimeController.CurrentTimeScale = SettingsMenu.settingsData.timeScale;
-                    if(Reserve == 0) {
+                    if (Reserve == 0) {
                         GameManager.GraphicsController.SetZincEffect(false);
                         recovering = false;
                     } else {
@@ -78,32 +78,33 @@ public class FeruchemicalZinc : MonoBehaviour {
                 }
                 HUD.ZincMeterController.ChangeSpikePosition((float)Reserve);
             } else {
-                Rate = Time.deltaTime / maxTime;
-                Reserve += Rate;
-                if (Reserve > 1) {
-                    if(recovering) {
-                        recovering = false;
-                        GameManager.GraphicsController.SetZincEffect(false);
+                if (Reserve < 1) {
+                    Rate = Time.deltaTime / maxTime;
+                    Reserve += Rate;
+                    if (Reserve > 1) {
+                        if (recovering) {
+                            recovering = false;
+                            GameManager.GraphicsController.SetZincEffect(false);
+                        }
+                        Reserve = 1;
+                        Rate = 0;
                     }
-                    Reserve = 1;
-                    Rate = 0;
-                } else {
                     HUD.ZincMeterController.ChangeSpikePosition((float)Reserve);
                 }
 
-                if (Keybinds.ZincTimeDown() && Reserve > 0) {
+                if (Keybinds.ZincTimeDown() && Reserve > 0 && Player.CanControlPlayer) {
                     inZincTime = true;
                     recovering = false;
                     startReserve = Reserve;
                     HUD.ZincMeterController.SideEnabled = true;
                     TimeController.CurrentTimeScale = slowPercent * SettingsMenu.settingsData.timeScale;
                     GameManager.GraphicsController.SetZincEffect(true, calculateIntensity((float)Reserve));
-                } else if(recovering) {
+                } else if (recovering) {
                     // player recently exiting zinc time; continue showing screen effect until it's gone
                     GameManager.GraphicsController.SetZincEffect(true, calculateRecovering());
 
                     // if done recovering, truly end zinc effect
-                    if(!recovering) {
+                    if (!recovering) {
                         GameManager.GraphicsController.SetZincEffect(false);
                     }
                 }

@@ -4,6 +4,8 @@ using System.Collections;
 /*
  * Controls all aspects of Allomantic Pewter.
  * Controls the particle system associated with using pewter.
+ * 
+ * Player-specific pewter management is in PlayerMovementController.
  */
 
 [RequireComponent(typeof(Rigidbody))]
