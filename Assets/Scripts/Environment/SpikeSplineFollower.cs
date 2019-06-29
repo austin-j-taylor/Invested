@@ -7,11 +7,12 @@ public class SpikeSplineFollower : SpikeSpline {
     private const int stepsPerCurve = 30;
     private const float distanceThreshold = .01f;
     private const float forwardTimeOffset = .2f;
-    private float progress = 0;
+    private const float luminosityFactor = .5f;
 
     private const float forceConstantFar = 40f;
 
     private VolumetricLineStripBehavior volLines;
+    private float progress = 0;
 
     void Start() {
         int steps = stepsPerCurve * CurveCount;
@@ -24,7 +25,7 @@ public class SpikeSplineFollower : SpikeSpline {
         volLines = Instantiate(GameManager.MetalLineStripTemplate);
         volLines.GetComponent<MeshRenderer>().enabled = true;
         volLines.UpdateLineVertices(points);
-        volLines.LineColor = new Color(0, AllomanticIronSteel.lowLineColor, AllomanticIronSteel.highLineColor, 1);
+        volLines.LineColor = new Color(0, AllomanticIronSteel.lowLineColor * luminosityFactor, AllomanticIronSteel.highLineColor * luminosityFactor, 1);
         volLines.LightSaberFactor = 1;
         volLines.LineWidth = AllomanticIronSteel.blueLineThirdPersonWidth;
     }

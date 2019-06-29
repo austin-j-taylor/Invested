@@ -9,10 +9,12 @@ public class FeruchemicalZinc : MonoBehaviour {
 
     // The maximum time that zinc will slow down for
     private const float maxTime = 8;
-
-    private float slowPercent = 1 / 8f; // the time scale that zinc slows time down to
+    // the time scale that zinc slows time down to
+    // interestingly, 1/8 is about the same that in-world speed bubbles slow time down by (Alloy of Law, 2 minutes into about 15s)
+    private const float slowPercent = 1 / 8f;
 
     private bool inZincTime;
+    private double startReserve; // the reserve that the player last entered zinc time at
     // percentage of available zinc
     // 100% -> do not move
     // 0% -> maximum movement
@@ -48,9 +50,10 @@ public class FeruchemicalZinc : MonoBehaviour {
                 if(!Keybinds.ZincTime() || Reserve == 0) {
                     inZincTime = false;
                     HUD.ZincMeterController.SideEnabled = false;
-
                     TimeController.CurrentTimeScale = SettingsMenu.settingsData.timeScale;
-                    GameManager.GraphicsController.SetMotionBlur(SettingsMenu.settingsData.motionBlur == 1);
+                    GameManager.GraphicsController.SetZincEffect(false);
+                } else {
+                    GameManager.GraphicsController.SetZincEffect(true, (float)Reserve, (float)(startReserve));
                 }
                 HUD.ZincMeterController.ChangeSpikePosition((float)Reserve);
             } else {
@@ -65,9 +68,10 @@ public class FeruchemicalZinc : MonoBehaviour {
 
                 if (Keybinds.ZincTimeDown() && Reserve > 0) {
                     inZincTime = true;
+                    startReserve = Reserve;
                     HUD.ZincMeterController.SideEnabled = true;
                     TimeController.CurrentTimeScale = slowPercent * SettingsMenu.settingsData.timeScale;
-                    GameManager.GraphicsController.SetMotionBlur(false);
+                    GameManager.GraphicsController.SetZincEffect(true, (float)Reserve, (float)(startReserve));
                 }
             }
         }

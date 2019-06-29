@@ -27,14 +27,15 @@ public class BezierCurveEditor : Editor {
     public override void OnInspectorGUI() {
         spline = target as BezierCurve;
         EditorGUI.BeginChangeCheck();
-        bool loop = EditorGUILayout.Toggle("Loop", spline.Loop);
-        float animationTime = EditorGUILayout.FloatField("Animation Time", spline.AnimationTime);
+        serializedObject.FindProperty("loop").boolValue = EditorGUILayout.Toggle("Loop", spline.Loop);
+        serializedObject.FindProperty("animationTime").floatValue = EditorGUILayout.FloatField("Animation Time", spline.AnimationTime);
         if (EditorGUI.EndChangeCheck()) {
             Undo.RecordObject(spline, "Toggle Loop");
             Undo.RecordObject(spline, "Change Animation Time");
             EditorUtility.SetDirty(spline);
-            spline.Loop = loop;
-            spline.AnimationTime = animationTime;
+            spline.Loop = serializedObject.FindProperty("loop").boolValue;
+            spline.AnimationTime = serializedObject.FindProperty("animationTime").floatValue;
+            serializedObject.ApplyModifiedProperties();
         }
         if (selectedIndex >= 0 && selectedIndex < spline.ControlPointCount) {
             DrawSelectedPointInspector();

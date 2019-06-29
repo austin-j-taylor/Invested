@@ -10,6 +10,7 @@ public enum BezierControlPointMode {
 /*
  * Modified from https://catlikecoding.com/unity/tutorials/curves-and-splines/
  */
+ [System.Serializable]
 public class BezierCurve : MonoBehaviour {
 
     [SerializeField]
@@ -40,7 +41,9 @@ public class BezierCurve : MonoBehaviour {
     public int ControlPointCount { get { return points.Length; } }
     public int CurveCount { get { return (points.Length - 1) / 3; } }
 
+    [SerializeField]
     private bool loop;
+    [SerializeField]
     private float animationTime = 5;
 
     public void Reset() {
