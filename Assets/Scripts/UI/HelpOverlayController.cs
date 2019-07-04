@@ -65,6 +65,9 @@ public class HelpOverlayController : MonoBehaviour {
             ;
             HelpTextRight.text = string.Empty;
         }
+        if(FlagsController.HelpOverlayFuller) {
+            HelpTextRight.text += KeyZincTime + " to activate " + ZincTime + ", slowing down time.";
+        }
     }
 
     // Not called by Button

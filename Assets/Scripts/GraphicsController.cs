@@ -46,7 +46,7 @@ public class GraphicsController : MonoBehaviour {
         profile.vignette.enabled = enable;
         if (enable) {
             aberrationSettings.intensity = intensity;
-            vignetteSettings.intensity = intensity / 4;
+            vignetteSettings.intensity = intensity / 3;
             profile.chromaticAberration.settings = aberrationSettings;
             profile.vignette.settings = vignetteSettings;
             return intensity;

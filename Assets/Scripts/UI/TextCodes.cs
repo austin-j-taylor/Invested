@@ -44,6 +44,9 @@ public class TextCodes : MonoBehaviour {
     public static string LightBlue(string s) {
         return "<color=#7fdfff>" + s + "</color>";
     }
+    public static string ZincBlue(string s) {
+        return "<color=#c1dbff>" + s + "</color>";
+    }
     public static string LightRed(string s) {
         return "<color=#ffbfbf>" + s + "</color>";
     }
@@ -157,6 +160,11 @@ public class TextCodes : MonoBehaviour {
     public static string CoinshotMode {
         get {
             return Gold("Coinshot mode");
+        }
+    }
+    public static string ZincTime {
+        get {
+            return ZincBlue("Zinc Time");
         }
     }
     public static string BurnPercentage {
@@ -306,7 +314,12 @@ public class TextCodes : MonoBehaviour {
     }
     public static string Tab {
         get {
-            return Gray("Tab");
+            return ZincBlue("Tab");
+        }
+    }
+    public static string R {
+        get {
+            return Gray("R");
         }
     }
     public static string WASD {
@@ -397,6 +410,14 @@ public class TextCodes : MonoBehaviour {
                 return s_Hold_ + LeftClick + " or " + RightClick;
         }
     }
+    public static string KeyZincTime {
+        get {
+            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+                return s_Hold_ + "[UNIMPLEMENTED]";
+            else
+                return s_Hold_ + Tab;
+        }
+    }
     public static string KeySelect {
         get {
             switch (SettingsMenu.settingsData.controlScheme) {
@@ -443,42 +464,29 @@ public class TextCodes : MonoBehaviour {
         get {
             switch (SettingsMenu.settingsData.controlScheme) {
                 case SettingsData.MK54: {
-                        return s_Press_ + LightBlue(s_Mouse_Button_5) + " or " + LightRed(s_Mouse_Button_4);
+                        return Pull + ", " + Push + ", or " + s_Press_ + LightBlue(s_Mouse_Button_5) + " or " + LightRed(s_Mouse_Button_4);
                     }
                 case SettingsData.MK45: {
-                        return s_Press_ + LightBlue(s_Mouse_Button_4) + " or " + LightRed(s_Mouse_Button_5);
+                        return Pull + ", " + Push + ", or " + s_Press_ + LightBlue(s_Mouse_Button_4) + " or " + LightRed(s_Mouse_Button_5);
                     }
                 case SettingsData.MKEQ: {
-                        return s_Press_ + LightBlue(s_E) + " or " + LightRed(s_Q);
+                        return Pull + ", " + Push + ", or " + s_Press_ + LightBlue(s_E) + " or " + LightRed(s_Q);
                     }
                 case SettingsData.MKQE: {
-                        return s_Press_ + LightBlue(s_Q) + " or " + LightRed(s_E);
+                        return Pull + ", " + Push + ", or " + s_Press_ + LightBlue(s_Q) + " or " + LightRed(s_E);
                     }
                 default: {
-                        return s_Press_ + LightBlue(s_Right_Bumper) + " or " + LightRed(s_Left_Bumper);
+                        return Pull + ", " + Push + ", or " + s_Press_ + LightBlue(s_Right_Bumper) + " or " + LightRed(s_Left_Bumper);
                     }
             }
         }
     }
     public static string KeyStartBurningIron {
         get {
-            switch (SettingsMenu.settingsData.controlScheme) {
-                case SettingsData.MK54: {
-                        return s_Press_ + LightBlue(s_Mouse_Button_5);
-                    }
-                case SettingsData.MK45: {
-                        return s_Press_ + LightBlue(s_Mouse_Button_4);
-                    }
-                case SettingsData.MKEQ: {
-                        return s_Press_ + LightBlue(s_E);
-                    }
-                case SettingsData.MKQE: {
-                        return s_Press_ + LightBlue(s_Q);
-                    }
-                default: {
-                        return s_Press_ + LightBlue(s_Right_Bumper);
-                    }
-            }
+            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+                return s_Press_ + LightBlue(s_Right_Bumper);
+            else
+                return s_Press_ + LightBlue(s_Left_Click);
         }
     }
     //public static string KeyStopBurning {
@@ -506,16 +514,16 @@ public class TextCodes : MonoBehaviour {
         get {
             switch (SettingsMenu.settingsData.controlScheme) {
                 case SettingsData.MK54: {
-                        return "Decrease " + BurnPercentage + " to 0% or " + s_Press_ + Gray("X") + " or " + s_Hold_ + Tab + ", " + LightBlue(s_Mouse_Button_5) + ", and " + LightRed(s_Mouse_Button_4);
+                        return "Decrease " + BurnPercentage + " to 0% or " + s_Press_ + Gray("X") + " or " + s_Hold_ + R + ", " + LightBlue(s_Mouse_Button_5) + ", and " + LightRed(s_Mouse_Button_4);
                     }
                 case SettingsData.MK45: {
-                        return "Decrease " + BurnPercentage + " to 0% or " + s_Press_ + Gray("X") + " or " + s_Hold_ + Tab + ", " + LightBlue(s_Mouse_Button_4) + ", and " + LightRed(s_Mouse_Button_5);
+                        return "Decrease " + BurnPercentage + " to 0% or " + s_Press_ + Gray("X") + " or " + s_Hold_ + R + ", " + LightBlue(s_Mouse_Button_4) + ", and " + LightRed(s_Mouse_Button_5);
                     }
                 case SettingsData.MKEQ: {
-                        return "Decrease " + BurnPercentage + " to 0% or " + s_Press_ + Gray("X") + " or " + s_Hold_ + Tab + ", " + LightBlue(s_E) + ", and " + LightRed(s_Q);
+                        return "Decrease " + BurnPercentage + " to 0% or " + s_Press_ + Gray("X") + " or " + s_Hold_ + R + ", " + LightBlue(s_E) + ", and " + LightRed(s_Q);
                     }
                 case SettingsData.MKQE: {
-                        return "Decrease " + BurnPercentage + " to 0% or " + s_Press_ + Gray("X") + " or " + s_Hold_ + Tab + ", " + LightBlue(s_Q) + ", and " + LightRed(s_E);
+                        return "Decrease " + BurnPercentage + " to 0% or " + s_Press_ + Gray("X") + " or " + s_Hold_ + R + ", " + LightBlue(s_Q) + ", and " + LightRed(s_E);
                     }
                 default: {
                         return s_Hold_ + Y + ", " + LightBlue(s_Right_Bumper) + ", and " + LightRed(s_Left_Bumper);
@@ -536,7 +544,7 @@ public class TextCodes : MonoBehaviour {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
                 return Y;
             else
-                return Tab;
+                return R;
         }
     }
     public static string KeyPushPullStrength {
@@ -584,7 +592,7 @@ public class TextCodes : MonoBehaviour {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
                 return "Double-tap " + Y;
             else
-                return "Double-tap " + Tab;
+                return "Double-tap " + R;
         }
     }
     public static string KeyCoinshotMode {

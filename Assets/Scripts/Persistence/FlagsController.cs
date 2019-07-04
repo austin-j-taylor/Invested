@@ -8,37 +8,52 @@ public class FlagsController : MonoBehaviour {
     private const string flagsFileName = "Data/flags.json";
 
     // Flags
+    // can't make them private because json-parsing has no brains
     public bool controlSchemeChosen;
     public bool helpOverlayFull;
+    public bool helpOverlayFuller;
 
-    private static FlagsController instance;
-
+    // Use these externally just to feel better about yourself
     public static bool ControlSchemeChosen {
         get {
             return instance.controlSchemeChosen;
         }
         set {
             instance.controlSchemeChosen = value;
-            instance.SaveSettings();
-            HUD.HelpOverlayController.UpdateText();
+            instance.Refresh();
         }
     }
-
     public static bool HelpOverlayFull {
         get {
             return instance.helpOverlayFull;
         }
         set {
             instance.helpOverlayFull = value;
-            instance.SaveSettings();
-            HUD.HelpOverlayController.UpdateText();
+            instance.Refresh();
         }
     }
+    public static bool HelpOverlayFuller {
+        get {
+            return instance.helpOverlayFuller;
+        }
+        set {
+            instance.helpOverlayFuller = value;
+            instance.Refresh();
+        }
+    }
+
+    private static FlagsController instance;
 
     private void Awake() {
         instance = this;
         LoadSettings();
     }
+
+    private void Refresh() {
+        SaveSettings();
+        HUD.HelpOverlayController.UpdateText();
+    }
+    
 
     public void LoadSettings() {
         try {

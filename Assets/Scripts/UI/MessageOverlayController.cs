@@ -10,7 +10,7 @@ using static TextCodes;
  */
 public class MessageOverlayController : MonoBehaviour {
 
-    private const int numberOfMessages = 12;
+    private const int numberOfMessages = 13;
 
     public Text HeaderText { get; private set; }
     public Text MessageText { get; private set; }
@@ -70,7 +70,6 @@ public class MessageOverlayController : MonoBehaviour {
         TriggerBeadMessages[1] = new List<string> {
             "Pulling",
             KeyStartBurningIron + "\n\t\tto start burning " + Iron + ".",
-            s_Press_ + KeySelect + "\n\t\tto select a metal to be a " + Pull_target + ".\n",
             KeyPull + " to " + Pull + ".\n"
         };
         TriggerBeadMessages[2] = new List<string> {
@@ -81,7 +80,8 @@ public class MessageOverlayController : MonoBehaviour {
                 KeyPush + " to " + Push + ".",
             "While holding " + KeyNegate + ", " + s_Press_ + KeySelect + "\n\t\t to deselect a " + Pull_target +
                 ".\nLikewise for " + KeySelectAlternate + " and " + Push_targets + ".",
-            KeyHelp + " to toggle the " + HelpOverlay + ".\nPlay around a bit before proceeding."
+            "Get familiar with these controls before proceeding.\n" +
+            KeyHelp + " to toggle the " + HelpOverlay + ".\n"
         };
         TriggerBeadMessages[3] = new List<string> {
             "Pulling",
@@ -131,6 +131,12 @@ public class MessageOverlayController : MonoBehaviour {
             KeyDrop + " to drop a coin at your feet. Try " + Pushing + " on it.",
             "\t\t• " + KeyDropDirection + " while dropping a coin to toss the coin away from that direction.\n\n\tScale the wall using " + O_Coins + " and " + Pewter + 
                 ".\n\n\t(Hint: multi-targeting is your best friend when using coins.)\n\t(" + KeyHelp + " to toggle the " + HelpOverlay + ".)"
+        };
+        TriggerBeadMessages[12] = new List<string> {
+            "Zinc Compounding Engine",
+            KeyZincTime + " to activate " + ZincTime + ".\n" +
+            "The primer sphere's processing speed significantly accelerates, slowing down time.\n" +
+            "The sphere's sensors lag behind the processor, causing redshift if the engine is overused."
         };
 
 

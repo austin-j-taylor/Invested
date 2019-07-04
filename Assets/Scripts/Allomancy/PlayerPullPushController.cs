@@ -89,9 +89,9 @@ public class PlayerPullPushController : AllomanticIronSteel {
             } else {
                 // Start burning
                 if (!Keybinds.Negate()) {
-                    if (Keybinds.SelectDown())
+                    if (Keybinds.SelectDown() || Keybinds.PullDown())
                         StartBurning(true);
-                    else if (Keybinds.SelectAlternateDown())
+                    else if (Keybinds.SelectAlternateDown() || Keybinds.PushDown())
                         StartBurning(false);
                 }
             }

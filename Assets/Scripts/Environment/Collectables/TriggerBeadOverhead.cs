@@ -7,7 +7,7 @@
  */
 public class TriggerBeadOverhead : MonoBehaviour {
 
-    public enum Section { tutorial1 = 0, tutorial2 = 3 };
+    public enum Section { tutorial1 = 0, tutorial2 = 3, sandbox1 = 12 };
 
     public Section section;
     
@@ -21,7 +21,7 @@ public class TriggerBeadOverhead : MonoBehaviour {
         //    beadMessages[i].overhead = this;
         //}
 
-        TriggerBeadPopupListener[] beadListeners = GetComponentsInChildren<TriggerBeadPopupListener>(true);
+        TriggerBeadPopup[] beadListeners = GetComponentsInChildren<TriggerBeadPopup>(true);
         for (int i = 0; i < beadListeners.Length; i++) {
             beadListeners[i].section = (int)section + i;
             beadListeners[i].index = 1;
