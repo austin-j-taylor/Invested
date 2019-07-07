@@ -48,8 +48,6 @@ public class SpikePit : MonoBehaviour {
         splineDragging = splines[0];
         splineReturnHome = splines[1];
 
-        spike.LinesAreVisibleWhenNotBurning = true;
-
         facingPlayer = false;
         tracingPlayer = false;
         chasingPlayer = false;
@@ -192,6 +190,7 @@ public class SpikePit : MonoBehaviour {
                     progress = 0;
 
                     Player.CanControlPlayer = true;
+                    Player.PlayerIronSteel.StopBurning();
 
                     Player.PlayerInstance.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
                     Player.PlayerInstance.transform.SetParent(GameObject.FindGameObjectWithTag("GameController").transform);

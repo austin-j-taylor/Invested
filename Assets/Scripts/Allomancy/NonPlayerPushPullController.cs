@@ -10,7 +10,7 @@ public class NonPlayerPushPullController : AllomanticIronSteel {
     public VolumetricLineBehavior[] pullLines;
     public VolumetricLineBehavior[] pushLines;
 
-    public bool LinesAreVisibleWhenNotBurning {
+    public bool LinesAreVisible {
         set {
             if (value) {
                 for (int i = 0; i < maxNumberOfTargets; i++) {
@@ -30,25 +30,31 @@ public class NonPlayerPushPullController : AllomanticIronSteel {
         base.Awake();
         IronReserve.IsEndless = true;
         SteelReserve.IsEndless = true;
-        
+        PullTargets.MaxRange = -1;
+        PushTargets.MaxRange = -1;
+
         pullLines = new VolumetricLineBehavior[maxNumberOfTargets];
         pushLines = new VolumetricLineBehavior[maxNumberOfTargets];
         for (int i = 0; i < maxNumberOfTargets; i++) {
             pullLines[i] = Instantiate(GameManager.MetalLineTemplate);
             pushLines[i] = Instantiate(GameManager.MetalLineTemplate);
         }
+
+        LinesAreVisible = true;
     }
 
     private void LateUpdate() {
         if (!PauseMenu.IsPaused) {
             for (int i = 0; i < maxNumberOfTargets; i++) {
                 // Non-existent target, disable blue line
-                if (PullTargets[i] != Player.PlayerMagnetic || !IronPulling) {
+                //if (PullTargets[i] != Player.PlayerMagnetic || !IronPulling) {
+                if (i >= PullTargets.Count || !IronPulling) {
                     pullLines[i].gameObject.SetActive(false);
                 } else {
                     UpdateLines(true, i);
                 }
-                if (PushTargets[i] != Player.PlayerMagnetic || !SteelPushing) {
+                //if (PushTargets[i] != Player.PlayerMagnetic || !SteelPushing) {
+                if (i >= PushTargets.Count || !SteelPushing) {
                     pushLines[i].gameObject.SetActive(false);
                 } else {
                     UpdateLines(false, i);

@@ -5,7 +5,7 @@ using System.IO;
 [System.Serializable]
 public class FlagsController : MonoBehaviour {
 
-    private const string flagsFileName = "Data/flags.json";
+    private readonly string flagsFileName = Application.streamingAssetsPath + "/Data/flags.json";
 
     // Flags
     // can't make them private because json-parsing has no brains

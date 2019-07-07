@@ -6,7 +6,8 @@ using UnityEngine.SceneManagement;
  */
 public class Player : PewterEntity {
 
-    private const float coinCooldown = 1f / 10;
+    private const float coinCooldownThreshold = 1f / 10;
+    private const float zincTimeCoinThrowModifier = 2; // throw coins faster while in zinc time
 
     //private Animator animator;
     private PlayerMovementController movementController;
@@ -51,7 +52,7 @@ public class Player : PewterEntity {
         }
     }
 
-    private float lastCoinThrowTime = 0;
+    private float coinCooldownTimer = 0;
     // In coinshot mode, clicking down to ironpull while pushing throws a coin, similar to conventional first-person shooters.
     public static bool CoinshotMode { get; private set; } = false;
 
@@ -83,9 +84,11 @@ public class Player : PewterEntity {
                 CoinshotMode = !CoinshotMode;
             }
             // On throwing a coin
-            if ((CoinshotMode && Keybinds.IronPulling() && Keybinds.SteelPushing() || Keybinds.WithdrawCoinDown()) && lastCoinThrowTime + (coinCooldown * Time.timeScale )< Time.time) {
-                lastCoinThrowTime = Time.time;
+            if ((CoinshotMode && Keybinds.IronPulling() && Keybinds.SteelPushing() || Keybinds.WithdrawCoinDown()) && coinCooldownTimer > coinCooldownThreshold) {
+                coinCooldownTimer = 0;
                 PlayerIronSteel.AddPushTarget(CoinHand.WithdrawCoinToHand());
+            } else {
+                coinCooldownTimer += Time.deltaTime * (PlayerZinc.InZincTime ? 2 : 1); // throw coins 
             }
         }
     }

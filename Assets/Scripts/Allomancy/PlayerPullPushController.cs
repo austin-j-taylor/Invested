@@ -68,7 +68,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
      * Update blue lines pointing from player to metal.
      */
     private void LateUpdate() {
-        if (!PauseMenu.IsPaused) {
+        if (!PauseMenu.IsPaused && Player.CanControlPlayer) {
             // Start and Stop Burning metals
             if (IsBurning) {
                 // Stop burning
@@ -410,8 +410,6 @@ public class PlayerPullPushController : AllomanticIronSteel {
         } else {
             // Assign weighting due to position
             weight = .1f / radialDistance - lateralDistance / 500;
-            target.wieght = weight;
-            target.radis = radialDistance;
         }
 
         if (SettingsMenu.settingsData.renderblueLines == 1) {

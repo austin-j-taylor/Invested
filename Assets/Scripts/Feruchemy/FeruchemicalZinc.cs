@@ -21,7 +21,7 @@ public class FeruchemicalZinc : MonoBehaviour {
     // interestingly, 1/8 is about the same that in-world speed bubbles slow time down by (Alloy of Law, 2 minutes into about 15s)
     private const float slowPercent = 1 / 8f;
 
-    private bool inZincTime;
+    public bool InZincTime { get; private set; }
     private bool recovering;
     private double startReserve; // the reserve that the player last entered zinc time at
     private double endReserve; // the reserve that the player last exited zinc time at
@@ -38,7 +38,7 @@ public class FeruchemicalZinc : MonoBehaviour {
     }
 
     public void Clear() {
-        inZincTime = false;
+        InZincTime = false;
         recovering = false;
         Reserve = 1;
         startReserve = 1;
@@ -52,7 +52,7 @@ public class FeruchemicalZinc : MonoBehaviour {
     // Update is called once per frame
     void Update() {
         if (!PauseMenu.IsPaused) {
-            if (inZincTime) {
+            if (InZincTime) {
                 Rate = -Time.deltaTime / slowPercent / maxTime;
                 Reserve += Rate;
                 if (Reserve < 0) {
@@ -60,8 +60,8 @@ public class FeruchemicalZinc : MonoBehaviour {
                     Rate = 0;
                 }
 
-                if (!Keybinds.ZincTime() || Reserve == 0 || !Player.CanControlPlayer) {
-                    inZincTime = false;
+                if (!Keybinds.ZincTime() || Reserve == 0 || !Player.CanControlPlayer || (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad && Keybinds.ZincTimeDown())) {
+                    InZincTime = false;
                     endReserve = Reserve;
                     HUD.ZincMeterController.SideEnabled = false;
                     TimeController.CurrentTimeScale = SettingsMenu.settingsData.timeScale;
@@ -93,7 +93,7 @@ public class FeruchemicalZinc : MonoBehaviour {
                 }
 
                 if (Keybinds.ZincTimeDown() && Reserve > 0 && Player.CanControlPlayer) {
-                    inZincTime = true;
+                    InZincTime = true;
                     recovering = false;
                     startReserve = Reserve;
                     HUD.ZincMeterController.SideEnabled = true;

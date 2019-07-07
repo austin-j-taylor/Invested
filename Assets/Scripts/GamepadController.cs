@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_STANDALONE_WIN
 using XInputDotNetPure;
+#endif
 /*
  * GamepadController is a mostly static class used to set controller vibrations.
  * GamepadRumble actually sends the vibration values to the GamePad/deals with IEnumerators.
@@ -61,7 +63,8 @@ public class GamepadController : MonoBehaviour {
     }
 
     private class GamepadRumble : MonoBehaviour {
-        
+
+#if UNITY_STANDALONE_WIN
         // Update is called once per frame
         void Update() {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
@@ -75,9 +78,11 @@ public class GamepadController : MonoBehaviour {
                 }
             }
         }
+#endif
 
         // Overrides the current left and right rumbles to shake the controller for a short time.
         public void Shake(float left, float right, float time) {
+#if UNITY_STANDALONE_WIN
             StartCoroutine(ShakeController(left, right, time));
         }
 
@@ -89,6 +94,7 @@ public class GamepadController : MonoBehaviour {
                 GamePad.SetVibration(0, leftRumble, RightRumble);
                 shaking = false;
             }
+#endif
         }
     }
 }

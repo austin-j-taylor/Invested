@@ -134,9 +134,9 @@ public class MessageOverlayController : MonoBehaviour {
         };
         TriggerBeadMessages[12] = new List<string> {
             "Zinc Compounding Engine",
-            KeyZincTime + " to activate " + ZincTime + ".\n" +
-            "The primer sphere's processing speed significantly accelerates, slowing down time.\n" +
-            "The sphere's sensors lag behind the processor, causing redshift if the engine is overused."
+            KeyZincTime + ".\n" +
+            "The primer sphere's processing speed significantly accelerates, giving you more time to react to the world around you.\n" +
+            "If the engine is overused, the sphere's sensors will lag behind the processor and cause redshift ."
         };
 
 

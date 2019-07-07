@@ -93,15 +93,15 @@ public class AllomanticIronSteel : Allomancer {
     public Vector3 LastMaximumNetForce { get; private set; } = Vector3.zero;
     private Vector3 thisFrameMaximumNetForce = Vector3.zero;
 
-    //// Debug variables for viewing values in the Unity editor
-    //public float allomanticsForce;
-    //public float netAllomancersForce;
-    //public float netTargetsForce;
-    //public Vector3 allomanticsForces;
-    //public Vector3 resititutionFromTargetsForce;
-    //public Vector3 resititutionFromPlayersForce;
-    //public float percentOfTargetForceReturned;
-    //public float percentOfAllomancerForceReturned;
+    // Debug variables for viewing values in the Unity editor
+    public float allomanticsForce;
+    public float netAllomancersForce;
+    public float netTargetsForce;
+    public Vector3 allomanticsForces;
+    public Vector3 resititutionFromTargetsForce;
+    public Vector3 resititutionFromPlayersForce;
+    public float percentOfTargetForceReturned;
+    public float percentOfAllomancerForceReturned;
     // Metal burn percentages
     // Used when burning metals, but not necessarily immediately Pushing or Pulling. Hence, they are "targets" and not the actual burn percentage of the Allomancer.
     public float IronBurnPercentageTarget { get; set; }
@@ -309,7 +309,7 @@ public class AllomanticIronSteel : Allomancer {
 
     // Public function for CalculateAllomanticForce that only needs one argument
     public Vector3 CalculateAllomanticForce(Magnetic target) {
-        return CalculateAllomanticForce(target.CenterOfMass, target.Charge); ;
+        return CalculateAllomanticForce(target.CenterOfMass, target.Charge);
     }
 
     /*
@@ -394,14 +394,14 @@ public class AllomanticIronSteel : Allomancer {
         if (SettingsMenu.settingsData.anchoredBoost != 3) {
             // APB: Disabled, Allomantic Normal Force, or Exponential with Velocity
 
-            allomanticForce = CalculateAllomanticForce(target.CenterOfMass, effectiveCharge) * (target.LastWasPulled ? 1 : -1) /* / (usingIronTargets ? PullCount : PushCount) */;
+            allomanticForce = CalculateAllomanticForce(target.CenterOfMass, effectiveCharge) * (pulling ? 1 : -1) /* / (usingIronTargets ? PullCount : PushCount) */;
             direction = allomanticForce.normalized;
 
             thisFrameMaximumNetForce += allomanticForce;
             target.LastMaxPossibleAllomanticForce = allomanticForce;
 
             // Make the AF proportional to the burn percentage
-            allomanticForce *= (target.LastWasPulled ? IronBurnPercentageTarget : SteelBurnPercentageTarget);
+            allomanticForce *= (pulling ? IronBurnPercentageTarget : SteelBurnPercentageTarget);
 
             switch (SettingsMenu.settingsData.anchoredBoost) {
                 case 0: { // Disabled
@@ -513,7 +513,7 @@ public class AllomanticIronSteel : Allomancer {
             // With anchors, only a portion of this energy will effectively be added to the system.
             // Next frame, that remaining unused energy will be added in the next section.
             //Vector3 maxEnergy = 100 * Time.timeScale * Time.timeScale * (target.CenterOfMass - CenterOfMass).normalized * (target.LastWasPulled ? 1 : -1);// Simulation physics
-            Vector3 maxEnergy = CalculateAllomanticForce(target.CenterOfMass, effectiveCharge) * Time.fixedDeltaTime * Time.timeScale * (target.LastWasPulled ? 1 : -1);
+            Vector3 maxEnergy = CalculateAllomanticForce(target.CenterOfMass, effectiveCharge) * Time.fixedDeltaTime * Time.timeScale * (pulling ? 1 : -1);
             direction = maxEnergy.normalized;
 
             Vector3 allomancerExpectedVelocityChange = Mathf.Sqrt(2 * maxEnergy.magnitude / (Mass + Mass * Mass / target.MagneticMass)) * direction;
@@ -586,14 +586,14 @@ public class AllomanticIronSteel : Allomancer {
         rb.AddForce(target.LastNetForceOnAllomancer);
 
         // Debug
-        //allomanticsForce = target.LastAllomanticForce.magnitude;
-        //allomanticsForces = target.LastAllomanticForce;
-        //netAllomancersForce = target.LastNetForceOnAllomancer.magnitude;
-        //resititutionFromTargetsForce = target.LastAnchoredPushBoostFromTarget;
-        //resititutionFromPlayersForce = target.LastAnchoredPushBoostFromAllomancer;
-        //percentOfTargetForceReturned = resititutionFromTargetsForce.magnitude / allomanticsForce;
-        //percentOfAllomancerForceReturned = resititutionFromPlayersForce.magnitude / allomanticsForce;
-        //netTargetsForce = target.LastNetForceOnTarget.magnitude;
+        allomanticsForce = target.LastAllomanticForce.magnitude;
+        allomanticsForces = target.LastAllomanticForce;
+        netAllomancersForce = target.LastNetForceOnAllomancer.magnitude;
+        resititutionFromTargetsForce = target.LastAnchoredPushBoostFromTarget;
+        resititutionFromPlayersForce = target.LastAnchoredPushBoostFromAllomancer;
+        percentOfTargetForceReturned = resititutionFromTargetsForce.magnitude / allomanticsForce;
+        percentOfAllomancerForceReturned = resititutionFromPlayersForce.magnitude / allomanticsForce;
+        netTargetsForce = target.LastNetForceOnTarget.magnitude;
     }
 
     /*

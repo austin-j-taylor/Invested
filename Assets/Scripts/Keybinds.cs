@@ -4,7 +4,7 @@ using UnityEngine;
  * Contains all keybinds. Allows for easy switching between keyboard and gamepad playing using the GamepadController.
  */
 
-public static class Keybinds {
+public class Keybinds : MonoBehaviour {
 
     private static float timeToHoldDPadY = 0f;
     private static float timeToHoldDPadX = 0f;
@@ -14,13 +14,15 @@ public static class Keybinds {
     private static bool lastWasPulling = false;
     private static bool lastWasPushing = false;
 
+    private void LateUpdate() {
+        lastWasPulling = IronPulling();
+        lastWasPushing = SteelPushing();
+    }
+
     public static bool PullDown() {
         if(SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
             if (Input.GetAxis("RightTrigger") > triggerDeadband) {
-                if(lastWasPulling) {
-                    return true;
-                }
-                lastWasPulling = true;
+                return !lastWasPulling;
             }
         } else {
             return Input.GetButtonDown("Mouse0");
@@ -30,10 +32,7 @@ public static class Keybinds {
     public static bool PushDown() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
             if (Input.GetAxis("LeftTrigger") > triggerDeadband) {
-                if (lastWasPushing) {
-                    return true;
-                }
-                lastWasPushing = true;
+                return !lastWasPushing;
             }
         } else {
             return Input.GetButtonDown("Mouse1");
@@ -226,7 +225,7 @@ public static class Keybinds {
 
     public static bool ToggleCoinshotMode() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
-            return Input.GetButtonDown("GamepadRightJoystickClick");
+            return Input.GetButtonDown("GamepadBack");
         } else {
             return Input.GetKeyDown(KeyCode.C);
         }
@@ -234,7 +233,7 @@ public static class Keybinds {
 
     public static bool ToggleHelpOverlay() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
-            return Input.GetButtonDown("GamepadBack"); ;
+            return false; //return Input.GetButtonDown("GamepadBack"); ;
         } else {
             return Input.GetKeyDown(KeyCode.H);
         }
@@ -243,14 +242,14 @@ public static class Keybinds {
 
     public static bool ZincTimeDown() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
-            return false;// Input.GetButtonDown("GamepadBack"); ;
+            return Input.GetButtonDown("GamepadRightJoystickClick");
         } else {
             return Input.GetKeyDown(KeyCode.Tab);
         }
     }
     public static bool ZincTime() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
-            return false;// Input.GetButtonDown("GamepadBack"); ;
+            return true; // return Input.GetButton("GamepadRightJoystickClick"); // managed in FeruchemicalZinc
         } else {
             return Input.GetKey(KeyCode.Tab);
         }

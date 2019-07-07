@@ -253,12 +253,12 @@ public class TextCodes : MonoBehaviour {
     }
     public static string theRightJoystick {
         get {
-            return "the " + Gray("right joystick");
+            return "the " + ZincBlue("right joystick");
         }
     }
     public static string Back {
         get {
-            return Gray("Back");
+            return Gold("Back");
         }
     }
     public static string Start {
@@ -413,9 +413,9 @@ public class TextCodes : MonoBehaviour {
     public static string KeyZincTime {
         get {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-                return s_Hold_ + "[UNIMPLEMENTED]";
+                return "Click in " + theRightJoystick + " to toggle " + ZincTime;
             else
-                return s_Hold_ + Tab;
+                return s_Hold_ + Tab + " to activate " + ZincTime;
         }
     }
     public static string KeySelect {
@@ -598,7 +598,7 @@ public class TextCodes : MonoBehaviour {
     public static string KeyCoinshotMode {
         get {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-                return "Click in " + Gold("the right joystick");
+                return s_Press_ + Back;
             else
                 return "Tap " + C;
         }
@@ -614,7 +614,7 @@ public class TextCodes : MonoBehaviour {
     public static string KeyHelp {
         get {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-                return s_Press_ + Back + " or " + s_Press_ +  Start + " > Settings > Interface > Help Overlay";
+                return s_Press_ +  Start + " > Settings > Interface > Help Overlay";
             else
                 return s_Press_ + H + " or " + s_Press_ + Escape + " > Settings > Interface > Help Overlay";
         }
