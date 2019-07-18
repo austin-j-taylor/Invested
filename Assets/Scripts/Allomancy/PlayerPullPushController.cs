@@ -205,9 +205,10 @@ public class PlayerPullPushController : AllomanticIronSteel {
                         // Add/Remove Targets
 
                         // If vacuously targeting (or should be),
+                        // No vacuous targeting in Coinshot Mode; otherwise, you keep Pulling back the coins you just fired
                         if (VacuouslyPullTargeting || !HasPullTarget) {
                             // If starting to pull/push again, replace that old vacuous target with the new target
-                            if (Keybinds.PullDown()) {
+                            if (!Player.CoinshotMode && Keybinds.PullDown()) {
                                 SetVacuousTarget(target, iron);
                             }
                             // If releasing push/pull, remove vacuous target
@@ -217,7 +218,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
                         }
                         // Repeat for steel
                         if (VacuouslyPushTargeting || !HasPushTarget) {
-                            if (Keybinds.PushDown()) {
+                            if (!Player.CoinshotMode && Keybinds.PushDown()) {
                                 SetVacuousTarget(target, steel);
                             }
                             if (!Keybinds.SteelPushing()) {

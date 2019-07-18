@@ -46,7 +46,7 @@ public class FeruchemicalZinc : MonoBehaviour {
         Rate = 0;
         lastReserve = Reserve;
         TimeController.CurrentTimeScale = SettingsMenu.settingsData.timeScale;
-        GameManager.GraphicsController.SetMotionBlur(SettingsMenu.settingsData.motionBlur == 1);
+        GameManager.GraphicsController.SetZincEffect(false);
     }
 
     // Update is called once per frame

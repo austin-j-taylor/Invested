@@ -245,7 +245,7 @@ public class AllomanticIronSteel : Allomancer {
                         AddForce(PullTargets[i]);
                         BurnSteel(PullTargets[i].LastNetForceOnAllomancer.magnitude);
                     }
-                } else if (HasPullTarget) {
+                } else if (HasPullTarget && !VacuouslyPushTargeting) {
                     for (int i = 0; i < PullTargets.Count; i++) {
                         CalculateForce(PullTargets[i], netPullTargetsCharge, sumPullTargetsCharge, iron);
                     }
@@ -263,7 +263,7 @@ public class AllomanticIronSteel : Allomancer {
                         AddForce(PushTargets[i]);
                         BurnSteel(PushTargets[i].LastNetForceOnAllomancer.magnitude);
                     }
-                } else if (HasPushTarget) {
+                } else if (HasPushTarget && !VacuouslyPullTargeting) {
                     for (int i = 0; i < PushTargets.Count; i++) {
                         CalculateForce(PushTargets[i], netPushTargetsCharge, sumPushTargetsCharge, steel);
                     }
@@ -372,7 +372,6 @@ public class AllomanticIronSteel : Allomancer {
      * */
     private void CalculateForce(Magnetic target, float netMagneticCharge, float sumOfCharges, bool pulling) {
         target.LastWasPulled = pulling;
-
         /*
          * If you're Pushing on one target, then start Pushing on another, 
          *      your Push on each individually will decrease, but the net Push on you will increase.

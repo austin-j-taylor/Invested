@@ -15,6 +15,7 @@ MonoBehaviour:
   overhead: {fileID: 0}
   section: 0
   index: 0
+  action: 1
 --- !u!1001 &2435941414977168499
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -22,11 +23,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 7934908318852061142, guid: 7e423f5a7769f924d86e1bb9ae74339b,
-        type: 3}
-      propertyPath: m_Name
-      value: TriggerBeadPopupMessage
-      objectReference: {fileID: 0}
     - target: {fileID: 7934908318852061143, guid: 7e423f5a7769f924d86e1bb9ae74339b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -80,6 +76,26 @@ PrefabInstance:
     - target: {fileID: 7934908318852061143, guid: 7e423f5a7769f924d86e1bb9ae74339b,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7934908318852061142, guid: 7e423f5a7769f924d86e1bb9ae74339b,
+        type: 3}
+      propertyPath: m_Name
+      value: TriggerBeadPopupMessage
+      objectReference: {fileID: 0}
+    - target: {fileID: 7934908319205833406, guid: 7e423f5a7769f924d86e1bb9ae74339b,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.5372549
+      objectReference: {fileID: 0}
+    - target: {fileID: 7934908319205833406, guid: 7e423f5a7769f924d86e1bb9ae74339b,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.29411766
+      objectReference: {fileID: 0}
+    - target: {fileID: 7934908319205833406, guid: 7e423f5a7769f924d86e1bb9ae74339b,
+        type: 3}
+      propertyPath: m_Color.b
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

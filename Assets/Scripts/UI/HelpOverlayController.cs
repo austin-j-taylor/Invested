@@ -50,7 +50,7 @@ public class HelpOverlayController : MonoBehaviour {
                 ) + 
                 KeyThrow + " to toss a " + O_Coin + ".\n" +
                 KeyDrop + " to drop a " + O_Coin + " at your feet.\n\t\t• " + KeyDropDirection + " while dropping a " + O_Coin + " to toss the coin away from that direction.\n\n" +
-                KeySprint + " to burn " + Pewter + " for " + Sprinting + " and " + PewterJumping + "."
+                KeySprint + " to burn " + Pewter + " for " + Sprinting + " and " + PewterJumping + ".\n\n"
             ;
         } else {
             HelpTextLeft.text = KeyHelp + " to toggle the " + HelpOverlay + ".\n\n" +
@@ -66,7 +66,9 @@ public class HelpOverlayController : MonoBehaviour {
             HelpTextRight.text = string.Empty;
         }
         if(FlagsController.HelpOverlayFuller) {
-            HelpTextRight.text += KeyZincTime + ", slowing down time.";
+            HelpTextRight.text += KeyZincTime + ", slowing down time.\n" +
+            KeyCoinshotMode + " to toggle " + CoinshotMode
+                + ".\n\t\t• While in " + CoinshotMode + ", " + KeyCoinshotThrow + " to throw coins.";
         }
     }
 

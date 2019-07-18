@@ -10,7 +10,7 @@ using static TextCodes;
  */
 public class MessageOverlayController : MonoBehaviour {
 
-    private const int numberOfMessages = 13;
+    private const int numberOfMessages = 15;
 
     public Text HeaderText { get; private set; }
     public Text MessageText { get; private set; }
@@ -133,10 +133,26 @@ public class MessageOverlayController : MonoBehaviour {
                 ".\n\n\t(Hint: multi-targeting is your best friend when using coins.)\n\t(" + KeyHelp + " to toggle the " + HelpOverlay + ".)"
         };
         TriggerBeadMessages[12] = new List<string> {
-            "Zinc Compounding Engine",
+            "Balancers",
+            "Each trio of red, blue, and grey cubes are a Balancer.\n" +
+            "The blue cube Pulls on the grey metal cube, while the red cube Pushes on it.\n" +
+            "They vary their Push/Pull strength to keep the metal cube in equilibrium, countering gravity.\n" +
+            "The red/blue cubes follow the metal cube's position and direction to try to keep it balanced.\n\n" +
+            "Some initial conditions are more stable than others; reset the scene to see how they start."
+        };
+        TriggerBeadMessages[13] = new List<string> {
+            "Zinc Peripheral",
             KeyZincTime + ".\n" +
-            "The primer sphere's processing speed significantly accelerates, giving you more time to react to the world around you.\n" +
-            "If the engine is overused, the sphere's sensors will lag behind the processor and cause redshift ."
+            "The sphere's processing speed significantly accelerates, giving you more time to react to the world around you.\n" +
+            "The zinc bank automatically recharges by drawing speed from a slave processor, but it does run out eventually.\n\n" +
+            "See the Articles for more details."
+        };
+        TriggerBeadMessages[14] = new List<string> {
+            "Coinshot Mode",
+            KeyCoinshotMode + " to activate " + CoinshotMode
+                + ".\n\t\t• While in " + CoinshotMode + ", " + KeyCoinshotThrow
+                + " to throw coins.\n\t\t" + KeyCoinshotMode + " again to disable " + CoinshotMode + ".\n\n"
+                + "You can't " + Push + " or " + Pull + " without targeting in " + CoinshotMode + "."
         };
 
 

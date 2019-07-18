@@ -73,7 +73,8 @@ public class Coin : Magnetic {
     // - player is pulling
     private void OnTriggerStay(Collider other) {
         if (other.CompareTag("PlayerBody") &&
-                    Keybinds.IronPulling() && (!Player.PlayerIronSteel.HasPullTarget || Player.PlayerIronSteel.PullTargets.IsTarget(this))) {
+                    //Keybinds.IronPulling() && (!Player.PlayerIronSteel.HasPullTarget || Player.PlayerIronSteel.PullTargets.IsTarget(this))) {
+                    Keybinds.IronPulling() && LastWasPulled) {
             BeCaughtByAllomancer(other.transform.parent.GetComponent<Player>());
         }
     }

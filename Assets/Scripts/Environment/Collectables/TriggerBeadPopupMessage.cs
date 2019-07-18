@@ -10,7 +10,7 @@ public class TriggerBeadPopupMessage : TriggerBeadPopup {
 
     private const int fadeTime = 20;
 
-    public enum Action { ZincTime };
+    public enum Action { Default, ZincTime };
 
     [SerializeField]
     private Action action = Action.ZincTime;
@@ -19,11 +19,17 @@ public class TriggerBeadPopupMessage : TriggerBeadPopup {
         base.Trigger();
 
         switch(action) {
+            case Action.Default: {
+                    // fade away after a time
+                    StartCoroutine(Fade());
+                    
+                    break;
+                }
             case Action.ZincTime: {
                     // fade away after a time
                     StartCoroutine(Fade());
                     FlagsController.HelpOverlayFuller = true;
-                    
+
                     break;
                 }
         }

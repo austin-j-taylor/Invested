@@ -31,7 +31,6 @@ public class SettingsData : MonoBehaviour {
     public float gamepadSensitivityX;
     public float gamepadSensitivityY;
     // Interface
-    public int renderblueLines; // 0 for Disabled, 1 for Enabled
     public int highlightedTargetOutline; // 0 for Disabled, 1 for Enabled
     public int pullTargetLineColor; // 0 for blue, 1 for light blue, 2 for green
     public int pushTargetLineColor; // 0 for blue, 1 for red
@@ -43,6 +42,7 @@ public class SettingsData : MonoBehaviour {
     public int fpsCounter; // 0 for Disabled, 1 for Enabled
     public int helpOverlay; // 0 for Disabled, 1 for Enabled
     // Graphics
+    public int renderblueLines; // 0 for Disabled, 1 for Enabled
     public int antialiasing;
     public int ambientOcclusion;
     public int motionBlur;
@@ -157,22 +157,6 @@ public class SettingsData : MonoBehaviour {
                     cameraInvertY = data;
                     return true;
                 }
-            case "renderblueLines": {
-                    renderblueLines = data;
-                    return true;
-                }
-            case "highlightedTargetOutline": {
-                    highlightedTargetOutline = data;
-                    return true;
-                }
-            case "pullTargetLineColor": {
-                    pullTargetLineColor = data;
-                    return true;
-                }
-            case "pushTargetLineColor": {
-                    pushTargetLineColor = data;
-                    return true;
-                }
             case "forceUnits": {
                     forceUnits = data;
                     return true;
@@ -199,6 +183,22 @@ public class SettingsData : MonoBehaviour {
                 }
             case "helpOverlay": {
                     helpOverlay = data;
+                    return true;
+                }
+            case "renderblueLines": {
+                    renderblueLines = data;
+                    return true;
+                }
+            case "pullTargetLineColor": {
+                    pullTargetLineColor = data;
+                    return true;
+                }
+            case "pushTargetLineColor": {
+                    pushTargetLineColor = data;
+                    return true;
+                }
+            case "highlightedTargetOutline": {
+                    highlightedTargetOutline = data;
                     return true;
                 }
             case "antialiasing": {
@@ -333,18 +333,6 @@ public class SettingsData : MonoBehaviour {
             case "cameraInvertY": {
                     return cameraInvertY;
                 }
-            case "renderblueLines": {
-                    return renderblueLines;
-                }
-            case "highlightedTargetOutline": {
-                    return highlightedTargetOutline;
-                }
-            case "pullTargetLineColor": {
-                    return pullTargetLineColor;
-                }
-            case "pushTargetLineColor": {
-                    return pushTargetLineColor;
-                }
             case "forceUnits": {
                     return forceUnits;
                 }
@@ -365,6 +353,18 @@ public class SettingsData : MonoBehaviour {
                 }
             case "helpOverlay": {
                     return helpOverlay;
+                }
+            case "renderblueLines": {
+                    return renderblueLines;
+                }
+            case "pullTargetLineColor": {
+                    return pullTargetLineColor;
+                }
+            case "pushTargetLineColor": {
+                    return pushTargetLineColor;
+                }
+            case "highlightedTargetOutline": {
+                    return highlightedTargetOutline;
                 }
             case "antialiasing": {
                     return antialiasing;
