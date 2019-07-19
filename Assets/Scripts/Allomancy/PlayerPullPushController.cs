@@ -165,7 +165,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
 
                         // Search for Metals
 
-                        bool pulling = Keybinds.IronPulling() && HasIron;// && !(Player.CoinshotMode && Keybinds.SteelPushing()); // in coinshot mode, you cannot push and pull simultaneously
+                        bool pulling = Keybinds.IronPulling() && HasIron && !(Player.CoinshotMode && Keybinds.SteelPushing()); // in coinshot mode, you cannot push and pull simultaneously
                         bool pushing = Keybinds.SteelPushing() && HasSteel;
                         // If you are trying to push and pull and only have pullTargets, only push. And vice versa
                         if (!HasPushTarget && HasPullTarget) {
@@ -205,10 +205,9 @@ public class PlayerPullPushController : AllomanticIronSteel {
                         // Add/Remove Targets
 
                         // If vacuously targeting (or should be),
-                        // No vacuous targeting in Coinshot Mode; otherwise, you keep Pulling back the coins you just fired
                         if (VacuouslyPullTargeting || !HasPullTarget) {
                             // If starting to pull/push again, replace that old vacuous target with the new target
-                            if (!Player.CoinshotMode && Keybinds.PullDown()) {
+                            if (Keybinds.PullDown()) {
                                 SetVacuousTarget(target, iron);
                             }
                             // If releasing push/pull, remove vacuous target
@@ -218,7 +217,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
                         }
                         // Repeat for steel
                         if (VacuouslyPushTargeting || !HasPushTarget) {
-                            if (!Player.CoinshotMode && Keybinds.PushDown()) {
+                            if (Keybinds.PushDown()) {
                                 SetVacuousTarget(target, steel);
                             }
                             if (!Keybinds.SteelPushing()) {
@@ -424,24 +423,12 @@ public class PlayerPullPushController : AllomanticIronSteel {
                 if (weight < lineWeightThreshold) {
                     closeness *= targetFocusLowerBound;
                 }
-                //    if (centerX < .44f) {
-                //        closeness *= targetFocusLowerBound + (1 - targetFocusLowerBound) * Mathf.Exp(-Mathf.Pow(centerX + 1 - horizontalImportanceFactor, targetFocusFalloffConstant));
-                //    } else {
-                //        closeness *= targetFocusOffScreenBound + (targetFocusLowerBound - targetFocusOffScreenBound) * Mathf.Exp(-Mathf.Pow(-centerX - .5f - targetLowCurvePosition, targetFocusFalloffConstant));
-                //    }
-
-                //    if (centerY < .44f) {
-                //        closeness *= targetFocusLowerBound + (1 - targetFocusLowerBound) * Mathf.Exp(-Mathf.Pow(centerY + 1 - verticalImportanceFactor, targetFocusFalloffConstant));
-                //    } else {
-                //        closeness *= targetFocusOffScreenBound + (targetFocusLowerBound - targetFocusOffScreenBound) * Mathf.Exp(-Mathf.Pow(-centerY - .5f - targetLowCurvePosition, targetFocusFalloffConstant));
-                //    }
-                //}
             }
             target.SetBlueLine(
                 CenterOfMass,
                 target.Charge * (SettingsMenu.settingsData.cameraFirstPerson == 0 ? blueLineThirdPersonWidth : blueLineFirstPersonWidth),
                 1,
-                new Color(0, closeness * lowLineColor, closeness * highLineColor, 1)
+                closeness
             );
         }
         return weight;

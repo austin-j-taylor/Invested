@@ -90,6 +90,6 @@ public class NonPlayerPushPullController : AllomanticIronSteel {
         line.EndPos = CenterOfMass;
         line.LineWidth = target.Charge * (SettingsMenu.settingsData.cameraFirstPerson == 0 ? blueLineThirdPersonWidth : blueLineFirstPersonWidth);
         line.LightSaberFactor = Mathf.Exp(-target.LastMaxPossibleAllomanticForce.magnitude * percentage / TargetArray.lightSaberConstant);
-        line.LineColor = pulling ? new Color(0, closeness * lowLineColor, closeness * highLineColor, 1) : TargetArray.targetedRedLine * closeness;
+        line.LineColor = pulling ? new Color(0, closeness * Magnetic.lowLineColor, closeness * Magnetic.highLineColor, 1) : TargetArray.targetedRedLine * closeness;
     }
 }

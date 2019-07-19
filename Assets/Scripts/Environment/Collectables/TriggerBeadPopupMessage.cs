@@ -8,8 +8,6 @@ using System.Collections;
  */
 public class TriggerBeadPopupMessage : TriggerBeadPopup {
 
-    private const int fadeTime = 20;
-
     public enum Action { Default, ZincTime };
 
     [SerializeField]
@@ -21,13 +19,13 @@ public class TriggerBeadPopupMessage : TriggerBeadPopup {
         switch(action) {
             case Action.Default: {
                     // fade away after a time
-                    StartCoroutine(Fade());
+                    StartCoroutine(Fade(20));
                     
                     break;
                 }
             case Action.ZincTime: {
                     // fade away after a time
-                    StartCoroutine(Fade());
+                    StartCoroutine(Fade(30));
                     FlagsController.HelpOverlayFuller = true;
 
                     break;
@@ -35,8 +33,8 @@ public class TriggerBeadPopupMessage : TriggerBeadPopup {
         }
     }
 
-    private IEnumerator Fade() {
-        yield return new WaitForSeconds(fadeTime);
+    private IEnumerator Fade(float time) {
+        yield return new WaitForSeconds(time);
         Close();
     }
 }

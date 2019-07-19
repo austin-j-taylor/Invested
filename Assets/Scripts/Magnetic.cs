@@ -14,8 +14,10 @@ using VolumetricLines;
 public class Magnetic : MonoBehaviour {
 
     private const float metalLinesLerpConstant = .30f;
-    private readonly Color brightBlue = new Color(0, .3f, .85f);
-
+    public const float lowLineColor = .1f;
+    public const float highLineColor = .85f;
+    private readonly Color brightBlue = new Color(0, .3f, highLineColor);
+    
     [SerializeField]
     protected float netMass = 0;
     [SerializeField]
@@ -314,6 +316,10 @@ public class Magnetic : MonoBehaviour {
             Debug.Log("Null: " + blueLine);
             Debug.Log("Null: " + GameManager.MagneticsInScene.Contains(this));
         }
+    }
+
+    public void SetBlueLine(Vector3 endPos, float width, float lsf, float closeness) {
+        SetBlueLine(endPos, width, lsf, new Color(0, closeness * lowLineColor, closeness * highLineColor, 1));
     }
 
     // Brighten this particular metal's blue line

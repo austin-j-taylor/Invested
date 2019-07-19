@@ -25,7 +25,7 @@ public class SpikeSplineFollower : SpikeSpline {
         volLines = Instantiate(GameManager.MetalLineStripTemplate);
         volLines.GetComponent<MeshRenderer>().enabled = true;
         volLines.UpdateLineVertices(points);
-        volLines.LineColor = new Color(0, AllomanticIronSteel.lowLineColor * luminosityFactor, AllomanticIronSteel.highLineColor * luminosityFactor, 1);
+        volLines.LineColor = new Color(0, Magnetic.lowLineColor * luminosityFactor, Magnetic.highLineColor * luminosityFactor, 1);
         volLines.LightSaberFactor = 1;
         volLines.LineWidth = AllomanticIronSteel.blueLineThirdPersonWidth;
     }
