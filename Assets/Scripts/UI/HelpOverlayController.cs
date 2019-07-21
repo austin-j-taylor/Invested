@@ -26,18 +26,13 @@ public class HelpOverlayController : MonoBehaviour {
     }
 
     public void UpdateText() {
-        if(FlagsController.HelpOverlayFull) {
+        HelpTextLeft.text = KeyHelp + " to toggle the " + HelpOverlay + ".\n\n" +
+            KeyLook + " to look.\n"
+        ;
 
-            HelpTextLeft.text = KeyHelp + " to toggle the " + HelpOverlay + ".\n\n" +
-                KeyLook + " to look.\n" +
-                    KeyMove + " to move.\n\t\t• " + KeyWalk + " to move slowly and anchor yourself.\n" +
-                    KeyJump + " to jump.\n\n" +
-                KeyStartBurning + "\n\t\tto start burning and select " + Push_Pull_targets + ".\n" +
-                KeyPullOrPush + " to " + Pull_or_Push + ".\n\n" +
-                "While holding " + KeyNegate +
-                ":\n\t\t• " + s_Press_ + KeySelect + " while looking at a " + Pull_target +
-                " to deselect it.\n\t\t• " + s_Tap_ + KeySelect + " while not looking at a " + Pull_target + " to deselect your oldest " + Pull_target +
-                ".\n\t\tLikewise for " + KeySelectAlternate + " and " + Push_targets + ".";
+        if (FlagsController.HelpOverlayFull) {
+
+            HelpTextLeft.text += KeyMove + " to move.\n\t\t• " + KeyWalk + " to move slowly and anchor yourself.\n";
 
             HelpTextRight.text =
                 KeyPushPullStrength + " to change " + Push_Pull + " " + BurnPercentage + "\n" +
@@ -53,22 +48,24 @@ public class HelpOverlayController : MonoBehaviour {
                 KeySprint + " to burn " + Pewter + " for " + Sprinting + " and " + PewterJumping + ".\n\n"
             ;
         } else {
-            HelpTextLeft.text = KeyHelp + " to toggle the " + HelpOverlay + ".\n\n" +
-                KeyLook + " to look.\n" +
-                    KeyMove + " to move.\n"+
-                    KeyJump + " to jump.\n\n" +
-                KeyStartBurning + "\n\t\tto start burning and select " + Push_Pull_targets + ".\n" +
-                KeyPullOrPush + " to " + Pull_or_Push + ".\n\n" +
-                "While holding " + KeyNegate +
-                ":\n\t\t• " + s_Press_ + KeySelect + " to deselect a " + Pull_target +
-                ".\n\t\t• " + s_Press_ + KeySelectAlternate + " to deselect a " + Push_target + "."
-            ;
+            HelpTextLeft.text += KeyMove + " to move.\n";
             HelpTextRight.text = string.Empty;
         }
-        if(FlagsController.HelpOverlayFuller) {
-            HelpTextRight.text += KeyZincTime + ", slowing down time.\n" +
-            KeyCoinshotMode + " to toggle " + CoinshotMode
-                + ".\n\t\t• While in " + CoinshotMode + ", " + KeyCoinshotThrow + " to throw coins.";
+
+        HelpTextLeft.text += KeyJump + " to jump.\n\n" +
+            KeyStartBurning + " to start burning " + Iron + "/" + Steel + ".\n" +
+            s_Press_ + _KeySelect + " to select " + Pull_targets + " and " + _KeySelectAlternate + " to select " + Push_targets + ".\n" +
+            s_Hold_ + _KeyPull + " to " + Pull + " and " + _KeyPush + " to " + Push + ".\n\n" +
+            "While holding " + KeyNegate +
+            ":\n\t\t• " + s_Press_ + _KeySelect + " to deselect a " + Pull_target +
+            ".\n\t\t• " + s_Press_ + _KeySelectAlternate + " to deselect a " + Push_target + "."
+        ;
+
+        if (FlagsController.HelpOverlayFuller) {
+            HelpTextRight.text += KeyCoinshotMode + " to toggle " + CoinshotMode
+                + ".\n\t\t• While in " + CoinshotMode + ", " + KeyCoinshotThrow + " to throw coins.\n" +
+                KeyZincTime + ", slowing down time."
+            ;
         }
     }
 

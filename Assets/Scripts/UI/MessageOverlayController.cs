@@ -70,16 +70,16 @@ public class MessageOverlayController : MonoBehaviour {
         TriggerBeadMessages[1] = new List<string> {
             "Pulling",
             KeyStartBurningIron + "\n\t\tto start burning " + Iron + ".",
-            KeyPull + " to " + Pull + ".\n"
+            s_Hold_ + _KeyPull + " to " + Pull + ".\n"
         };
         TriggerBeadMessages[2] = new List<string> {
             "Pushing & Pulling Basics",
-            s_Press_ + KeySelect + " to select a metal to be a " + Pull_target + ".\n" + 
-            s_Press_ + KeySelectAlternate + " to select a metal to be a " + Push_target + ".",
-            KeyPull + " to " + Pull + ".\n" +
-                KeyPush + " to " + Push + ".",
-            "While holding " + KeyNegate + ", " + s_Press_ + KeySelect + "\n\t\t to deselect a " + Pull_target +
-                ".\nLikewise for " + KeySelectAlternate + " and " + Push_targets + ".",
+            s_Press_ + _KeySelect + " to select a metal to be a " + Pull_target + ".\n" + 
+            s_Press_ + _KeySelectAlternate + " to select a metal to be a " + Push_target + ".",
+            s_Hold_ + _KeyPull + " to " + Pull + ".\n" +
+                s_Hold_ + _KeyPush + " to " + Push + ".",
+            "While holding " + KeyNegate + ", " + s_Press_ + _KeySelect + "\n\t\t to deselect a " + Pull_target +
+                ".\nLikewise for " + _KeySelectAlternate + " and " + Push_targets + ".",
             "Get familiar with these controls before proceeding.\n" +
             KeyHelp + " to toggle the " + HelpOverlay + ".\n"
         };
@@ -126,7 +126,7 @@ public class MessageOverlayController : MonoBehaviour {
         };
         TriggerBeadMessages[11] = new List<string> {
             "Coins",
-            KeyPull + " near " + O_Coins + " to pick them up.",
+            s_Hold_ + _KeyPull + " near " + O_Coins + " to pick them up.",
             KeyThrow + " to toss a coin in front of you. Try " + Pushing + " on it as you throw.", 
             KeyDrop + " to drop a coin at your feet. Try " + Pushing + " on it.",
             "\t\t• " + KeyDropDirection + " while dropping a coin to toss the coin away from that direction.\n\n\tScale the wall using " + O_Coins + " and " + Pewter + 
@@ -152,7 +152,7 @@ public class MessageOverlayController : MonoBehaviour {
             KeyCoinshotMode + " to activate " + CoinshotMode
                 + ".\n\t\t• While in " + CoinshotMode + ", " + KeyCoinshotThrow
                 + " to throw coins.\n\t\t" + KeyCoinshotMode + " again to disable " + CoinshotMode + ".\n\n"
-                + "You can't " + Push + " or " + Pull + " without targeting in " + CoinshotMode + "."
+                //+ "You can't " + Push + " or " + Pull + " without targeting in " + CoinshotMode + "."
         };
 
 

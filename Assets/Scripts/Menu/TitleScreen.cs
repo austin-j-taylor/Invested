@@ -5,16 +5,19 @@ public class TitleScreen : MonoBehaviour {
 
     private Button playButton;
     private Button settingsButton;
+    private Button articlesButton;
     private Button quitButton;
 
     private void Awake() {
         Button[] buttons = GetComponentsInChildren<Button>();
         playButton = buttons[0];
         settingsButton = buttons[1];
-        quitButton = buttons[2];
+        articlesButton = buttons[2];
+        quitButton = buttons[3];
 
         playButton.onClick.AddListener(OnClickedPlay);
         settingsButton.onClick.AddListener(OnClickedSettings);
+        articlesButton.onClick.AddListener(OnClickedArticles);
         quitButton.onClick.AddListener(OnClickedQuit);
     }
 
@@ -25,6 +28,10 @@ public class TitleScreen : MonoBehaviour {
 
     private void OnClickedSettings() {
         MainMenu.OpenSettingsMenu();
+    }
+
+    private void OnClickedArticles() {
+        MainMenu.OpenArticlesMenu();
     }
 
     private void OnClickedQuit() {

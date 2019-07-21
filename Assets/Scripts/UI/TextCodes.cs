@@ -117,11 +117,6 @@ public class TextCodes : MonoBehaviour {
             return Push + '/' + Pull;
         }
     }
-    public static string Pull_or_Push {
-        get {
-            return Pull + " or " + Push;
-        }
-    }
     public static string Pushes_and_Pulls {
         get {
             return Pushes + " and " + Pulls;
@@ -150,11 +145,6 @@ public class TextCodes : MonoBehaviour {
     public static string Push_Pull_targets {
         get {
             return Push + '/' + LightBlue("Pull-targets");
-        }
-    }
-    public static string Pull_or_Push_target {
-        get {
-            return Pull + LightBlue("-") +" or " + Red("Push-target");
         }
     }
     public static string CoinshotMode {
@@ -253,7 +243,7 @@ public class TextCodes : MonoBehaviour {
     }
     public static string theRightJoystick {
         get {
-            return "the " + ZincBlue("right joystick");
+            return "the " + Gray("right joystick");
         }
     }
     public static string Back {
@@ -357,7 +347,7 @@ public class TextCodes : MonoBehaviour {
     public static string KeyWalk {
         get {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-                return "Click in " + Gray("the left joystick");
+                return "Click in " + theRightJoystick;
             else
                 return s_Hold_ + Ctrl;
         }
@@ -386,39 +376,31 @@ public class TextCodes : MonoBehaviour {
                 return s_Press_ + Space;
         }
     }
-    public static string KeyPull {
+    public static string _KeyPull {
         get {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-                return s_Hold_ + RightTrigger;
+                return RightTrigger;
             else
-                return s_Hold_ + LeftClick;
+                return LeftClick;
         }
     }
-    public static string KeyPush {
+    public static string _KeyPush {
         get {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-                return s_Hold_ + LeftTrigger;
+                return LeftTrigger;
             else
-                return s_Hold_ + RightClick;
-        }
-    }
-    public static string KeyPullOrPush {
-        get {
-            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-                return s_Hold_ + RightTrigger + " or " + LeftTrigger;
-            else
-                return s_Hold_ + LeftClick + " or " + RightClick;
+                return RightClick;
         }
     }
     public static string KeyZincTime {
         get {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-                return "Click in " + theRightJoystick + " to toggle " + ZincTime;
+                return "Click in the " + ZincBlue("left joystick") + " to toggle " + ZincTime;
             else
                 return s_Hold_ + Tab + " to activate " + ZincTime;
         }
     }
-    public static string KeySelect {
+    public static string _KeySelect {
         get {
             switch (SettingsMenu.settingsData.controlScheme) {
                 case SettingsData.MK54: {
@@ -439,7 +421,7 @@ public class TextCodes : MonoBehaviour {
             }
         }
     }
-    public static string KeySelectAlternate {
+    public static string _KeySelectAlternate {
         get {
             switch (SettingsMenu.settingsData.controlScheme) {
                 case SettingsData.MK54: {
@@ -464,19 +446,19 @@ public class TextCodes : MonoBehaviour {
         get {
             switch (SettingsMenu.settingsData.controlScheme) {
                 case SettingsData.MK54: {
-                        return Pull + ", " + Push + ", or " + s_Press_ + LightBlue(s_Mouse_Button_5) + " or " + LightRed(s_Mouse_Button_4);
+                        return LeftClick + ", " + RightClick + ", or " + s_Press_ + LightBlue(s_Mouse_Button_5) + " or " + LightRed(s_Mouse_Button_4);
                     }
                 case SettingsData.MK45: {
-                        return Pull + ", " + Push + ", or " + s_Press_ + LightBlue(s_Mouse_Button_4) + " or " + LightRed(s_Mouse_Button_5);
+                        return LeftClick + ", " + RightClick + ", or " + s_Press_ + LightBlue(s_Mouse_Button_4) + " or " + LightRed(s_Mouse_Button_5);
                     }
                 case SettingsData.MKEQ: {
-                        return Pull + ", " + Push + ", or " + s_Press_ + LightBlue(s_E) + " or " + LightRed(s_Q);
+                        return LeftClick + ", " + RightClick + ", or " + s_Press_ + LightBlue(s_E) + " or " + LightRed(s_Q);
                     }
                 case SettingsData.MKQE: {
-                        return Pull + ", " + Push + ", or " + s_Press_ + LightBlue(s_Q) + " or " + LightRed(s_E);
+                        return LeftClick + ", " + RightClick + ", or " + s_Press_ + LightBlue(s_Q) + " or " + LightRed(s_E);
                     }
                 default: {
-                        return Pull + ", " + Push + ", or " + s_Press_ + LightBlue(s_Right_Bumper) + " or " + LightRed(s_Left_Bumper);
+                        return s_Press_ + LeftTrigger + ", " + RightTrigger + ", " + LightBlue(s_Right_Bumper) + ", or " + LightRed(s_Left_Bumper);
                     }
             }
         }

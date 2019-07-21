@@ -12,6 +12,7 @@ public class MainMenu : MonoBehaviour {
     private TitleScreen titleScreen;
     private SettingsMenu settingsMenu;
     private SceneSelectMenu sceneSelectMenu;
+    private ArticlesMenu articlesMenu;
 
     public static bool IsOpen {
         get {
@@ -28,6 +29,7 @@ public class MainMenu : MonoBehaviour {
         titleScreen = GetComponentInChildren<TitleScreen>();
         settingsMenu = transform.parent.GetComponentInChildren<SettingsMenu>();
         sceneSelectMenu = GetComponentInChildren<SceneSelectMenu>();
+        articlesMenu = GetComponentInChildren<ArticlesMenu>();
 
         // Set up the Player, Canvas, and EventSystem to persist between scenes
         //DontDestroyOnLoad(Player.PlayerInstance);
@@ -39,6 +41,7 @@ public class MainMenu : MonoBehaviour {
         Player.PlayerInstance.gameObject.SetActive(false);
         settingsMenu.Close();
         sceneSelectMenu.Close();
+        articlesMenu.Close();
         HUD.DisableHUD();
         
         Open();
@@ -53,8 +56,10 @@ public class MainMenu : MonoBehaviour {
 
     private void Update() {
         if(Keybinds.ExitMenu() && !controlSchemeScreen.IsOpen) {
-            if(sceneSelectMenu.IsOpen) {
+            if (sceneSelectMenu.IsOpen) {
                 CloseSceneSelectMenu();
+            } else if (articlesMenu.IsOpen) {
+                CloseArticlesMenu();
             } else if(settingsMenu.IsOpen) {
                 if (settingsMenu.BackAndSaveSettings())
                     OpenTitleScreen();
@@ -95,7 +100,15 @@ public class MainMenu : MonoBehaviour {
 
     public static void CloseSceneSelectMenu() {
         instance.sceneSelectMenu.Close();
-        //instance.titleScreen.Open();
+    }
+
+    public static void OpenArticlesMenu() {
+        instance.titleScreen.Close();
+        instance.articlesMenu.Open();
+    }
+
+    public static void CloseArticlesMenu() {
+        instance.articlesMenu.Close();
     }
 
     public static void OpenSettingsMenu() {

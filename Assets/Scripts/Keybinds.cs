@@ -176,7 +176,7 @@ public class Keybinds : MonoBehaviour {
     
     public static bool Walk() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
-            return Input.GetButton("GamepadLeftJoystickClick");
+            return Input.GetButton("GamepadRightJoystickClick");
         } else {
             return Input.GetKey(KeyCode.LeftControl);
         }
@@ -242,14 +242,14 @@ public class Keybinds : MonoBehaviour {
 
     public static bool ZincTimeDown() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
-            return Input.GetButtonDown("GamepadRightJoystickClick");
+            return Input.GetButtonDown("GamepadLeftJoystickClick");
         } else {
             return Input.GetKeyDown(KeyCode.Tab);
         }
     }
     public static bool ZincTime() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
-            return true; // return Input.GetButton("GamepadRightJoystickClick"); // managed in FeruchemicalZinc
+            return true; // return Input.GetButton("GamepadLeftJoystickClick"); // managed in FeruchemicalZinc
         } else {
             return Input.GetKey(KeyCode.Tab);
         }
@@ -268,7 +268,7 @@ public class Keybinds : MonoBehaviour {
 
     public static float DPadYAxis() {
         if (timeToHoldDPadY < Time.time) {
-            timeToHoldDPadY = Time.time + .1f;
+            timeToHoldDPadY = Time.time + .1f * Time.timeScale;
             return Input.GetAxis("GamepadDPadY");
         } else {
             return 0;
@@ -277,7 +277,7 @@ public class Keybinds : MonoBehaviour {
 
     public static float DPadXAxis() {
         if (timeToHoldDPadX < Time.time) {
-            timeToHoldDPadX = Time.time + .1f;
+            timeToHoldDPadX = Time.time + .1f * Time.timeScale;
             return Input.GetAxis("GamepadDPadX");
         } else {
             return 0;
