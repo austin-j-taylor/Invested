@@ -79,7 +79,7 @@ public class TextCodes : MonoBehaviour {
     }
     public static string Pewter {
         get {
-            return Gray("Pewter");
+            return Orange("Pewter");
         }
     }
     public static string Pull {

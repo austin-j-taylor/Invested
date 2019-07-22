@@ -110,6 +110,9 @@ public class HarmonyTarget : MonoBehaviour {
         //Player.PlayerIronSteel.StopBurning();
         Player.PlayerInstance.GetComponent<Rigidbody>().useGravity = false;
         CameraController.SetExternalSource(cameraPositionTarget, cameraLookAtTarget);
+
+        // If a player is motivated enough to finish a level without completing the tutorial, give them the full help overlay anyway
+        FlagsController.HelpOverlayFull = true;
     }
 
     private void EndAnimation() {

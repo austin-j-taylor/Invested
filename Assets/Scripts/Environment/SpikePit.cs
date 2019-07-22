@@ -154,6 +154,7 @@ public class SpikePit : MonoBehaviour {
 
                     spike.IronBurnPercentageTarget = 0;
                     spike.IronPulling = false;
+                    spike.RemovePullTargetAt(0);
                 }
             }
 

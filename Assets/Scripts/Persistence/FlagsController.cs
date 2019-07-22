@@ -19,8 +19,12 @@ public class FlagsController : MonoBehaviour {
             return instance.controlSchemeChosen;
         }
         set {
-            instance.controlSchemeChosen = value;
-            instance.Refresh();
+            if(instance.controlSchemeChosen != value) {
+                instance.controlSchemeChosen = value;
+                instance.Refresh();
+            } else {
+                instance.controlSchemeChosen = value;
+            }
         }
     }
     public static bool HelpOverlayFull {
@@ -28,8 +32,12 @@ public class FlagsController : MonoBehaviour {
             return instance.helpOverlayFull;
         }
         set {
-            instance.helpOverlayFull = value;
-            instance.Refresh();
+            if (instance.helpOverlayFull != value) {
+                instance.helpOverlayFull = value;
+                instance.Refresh();
+            } else {
+                instance.helpOverlayFull = value;
+            }
         }
     }
     public static bool HelpOverlayFuller {
@@ -37,8 +45,12 @@ public class FlagsController : MonoBehaviour {
             return instance.helpOverlayFuller;
         }
         set {
-            instance.helpOverlayFuller = value;
-            instance.Refresh();
+            if (instance.helpOverlayFuller != value) {
+                instance.helpOverlayFuller = value;
+                instance.Refresh();
+            } else {
+                instance.helpOverlayFuller = value;
+            }
         }
     }
 

@@ -11,6 +11,7 @@ Here are some videos of the game:
 - [Traversing Luthadel](https://gfycat.com/insecuredifficultdodo)
 - [Aerial combat](https://gfycat.com/soupyelegantlark)
 - [Throwing coins](https://gfycat.com/complicatedregularangelwingmussel)
+- [Zinc time](https://gfycat.com/hauntingfalseindigobunting)
 
 This Unity project makes use of:
 - [Volumetric Lines by Johannes Unterguggenberger](https://assetstore.unity.com/packages/tools/particles-effects/volumetric-lines-29160)
@@ -20,30 +21,19 @@ This Unity project makes use of:
 
 ### Recent changes
 
-Version 1.2 (May 2019)
-- Added Tutorial
-- Expanded Sandbox
-- Added player model
-- Added Pewter
-	- Sprinting and Pewter Jumping/wall jumping
-- Changed controls
-	- Full gamepad (XBox 360 controller) support for menu navigation and playability in general
-	- Added control to move slowly/anchor self
-	- Player moves more like a ball should (improved rolling physics)
-- Camera improvements
-	- Added options for inverting camera (horizontally and vertically)
-	- Added option for changing camera distance from player
-	- Much less likely to clip through walls
-- HUD improvements
-	- Added Help Overlay to show controls while playing
-	- Burn Percentage Meter now differentiates between Iron and Steel burn percentage (only affects for gamepad users)
-	- Added option to hide HUD
-- Allomancy changes
-	- Added experimental "Distributed Power" Anchored Push Boost.
-	- Changed "Exponential w/ Velocity" Anchored Push Boost.
-		- Clarified terminology used to describe how velocity affects each subtype of EwV used.
-		- EwV is now the default Allomancy model
-	- Player model now glows when metals are burned
-	- Walls partially interfere with ironsight
-- Simulations are now playable through the scene select menu
-- Added settings for "inverted" gravity and changing the time scale
+Version 1.2.1 (July 2019)
+- Added zinc peripheral
+	- Hold 'Tab' to rev the zinc peripheral, accelerating the sphere's processing speed
+	- Time slows around you for up to 8 seconds
+- Improved controls	
+	- Added Vacuous Pushing/Pulling
+		- When no Push/Pull targets are selected, trying to Push/Pull will simply act on whatever target you're looking at
+	- Changed target deselection keybind (was 'Tab', is now 'R')
+	- Changed gamepad controls
+		- Toggle Zinc Time is Left Joystick Click
+		- Walk/Anchor self is Right Joystick Click
+		- Toggle coinshot mode is now Back
+		- Toggle help overlay is now unbound (must be toggled through Settings)
+	- Using the Push/Pull keys while not burning will start burning iron/steel
+	- Updated Tutorial to reflect control changes
+- Added Articles section for in-world explanations of game mechanics

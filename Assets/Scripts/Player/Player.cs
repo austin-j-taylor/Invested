@@ -82,6 +82,7 @@ public class Player : PewterEntity {
         if (CanControlPlayer) {
             if (Keybinds.ToggleCoinshotMode()) {
                 CoinshotMode = !CoinshotMode;
+                FlagsController.HelpOverlayFuller = true;
             }
             // On throwing a coin
             if ((CoinshotMode && Keybinds.IronPulling() && Keybinds.SteelPushing() || Keybinds.WithdrawCoinDown()) && coinCooldownTimer > coinCooldownThreshold) {

@@ -68,31 +68,33 @@ public class PlayerPullPushController : AllomanticIronSteel {
      * Update blue lines pointing from player to metal.
      */
     private void LateUpdate() {
-        if (!PauseMenu.IsPaused && Player.CanControlPlayer) {
-            // Start and Stop Burning metals
-            if (IsBurning) {
-                // Stop burning
-                if (Keybinds.StopBurning()) {
-                    StopBurning();
-                    timeToStopBurning = 0;
-                } else
-                if (Keybinds.Negate()) {
-                    timeToStopBurning += Time.deltaTime;
-                    if (Keybinds.Select() && Keybinds.SelectAlternate() && timeToStopBurning > timeToHoldDown) {
-                        //if (Keybinds.IronPulling() && Keybinds.SteelPushing() && timeToStopBurning > timeToHoldDown) {
+        if (!PauseMenu.IsPaused) {
+            if (Player.CanControlPlayer) {
+                // Start and Stop Burning metals
+                if (IsBurning) {
+                    // Stop burning
+                    if (Keybinds.StopBurning()) {
                         StopBurning();
+                        timeToStopBurning = 0;
+                    } else
+                    if (Keybinds.Negate()) {
+                        timeToStopBurning += Time.deltaTime;
+                        if (Keybinds.Select() && Keybinds.SelectAlternate() && timeToStopBurning > timeToHoldDown) {
+                            //if (Keybinds.IronPulling() && Keybinds.SteelPushing() && timeToStopBurning > timeToHoldDown) {
+                            StopBurning();
+                            timeToStopBurning = 0;
+                        }
+                    } else {
                         timeToStopBurning = 0;
                     }
                 } else {
-                    timeToStopBurning = 0;
-                }
-            } else {
-                // Start burning
-                if (!Keybinds.Negate()) {
-                    if (Keybinds.SelectDown() || Keybinds.PullDown())
-                        StartBurning(true);
-                    else if (Keybinds.SelectAlternateDown() || Keybinds.PushDown())
-                        StartBurning(false);
+                    // Start burning
+                    if (!Keybinds.Negate()) {
+                        if (Keybinds.SelectDown() || Keybinds.PullDown())
+                            StartBurning(true);
+                        else if (Keybinds.SelectAlternateDown() || Keybinds.PushDown())
+                            StartBurning(false);
+                    }
                 }
             }
 
