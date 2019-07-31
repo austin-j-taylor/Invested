@@ -6,9 +6,10 @@ using UnityEngine;
 
 public class Keybinds : MonoBehaviour {
 
+    private const float triggerDeadband = 0.01f;
+
     private static float timeToHoldDPadY = 0f;
     private static float timeToHoldDPadX = 0f;
-    private static float triggerDeadband = 0.01f;
 
     // Only used for convert Gamepad axes to binary buttons
     private static bool lastWasPulling = false;
@@ -252,6 +253,13 @@ public class Keybinds : MonoBehaviour {
             return true; // return Input.GetButton("GamepadLeftJoystickClick"); // managed in FeruchemicalZinc
         } else {
             return Input.GetKey(KeyCode.Tab);
+        }
+    }
+    public static bool ControlWheel() {
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+            return true;
+        } else {
+            return Input.GetKey(KeyCode.T);
         }
     }
 

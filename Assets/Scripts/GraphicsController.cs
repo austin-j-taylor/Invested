@@ -42,8 +42,13 @@ public class GraphicsController : MonoBehaviour {
     }
 
     public float SetZincEffect(bool enable, float intensity = 0) {
+        if (HUD.ControlWheelController.IsOpen) {
+            //enabled = false; // If Control Wheel is open, don't show the effect
+            intensity = intensity / 3;
+        }
         profile.chromaticAberration.enabled = enable;
         profile.vignette.enabled = enable;
+        
         if (enable) {
             aberrationSettings.intensity = intensity;
             vignetteSettings.intensity = intensity / 3;

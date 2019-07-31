@@ -32,6 +32,9 @@ public class HUD : MonoBehaviour {
     public static TargetOverlayController TargetOverlayController {
         get; private set;
     }
+    public static ControlWheelController ControlWheelController {
+        get; private set;
+    }
     public static MessageOverlayController MessageOverlayController {
         get; private set;
     }
@@ -49,6 +52,7 @@ public class HUD : MonoBehaviour {
         HelpOverlayController = GetComponentInChildren<HelpOverlayController>();
         MetalReserveMeters = GetComponentInChildren<MetalReserveMeters>();
         ZincMeterController = GetComponentInChildren<ZincMeterController>();
+        ControlWheelController = GetComponentInChildren<ControlWheelController>();
     }
 
 	void LateUpdate() {
@@ -95,6 +99,7 @@ public class HUD : MonoBehaviour {
                 MetalReserveMeters.Clear();
                 MessageOverlayController.Clear();
                 ZincMeterController.Clear();
+                ControlWheelController.Clear();
             }
         }
     }
