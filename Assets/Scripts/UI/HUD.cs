@@ -11,10 +11,16 @@ public class HUD : MonoBehaviour {
     public static readonly Color strongBlue = new Color(0, 1f, 1, 1);
 
     private static Text fPSText;
+    private static CanvasGroup hudGroup;
+    private static CanvasGroup hudBehindWheelGroup;
+    private static Animator anim;
 
     private float deltaTimeFPS = 0.0f;
 
     public static GameObject HudGameObject {
+        get; private set;
+    }
+    public static Image Crosshair{
         get; private set;
     }
     public static BurnPercentageMeter BurnPercentageMeter {
@@ -45,6 +51,10 @@ public class HUD : MonoBehaviour {
     void Awake() {
         HudGameObject = gameObject;
         fPSText = GetComponentInChildren<Text>();
+        hudGroup = GetComponent<CanvasGroup>();
+        hudBehindWheelGroup = transform.Find("BehindControlWheel").GetComponent<CanvasGroup>();
+        anim = GetComponent<Animator>();
+        Crosshair = transform.Find("BehindControlWheel/Crosshair").GetComponent<Image>();
         BurnPercentageMeter = GetComponentInChildren<BurnPercentageMeter>();
         TargetOverlayController = GetComponentInChildren<TargetOverlayController>();
         ThrowingAmmoMeter = GetComponentInChildren<ThrowingAmmoMeter>();
@@ -69,23 +79,13 @@ public class HUD : MonoBehaviour {
         }
     }
 
+    // Ready HUD elements for a certain simulation
     public static void EnableHUD() {
-        HudGameObject.GetComponent<CanvasGroup>().alpha = 1;
+        hudGroup.alpha = 1;
     }
 
     public static void DisableHUD() {
-        HudGameObject.GetComponent<CanvasGroup>().alpha = 0;
-    }
-    // Ready HUD elements for a certain simulation
-
-
-    // Used by Settings to make HUD visible or invisible
-    public void ShowHUD() {
-        HudGameObject.GetComponent<CanvasGroup>().alpha = 1;
-    }
-
-    public void HideHUD() {
-        HudGameObject.GetComponent<CanvasGroup>().alpha = 0;
+        hudGroup.alpha = 0;
     }
 
     // Clears the values currently on the HUD
@@ -100,6 +100,7 @@ public class HUD : MonoBehaviour {
                 MessageOverlayController.Clear();
                 ZincMeterController.Clear();
                 ControlWheelController.Clear();
+                anim.SetBool("ControlWheelVisible", false);
             }
         }
     }
@@ -153,9 +154,29 @@ public class HUD : MonoBehaviour {
         return (low * tenPower).ToString();
     }
 
+    // Fade HUD in/out with Control Wheel
+    public static void ShowControlWheel() {
+        anim.SetBool("ControlWheelVisible", true);
+    }
+    public static void HideControlWheel(bool noTransition = false) {
+        anim.SetBool("ControlWheelVisible", false);
+        if(noTransition) {
+            anim.Play("HUD_HideControlWheel", anim.GetLayerIndex("Visibility"));
+        }
+    }
+
     // Clear unwanted fields after changing settings
     public void InterfaceRefresh() {
         BurnPercentageMeter.InterfaceRefresh();
         TargetOverlayController.InterfaceRefresh();
+    }
+
+    // Used by Settings to make HUD visible or invisible
+    public void ShowHUD() {
+        hudGroup.alpha = 1;
+    }
+
+    public void HideHUD() {
+        hudGroup.alpha = 0;
     }
 }

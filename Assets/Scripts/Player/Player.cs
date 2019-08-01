@@ -80,16 +80,14 @@ public class Player : PewterEntity {
 
     void Update() {
         if (CanControlPlayer) {
-            if (Keybinds.ToggleCoinshotMode()) {
-                CoinshotMode = !CoinshotMode;
-                FlagsController.HelpOverlayFuller = true;
-            }
             // On throwing a coin
-            if ((CoinshotMode && Keybinds.IronPulling() && Keybinds.SteelPushing() || Keybinds.WithdrawCoinDown()) && coinCooldownTimer > coinCooldownThreshold) {
-                coinCooldownTimer = 0;
-                PlayerIronSteel.AddPushTarget(CoinHand.WithdrawCoinToHand());
-            } else {
-                coinCooldownTimer += Time.deltaTime * (PlayerZinc.InZincTime ? 2 : 1); // throw coins 
+            if (!CoinHand.Pouch.IsEmpty) {
+                if ((CoinshotMode && Keybinds.IronPulling() && Keybinds.SteelPushing() || Keybinds.WithdrawCoinDown()) && coinCooldownTimer > coinCooldownThreshold) {
+                    coinCooldownTimer = 0;
+                    PlayerIronSteel.AddPushTarget(CoinHand.WithdrawCoinToHand());
+                } else {
+                    coinCooldownTimer += Time.deltaTime * (PlayerZinc.InZincTime ? 2 : 1); // throw coins 
+                }
             }
         }
     }
@@ -148,5 +146,9 @@ public class Player : PewterEntity {
 
     public void SetFrameMaterial(Material mat) {
         playerFrame.GetComponent<Renderer>().material = mat;
+    }
+
+    public void ToggleCoinshotMode() {
+        CoinshotMode = !CoinshotMode;
     }
 }

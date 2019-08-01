@@ -5,6 +5,7 @@ public class CoinPouch : MonoBehaviour {
     public const int startingCoinCount = 50;
     
     public int Count { get; private set; }
+    public bool IsEmpty { get { return Count == 0; } }
 
 	// Use this for initialization
 	void Start () {

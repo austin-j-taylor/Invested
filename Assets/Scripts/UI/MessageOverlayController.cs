@@ -142,7 +142,7 @@ public class MessageOverlayController : MonoBehaviour {
         };
         TriggerBeadMessages[13] = new List<string> {
             "Zinc Peripheral",
-            KeyZincTime + ".\n" +
+            KeyZincTime  + " to activate " + ZincTime + ".\n" +
             "The sphere's processing speed significantly accelerates, giving you more time to react to the world around you.\n" +
             "The zinc bank automatically recharges by drawing speed from a slave processor, but it does run out eventually.\n\n" +
             "See the Articles for more details."

@@ -88,8 +88,8 @@ public class PlayerPullPushController : AllomanticIronSteel {
                         timeToStopBurning = 0;
                     }
                 } else {
-                    // Start burning
-                    if (!Keybinds.Negate()) {
+                    // Start burning (as long as the Control Wheel isn't open to interfere)
+                    if (!Keybinds.Negate() && !HUD.ControlWheelController.IsOpen) {
                         if (Keybinds.SelectDown() || Keybinds.PullDown())
                             StartBurning(true);
                         else if (Keybinds.SelectAlternateDown() || Keybinds.PushDown())
@@ -98,7 +98,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
                 }
             }
 
-            // Could have stopped burning above. Check if the Allomancer is still burning.
+            // Could have changed burning status above. Check if the Allomancer is still burning.
             if (IsBurning) {
 
                 // Change Burn Percentage Targets, Number of Targets
@@ -167,7 +167,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
 
                         // Search for Metals
 
-                        bool pulling = Keybinds.IronPulling() && HasIron && !(Player.CoinshotMode && Keybinds.SteelPushing()); // in coinshot mode, you cannot push and pull simultaneously
+                        bool pulling = Keybinds.IronPulling() && HasIron && !(Player.CoinshotMode && Keybinds.SteelPushing() && !Player.PlayerInstance.CoinHand.Pouch.IsEmpty); // in coinshot mode, you cannot push and pull simultaneously (as long as you can throw coins)
                         bool pushing = Keybinds.SteelPushing() && HasSteel;
                         // If you are trying to push and pull and only have pullTargets, only push. And vice versa
                         if (!HasPushTarget && HasPullTarget) {

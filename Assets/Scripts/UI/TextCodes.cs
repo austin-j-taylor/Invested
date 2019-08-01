@@ -28,6 +28,7 @@ public class TextCodes : MonoBehaviour {
 
     public const string s_Press_ = "Press ";
     public const string s_Hold_ = "Hold ";
+    public const string s_Click_in_ = "Click in ";
     public const string s_Use_ = "Use ";
     public const string s_Tap_ = "Tap ";
     public const string s_Scroll_ = "Scroll ";
@@ -347,7 +348,7 @@ public class TextCodes : MonoBehaviour {
     public static string KeyWalk {
         get {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-                return "Click in " + theRightJoystick;
+                return s_Click_in_ + theRightJoystick;
             else
                 return s_Hold_ + Ctrl;
         }
@@ -395,9 +396,9 @@ public class TextCodes : MonoBehaviour {
     public static string KeyZincTime {
         get {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-                return "Click in the " + ZincBlue("left joystick") + " to toggle " + ZincTime;
+                return s_Click_in_ + "the " + ZincBlue("left joystick");
             else
-                return s_Hold_ + Tab + " to activate " + ZincTime;
+                return s_Hold_ + Tab;
         }
     }
     public static string _KeySelect {

@@ -64,7 +64,7 @@ public class HelpOverlayController : MonoBehaviour {
         if (FlagsController.HelpOverlayFuller) {
             HelpTextRight.text += KeyCoinshotMode + " to toggle " + CoinshotMode
                 + ".\n\t\t• While in " + CoinshotMode + ", " + KeyCoinshotThrow + " to throw coins.\n" +
-                KeyZincTime + "."
+                KeyZincTime + " to activate " + ZincTime + "."
             ;
         }
     }

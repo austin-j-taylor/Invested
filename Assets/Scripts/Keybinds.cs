@@ -7,9 +7,11 @@ using UnityEngine;
 public class Keybinds : MonoBehaviour {
 
     private const float triggerDeadband = 0.01f;
+    private const float doubleTapThreshold = 0.25f;
 
     private static float timeToHoldDPadY = 0f;
     private static float timeToHoldDPadX = 0f;
+    private static float doubleTapTimeWheel = float.NegativeInfinity;
 
     // Only used for convert Gamepad axes to binary buttons
     private static bool lastWasPulling = false;
@@ -52,10 +54,10 @@ public class Keybinds : MonoBehaviour {
     public static bool SelectDown() {
         switch (SettingsMenu.settingsData.controlScheme) {
             case SettingsData.MK54: {
-                    return Input.GetButtonDown("Mouse4");
+                    return Input.GetKey(KeyCode.Mouse4);
                 }
             case SettingsData.MK45: {
-                    return Input.GetButtonDown("Mouse3");
+                    return Input.GetKey(KeyCode.Mouse3);
                 }
             case SettingsData.MKEQ: {
                     return Input.GetKeyDown(KeyCode.E);
@@ -110,10 +112,10 @@ public class Keybinds : MonoBehaviour {
     public static bool SelectAlternateDown() {
         switch (SettingsMenu.settingsData.controlScheme) {
             case SettingsData.MK54: {
-                    return Input.GetButtonDown("Mouse3");
+                    return Input.GetKey(KeyCode.Mouse3);
                 }
             case SettingsData.MK45: {
-                    return Input.GetButtonDown("Mouse4");
+                    return Input.GetKey(KeyCode.Mouse4);
                 }
             case SettingsData.MKEQ: {
                     return Input.GetKeyDown(KeyCode.Q);
@@ -187,7 +189,7 @@ public class Keybinds : MonoBehaviour {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
             return Input.GetButtonDown("GamepadX");
         else
-            return Input.GetButtonDown("Mouse2");
+            return Input.GetKey(KeyCode.Mouse2);
     }
 
     public static bool NegateDown() {
@@ -214,22 +216,14 @@ public class Keybinds : MonoBehaviour {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
             return Input.GetAxis("LeftTrigger");
         else
-            return Input.GetButton("Mouse1") ? 1 : 0;
+            return Input.GetKey(KeyCode.Mouse1) ? 1 : 0;
     }
 
     public static float RightBurnPercentage() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
             return Input.GetAxis("RightTrigger");
         else
-            return Input.GetButton("Mouse0") ? 1 : 0;
-    }
-
-    public static bool ToggleCoinshotMode() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
-            return Input.GetButtonDown("GamepadBack");
-        } else {
-            return Input.GetKeyDown(KeyCode.C);
-        }
+            return Input.GetKey(KeyCode.Mouse0) ? 1 : 0;
     }
 
     public static bool ToggleHelpOverlay() {
@@ -250,16 +244,30 @@ public class Keybinds : MonoBehaviour {
     }
     public static bool ZincTime() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
-            return true; // return Input.GetButton("GamepadLeftJoystickClick"); // managed in FeruchemicalZinc
+            return Input.GetButton("GamepadLeftJoystickClick");
         } else {
             return Input.GetKey(KeyCode.Tab);
         }
     }
+
     public static bool ControlWheel() {
+        return ZincTime();
+    }
+    public static bool ControlWheelDown() {
+        if(ZincTimeDown()) {
+            if(Time.unscaledTime < doubleTapTimeWheel) {
+                doubleTapTimeWheel = Time.unscaledTime + doubleTapThreshold;
+                return true;
+            }
+            doubleTapTimeWheel = Time.unscaledTime + doubleTapThreshold;
+        }
+        return false;
+    }
+    public static bool ControlWheelConfirm() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
-            return true;
+            return Input.GetButtonDown("GamepadA");
         } else {
-            return Input.GetKey(KeyCode.T);
+            return Input.GetKeyDown(KeyCode.Mouse0);
         }
     }
 
