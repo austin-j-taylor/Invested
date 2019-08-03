@@ -5,7 +5,7 @@ using UnityEngine;
  */
 [RequireComponent(typeof(Rigidbody))]
 public class AllomanticIronSteel : Allomancer {
-     
+
     public const int maxNumberOfTargets = 10;
     // Force calculation constants
     public const float chargePower = 1f / 8f;
@@ -92,14 +92,14 @@ public class AllomanticIronSteel : Allomancer {
     private Vector3 thisFrameMaximumNetForce = Vector3.zero;
 
     // Debug variables for viewing values in the Unity editor
-    public float allomanticsForce;
-    public float netAllomancersForce;
-    public float netTargetsForce;
-    public Vector3 allomanticsForces;
-    public Vector3 resititutionFromTargetsForce;
-    public Vector3 resititutionFromPlayersForce;
-    public float percentOfTargetForceReturned;
-    public float percentOfAllomancerForceReturned;
+    //public float allomanticsForce;
+    //public float netAllomancersForce;
+    //public float netTargetsForce;
+    //public Vector3 allomanticsForces;
+    //public Vector3 resititutionFromTargetsForce;
+    //public Vector3 resititutionFromPlayersForce;
+    //public float percentOfTargetForceReturned;
+    //public float percentOfAllomancerForceReturned;
     // Metal burn percentages
     // Used when burning metals, but not necessarily immediately Pushing or Pulling. Hence, they are "targets" and not the actual burn percentage of the Allomancer.
     public float IronBurnPercentageTarget { get; set; }
@@ -175,13 +175,16 @@ public class AllomanticIronSteel : Allomancer {
         }
     }
 
+    // Number of targets for Manual/Coinshot Control Mode; ignored for Area and Bubble
+    protected int sizeOfTargets;
+
     protected virtual void Awake() {
         rb = GetComponent<Rigidbody>();
         Charge = Mathf.Pow(Mass, chargePower);
         IronReserve = gameObject.AddComponent<MetalReserve>();
         SteelReserve = gameObject.AddComponent<MetalReserve>();
-        PullTargets = new TargetArray(maxNumberOfTargets);
-        PushTargets = new TargetArray(maxNumberOfTargets);
+        PullTargets = new TargetArray();
+        PushTargets = new TargetArray();
         GameManager.AddAllomancer(this);
     }
 
@@ -583,14 +586,14 @@ public class AllomanticIronSteel : Allomancer {
         rb.AddForce(target.LastNetForceOnAllomancer);
 
         // Debug
-        allomanticsForce = target.LastAllomanticForce.magnitude;
-        allomanticsForces = target.LastAllomanticForce;
-        netAllomancersForce = target.LastNetForceOnAllomancer.magnitude;
-        resititutionFromTargetsForce = target.LastAnchoredPushBoostFromTarget;
-        resititutionFromPlayersForce = target.LastAnchoredPushBoostFromAllomancer;
-        percentOfTargetForceReturned = resititutionFromTargetsForce.magnitude / allomanticsForce;
-        percentOfAllomancerForceReturned = resititutionFromPlayersForce.magnitude / allomanticsForce;
-        netTargetsForce = target.LastNetForceOnTarget.magnitude;
+        //allomanticsForce = target.LastAllomanticForce.magnitude;
+        //allomanticsForces = target.LastAllomanticForce;
+        //netAllomancersForce = target.LastNetForceOnAllomancer.magnitude;
+        //resititutionFromTargetsForce = target.LastAnchoredPushBoostFromTarget;
+        //resititutionFromPlayersForce = target.LastAnchoredPushBoostFromAllomancer;
+        //percentOfTargetForceReturned = resititutionFromTargetsForce.magnitude / allomanticsForce;
+        //percentOfAllomancerForceReturned = resititutionFromPlayersForce.magnitude / allomanticsForce;
+        //netTargetsForce = target.LastNetForceOnTarget.magnitude;
     }
 
     /*

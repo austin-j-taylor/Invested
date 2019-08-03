@@ -6,6 +6,8 @@ using UnityEngine;
  * Array-based data structure used for storing an Allomancer's Pull targets or Push targets
  */
 public class TargetArray {
+    
+    public const int arraySize = 30; // Area, Bubble Control Mode
 
     public const float lightSaberConstant = 1024;
     private const float blueLineTargetedWidthFactor = .06f;
@@ -16,14 +18,14 @@ public class TargetArray {
 
     private Magnetic[] targets;
     private Magnetic vacuousTarget; // When no targets are selected, the vacuous target may still be Pushed on.
-
-    public int Size { get; private set; } = 1;
+    
+    public int Size { get; private set; } = 1; // When in Manual, ranges from [1:10]
     public int Count { get; private set; } = 0;
 
     public float MaxRange { get; set; } = 0; // 0 if ignored (use SettingsData), negative if infinite, positive if this Allomancer has a custom max range
-
-    public TargetArray(int maxNumberOfTargets) {
-        targets = new Magnetic[maxNumberOfTargets];
+    
+    public TargetArray() {
+        targets = new Magnetic[arraySize];
     }
 
     /*

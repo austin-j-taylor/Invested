@@ -53,8 +53,6 @@ public class Player : PewterEntity {
     }
 
     private float coinCooldownTimer = 0;
-    // In coinshot mode, clicking down to ironpull while pushing throws a coin, similar to conventional first-person shooters.
-    public static bool CoinshotMode { get; private set; } = false;
 
     protected override void Awake() {
         base.Awake();
@@ -80,15 +78,15 @@ public class Player : PewterEntity {
 
     void Update() {
         if (CanControlPlayer) {
-            // On throwing a coin
-            if (!CoinHand.Pouch.IsEmpty) {
-                if ((CoinshotMode && Keybinds.IronPulling() && Keybinds.SteelPushing() || Keybinds.WithdrawCoinDown()) && coinCooldownTimer > coinCooldownThreshold) {
-                    coinCooldownTimer = 0;
-                    PlayerIronSteel.AddPushTarget(CoinHand.WithdrawCoinToHand());
-                } else {
-                    coinCooldownTimer += Time.deltaTime * (PlayerZinc.InZincTime ? 2 : 1); // throw coins 
-                }
-            }
+            //// On throwing a coin
+            //if (!CoinHand.Pouch.IsEmpty) {
+            //    if ((HUD.ControlWheelController.IsModeCoinshot && Keybinds.IronPulling() && Keybinds.SteelPushing() || Keybinds.WithdrawCoinDown()) && coinCooldownTimer > coinCooldownThreshold) {
+            //        coinCooldownTimer = 0;
+            //        PlayerIronSteel.AddPushTarget(CoinHand.WithdrawCoinToHand());
+            //    } else {
+            //        coinCooldownTimer += Time.deltaTime * (PlayerZinc.InZincTime ? 2 : 1); // throw coins 
+            //    }
+            //}
         }
     }
 
@@ -146,9 +144,5 @@ public class Player : PewterEntity {
 
     public void SetFrameMaterial(Material mat) {
         playerFrame.GetComponent<Renderer>().material = mat;
-    }
-
-    public void ToggleCoinshotMode() {
-        CoinshotMode = !CoinshotMode;
     }
 }

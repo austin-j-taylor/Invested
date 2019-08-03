@@ -11,17 +11,24 @@ public class ControlWheelController : MonoBehaviour {
     private const float angleStopBurning_Manual = 112.5f;
     private const float angleManual_Area = 67.5f;
     private const float angleArea_Bubble = 22.5f;
-    private const float angleBubble_Empty = -22.5f;
-    private const float angleEmpty_CoinshotSpray = -67.5f;
-    private const float angleCoinshotSpray_CoinshotFull = -82.5f;
-    private const float angleCoinshotFull_CoinshotSemi = -97.5f;
-    private const float angleCoinshotSemi_DeselectAll = -112.5f;
+    private const float angleBubble_Coinshot = -22.5f;
+    private const float angleCoinshot_CoinSpray = -67.5f;
+    private const float angleCoinSpray_CoinFull = -82.5f;
+    private const float angleCoinFull_CoinSemi = -97.5f;
+    private const float angleCoinSemi_DeselectAll = -112.5f;
 
-    enum Selection { Cancel, Manual, Area, Bubble, Empty, Coinshot, Coin_Spray, Coin_Full, Coin_Semi, DeselectAll, StopBurning };
-    
+    private readonly Color colorBlankSpoke = new Color(1, 1, 1, .1f);
+    private readonly Color colorHighlitSpoke = new Color(1, 1, 1, .25f);
+    private readonly Color colorSelectedSpoke = new Color(1, 1, 1, .5f);
+
+    enum Selection { Cancel, Manual, Area, Bubble, Coinshot, Coin_Spray, Coin_Full, Coin_Semi, DeselectAll, StopBurning };
+
     private Image circle;
+    private Image[] spokes;
 
-    private static Selection selected;
+    private Selection highlit; // the selection being hovered over
+    private Selection selectedSpoke; // manual, area, etc.
+    private Selection selectedCoin; // semi auto, full auto, spray
 
     private bool isOpen = false;
     public bool IsOpen {
@@ -39,27 +46,35 @@ public class ControlWheelController : MonoBehaviour {
                     if (SettingsMenu.settingsData.controlScheme != SettingsData.Gamepad)
                         CameraController.LockCamera();
                     HUD.HideControlWheel();
-                    Debug.Log(selected);
+
                     // Execute selected
-                    switch(selected) {
+                    switch(highlit) {
                         case Selection.Cancel:
                             break;
                         case Selection.Manual:
+                            selectedSpoke = highlit;
+                            Player.PlayerIronSteel.SetControlModeManual();
                             break;
                         case Selection.Area:
+                            selectedSpoke = highlit;
+                            Player.PlayerIronSteel.SetControlModeArea();
                             break;
                         case Selection.Bubble:
-                            break;
-                        case Selection.Empty:
+                            selectedSpoke = highlit;
+                            Player.PlayerIronSteel.SetControlModeBubble();
                             break;
                         case Selection.Coinshot:
-                            Player.PlayerInstance.ToggleCoinshotMode();
+                            selectedSpoke = highlit;
+                            Player.PlayerIronSteel.SetControlModeCoinshot();
                             break;
                         case Selection.Coin_Spray:
+                            selectedCoin = highlit;
                             break;
                         case Selection.Coin_Full:
+                            selectedCoin = highlit;
                             break;
                         case Selection.Coin_Semi:
+                            selectedCoin = highlit;
                             break;
                         case Selection.DeselectAll:
                             Player.PlayerIronSteel.RemoveAllTargets();
@@ -68,10 +83,26 @@ public class ControlWheelController : MonoBehaviour {
                             Player.PlayerIronSteel.StopBurning();
                             break;
                     }
+                    RefreshSpokes();
                 }
             }
             isOpen = value;
         }
+    }
+
+    void Start() {
+        selectedSpoke = Selection.Manual;
+        selectedCoin = Selection.Coin_Semi;
+        circle = transform.Find("Circle").GetComponent<Image>();
+        spokes = transform.Find("Selections").GetComponentsInChildren<Image>();
+    }
+
+    public void Clear() {
+        circle.fillAmount = 1;
+        isOpen = false;
+        HUD.HideControlWheel(true);
+        highlit = Selection.Cancel;
+        RefreshSpokes();
     }
 
     private void LateUpdate() {
@@ -106,37 +137,32 @@ public class ControlWheelController : MonoBehaviour {
                     }
                     // The selection depends on the radius and angle of input
                     if (radius < pixelRadius) {
-                        selected = Selection.Cancel;
+                        highlit = Selection.Cancel;
                     } else { // outside Cancel circle: depending on the angle, choose a selection
                         if (angle > angleDeselectAll_StopBurning) {
-                            selected = Selection.DeselectAll;
+                            highlit = Selection.DeselectAll;
                         } else if (angle > angleStopBurning_Manual) {
-                            selected = Selection.StopBurning;
+                            highlit = Selection.StopBurning;
                         } else if (angle > angleManual_Area) {
-                            selected = Selection.Manual;
+                            highlit = Selection.Manual;
                         } else if (angle > angleArea_Bubble) {
-                            selected = Selection.Area;
-                        } else if (angle > angleBubble_Empty) {
-                            selected = Selection.Bubble;
-                        } else if (angle > angleEmpty_CoinshotSpray) {
-                            selected = Selection.Empty;
-                        } else if (angle > angleCoinshotSemi_DeselectAll) {
-                            // could be Coinshot if input is within outer radius; if not, it's Coin_Spray, Full, or Semi
-                            if (radius < pixelRadius * 2) {
-                                selected = Selection.Coinshot;
-                            } else {
-                                if (angle > angleCoinshotSpray_CoinshotFull) {
-                                    selected = Selection.Coin_Spray;
-                                } else if (angle > angleCoinshotFull_CoinshotSemi) {
-                                    selected = Selection.Coin_Full;
-                                } else {
-                                    selected = Selection.Coin_Semi;
-                                }
-                            }
+                            highlit = Selection.Area;
+                        } else if (angle > angleBubble_Coinshot) {
+                            highlit = Selection.Bubble;
+                        } else if (angle > angleCoinshot_CoinSpray) {
+                            highlit = Selection.Coinshot;
+                        } else if (angle > angleCoinSpray_CoinFull) {
+                            highlit = Selection.Coin_Spray;
+                        } else if (angle > angleCoinFull_CoinSemi) {
+                            highlit = Selection.Coin_Full;
+                        } else if (angle > angleCoinSemi_DeselectAll) {
+                            highlit = Selection.Coin_Semi;
                         } else {
-                            selected = Selection.DeselectAll;
+                            highlit = Selection.DeselectAll;
                         }
                     }
+                    // Update spoke images to reflect current highlit option
+                    RefreshSpokes();
                 }
                 if (Keybinds.ControlWheelConfirm()) {
                     IsOpen = false;
@@ -148,15 +174,20 @@ public class ControlWheelController : MonoBehaviour {
             }
         }
     }
-    
-    void Awake() {
-        circle = transform.Find("Circle").GetComponent<Image>();
-    }
 
-    public void Clear() {
-        circle.fillAmount = 1;
-        isOpen = false;
-        HUD.HideControlWheel(true);
-        selected = Selection.Cancel;
+    // Set the color of all spokes:
+    // Selected spoke: dark gray
+    // Highlit spoke: light gray
+    // Others: invisible
+    private void RefreshSpokes() {
+        // clear all spokes
+        foreach (Image image in spokes) {
+            image.color = colorBlankSpoke;
+        }
+
+        spokes[(int)selectedSpoke].color = colorSelectedSpoke;
+        spokes[(int)selectedCoin].color = colorSelectedSpoke;
+        spokes[(int)highlit].color = colorHighlitSpoke;
+        
     }
 }
