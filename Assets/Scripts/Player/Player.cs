@@ -105,7 +105,7 @@ public class Player : PewterEntity {
     public void ClearPlayerBeforeSceneChange(Scene scene) {
         GetComponentInChildren<AllomechanicalGlower>().RemoveAllEmissions();
         movementController.Clear();
-        PlayerIronSteel.Clear(false);
+        PlayerIronSteel.Clear();
         PlayerPewter.Clear();
         PlayerZinc.Clear();
     }

@@ -40,17 +40,10 @@ public class BurnPercentageMeter : MonoBehaviour {
         burnRateAlternateImage.fillAmount = minAngle;
     }
 
-    // Clear unwanted fields after changing settings
+    // Hide unwanted fields after changing Settings
     public void InterfaceRefresh() {
         if (SettingsMenu.settingsData.forceComplexity == 0) {
             sumForceText.text = "";
-        }
-    }
-
-    // Hide the burn meter if the player is not burning iron/steel
-    public void HardRefresh() {
-        if(!Player.PlayerIronSteel.IsBurning) {
-            Clear();
         }
     }
 
@@ -101,7 +94,13 @@ public class BurnPercentageMeter : MonoBehaviour {
         actualForceText.color = HUD.weakBlue;
     }
 
-    public void SetMetalLineCountText(string text) {
-        metalLineCountText.text = text;
+    public void SetMetalLineCountTextManual(int sizeOfTargetArrays) {
+        metalLineCountText.text = sizeOfTargetArrays.ToString();
+    }
+    public void SetMetalLineCountTextArea(float radius) {
+        metalLineCountText.text = HUD.RoundStringToSigFigs(radius) + "%";
+    }
+    public void SetMetalLineCountTextBubble(float radius) {
+        metalLineCountText.text = HUD.RoundStringToSigFigs(radius) + "m";
     }
 }

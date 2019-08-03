@@ -23,7 +23,7 @@ public class Keybinds : MonoBehaviour {
     }
 
     public static bool PullDown() {
-        if(SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
             if (Input.GetAxis("RightTrigger") > triggerDeadband) {
                 return !lastWasPulling;
             }
@@ -54,10 +54,10 @@ public class Keybinds : MonoBehaviour {
     public static bool SelectDown() {
         switch (SettingsMenu.settingsData.controlScheme) {
             case SettingsData.MK54: {
-                    return Input.GetKey(KeyCode.Mouse4);
+                    return Input.GetKeyDown(KeyCode.Mouse4);
                 }
             case SettingsData.MK45: {
-                    return Input.GetKey(KeyCode.Mouse3);
+                    return Input.GetKeyDown(KeyCode.Mouse3);
                 }
             case SettingsData.MKEQ: {
                     return Input.GetKeyDown(KeyCode.E);
@@ -99,10 +99,10 @@ public class Keybinds : MonoBehaviour {
                     return Input.GetButton("Mouse4");
                 }
             case SettingsData.MKEQ: {
-                    return Input.GetKey(KeyCode.Q);
+                    return Input.GetKeyDown(KeyCode.Q);
                 }
             case SettingsData.MKQE: {
-                    return Input.GetKey(KeyCode.E);
+                    return Input.GetKeyDown(KeyCode.E);
                 }
             default: {
                     return Input.GetButton("LeftBumper");
@@ -176,7 +176,7 @@ public class Keybinds : MonoBehaviour {
         else
             return Input.GetKeyDown(KeyCode.LeftShift);
     }
-    
+
     public static bool Walk() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
             return Input.GetButton("GamepadRightJoystickClick");
@@ -189,7 +189,7 @@ public class Keybinds : MonoBehaviour {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
             return Input.GetButtonDown("GamepadX");
         else
-            return Input.GetKey(KeyCode.Mouse2);
+            return Input.GetKeyDown(KeyCode.Mouse2);
     }
 
     public static bool NegateDown() {
@@ -254,8 +254,8 @@ public class Keybinds : MonoBehaviour {
         return ZincTime();
     }
     public static bool ControlWheelDown() {
-        if(ZincTimeDown()) {
-            if(Time.unscaledTime < doubleTapTimeWheel) {
+        if (ZincTimeDown()) {
+            if (Time.unscaledTime < doubleTapTimeWheel) {
                 doubleTapTimeWheel = Time.unscaledTime + doubleTapThreshold;
                 return true;
             }

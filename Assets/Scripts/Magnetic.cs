@@ -17,7 +17,7 @@ public class Magnetic : MonoBehaviour {
     public const float lowLineColor = .1f;
     public const float highLineColor = .85f;
     private readonly Color brightBlue = new Color(0, .3f, highLineColor);
-    
+
     [SerializeField]
     protected float netMass = 0;
     [SerializeField]
@@ -114,7 +114,37 @@ public class Magnetic : MonoBehaviour {
     }
     public float Charge { get; private set; }
     // If this Magnetic is at the center of the screen, highlighted, ready to be targeted.
-    public bool IsHighlighted { get; private set; }
+    private bool isHighlighted;
+    public bool IsHighlighted {
+        get {
+            return isHighlighted;
+        }
+        set {
+            if (value != isHighlighted) {
+                if (value) {
+                    if (SettingsMenu.settingsData.highlightedTargetOutline == 1) {
+                        for (int i = 0; i < childMagnetics.Length; i++) {
+                            // Assign original emmisions
+                            if (childMagnetics[i].material.IsKeywordEnabled("_EMISSION"))
+                                defaultEmissionColor[i] = childMagnetics[i].material.GetColor("_EmissionColor");
+
+                            childMagnetics[i].material.SetColor("_EmissionColor", new Color(0, .35f, 1f) * Mathf.LinearToGammaSpace(2));
+                            childMagnetics[i].material.EnableKeyword("_EMISSION");
+                        }
+                    }
+                } else {
+                    for (int i = 0; i < childMagnetics.Length; i++) {
+                        if (defaultEmissionColor[i] == null)
+                            childMagnetics[i].material.DisableKeyword("_EMISSION");
+                        else
+                            childMagnetics[i].material.SetColor("_EmissionColor", defaultEmissionColor[i]);
+                    }
+                }
+
+                isHighlighted = value;
+            }
+        }
+    }
     // The total mass of this object (RigidBody mass)
     public float NetMass { get { return netMass; } }
     // The magnetic mass of this object
@@ -125,8 +155,8 @@ public class Magnetic : MonoBehaviour {
     private Vector3 centerOfMass;
     public Vector3 CenterOfMass {
         get {
-            if(IsStatic) {
-                if(HasColliders) {
+            if (IsStatic) {
+                if (HasColliders) {
                     return transform.TransformPoint(centerOfMass);
                 } else {
                     // no collider or rigidbody, so center of mass is set to transform.position as a default
@@ -169,19 +199,17 @@ public class Magnetic : MonoBehaviour {
     }
 
     protected void Awake() {
-        if(childMagnetics == null || childMagnetics.Length == 0) {
+        if (childMagnetics == null || childMagnetics.Length == 0) {
             // If not assigned in the editor, assume that all children should glow
             childMagnetics = GetComponentsInChildren<Renderer>();
         }
         defaultEmissionColor = new Color[childMagnetics.Length];
         blueLine = Instantiate(GameManager.MetalLineTemplate);
         colliders = GetComponentsInChildren<Collider>();
-        if (gameObject.layer != LayerMask.NameToLayer("Undetectable Magnetic"))
-            GameManager.AddMagnetic(this);
         lightSaberFactor = 1;
         lastWasPulled = false;
         isBeingPushPulled = false;
-        IsHighlighted = false;
+        isHighlighted = false;
         if (!IsStatic) { // assigned by MagneticDense
             Rb = GetComponentInParent<Rigidbody>();
             IsStatic = (Rb == null);
@@ -195,7 +223,7 @@ public class Magnetic : MonoBehaviour {
             if (magneticMass == 0) {
                 magneticMass = netMass;
             }
-            if(HasColliders) {
+            if (HasColliders) {
                 //Vector3 centers = colliders[0].bounds.center;
                 //int triggerCount = 0;
                 //for (int i = 1; i < colliders.Length; i++) {
@@ -245,7 +273,7 @@ public class Magnetic : MonoBehaviour {
         LastMaxPossibleAllomanticForce = Vector3.zero;
         LastAnchoredPushBoostFromAllomancer = Vector3.zero;
         LastAnchoredPushBoostFromTarget = Vector3.zero;
-        RemoveTargetGlow();
+        IsHighlighted = false;
     }
 
     private void OnDestroy() {
@@ -259,7 +287,8 @@ public class Magnetic : MonoBehaviour {
     }
 
     private void OnEnable() {
-        GameManager.AddMagnetic(this);
+        if (gameObject.layer != LayerMask.NameToLayer("Undetectable Magnetic"))
+            GameManager.AddMagnetic(this);
     }
 
     public virtual void AddForce(Vector3 netForce, Vector3 allomanticForce /* unused for the Magnetic base class */) {
@@ -273,29 +302,6 @@ public class Magnetic : MonoBehaviour {
     }
     public virtual void StopBeingPullPushed() {
         isBeingPushPulled = false;
-    }
-
-    public void AddTargetGlow() {
-        if (SettingsMenu.settingsData.highlightedTargetOutline == 1) {
-            for (int i = 0; i < childMagnetics.Length; i++) {
-                // Assign original emmisions
-                if (childMagnetics[i].material.IsKeywordEnabled("_EMISSION"))
-                    defaultEmissionColor[i] = childMagnetics[i].material.GetColor("_EmissionColor");
-
-                childMagnetics[i].material.SetColor("_EmissionColor", new Color(0, .35f, 1f) * Mathf.LinearToGammaSpace(2));
-                childMagnetics[i].material.EnableKeyword("_EMISSION");
-            }
-        }
-
-    }
-
-    public void RemoveTargetGlow() {
-        for (int i = 0; i < childMagnetics.Length; i++) {
-            if (defaultEmissionColor[i] == null)
-                childMagnetics[i].material.DisableKeyword("_EMISSION");
-            else
-                childMagnetics[i].material.SetColor("_EmissionColor", defaultEmissionColor[i]);
-        }
     }
 
     // Set properties of the blue line pointing to this metal

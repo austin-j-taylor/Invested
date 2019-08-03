@@ -6,7 +6,7 @@ using UnityEngine;
  * Array-based data structure used for storing an Allomancer's Pull targets or Push targets
  */
 public class TargetArray {
-    
+
     public const int arraySize = 30; // Area, Bubble Control Mode
 
     public const float lightSaberConstant = 1024;
@@ -18,12 +18,29 @@ public class TargetArray {
 
     private Magnetic[] targets;
     private Magnetic vacuousTarget; // When no targets are selected, the vacuous target may still be Pushed on.
-    
-    public int Size { get; private set; } = 1; // When in Manual, ranges from [1:10]
+
+    private int size = 1;
+    public int Size {
+        get {
+            return size;
+        }
+        set {
+            if (value >= targets.Length)
+                value = targets.Length;
+            if (value < 0)
+                value = 0;
+            if (Count > value) {
+                ReduceCountTo(value);
+            }
+
+            size = value;
+        }
+    }
+
     public int Count { get; private set; } = 0;
 
     public float MaxRange { get; set; } = 0; // 0 if ignored (use SettingsData), negative if infinite, positive if this Allomancer has a custom max range
-    
+
     public TargetArray() {
         targets = new Magnetic[arraySize];
     }
@@ -79,22 +96,6 @@ public class TargetArray {
             return targets[key];
         }
     }
-
-    /*
-     * Moves all elements down, covering the element at index, making an empty space at Count
-     * Decrements Count.
-     */
-    private void MoveDown(int index, bool clear = true) {
-        if(clear)
-            targets[index].Clear();
-
-        for (int i = index; i < Count - 1; i++) {
-            targets[i] = targets[i + 1];
-        }
-        Count--;
-        targets[Count] = null;
-    }
-
     /*
      * Removes a target by index
      */
@@ -103,6 +104,7 @@ public class TargetArray {
             MoveDown(index);
         }
     }
+
 
     /*
      * Removes a target by reference
@@ -164,52 +166,16 @@ public class TargetArray {
     }
 
     /*
-     * Returns the index of potentialTarget in targets.
-     * Returns -1 if potentialTarget is not in targets.
-     */
-    private int GetIndex(Magnetic potentialTarget) {
-        for (int i = 0; i < Count; i++) {
-            if (potentialTarget == targets[i])
-                return i;
-        }
-        return -1;
-    }
-
-    /*
      * Removes all targets from the array
      */
-    public void Clear(bool setSizeTo1 = false, bool clearTargets = true) {
+    public void Clear(bool setSizeTo1 = false) {
         for (int i = 0; i < Count; i++) {
-            if(clearTargets)
-                targets[i].Clear();
+            targets[i].Clear();
             targets[i] = null;
         }
         Count = 0;
         if (setSizeTo1)
             Size = 1;
-    }
-
-    /*
-     * Increments the available number of targets in the array.
-     */
-    public void IncrementSize() {
-        if (Size < targets.Length) {
-            Size++;
-        }
-    }
-
-    /*
-     * Decrements the available number of targets in the array.
-     * If there are too many targets after decrementing the Size, remove the oldest one.
-     * Cannot go below 1.
-     */
-    public void DecrementSize() {
-        if (Size > 1) {
-            Size--;
-            if (Count > Size) {
-                RemoveTargetAt(0);
-            }
-        }
     }
 
     /*
@@ -254,7 +220,7 @@ public class TargetArray {
      * Removes all entries out of range, using the given burn rate
      */
     public void RemoveAllOutOfRange(float burnRate, AllomanticIronSteel allomancer) {
-        if(MaxRange == 0) {
+        if (MaxRange == 0) {
             for (int i = 0; i < Count; i++) {
                 if (SettingsMenu.settingsData.pushControlStyle == 0 && SettingsMenu.settingsData.controlScheme != SettingsData.Gamepad) {
                     if (!targets[i].IsInRange(allomancer, burnRate)) {
@@ -266,12 +232,59 @@ public class TargetArray {
                     }
                 }
             }
-        } else if(MaxRange > 0) {
+        } else if (MaxRange > 0) {
             for (int i = 0; i < Count; i++) {
                 if ((targets[i].CenterOfMass - allomancer.CenterOfMass).sqrMagnitude > MaxRange * MaxRange) {
                     RemoveTargetAt(i);
                 }
             }
         } // else: maxrange < 0, no max range
+    }
+    /*
+     * Removes targets at or above the specified index
+     * e.g. for size 40 and count 4:
+     *      [A] [B] [C] [D] [ ] [ ] .. [ ]
+     * ReduceCountTo(2) results in size 40 and count 2 (Size property assigns size)
+     *      [A] [B] [ ] [ ] [ ] [ ] .. [ ]
+     */
+    private void ReduceCountTo(int index) {
+        for (int i = index; i < Count; i++) {
+            targets[i].Clear();
+            targets[i] = null;
+        }
+        Count = index;
+    }
+
+    /*
+     * Moves all elements down, covering the element at index, making an empty space at Count
+     * Decrements Count.
+     * e.g. for size 40 and count 4:
+     *      [A] [B] [C] [D] [ ] [ ] .. [ ]
+     * MoveDown(1) results in size 40 and count 3
+     *      [A] [B] [D] [ ] [ ] [ ] .. [ ]
+     */
+    private void MoveDown(int index, bool clear = true) {
+        if (Count == 0)
+            return;
+        if (clear)
+            targets[index].Clear();
+
+        for (int i = index; i < Count - 1; i++) {
+            targets[i] = targets[i + 1];
+        }
+        Count--;
+        targets[Count] = null;
+    }
+
+    /*
+     * Returns the index of potentialTarget in targets.
+     * Returns -1 if potentialTarget is not in targets.
+     */
+    private int GetIndex(Magnetic potentialTarget) {
+        for (int i = 0; i < Count; i++) {
+            if (potentialTarget == targets[i])
+                return i;
+        }
+        return -1;
     }
 }
