@@ -15,12 +15,16 @@ public class TextCodes : MonoBehaviour {
     public const string s_Mouse_Button_3 = "Mouse Button 3";
     public const string s_Mouse_Button_4 = "Mouse Button 4";
     public const string s_Mouse_Button_5 = "Mouse Button 5";
+    public const string s_Mouse_Button_4Abridged = "MB4";
+    public const string s_Mouse_Button_5Abridged = "MB5";
     public const string s_E = "E";
     public const string s_Q = "Q";
     public const string s_Left_Trigger = "Left Trigger";
     public const string s_Right_Trigger = "Right Trigger";
     public const string s_Left_Bumper = "Left Bumper";
     public const string s_Right_Bumper = "Right Bumper";
+    public const string s_Left_BumperAbridged = "LB";
+    public const string s_Right_BumperAbridged = "RB";
     public const string s_Left_Click = "Left Click";
     public const string s_Right_Click = "Right Click";
     public const string s_Up_Down_on_the_D_Pad = "Up/Down on the D-Pad";
@@ -118,6 +122,11 @@ public class TextCodes : MonoBehaviour {
             return Push + '/' + Pull;
         }
     }
+    public static string Pull_Push {
+        get {
+            return Pull + '/' + Push;
+        }
+    }
     public static string Pushes_and_Pulls {
         get {
             return Pushes + " and " + Pulls;
@@ -212,9 +221,19 @@ public class TextCodes : MonoBehaviour {
             return MidBlue(s_Left_Click);
         }
     }
+    public static string LeftClickAbridged {
+        get {
+            return MidBlue("LMB");
+        }
+    }
     public static string RightClick {
         get {
             return Red(s_Right_Click);
+        }
+    }
+    public static string RightClickAbridged {
+        get {
+            return Red("RMB");
         }
     }
     public static string RightTrigger {
@@ -222,9 +241,19 @@ public class TextCodes : MonoBehaviour {
             return MidBlue(s_Right_Trigger);
         }
     }
+    public static string RightTriggerAbridged {
+        get {
+            return MidBlue("RT");
+        }
+    }
     public static string LeftTrigger {
         get {
             return Red(s_Left_Trigger);
+        }
+    }
+    public static string LeftTriggerAbridged {
+        get {
+            return Red("LT");
         }
     }
     public static string mouseButton3 {
@@ -235,6 +264,11 @@ public class TextCodes : MonoBehaviour {
     public static string theScrollWheel {
         get {
             return "the " + Gray("scroll wheel");
+        }
+    }
+    public static string scrollWheel {
+        get {
+            return Gray("scroll wheel");
         }
     }
     public static string theLeftJoystick {
@@ -385,12 +419,28 @@ public class TextCodes : MonoBehaviour {
                 return LeftClick;
         }
     }
+    public static string _KeyPullAbridged {
+        get {
+            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+                return RightTriggerAbridged;
+            else
+                return LeftClickAbridged;
+        }
+    }
     public static string _KeyPush {
         get {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
                 return LeftTrigger;
             else
                 return RightClick;
+        }
+    }
+    public static string _KeyPushAbridged {
+        get {
+            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+                return LeftTriggerAbridged;
+            else
+                return RightClickAbridged;
         }
     }
     public static string KeyZincTime {
@@ -422,6 +472,27 @@ public class TextCodes : MonoBehaviour {
             }
         }
     }
+    public static string _KeySelectAbridged {
+        get {
+            switch (SettingsMenu.settingsData.controlScheme) {
+                case SettingsData.MK54: {
+                        return LightBlue(s_Mouse_Button_5Abridged);
+                    }
+                case SettingsData.MK45: {
+                        return LightBlue(s_Mouse_Button_4Abridged);
+                    }
+                case SettingsData.MKEQ: {
+                        return LightBlue(s_E);
+                    }
+                case SettingsData.MKQE: {
+                        return LightBlue(s_Q);
+                    }
+                default: {
+                        return LightBlue(s_Right_BumperAbridged);
+                    }
+            }
+        }
+    }
     public static string _KeySelectAlternate {
         get {
             switch (SettingsMenu.settingsData.controlScheme) {
@@ -439,6 +510,27 @@ public class TextCodes : MonoBehaviour {
                     }
                 default: {
                         return LightRed(s_Left_Bumper);
+                    }
+            }
+        }
+    }
+    public static string _KeySelectAlternateAbridged {
+        get {
+            switch (SettingsMenu.settingsData.controlScheme) {
+                case SettingsData.MK54: {
+                        return LightRed(s_Mouse_Button_4Abridged);
+                    }
+                case SettingsData.MK45: {
+                        return LightRed(s_Mouse_Button_5Abridged);
+                    }
+                case SettingsData.MKEQ: {
+                        return LightRed(s_Q);
+                    }
+                case SettingsData.MKQE: {
+                        return LightRed(s_E);
+                    }
+                default: {
+                        return LightRed(s_Left_BumperAbridged);
                     }
             }
         }
@@ -472,27 +564,7 @@ public class TextCodes : MonoBehaviour {
                 return s_Press_ + LightBlue(s_Left_Click);
         }
     }
-    //public static string KeyStopBurning {
-    //    get {
-    //        switch (SettingsMenu.settingsData.controlScheme) {
-    //            case SettingsData.MK54: {
-    //                    return "Decrease " + BurnPercentage + " to 0% or " + s_Hold_ + Tab + ", " + LightBlue(s_Mouse_Button_5) + ", and " + LightRed(s_Mouse_Button_4);
-    //                }
-    //            case SettingsData.MK45: {
-    //                    return "Decrease " + BurnPercentage + " to 0% or " + s_Hold_ + Tab + ", " + LightBlue(s_Mouse_Button_4) + ", and " + LightRed(s_Mouse_Button_5);
-    //                }
-    //            case SettingsData.MKEQ: {
-    //                    return "Decrease " + BurnPercentage + " to 0% or " + s_Hold_ + Tab + ", " + LightBlue(s_E) + ", and " + LightRed(s_Q);
-    //                }
-    //            case SettingsData.MKQE: {
-    //                    return "Decrease " + BurnPercentage + " to 0% or " + s_Hold_ + Tab + ", " + LightBlue(s_Q) + ", and " + LightRed(s_E);
-    //                }
-    //            default: {
-    //                    return s_Hold_ + Y + ", " + LightBlue(s_Right_Bumper) + ", and " + LightRed(s_Left_Bumper);
-    //                }
-    //        }
-    //    }
-    //}
+
     public static string KeyStopBurning {
         get {
             switch (SettingsMenu.settingsData.controlScheme) {
@@ -527,7 +599,7 @@ public class TextCodes : MonoBehaviour {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
                 return Y;
             else
-                return R;
+                return "(" + R + " or " + LeftAlt + ")";
         }
     }
     public static string KeyPushPullStrength {

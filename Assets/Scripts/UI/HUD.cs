@@ -105,6 +105,11 @@ public class HUD : MonoBehaviour {
         }
     }
 
+    public static void UpdateText() {
+        HelpOverlayController.UpdateText();
+        ControlWheelController.UpdateText();
+    }
+
     // Returns a string reading a single Force in Newtons or G's
     public static string ForceString(float force, float mass, int sigFigs = 2) {
         if(SettingsMenu.settingsData.forceUnits == 1) {

@@ -9,6 +9,8 @@ public class Player : PewterEntity {
     private const float coinCooldownThreshold = 1f / 10;
     private const float zincTimeCoinThrowModifier = 2; // throw coins faster while in zinc time
 
+    public enum CoinMode { Semi, Full, Spray };
+
     //private Animator animator;
     private PlayerMovementController movementController;
     private Material frameMaterial;
@@ -51,6 +53,7 @@ public class Player : PewterEntity {
             godMode = value;
         }
     }
+    public CoinMode CoinThrowingMode;
 
     private float coinCooldownTimer = 0;
 
@@ -71,6 +74,7 @@ public class Player : PewterEntity {
         PlayerMagnetic = GetComponentInChildren<Magnetic>();
         PlayerZinc = GetComponent<FeruchemicalZinc>();
         Health = 100;
+        CoinThrowingMode = CoinMode.Semi;
         CoinHand = GetComponentInChildren<Hand>();
         SceneManager.sceneLoaded += ClearPlayerAfterSceneChange;
         SceneManager.sceneUnloaded += ClearPlayerBeforeSceneChange;
@@ -78,15 +82,40 @@ public class Player : PewterEntity {
 
     void Update() {
         if (CanControlPlayer) {
-            //// On throwing a coin
-            //if (!CoinHand.Pouch.IsEmpty) {
-            //    if ((HUD.ControlWheelController.IsModeCoinshot && Keybinds.IronPulling() && Keybinds.SteelPushing() || Keybinds.WithdrawCoinDown()) && coinCooldownTimer > coinCooldownThreshold) {
-            //        coinCooldownTimer = 0;
-            //        PlayerIronSteel.AddPushTarget(CoinHand.WithdrawCoinToHand());
-            //    } else {
-            //        coinCooldownTimer += Time.deltaTime * (PlayerZinc.InZincTime ? 2 : 1); // throw coins 
-            //    }
-            //}
+            // On throwing a coin
+            if (!CoinHand.Pouch.IsEmpty) {
+                
+                if(coinCooldownTimer > coinCooldownThreshold) {
+                    // TODO: simplify logic. just like this for thinking
+                    bool firing = false;
+                    if (Keybinds.WithdrawCoinDown())
+                        firing = true;
+                    if (PlayerIronSteel.Mode == PlayerPullPushController.ControlMode.Coinshot) {
+                        if (!PlayerIronSteel.HasPullTarget) {
+                            if (Keybinds.PullDown() || CoinThrowingMode == CoinMode.Full && Keybinds.IronPulling()) {
+                                firing = true;
+                            }
+                        }
+                    } else {
+                        if(CoinThrowingMode == CoinMode.Full && Keybinds.WithdrawCoin()) {
+                            firing = true;
+                        }
+                    }
+
+                    if (firing) {
+                        coinCooldownTimer = 0;
+                        if (CoinThrowingMode == CoinMode.Spray) {
+                            Coin[] coins = CoinHand.WithdrawCoinSprayToHand();
+                            for(int i = 0; i < Hand.spraySize; i++)
+                                PlayerIronSteel.AddVacuousPushTarget(coins[i], true);
+                        } else
+                            PlayerIronSteel.AddVacuousPushTarget(CoinHand.WithdrawCoinToHand());
+
+                    }
+                } else {
+                    coinCooldownTimer += Time.deltaTime * (PlayerZinc.InZincTime ? 2 : 1); // throw coins 
+                }
+            }
         }
     }
 
@@ -111,14 +140,13 @@ public class Player : PewterEntity {
     }
 
     // Reset certain values AFTER the player enters a new scene
+    // TODO Clear flags upon entering first level
     private void ClearPlayerAfterSceneChange(Scene scene, LoadSceneMode mode) {
         if (mode == LoadSceneMode.Single) { // Not loading all of the scenes, as it does at startup
             PlayerIronSteel.Clear();
             SetFrameMaterial(frameMaterial);
             CanControlPlayer = true;
-            //if (scene.buildIndex == SceneSelectMenu.sceneLevel01)
-            //    GodMode = true;
-            //else
+
             if (scene.buildIndex == SceneSelectMenu.sceneLevel01) {
                 CoinHand.Pouch.Clear();
                 PlayerIronSteel.IronReserve.SetMass(0);

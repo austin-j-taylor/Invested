@@ -31,8 +31,7 @@ public class AllomechanicalGlower : MonoBehaviour {
         pewters = transform.Find("Pewters").GetComponentsInChildren<Renderer>();
     }
     
-    void LateUpdate()
-    {
+    void LateUpdate() {
         if (allomancer.IsBurning) {
             if (allomancer.IronPulling) {
                 foreach (Renderer rend in irons) {

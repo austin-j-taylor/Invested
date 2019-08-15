@@ -7,8 +7,8 @@ using static TextCodes;
  */
 public class HelpOverlayController : MonoBehaviour {
 
-    public Text HelpTextLeft { get; private set; }
-    public Text HelpTextRight { get; private set; }
+    private Text HelpTextLeft { get; set; }
+    private Text HelpTextRight { get; set; }
     
     public bool IsOpen {
         get {
@@ -30,7 +30,7 @@ public class HelpOverlayController : MonoBehaviour {
             KeyLook + " to look.\n"
         ;
 
-        if (FlagsController.HelpOverlayFull) {
+        if (FlagsController.GetFlag(FlagsController.Flag.ControlSchemeChosen)) {
 
             HelpTextLeft.text += KeyMove + " to move.\n\t\t• " + KeyWalk + " to move slowly and anchor yourself.\n";
 
@@ -61,7 +61,7 @@ public class HelpOverlayController : MonoBehaviour {
             ".\n\t\t• " + s_Press_ + _KeySelectAlternate + " to deselect a " + Push_target + "."
         ;
 
-        if (FlagsController.HelpOverlayFuller) {
+        if (FlagsController.GetFlag(FlagsController.Flag.HelpOverlay03)) {
             HelpTextRight.text += KeyCoinshotMode + " to toggle " + CoinshotMode
                 + ".\n\t\t• While in " + CoinshotMode + ", " + KeyCoinshotThrow + " to throw coins.\n" +
                 KeyZincTime + " to activate " + ZincTime + "."

@@ -26,7 +26,6 @@ public class TriggerBeadPopupMessage : TriggerBeadPopup {
             case Action.ZincTime: {
                     // fade away after a time
                     StartCoroutine(Fade(30));
-                    FlagsController.HelpOverlayFuller = true;
 
                     break;
                 }

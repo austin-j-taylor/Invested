@@ -65,7 +65,7 @@ public class PauseMenu : MonoBehaviour {
         Time.timeScale = 0f;
 
         // Update blue lines for this frame (workaround)
-        Player.PlayerIronSteel.SearchForMetals();
+        Player.PlayerIronSteel.UpdateBlueLines();
 
         instance.gameObject.SetActive(true);
         Open();

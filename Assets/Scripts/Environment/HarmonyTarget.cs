@@ -112,7 +112,7 @@ public class HarmonyTarget : MonoBehaviour {
         CameraController.SetExternalSource(cameraPositionTarget, cameraLookAtTarget);
 
         // If a player is motivated enough to finish a level without completing the tutorial, give them the full help overlay anyway
-        FlagsController.HelpOverlayFull = true;
+        FlagsController.SetFlag(FlagsController.Flag.HelpOverlay03);
     }
 
     private void EndAnimation() {

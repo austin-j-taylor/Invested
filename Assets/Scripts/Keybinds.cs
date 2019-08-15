@@ -191,18 +191,24 @@ public class Keybinds : MonoBehaviour {
         else
             return Input.GetKeyDown(KeyCode.Mouse2);
     }
+    public static bool WithdrawCoin() {
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            return Input.GetButton("GamepadX");
+        else
+            return Input.GetKey(KeyCode.Mouse2);
+    }
 
     public static bool NegateDown() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
             return Input.GetButtonDown("GamepadY");
         else
-            return Input.GetKeyDown(KeyCode.R);
+            return Input.GetKeyDown(KeyCode.R) || Input.GetKeyDown(KeyCode.LeftAlt);
     }
     public static bool Negate() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
             return Input.GetButton("GamepadY");
         else
-            return Input.GetKey(KeyCode.R);
+            return Input.GetKey(KeyCode.R) || Input.GetKey(KeyCode.LeftAlt);
     }
 
     public static bool StopBurning() {

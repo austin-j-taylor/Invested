@@ -139,7 +139,7 @@ public class TriggerBeadPopupListener : TriggerBeadPopup {
                         while (!Keybinds.WithdrawCoinDown() || !Keybinds.Jump()) {
                             yield return null;
                         }
-                        FlagsController.HelpOverlayFull = true;
+                        
                         break;
                     }
                 case Action.SelectIron: {

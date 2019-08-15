@@ -17,7 +17,6 @@ public class TargetArray {
     private static readonly Color targetedLightBlueLine = new Color(0, .5f, 1f);
 
     private Magnetic[] targets;
-    private Magnetic vacuousTarget; // When no targets are selected, the vacuous target may still be Pushed on.
 
     private int size = 1;
     public int Size {
@@ -286,5 +285,9 @@ public class TargetArray {
                 return i;
         }
         return -1;
+    }
+
+    public bool IsFull() {
+        return size == Count;
     }
 }

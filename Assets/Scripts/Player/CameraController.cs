@@ -321,7 +321,7 @@ public class CameraController : MonoBehaviour {
         }
 
         if (Player.PlayerIronSteel.IsBurning) // Update blue lines when the camera is reset
-            Player.PlayerIronSteel.SearchForMetals();
+            Player.PlayerIronSteel.UpdateBlueLines();
         UpdateCamera();
     }
 

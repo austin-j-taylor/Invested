@@ -97,6 +97,9 @@ public class PlayerMovementController : AllomanticPewter {
             } else {
                 IsSprinting = false;
             }
+        } else {
+            jumpQueued = false;
+            IsSprinting = false;
         }
     }
 

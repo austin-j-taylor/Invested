@@ -5,55 +5,23 @@ using System.IO;
 [System.Serializable]
 public class FlagsController : MonoBehaviour {
 
+    public enum Level { Start01, Complete01, Complete02, Complete03, Complete04 };
+    public enum Flag { ControlSchemeChosen, HelpOverlay01, HelpOverlay02, HelpOverlay03 };
+
     private readonly string flagsFileName = Application.streamingAssetsPath + "/Data/flags.json";
 
     // Flags
     // can't make them private because json-parsing has no brains
+    // "Please don't access these" is the best security I've got
+    public bool complete01;
+    public bool complete02;
+    public bool complete03;
+    public bool complete04;
     public bool controlSchemeChosen;
-    public bool helpOverlayFull;
-    public bool helpOverlayFuller;
-
-    // Use these externally just to feel better about yourself
-    public static bool ControlSchemeChosen {
-        get {
-            return instance.controlSchemeChosen;
-        }
-        set {
-            if(instance.controlSchemeChosen != value) {
-                instance.controlSchemeChosen = value;
-                instance.Refresh();
-            } else {
-                instance.controlSchemeChosen = value;
-            }
-        }
-    }
-    public static bool HelpOverlayFull {
-        get {
-            return instance.helpOverlayFull;
-        }
-        set {
-            if (instance.helpOverlayFull != value) {
-                instance.helpOverlayFull = value;
-                instance.Refresh();
-            } else {
-                instance.helpOverlayFull = value;
-            }
-        }
-    }
-    public static bool HelpOverlayFuller {
-        get {
-            return instance.helpOverlayFuller;
-        }
-        set {
-            if (instance.helpOverlayFuller != value) {
-                instance.helpOverlayFuller = value;
-                instance.Refresh();
-            } else {
-                instance.helpOverlayFuller = value;
-            }
-        }
-    }
-
+    public bool helpOverlay01;
+    public bool helpOverlay02;
+    public bool helpOverlay03;
+    
     private static FlagsController instance;
 
     private void Awake() {
@@ -62,8 +30,8 @@ public class FlagsController : MonoBehaviour {
     }
 
     private void Refresh() {
-        SaveSettings();
-        HUD.HelpOverlayController.UpdateText();
+        SaveJSON();
+        HUD.UpdateText();
     }
     
 
@@ -80,7 +48,7 @@ public class FlagsController : MonoBehaviour {
         }
     }
 
-    public void SaveSettings() {
+    public void SaveJSON() {
         try {
             string jSONText = JsonUtility.ToJson(this, true);
 
@@ -91,5 +59,83 @@ public class FlagsController : MonoBehaviour {
         } catch (DirectoryNotFoundException e) {
             Debug.LogError(e.Message);
         }
+    }
+
+    public static void SetLevel(Level level) {
+        switch(level) {
+            case Level.Start01:
+                break;
+            case Level.Complete01:
+                if (!instance.complete01) {
+                    instance.complete01 = true;
+                }
+                break;
+            case Level.Complete02:
+                if (!instance.complete02) {
+                    instance.complete02 = true;
+                }
+                break;
+            case Level.Complete03:
+                if (!instance.complete03) {
+                    instance.complete03 = true;
+                }
+                break;
+            case Level.Complete04:
+                if (!instance.complete04) {
+                    instance.complete04 = true;
+                }
+                break;
+        }
+        instance.Refresh();
+    }
+
+    public static void SetFlag(Flag flag) {
+        switch (flag) {
+            case Flag.ControlSchemeChosen:
+                if(!instance.controlSchemeChosen) {
+                    instance.controlSchemeChosen = true;
+                }
+                break;
+            case Flag.HelpOverlay01:
+                if (!instance.helpOverlay01) {
+                    instance.helpOverlay01 = true;
+                }
+                break;
+            case Flag.HelpOverlay02:
+                if (!instance.helpOverlay02) {
+                    instance.helpOverlay02 = true;
+                }
+                break;
+            case Flag.HelpOverlay03:
+                if (!instance.helpOverlay03) {
+                    instance.helpOverlay03 = true;
+                }
+                break;
+        }
+        instance.Refresh();
+    }
+    public static bool GetFlag(Flag flag) {
+        switch(flag) {
+            case Flag.ControlSchemeChosen:
+                return instance.controlSchemeChosen;
+            case Flag.HelpOverlay01:
+                return instance.helpOverlay01;
+            case Flag.HelpOverlay02:
+                return instance.helpOverlay02;
+            case Flag.HelpOverlay03:
+                return instance.helpOverlay03;
+        }
+        return false; // never reached
+    }
+    public static bool GetLevel(Level level) {
+        switch (level) {
+            case Level.Complete01:
+                return instance.complete01;
+            case Level.Complete02:
+                return instance.complete02;
+            case Level.Complete03:
+                return instance.complete03;
+        }
+        return false; // never reached
     }
 }

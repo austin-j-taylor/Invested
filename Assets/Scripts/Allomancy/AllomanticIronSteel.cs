@@ -76,6 +76,9 @@ public class AllomanticIronSteel : Allomancer {
         }
     }
 
+    // Number of targets for manual targeting
+    protected int sizeOfTargetArrays = 1;
+
     // Used for calculating the acceleration over the last frame for pushing/pulling
     public Vector3 LastAllomancerVelocity { get; private set; } = Vector3.zero;
     //private Vector3 lastExpectedAllomancerVelocityChange = Vector3.zero;
@@ -170,6 +173,9 @@ public class AllomanticIronSteel : Allomancer {
             if (value != vacuouslyPullTargeting) {
                 PullTargets.Clear();
                 vacuouslyPullTargeting = value;
+                // Make sure that the array size is set correctly (you might be vacuously Pushing/Pulling on more metals than you can target)
+                if (!value)
+                    PullTargets.Size = sizeOfTargetArrays;
             }
         }
     }
@@ -181,6 +187,9 @@ public class AllomanticIronSteel : Allomancer {
             if (value != vacuouslyPushTargeting) {
                 PushTargets.Clear();
                 vacuouslyPushTargeting = value;
+                // Make sure that the array size is set correctly (you might be vacuously Pushing/Pulling on more metals than you can target)
+                if (!value)
+                    PushTargets.Size = sizeOfTargetArrays;
             }
         }
     }
@@ -648,12 +657,12 @@ public class AllomanticIronSteel : Allomancer {
 
     /*
      * Add a target
-     * If it's a pushTarget, remove it from pushTargets and move it to pullTargets
+     * If disallowDoubleDipping and it's a pushTarget, remove it from pushTargets and move it to pullTargets
      */
-    public void AddPullTarget(Magnetic target) {
+    public void AddPullTarget(Magnetic target, bool disallowDoubleDipping = true) {
         StartBurning(true);
         if (HasIron) {
-            if (PushTargets.IsTarget(target)) {
+            if (disallowDoubleDipping && PushTargets.IsTarget(target)) {
                 PushTargets.RemoveTarget(target, false);
             }
             if (target != null) {
@@ -665,12 +674,12 @@ public class AllomanticIronSteel : Allomancer {
 
     /*
      * Add a target
-     * If it's a pullTarget, remove it from pullTargets and move it to pushTargets
+     * If disallowDoubleDipping and it's a pullTarget, remove it from pullTargets and move it to pushTargets
      */
-    public void AddPushTarget(Magnetic target) {
+    public void AddPushTarget(Magnetic target, bool disallowDoubleDipping = true) {
         StartBurning(false);
         if (HasSteel) {
-            if (PullTargets.IsTarget(target)) {
+            if (disallowDoubleDipping && PullTargets.IsTarget(target)) {
                 PullTargets.RemoveTarget(target, false);
             }
             if (target != null) {

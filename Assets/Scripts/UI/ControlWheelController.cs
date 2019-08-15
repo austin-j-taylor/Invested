@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using static TextCodes;
 
 /*
  * Controls the HUD element (and all logic) for the Control Wheel, which is used for various Push controls
@@ -25,6 +26,10 @@ public class ControlWheelController : MonoBehaviour {
 
     private Image circle;
     private Image[] spokes;
+    private Text textManual;
+    private Text textArea;
+    private Text textBubble;
+    private Text textCoinshot;
 
     private Selection highlit; // the selection being hovered over
     private Selection selectedSpoke; // manual, area, etc.
@@ -48,7 +53,7 @@ public class ControlWheelController : MonoBehaviour {
                     HUD.HideControlWheel();
 
                     // Execute selected
-                    switch(highlit) {
+                    switch (highlit) {
                         case Selection.Cancel:
                             break;
                         case Selection.Manual:
@@ -69,12 +74,18 @@ public class ControlWheelController : MonoBehaviour {
                             break;
                         case Selection.Coin_Spray:
                             selectedCoin = highlit;
+                            Player.PlayerInstance.CoinThrowingMode = Player.CoinMode.Spray;
+                            HUD.ThrowingAmmoMeter.Alert(Player.CoinMode.Spray);
                             break;
                         case Selection.Coin_Full:
                             selectedCoin = highlit;
+                            Player.PlayerInstance.CoinThrowingMode = Player.CoinMode.Full;
+                            HUD.ThrowingAmmoMeter.Alert(Player.CoinMode.Full);
                             break;
                         case Selection.Coin_Semi:
                             selectedCoin = highlit;
+                            Player.PlayerInstance.CoinThrowingMode = Player.CoinMode.Semi;
+                            HUD.ThrowingAmmoMeter.Alert(Player.CoinMode.Semi);
                             break;
                         case Selection.DeselectAll:
                             Player.PlayerIronSteel.RemoveAllTargets();
@@ -95,6 +106,10 @@ public class ControlWheelController : MonoBehaviour {
         selectedCoin = Selection.Coin_Semi;
         circle = transform.Find("Circle").GetComponent<Image>();
         spokes = transform.Find("Selections").GetComponentsInChildren<Image>();
+        textManual = transform.Find("Selections/Spoke0/Text/Title/Description").GetComponent<Text>();
+        textArea = transform.Find("Selections/Spoke1/Text/Title/Description").GetComponent<Text>();
+        textBubble = transform.Find("Selections/Spoke2/Text/Title/Description").GetComponent<Text>();
+        textCoinshot = transform.Find("Selections/Spoke3/Text/Title/Description").GetComponent<Text>();
     }
 
     public void Clear() {
@@ -138,26 +153,37 @@ public class ControlWheelController : MonoBehaviour {
                     // The selection depends on the radius and angle of input
                     if (radius < pixelRadius) {
                         highlit = Selection.Cancel;
+                        UpdateText();
                     } else { // outside Cancel circle: depending on the angle, choose a selection
                         if (angle > angleDeselectAll_StopBurning) {
+                            UpdateText();
                             highlit = Selection.DeselectAll;
                         } else if (angle > angleStopBurning_Manual) {
+                            UpdateText();
                             highlit = Selection.StopBurning;
                         } else if (angle > angleManual_Area) {
+                            UpdateManual();
                             highlit = Selection.Manual;
                         } else if (angle > angleArea_Bubble) {
+                            UpdateArea();
                             highlit = Selection.Area;
                         } else if (angle > angleBubble_Coinshot) {
+                            UpdateBubble();
                             highlit = Selection.Bubble;
                         } else if (angle > angleCoinshot_CoinSpray) {
+                            UpdateCoinshot();
                             highlit = Selection.Coinshot;
                         } else if (angle > angleCoinSpray_CoinFull) {
+                            UpdateText();
                             highlit = Selection.Coin_Spray;
                         } else if (angle > angleCoinFull_CoinSemi) {
+                            UpdateText();
                             highlit = Selection.Coin_Full;
                         } else if (angle > angleCoinSemi_DeselectAll) {
+                            UpdateText();
                             highlit = Selection.Coin_Semi;
                         } else {
+                            UpdateText();
                             highlit = Selection.DeselectAll;
                         }
                     }
@@ -175,6 +201,37 @@ public class ControlWheelController : MonoBehaviour {
         }
     }
 
+    public void UpdateText() {
+        textManual.text = _KeyPullAbridged + "/" + _KeyPushAbridged + ": " + Pull_Push + "\non a single target\n\n\n\n\n";
+        textArea.text = _KeyPullAbridged + "/" + _KeyPushAbridged + ": " + Pull_Push + "\nin a cone in front of you\n\n\n";
+        textBubble.text = _KeyPullAbridged + "/" + _KeyPushAbridged + ": " + Pull_Push + "\nin a bubble around you\n\n\n";
+        textCoinshot.text = _KeyPullAbridged + " with no " + Pull_targets + ":\nthrow and " + Push + " on " + O_Coin + "\n";
+    }
+    private void UpdateManual() {
+        UpdateText();
+        textManual.text = _KeyPullAbridged + "/" + _KeyPushAbridged + ": " + Pull_Push + "\n"
+            + _KeySelectAbridged + "/" + _KeySelectAlternateAbridged + ":\nselect targets\n"
+            + KeyNegate + " + " + _KeySelectAbridged + "/" + _KeySelectAlternateAbridged + ":\nDeselect targets\n"
+            + KeyNegate + " + " + scrollWheel + ":\n# of targets";
+    }
+    private void UpdateArea() {
+        UpdateText();
+        textArea.text = _KeyPullAbridged + "/" + _KeyPushAbridged + ": " + Pull_Push + "\n"
+            + _KeySelectAbridged + "/" + _KeySelectAlternateAbridged + ":\nselect in a cone\n"
+        + KeyNegate + " + " + scrollWheel + ":\nsize of cone";
+    }
+    private void UpdateBubble() {
+        UpdateText();
+        textBubble.text = _KeyPullAbridged + "/" + _KeyPushAbridged + ": " + Pull_Push + "\n"
+            + _KeySelectAbridged + "/" + _KeySelectAlternateAbridged + ":\nselect in a bubble\n"
+        + KeyNegate + " + " + scrollWheel + ":\nsize of bubble";
+    }
+    private void UpdateCoinshot() {
+        UpdateText();
+        textCoinshot.text = _KeyPullAbridged + " with no " + Pull_targets + ":\nthrow and " + Push + " on " + O_Coin
+            +"\n(otherwise Manual)";
+    }
+
     // Set the color of all spokes:
     // Selected spoke: dark gray
     // Highlit spoke: light gray
@@ -188,6 +245,6 @@ public class ControlWheelController : MonoBehaviour {
         spokes[(int)selectedSpoke].color = colorSelectedSpoke;
         spokes[(int)selectedCoin].color = colorSelectedSpoke;
         spokes[(int)highlit].color = colorHighlitSpoke;
-        
+
     }
 }

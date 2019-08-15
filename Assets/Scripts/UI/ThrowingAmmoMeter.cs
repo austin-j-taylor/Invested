@@ -24,7 +24,11 @@ public class ThrowingAmmoMeter : MonoBehaviour {
             timeLastChanged = Time.time;
         }
 
-        anim.SetBool("IsVisible", Time.time - timeLastChanged < timeToFade);
+        if(Player.PlayerIronSteel.Mode == PlayerPullPushController.ControlMode.Coinshot) {
+            anim.SetBool("IsVisible", true);
+        } else {
+            anim.SetBool("IsVisible", Time.time - timeLastChanged < timeToFade);
+        }
 
         coinCountText.text = Player.PlayerInstance.CoinHand.Pouch.Count.ToString();
 
@@ -36,5 +40,20 @@ public class ThrowingAmmoMeter : MonoBehaviour {
         lastCount = 0;
         anim.SetBool("IsVisible", false);
         anim.Play("MetalReserve_Invisible", anim.GetLayerIndex("Visibility"));
+    }
+
+    public void Alert(Player.CoinMode mode) {
+        timeLastChanged = Time.time;
+        switch(mode) {
+            case Player.CoinMode.Semi:
+                anim.Play("ThrowableAmmo_Semi", anim.GetLayerIndex("Image"));
+                break;
+            case Player.CoinMode.Full:
+                anim.Play("ThrowableAmmo_Full", anim.GetLayerIndex("Image"));
+                break;
+            case Player.CoinMode.Spray:
+                anim.Play("ThrowableAmmo_Spray", anim.GetLayerIndex("Image"));
+                break;
+        }
     }
 }
