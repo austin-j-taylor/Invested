@@ -119,19 +119,34 @@ public class SceneSelectMenu : MonoBehaviour {
         if (mode == LoadSceneMode.Single) {
             PauseMenu.UnPause();
 
-            if (scene.buildIndex != sceneTitleScreen) {
-                //Close();
+            if (scene.buildIndex == sceneTitleScreen) {
+
+                Player.PlayerInstance.gameObject.SetActive(false);
+                CameraController.UnlockCamera();
+                if (isActiveAndEnabled)
+                    MainMenu.FocusOnCurrentMenu(transform);
+            } else {
                 MainMenu.Close();
                 TimeController.CurrentTimeScale = SettingsMenu.settingsData.timeScale;
 
                 Player.PlayerInstance.gameObject.SetActive(true);
                 CameraController.LockCamera();
                 HUD.ResetHUD();
-            } else {
-                Player.PlayerInstance.gameObject.SetActive(false);
-                CameraController.UnlockCamera();
-                if(isActiveAndEnabled)
-                    MainMenu.FocusOnCurrentMenu(transform);
+
+                // Set parameters for starting on certain scenes
+                if (scene.buildIndex == sceneLevel01) {
+                    Player.PlayerInstance.CoinHand.Pouch.Clear();
+                    Player.PlayerIronSteel.IronReserve.SetMass(50);
+                    Player.PlayerIronSteel.SteelReserve.SetMass(0);
+                    Player.PlayerPewter.PewterReserve.SetMass(0);
+                } else {
+                    // For every scene except the tutorial, give metals and coins at the start.
+                    Player.PlayerInstance.CoinHand.Pouch.Fill();
+                    Player.PlayerIronSteel.IronReserve.SetMass(150);
+                    Player.PlayerIronSteel.SteelReserve.SetMass(150);
+                    Player.PlayerPewter.PewterReserve.SetMass(150);
+                }
+
             }
         }
     }

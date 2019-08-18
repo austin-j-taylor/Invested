@@ -311,8 +311,8 @@ public class CameraController : MonoBehaviour {
         firstPersonCamera.transform.localPosition = Vector3.zero;
         if(resetRotation) {
             Vector3 eulers = Player.PlayerInstance.transform.eulerAngles;
-            eulers.x = 0;
-            eulers.z = 0;
+            //eulers.x = 0;
+            //eulers.z = 0;
             playerLookAtTarget.rotation = Quaternion.Euler(eulers);
 
             currentY = playerLookAtTarget.localEulerAngles.x;

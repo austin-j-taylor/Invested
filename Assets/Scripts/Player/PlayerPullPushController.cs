@@ -251,10 +251,10 @@ public class PlayerPullPushController : AllomanticIronSteel {
                             Magnetic[] targets = SearchForMetalsAreaOrBubble();
 
                             // When targets change, remove all old targets and make space for the new ones
-                            if (Keybinds.Select() || Keybinds.PullDown()) {// || VacuouslyPullTargeting) {
+                            if (Keybinds.Select() || (Keybinds.PullDown() && !HasPullTarget)) {// || VacuouslyPullTargeting) {
                                 PullTargets.Size = targets.Length;
                             }
-                            if (Keybinds.SelectAlternate() || Keybinds.PushDown()) {// || VacuouslyPushTargeting) {
+                            if (Keybinds.SelectAlternate() || (Keybinds.PushDown() && !HasPushTarget)) {// || VacuouslyPushTargeting) {
                                 PushTargets.Size = targets.Length;
                             }
                             bool nowVacuouslyPulling = !HasPullTarget;

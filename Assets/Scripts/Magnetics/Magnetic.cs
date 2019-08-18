@@ -22,9 +22,9 @@ public class Magnetic : MonoBehaviour {
     protected float netMass = 0;
     [SerializeField]
     private float magneticMass = 0;
-    // Assigned in the editor. Marks children that should also glow when this target is highlighted.
-    [SerializeField]
-    private Renderer[] childMagnetics;
+    //// Assigned in the editor. Marks children that should also glow when this target is highlighted.
+    ////[SerializeField]
+    //private Renderer[] childMagnetics;
 
     private bool lastWasPulled;
     protected bool isBeingPushPulled;
@@ -121,25 +121,25 @@ public class Magnetic : MonoBehaviour {
         }
         set {
             if (value != isHighlighted) {
-                if (value) {
-                    if (SettingsMenu.settingsData.highlightedTargetOutline == 1) {
-                        for (int i = 0; i < childMagnetics.Length; i++) {
-                            // Assign original emmisions
-                            if (childMagnetics[i].material.IsKeywordEnabled("_EMISSION"))
-                                defaultEmissionColor[i] = childMagnetics[i].material.GetColor("_EmissionColor");
+                //if (value) {
+                //    if (SettingsMenu.settingsData.highlightedTargetOutline == 1) {
+                //        for (int i = 0; i < childMagnetics.Length; i++) {
+                //            // Assign original emmisions
+                //            if (childMagnetics[i].material.IsKeywordEnabled("_EMISSION"))
+                //                defaultEmissionColor[i] = childMagnetics[i].material.GetColor("_EmissionColor");
 
-                            childMagnetics[i].material.SetColor("_EmissionColor", new Color(0, .35f, 1f) * Mathf.LinearToGammaSpace(2));
-                            childMagnetics[i].material.EnableKeyword("_EMISSION");
-                        }
-                    }
-                } else {
-                    for (int i = 0; i < childMagnetics.Length; i++) {
-                        if (defaultEmissionColor[i] == null)
-                            childMagnetics[i].material.DisableKeyword("_EMISSION");
-                        else
-                            childMagnetics[i].material.SetColor("_EmissionColor", defaultEmissionColor[i]);
-                    }
-                }
+                //            childMagnetics[i].material.SetColor("_EmissionColor", new Color(0, .35f, 1f) * Mathf.LinearToGammaSpace(2));
+                //            childMagnetics[i].material.EnableKeyword("_EMISSION");
+                //        }
+                //    }
+                //} else {
+                //    for (int i = 0; i < childMagnetics.Length; i++) {
+                //        if (defaultEmissionColor[i] == null)
+                //            childMagnetics[i].material.DisableKeyword("_EMISSION");
+                //        else
+                //            childMagnetics[i].material.SetColor("_EmissionColor", defaultEmissionColor[i]);
+                //    }
+                //}
 
                 isHighlighted = value;
             }
@@ -199,11 +199,11 @@ public class Magnetic : MonoBehaviour {
     }
 
     protected void Awake() {
-        if (childMagnetics == null || childMagnetics.Length == 0) {
-            // If not assigned in the editor, assume that all children should glow
-            childMagnetics = GetComponentsInChildren<Renderer>();
-        }
-        defaultEmissionColor = new Color[childMagnetics.Length];
+        //if (childMagnetics == null || childMagnetics.Length == 0) {
+        //    // If not assigned in the editor, assume that all children should glow
+        //    childMagnetics = GetComponentsInChildren<Renderer>();
+        //}
+        //defaultEmissionColor = new Color[childMagnetics.Length];
         blueLine = Instantiate(GameManager.MetalLineTemplate);
         colliders = GetComponentsInChildren<Collider>();
         lightSaberFactor = 1;

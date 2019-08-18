@@ -147,19 +147,6 @@ public class Player : PewterEntity {
             SetFrameMaterial(frameMaterial);
             CanControlPlayer = true;
 
-            if (scene.buildIndex == SceneSelectMenu.sceneLevel01) {
-                CoinHand.Pouch.Clear();
-                PlayerIronSteel.IronReserve.SetMass(0);
-                PlayerIronSteel.SteelReserve.SetMass(0);
-                PlayerPewter.PewterReserve.SetMass(0);
-            } else {
-                // For every scene except the tutorial, give metals and coins at the start.
-                CoinHand.Pouch.Fill();
-                PlayerIronSteel.IronReserve.SetMass(150);
-                PlayerIronSteel.SteelReserve.SetMass(150);
-                PlayerPewter.PewterReserve.SetMass(100);
-            }
-            GodMode = false;
 
             GameObject spawn = GameObject.FindGameObjectWithTag("PlayerSpawn");
             if (spawn && CameraController.ActiveCamera) { // if CameraController.Awake has been called
