@@ -21,8 +21,8 @@ public class TextCodes : MonoBehaviour {
     public const string s_Right_Trigger = "Right Trigger";
     public const string s_Left_Bumper = "Left Bumper";
     public const string s_Right_Bumper = "Right Bumper";
-    public const string s_Left_Click = "Left Click";
-    public const string s_Right_Click = "Right Click";
+    public const string s_Left_Click = "Left-click";
+    public const string s_Right_Click = "Right-click";
     public const string s_Up_Down_on_the_D_Pad = "Up/Down on the D-Pad";
     public const string s_Left_Right_on_the_D_Pad = "Left/Right on the D-Pad";
 
@@ -32,8 +32,6 @@ public class TextCodes : MonoBehaviour {
     public const string s_Use_ = "Use ";
     public const string s_Tap_ = "Tap ";
     public const string s_Scroll_ = "Scroll ";
-    public const string s_Leftdashclick_ = "Left-click ";
-    public const string s_Rightdashclick_ = "Right-click ";
     
     // Methods that accept strings as arguments and return strings colored in their respective color
     public static string Blue(string s) {
