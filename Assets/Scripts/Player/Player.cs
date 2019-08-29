@@ -22,8 +22,8 @@ public class Player : PewterEntity {
     public static FeruchemicalZinc PlayerZinc { get; set; }
 
     public Hand CoinHand { get; private set; }
+
     private static bool canControlPlayer = false;
-    private static bool godMode = false;
     public static bool CanControlPlayer {
         get {
             return canControlPlayer && !PauseMenu.IsPaused;
@@ -32,10 +32,22 @@ public class Player : PewterEntity {
             canControlPlayer = value;
             if (!value) {
                 PlayerIronSteel.SoftClear();
-                //PlayerZinc.Clear();
             }
         }
     }
+    private static bool canControlPushes = false;
+    public static bool CanControlPushes {
+        get {
+            return canControlPushes && !PauseMenu.IsPaused;
+        }
+        set {
+            canControlPushes = value;
+            if (!value) {
+                PlayerIronSteel.SoftClear();
+            }
+        }
+    }
+    private static bool godMode = false;
     public static bool GodMode { // Player does not run out of metals
         get {
             return godMode;
@@ -51,8 +63,6 @@ public class Player : PewterEntity {
             godMode = value;
         }
     }
-
-    private float coinCooldownTimer = 0;
 
     protected override void Awake() {
         base.Awake();
@@ -116,6 +126,7 @@ public class Player : PewterEntity {
             PlayerIronSteel.Clear();
             SetFrameMaterial(frameMaterial);
             CanControlPlayer = true;
+            CanControlPushes = true;
             //if (scene.buildIndex == SceneSelectMenu.sceneLevel01)
             //    GodMode = true;
             //else

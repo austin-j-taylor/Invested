@@ -41,7 +41,10 @@ public class HUD : MonoBehaviour {
     public static ControlWheelController ControlWheelController {
         get; private set;
     }
-    public static MessageOverlayController MessageOverlayController {
+    public static MessageOverlayDescriptive MessageOverlayDescriptive {
+        get; private set;
+    }
+    public static MessageOverlayCinematic MessageOverlayCinematic {
         get; private set;
     }
     public static HelpOverlayController HelpOverlayController {
@@ -58,7 +61,8 @@ public class HUD : MonoBehaviour {
         BurnPercentageMeter = GetComponentInChildren<BurnPercentageMeter>();
         TargetOverlayController = GetComponentInChildren<TargetOverlayController>();
         ThrowingAmmoMeter = GetComponentInChildren<ThrowingAmmoMeter>();
-        MessageOverlayController = GetComponentInChildren<MessageOverlayController>();
+        MessageOverlayDescriptive = GetComponentInChildren<MessageOverlayDescriptive>();
+        MessageOverlayCinematic = GetComponentInChildren<MessageOverlayCinematic>();
         HelpOverlayController = GetComponentInChildren<HelpOverlayController>();
         MetalReserveMeters = GetComponentInChildren<MetalReserveMeters>();
         ZincMeterController = GetComponentInChildren<ZincMeterController>();
@@ -97,7 +101,8 @@ public class HUD : MonoBehaviour {
                 TargetOverlayController.Clear();
                 ThrowingAmmoMeter.Clear();
                 MetalReserveMeters.Clear();
-                MessageOverlayController.Clear();
+                MessageOverlayDescriptive.Clear();
+                MessageOverlayCinematic.Clear();
                 ZincMeterController.Clear();
                 ControlWheelController.Clear();
                 anim.SetBool("ControlWheelVisible", false);
