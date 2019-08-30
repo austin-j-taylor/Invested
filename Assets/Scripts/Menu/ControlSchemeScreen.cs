@@ -42,13 +42,12 @@ public class ControlSchemeScreen : MonoBehaviour {
 
     public void Close() {
         SettingsMenu.settingsData.SaveSettings();
-        HUD.MessageOverlayController.UpdateMessages();
+        Messages.Refresh();
         HUD.UpdateText();
         FlagsController.SetFlag(FlagsController.Flag.ControlSchemeChosen);
         gameObject.SetActive(false);
         MainMenu.OpenTitleScreen();
     }
-
 
     public void OnClickedMouseKeyboard() {
         mouseKeyboardButton.gameObject.SetActive(false);

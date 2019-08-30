@@ -50,6 +50,6 @@ public class HUDSimulations : MonoBehaviour {
         Duel.gameObject.SetActive(false);
         CoinWall.gameObject.SetActive(false);
         CoinGround.gameObject.SetActive(false);
-        Player.CanControlPlayer = false;
+        Player.CanControlMovement = false;
     }
 }

@@ -122,7 +122,7 @@ public class SpikePit : MonoBehaviour {
                     chasingPlayer = false;
                     spikingPlayer = true;
 
-                    Player.CanControlPlayer = false;
+                    Player.CanControlMovement = false;
                     Player.PlayerInstance.GetComponent<Rigidbody>().velocity = spikeRb.velocity;
                 }
             }
@@ -190,7 +190,7 @@ public class SpikePit : MonoBehaviour {
                     slerpTimeRotation = 0;
                     progress = 0;
 
-                    Player.CanControlPlayer = true;
+                    Player.CanControlMovement = true;
                     Player.PlayerIronSteel.StopBurning();
 
                     Player.PlayerInstance.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;

@@ -25,12 +25,14 @@ public class CameraController : MonoBehaviour {
 
     private static float currentX = 0;
     private static float currentY = 0;
+    private static float startX = 0;
+    private static float startY = 0;
     private static float playerLookAtTargetHeight = playerLookAtTargetReferenceHeight;
     private static bool cameraIsLocked;
 
     public static bool HasNotMovedCamera {
         get {
-            return currentX == 0 && currentY == 0;
+            return currentX == startX && currentY == startY;
         }
     }
     public static bool UpsideDown {
@@ -60,7 +62,6 @@ public class CameraController : MonoBehaviour {
             return Quaternion.Euler(eulers);
         }
     }
-
 
     void Awake() {
         playerBody = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
@@ -316,8 +317,10 @@ public class CameraController : MonoBehaviour {
             //eulers.z = 0;
             playerLookAtTarget.rotation = Quaternion.Euler(eulers);
 
-            currentY = playerLookAtTarget.localEulerAngles.x;
             currentX = playerLookAtTarget.localEulerAngles.y;
+            currentY = playerLookAtTarget.localEulerAngles.x;
+            startX = currentX;
+            startY = currentY;
             ModY();
         }
 

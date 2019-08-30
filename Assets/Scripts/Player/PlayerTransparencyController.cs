@@ -19,7 +19,7 @@ public class PlayerTransparencyController : MonoBehaviour {
     }
     
     void LateUpdate() {
-        if (Player.CanControlPlayer) {
+        if (Player.CanControlMovement) {
             float distance = (CameraController.ActiveCamera.transform.position - Player.PlayerInstance.transform.position).magnitude;
             float percent = 0;
             // If camera is physically near the player, fade slowly to transparent

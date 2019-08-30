@@ -72,17 +72,17 @@ public class TextCodes : MonoBehaviour {
     // Known words that should always appear in a specific color
     public static string Iron {
         get {
-            return Gray("Iron");
+            return Gray("iron");
         }
     }
     public static string Steel {
         get {
-            return Gray("Steel");
+            return Gray("steel");
         }
     }
     public static string Pewter {
         get {
-            return Orange("Pewter");
+            return Orange("pewter");
         }
     }
     public static string Pull {
@@ -404,9 +404,9 @@ public class TextCodes : MonoBehaviour {
     public static string KeyJump {
         get {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-                return s_Press_ + A;
+                return "press " + A;
             else
-                return s_Press_ + Space;
+                return "press " + Space;
         }
     }
     public static string _KeyPull {
@@ -559,7 +559,7 @@ public class TextCodes : MonoBehaviour {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
                 return s_Press_ + LightBlue(s_Right_Bumper);
             else
-                return s_Press_ + LightBlue(s_Left_Click);
+                return LeftClick;
         }
     }
 

@@ -82,7 +82,7 @@ public class PlayerMovementController : AllomanticPewter {
     }
 
     private void Update() {
-        if (Player.CanControlPlayer) {
+        if (Player.CanControlMovement) {
             // Check if jumping
             if (IsGrounded && Keybinds.JumpDown()) {
                 // Queue a jump for the next FixedUpdate
@@ -111,7 +111,7 @@ public class PlayerMovementController : AllomanticPewter {
             rb.AddForce(-2 * Physics.gravity, ForceMode.Acceleration);
         }
 
-        if (Player.CanControlPlayer) {
+        if (Player.CanControlMovement) {
             // Convert user input to movement vector
             Vector3 movement = new Vector3(Keybinds.Horizontal(), 0f, Keybinds.Vertical());
 

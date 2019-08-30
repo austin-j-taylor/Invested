@@ -52,10 +52,7 @@ public class PlayerGroundedChecker : MonoBehaviour {
     // Raycast downward; if there's a ground very close to your feet, always try to jump from that.
     public void UpdateStanding() {
         if(Physics.Raycast(transform.position + feetOffset, Vector3.down, out RaycastHit hit, feetRange, GameManager.Layer_IgnorePlayer)) {
-            Debug.Log("found a goodun!");
             if (StandingOnCollider != hit.collider) {
-                Debug.Log("fooooh!");
-
                 StandingOnCollider = hit.collider;
                 Normal = hit.normal;
                 Point = hit.point;

@@ -76,9 +76,10 @@ public class FacilityDoor : Powered {
 
     //}
 
+    // close the door when the player passes it
     private void OnTriggerEnter(Collider other) {
         if(other.CompareTag("PlayerBody")) {
-            On = !on;
+            On = false;
         }
     }
 

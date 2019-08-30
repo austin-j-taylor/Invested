@@ -16,7 +16,7 @@ public class WireLock : Destructable {
     private Animator anim;
 
     private void Awake() {
-        maxHealth = 60;
+        maxHealth = 120;
 
         metal = GetComponentInChildren<Magnetic>();
         mount = GetComponentInChildren<Renderer>();

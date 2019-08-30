@@ -160,7 +160,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
                 LerpToBurnPercentages();
                 UpdateBurnRateMeter();
 
-                if (Player.CanControlPlayer) {
+                if (Player.CanControlPushes) {
                     // Could have stopped burning above. Check if the Allomancer is still burning.
                     if (IsBurning) {
                         // Swap pull- and push- targets
@@ -254,7 +254,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
             }
 
             // Start and Stop Burning metals
-            if (Player.CanControlPlayer) {
+            if (Player.CanControlPushes) {
                 if (IsBurning) {
                     // Stop burning
                     if (Keybinds.StopBurning()) {

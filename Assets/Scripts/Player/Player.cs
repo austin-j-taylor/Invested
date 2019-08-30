@@ -24,20 +24,33 @@ public class Player : PewterEntity {
     public static FeruchemicalZinc PlayerZinc { get; set; }
 
     public Hand CoinHand { get; private set; }
-    private static bool canControlPlayer = false;
-    private static bool godMode = false;
-    public static bool CanControlPlayer {
+    public CoinMode CoinThrowingMode;
+
+    private static bool canControlMovement = false;
+    public static bool CanControlMovement {
         get {
-            return canControlPlayer && !PauseMenu.IsPaused;
+            return canControlMovement && !PauseMenu.IsPaused;
         }
         set {
-            canControlPlayer = value;
+            canControlMovement = value;
             if (!value) {
                 PlayerIronSteel.SoftClear();
-                //PlayerZinc.Clear();
             }
         }
     }
+    private static bool canControlPushes = false;
+    public static bool CanControlPushes {
+        get {
+            return canControlPushes && !PauseMenu.IsPaused;
+        }
+        set {
+            canControlPushes = value;
+            if (!value) {
+                PlayerIronSteel.SoftClear();
+            }
+        }
+    }
+    private static bool godMode = false;
     public static bool GodMode { // Player does not run out of metals
         get {
             return godMode;
@@ -53,7 +66,6 @@ public class Player : PewterEntity {
             godMode = value;
         }
     }
-    public CoinMode CoinThrowingMode;
 
     private float coinCooldownTimer = 0;
 
@@ -81,7 +93,7 @@ public class Player : PewterEntity {
     }
 
     void Update() {
-        if (CanControlPlayer) {
+        if (CanControlMovement) {
             // On throwing a coin
             if (!CoinHand.Pouch.IsEmpty) {
                 
@@ -145,8 +157,9 @@ public class Player : PewterEntity {
         if (mode == LoadSceneMode.Single) { // Not loading all of the scenes, as it does at startup
             PlayerIronSteel.Clear();
             SetFrameMaterial(frameMaterial);
-            CanControlPlayer = true;
-
+            CanControlMovement = true;
+            CanControlPushes = true;
+            GodMode = false;
 
             GameObject spawn = GameObject.FindGameObjectWithTag("PlayerSpawn");
             if (spawn && CameraController.ActiveCamera) { // if CameraController.Awake has been called

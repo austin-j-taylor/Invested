@@ -101,7 +101,7 @@ public class HarmonyTarget : MonoBehaviour {
     private void BeginAnimation() {
         playerHasEntered = true;
         controllingPlayer = true;
-        Player.CanControlPlayer = false;
+        Player.CanControlMovement = false;
         Player.PlayerIronSteel.StopBurning();
         harmonySphere.GetComponent<Collider>().enabled = false;
         anim.SetTrigger("PlayerHasEntered");
@@ -137,7 +137,7 @@ public class HarmonyTarget : MonoBehaviour {
     public void ReleasePlayer() {
         controllingPlayer = false;
         anim.SetTrigger("PlayerExits");
-        Player.CanControlPlayer = true;
+        Player.CanControlMovement = true;
         HUD.EnableHUD();
         Player.PlayerInstance.GetComponent<Rigidbody>().useGravity = SettingsMenu.settingsData.playerGravity == 1;
         CameraController.SetExternalSource(null, null);

@@ -124,7 +124,7 @@ public class ControlWheelController : MonoBehaviour {
         if (!PauseMenu.IsPaused) {
             // State machine for Control Wheel
             if (IsOpen) {
-                if (!Keybinds.ControlWheel() || !Player.CanControlPlayer) {
+                if (!Keybinds.ControlWheel() || !Player.CanControlMovement) {
                     IsOpen = false;
                 } else {
                     circle.fillAmount = (float)Player.PlayerZinc.Reserve;
