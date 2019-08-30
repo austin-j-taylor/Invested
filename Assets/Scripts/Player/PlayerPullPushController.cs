@@ -107,36 +107,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
      */
     private void Update() {
         if (!PauseMenu.IsPaused) {
-            if (Player.CanControlPlayer) {
-                // Start and Stop Burning metals
-                if (IsBurning) {
-                    // Stop burning
-                    if (Keybinds.StopBurning()) {
-                        StopBurning();
-                        timeToStopBurning = 0;
-                    } else
-                    if (Keybinds.Negate()) {
-                        timeToStopBurning += Time.deltaTime;
-                        if (Keybinds.Select() && Keybinds.SelectAlternate() && timeToStopBurning > timeToHoldDown) {
-                            //if (Keybinds.IronPulling() && Keybinds.SteelPushing() && timeToStopBurning > timeToHoldDown) {
-                            StopBurning();
-                            timeToStopBurning = 0;
-                        }
-                    } else {
-                        timeToStopBurning = 0;
-                    }
-                } else {
-                    // Start burning (as long as the Control Wheel isn't open to interfere)
-                    if (!Keybinds.Negate() && !HUD.ControlWheelController.IsOpen) {
-                        if (Keybinds.SelectDown() || Keybinds.PullDown())
-                            StartBurning(true);
-                        else if (Keybinds.SelectAlternateDown() || Keybinds.PushDown())
-                            StartBurning(false);
-                    }
-                }
-            }
-
-            // Could have changed burning status above. Check if the Allomancer is still burning.
+            
             if (IsBurning) {
 
                 // Change Burn Percentage Targets
@@ -278,6 +249,35 @@ public class PlayerPullPushController : AllomanticIronSteel {
                         LerpToBurnPercentages();
                         UpdateBurnRateMeter();
                         RefreshHUD();
+                    }
+                }
+            }
+
+            // Start and Stop Burning metals
+            if (Player.CanControlPlayer) {
+                if (IsBurning) {
+                    // Stop burning
+                    if (Keybinds.StopBurning()) {
+                        StopBurning();
+                        timeToStopBurning = 0;
+                    } else
+                    if (Keybinds.Negate()) {
+                        timeToStopBurning += Time.deltaTime;
+                        if (Keybinds.Select() && Keybinds.SelectAlternate() && timeToStopBurning > timeToHoldDown) {
+                            //if (Keybinds.IronPulling() && Keybinds.SteelPushing() && timeToStopBurning > timeToHoldDown) {
+                            StopBurning();
+                            timeToStopBurning = 0;
+                        }
+                    } else {
+                        timeToStopBurning = 0;
+                    }
+                } else {
+                    // Start burning (as long as the Control Wheel isn't open to interfere)
+                    if (!Keybinds.Negate() && !HUD.ControlWheelController.IsOpen) {
+                        if (Keybinds.SelectDown() || Keybinds.PullDown())
+                            StartBurning(true);
+                        else if (Keybinds.SelectAlternateDown() || Keybinds.PushDown())
+                            StartBurning(false);
                     }
                 }
             }

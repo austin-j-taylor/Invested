@@ -1,23 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class FacilityDoor : MonoBehaviour {
+public class FacilityDoor : Powered {
 
     private const float angleForStopping = 1;
     private const int timeToTryHarder = 2;
     private const int timeToQuit = 4;
-
-    private bool locked;
-    public bool Locked {
-        get {
-            return locked;
-        }
+    
+    public override bool On {
         set {
-            if (locked != value) {
-                locked = value;
-                if(locked) {
-                    rendererLeft.material = lockedMaterial;
-                    rendererRight.material = lockedMaterial;
+            if (on != value) {
+                if(value) {
+                    rendererLeft.material = GameManager.Material_MARL_Wire_lit;
+                    rendererRight.material = GameManager.Material_MARL_Wire_lit;
                     magneticLeft.enabled = false;
                     magneticRight.enabled = false;
                     StartCoroutine(SpringToLock());
@@ -27,12 +22,13 @@ public class FacilityDoor : MonoBehaviour {
                     jointRight.spring = lowSpring;
                     jointLeft.useLimits = false;
                     jointRight.useLimits = false;
-                    rendererLeft.material = unlockedMaterial;
-                    rendererRight.material = unlockedMaterial;
+                    rendererLeft.material = GameManager.Material_MARL_Wire_unlit;
+                    rendererRight.material = GameManager.Material_MARL_Wire_unlit;
                     magneticLeft.enabled = true;
                     magneticRight.enabled = true;
                 }
             }
+            base.on = value;
         }
     }
 
@@ -43,14 +39,11 @@ public class FacilityDoor : MonoBehaviour {
 
     private Renderer rendererLeft;
     private Renderer rendererRight;
-    private Material lockedMaterial;
-    [SerializeField]
-    private Material unlockedMaterial = null;
 
     private Magnetic magneticLeft;
     private Magnetic magneticRight;
 
-    private void Start() {
+    private void Awake() {
         jointLeft = transform.Find("Left").GetComponent<HingeJoint>();
         jointRight = transform.Find("Right").GetComponent<HingeJoint>();
 
@@ -66,30 +59,26 @@ public class FacilityDoor : MonoBehaviour {
 
         rendererLeft = leftMetal.GetComponent<Renderer>();
         rendererRight = rightMetal.GetComponent<Renderer>();
-        lockedMaterial = rendererLeft.material;
 
         magneticLeft = leftMetal.GetComponent<Magnetic>();
         magneticRight = rightMetal.GetComponent<Magnetic>();
-
-        Locked = true;
     }
 
-    private void Update() {
-        Locked = Keybinds.ZincTimeDown() ? !Locked : locked;
-        //if(!locked) {
-        //    // when the door is nearly closed, try harder to seal it shut
-        //    if(((jointLeft.angle < 0) ? -jointLeft.angle : jointLeft.angle) > angleForStopping
-        //             || ((jointRight.angle < 0) ? -jointRight.angle : jointRight.angle) > angleForStopping)) {
-        //        jointLeft.spring = highSpring;
-        //        jointRight.spring = highSpring;
-        //    }
-        //}
+    //private void Update() {
+    //    if (!On) {
+    //        // when the door is nearly closed, try harder to seal it shut
+    //        if (((jointLeft.angle < 0) ? -jointLeft.angle : jointLeft.angle) > angleForStopping
+    //                 || ((jointRight.angle < 0) ? -jointRight.angle : jointRight.angle) > angleForStopping)) {
+    //            jointLeft.spring = highSpring;
+    //            jointRight.spring = highSpring;
+    //        }
+    //    }
 
-    }
+    //}
 
     private void OnTriggerEnter(Collider other) {
         if(other.CompareTag("PlayerBody")) {
-            Locked = !locked;
+            On = !on;
         }
     }
 

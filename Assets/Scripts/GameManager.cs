@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour {
 
     // Resurces
     public static Material Material_Ettmetal_Glowing { get; private set; }
+    public static Material Material_MARL_Wire_unlit { get; private set; }
+    public static Material Material_MARL_Wire_lit { get; private set; }
     public static Font Font_Heebo { get; private set; }
     public static VolumetricLineBehavior MetalLineTemplate { get; private set; }
     public static VolumetricLineStripBehavior MetalLineStripTemplate { get; private set; }
@@ -36,6 +38,8 @@ public class GameManager : MonoBehaviour {
         GraphicsController = GetComponent<GraphicsController>();
 
         Material_Ettmetal_Glowing = Resources.Load<Material>("Materials/CompilationShaders/Ettmetal_glowing");
+        Material_MARL_Wire_unlit = Resources.Load<Material>("Materials/Facility_Wire_unlit");
+        Material_MARL_Wire_lit = Resources.Load<Material>("Materials/Facility_Wire_lit");
         Font_Heebo = Resources.Load<Font>("Fonts/Heebo-Medium");
         MetalLineTemplate = Resources.Load<VolumetricLineBehavior>("MetalLineTemplate");
         MetalLineStripTemplate = Resources.Load<VolumetricLineStripBehavior>("MetalLineStripTemplate");

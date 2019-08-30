@@ -5,7 +5,8 @@
  */
 public class MetalReserve : MonoBehaviour {
 
-    private const float maxCapacity = 150; // stomach can hold up to this much metal
+    private const double maxCapacity = 150, // stomach can hold up to this much metal
+                         fuzzyThreshold = 1;
 
     public bool IsEndless { get; set; } = false; // If true, this reserve will never run out
     
@@ -31,6 +32,15 @@ public class MetalReserve : MonoBehaviour {
     }
     public bool IsDraining {
         get { return Rate < 0; }
+    }
+    public bool IsRestoring {
+        get { return Rate > 0; }
+    }
+    public bool IsFull {
+        get { return mass == maxCapacity; }
+    }
+    public bool IsFullFuzzy {
+        get { return maxCapacity - mass < fuzzyThreshold; }
     }
 
     private void FixedUpdate() {

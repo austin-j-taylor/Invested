@@ -37,7 +37,7 @@ public class MetalReserveMeters : MonoBehaviour {
     }
 
     private void UpdateReserve(MetalReserveElement element) {
-        if (element.reserve.IsDraining)
+        if (element.reserve.IsDraining || element.reserve.IsRestoring)
             element.timeLastChanged = Time.time;
 
         element.massText.text = HUD.RoundStringToSigFigs((float)element.reserve.Mass, 3) + "g";

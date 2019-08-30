@@ -220,6 +220,7 @@ public class CameraController : MonoBehaviour {
                 smallestIndex = -1;
                 smallestDistance = SettingsMenu.settingsData.cameraDistance;
 
+                // check if the camera is angled such that it would clip into the ceiling
                 for (int i = 0; i < 9; i++) {
                     if (Physics.Raycast(destinations[i], -directionToTarget, out RaycastHit hit, distanceToTarget, GameManager.Layer_IgnoreCamera)) {
                         float distance = (hit.point - destinations[i]).magnitude;

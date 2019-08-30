@@ -119,36 +119,8 @@ public class AllomanticIronSteel : Allomancer {
 
     private bool lastWasPulling = false;
     private bool lastWasPushing = false;
-    private bool ironPulling = false;
-    private bool steelPushing = false;
-    public bool IronPulling {
-        get {
-            return ironPulling;
-        }
-        set {
-            if (ironPulling && !value) {
-                if (HasPullTarget)
-                    StopOnPullTargets();
-                else
-                    StopOnPushTargets();
-            }
-            ironPulling = value;
-        }
-    }
-    public bool SteelPushing {
-        get {
-            return steelPushing;
-        }
-        set {
-            if (steelPushing && !value) {
-                if (HasPushTarget)
-                    StopOnPushTargets();
-                else
-                    StopOnPullTargets();
-            }
-            steelPushing = value;
-        }
-    }
+    public bool IronPulling { get; set; }
+    public bool SteelPushing { get; set; }
 
     public float Strength { get; set; } = 1; // Allomantic Strength
     public float Charge { get; private set; } // Allomantic Charge
@@ -628,20 +600,7 @@ public class AllomanticIronSteel : Allomancer {
             lastWasPushing = false;
         }
     }
-
-    //Stop pushing or pulling on Pull targets
-    public void StopOnPullTargets() {
-        for (int i = 0; i < PullTargets.Count; i++) {
-            PullTargets[i].StopBeingPullPushed();
-        }
-    }
-
-    // Stop pushing or pulling on Push targets
-    public void StopOnPushTargets() {
-        for (int i = 0; i < PushTargets.Count; i++) {
-            PushTargets[i].StopBeingPullPushed();
-        }
-    }
+    
 
     // Consume iron for pull
     private void BurnIron(float force) {

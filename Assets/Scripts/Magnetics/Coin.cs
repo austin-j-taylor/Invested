@@ -25,6 +25,14 @@ public class Coin : Magnetic {
         }
     }
 
+    public override bool IsBeingPushPulled {
+        protected set {
+            base.IsBeingPushPulled = value;
+            if (!value)
+                UnStick();
+        }
+    }
+
     public new void Clear() {
         base.Clear();
         UnStick();
@@ -47,7 +55,7 @@ public class Coin : Magnetic {
             if (collisionCollider == collision.transform || collisionCollider == null) {
                 collisionCollider = collision.transform;
                 collisionNormal = collision.contacts[0].normal;
-                if(isBeingPushPulled) {
+                if(IsBeingPushPulled) {
                     if (!isStuck) { // Only updates on first frame of being stuck
                         isStuck = IsStuckByFriction(collision.impulse / Time.deltaTime, LastNetForceOnTarget);
                         if (isStuck) {
@@ -102,11 +110,6 @@ public class Coin : Magnetic {
         }
         LastExpectedAcceleration = newNetForce / NetMass; // LastPosition, LastVelocity are updated
         Rb.AddForce(newNetForce * (1 / Time.timeScale));
-    }
-
-    public override void StopBeingPullPushed() {
-        base.StopBeingPullPushed();
-        UnStick();
     }
 
     /*

@@ -184,7 +184,7 @@ Rigidbody:
   m_GameObject: {fileID: 4142846432606670533}
   serializedVersion: 2
   m_Mass: 60
-  m_Drag: 7
+  m_Drag: 3
   m_AngularDrag: 0.5
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -250,6 +250,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9008539007831283766}
   - component: {fileID: 5431230819284707876}
+  - component: {fileID: 1913652215}
   m_Layer: 0
   m_Name: MARL_Door
   m_TagString: Untagged
@@ -264,7 +265,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5431230819284707877}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -9, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -286,6 +287,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unlockedMaterial: {fileID: 2100000, guid: 30914c918e532e54b96aa578ae7e0d3e, type: 2}
+--- !u!65 &1913652215
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5431230819284707877}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 5, z: 3}
+  m_Center: {x: -8, y: 2.5, z: 0}
 --- !u!1 &6878962752830198882
 GameObject:
   m_ObjectHideFlags: 0
@@ -470,7 +484,7 @@ Rigidbody:
   m_GameObject: {fileID: 8808651714341597951}
   serializedVersion: 2
   m_Mass: 60
-  m_Drag: 7
+  m_Drag: 3
   m_AngularDrag: 0.5
   m_UseGravity: 1
   m_IsKinematic: 0

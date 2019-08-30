@@ -138,7 +138,8 @@ public class SceneSelectMenu : MonoBehaviour {
                     Player.PlayerInstance.CoinHand.Pouch.Clear();
                     Player.PlayerIronSteel.IronReserve.SetMass(50);
                     Player.PlayerIronSteel.SteelReserve.SetMass(0);
-                    Player.PlayerPewter.PewterReserve.SetMass(0);
+                    //Player.PlayerPewter.PewterReserve.SetMass(0);
+                    Player.PlayerPewter.PewterReserve.SetMass(50);
                 } else {
                     // For every scene except the tutorial, give metals and coins at the start.
                     Player.PlayerInstance.CoinHand.Pouch.Fill();

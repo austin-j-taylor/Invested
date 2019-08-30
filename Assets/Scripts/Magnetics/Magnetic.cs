@@ -26,8 +26,16 @@ public class Magnetic : MonoBehaviour {
     ////[SerializeField]
     //private Renderer[] childMagnetics;
 
-    private bool lastWasPulled;
-    protected bool isBeingPushPulled;
+    private bool thisFrameIsBeingPushPulled = false;
+    private bool isBeingPushPulled = false;
+    public virtual bool IsBeingPushPulled {
+        get {
+             return isBeingPushPulled;
+        }
+        protected set {
+            isBeingPushPulled = value;
+        }
+    }
     private float lightSaberFactor;
     private Color[] defaultEmissionColor;
     //private Outline highlightedTargetOutline;
@@ -69,6 +77,7 @@ public class Magnetic : MonoBehaviour {
     public bool IsStatic { get; protected set; }
     public bool HasColliders { get; private set; }
 
+    private bool lastWasPulled;
     public bool LastWasPulled {
         get {
             return lastWasPulled;
@@ -204,16 +213,16 @@ public class Magnetic : MonoBehaviour {
         //    childMagnetics = GetComponentsInChildren<Renderer>();
         //}
         //defaultEmissionColor = new Color[childMagnetics.Length];
-        blueLine = Instantiate(GameManager.MetalLineTemplate);
-        colliders = GetComponentsInChildren<Collider>();
-        lightSaberFactor = 1;
-        lastWasPulled = false;
-        isBeingPushPulled = false;
-        isHighlighted = false;
         if (!IsStatic) { // assigned by MagneticDense
             Rb = GetComponentInParent<Rigidbody>();
             IsStatic = (Rb == null);
         }
+        blueLine = Instantiate(GameManager.MetalLineTemplate);
+        colliders = GetComponentsInChildren<Collider>();
+        lightSaberFactor = 1;
+        lastWasPulled = false;
+        IsBeingPushPulled = false;
+        isHighlighted = false;
         HasColliders = colliders.Length > 0;
 
         if (IsStatic) { // No RigidBody attached
@@ -260,11 +269,13 @@ public class Magnetic : MonoBehaviour {
 
     private void FixedUpdate() {
         LastVelocity = Velocity;
+        IsBeingPushPulled = thisFrameIsBeingPushPulled;
+        thisFrameIsBeingPushPulled = false;
     }
 
     // If the Magnetic is untargeted
     public void Clear() {
-        StopBeingPullPushed();
+        IsBeingPushPulled = false;
         LastVelocity = Vector3.zero;
         LastExpectedAcceleration = Vector3.zero;
         //LastExpectedVelocityChange = Vector3.zero;
@@ -296,12 +307,7 @@ public class Magnetic : MonoBehaviour {
             LastExpectedAcceleration = netForce / netMass;
             Rb.AddForce(netForce, ForceMode.Force);
         }
-    }
-    public virtual void StartBeingPullPushed() {
-        isBeingPushPulled = true;
-    }
-    public virtual void StopBeingPullPushed() {
-        isBeingPushPulled = false;
+        thisFrameIsBeingPushPulled = true;
     }
 
     // Set properties of the blue line pointing to this metal

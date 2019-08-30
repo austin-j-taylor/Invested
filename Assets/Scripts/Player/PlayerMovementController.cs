@@ -132,6 +132,7 @@ public class PlayerMovementController : AllomanticPewter {
                 if (jumpQueued) {
                     jumpQueued = false;
 
+                    groundedChecker.UpdateStanding();
                     Rigidbody targetRb = groundedChecker.StandingOnCollider.attachedRigidbody;
 
                     Vector3 jumpForce;
