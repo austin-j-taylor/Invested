@@ -9,7 +9,7 @@ using UnityEngine;
  */
 public class PlayerGroundedChecker : MonoBehaviour {
 
-    private const float feetRange = 0.15f;
+    private const float feetRange = 0.05f;
     private readonly Vector3 feetOffset = new Vector3(0, -.25f, 0);
 
     public bool IsGrounded { get { return StandingOnCollider != null; } }

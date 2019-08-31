@@ -11,8 +11,8 @@ public class FacilityDoor : Powered {
         set {
             if (on != value) {
                 if(value) {
-                    rendererLeft.material = GameManager.Material_MARL_Wire_lit;
-                    rendererRight.material = GameManager.Material_MARL_Wire_lit;
+                    rendererLeft.material = GameManager.Material_MARLmetal_lit;
+                    rendererRight.material = GameManager.Material_MARLmetal_lit;
                     magneticLeft.enabled = false;
                     magneticRight.enabled = false;
                     StartCoroutine(SpringToLock());
@@ -22,8 +22,8 @@ public class FacilityDoor : Powered {
                     jointRight.spring = lowSpring;
                     jointLeft.useLimits = false;
                     jointRight.useLimits = false;
-                    rendererLeft.material = GameManager.Material_MARL_Wire_unlit;
-                    rendererRight.material = GameManager.Material_MARL_Wire_unlit;
+                    rendererLeft.material = GameManager.Material_MARLmetal_unlit;
+                    rendererRight.material = GameManager.Material_MARLmetal_unlit;
                     magneticLeft.enabled = true;
                     magneticRight.enabled = true;
                 }

@@ -33,7 +33,7 @@ public class SeekerCube : MonoBehaviour {
 
         if (counter > duration) {
             if (!finished) {
-                GetComponentInChildren<MeshRenderer>().material = GameManager.Material_Ettmetal_Glowing;
+                GetComponentInChildren<MeshRenderer>().material = GameManager.Material_MARLmetal_lit;
                 GetComponentInChildren<Light>().intensity = 1.5f;
                 EnableEmissions(4);
                 rb.angularVelocity = rb.angularVelocity / 2;

@@ -6,7 +6,7 @@ public class Wire : Powered {
     public override bool On {
         set {
             base.On = value;
-            rend.material = value ? GameManager.Material_MARL_Wire_lit : GameManager.Material_MARL_Wire_unlit;
+            rend.material = value ? GameManager.Material_MARLmetal_lit : GameManager.Material_MARLmetal_unlit;
         }
     }
 

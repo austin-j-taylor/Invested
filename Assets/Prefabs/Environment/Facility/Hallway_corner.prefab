@@ -107,6 +107,7 @@ GameObject:
   - component: {fileID: 8334076751063282495}
   - component: {fileID: 2347536273129607110}
   - component: {fileID: 4082734896411196187}
+  - component: {fileID: 3869846797924409440}
   m_Layer: 0
   m_Name: Hallway_corner
   m_TagString: Untagged
@@ -190,6 +191,26 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 14
   m_Mesh: {fileID: 2186430941476567602, guid: efc8d4fca9ad2e544a01f09308f083aa, type: 3}
+--- !u!220 &3869846797924409440
+LightProbeGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4082734896411196186}
+  m_Enabled: 1
+  m_SourcePositions:
+  - {x: 0, y: 0, z: 4.4999995}
+  - {x: 0, y: 1.0000004, z: 0.5}
+  - {x: -0.5, y: -0.99999964, z: 0.5}
+  - {x: -2.5, y: 1.0000004, z: 0.5}
+  - {x: -2.5, y: -1.5, z: 0.5}
+  - {x: -0.5, y: 1.0000004, z: 2.5}
+  - {x: -2.5, y: 1.0000004, z: 2.5}
+  - {x: -2.5, y: -0.99999964, z: 2.5}
+  - {x: -1.5, y: -1.5, z: 4.499999}
+  - {x: -1.5, y: 0, z: 4.4999995}
+  m_Dering: 1
 --- !u!1001 &6526829977603048853
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -197,11 +218,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1077363173511186697}
     m_Modifications:
-    - target: {fileID: 8567218120562958512, guid: 66a60f7b0fac1714bb3d3123e6df916c,
-        type: 3}
-      propertyPath: m_Name
-      value: CeilingLight Variant
-      objectReference: {fileID: 0}
     - target: {fileID: 8567218120562958513, guid: 66a60f7b0fac1714bb3d3123e6df916c,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -257,6 +273,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 180.00002
       objectReference: {fileID: 0}
+    - target: {fileID: 8567218120562958512, guid: 66a60f7b0fac1714bb3d3123e6df916c,
+        type: 3}
+      propertyPath: m_Name
+      value: CeilingLight Variant
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 66a60f7b0fac1714bb3d3123e6df916c, type: 3}
 --- !u!4 &3204076070795437348 stripped
@@ -272,11 +293,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 384124896110488504}
     m_Modifications:
-    - target: {fileID: 2756289012695650528, guid: e6413b60126e46943a947e843d151eb0,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityLight (1)
-      objectReference: {fileID: 0}
     - target: {fileID: 8755117294222736066, guid: e6413b60126e46943a947e843d151eb0,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -332,6 +348,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 2756289012695650528, guid: e6413b60126e46943a947e843d151eb0,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityLight (1)
+      objectReference: {fileID: 0}
     - target: {fileID: 4976507190823673086, guid: e6413b60126e46943a947e843d151eb0,
         type: 3}
       propertyPath: m_AreaSize.x
@@ -357,11 +378,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 384124896110488504}
     m_Modifications:
-    - target: {fileID: 2756289012695650528, guid: e6413b60126e46943a947e843d151eb0,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityLight
-      objectReference: {fileID: 0}
     - target: {fileID: 8755117294222736066, guid: e6413b60126e46943a947e843d151eb0,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -416,6 +432,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2756289012695650528, guid: e6413b60126e46943a947e843d151eb0,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityLight
       objectReference: {fileID: 0}
     - target: {fileID: 4976507190823673086, guid: e6413b60126e46943a947e843d151eb0,
         type: 3}

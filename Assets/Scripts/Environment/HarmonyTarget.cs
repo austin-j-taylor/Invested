@@ -116,10 +116,10 @@ public class HarmonyTarget : MonoBehaviour {
     }
 
     private void EndAnimation() {
-        Player.PlayerInstance.SetFrameMaterial(GameManager.Material_Ettmetal_Glowing);
+        Player.PlayerInstance.SetFrameMaterial(GameManager.Material_MARLmetal_lit);
         //Player.PlayerInstance.GetComponentInChildren<MeshRenderer>().material = harmonySphere.GetComponent<Renderer>().material;
         foreach (Renderer renderer in symbolRenderers)
-            renderer.material = GameManager.Material_Ettmetal_Glowing;
+            renderer.material = GameManager.Material_MARLmetal_lit;
 
         // Open menus
         LevelCompletedScreen.OpenScreen(this);
