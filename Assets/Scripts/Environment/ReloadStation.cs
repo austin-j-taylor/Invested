@@ -6,6 +6,8 @@ public class ReloadStation : MonoBehaviour {
     private const float refillAmount = 50;
 
     [SerializeField]
+    private double capacity = 150;
+    [SerializeField]
     private bool fillIron = true;
     [SerializeField]
     private bool fillSteel = false;
@@ -21,7 +23,7 @@ public class ReloadStation : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Player") && !other.isTrigger) {
-            anim.SetBool("activated", true);
+            if(anim) anim.SetBool("activated", true);
         }
     }
 
@@ -32,23 +34,23 @@ public class ReloadStation : MonoBehaviour {
                     (!fillSteel || Player.PlayerIronSteel.SteelReserve.IsFullFuzzy) &&
                     (!fillPewter || Player.PlayerPewter.PewterReserve.IsFullFuzzy)
             ) {
-                anim.SetBool("activated", false);
+                if (anim) anim.SetBool("activated", false);
             } else {
-                anim.SetBool("activated", true);
+                if (anim) anim.SetBool("activated", true);
             }
 
             if (fillIron)
-                Player.PlayerIronSteel.IronReserve.Mass += refillAmount * Time.deltaTime;
+                Player.PlayerIronSteel.IronReserve.Fill(refillAmount * Time.deltaTime, capacity);
             if(fillSteel)
-                Player.PlayerIronSteel.SteelReserve.Mass += refillAmount * Time.deltaTime;
+                Player.PlayerIronSteel.SteelReserve.Fill(refillAmount * Time.deltaTime, capacity);
             if (fillPewter)
-                Player.PlayerPewter.PewterReserve.Mass += refillAmount * Time.deltaTime;
+                Player.PlayerPewter.PewterReserve.Fill(refillAmount * Time.deltaTime, capacity);
         }
     }
 
     private void OnTriggerExit(Collider other) {
         if (other.CompareTag("Player") && !other.isTrigger) {
-            anim.SetBool("activated", false);
+            if (anim) anim.SetBool("activated", false);
         }
     }
 }

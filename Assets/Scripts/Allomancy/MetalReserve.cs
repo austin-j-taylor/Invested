@@ -6,7 +6,8 @@
 public class MetalReserve : MonoBehaviour {
 
     private const double maxCapacity = 150, // stomach can hold up to this much metal
-                         fuzzyThreshold = 1;
+                         fuzzyThresholdFull = 1, // 1 gram
+                         fuzzyThresholdChanging = .100f; // 100 mg
 
     public bool IsEndless { get; set; } = false; // If true, this reserve will never run out
     
@@ -31,16 +32,23 @@ public class MetalReserve : MonoBehaviour {
         }
     }
     public bool IsDraining {
-        get { return Rate < 0; }
+        get { return Rate < -fuzzyThresholdChanging; }
     }
-    public bool IsRestoring {
-        get { return Rate > 0; }
-    }
+    private bool thisFrameRestoring = false;
+    public bool IsRestoring { get; private set; }
     public bool IsFull {
         get { return mass == maxCapacity; }
     }
     public bool IsFullFuzzy {
-        get { return maxCapacity - mass < fuzzyThreshold; }
+        get { return maxCapacity - mass < fuzzyThresholdFull; }
+    }
+    public bool IsChangingFuzzy {
+        get { return Rate < 0 ? (Rate < fuzzyThresholdChanging) : (Rate > fuzzyThresholdChanging); }
+    }
+    public bool IsInEquilibrium {
+        get {
+            return IsDraining && !((IsRestoring || thisFrameRestoring) && !IsChangingFuzzy);
+        }
     }
 
     private void FixedUpdate() {
@@ -50,6 +58,8 @@ public class MetalReserve : MonoBehaviour {
             Rate = (Mass - lastMass) / Time.fixedDeltaTime;
             lastMass = Mass;
         }
+        IsRestoring = thisFrameRestoring;
+        thisFrameRestoring = false;
     }
 
     // Updates both mass and lastMass to the newMass, so rate doesn't get confused from the discontinuitous change
@@ -62,9 +72,10 @@ public class MetalReserve : MonoBehaviour {
     // Fill this reserve with the amount volume
     // If noMoreThan is above 0, don't fill more than that amount
     public void Fill(double volume, double noMoreThan = 0) {
+        thisFrameRestoring = true;
         if (noMoreThan > 0 && mass + volume > noMoreThan)
-            SetMass(noMoreThan);
+            Mass = noMoreThan;
         else
-            SetMass(mass + volume);
+            Mass = mass + volume;
     }
 }

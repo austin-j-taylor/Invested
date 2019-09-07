@@ -5,16 +5,12 @@ public class Environment_MARL_SpawnRoom : Environment {
 
     // Environment members
     [SerializeField]
-    private Light flickeringSpotlight = null;
+    private Animator flickeringSpotlight = null;
     [SerializeField]
     private FacilityDoor door = null;
 
     private void Start() {
         StartCoroutine(startingControls());
-    }
-    
-    void Update() {
-        flickeringSpotlight.intensity = 17 * Mathf.Sin(Time.time);
     }
 
     // State coroutines
@@ -23,7 +19,11 @@ public class Environment_MARL_SpawnRoom : Environment {
         Player.CanControlPushes = false;
 
         yield return new WaitForSeconds(3);
-        if(CameraController.HasNotMovedCamera) {
+
+        flickeringSpotlight.SetTrigger("flickerOn");
+        yield return new WaitForSeconds(2);
+
+        if (CameraController.HasNotMovedCamera) {
             HUD.MessageOverlayCinematic.FadeIn(Messages.tutorial_movement); // look
             while (CameraController.HasNotMovedCamera)
                 yield return null;

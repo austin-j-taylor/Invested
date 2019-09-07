@@ -29,15 +29,15 @@ public class MetalReserveMeters : MonoBehaviour {
     }
 
     private void LateUpdate() {
-        UpdateReserve(iron);
-        UpdateReserve(steel);
-        UpdateReserve(pewter);
-        UpdateReserveIronSteel(iron);
-        UpdateReserveIronSteel(steel);
+        if (!PauseMenu.IsPaused) {
+            UpdateReserve(iron);
+            UpdateReserve(steel);
+            UpdateReserve(pewter);
+        }
     }
 
     private void UpdateReserve(MetalReserveElement element) {
-        if (element.reserve.IsDraining || element.reserve.IsRestoring)
+        if (element.reserve.IsInEquilibrium)
             element.timeLastChanged = Time.time;
 
         element.massText.text = HUD.RoundStringToSigFigs((float)element.reserve.Mass, 3) + "g";
@@ -46,11 +46,8 @@ public class MetalReserveMeters : MonoBehaviour {
 
         element.animator.SetBool("IsLow", element.fill.fillAmount < lowThreshold);
         element.animator.SetBool("IsVisible", Time.time - element.timeLastChanged < timeToFade);
-    }
 
-    private void UpdateReserveIronSteel(MetalReserveElement element) {
-        // The -.001f is to account for floating-point error
-        element.animator.SetBool("IsDraining", element.reserve.Rate < AllomanticIronSteel.gramsPerSecondPassiveBurn - .001f || element.reserve.Mass < criticalMassThreshold && element.reserve.Mass != 0);
+        element.animator.SetBool("IsDraining", !element.reserve.IsRestoring && (element.reserve.IsDraining || (element.reserve.Mass < criticalMassThreshold && element.reserve.HasMass)));
     }
 
     public void Clear() {
