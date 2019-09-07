@@ -15,8 +15,14 @@ public class Environment_MARL_SpawnRoom : Environment {
 
     // State coroutines
     private IEnumerator startingControls() {
+        Player.CanControlZinc = false;
+        Player.CanControlWheel = false;
         Player.CanControlMovement = false;
         Player.CanControlPushes = false;
+        Player.PlayerInstance.CoinHand.Pouch.Clear();
+        Player.PlayerIronSteel.IronReserve.SetMass(100);
+        Player.PlayerIronSteel.SteelReserve.SetMass(0);
+        Player.PlayerPewter.PewterReserve.SetMass(0);
 
         yield return new WaitForSeconds(3);
 

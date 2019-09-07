@@ -26,18 +26,9 @@ public class Player : PewterEntity {
     public Hand CoinHand { get; private set; }
     public CoinMode CoinThrowingMode;
 
-    private static bool canControlMovement = false;
-    public static bool CanControlMovement {
-        get {
-            return canControlMovement && !PauseMenu.IsPaused;
-        }
-        set {
-            canControlMovement = value;
-            if (!value) {
-                PlayerIronSteel.SoftClear();
-            }
-        }
-    }
+    public static bool CanControlWheel { get; set; }
+    public static bool CanControlZinc { get; set; }
+    public static bool CanControlMovement { get; set; }
     private static bool canControlPushes = false;
     public static bool CanControlPushes {
         get {
@@ -96,8 +87,8 @@ public class Player : PewterEntity {
         if (CanControlMovement) {
             // On throwing a coin
             if (!CoinHand.Pouch.IsEmpty) {
-                
-                if(coinCooldownTimer > coinCooldownThreshold) {
+
+                if (coinCooldownTimer > coinCooldownThreshold) {
                     // TODO: simplify logic. just like this for thinking
                     bool firing = false;
                     if (Keybinds.WithdrawCoinDown())
@@ -109,7 +100,7 @@ public class Player : PewterEntity {
                             }
                         }
                     } else {
-                        if(CoinThrowingMode == CoinMode.Full && Keybinds.WithdrawCoin()) {
+                        if (CoinThrowingMode == CoinMode.Full && Keybinds.WithdrawCoin()) {
                             firing = true;
                         }
                     }
@@ -118,7 +109,7 @@ public class Player : PewterEntity {
                         coinCooldownTimer = 0;
                         if (CoinThrowingMode == CoinMode.Spray) {
                             Coin[] coins = CoinHand.WithdrawCoinSprayToHand();
-                            for(int i = 0; i < Hand.spraySize; i++)
+                            for (int i = 0; i < Hand.spraySize; i++)
                                 PlayerIronSteel.AddVacuousPushTarget(coins[i], true);
                         } else
                             PlayerIronSteel.AddVacuousPushTarget(CoinHand.WithdrawCoinToHand());
@@ -157,6 +148,8 @@ public class Player : PewterEntity {
         if (mode == LoadSceneMode.Single) { // Not loading all of the scenes, as it does at startup
             PlayerIronSteel.Clear();
             SetFrameMaterial(frameMaterial);
+            CanControlWheel = true;
+            CanControlZinc = true;
             CanControlMovement = true;
             CanControlPushes = true;
             GodMode = false;
