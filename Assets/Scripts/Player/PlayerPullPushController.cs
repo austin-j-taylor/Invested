@@ -274,10 +274,14 @@ public class PlayerPullPushController : AllomanticIronSteel {
                 } else {
                     // Start burning (as long as the Control Wheel isn't open to interfere)
                     if (!Keybinds.Negate() && !HUD.ControlWheelController.IsOpen) {
-                        if (Keybinds.SelectDown() || Keybinds.PullDown())
+                        if (Keybinds.SelectDown() || Keybinds.PullDown()) {
                             StartBurning(true);
-                        else if (Keybinds.SelectAlternateDown() || Keybinds.PushDown())
+                            SearchForMetalsManual();
+                        }
+                        else if (Keybinds.SelectAlternateDown() || Keybinds.PushDown()) {
                             StartBurning(false);
+                            SearchForMetalsManual();
+                        }
                     }
                 }
             }
