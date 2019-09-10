@@ -2,19 +2,20 @@
 using System.Collections;
 
 public class Environment_MARL_SpawnRoom : Environment {
-
+    
     // Environment members
     [SerializeField]
     private Animator flickeringSpotlight = null;
     [SerializeField]
     private FacilityDoor door = null;
+    
 
     private void Start() {
-        StartCoroutine(startingControls());
+        StartCoroutine(Procedure());
     }
 
     // State coroutines
-    private IEnumerator startingControls() {
+    private IEnumerator Procedure() {
         Player.CanControlZinc = false;
         Player.CanControlWheel = false;
         Player.CanControlMovement = false;
@@ -78,7 +79,7 @@ public class Environment_MARL_SpawnRoom : Environment {
 
         // player leaves room
         // door closes when player crosses trigger
-
+        enabled = false;
     }
     // other coroutines when triggers are hit or other actions are done
     // these coroutines may be public and started elsewhere

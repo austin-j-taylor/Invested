@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.12731713, g: 0.13414736, b: 0.12107852, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -77,7 +77,7 @@ LightmapSettings:
     m_PVRDirectSampleCount: 32
     m_PVRSampleCount: 500
     m_PVRBounces: 2
-    m_PVREnvironmentSampleCount: 500
+    m_PVREnvironmentSampleCount: 256
     m_PVREnvironmentReferencePointCount: 2048
     m_PVRFilteringMode: 2
     m_PVRDenoiserTypeDirect: 0
@@ -96,7 +96,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
-  m_LightingDataAsset: {fileID: 112000014, guid: 02a1a5157d5c89a4fb812aa142697d4c,
+  m_LightingDataAsset: {fileID: 112000000, guid: fd6de86ecfd6bd947b3e5fb8707e9ab8,
     type: 2}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -1571,36 +1571,6 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 8352919904377344444, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904523153404, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904587297714, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904795492176, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904957152988, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
     - target: {fileID: 8352919903594384144, guid: eb9b386faf99c044da80c4a46699a5b7,
         type: 3}
       propertyPath: m_Material
@@ -1619,6 +1589,24 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
         type: 2}
+    - target: {fileID: 8352919904377344444, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
+    - target: {fileID: 8352919904523153404, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
+    - target: {fileID: 8352919904587297714, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
     - target: {fileID: 8352919904669247413, guid: eb9b386faf99c044da80c4a46699a5b7,
         type: 3}
       propertyPath: m_Material
@@ -1631,7 +1619,19 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
         type: 2}
+    - target: {fileID: 8352919904795492176, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
     - target: {fileID: 8352919904813279450, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
+    - target: {fileID: 8352919904957152988, guid: eb9b386faf99c044da80c4a46699a5b7,
         type: 3}
       propertyPath: m_Material
       value: 
@@ -2142,11 +2142,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 33.5976
   magneticMass: 33.5976
-  childMagnetics: []
   density: 7870
 --- !u!54 &53948207
 Rigidbody:
@@ -2815,11 +2812,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1026813143}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (3)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2879,6 +2871,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 14.812307
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (3)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -2984,11 +2981,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (28)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3053,6 +3045,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000006
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (28)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -4051,11 +4048,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1141653764}
     m_Modifications:
-    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
-        type: 3}
-      propertyPath: m_Name
-      value: LampCeiling
-      objectReference: {fileID: 0}
     - target: {fileID: 1849423427054811829, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4111,6 +4103,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
+        type: 3}
+      propertyPath: m_Name
+      value: LampCeiling
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d660472104706b42b70149001b7f57d, type: 3}
 --- !u!4 &127731980 stripped
@@ -4126,11 +4123,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2090497310}
     m_Modifications:
-    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
-        type: 3}
-      propertyPath: m_Name
-      value: LampCeiling (2)
-      objectReference: {fileID: 0}
     - target: {fileID: 1849423427054811829, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4185,6 +4177,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
+        type: 3}
+      propertyPath: m_Name
+      value: LampCeiling (2)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d660472104706b42b70149001b7f57d, type: 3}
@@ -4585,11 +4582,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3161245}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (49)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4659,6 +4651,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000018
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (49)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -4732,11 +4729,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 20.977573
   magneticMass: 20.977573
-  childMagnetics: []
   density: 7870
 --- !u!54 &157347125
 Rigidbody:
@@ -4912,11 +4906,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (1)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4986,6 +4975,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000018
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -5403,11 +5397,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 50.85184
   magneticMass: 50.85184
-  childMagnetics: []
   density: 7870
 --- !u!54 &170569410
 Rigidbody:
@@ -6586,11 +6577,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (42)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6661,6 +6647,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 0.25000015
       objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (42)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
 --- !u!4 &206395810 stripped
@@ -6676,11 +6667,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (25)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6745,6 +6731,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000012
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (25)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -7341,11 +7332,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 50.851906
   magneticMass: 50.851906
-  childMagnetics: []
   density: 7870
 --- !u!54 &234928780
 Rigidbody:
@@ -7619,11 +7607,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3161245}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (48)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7693,6 +7676,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000015
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (48)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -8248,11 +8236,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (11)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -8317,6 +8300,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000018
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (11)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -8764,16 +8752,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1600839365}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (2)
-      objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -8833,6 +8811,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -9268,11 +9256,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (13)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -9337,6 +9320,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.2500002
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (13)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -9485,11 +9473,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 14.010962
   magneticMass: 14.010962
-  childMagnetics: []
   density: 7870
 --- !u!54 &331639416
 Rigidbody:
@@ -9636,11 +9621,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2090497310}
     m_Modifications:
-    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
-        type: 3}
-      propertyPath: m_Name
-      value: LampCeiling
-      objectReference: {fileID: 0}
     - target: {fileID: 1849423427054811829, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -9695,6 +9675,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
+        type: 3}
+      propertyPath: m_Name
+      value: LampCeiling
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d660472104706b42b70149001b7f57d, type: 3}
@@ -9762,11 +9747,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 6.321439
   magneticMass: 6.321439
-  childMagnetics: []
   density: 7870
 --- !u!54 &336215516
 Rigidbody:
@@ -10417,11 +10399,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 7.637786
   magneticMass: 7.637786
-  childMagnetics: []
   density: 7870
 --- !u!54 &348985307
 Rigidbody:
@@ -10505,11 +10484,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3161245}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (46)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -10579,6 +10553,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.2500004
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (46)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -10670,11 +10649,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (6)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -10740,6 +10714,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 0.25000012
       objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (6)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
 --- !u!4 &358527778 stripped
@@ -10755,11 +10734,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1026813143}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (1)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -10819,6 +10793,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 19.203367
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -11112,11 +11091,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (20)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -11182,6 +11156,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 0.25000018
       objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (20)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
 --- !u!4 &366467679 stripped
@@ -11197,11 +11176,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (41)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -11261,6 +11235,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 3.2995944
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (41)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -11602,11 +11581,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 31.750654
   magneticMass: 31.750654
-  childMagnetics: []
   density: 7870
 --- !u!54 &382212377
 Rigidbody:
@@ -11782,11 +11758,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3161245}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (56)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -11856,6 +11827,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000018
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (56)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -12270,11 +12246,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 17.807371
   magneticMass: 17.807371
-  childMagnetics: []
   density: 7870
 --- !u!54 &395769962
 Rigidbody:
@@ -12528,16 +12501,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1600839365}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (5)
-      objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -12597,6 +12560,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -12762,11 +12735,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 6.8828306
   magneticMass: 6.8828306
-  childMagnetics: []
   density: 7870
 --- !u!54 &415130057
 Rigidbody:
@@ -13588,11 +13558,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 9.464658
   magneticMass: 9.464658
-  childMagnetics: []
   density: 7870
 --- !u!54 &442466563
 Rigidbody:
@@ -13676,11 +13643,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1141653764}
     m_Modifications:
-    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
-        type: 3}
-      propertyPath: m_Name
-      value: LampCeiling (1)
-      objectReference: {fileID: 0}
     - target: {fileID: 1849423427054811829, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -13735,6 +13697,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
+        type: 3}
+      propertyPath: m_Name
+      value: LampCeiling (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d660472104706b42b70149001b7f57d, type: 3}
@@ -14383,11 +14350,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2090497310}
     m_Modifications:
-    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
-        type: 3}
-      propertyPath: m_Name
-      value: LampCeiling (1)
-      objectReference: {fileID: 0}
     - target: {fileID: 1849423427054811829, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -14442,6 +14404,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
+        type: 3}
+      propertyPath: m_Name
+      value: LampCeiling (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d660472104706b42b70149001b7f57d, type: 3}
@@ -14550,11 +14517,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (19)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -14619,6 +14581,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000018
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (19)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -14976,11 +14943,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 9.464654
   magneticMass: 9.464654
-  childMagnetics: []
   density: 7870
 --- !u!54 &510748730
 Rigidbody:
@@ -15421,11 +15385,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3161245}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (53)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -15495,6 +15454,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000054
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (53)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -15604,11 +15568,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3161245}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (47)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -15678,6 +15637,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000003
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (47)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -16255,11 +16219,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (23)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -16324,6 +16283,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000006
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (23)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -16775,11 +16739,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (37)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -16849,6 +16808,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000018
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (37)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -17553,36 +17517,6 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 13.12
       objectReference: {fileID: 0}
-    - target: {fileID: 8352919904377344444, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904523153404, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904587297714, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904795492176, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904957152988, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
     - target: {fileID: 8352919903594384144, guid: eb9b386faf99c044da80c4a46699a5b7,
         type: 3}
       propertyPath: m_Material
@@ -17601,6 +17535,24 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
         type: 2}
+    - target: {fileID: 8352919904377344444, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
+    - target: {fileID: 8352919904523153404, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
+    - target: {fileID: 8352919904587297714, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
     - target: {fileID: 8352919904669247413, guid: eb9b386faf99c044da80c4a46699a5b7,
         type: 3}
       propertyPath: m_Material
@@ -17613,7 +17565,19 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
         type: 2}
+    - target: {fileID: 8352919904795492176, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
     - target: {fileID: 8352919904813279450, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
+    - target: {fileID: 8352919904957152988, guid: eb9b386faf99c044da80c4a46699a5b7,
         type: 3}
       propertyPath: m_Material
       value: 
@@ -18373,11 +18337,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 20.977606
   magneticMass: 20.977606
-  childMagnetics: []
   density: 7870
 --- !u!54 &637184677
 Rigidbody:
@@ -18794,11 +18755,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 50.851906
   magneticMass: 50.851906
-  childMagnetics: []
   density: 7870
 --- !u!54 &642560696
 Rigidbody:
@@ -18939,11 +18897,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 20.97758
   magneticMass: 20.97758
-  childMagnetics: []
   density: 7870
 --- !u!54 &644970138
 Rigidbody:
@@ -19084,11 +19039,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 21.206299
   magneticMass: 21.206299
-  childMagnetics: []
   density: 7870
 --- !u!54 &647889846
 Rigidbody:
@@ -19505,11 +19457,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (40)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -19574,6 +19521,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 0.25000006
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (40)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -19904,36 +19856,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 18.302
       objectReference: {fileID: 0}
-    - target: {fileID: 8352919904377344444, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904523153404, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904587297714, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904795492176, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904957152988, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
     - target: {fileID: 8352919903594384144, guid: eb9b386faf99c044da80c4a46699a5b7,
         type: 3}
       propertyPath: m_Material
@@ -19952,6 +19874,24 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
         type: 2}
+    - target: {fileID: 8352919904377344444, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
+    - target: {fileID: 8352919904523153404, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
+    - target: {fileID: 8352919904587297714, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
     - target: {fileID: 8352919904669247413, guid: eb9b386faf99c044da80c4a46699a5b7,
         type: 3}
       propertyPath: m_Material
@@ -19964,7 +19904,19 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
         type: 2}
+    - target: {fileID: 8352919904795492176, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
     - target: {fileID: 8352919904813279450, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
+    - target: {fileID: 8352919904957152988, guid: eb9b386faf99c044da80c4a46699a5b7,
         type: 3}
       propertyPath: m_Material
       value: 
@@ -20069,11 +20021,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3467877974828344403, guid: 1589cd97bc7e27c448191031f2fced22,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3062565781281829204, guid: 1589cd97bc7e27c448191031f2fced22,
         type: 3}
       propertyPath: fillIron
@@ -20082,6 +20029,11 @@ PrefabInstance:
     - target: {fileID: 3062565781281829204, guid: 1589cd97bc7e27c448191031f2fced22,
         type: 3}
       propertyPath: fillSteel
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3467877974828344403, guid: 1589cd97bc7e27c448191031f2fced22,
+        type: 3}
+      propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -21242,36 +21194,6 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 8352919904377344444, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904523153404, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904587297714, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904795492176, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904957152988, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
     - target: {fileID: 8352919903594384144, guid: eb9b386faf99c044da80c4a46699a5b7,
         type: 3}
       propertyPath: m_Material
@@ -21290,6 +21212,24 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
         type: 2}
+    - target: {fileID: 8352919904377344444, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
+    - target: {fileID: 8352919904523153404, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
+    - target: {fileID: 8352919904587297714, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
     - target: {fileID: 8352919904669247413, guid: eb9b386faf99c044da80c4a46699a5b7,
         type: 3}
       propertyPath: m_Material
@@ -21302,7 +21242,19 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
         type: 2}
+    - target: {fileID: 8352919904795492176, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
     - target: {fileID: 8352919904813279450, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
+    - target: {fileID: 8352919904957152988, guid: eb9b386faf99c044da80c4a46699a5b7,
         type: 3}
       propertyPath: m_Material
       value: 
@@ -21559,11 +21511,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 50.851852
   magneticMass: 50.851852
-  childMagnetics: []
   density: 7870
 --- !u!54 &711525338
 Rigidbody:
@@ -21647,11 +21596,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (12)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -21721,6 +21665,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000006
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (12)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -22156,11 +22105,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -22230,6 +22174,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000012
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -22303,11 +22252,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 32.605915
   magneticMass: 32.605915
-  childMagnetics: []
   density: 7870
 --- !u!54 &745663531
 Rigidbody:
@@ -22667,11 +22613,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (2)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -22736,6 +22677,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000018
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (2)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -22937,11 +22883,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1026813143}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (5)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -23002,6 +22943,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 4.550566
       objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (5)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
 --- !u!4 &780261740 stripped
@@ -23017,11 +22963,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3161245}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (55)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -23092,6 +23033,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 0.25000015
       objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (55)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
 --- !u!4 &780916344 stripped
@@ -23107,11 +23053,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3161245}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (14)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -23181,6 +23122,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.2500002
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (14)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -23795,11 +23741,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1141653764}
     m_Modifications:
-    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
-        type: 3}
-      propertyPath: m_Name
-      value: LampCeiling (3)
-      objectReference: {fileID: 0}
     - target: {fileID: 1849423427054811829, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -23854,6 +23795,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
+        type: 3}
+      propertyPath: m_Name
+      value: LampCeiling (3)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d660472104706b42b70149001b7f57d, type: 3}
@@ -24854,36 +24800,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 18.302
       objectReference: {fileID: 0}
-    - target: {fileID: 8352919904377344444, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904523153404, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904587297714, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904795492176, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904957152988, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
     - target: {fileID: 8352919903594384144, guid: eb9b386faf99c044da80c4a46699a5b7,
         type: 3}
       propertyPath: m_Material
@@ -24902,6 +24818,24 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
         type: 2}
+    - target: {fileID: 8352919904377344444, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
+    - target: {fileID: 8352919904523153404, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
+    - target: {fileID: 8352919904587297714, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
     - target: {fileID: 8352919904669247413, guid: eb9b386faf99c044da80c4a46699a5b7,
         type: 3}
       propertyPath: m_Material
@@ -24914,7 +24848,19 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
         type: 2}
+    - target: {fileID: 8352919904795492176, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
     - target: {fileID: 8352919904813279450, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
+    - target: {fileID: 8352919904957152988, guid: eb9b386faf99c044da80c4a46699a5b7,
         type: 3}
       propertyPath: m_Material
       value: 
@@ -25444,11 +25390,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 32.6059
   magneticMass: 32.6059
-  childMagnetics: []
   density: 7870
 --- !u!54 &862108567
 Rigidbody:
@@ -25841,11 +25784,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 33.597645
   magneticMass: 33.597645
-  childMagnetics: []
   density: 7870
 --- !u!54 &874376986
 Rigidbody:
@@ -26021,11 +25961,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3161245}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (52)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -26095,6 +26030,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000015
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (52)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -26426,11 +26366,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3161245}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (44)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -26495,6 +26430,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000077
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (44)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -26666,16 +26606,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (43)
-      objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -26740,6 +26670,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000045
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (43)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -27152,11 +27092,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 50.85182
   magneticMass: 50.85182
-  childMagnetics: []
   density: 7870
 --- !u!54 &911445421
 Rigidbody:
@@ -27297,11 +27234,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 20.977566
   magneticMass: 20.977566
-  childMagnetics: []
   density: 7870
 --- !u!54 &912342917
 Rigidbody:
@@ -27505,11 +27439,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 17.807358
   magneticMass: 17.807358
-  childMagnetics: []
   density: 7870
 --- !u!54 &916146452
 Rigidbody:
@@ -27593,16 +27524,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1600839365}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (4)
-      objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -27662,6 +27583,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -27770,16 +27701,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1600839365}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (7)
-      objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -27840,6 +27761,16 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 2.5
       objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
 --- !u!4 &919095231 stripped
@@ -27855,11 +27786,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2090497310}
     m_Modifications:
-    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
-        type: 3}
-      propertyPath: m_Name
-      value: LampCeiling (3)
-      objectReference: {fileID: 0}
     - target: {fileID: 1849423427054811829, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -27915,6 +27841,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
+        type: 3}
+      propertyPath: m_Name
+      value: LampCeiling (3)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d660472104706b42b70149001b7f57d, type: 3}
 --- !u!4 &922966749 stripped
@@ -27930,11 +27861,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (26)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -27999,6 +27925,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 0.24999999
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (26)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -28239,11 +28170,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 2.81663
   magneticMass: 2.81663
-  childMagnetics: []
   density: 7870
 --- !u!54 &942889888
 Rigidbody:
@@ -28494,11 +28422,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1275951941}
     m_Modifications:
-    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
-        type: 3}
-      propertyPath: m_Name
-      value: LampCeiling
-      objectReference: {fileID: 0}
     - target: {fileID: 1849423427054811829, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -28554,6 +28477,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
+        type: 3}
+      propertyPath: m_Name
+      value: LampCeiling
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d660472104706b42b70149001b7f57d, type: 3}
 --- !u!4 &955176389 stripped
@@ -28569,11 +28497,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (31)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -28643,6 +28566,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000006
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (31)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -29072,11 +29000,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (4)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -29136,6 +29059,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 5.811899
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (4)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -29308,11 +29236,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1062480996}
     m_Modifications:
-    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
-        type: 3}
-      propertyPath: m_Name
-      value: LampCeiling (3)
-      objectReference: {fileID: 0}
     - target: {fileID: 1849423427054811829, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -29368,6 +29291,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
+        type: 3}
+      propertyPath: m_Name
+      value: LampCeiling (3)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d660472104706b42b70149001b7f57d, type: 3}
 --- !u!4 &971010459 stripped
@@ -29383,11 +29311,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (3)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -29452,6 +29375,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000006
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (3)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -29668,11 +29596,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (24)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -29737,6 +29660,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000012
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (24)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -29810,11 +29738,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 20.977583
   magneticMass: 20.977583
-  childMagnetics: []
   density: 7870
 --- !u!54 &992934569
 Rigidbody:
@@ -29898,11 +29823,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (39)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -29972,6 +29892,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.24999997
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (39)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -30045,11 +29970,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 50.851917
   magneticMass: 50.851917
-  childMagnetics: []
   density: 7870
 --- !u!54 &994956393
 Rigidbody:
@@ -30526,11 +30448,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 50.852
   magneticMass: 50.852
-  childMagnetics: []
   density: 7870
 --- !u!54 &1008675210
 Rigidbody:
@@ -30694,11 +30613,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (8)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -30763,6 +30677,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000018
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (8)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -30916,11 +30835,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 33.59763
   magneticMass: 33.59763
-  childMagnetics: []
   density: 7870
 --- !u!54 &1020500039
 Rigidbody:
@@ -31171,11 +31087,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (5)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -31245,6 +31156,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000012
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (5)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -32617,16 +32533,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1600839365}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -32686,6 +32592,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -33472,11 +33388,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 33.597668
   magneticMass: 33.597668
-  childMagnetics: []
   density: 7870
 --- !u!54 &1111748921
 Rigidbody:
@@ -33846,11 +33759,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 50.851788
   magneticMass: 50.851788
-  childMagnetics: []
   density: 7870
 --- !u!54 &1118980194
 Rigidbody:
@@ -34181,11 +34091,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1141653764}
     m_Modifications:
-    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
-        type: 3}
-      propertyPath: m_Name
-      value: LampCeiling (2)
-      objectReference: {fileID: 0}
     - target: {fileID: 1849423427054811829, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -34240,6 +34145,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
+        type: 3}
+      propertyPath: m_Name
+      value: LampCeiling (2)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d660472104706b42b70149001b7f57d, type: 3}
@@ -35498,11 +35408,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3161245}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (45)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -35572,6 +35477,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000054
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (45)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -35830,11 +35740,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 9.464657
   magneticMass: 9.464657
-  childMagnetics: []
   density: 7870
 --- !u!54 &1184895594
 Rigidbody:
@@ -36157,11 +36064,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 5.2734113
   magneticMass: 5.2734113
-  childMagnetics: []
   density: 7870
 --- !u!54 &1192338621
 Rigidbody:
@@ -36337,11 +36241,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (18)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -36406,6 +36305,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000018
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (18)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -36571,11 +36475,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 9.464654
   magneticMass: 9.464654
-  childMagnetics: []
   density: 7870
 --- !u!54 &1195241890
 Rigidbody:
@@ -37349,16 +37250,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1600839365}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (3)
-      objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -37418,6 +37309,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -37560,11 +37461,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3161245}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (15)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -37634,6 +37530,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000003
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (15)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -39783,11 +39684,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b083df3923656e4b8dbd2801b9ba592, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 10
   magneticMass: 10
-  childMagnetics: []
 --- !u!4 &1321473607 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1101046137496778470, guid: ca6bab85388bf67458e7a54f34fc2281,
@@ -39899,16 +39797,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1600839365}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (9)
-      objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -39968,6 +39856,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (9)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -41992,11 +41890,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1026813143}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (4)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -42056,6 +41949,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 17.734776
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (4)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -42643,11 +42541,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 5.273429
   magneticMass: 5.273429
-  childMagnetics: []
   density: 7870
 --- !u!54 &1409489665
 Rigidbody:
@@ -42851,11 +42746,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 21.41147
   magneticMass: 21.41147
-  childMagnetics: []
   density: 7870
 --- !u!54 &1413870867
 Rigidbody:
@@ -43359,36 +43251,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 188.855
       objectReference: {fileID: 0}
-    - target: {fileID: 8352919904377344444, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904523153404, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904587297714, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904795492176, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904957152988, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
     - target: {fileID: 8352919903594384144, guid: eb9b386faf99c044da80c4a46699a5b7,
         type: 3}
       propertyPath: m_Material
@@ -43407,6 +43269,24 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
         type: 2}
+    - target: {fileID: 8352919904377344444, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
+    - target: {fileID: 8352919904523153404, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
+    - target: {fileID: 8352919904587297714, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
     - target: {fileID: 8352919904669247413, guid: eb9b386faf99c044da80c4a46699a5b7,
         type: 3}
       propertyPath: m_Material
@@ -43419,7 +43299,19 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
         type: 2}
+    - target: {fileID: 8352919904795492176, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
     - target: {fileID: 8352919904813279450, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
+    - target: {fileID: 8352919904957152988, guid: eb9b386faf99c044da80c4a46699a5b7,
         type: 3}
       propertyPath: m_Material
       value: 
@@ -43464,11 +43356,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (35)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -43538,6 +43425,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000012
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (35)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -44284,11 +44176,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 38.961166
   magneticMass: 38.961166
-  childMagnetics: []
   density: 7870
 --- !u!54 &1443177561
 Rigidbody:
@@ -44464,11 +44353,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (27)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -44533,6 +44417,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000015
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (27)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -45030,11 +44919,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 50.852
   magneticMass: 50.852
-  childMagnetics: []
   density: 7870
 --- !u!54 &1458664167
 Rigidbody:
@@ -45118,11 +45004,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (30)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -45192,6 +45073,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000012
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (30)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -45839,11 +45725,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 6.8828397
   magneticMass: 6.8828397
-  childMagnetics: []
   density: 7870
 --- !u!54 &1481446619
 Rigidbody:
@@ -46203,11 +46086,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1062480996}
     m_Modifications:
-    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
-        type: 3}
-      propertyPath: m_Name
-      value: LampCeiling (1)
-      objectReference: {fileID: 0}
     - target: {fileID: 1849423427054811829, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -46263,6 +46141,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
+        type: 3}
+      propertyPath: m_Name
+      value: LampCeiling (1)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d660472104706b42b70149001b7f57d, type: 3}
 --- !u!4 &1484722670 stripped
@@ -46278,11 +46161,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (34)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -46347,6 +46225,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000006
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (34)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -46859,11 +46742,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3161245}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (51)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -46928,6 +46806,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 0.24999997
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (51)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -47174,11 +47057,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 2.81663
   magneticMass: 2.81663
-  childMagnetics: []
   density: 7870
 --- !u!54 &1517790397
 Rigidbody:
@@ -47900,36 +47780,6 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8352919904377344444, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904523153404, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904587297714, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904795492176, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904957152988, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
     - target: {fileID: 8352919903594384144, guid: eb9b386faf99c044da80c4a46699a5b7,
         type: 3}
       propertyPath: m_Material
@@ -47948,6 +47798,24 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
         type: 2}
+    - target: {fileID: 8352919904377344444, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
+    - target: {fileID: 8352919904523153404, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
+    - target: {fileID: 8352919904587297714, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
     - target: {fileID: 8352919904669247413, guid: eb9b386faf99c044da80c4a46699a5b7,
         type: 3}
       propertyPath: m_Material
@@ -47960,7 +47828,19 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
         type: 2}
+    - target: {fileID: 8352919904795492176, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
     - target: {fileID: 8352919904813279450, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
+    - target: {fileID: 8352919904957152988, guid: eb9b386faf99c044da80c4a46699a5b7,
         type: 3}
       propertyPath: m_Material
       value: 
@@ -48119,11 +47999,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 20.97758
   magneticMass: 20.97758
-  childMagnetics: []
   density: 7870
 --- !u!54 &1542866044
 Rigidbody:
@@ -49240,11 +49117,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 33.597652
   magneticMass: 33.597652
-  childMagnetics: []
   density: 7870
 --- !u!54 &1556959575
 Rigidbody:
@@ -50096,11 +49970,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 40.087467
   magneticMass: 40.087467
-  childMagnetics: []
   density: 7870
 --- !u!54 &1600412487
 Rigidbody:
@@ -50452,11 +50323,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 20.977581
   magneticMass: 20.977581
-  childMagnetics: []
   density: 7870
 --- !u!54 &1607267023
 Rigidbody:
@@ -50597,11 +50465,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 14.010939
   magneticMass: 14.010939
-  childMagnetics: []
   density: 7870
 --- !u!54 &1607656070
 Rigidbody:
@@ -50887,11 +50752,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b083df3923656e4b8dbd2801b9ba592, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 10
   magneticMass: 10
-  childMagnetics: []
 --- !u!1001 &1611803204
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -51190,11 +51052,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 2.816635
   magneticMass: 2.816635
-  childMagnetics: []
   density: 7870
 --- !u!54 &1620255113
 Rigidbody:
@@ -52049,11 +51908,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 27.772146
   magneticMass: 27.772146
-  childMagnetics: []
   density: 7870
 --- !u!54 &1635486107
 Rigidbody:
@@ -52503,11 +52359,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1062480996}
     m_Modifications:
-    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
-        type: 3}
-      propertyPath: m_Name
-      value: LampCeiling
-      objectReference: {fileID: 0}
     - target: {fileID: 1849423427054811829, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -52562,6 +52413,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
+        type: 3}
+      propertyPath: m_Name
+      value: LampCeiling
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d660472104706b42b70149001b7f57d, type: 3}
@@ -52635,11 +52491,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (36)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -52704,6 +52555,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000018
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (36)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -52812,16 +52668,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1600839365}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (6)
-      objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -52882,6 +52728,16 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 2.5
       objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
 --- !u!4 &1666493090 stripped
@@ -52897,11 +52753,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (10)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -52971,6 +52822,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000012
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (10)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -53396,11 +53252,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 40.087467
   magneticMass: 40.087467
-  childMagnetics: []
   density: 7870
 --- !u!54 &1698285256
 Rigidbody:
@@ -54131,11 +53984,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (32)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -54205,6 +54053,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000018
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (32)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -54284,11 +54137,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1026813143}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -54348,6 +54196,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 9.415356
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -54648,16 +54501,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1600839365}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire
-      objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -54717,6 +54560,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -55554,11 +55407,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 20.977573
   magneticMass: 20.977573
-  childMagnetics: []
   density: 7870
 --- !u!54 &1753701403
 Rigidbody:
@@ -56459,11 +56309,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 50.851917
   magneticMass: 50.851917
-  childMagnetics: []
   density: 7870
 --- !u!54 &1766900034
 Rigidbody:
@@ -57101,11 +56948,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (33)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -57170,6 +57012,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.24999996
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (33)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -57243,11 +57090,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 14.010939
   magneticMass: 14.010939
-  childMagnetics: []
   density: 7870
 --- !u!54 &1782117136
 Rigidbody:
@@ -57668,11 +57512,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 9.464658
   magneticMass: 9.464658
-  childMagnetics: []
   density: 7870
 --- !u!54 &1792041042
 Rigidbody:
@@ -58163,11 +58004,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (16)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -58237,6 +58073,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000012
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (16)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -58618,11 +58459,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 9.464654
   magneticMass: 9.464654
-  childMagnetics: []
   density: 7870
 --- !u!54 &1816594216
 Rigidbody:
@@ -58855,11 +58693,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1062480996}
     m_Modifications:
-    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
-        type: 3}
-      propertyPath: m_Name
-      value: LampCeiling (2)
-      objectReference: {fileID: 0}
     - target: {fileID: 1849423427054811829, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -58914,6 +58747,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
+        type: 3}
+      propertyPath: m_Name
+      value: LampCeiling (2)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d660472104706b42b70149001b7f57d, type: 3}
@@ -59080,11 +58918,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 9.464663
   magneticMass: 9.464663
-  childMagnetics: []
   density: 7870
 --- !u!54 &1826077464
 Rigidbody:
@@ -59779,11 +59614,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3161245}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (50)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -59848,6 +59678,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 0.25000018
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (50)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -60154,36 +59989,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 8.771001
       objectReference: {fileID: 0}
-    - target: {fileID: 8352919904377344444, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904523153404, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904587297714, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904795492176, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904957152988, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
     - target: {fileID: 8352919903594384144, guid: eb9b386faf99c044da80c4a46699a5b7,
         type: 3}
       propertyPath: m_Material
@@ -60202,6 +60007,24 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
         type: 2}
+    - target: {fileID: 8352919904377344444, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
+    - target: {fileID: 8352919904523153404, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
+    - target: {fileID: 8352919904587297714, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
     - target: {fileID: 8352919904669247413, guid: eb9b386faf99c044da80c4a46699a5b7,
         type: 3}
       propertyPath: m_Material
@@ -60214,7 +60037,19 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
         type: 2}
+    - target: {fileID: 8352919904795492176, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
     - target: {fileID: 8352919904813279450, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
+    - target: {fileID: 8352919904957152988, guid: eb9b386faf99c044da80c4a46699a5b7,
         type: 3}
       propertyPath: m_Material
       value: 
@@ -60775,11 +60610,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (17)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -60844,6 +60674,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.x
       value: 0.24999996
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (17)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -61101,11 +60936,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 3.6762464
   magneticMass: 3.6762464
-  childMagnetics: []
   density: 7870
 --- !u!54 &1895268608
 Rigidbody:
@@ -61331,11 +61163,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 19.295063
   magneticMass: 19.295063
-  childMagnetics: []
   density: 7870
 --- !u!54 &1898947998
 Rigidbody:
@@ -61576,11 +61405,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 33.59763
   magneticMass: 33.59763
-  childMagnetics: []
   density: 7870
 --- !u!54 &1901662174
 Rigidbody:
@@ -63115,11 +62941,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 14.3252535
   magneticMass: 14.3252535
-  childMagnetics: []
   density: 7870
 --- !u!54 &1957949633
 Rigidbody:
@@ -63338,36 +63161,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 142.418
       objectReference: {fileID: 0}
-    - target: {fileID: 8352919904377344444, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904523153404, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904587297714, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904795492176, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904957152988, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
     - target: {fileID: 8352919903594384144, guid: eb9b386faf99c044da80c4a46699a5b7,
         type: 3}
       propertyPath: m_Material
@@ -63386,6 +63179,24 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
         type: 2}
+    - target: {fileID: 8352919904377344444, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
+    - target: {fileID: 8352919904523153404, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
+    - target: {fileID: 8352919904587297714, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
     - target: {fileID: 8352919904669247413, guid: eb9b386faf99c044da80c4a46699a5b7,
         type: 3}
       propertyPath: m_Material
@@ -63398,7 +63209,19 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
         type: 2}
+    - target: {fileID: 8352919904795492176, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
     - target: {fileID: 8352919904813279450, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
+    - target: {fileID: 8352919904957152988, guid: eb9b386faf99c044da80c4a46699a5b7,
         type: 3}
       propertyPath: m_Material
       value: 
@@ -63500,11 +63323,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 33.59761
   magneticMass: 33.59761
-  childMagnetics: []
   density: 7870
 --- !u!54 &1966088294
 Rigidbody:
@@ -63800,11 +63620,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 3161245}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (54)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -63875,6 +63690,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 0.2500004
       objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (54)
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
 --- !u!4 &1972649567 stripped
@@ -63890,11 +63710,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1026813143}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (6)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -63954,6 +63769,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 5.6486177
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (6)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -64027,11 +63847,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 17.807383
   magneticMass: 17.807383
-  childMagnetics: []
   density: 7870
 --- !u!54 &1975956648
 Rigidbody:
@@ -64803,11 +64620,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 9.464648
   magneticMass: 9.464648
-  childMagnetics: []
   density: 7870
 --- !u!54 &1988558347
 Rigidbody:
@@ -65368,11 +65182,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 5.273431
   magneticMass: 5.273431
-  childMagnetics: []
   density: 7870
 --- !u!54 &2000748774
 Rigidbody:
@@ -65456,16 +65267,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1600839365}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (8)
-      objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -65525,6 +65326,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -65858,11 +65669,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 9.464654
   magneticMass: 9.464654
-  childMagnetics: []
   density: 7870
 --- !u!54 &2011236745
 Rigidbody:
@@ -66039,11 +65847,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1026813143}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (2)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -66103,6 +65906,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 29.946602
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (2)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -66256,11 +66064,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 33.597717
   magneticMass: 33.597717
-  childMagnetics: []
   density: 7870
 --- !u!54 &2023373345
 Rigidbody:
@@ -66401,11 +66206,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 16.247631
   magneticMass: 16.247631
-  childMagnetics: []
   density: 7870
 --- !u!54 &2026366812
 Rigidbody:
@@ -66907,11 +66709,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 50.851795
   magneticMass: 50.851795
-  childMagnetics: []
   density: 7870
 --- !u!54 &2033875609
 Rigidbody:
@@ -67132,11 +66931,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 33.597652
   magneticMass: 33.597652
-  childMagnetics: []
   density: 7870
 --- !u!54 &2039257004
 Rigidbody:
@@ -67220,11 +67016,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (9)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -67284,6 +67075,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (9)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -68089,6 +67885,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 498025889}
     m_Modifications:
+    - target: {fileID: 1054545554421348, guid: 5dc43a83ec5fd1e4caae54511e33da1f, type: 3}
+      propertyPath: m_Name
+      value: HarmonyTarget
+      objectReference: {fileID: 0}
     - target: {fileID: 4958656091128614, guid: 5dc43a83ec5fd1e4caae54511e33da1f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.046341658
@@ -68132,10 +67932,6 @@ PrefabInstance:
     - target: {fileID: 4958656091128614, guid: 5dc43a83ec5fd1e4caae54511e33da1f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1054545554421348, guid: 5dc43a83ec5fd1e4caae54511e33da1f, type: 3}
-      propertyPath: m_Name
-      value: HarmonyTarget
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5dc43a83ec5fd1e4caae54511e33da1f, type: 3}
@@ -68244,11 +68040,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1275951941}
     m_Modifications:
-    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
-        type: 3}
-      propertyPath: m_Name
-      value: LampCeiling (1)
-      objectReference: {fileID: 0}
     - target: {fileID: 1849423427054811829, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -68303,6 +68094,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
+        type: 3}
+      propertyPath: m_Name
+      value: LampCeiling (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d660472104706b42b70149001b7f57d, type: 3}
@@ -68890,11 +68686,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 5.2734256
   magneticMass: 5.2734256
-  childMagnetics: []
   density: 7870
 --- !u!54 &2096768225
 Rigidbody:
@@ -69071,11 +68864,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (38)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -69145,6 +68933,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.24999996
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (38)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -69241,11 +69034,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (21)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -69305,6 +69093,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 3.299593
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (21)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -69378,11 +69171,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 14.010962
   magneticMass: 14.010962
-  childMagnetics: []
   density: 7870
 --- !u!54 &2102827946
 Rigidbody:
@@ -69558,11 +69348,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (29)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -69622,6 +69407,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 7.2290664
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (29)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -69926,11 +69716,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (7)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -69995,6 +69780,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000006
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (7)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -70068,11 +69858,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 658770807}
     m_Modifications:
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (22)
-      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -70137,6 +69922,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.25000003
+      objectReference: {fileID: 0}
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (22)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -70310,11 +70100,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 50.851776
   magneticMass: 50.851776
-  childMagnetics: []
   density: 7870
 --- !u!54 &2122561872
 Rigidbody:
@@ -70961,11 +70748,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 14.010928
   magneticMass: 14.010928
-  childMagnetics: []
   density: 7870
 --- !u!54 &2140204780
 Rigidbody:
@@ -72515,11 +72299,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 744.85455
   magneticMass: 9.464654
-  childMagnetics: []
   density: 7870
 --- !u!4 &4598750244882946626
 Transform:
@@ -72615,11 +72396,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 4002.0413
   magneticMass: 50.85182
-  childMagnetics: []
   density: 7870
 --- !u!65 &4598750244882946638
 BoxCollider:
@@ -72692,11 +72470,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 1102.6537
   magneticMass: 14.010939
-  childMagnetics: []
   density: 7870
 --- !u!1 &4598750244990766390
 GameObject:
@@ -72880,11 +72655,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 221.67143
   magneticMass: 2.81663
-  childMagnetics: []
   density: 7870
 --- !u!1 &4598750245039577978
 GameObject:
@@ -73009,11 +72781,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 1102.652
   magneticMass: 14.010962
-  childMagnetics: []
   density: 7870
 --- !u!1 &4598750245088293178
 GameObject:
@@ -73049,11 +72818,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 744.85583
   magneticMass: 9.464654
-  childMagnetics: []
   density: 7870
 --- !u!65 &4598750245234409930
 BoxCollider:
@@ -73208,11 +72974,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 221.67221
   magneticMass: 2.81663
-  childMagnetics: []
   density: 7870
 --- !u!1 &4598750245353035958
 GameObject:
@@ -73396,11 +73159,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 1668.9452
   magneticMass: 21.206299
-  childMagnetics: []
   density: 7870
 --- !u!1 &4598750245466911034
 GameObject:
@@ -73525,11 +73285,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 2644.1375
   magneticMass: 33.597645
-  childMagnetics: []
   density: 7870
 --- !u!1 &4598750245469742810
 GameObject:
@@ -73601,11 +73358,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 1102.6493
   magneticMass: 14.010939
-  childMagnetics: []
   density: 7870
 --- !u!65 &4598750245505836908
 BoxCollider:
@@ -73754,11 +73508,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 289.31702
   magneticMass: 3.6762464
-  childMagnetics: []
   density: 7870
 --- !u!23 &4598750245615441950
 MeshRenderer:
@@ -73935,11 +73686,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 1278.7025
   magneticMass: 16.247631
-  childMagnetics: []
   density: 7870
 --- !u!1 &4598750245767913328
 GameObject:
@@ -74013,11 +73761,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 4002.0605
   magneticMass: 50.851788
-  childMagnetics: []
   density: 7870
 --- !u!23 &4598750245767913342
 MeshRenderer:
@@ -74193,11 +73938,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 2644.1396
   magneticMass: 33.597717
-  childMagnetics: []
   density: 7870
 --- !u!4 &4598750245823661982 stripped
 Transform:
@@ -74299,11 +74041,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 744.8739
   magneticMass: 9.464654
-  childMagnetics: []
   density: 7870
 --- !u!65 &4598750245963204942
 BoxCollider:
@@ -74463,11 +74202,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 1278.7025
   magneticMass: 16.247631
-  childMagnetics: []
   density: 7870
 --- !u!4 &4598750246103703662 stripped
 Transform:
@@ -74598,11 +74334,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 1650.9443
   magneticMass: 20.977573
-  childMagnetics: []
   density: 7870
 --- !u!1 &4598750246182969244
 GameObject:
@@ -74739,11 +74472,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 415.02118
   magneticMass: 5.273431
-  childMagnetics: []
   density: 7870
 --- !u!1 &4598750246219505998
 GameObject:
@@ -74898,11 +74628,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 4002.059
   magneticMass: 50.851917
-  childMagnetics: []
   density: 7870
 --- !u!23 &4598750246255844398
 MeshRenderer:
@@ -75013,11 +74740,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 4002.0493
   magneticMass: 50.851776
-  childMagnetics: []
   density: 7870
 --- !u!65 &4598750246283431782
 BoxCollider:
@@ -75185,11 +74909,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 3066.2368
   magneticMass: 38.961166
-  childMagnetics: []
   density: 7870
 --- !u!1 &4598750246297600062
 GameObject:
@@ -75314,11 +75035,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 744.875
   magneticMass: 9.464654
-  childMagnetics: []
   density: 7870
 --- !u!1 &4598750246376057182
 GameObject:
@@ -75443,11 +75161,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 4002.0469
   magneticMass: 50.851776
-  childMagnetics: []
   density: 7870
 --- !u!1 &4598750246381365722
 GameObject:
@@ -75499,11 +75214,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 415.02106
   magneticMass: 5.273431
-  childMagnetics: []
   density: 7870
 --- !u!23 &4598750246434879882
 MeshRenderer:
@@ -75642,11 +75354,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 4002.0469
   magneticMass: 50.851917
-  childMagnetics: []
   density: 7870
 --- !u!1 &4598750246574042934
 GameObject:
@@ -75823,11 +75532,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 4002.0422
   magneticMass: 50.85182
-  childMagnetics: []
   density: 7870
 --- !u!65 &4598750246619635638
 BoxCollider:
@@ -75952,11 +75658,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 1102.6539
   magneticMass: 14.010962
-  childMagnetics: []
   density: 7870
 --- !u!65 &4598750246641479614
 BoxCollider:
@@ -75999,11 +75702,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 2644.1335
   magneticMass: 33.597668
-  childMagnetics: []
   density: 7870
 --- !u!65 &4598750246761424226
 BoxCollider:
@@ -76158,11 +75858,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 744.8606
   magneticMass: 9.464663
-  childMagnetics: []
   density: 7870
 --- !u!1 &4598750246772310006
 GameObject:
@@ -76293,11 +75990,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc9a602c72e6c60448712d635396d8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 2644.1138
   magneticMass: 33.59761
-  childMagnetics: []
   density: 7870
 --- !u!65 &4598750246945774924
 BoxCollider:
@@ -76787,36 +76481,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 89.309006
       objectReference: {fileID: 0}
-    - target: {fileID: 8352919904377344444, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904523153404, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904587297714, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904795492176, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
-    - target: {fileID: 8352919904957152988, guid: eb9b386faf99c044da80c4a46699a5b7,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
-        type: 2}
     - target: {fileID: 8352919903594384144, guid: eb9b386faf99c044da80c4a46699a5b7,
         type: 3}
       propertyPath: m_Material
@@ -76835,6 +76499,24 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
         type: 2}
+    - target: {fileID: 8352919904377344444, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
+    - target: {fileID: 8352919904523153404, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
+    - target: {fileID: 8352919904587297714, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
     - target: {fileID: 8352919904669247413, guid: eb9b386faf99c044da80c4a46699a5b7,
         type: 3}
       propertyPath: m_Material
@@ -76847,7 +76529,19 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
         type: 2}
+    - target: {fileID: 8352919904795492176, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
     - target: {fileID: 8352919904813279450, guid: eb9b386faf99c044da80c4a46699a5b7,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 8a162c080c9e87b4d93774ed751e6127,
+        type: 2}
+    - target: {fileID: 8352919904957152988, guid: eb9b386faf99c044da80c4a46699a5b7,
         type: 3}
       propertyPath: m_Material
       value: 

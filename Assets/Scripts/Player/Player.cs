@@ -41,6 +41,14 @@ public class Player : PewterEntity {
             }
         }
     }
+    public static bool CanControl {
+        set {
+            CanControlMovement = value;
+            CanControlZinc = value;
+            CanControlPushes = value;
+            CanControlWheel = value;
+        }
+    }
     private static bool godMode = false;
     public static bool GodMode { // Player does not run out of metals
         get {

@@ -11,8 +11,9 @@ public class SpikePit : MonoBehaviour {
     private const float slerpTimeChargeupPath = 2f;
     private const float anglePullThreshold = 45f;
     private const float angleEqualThreshold = 1f;
+    private const float pullPercentage = 1f;
     private const float distanceThresholdSpiking = 1.9f;
-    private const float distanceThresholdEqual = .15f;
+    private const float distanceThresholdEqual = .3f;
     private const float distanceThresholdReturn = 5;
     private const float forwardTimeOffset = .2f;
     private const float forceConstantFar = 200f;
@@ -95,7 +96,7 @@ public class SpikePit : MonoBehaviour {
                     // add player as a pull target
                     spike.AddPullTarget(Player.PlayerMagnetic);
                     spike.IronPulling = true;
-                    spike.IronBurnPercentageTarget = .2f;
+                    spike.IronBurnPercentageTarget = pullPercentage;
                     spike.PullTargets.MaxRange = -1;
                 }
                 if (angle < angleEqualThreshold) {
@@ -108,7 +109,7 @@ public class SpikePit : MonoBehaviour {
                     spikeRb.drag = dragChasing;
                     spikeRb.velocity = Vector3.zero;
                     spikeRb.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-                    spike.IronBurnPercentageTarget = .75f;
+                    spike.IronBurnPercentageTarget = 1f;
                 }
             }
 
@@ -122,6 +123,7 @@ public class SpikePit : MonoBehaviour {
                     chasingPlayer = false;
                     spikingPlayer = true;
 
+                    Player.CanControlPushes = false;
                     Player.CanControlMovement = false;
                     Player.PlayerInstance.GetComponent<Rigidbody>().velocity = spikeRb.velocity;
                 }
@@ -190,6 +192,7 @@ public class SpikePit : MonoBehaviour {
                     slerpTimeRotation = 0;
                     progress = 0;
 
+                    Player.CanControlPushes = true;
                     Player.CanControlMovement = true;
                     Player.PlayerIronSteel.StopBurning();
 

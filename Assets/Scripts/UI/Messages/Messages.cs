@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 using static TextCodes;
 
 /*
  * Stores the strings written to the message overlays.
  */
 
-public static class Messages {
+public class Messages : MonoBehaviour {
 
     // Each List of strings represents a series of messages that logicially appear after each other.
     // If it displays on the MessageOverlayDescriptive, the first element of each list is the header for that series of messages.
@@ -123,5 +125,9 @@ public static class Messages {
                 " to throw coins.\n\t\t" + KeyCoinshotMode + " again to disable " + CoinshotMode + ".\n\n"
             //+ "You can't " + Push + " or " + Pull + " without targeting in " + CoinshotMode + "."
         };
+    }
+
+    public void RefreshNonStatic() { // needed for Editor calls
+        Refresh();
     }
 }

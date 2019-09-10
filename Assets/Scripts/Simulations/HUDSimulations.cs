@@ -41,6 +41,10 @@ public class HUDSimulations : MonoBehaviour {
             }
 
             HUD.DisableHUD();
+            Player.CanControlMovement = false;
+            Player.CanControlPushes = false;
+            Player.CanControlWheel = false;
+            Player.CanControlZinc = true;
             FindObjectOfType<Simulation>().StartSimulation();
         }
     }

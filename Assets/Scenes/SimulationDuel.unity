@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028352, g: 0.22571376, b: 0.30692244, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -77,7 +77,7 @@ LightmapSettings:
     m_PVRDirectSampleCount: 32
     m_PVRSampleCount: 500
     m_PVRBounces: 2
-    m_PVREnvironmentSampleCount: 500
+    m_PVREnvironmentSampleCount: 256
     m_PVREnvironmentReferencePointCount: 2048
     m_PVRFilteringMode: 2
     m_PVRDenoiserTypeDirect: 0
@@ -94,9 +94,9 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaDirect: 0.5
     m_PVRFilteringAtrousPositionSigmaIndirect: 2
     m_PVRFilteringAtrousPositionSigmaAO: 1
-    m_ShowResolutionOverlay: 1
     m_ExportTrainingData: 0
-  m_LightingDataAsset: {fileID: 112000008, guid: 02a1a5157d5c89a4fb812aa142697d4c,
+    m_TrainingDataDestination: TrainingData
+  m_LightingDataAsset: {fileID: 112000000, guid: a654bd88628c473429ca4cc927fe0aaa,
     type: 2}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -168,14 +168,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2788236ad887d40a34d1c55803b2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allomanticsForce: 0
-  netAllomancersForce: 0
-  netTargetsForce: 0
-  allomanticsForces: {x: 0, y: 0, z: 0}
-  resititutionFromTargetsForce: {x: 0, y: 0, z: 0}
-  resititutionFromPlayersForce: {x: 0, y: 0, z: 0}
-  percentOfTargetForceReturned: 0
-  percentOfAllomancerForceReturned: 0
   pullLines: []
   pushLines: []
 --- !u!54 &70713252
@@ -232,6 +224,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -285,14 +278,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2788236ad887d40a34d1c55803b2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allomanticsForce: 0
-  netAllomancersForce: 0
-  netTargetsForce: 0
-  allomanticsForces: {x: 0, y: 0, z: 0}
-  resititutionFromTargetsForce: {x: 0, y: 0, z: 0}
-  resititutionFromPlayersForce: {x: 0, y: 0, z: 0}
-  percentOfTargetForceReturned: 0
-  percentOfAllomancerForceReturned: 0
   pullLines: []
   pushLines: []
 --- !u!54 &80069393
@@ -349,6 +334,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -430,14 +416,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2788236ad887d40a34d1c55803b2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allomanticsForce: 0
-  netAllomancersForce: 0
-  netTargetsForce: 0
-  allomanticsForces: {x: 0, y: 0, z: 0}
-  resititutionFromTargetsForce: {x: 0, y: 0, z: 0}
-  resititutionFromPlayersForce: {x: 0, y: 0, z: 0}
-  percentOfTargetForceReturned: 0
-  percentOfAllomancerForceReturned: 0
   pullLines: []
   pushLines: []
 --- !u!54 &106716195
@@ -494,6 +472,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -652,6 +631,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -737,7 +717,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 0
   magneticMass: 0
-  childMagnetics: []
 --- !u!135 &414427386
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -776,6 +755,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -843,14 +823,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2788236ad887d40a34d1c55803b2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allomanticsForce: 0
-  netAllomancersForce: 0
-  netTargetsForce: 0
-  allomanticsForces: {x: 0, y: 0, z: 0}
-  resititutionFromTargetsForce: {x: 0, y: 0, z: 0}
-  resititutionFromPlayersForce: {x: 0, y: 0, z: 0}
-  percentOfTargetForceReturned: 0
-  percentOfAllomancerForceReturned: 0
   pullLines: []
   pushLines: []
 --- !u!54 &482586909
@@ -907,6 +879,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -992,7 +965,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 0
   magneticMass: 0
-  childMagnetics: []
 --- !u!135 &518423322
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1031,6 +1003,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -1178,14 +1151,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2788236ad887d40a34d1c55803b2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allomanticsForce: 0
-  netAllomancersForce: 0
-  netTargetsForce: 0
-  allomanticsForces: {x: 0, y: 0, z: 0}
-  resititutionFromTargetsForce: {x: 0, y: 0, z: 0}
-  resititutionFromPlayersForce: {x: 0, y: 0, z: 0}
-  percentOfTargetForceReturned: 0
-  percentOfAllomancerForceReturned: 0
   pullLines: []
   pushLines: []
 --- !u!54 &1073300530
@@ -1242,6 +1207,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -1341,7 +1307,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 0
   magneticMass: 0
-  childMagnetics: []
 --- !u!135 &1120945605
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1380,6 +1345,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -1465,7 +1431,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 0
   magneticMass: 0
-  childMagnetics: []
 --- !u!135 &1138110126
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1504,6 +1469,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -1571,14 +1537,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2788236ad887d40a34d1c55803b2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allomanticsForce: 0
-  netAllomancersForce: 0
-  netTargetsForce: 0
-  allomanticsForces: {x: 0, y: 0, z: 0}
-  resititutionFromTargetsForce: {x: 0, y: 0, z: 0}
-  resititutionFromPlayersForce: {x: 0, y: 0, z: 0}
-  percentOfTargetForceReturned: 0
-  percentOfAllomancerForceReturned: 0
   pullLines: []
   pushLines: []
 --- !u!54 &1160657351
@@ -1635,6 +1593,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -1735,14 +1694,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2788236ad887d40a34d1c55803b2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allomanticsForce: 0
-  netAllomancersForce: 0
-  netTargetsForce: 0
-  allomanticsForces: {x: 0, y: 0, z: 0}
-  resititutionFromTargetsForce: {x: 0, y: 0, z: 0}
-  resititutionFromPlayersForce: {x: 0, y: 0, z: 0}
-  percentOfTargetForceReturned: 0
-  percentOfAllomancerForceReturned: 0
   pullLines: []
   pushLines: []
 --- !u!54 &1280146156
@@ -1799,6 +1750,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -1866,14 +1818,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2788236ad887d40a34d1c55803b2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allomanticsForce: 0
-  netAllomancersForce: 0
-  netTargetsForce: 0
-  allomanticsForces: {x: 0, y: 0, z: 0}
-  resititutionFromTargetsForce: {x: 0, y: 0, z: 0}
-  resititutionFromPlayersForce: {x: 0, y: 0, z: 0}
-  percentOfTargetForceReturned: 0
-  percentOfAllomancerForceReturned: 0
   pullLines: []
   pushLines: []
 --- !u!54 &1534417900
@@ -1930,6 +1874,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -2001,7 +1946,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 0
   magneticMass: 0
-  childMagnetics: []
 --- !u!135 &1592168376
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -2040,6 +1984,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -2277,14 +2222,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2788236ad887d40a34d1c55803b2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allomanticsForce: 0
-  netAllomancersForce: 0
-  netTargetsForce: 0
-  allomanticsForces: {x: 0, y: 0, z: 0}
-  resititutionFromTargetsForce: {x: 0, y: 0, z: 0}
-  resititutionFromPlayersForce: {x: 0, y: 0, z: 0}
-  percentOfTargetForceReturned: 0
-  percentOfAllomancerForceReturned: 0
   pullLines: []
   pushLines: []
 --- !u!54 &1780318109
@@ -2341,6 +2278,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -2408,14 +2346,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2788236ad887d40a34d1c55803b2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allomanticsForce: 0
-  netAllomancersForce: 0
-  netTargetsForce: 0
-  allomanticsForces: {x: 0, y: 0, z: 0}
-  resititutionFromTargetsForce: {x: 0, y: 0, z: 0}
-  resititutionFromPlayersForce: {x: 0, y: 0, z: 0}
-  percentOfTargetForceReturned: 0
-  percentOfAllomancerForceReturned: 0
   pullLines: []
   pushLines: []
 --- !u!54 &1861730610
@@ -2472,6 +2402,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0

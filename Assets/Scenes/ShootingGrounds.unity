@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641258, b: 0.5748172, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028542, g: 0.22571588, b: 0.30692363, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -77,7 +77,7 @@ LightmapSettings:
     m_PVRDirectSampleCount: 32
     m_PVRSampleCount: 500
     m_PVRBounces: 2
-    m_PVREnvironmentSampleCount: 500
+    m_PVREnvironmentSampleCount: 256
     m_PVREnvironmentReferencePointCount: 2048
     m_PVRFilteringMode: 2
     m_PVRDenoiserTypeDirect: 0
@@ -96,7 +96,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
-  m_LightingDataAsset: {fileID: 112000004, guid: 02a1a5157d5c89a4fb812aa142697d4c,
+  m_LightingDataAsset: {fileID: 112000000, guid: 0703d5981b3bc2545b3eee699b8d019d,
     type: 2}
   m_UseShadowmask: 1
 --- !u!196 &4
@@ -657,7 +657,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 0
   magneticMass: 0
-  childMagnetics: []
 --- !u!135 &366291962
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -782,7 +781,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 0
   magneticMass: 0
-  childMagnetics: []
 --- !u!65 &382789537
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1202,7 +1200,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 0
   magneticMass: 0
-  childMagnetics: []
 --- !u!135 &653810779
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1442,7 +1439,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 0
   magneticMass: 0
-  childMagnetics: []
 --- !u!65 &773549584
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2680,7 +2676,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 0
   magneticMass: 0
-  childMagnetics: []
 --- !u!135 &1583640718
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -3388,7 +3383,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 0
   magneticMass: 0
-  childMagnetics: []
 --- !u!65 &2049163091
 BoxCollider:
   m_ObjectHideFlags: 0
