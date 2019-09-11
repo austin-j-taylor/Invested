@@ -26,29 +26,36 @@ public class Player : PewterEntity {
     public Hand CoinHand { get; private set; }
     public CoinMode CoinThrowingMode;
 
-    public static bool CanControlWheel { get; set; }
-    public static bool CanControlZinc { get; set; }
-    public static bool CanControlMovement { get; set; }
-    private static bool canControlPushes = false;
-    public static bool CanControlPushes {
+    //public static bool CanControlWheel { get; set; }
+    //public static bool CanControlZinc { get; set; }
+    //public static bool CanControlMovement { get; set; }
+    //private static bool canControlPushes = false;
+    //public static bool CanControlPushes {
+    //    get {
+    //        return canControlPushes && !PauseMenu.IsPaused;
+    //    }
+    //    set {
+    //        canControlPushes = value;
+    //        if (!value) {
+    //            PlayerIronSteel.SoftClear();
+    //        }
+    //    }
+    //}
+    private static bool canControl;
+    public static bool CanControl {
         get {
-            return canControlPushes && !PauseMenu.IsPaused;
+            return canControl;
         }
         set {
-            canControlPushes = value;
-            if (!value) {
+            canControl = value;
+            if(!value) {
                 PlayerIronSteel.SoftClear();
             }
         }
     }
-    public static bool CanControl {
-        set {
-            CanControlMovement = value;
-            CanControlZinc = value;
-            CanControlPushes = value;
-            CanControlWheel = value;
-        }
-    }
+    public static bool CanControlZinc { get; set; }
+    public static bool CanControlMovement { get; set; }
+
     private static bool godMode = false;
     public static bool GodMode { // Player does not run out of metals
         get {
@@ -92,7 +99,7 @@ public class Player : PewterEntity {
     }
 
     void Update() {
-        if (CanControlMovement) {
+        if (CanControl) {
             // On throwing a coin
             if (!CoinHand.Pouch.IsEmpty) {
 
@@ -156,10 +163,9 @@ public class Player : PewterEntity {
         if (mode == LoadSceneMode.Single) { // Not loading all of the scenes, as it does at startup
             PlayerIronSteel.Clear();
             SetFrameMaterial(frameMaterial);
-            CanControlWheel = true;
-            CanControlZinc = true;
+            CanControl = true;
             CanControlMovement = true;
-            CanControlPushes = true;
+            CanControlZinc = true;
             GodMode = false;
 
             GameObject spawn = GameObject.FindGameObjectWithTag("PlayerSpawn");

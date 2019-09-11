@@ -11,15 +11,16 @@ public class Environment_MARL_SpawnRoom : Environment {
     
 
     private void Start() {
+        Player.CanControlZinc = false;
+        HUD.ControlWheelController.SetLockedState(ControlWheelController.LockedState.LockedFully);
+        HUD.HelpOverlayController.SetLockedState(HelpOverlayController.LockedState.Locked0);
         StartCoroutine(Procedure());
     }
 
     // State coroutines
     private IEnumerator Procedure() {
-        Player.CanControlZinc = false;
-        Player.CanControlWheel = false;
+        Player.CanControl = false;
         Player.CanControlMovement = false;
-        Player.CanControlPushes = false;
         Player.PlayerInstance.CoinHand.Pouch.Clear();
         Player.PlayerIronSteel.IronReserve.SetMass(100);
         Player.PlayerIronSteel.SteelReserve.SetMass(0);
@@ -44,7 +45,7 @@ public class Environment_MARL_SpawnRoom : Environment {
         }
         HUD.MessageOverlayCinematic.Next(); // start burning
 
-        Player.CanControlPushes = true;
+        Player.CanControl = true;
 
         while (!Player.PlayerIronSteel.IsBurning)
             yield return null;
@@ -58,10 +59,11 @@ public class Environment_MARL_SpawnRoom : Environment {
             yield return null;
 
         HUD.MessageOverlayCinematic.FadeOut();
-        Player.CanControlMovement = true;
 
         while (door.On)
             yield return null;
+
+        Player.CanControlMovement = true;
 
         yield return new WaitForSeconds(2);
         if(Player.PlayerInstance.GetComponent<Rigidbody>().velocity.sqrMagnitude < .25f) {
@@ -75,7 +77,7 @@ public class Environment_MARL_SpawnRoom : Environment {
             HUD.MessageOverlayCinematic.Next();
             HUD.MessageOverlayCinematic.FadeOut();
         }
-
+        
 
         // player leaves room
         // door closes when player crosses trigger

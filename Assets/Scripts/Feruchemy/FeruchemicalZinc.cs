@@ -60,7 +60,7 @@ public class FeruchemicalZinc : MonoBehaviour {
                     Rate = 0;
                 }
 
-                if (!Keybinds.ZincTime() || Reserve == 0 || !Player.CanControlZinc) {
+                if (!Keybinds.ZincTime() || Reserve == 0 || !Player.CanControl || !Player.CanControlZinc) {
                     InZincTime = false;
                     endReserve = Reserve;
                     HUD.ZincMeterController.SideEnabled = false;
@@ -92,7 +92,7 @@ public class FeruchemicalZinc : MonoBehaviour {
                     HUD.ZincMeterController.ChangeSpikePosition((float)Reserve);
                 }
 
-                if (Keybinds.ZincTimeDown() && Reserve > 0 && Player.CanControlZinc) {
+                if (Keybinds.ZincTimeDown() && Reserve > 0 && Player.CanControl && Player.CanControlZinc) {
                     InZincTime = true;
                     recovering = false;
                     startReserve = Reserve;

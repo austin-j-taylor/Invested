@@ -6,7 +6,7 @@ using System.IO;
 public class FlagsController : MonoBehaviour {
 
     public enum Level { Start01, Complete01, Complete02, Complete03, Complete04 };
-    public enum Flag { ControlSchemeChosen, HelpOverlay01, HelpOverlay02, HelpOverlay03 };
+    public enum Flag { ControlSchemeChosen };
 
     private readonly string flagsFileName = Application.streamingAssetsPath + "/Data/flags.json";
 
@@ -18,9 +18,6 @@ public class FlagsController : MonoBehaviour {
     public bool complete03;
     public bool complete04;
     public bool controlSchemeChosen;
-    public bool helpOverlay01;
-    public bool helpOverlay02;
-    public bool helpOverlay03;
     
     private static FlagsController instance;
 
@@ -96,21 +93,6 @@ public class FlagsController : MonoBehaviour {
                     instance.controlSchemeChosen = true;
                 }
                 break;
-            case Flag.HelpOverlay01:
-                if (!instance.helpOverlay01) {
-                    instance.helpOverlay01 = true;
-                }
-                break;
-            case Flag.HelpOverlay02:
-                if (!instance.helpOverlay02) {
-                    instance.helpOverlay02 = true;
-                }
-                break;
-            case Flag.HelpOverlay03:
-                if (!instance.helpOverlay03) {
-                    instance.helpOverlay03 = true;
-                }
-                break;
         }
         instance.Refresh();
     }
@@ -118,12 +100,6 @@ public class FlagsController : MonoBehaviour {
         switch(flag) {
             case Flag.ControlSchemeChosen:
                 return instance.controlSchemeChosen;
-            case Flag.HelpOverlay01:
-                return instance.helpOverlay01;
-            case Flag.HelpOverlay02:
-                return instance.helpOverlay02;
-            case Flag.HelpOverlay03:
-                return instance.helpOverlay03;
         }
         return false; // never reached
     }

@@ -41,10 +41,6 @@ public class HUDSimulations : MonoBehaviour {
             }
 
             HUD.DisableHUD();
-            Player.CanControlMovement = false;
-            Player.CanControlPushes = false;
-            Player.CanControlWheel = false;
-            Player.CanControlZinc = true;
             FindObjectOfType<Simulation>().StartSimulation();
         }
     }
@@ -54,6 +50,6 @@ public class HUDSimulations : MonoBehaviour {
         Duel.gameObject.SetActive(false);
         CoinWall.gameObject.SetActive(false);
         CoinGround.gameObject.SetActive(false);
-        Player.CanControlMovement = false;
+        Player.CanControl = false;
     }
 }

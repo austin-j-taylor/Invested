@@ -19,7 +19,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
     private const float lineWeightThreshold = 1;
     private const float targetLateralConstant = .1f;
     private const float targetFocusFalloffConstant = 128;       // Determines how quickly blue lines blend from in-focus to out-of-focus
-    private const float targetFocusLowerBound = .3f;            // Determines the luminosity of blue lines that are out of foucus
+    private const float targetFocusLowerBound = .35f;            // Determines the luminosity of blue lines that are out of foucus
     private const float targetFocusOffScreenBound = .3f;      // Determines the luminosity of blue lines that are off-screen
     private const float targetLowTransition = .06f;
     private const float targetLowCurvePosition = .02f;
@@ -160,7 +160,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
                 LerpToBurnPercentages();
                 UpdateBurnRateMeter();
 
-                if (Player.CanControlPushes) {
+                if (Player.CanControl) {
                     // Could have stopped burning above. Check if the Allomancer is still burning.
                     if (IsBurning) {
                         // Swap pull- and push- targets
@@ -254,7 +254,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
             }
 
             // Start and Stop Burning metals
-            if (Player.CanControlPushes) {
+            if (Player.CanControl) {
                 if (IsBurning) {
                     // Stop burning
                     if (Keybinds.StopBurning()) {

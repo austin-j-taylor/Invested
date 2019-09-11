@@ -14,7 +14,7 @@ using VolumetricLines;
 public class Magnetic : MonoBehaviour {
 
     private const float metalLinesLerpConstant = .30f;
-    public const float lowLineColor = .1f;
+    public const float lowLineColor = .3f;
     public const float highLineColor = .85f;
     private readonly Color brightBlue = new Color(0, .3f, highLineColor);
 

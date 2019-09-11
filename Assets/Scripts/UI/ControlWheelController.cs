@@ -23,6 +23,7 @@ public class ControlWheelController : MonoBehaviour {
     private readonly Color colorSelectedSpoke = new Color(1, 1, 1, .5f);
 
     enum Selection { Cancel, Manual, Area, Bubble, Coinshot, Coin_Spray, Coin_Full, Coin_Semi, DeselectAll, StopBurning };
+    public enum LockedState { Unlocked, LockedFully, LockedTo3 };
 
     private Image circle;
     private Image[] spokes;
@@ -34,6 +35,7 @@ public class ControlWheelController : MonoBehaviour {
     private Selection highlit; // the selection being hovered over
     private Selection selectedSpoke; // manual, area, etc.
     private Selection selectedCoin; // semi auto, full auto, spray
+    private LockedState lockedState;
 
     private bool isOpen = false;
     public bool IsOpen {
@@ -101,7 +103,7 @@ public class ControlWheelController : MonoBehaviour {
         }
     }
 
-    void Start() {
+    void Awake() {
         selectedSpoke = Selection.Manual;
         selectedCoin = Selection.Coin_Semi;
         circle = transform.Find("Circle").GetComponent<Image>();
@@ -110,6 +112,7 @@ public class ControlWheelController : MonoBehaviour {
         textArea = transform.Find("Selections/Spoke1/Text/Title/Description").GetComponent<Text>();
         textBubble = transform.Find("Selections/Spoke2/Text/Title/Description").GetComponent<Text>();
         textCoinshot = transform.Find("Selections/Spoke3/Text/Title/Description").GetComponent<Text>();
+        SetLockedState(LockedState.Unlocked);
     }
 
     public void Clear() {
@@ -117,6 +120,7 @@ public class ControlWheelController : MonoBehaviour {
         isOpen = false;
         HUD.HideControlWheel(true);
         highlit = Selection.Cancel;
+        SetLockedState(LockedState.Unlocked);
         RefreshSpokes();
     }
 
@@ -124,7 +128,7 @@ public class ControlWheelController : MonoBehaviour {
         if (!PauseMenu.IsPaused) {
             // State machine for Control Wheel
             if (IsOpen) {
-                if (!Keybinds.ControlWheel() || !Player.CanControlWheel) {
+                if (!Keybinds.ControlWheel() || !Player.CanControl || (lockedState == LockedState.LockedFully)) {
                     IsOpen = false;
                 } else {
                     circle.fillAmount = (float)Player.PlayerZinc.Reserve;
@@ -172,16 +176,16 @@ public class ControlWheelController : MonoBehaviour {
                             highlit = Selection.Bubble;
                         } else if (angle > angleCoinshot_CoinSpray) {
                             UpdateCoinshot();
-                            highlit = Selection.Coinshot;
+                            highlit = (lockedState == LockedState.Unlocked) ? Selection.Coinshot : Selection.Cancel;
                         } else if (angle > angleCoinSpray_CoinFull) {
                             UpdateText();
-                            highlit = Selection.Coin_Spray;
+                            highlit = (lockedState == LockedState.Unlocked) ? Selection.Coin_Spray : Selection.Cancel;
                         } else if (angle > angleCoinFull_CoinSemi) {
                             UpdateText();
-                            highlit = Selection.Coin_Full;
+                            highlit = (lockedState == LockedState.Unlocked) ? Selection.Coin_Full : Selection.Cancel;
                         } else if (angle > angleCoinSemi_DeselectAll) {
                             UpdateText();
-                            highlit = Selection.Coin_Semi;
+                            highlit = (lockedState == LockedState.Unlocked) ? Selection.Coin_Semi : Selection.Cancel;
                         } else {
                             UpdateText();
                             highlit = Selection.DeselectAll;
@@ -194,7 +198,7 @@ public class ControlWheelController : MonoBehaviour {
                     IsOpen = false;
                 }
             } else {
-                if (Keybinds.ControlWheelDown() && Player.CanControlWheel) {
+                if (Keybinds.ControlWheelDown() && Player.CanControl && !(lockedState == LockedState.LockedFully)) {
                     IsOpen = true;
                 }
             }
@@ -246,5 +250,36 @@ public class ControlWheelController : MonoBehaviour {
         spokes[(int)selectedCoin].color = colorSelectedSpoke;
         spokes[(int)highlit].color = colorHighlitSpoke;
 
+    }
+
+    // Sets how many options are available on the control wheel
+    public void SetLockedState(LockedState newState) {
+        lockedState = newState;
+
+        switch (newState) {
+            case LockedState.Unlocked:
+                for (int i = 0; i < spokes.Length; i++) {
+                    spokes[i].gameObject.SetActive(true);
+                }
+                break;
+            case LockedState.LockedFully:
+                for (int i = 0; i < spokes.Length; i++) {
+                    spokes[i].gameObject.SetActive(false);
+                }
+
+                break;
+            case LockedState.LockedTo3:
+                for (int i = 0; i < 4; i++) {
+                    spokes[i].gameObject.SetActive(true);
+                }
+                for (int i = 4; i < 8; i++) {
+                    spokes[i].gameObject.SetActive(false);
+                }
+                for (int i = 8; i < spokes.Length; i++) {
+                    spokes[i].gameObject.SetActive(true);
+                }
+
+                break;
+        }
     }
 }

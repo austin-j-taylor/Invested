@@ -103,6 +103,7 @@ public class HUD : MonoBehaviour {
                 MetalReserveMeters.Clear();
                 MessageOverlayDescriptive.Clear();
                 MessageOverlayCinematic.Clear();
+                HelpOverlayController.Clear();
                 ZincMeterController.Clear();
                 ControlWheelController.Clear();
                 anim.SetBool("ControlWheelVisible", false);
