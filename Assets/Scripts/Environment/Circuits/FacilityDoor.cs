@@ -6,6 +6,9 @@ public class FacilityDoor : Powered {
     private const float angleForStopping = 1;
     private const int timeToTryHarder = 2;
     private const int timeToQuit = 4;
+
+    [SerializeField]
+    private bool lockOncePassed = true;
     
     public override bool On {
         set {
@@ -79,7 +82,11 @@ public class FacilityDoor : Powered {
     // close the door when the player passes it
     private void OnTriggerEnter(Collider other) {
         if(other.CompareTag("PlayerBody")) {
-            On = false;
+            if(lockOncePassed) {
+                On = true;
+            } else {
+                On = !on;
+            }
         }
     }
 

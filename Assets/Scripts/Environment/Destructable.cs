@@ -10,8 +10,8 @@ public class Destructable : MonoBehaviour {
 
     protected bool destroyed = false;
 
-    private int health;
-    public int Health {
+    protected int health;
+    public virtual int Health {
         get {
             return health;
         }

@@ -23,6 +23,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
     private const float targetFocusOffScreenBound = .3f;      // Determines the luminosity of blue lines that are off-screen
     private const float targetLowTransition = .06f;
     private const float targetLowCurvePosition = .02f;
+
     // Control Mode constants
     private const float minAreaRadius = .025f;
     private const float maxAreaRadius = .25f;

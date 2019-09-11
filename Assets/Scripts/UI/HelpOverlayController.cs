@@ -37,7 +37,7 @@ public class HelpOverlayController : MonoBehaviour {
         HelpTextLeft.text = KeyHelp + " to toggle the " + HelpOverlay + ".\n\n" +
             KeyLook + " to look.\n"
         ;
-        Debug.Log(lockedState);
+
         switch (lockedState) {
             case LockedState.Locked0:
                 HelpTextLeft.text += KeyMove + " to move.\n";
