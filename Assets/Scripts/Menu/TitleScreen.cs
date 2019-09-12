@@ -1,7 +1,10 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class TitleScreen : MonoBehaviour {
+
+    private Button highlitButton;
 
     private Button playButton;
     private Button settingsButton;
@@ -19,6 +22,8 @@ public class TitleScreen : MonoBehaviour {
         settingsButton.onClick.AddListener(OnClickedSettings);
         articlesButton.onClick.AddListener(OnClickedArticles);
         quitButton.onClick.AddListener(OnClickedQuit);
+
+        highlitButton = playButton;
     }
 
     private void OnClickedPlay() {
@@ -39,10 +44,16 @@ public class TitleScreen : MonoBehaviour {
     }
 
     public void Open() {
-        gameObject.SetActive(true);
+        if (!gameObject.activeSelf) {
+            gameObject.SetActive(true);
+            MainMenu.FocusOnButton(highlitButton);
+        }
     }
 
     public void Close() {
-        gameObject.SetActive(false);
+        if(gameObject.activeSelf) {
+            highlitButton = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
+            gameObject.SetActive(false);
+        }
     }
 }

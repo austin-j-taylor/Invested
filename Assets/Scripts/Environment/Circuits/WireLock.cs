@@ -16,7 +16,7 @@ public class WireLock : Source {
     private Renderer mount;
     private Animator anim;
 
-    public override int Health {
+    public override double Health {
         set {
             health = value;
             if (health <= 0) {
@@ -47,11 +47,11 @@ public class WireLock : Source {
         PowerConnected(true);
     }
 
-    private void FixedUpdate() {
+    private void LateUpdate() {
         if (!destroyed) {
             if (isBeingDestroyed) {
                 if (metal.IsBeingPushPulled) {
-                    Health--;
+                    Health -= Time.deltaTime * 60;
                 } else {
                     isBeingDestroyed = false;
                     anim.SetBool("isBeingDestroyed", false);
@@ -61,7 +61,7 @@ public class WireLock : Source {
                 if (metal.IsBeingPushPulled) {
                     isBeingDestroyed = true;
                     anim.SetBool("isBeingDestroyed", true);
-                    Health--;
+                    Health -= Time.deltaTime * 60;
                 }
             }
         }

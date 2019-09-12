@@ -54,7 +54,7 @@ public class ControlSchemeScreen : MonoBehaviour {
         gamepadButton.gameObject.SetActive(false);
         mkEQButton.gameObject.SetActive(true);
         mk54Button.gameObject.SetActive(true);
-        MainMenu.FocusOnCurrentMenu(transform);
+        MainMenu.FocusOnButton(transform);
     }
     public void OnClickedGamepad() {
         SettingsMenu.settingsData.controlScheme = SettingsData.Gamepad;

@@ -6,12 +6,12 @@ using System.Collections;
  */
 public class Destructable : MonoBehaviour {
 
-    protected int maxHealth = 100;
+    protected double maxHealth = 100;
 
     protected bool destroyed = false;
 
-    protected int health;
-    public virtual int Health {
+    protected double health;
+    public virtual double Health {
         get {
             return health;
         }

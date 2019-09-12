@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public class SceneSelectMenu : MonoBehaviour {
 
@@ -26,6 +27,8 @@ public class SceneSelectMenu : MonoBehaviour {
             return gameObject.activeSelf;
         }
     }
+
+    private static Button highlitButton;
 
     private Text tooltip;
     private Transform levelsHeader;
@@ -75,6 +78,9 @@ public class SceneSelectMenu : MonoBehaviour {
         simulationWallButton.onClick.AddListener(OnClickedSimulationWall);
         simulationGroundButton.onClick.AddListener(OnClickedSimulationGround);
         backButton.onClick.AddListener(OnClickedBack);
+
+        highlitButton = level01Button;
+
         // Only close the main menu after the scene loads to prevent jarring camera transitions
         SceneManager.sceneLoaded += ClearAfterSceneChange;
     }
@@ -82,9 +88,9 @@ public class SceneSelectMenu : MonoBehaviour {
     public void Open() {
         gameObject.SetActive(true);
         tooltip.text = "";
-        MainMenu.FocusOnCurrentMenu(transform);
+        MainMenu.FocusOnButton(highlitButton);
         // Lock levels when previous levels are not completed
-        if(!FlagsController.GetLevel(FlagsController.Level.Complete03)) {
+        if (!FlagsController.GetLevel(FlagsController.Level.Complete03)) {
             level04Button.interactable = false;
         }
         if (!FlagsController.GetLevel(FlagsController.Level.Complete02)) {
@@ -124,7 +130,7 @@ public class SceneSelectMenu : MonoBehaviour {
                 Player.PlayerInstance.gameObject.SetActive(false);
                 CameraController.UnlockCamera();
                 if (isActiveAndEnabled)
-                    MainMenu.FocusOnCurrentMenu(transform);
+                    MainMenu.FocusOnButton(highlitButton);
             } else {
                 MainMenu.Close();
                 TimeController.CurrentTimeScale = SettingsMenu.settingsData.timeScale;
@@ -146,39 +152,44 @@ public class SceneSelectMenu : MonoBehaviour {
         tooltip.text = tip;
     }
 
+    private void LoadSceneFromClick(int scene) {
+        highlitButton = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
+        LoadScene(scene);
+    }
     private void OnClickedLevel01Button() {
-        LoadScene(sceneLevel01);
+        LoadSceneFromClick(sceneLevel01);
     }
     private void OnClickedLevel02Button() {
-        LoadScene(sceneLevel02);
+        LoadSceneFromClick(sceneLevel02);
     }
     private void OnClickedLevel03Button() {
-        LoadScene(sceneLevel03);
+        LoadSceneFromClick(sceneLevel03);
     }
     private void OnClickedLevel04Button() {
-        LoadScene(sceneLevel04);
+        LoadSceneFromClick(sceneLevel04);
     }
     private void OnClickedLuthadel() {
-        LoadScene(sceneLuthadel);
+        LoadSceneFromClick(sceneLuthadel);
     }
     private void OnClickedShootingGrounds() {
-        LoadScene(sceneShootingGrounds);
+        LoadSceneFromClick(sceneShootingGrounds);
     }
     private void OnClickedSandbox() {
-        LoadScene(sceneSandbox);
+        LoadSceneFromClick(sceneSandbox);
     }
     private void OnClickedSouthernMountains() {
-        LoadScene(sceneSouthernMountains);
+        LoadSceneFromClick(sceneSouthernMountains);
     }
     private void OnClickedSimulationDuel() {
-        LoadScene(sceneSimulationDuel);
+        LoadSceneFromClick(sceneSimulationDuel);
     }
     private void OnClickedSimulationWall() {
-        LoadScene(sceneSimulationWall);
+        LoadSceneFromClick(sceneSimulationWall);
     }
     private void OnClickedSimulationGround() {
-        LoadScene(sceneSimulationGround);
+        LoadSceneFromClick(sceneSimulationGround);
     }
+
     private void OnClickedBack() {
         Close();
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class SettingsMenu : MonoBehaviour {
@@ -58,6 +59,8 @@ public class SettingsMenu : MonoBehaviour {
             return worldHeader.gameObject.activeSelf;
         }
     }
+
+    private Button highlitButton;
 
     // Settings
     private Text titleText;
@@ -142,6 +145,7 @@ public class SettingsMenu : MonoBehaviour {
 
         discardButton.gameObject.SetActive(false);
         resetToDefaultsButton.gameObject.SetActive(false);
+        highlitButton = gameplayButton;
     }
 
     // Refresh Settings and Refresh Particular Settings to update button texts
@@ -163,10 +167,12 @@ public class SettingsMenu : MonoBehaviour {
         gameObject.SetActive(true);
         resetToDefaultsButton.gameObject.SetActive(true);
         tooltipText.text = "";
-        MainMenu.FocusOnCurrentMenu(transform);
+        MainMenu.FocusOnButton(highlitButton);
     }
 
     public void Close() {
+        if(EventSystem.current.currentSelectedGameObject != null)
+            highlitButton = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
         resetToDefaultsText.text = s_reset;
         resetToDefaultsButton.gameObject.SetActive(false);
         CloseGlossary();
@@ -184,20 +190,23 @@ public class SettingsMenu : MonoBehaviour {
     }
 
     private void OpenHeader() {
+        highlitButton = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
         resetToDefaultsText.text = s_reset;
         settingsHeader.gameObject.SetActive(false);
         discardButton.gameObject.SetActive(true);
         resetToDefaultsButton.gameObject.SetActive(false);
         closeText.text = s_save;
-        MainMenu.FocusOnCurrentMenu(settingsHeader.parent);
+        MainMenu.FocusOnButton(transform);
     }
 
     private void CloseHeader() {
-        settingsHeader.gameObject.SetActive(true);
-        discardButton.gameObject.SetActive(false);
-        resetToDefaultsButton.gameObject.SetActive(true);
-        closeText.text = s_back;
-        MainMenu.FocusOnCurrentMenu(settingsHeader);
+        if (!settingsHeader.gameObject.activeSelf) {
+            settingsHeader.gameObject.SetActive(true);
+            discardButton.gameObject.SetActive(false);
+            resetToDefaultsButton.gameObject.SetActive(true);
+            closeText.text = s_back;
+            MainMenu.FocusOnButton(highlitButton);
+        }
     }
 
     private void OpenGlossary() {
@@ -205,7 +214,7 @@ public class SettingsMenu : MonoBehaviour {
         glossaryHeader.gameObject.SetActive(true);
         settingsHeader.gameObject.SetActive(false);
         resetToDefaultsButton.gameObject.SetActive(false);
-        MainMenu.FocusOnCurrentMenu(settingsHeader.parent);
+        MainMenu.FocusOnButton(glossaryHeader);
     }
 
     private void CloseGlossary() {

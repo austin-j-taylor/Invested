@@ -6,7 +6,6 @@ public class MainMenu : MonoBehaviour {
 
     private static MainMenu instance;
     private static Transform canvas;
-    private static EventSystem eventSystem;
 
     private ControlSchemeScreen controlSchemeScreen;
     private TitleScreen titleScreen;
@@ -23,7 +22,6 @@ public class MainMenu : MonoBehaviour {
     private void Awake() {
         instance = this;
         canvas = GameObject.FindGameObjectWithTag("Canvas").transform;
-        eventSystem = GameObject.FindGameObjectWithTag("GameController").GetComponent<EventSystem>();
 
         controlSchemeScreen = GetComponentInChildren<ControlSchemeScreen>();
         titleScreen = GetComponentInChildren<TitleScreen>();
@@ -71,7 +69,6 @@ public class MainMenu : MonoBehaviour {
 
     public static void Open() {
         instance.gameObject.SetActive(true);
-        FocusOnCurrentMenu(instance.transform);
     }
 
     public static void Close() {
@@ -80,7 +77,7 @@ public class MainMenu : MonoBehaviour {
 
     public static void OpenControlSchemeScreen() {
         instance.controlSchemeScreen.Open();
-        FocusOnCurrentMenu(instance.controlSchemeScreen.transform);
+        FocusOnButton(instance.controlSchemeScreen.transform);
     }
 
     public static void CloseControlSchemeScreen() {
@@ -90,7 +87,6 @@ public class MainMenu : MonoBehaviour {
 
     public static void OpenTitleScreen() {
         instance.titleScreen.Open();
-        FocusOnCurrentMenu(instance.titleScreen.transform);
     }
 
     public static void OpenSceneSelectMenu() {
@@ -123,9 +119,10 @@ public class MainMenu : MonoBehaviour {
 
     // Finds the first button, slider, etc. in the newly opened menu for gamepad and keyboard control of the menu
     // Works for Title Screen and Scene Select Menu
-    public static void FocusOnCurrentMenu(Transform parent) {
-        Selectable child = parent.GetComponentInChildren<Selectable>();
-        if(child)
-            eventSystem.SetSelectedGameObject(child.gameObject);
+    public static void FocusOnButton(Button button) {
+        EventSystem.current.SetSelectedGameObject(button.gameObject);
+    }
+    public static void FocusOnButton(Transform parent) {
+        EventSystem.current.SetSelectedGameObject(parent.GetComponentInChildren<Button>().gameObject);
     }
 }

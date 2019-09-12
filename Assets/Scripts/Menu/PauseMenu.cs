@@ -52,7 +52,7 @@ public class PauseMenu : MonoBehaviour {
 
     public static void Open() {
         buttonsHeader.gameObject.SetActive(true);
-        MainMenu.FocusOnCurrentMenu(instance.transform);
+        MainMenu.FocusOnButton(instance.unpauseButton);
     }
 
     public static void Close() {

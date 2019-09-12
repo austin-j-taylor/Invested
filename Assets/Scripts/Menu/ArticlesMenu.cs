@@ -31,7 +31,7 @@ public class ArticlesMenu : MonoBehaviour {
     public void Open() {
         gameObject.SetActive(true);
         tooltip.text = "";
-        MainMenu.FocusOnCurrentMenu(transform);
+        MainMenu.FocusOnButton(transform);
     }
 
     public void Close() {
