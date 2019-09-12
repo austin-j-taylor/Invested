@@ -222,20 +222,39 @@ public class PlayerPullPushController : AllomanticIronSteel {
                         } else {
                             Magnetic[] targets = SearchForMetalsAreaOrBubble();
 
-                            // When targets change, remove all old targets and make space for the new ones
-                            if (Keybinds.Select() || (Keybinds.PullDown() && !HasPullTarget)) {// || VacuouslyPullTargeting) {
-                                PullTargets.Size = targets.Length;
-                            }
-                            if (Keybinds.SelectAlternate() || (Keybinds.PushDown() && !HasPushTarget)) {// || VacuouslyPushTargeting) {
-                                PushTargets.Size = targets.Length;
-                            }
-                            bool nowVacuouslyPulling = !HasPullTarget;
-                            bool nowVacuouslyPushing = !HasPushTarget;
-                            if(targets.Length == 0) {
-                                TryToAddTarget(null, addingTargets, nowVacuouslyPulling, nowVacuouslyPushing, keybindPulling, keybindPushing);
+                            if(Keybinds.Negate()) {
+                                // Removing targets
+                                // For area/bubble targeting, Removing a target means to remove all targets.
+                                if(Keybinds.Select()) {
+                                    PullTargets.Clear();
+                                    VacuouslyPullTargeting = false;
+                                }
+                                if (Keybinds.SelectAlternate()) {
+                                    PushTargets.Clear();
+                                    VacuouslyPushTargeting = false;
+                                }
+                                // Consider preserving vacuous targets (consider coins, consider a vacuous cone/bubble)
                             } else {
-                                foreach (Magnetic target in targets) {
-                                    TryToAddTarget(target, addingTargets, nowVacuouslyPulling, nowVacuouslyPushing, keybindPulling, keybindPushing);
+                                // Adding targets
+                                // When targets change, remove all old targets and make space for the new ones
+                                if (Keybinds.Select() || (Keybinds.PullDown() && !HasPullTarget)) {// || VacuouslyPullTargeting) {
+                                    PullTargets.Size = targets.Length; // takes care of removing all targets if none are in sight
+                                }
+                                if (Keybinds.SelectAlternate() || (Keybinds.PushDown() && !HasPushTarget)) {// || VacuouslyPushTargeting) {
+                                    PushTargets.Size = targets.Length;
+                                }
+                                bool nowVacuouslyPulling = !HasPullTarget;
+                                bool nowVacuouslyPushing = !HasPushTarget;
+                                if (targets.Length == 0) {
+                                    // No metals are in the scope of the area/bubble, but you are trying to select.
+                                    // Do nothing?
+                                    // Deselect everything?
+                                    // This at least handles vacuous targets
+                                    TryToAddTarget(null, addingTargets, nowVacuouslyPulling, nowVacuouslyPushing, keybindPulling, keybindPushing);
+                                } else {
+                                    foreach (Magnetic target in targets) {
+                                        TryToAddTarget(target, addingTargets, nowVacuouslyPulling, nowVacuouslyPushing, keybindPulling, keybindPushing);
+                                    }
                                 }
                             }
                         }
@@ -314,7 +333,8 @@ public class PlayerPullPushController : AllomanticIronSteel {
         RefreshHUD();
     }
 
-    // Called on Magnetics that should be added as Push/Pull-targets
+    // Called on Magnetics that should be added or removed as Push/Pull-targets
+    // This whoooole thing is bad coding practice
     private void TryToAddTarget(Magnetic target, bool addingTargets, bool nowVacuouslyPulling, bool nowVacuouslyPushing, bool keybindPulling, bool keybindPushing) {
         // Add/Remove Targets
         // Pulling

@@ -135,8 +135,8 @@ public class AllomanticIronSteel : Allomancer {
         }
     }
 
-    private bool vacuouslyPullTargeting = false;
-    private bool vacuouslyPushTargeting = false;
+    protected bool vacuouslyPullTargeting = false;
+    protected bool vacuouslyPushTargeting = false;
     protected bool VacuouslyPullTargeting {
         get {
             return vacuouslyPullTargeting;
@@ -681,8 +681,8 @@ public class AllomanticIronSteel : Allomancer {
     }
 
     protected void SwapVacuousTargets() {
-        bool temp = VacuouslyPullTargeting;
-        VacuouslyPullTargeting = VacuouslyPushTargeting;
-        VacuouslyPushTargeting = temp;
+        bool temp = vacuouslyPullTargeting;
+        vacuouslyPullTargeting = vacuouslyPushTargeting;
+        vacuouslyPushTargeting = temp;
     }
 }
