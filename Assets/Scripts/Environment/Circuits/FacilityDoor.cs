@@ -65,6 +65,12 @@ public class FacilityDoor : Powered {
 
         magneticLeft = leftMetal.GetComponent<Magnetic>();
         magneticRight = rightMetal.GetComponent<Magnetic>();
+
+        on = true;
+        magneticLeft.enabled = false;
+        magneticRight.enabled = false;
+        jointLeft.useLimits = true;
+        jointRight.useLimits = true;
     }
 
     //private void Update() {
@@ -81,7 +87,7 @@ public class FacilityDoor : Powered {
 
     // close the door when the player passes it
     private void OnTriggerEnter(Collider other) {
-        if(other.CompareTag("PlayerBody")) {
+        if(other.CompareTag("Player") && other.isTrigger) {
             if(lockOncePassed) {
                 On = true;
             } else {

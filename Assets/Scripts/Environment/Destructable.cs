@@ -2,13 +2,11 @@
 using System.Collections;
 
 /*
- * An environmental object that can be destroyed.
+ * An Investiture circuit element that can be destroyed.
  */
-public class Destructable : MonoBehaviour {
+public class Destructable : Powered {
 
     protected double maxHealth = 100;
-
-    protected bool destroyed = false;
 
     protected double health;
     public virtual double Health {
@@ -19,7 +17,7 @@ public class Destructable : MonoBehaviour {
             health = value;
             if (health <= 0) {
                 health = 0;
-                if(!destroyed)
+                if(on)
                     Destroy();
             }
         }
@@ -27,10 +25,10 @@ public class Destructable : MonoBehaviour {
 
     protected virtual void Start() {
         health = maxHealth;
+        on = true;
     }
 
     protected virtual void Destroy() {
-        destroyed = true;
-
+        On = false;
     }
 }

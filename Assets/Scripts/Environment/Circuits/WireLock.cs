@@ -8,6 +8,8 @@ public class WireLock : Source {
 
     [SerializeField]
     private bool repairing = false;
+    [SerializeField]
+    private float timeToRepair = 1;
 
 
     private bool isBeingDestroyed = false;
@@ -24,8 +26,7 @@ public class WireLock : Source {
                 if(repairing) {
                     // Do not destroy this; however, disable the magnetic and begin repairing.
                     DestroyButThenRepair();
-                    destroyed = true;
-                } else if (!destroyed)
+                } else if (on)
                     Destroy();
             }
         }
@@ -48,7 +49,7 @@ public class WireLock : Source {
     }
 
     private void LateUpdate() {
-        if (!destroyed) {
+        if (on) {
             if (isBeingDestroyed) {
                 if (metal.IsBeingPushPulled) {
                     Health -= Time.deltaTime * 60;
@@ -81,13 +82,17 @@ public class WireLock : Source {
         anim.SetTrigger("destroyed");
         PowerConnected(false);
 
+        on = false;
         metal.enabled = false;
+        anim.speed = 1f / timeToRepair;
     }
 
     private void Repair() {
         metal.enabled = true;
-        destroyed = false;
+        on = true;
         health = maxHealth;
         PowerConnected(true);
+
+        anim.speed = 1;
     }
 }
