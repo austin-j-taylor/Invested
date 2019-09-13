@@ -72,7 +72,7 @@ LightmapSettings:
     m_FinalGatherRayCount: 256
     m_ReflectionCompression: 2
     m_MixedBakeMode: 2
-    m_BakeBackend: 2
+    m_BakeBackend: 1
     m_PVRSampling: 1
     m_PVRDirectSampleCount: 32
     m_PVRSampleCount: 500
@@ -96,8 +96,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
-  m_LightingDataAsset: {fileID: 112000000, guid: 19b2e764e0ac62b4591b405440b2c480,
-    type: 2}
+  m_LightingDataAsset: {fileID: 0}
   m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
@@ -134,6 +133,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 181430527}
     m_Modifications:
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (20)
+      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -203,11 +207,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.2499999
-      objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (20)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -288,6 +287,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 181430527}
     m_Modifications:
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (13)
+      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -358,11 +362,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 0.2499999
       objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (13)
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
 --- !u!4 &43545198 stripped
@@ -378,6 +377,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 297757742}
     m_Modifications:
+    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
+        type: 3}
+      propertyPath: m_Name
+      value: LampCeiling (6)
+      objectReference: {fileID: 0}
     - target: {fileID: 1849423427054811829, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -433,11 +437,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
-        type: 3}
-      propertyPath: m_Name
-      value: LampCeiling (6)
-      objectReference: {fileID: 0}
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_Range
@@ -446,22 +445,22 @@ PrefabInstance:
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_BoundingSphereOverride.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_BoundingSphereOverride.z
-      value: 1
+      value: 1.3196e-41
       objectReference: {fileID: 0}
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_BoundingSphereOverride.w
-      value: 6e-45
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_BoundingSphereOverride.x
-      value: 1
+      value: 1e-45
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d660472104706b42b70149001b7f57d, type: 3}
@@ -484,6 +483,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 297757742}
     m_Modifications:
+    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
+        type: 3}
+      propertyPath: m_Name
+      value: LampCeiling (1)
+      objectReference: {fileID: 0}
     - target: {fileID: 1849423427054811829, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -539,11 +543,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
-        type: 3}
-      propertyPath: m_Name
-      value: LampCeiling (1)
-      objectReference: {fileID: 0}
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_Range
@@ -552,17 +551,17 @@ PrefabInstance:
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_BoundingSphereOverride.x
-      value: 1.5046328e-36
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_BoundingSphereOverride.y
-      value: 1.009742e-28
+      value: 89
       objectReference: {fileID: 0}
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_BoundingSphereOverride.z
-      value: 0
+      value: 6e-45
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d660472104706b42b70149001b7f57d, type: 3}
@@ -579,6 +578,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 181430527}
     m_Modifications:
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (21)
+      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -649,11 +653,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 0.2499999
       objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (21)
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
 --- !u!4 &157877633 stripped
@@ -669,6 +668,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 181430527}
     m_Modifications:
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (25)
+      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -738,11 +742,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.2499999
-      objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (25)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -827,6 +826,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 181430527}
     m_Modifications:
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (6)
+      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -897,11 +901,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 0.2499999
       objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (6)
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
 --- !u!1 &297757741
@@ -953,6 +952,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 181430527}
     m_Modifications:
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (27)
+      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1022,11 +1026,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.2499999
-      objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (27)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -1330,6 +1329,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 181430527}
     m_Modifications:
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (17)
+      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1400,11 +1404,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 0.2499999
       objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (17)
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
 --- !u!4 &410676842 stripped
@@ -1454,6 +1453,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 181430527}
     m_Modifications:
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (16)
+      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1523,11 +1527,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.2499999
-      objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (16)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -1717,7 +1716,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 1, y: 0, z: 0, w: Infinity}
+  m_BoundingSphereOverride: {x: 8.371e-42, y: 1.05e-43, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
@@ -1734,6 +1733,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 181430527}
     m_Modifications:
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (14)
+      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1804,11 +1808,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 0.2499999
       objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (14)
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
 --- !u!4 &489083218 stripped
@@ -1824,6 +1823,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 181430527}
     m_Modifications:
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (7)
+      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1894,11 +1898,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 0.2499999
       objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (7)
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
 --- !u!4 &509011853 stripped
@@ -1928,6 +1927,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 181430527}
     m_Modifications:
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (29)
+      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1997,11 +2001,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.2499999
-      objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (29)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -2128,6 +2127,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 181430527}
     m_Modifications:
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (11)
+      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2197,11 +2201,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.2499999
-      objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (11)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -2311,6 +2310,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 181430527}
     m_Modifications:
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (30)
+      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2380,11 +2384,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.2499999
-      objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (30)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -2730,6 +2729,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 297757742}
     m_Modifications:
+    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
+        type: 3}
+      propertyPath: m_Name
+      value: LampCeiling (9)
+      objectReference: {fileID: 0}
     - target: {fileID: 1849423427054811829, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2784,11 +2788,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
-        type: 3}
-      propertyPath: m_Name
-      value: LampCeiling (9)
       objectReference: {fileID: 0}
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
@@ -2914,6 +2913,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 181430527}
     m_Modifications:
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (8)
+      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2984,11 +2988,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 0.2499999
       objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (8)
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
 --- !u!4 &615110417 stripped
@@ -3004,6 +3003,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 181430527}
     m_Modifications:
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (9)
+      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3074,11 +3078,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 0.2499999
       objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (9)
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
 --- !u!4 &637441993 stripped
@@ -3094,6 +3093,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 297757742}
     m_Modifications:
+    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
+        type: 3}
+      propertyPath: m_Name
+      value: LampCeiling (3)
+      objectReference: {fileID: 0}
     - target: {fileID: 1849423427054811829, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3149,11 +3153,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
-        type: 3}
-      propertyPath: m_Name
-      value: LampCeiling (3)
-      objectReference: {fileID: 0}
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_Range
@@ -3162,12 +3161,12 @@ PrefabInstance:
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_BoundingSphereOverride.x
-      value: 6.488e-42
+      value: 3.8020831e-38
       objectReference: {fileID: 0}
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_BoundingSphereOverride.y
-      value: 1.02e-43
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
@@ -3527,6 +3526,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 181430527}
     m_Modifications:
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (22)
+      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3597,11 +3601,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 0.2499999
       objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (22)
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
 --- !u!4 &764815357 stripped
@@ -3635,6 +3634,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 181430527}
     m_Modifications:
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (10)
+      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3705,11 +3709,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 0.2499999
       objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (10)
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
 --- !u!4 &886029930 stripped
@@ -3725,6 +3724,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 181430527}
     m_Modifications:
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (2)
+      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -3794,11 +3798,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.2499999
-      objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (2)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -4139,6 +4138,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 181430527}
     m_Modifications:
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (26)
+      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4209,11 +4213,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 0.2499999
       objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (26)
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
 --- !u!4 &999416165 stripped
@@ -4229,6 +4228,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 181430527}
     m_Modifications:
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (12)
+      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4298,11 +4302,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.2499999
-      objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (12)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -4530,6 +4529,26 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4078607796260797219, guid: 9ad3426b36e941a49b3fd11d8da76783,
+        type: 3}
+      propertyPath: m_BoundingSphereOverride.x
+      value: NaN
+      objectReference: {fileID: 0}
+    - target: {fileID: 4078607796260797219, guid: 9ad3426b36e941a49b3fd11d8da76783,
+        type: 3}
+      propertyPath: m_BoundingSphereOverride.y
+      value: NaN
+      objectReference: {fileID: 0}
+    - target: {fileID: 4078607796260797219, guid: 9ad3426b36e941a49b3fd11d8da76783,
+        type: 3}
+      propertyPath: m_BoundingSphereOverride.z
+      value: 3.2095678e-14
+      objectReference: {fileID: 0}
+    - target: {fileID: 4078607796260797219, guid: 9ad3426b36e941a49b3fd11d8da76783,
+        type: 3}
+      propertyPath: m_BoundingSphereOverride.w
+      value: NaN
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9ad3426b36e941a49b3fd11d8da76783, type: 3}
 --- !u!4 &1091202041 stripped
@@ -4545,6 +4564,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1793210211086225272}
     m_Modifications:
+    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
+        type: 3}
+      propertyPath: m_Name
+      value: LampCeiling
+      objectReference: {fileID: 0}
     - target: {fileID: 1849423427054811829, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4600,11 +4624,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
-        type: 3}
-      propertyPath: m_Name
-      value: LampCeiling
-      objectReference: {fileID: 0}
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_BoundingSphereOverride.y
@@ -4618,7 +4637,7 @@ PrefabInstance:
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_BoundingSphereOverride.w
-      value: -3.2240644e-16
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d660472104706b42b70149001b7f57d, type: 3}
@@ -4629,6 +4648,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 181430527}
     m_Modifications:
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (5)
+      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4699,11 +4723,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 0.2499999
       objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (5)
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
 --- !u!1001 &1131523257
@@ -4713,6 +4732,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 181430527}
     m_Modifications:
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (15)
+      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4782,11 +4806,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.2499999
-      objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (15)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -5128,6 +5147,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 297757742}
     m_Modifications:
+    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
+        type: 3}
+      propertyPath: m_Name
+      value: LampCeiling (7)
+      objectReference: {fileID: 0}
     - target: {fileID: 1849423427054811829, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5182,11 +5206,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
-        type: 3}
-      propertyPath: m_Name
-      value: LampCeiling (7)
       objectReference: {fileID: 0}
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
@@ -5422,6 +5441,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 181430527}
     m_Modifications:
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (19)
+      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5491,11 +5515,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.2499999
-      objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (19)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -5660,6 +5679,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 297757742}
     m_Modifications:
+    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
+        type: 3}
+      propertyPath: m_Name
+      value: LampCeiling (11)
+      objectReference: {fileID: 0}
     - target: {fileID: 1849423427054811829, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5715,11 +5739,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
-        type: 3}
-      propertyPath: m_Name
-      value: LampCeiling (11)
-      objectReference: {fileID: 0}
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_Range
@@ -5738,12 +5757,12 @@ PrefabInstance:
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_BoundingSphereOverride.w
-      value: 0
+      value: 1e-45
       objectReference: {fileID: 0}
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_BoundingSphereOverride.x
-      value: 7.45e-43
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d660472104706b42b70149001b7f57d, type: 3}
@@ -5760,6 +5779,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 181430527}
     m_Modifications:
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (3)
+      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5829,11 +5853,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.2499999
-      objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (3)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -5944,6 +5963,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 181430527}
     m_Modifications:
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (4)
+      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6013,11 +6037,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.2499999
-      objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (4)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -6248,6 +6267,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 181430527}
     m_Modifications:
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (24)
+      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6318,11 +6342,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 0.2499999
       objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (24)
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
 --- !u!4 &1443076624 stripped
@@ -6338,6 +6357,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 181430527}
     m_Modifications:
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (31)
+      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6408,11 +6432,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 0.2499999
       objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (31)
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
 --- !u!4 &1461211714 stripped
@@ -6428,6 +6447,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 297757742}
     m_Modifications:
+    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
+        type: 3}
+      propertyPath: m_Name
+      value: LampCeiling
+      objectReference: {fileID: 0}
     - target: {fileID: 1849423427054811829, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6483,11 +6507,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
-        type: 3}
-      propertyPath: m_Name
-      value: LampCeiling
-      objectReference: {fileID: 0}
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_Range
@@ -6496,17 +6515,22 @@ PrefabInstance:
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_BoundingSphereOverride.y
-      value: 0
+      value: -1.3679472e-32
       objectReference: {fileID: 0}
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_BoundingSphereOverride.z
-      value: 0
+      value: -1.130608e-23
       objectReference: {fileID: 0}
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_BoundingSphereOverride.x
-      value: 4.5905e-41
+      value: -3.1542703e-21
+      objectReference: {fileID: 0}
+    - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
+        type: 3}
+      propertyPath: m_BoundingSphereOverride.w
+      value: 0.01491412
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d660472104706b42b70149001b7f57d, type: 3}
@@ -6529,6 +6553,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 297757742}
     m_Modifications:
+    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
+        type: 3}
+      propertyPath: m_Name
+      value: LampCeiling (4)
+      objectReference: {fileID: 0}
     - target: {fileID: 1849423427054811829, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6584,11 +6613,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
-        type: 3}
-      propertyPath: m_Name
-      value: LampCeiling (4)
-      objectReference: {fileID: 0}
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_Range
@@ -6597,12 +6621,12 @@ PrefabInstance:
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_BoundingSphereOverride.x
-      value: 6.78e-43
+      value: 1e-45
       objectReference: {fileID: 0}
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_BoundingSphereOverride.y
-      value: 1e-45
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
@@ -6612,7 +6636,7 @@ PrefabInstance:
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_BoundingSphereOverride.w
-      value: 6.82e-43
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d660472104706b42b70149001b7f57d, type: 3}
@@ -6745,6 +6769,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 181430527}
     m_Modifications:
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire
+      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6814,11 +6843,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.2499999
-      objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -7134,6 +7158,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 181430527}
     m_Modifications:
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (23)
+      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7203,11 +7232,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.2499999
-      objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (23)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -7334,6 +7358,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 297757742}
     m_Modifications:
+    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
+        type: 3}
+      propertyPath: m_Name
+      value: LampCeiling (8)
+      objectReference: {fileID: 0}
     - target: {fileID: 1849423427054811829, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7389,11 +7418,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
-        type: 3}
-      propertyPath: m_Name
-      value: LampCeiling (8)
-      objectReference: {fileID: 0}
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_Range
@@ -7412,12 +7436,12 @@ PrefabInstance:
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_BoundingSphereOverride.w
-      value: 1.1e-44
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_BoundingSphereOverride.x
-      value: 1.6927021e+22
+      value: 1.239798e-38
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d660472104706b42b70149001b7f57d, type: 3}
@@ -7434,6 +7458,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 297757742}
     m_Modifications:
+    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
+        type: 3}
+      propertyPath: m_Name
+      value: LampCeiling (2)
+      objectReference: {fileID: 0}
     - target: {fileID: 1849423427054811829, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7489,11 +7518,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
-        type: 3}
-      propertyPath: m_Name
-      value: LampCeiling (2)
-      objectReference: {fileID: 0}
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_Range
@@ -7502,7 +7526,7 @@ PrefabInstance:
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_BoundingSphereOverride.x
-      value: 0
+      value: 1e-45
       objectReference: {fileID: 0}
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
@@ -7512,12 +7536,12 @@ PrefabInstance:
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_BoundingSphereOverride.z
-      value: 0
+      value: 5.418376e-39
       objectReference: {fileID: 0}
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_BoundingSphereOverride.w
-      value: NaN
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d660472104706b42b70149001b7f57d, type: 3}
@@ -7614,7 +7638,7 @@ Light:
   m_BounceIntensity: 1
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
-  m_BoundingSphereOverride: {x: 1, y: 1, z: 1, w: 6e-45}
+  m_BoundingSphereOverride: {x: 0, y: 1.02e-43, z: 0, w: -2.0941092e+17}
   m_UseBoundingSphereOverride: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
@@ -7625,6 +7649,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 181430527}
     m_Modifications:
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (28)
+      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7694,11 +7723,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.2499999
-      objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (28)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -7825,6 +7849,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 297757742}
     m_Modifications:
+    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
+        type: 3}
+      propertyPath: m_Name
+      value: LampCeiling (10)
+      objectReference: {fileID: 0}
     - target: {fileID: 1849423427054811829, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7880,11 +7909,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
-        type: 3}
-      propertyPath: m_Name
-      value: LampCeiling (10)
-      objectReference: {fileID: 0}
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_Range
@@ -7893,17 +7917,22 @@ PrefabInstance:
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_BoundingSphereOverride.y
-      value: 0
+      value: 6e-45
       objectReference: {fileID: 0}
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_BoundingSphereOverride.z
-      value: 0
+      value: 1.2122475e-38
       objectReference: {fileID: 0}
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_BoundingSphereOverride.w
-      value: 0
+      value: 4.26e-43
+      objectReference: {fileID: 0}
+    - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
+        type: 3}
+      propertyPath: m_BoundingSphereOverride.x
+      value: 3.57e-43
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d660472104706b42b70149001b7f57d, type: 3}
@@ -7920,6 +7949,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 181430527}
     m_Modifications:
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (18)
+      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7990,11 +8024,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.y
       value: 0.2499999
       objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (18)
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
 --- !u!4 &2064936645 stripped
@@ -8010,6 +8039,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 181430527}
     m_Modifications:
+    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
+        type: 3}
+      propertyPath: m_Name
+      value: FacilityWire (1)
+      objectReference: {fileID: 0}
     - target: {fileID: 3970763150763668704, guid: 32799ba03667c8246b1d5103134570ce,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -8079,11 +8113,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.y
       value: 0.2499999
-      objectReference: {fileID: 0}
-    - target: {fileID: 3970763150763668705, guid: 32799ba03667c8246b1d5103134570ce,
-        type: 3}
-      propertyPath: m_Name
-      value: FacilityWire (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 32799ba03667c8246b1d5103134570ce, type: 3}
@@ -8174,6 +8203,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 297757742}
     m_Modifications:
+    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
+        type: 3}
+      propertyPath: m_Name
+      value: LampCeiling (5)
+      objectReference: {fileID: 0}
     - target: {fileID: 1849423427054811829, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -8229,11 +8263,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1846763968317421917, guid: 9d660472104706b42b70149001b7f57d,
-        type: 3}
-      propertyPath: m_Name
-      value: LampCeiling (5)
-      objectReference: {fileID: 0}
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_Range
@@ -8242,22 +8271,22 @@ PrefabInstance:
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_BoundingSphereOverride.y
-      value: 0.000000013928023
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_BoundingSphereOverride.z
-      value: 7.45e-43
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_BoundingSphereOverride.w
-      value: 0.0000000137714835
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1740312866526720993, guid: 9d660472104706b42b70149001b7f57d,
         type: 3}
       propertyPath: m_BoundingSphereOverride.x
-      value: 7.45e-43
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d660472104706b42b70149001b7f57d, type: 3}
@@ -8517,6 +8546,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 80a1e8826d8b71346acafc8de471d250, type: 2}
+    - target: {fileID: 8537740425723122257, guid: cff36b8fabbe5f445bc2f5b38306008e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cff36b8fabbe5f445bc2f5b38306008e, type: 3}
 --- !u!33 &86763798983210566
@@ -9087,30 +9121,30 @@ PrefabInstance:
       propertyPath: connected.Array.data[3]
       value: 
       objectReference: {fileID: 464713742}
-    - target: {fileID: 4078607796260797219, guid: 9ad3426b36e941a49b3fd11d8da76783,
-        type: 3}
-      propertyPath: m_BoundingSphereOverride.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4078607796260797219, guid: 9ad3426b36e941a49b3fd11d8da76783,
-        type: 3}
-      propertyPath: m_BoundingSphereOverride.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4078607796260797219, guid: 9ad3426b36e941a49b3fd11d8da76783,
-        type: 3}
-      propertyPath: m_BoundingSphereOverride.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4078607796260797219, guid: 9ad3426b36e941a49b3fd11d8da76783,
-        type: 3}
-      propertyPath: m_BoundingSphereOverride.w
-      value: 4e-45
-      objectReference: {fileID: 0}
     - target: {fileID: 4078607796260797216, guid: 9ad3426b36e941a49b3fd11d8da76783,
         type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4078607796260797219, guid: 9ad3426b36e941a49b3fd11d8da76783,
+        type: 3}
+      propertyPath: m_BoundingSphereOverride.x
+      value: 0.000020440684
+      objectReference: {fileID: 0}
+    - target: {fileID: 4078607796260797219, guid: 9ad3426b36e941a49b3fd11d8da76783,
+        type: 3}
+      propertyPath: m_BoundingSphereOverride.y
+      value: 1.00908445e-16
+      objectReference: {fileID: 0}
+    - target: {fileID: 4078607796260797219, guid: 9ad3426b36e941a49b3fd11d8da76783,
+        type: 3}
+      propertyPath: m_BoundingSphereOverride.z
+      value: 7.2790555e+22
+      objectReference: {fileID: 0}
+    - target: {fileID: 4078607796260797219, guid: 9ad3426b36e941a49b3fd11d8da76783,
+        type: 3}
+      propertyPath: m_BoundingSphereOverride.w
+      value: -4.929046e+14
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9ad3426b36e941a49b3fd11d8da76783, type: 3}
@@ -9616,22 +9650,22 @@ PrefabInstance:
     - target: {fileID: 7201551148333478644, guid: 49cceaa69c351c142bd6e1340cd67d95,
         type: 3}
       propertyPath: m_BoundingSphereOverride.x
-      value: 1.0155e-41
+      value: 5.3476335e-20
       objectReference: {fileID: 0}
     - target: {fileID: 7201551148333478644, guid: 49cceaa69c351c142bd6e1340cd67d95,
         type: 3}
       propertyPath: m_BoundingSphereOverride.y
-      value: 1.05e-43
+      value: -56146.2
       objectReference: {fileID: 0}
     - target: {fileID: 7201551148333478644, guid: 49cceaa69c351c142bd6e1340cd67d95,
         type: 3}
       propertyPath: m_BoundingSphereOverride.z
-      value: 0
+      value: -103153.36
       objectReference: {fileID: 0}
     - target: {fileID: 7201551148333478644, guid: 49cceaa69c351c142bd6e1340cd67d95,
         type: 3}
       propertyPath: m_BoundingSphereOverride.w
-      value: 0
+      value: -1.7229883e-17
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 49cceaa69c351c142bd6e1340cd67d95, type: 3}
