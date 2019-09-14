@@ -14,23 +14,23 @@ public class PlayerMovementController : AllomanticPewter {
     private const float radius = .26f;
     // Rolling
     public const float rollingAcceleration = 5f;
-    public const float maxRollingSpeed = 7.5f / radius;
-    private const float maxRollingAngularSpeed = Mathf.Infinity; // maxRollingSpeed;
+    public const float targetRollingSpeed = 7.5f;
+    public const float targetRollingSpeedRadial = targetRollingSpeed / radius;
+    //private const float maxRollingAngularSpeed = Mathf.Infinity; // targetRollingSpeedRadial;
     // Pewter
-    private const float pewterAcceleration = 5.5f;
-    private const float maxSprintingSpeed = 12.5f / radius;
-    private const float pewterSpeedFactor = maxSprintingSpeed / maxRollingSpeed;
-    private const float maxSprintingAngularVelocity = Mathf.Infinity;
+    private const float targetSprintingSpeed = 20f;
+    private const float targetSprintingSpeedRadial = targetSprintingSpeed / radius;
+    //private const float maxSprintingAngularVelocity = Mathf.Infinity;
     // Pewter burning
     protected const float gramsPewterPerJump = 1f;
     protected const float timePewterPerJump = 1.5f;
     // Jumping
     private const float jumpHeight = 300;
     private const float jumpDirectionModifier = 400;
-    private const float jumpPewterMagnitude = 500;
+    private const float jumpPewterMagnitude = 350;
 
     // Factors
-    private const float movementFactor = .15f;
+    private const float walkingFactor = .15f;
     private const float airControlFactor = .3f;
     private const float dotFactor = 10;
     // Air resistance
@@ -39,11 +39,11 @@ public class PlayerMovementController : AllomanticPewter {
     [SerializeField]
     private float dragAirborneAngular = 1.5f;
     [SerializeField]
-    private float dragGroundedAngular = 5f;
+    private float dragGroundedAngular = 3f;
     private const float dragNoControl = 10f;
     // Friction
     [SerializeField]
-    private float frictionDynamicRolling = 5f;
+    private float frictionDynamicRolling = 6;
     [SerializeField]
     private float frictionDynamicSprinting = 10f;
     [SerializeField]
@@ -52,7 +52,7 @@ public class PlayerMovementController : AllomanticPewter {
     [SerializeField]
     private float momentOfInertiaMagnitude = 5;
     [SerializeField]
-    private float momentOfInertiaMagnitudeSprinting = 50;
+    private float momentOfInertiaMagnitudeSprinting = 25;
     [SerializeField]
     private float momentOfInertiaMagnitudeWalking = 50;
     private readonly Vector3 particleSystemPosition = new Vector3(0, -.2f, 0);
@@ -77,7 +77,8 @@ public class PlayerMovementController : AllomanticPewter {
         base.Awake();
         groundedChecker = transform.GetComponentInChildren<PlayerGroundedChecker>();
         pidSpeed = GetComponent<PIDController_Vector3>();
-        rb.maxAngularVelocity = maxRollingAngularSpeed;
+        //rb.maxAngularVelocity = maxRollingAngularSpeed;
+        rb.maxAngularVelocity = Mathf.Infinity;
         physicsMaterial = GetComponent<Collider>().material;
     }
 
@@ -108,7 +109,7 @@ public class PlayerMovementController : AllomanticPewter {
 
         // Apply the Fun Inverse Gravity
         if(invertGravity) {
-            rb.AddForce(-2 * Physics.gravity, ForceMode.Acceleration);
+            rb.AddForce(-Physics.gravity, ForceMode.Acceleration);
         }
 
         if (Player.CanControl && Player.CanControlMovement) {
@@ -125,8 +126,6 @@ public class PlayerMovementController : AllomanticPewter {
                 movement = CameraController.CameraDirection * Vector3.ClampMagnitude(movement, 1);
             }
 
-
-
             if (IsGrounded) {
                 // if a Jump is queued
                 if (jumpQueued) {
@@ -139,21 +138,27 @@ public class PlayerMovementController : AllomanticPewter {
 
                     // Apply Pewter Jump, if sprinting
                     if (IsSprinting) {
+                        Vector3 movementForPewter = CameraController.UpsideDown ? -movement : movement;
+
                         Drain(gramsPewterPerJump, timePewterPerJump);
 
                         particleSystem.transform.rotation = particleDirection;
                         particleSystem.transform.position = Player.PlayerInstance.transform.position + particleSystemPosition;
-
-                        if (movement.sqrMagnitude <= .01f) { // Vertical jump
-                            movement = Vector3.up; // groundedChecker.Normal;
-                            // If movement is going INTO the wall, we must be jumping up it
-                        } else if (Vector3.Dot(groundedChecker.Normal, movement) < -0.01f) {
-                            float angle = Vector3.Angle(movement, groundedChecker.Normal) - 90;
-                            movement = Quaternion.AngleAxis(angle, Vector3.Cross(Vector3.up, groundedChecker.Normal)) * movement;
-                            if (movement.y < 0)
-                                movement.y = -movement.y;
-                        }
-                        jumpForce = Vector3.ClampMagnitude(groundedChecker.Normal * jumpHeight + movement * jumpDirectionModifier, jumpPewterMagnitude);
+                        if (movementForPewter.sqrMagnitude <= .01f) { // Vertical jump. Jump straight up.
+                            movementForPewter = groundedChecker.Normal;
+                            //movement = Vector3.up;
+                        } else if (Vector3.Dot(groundedChecker.Normal, movementForPewter) < -0.01f) { // Wall jump. Kick up off of wall.
+                            float angle = Vector3.Angle(movementForPewter, groundedChecker.Normal) - 90;
+                            movementForPewter = Quaternion.AngleAxis(angle, Vector3.Cross(Vector3.up, groundedChecker.Normal)) * movementForPewter;
+                            if(CameraController.UpsideDown) {
+                                if (movementForPewter.y > 0)
+                                    movementForPewter.y = -movementForPewter.y;
+                            } else {
+                                if (movementForPewter.y < 0)
+                                    movementForPewter.y = -movementForPewter.y;
+                            }
+                        } // Either jumping in a direction or kicking off of a wall. Either way, do nothing special.
+                        jumpForce = Vector3.ClampMagnitude(groundedChecker.Normal * jumpHeight + movementForPewter  * jumpDirectionModifier, jumpPewterMagnitude);
 
                         particleDirection = Quaternion.LookRotation(-jumpForce);
                         particleSystem.transform.rotation = particleDirection;
@@ -163,6 +168,7 @@ public class PlayerMovementController : AllomanticPewter {
                     }
 
                     rb.AddForce(jumpForce, ForceMode.Impulse);
+
                     // Apply force and torque to target
                     if (targetRb) {
                         Vector3 radius = groundedChecker.Point - targetRb.worldCenterOfMass;
@@ -189,6 +195,7 @@ public class PlayerMovementController : AllomanticPewter {
                 //movement *= airControlFactor;
             }
 
+            //float sprintingAcceleration = 0;
             if (movement.sqrMagnitude > 0) { // If moving at all
                 // Apply Pewter Sprint, if possible
 
@@ -200,20 +207,31 @@ public class PlayerMovementController : AllomanticPewter {
                         particleSystem.transform.rotation = particleDirection;
                         particleSystem.Play();
                     }
-                    //movement *= pewterAcceleration * Mathf.Max(maxSprintingSpeed - Vector3.Project(rb.velocity, movement.normalized).magnitude, 0);
-                    rb.maxAngularVelocity = maxSprintingAngularVelocity;
                     lastWasSprintingOnGround = IsGrounded; // only show particles after hitting the ground
+
+                    //// Pewter acceleration: The faster you are going, the more you can keep going.
+                    //// 1x movement @ movement = half of sprinting speed
+                    //// i.e. the movement starts to increase when you are rolling above half the speed you can normally roll
+                    //// This factor is applied to the target speed for the the PID loop
+                    //float ratio = rb.angularVelocity.magnitude / targetRollingSpeedRadial * 4;
+                    //sprintingAcceleration = Mathf.Log(1 + ratio) / 4;
+                    //Debug.Log("Ratio: " + ratio + " ... " + sprintingAcceleration);
+
+                    //if (sprintingAcceleration < 0)
+                    //    sprintingAcceleration = 0;
+
+                    //rb.maxAngularVelocity = maxSprintingAngularVelocity;
                     physicsMaterial.dynamicFriction = frictionDynamicSprinting;
                     rb.inertiaTensor = new Vector3(momentOfInertiaMagnitudeSprinting, momentOfInertiaMagnitudeSprinting, momentOfInertiaMagnitudeSprinting);
                 } else {
                     // not Sprinting, move normally.
                     //movement = MovementMagnitude(movement);
-                    rb.maxAngularVelocity = maxRollingAngularSpeed;
+                    //rb.maxAngularVelocity = maxRollingAngularSpeed;
                     lastWasSprintingOnGround = false;
 
                     // If Walking, reduce movment
                     if (Keybinds.Walk()) {
-                        movement *= movementFactor;
+                        movement *= walkingFactor;
                         rb.inertiaTensor = new Vector3(momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking);
                         physicsMaterial.dynamicFriction = frictionDynamicWalking;
                     } else {
@@ -227,9 +245,8 @@ public class PlayerMovementController : AllomanticPewter {
                 Vector3 torque = Vector3.Cross(Vector3.up, movement);
 
                 Vector3 feedback = rb.angularVelocity;
-                Vector3 target = torque * maxRollingSpeed;
-                if (IsSprinting)
-                    target *= pewterSpeedFactor;
+                //Vector3 target  = torque * (IsSprinting ? targetSprintingSpeedRadial * (1 + sprintingAcceleration) : targetRollingSpeedRadial);
+                Vector3 target  = torque * (IsSprinting ? targetSprintingSpeedRadial : targetRollingSpeedRadial);
 
                 torque = pidSpeed.Step(feedback, target);
                 //Debug.Log("speed    : " + rb.velocity.magnitude);
@@ -256,12 +273,12 @@ public class PlayerMovementController : AllomanticPewter {
     // Convert a movement vector into real player movement based on current velocity
     private Vector3 MovementMagnitude(Vector3 movement) {
         //Vector3 feedback = Vector3.Project(rb.velocity, movement.normalized);
-        //Vector3 target = movement * maxRollingSpeed;
+        //Vector3 target = movement * targetRollingSpeedRadial;
         //Vector3 command = pidSpeed.Step(feedback, target);
 
         //return command;
         return movement;
-        //return movement * rollingAcceleration * Mathf.Max(maxRollingSpeed - Vector3.Project(rb.velocity, movement.normalized).magnitude, 0);
+        //return movement * rollingAcceleration * Mathf.Max(targetRollingSpeedRadial - Vector3.Project(rb.velocity, movement.normalized).magnitude, 0);
     }
 
 
@@ -287,7 +304,7 @@ public class PlayerMovementController : AllomanticPewter {
         invertGravity = false;
     }
     public void InvertGravity() {
-        rb.useGravity = true;
+        rb.useGravity = false;
         invertGravity = true;
     }
 }

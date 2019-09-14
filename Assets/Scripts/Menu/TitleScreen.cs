@@ -24,6 +24,7 @@ public class TitleScreen : MonoBehaviour {
         quitButton.onClick.AddListener(OnClickedQuit);
 
         highlitButton = playButton;
+        EventSystem.current.SetSelectedGameObject(highlitButton.gameObject);
     }
 
     private void OnClickedPlay() {
