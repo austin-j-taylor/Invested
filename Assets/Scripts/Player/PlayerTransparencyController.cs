@@ -7,7 +7,8 @@ using UnityEngine;
  */
 public class PlayerTransparencyController : MonoBehaviour {
 
-    private const int threshold = 1;
+    private const float distance = 2;
+    private const float distanceThresholdSqr = distance * distance;
     private const float lookAtTransparency = .15f;
 
     private Renderer[] rends;
@@ -20,14 +21,14 @@ public class PlayerTransparencyController : MonoBehaviour {
     
     void LateUpdate() {
         if (Player.CanControl) {
-            float distance = (CameraController.ActiveCamera.transform.position - Player.PlayerInstance.transform.position).magnitude;
+            float distanceSqr = (CameraController.ActiveCamera.transform.position - Player.PlayerInstance.transform.position).sqrMagnitude;
             float percent = 0;
             // If camera is physically near the player, fade slowly to transparent
-            if (SettingsMenu.settingsData.cameraFirstPerson == 0 && distance < threshold) {
-                percent = ((distance * distance) / (threshold * threshold));
+            if (SettingsMenu.settingsData.cameraFirstPerson == 0 && distanceSqr < distanceThresholdSqr) {
+                percent = ((distanceSqr) / (distanceThresholdSqr));
             }
             // If the camera is directly looking at the player, set the transparency to a constant amount
-            if (Physics.Raycast(CameraController.ActiveCamera.transform.position, CameraController.ActiveCamera.transform.forward, out RaycastHit hit, distance, 1 << LayerMask.NameToLayer("Player"))) {
+            if ((percent == 0 || percent > lookAtTransparency) && Physics.Raycast(CameraController.ActiveCamera.transform.position, CameraController.ActiveCamera.transform.forward, out RaycastHit hit, distance, 1 << LayerMask.NameToLayer("Player"))) {
                 // If reticle is on player, immediately fade to transparent
                 percent = (lookAtTransparency);
             }
