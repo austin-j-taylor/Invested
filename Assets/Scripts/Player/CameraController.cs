@@ -78,7 +78,7 @@ public class CameraController : MonoBehaviour {
     }
 
     private void LateUpdate() {
-        transform.position = playerBody.transform.position + cameraControllerOffset;
+        transform.position = playerBody.position + cameraControllerOffset;
         playerLookAtTarget.rotation = Quaternion.Euler(0, currentX, 0);
 
         if (externalPositionTarget) {
@@ -168,59 +168,86 @@ public class CameraController : MonoBehaviour {
                 // Raycast from player to camera and from camera to player.
                 // In the event of a collision, scale THIS in all dimensions by (length from player to hit / length of camera distance)
 
-                
-                Vector3 originPlayer = playerBody.position;
+                // The destinationsCamera[] are at the 9 corners of the camera in world space (top-left to center-center bottom-right)
+                Vector3[] destinationsCamera = new Vector3[9];
+                destinationsCamera[0] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, 0, ActiveCamera.nearClipPlane));
+                destinationsCamera[1] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, .5f, ActiveCamera.nearClipPlane));
+                destinationsCamera[2] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, 1, ActiveCamera.nearClipPlane));
+                destinationsCamera[3] = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, 0, ActiveCamera.nearClipPlane));
+                destinationsCamera[4] = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, .5f, ActiveCamera.nearClipPlane));
+                destinationsCamera[5] = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, 1, ActiveCamera.nearClipPlane));
+                destinationsCamera[6] = ActiveCamera.ViewportToWorldPoint(new Vector3(1, 0, ActiveCamera.nearClipPlane));
+                destinationsCamera[7] = ActiveCamera.ViewportToWorldPoint(new Vector3(1, .5f, ActiveCamera.nearClipPlane));
+                destinationsCamera[8] = ActiveCamera.ViewportToWorldPoint(new Vector3(1, 1, ActiveCamera.nearClipPlane));
+
+
+
+                Vector3 originPlayer = playerBody.position + cameraControllerOffset;
                 Vector3 destinationCamera = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, .5f, ActiveCamera.nearClipPlane));
                 float length = Vector3.Distance(originPlayer, destinationCamera);
-                RaycastHit hit;
-                if(Physics.Raycast(originPlayer, destinationCamera - originPlayer, out hit, length, GameManager.Layer_IgnoreCamera)) {
-                    Debug.DrawLine(originPlayer, hit.point, Color.blue);
-                    float scale = (hit.point - originPlayer).sqrMagnitude / (length * length);
-                    playerCameraController.localScale = new Vector3(scale, scale, scale);
 
-                } else if (Physics.Raycast(destinationCamera, originPlayer - destinationCamera, out hit, length, GameManager.Layer_IgnoreCamera)) {
-                    Debug.DrawLine(originPlayer, hit.point, Color.red);
-                    float scale = (hit.point - originPlayer).sqrMagnitude / (length * length);
-                    playerCameraController.localScale = new Vector3(scale, scale, scale);
+                Vector3 fromCameraToPlayer = originPlayer - destinationsCamera[4]; // center
+                float distanceFromCameraToPlayer = Vector3.Distance(originPlayer, destinationsCamera[4]);
 
-                } else {
-                    // If we were Colliding, LERP back to wanted position
-                    // If we weren't Colliding, just move camera instantly
+
+                Vector3[] originsPlayer = new Vector3[9];
+                for (int i = 0; i < 9; i++) {
+                    originsPlayer[i] = destinationsCamera[i] + fromCameraToPlayer;
+                    Debug.DrawLine(originsPlayer[i], destinationsCamera[i], Color.gray);
                 }
 
 
-                //    Vector3[] origins = new Vector3[9];
-                //    origins[0] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, 0, ActiveCamera.nearClipPlane));
-                //    origins[1] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, .5f, ActiveCamera.nearClipPlane));
-                //    origins[2] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, 1, ActiveCamera.nearClipPlane));
-                //    origins[3] = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, 0, ActiveCamera.nearClipPlane));
-                //    origins[4] = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, .5f, ActiveCamera.nearClipPlane));
-                //    origins[5] = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, 1, ActiveCamera.nearClipPlane));
-                //    origins[6] = ActiveCamera.ViewportToWorldPoint(new Vector3(1, 0, ActiveCamera.nearClipPlane));
-                //    origins[7] = ActiveCamera.ViewportToWorldPoint(new Vector3(1, .5f, ActiveCamera.nearClipPlane));
-                //    origins[8] = ActiveCamera.ViewportToWorldPoint(new Vector3(1, 1, ActiveCamera.nearClipPlane));
+                //RaycastHit hit;
+                //if(Physics.Raycast(originPlayer, destinationCamera - originPlayer, out hit, length, GameManager.Layer_IgnoreCamera)) {
+                //    Debug.DrawLine(originPlayer, hit.point, Color.blue);
+                //    float scale = (hit.point - originPlayer).magnitude / length;
+                //    playerCameraController.localScale = new Vector3(scale, scale, scale);
 
-                //    Vector3 directionToTarget = playerLookAtTarget.position - origins[4]; // center
-                //    float distanceToTarget = directionToTarget.magnitude;
+                //} else if (Physics.Raycast(destinationCamera, originPlayer - destinationCamera, out hit, length, GameManager.Layer_IgnoreCamera)) {
+                //    Debug.DrawLine(originPlayer, hit.point, Color.red);
+                //    float scale = (hit.point - originPlayer).magnitude / length;
+                //    playerCameraController.localScale = new Vector3(scale, scale, scale);
 
-                //    Vector3[] destinations = new Vector3[9];
-                //    for (int i = 0; i < 9; i++)
-                //        destinations[i] = origins[i] + directionToTarget;
+                //} else {
+                //     If we were Colliding, LERP back to wanted position
+                //     If we weren't Colliding, just move camera instantly
+                //}
+
+                int smallestIndex = -1;
+                RaycastHit smallestHit = new RaycastHit();
+                float smallestDistance = Mathf.Infinity;
+
+                // check if the camera is angled such that it would clip into the ceiling
+                for (int i = 0; i < 9; i++) {
+                    if (Physics.Raycast(originsPlayer[i], -fromCameraToPlayer, out RaycastHit hit, distanceFromCameraToPlayer, GameManager.Layer_IgnoreCamera)) {
+                        float distance = (hit.point - originsPlayer[i]).magnitude;
+                        Debug.DrawLine(originsPlayer[i], hit.point, Color.yellow);
+                        if (distance < smallestDistance) {
+                            smallestIndex = i;
+                            smallestHit = hit;
+                            smallestDistance = distance;
+                        }
+                    }
+                }
+
+                if (smallestIndex > -1) { // A collision has occured
+                    float scale = (smallestHit.point - originsPlayer[smallestIndex]).magnitude / length;
+                    playerCameraController.localScale = new Vector3(scale, scale, scale);
+                    Debug.DrawLine(originsPlayer[smallestIndex], smallestHit.point, Color.red);
+                }
+
+
 
                 //    // Check if lookAtTarget would be clipping into a ceiling
                 //    Vector3[] playerDestinations = new Vector3[9];
                 //    for (int i = 0; i < 9; i++) {
-                //        playerDestinations[i] = destinations[i] - playerLookAtTarget.localPosition;
-                //        Debug.DrawLine(playerDestinations[i], destinations[i], Color.white);
+                //        playerDestinations[i] = originsPlayer[i] - playerLookAtTarget.localPosition;
+                //        Debug.DrawLine(playerDestinations[i], originsPlayer[i], Color.white);
                 //    }
-
-                //    int smallestIndex = -1;
-                //    RaycastHit smallestHit = new RaycastHit();
-                //    float smallestDistance = playerLookAtTargetReferenceHeight;
 
                 //    for (int i = 0; i < 9; i++) {
                 //        // Check height of lookAtTarget
-                //        if (Physics.Raycast(playerDestinations[i], UpsideDown ? Vector3.down : Vector3.up, out RaycastHit hit, (destinations[i] - playerDestinations[i]).magnitude, GameManager.Layer_IgnoreCamera)) {
+                //        if (Physics.Raycast(playerDestinations[i], UpsideDown ? Vector3.down : Vector3.up, out RaycastHit hit, (originsPlayer[i] - playerDestinations[i]).magnitude, GameManager.Layer_IgnoreCamera)) {
                 //            float distance = (playerDestinations[i] - hit.point).magnitude;
                 //            Debug.DrawLine(playerDestinations[i], hit.point, Color.green);
                 //            if (distance < smallestDistance) {
@@ -232,49 +259,32 @@ public class CameraController : MonoBehaviour {
                 //    }
 
                 //    if (smallestIndex > -1) { // A collision has occured
-                //        playerLookAtTarget.position = smallestHit.point + (playerLookAtTarget.position - destinations[smallestIndex]) + (UpsideDown ? new Vector3(0, .00001f, 0) : new Vector3(0, -.00001f, 0));
+                //        playerLookAtTarget.position = smallestHit.point + (playerLookAtTarget.position - originsPlayer[smallestIndex]) + (UpsideDown ? new Vector3(0, .00001f, 0) : new Vector3(0, -.00001f, 0));
                 //        Debug.DrawLine(playerDestinations[smallestIndex], smallestHit.point, Color.red);
 
                 //        // Recalculate based on new lookAtTarget position
                 //        ActiveCamera.transform.localPosition = wantedPosition;
-                //        origins[0] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, 0, ActiveCamera.nearClipPlane));
-                //        origins[1] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, .5f, ActiveCamera.nearClipPlane));
-                //        origins[2] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, 1, ActiveCamera.nearClipPlane));
-                //        origins[3] = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, 0, ActiveCamera.nearClipPlane));
-                //        origins[4] = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, .5f, ActiveCamera.nearClipPlane));
-                //        origins[5] = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, 1, ActiveCamera.nearClipPlane));
-                //        origins[6] = ActiveCamera.ViewportToWorldPoint(new Vector3(1, 0, ActiveCamera.nearClipPlane));
-                //        origins[7] = ActiveCamera.ViewportToWorldPoint(new Vector3(1, .5f, ActiveCamera.nearClipPlane));
-                //        origins[8] = ActiveCamera.ViewportToWorldPoint(new Vector3(1, 1, ActiveCamera.nearClipPlane));
+                //        destinationsCamera[0] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, 0, ActiveCamera.nearClipPlane));
+                //        destinationsCamera[1] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, .5f, ActiveCamera.nearClipPlane));
+                //        destinationsCamera[2] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, 1, ActiveCamera.nearClipPlane));
+                //        destinationsCamera[3] = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, 0, ActiveCamera.nearClipPlane));
+                //        destinationsCamera[4] = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, .5f, ActiveCamera.nearClipPlane));
+                //        destinationsCamera[5] = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, 1, ActiveCamera.nearClipPlane));
+                //        destinationsCamera[6] = ActiveCamera.ViewportToWorldPoint(new Vector3(1, 0, ActiveCamera.nearClipPlane));
+                //        destinationsCamera[7] = ActiveCamera.ViewportToWorldPoint(new Vector3(1, .5f, ActiveCamera.nearClipPlane));
+                //        destinationsCamera[8] = ActiveCamera.ViewportToWorldPoint(new Vector3(1, 1, ActiveCamera.nearClipPlane));
 
-                //        directionToTarget = playerLookAtTarget.position - origins[4]; // center
-                //        distanceToTarget = directionToTarget.magnitude;
+                //        directionToTarget = playerLookAtTarget.position - destinationsCamera[4]; // center
+                //        distanceFromCameraToPlayer = directionToTarget.magnitude;
 
                 //        for (int i = 0; i < 9; i++) {
-                //            destinations[i] = origins[i] + directionToTarget;
+                //            originsPlayer[i] = destinationsCamera[i] + directionToTarget;
                 //        }
                 //    }
 
                 //    smallestIndex = -1;
                 //    smallestDistance = SettingsMenu.settingsData.cameraDistance;
 
-                //    // check if the camera is angled such that it would clip into the ceiling
-                //    for (int i = 0; i < 9; i++) {
-                //        if (Physics.Raycast(destinations[i], -directionToTarget, out RaycastHit hit, distanceToTarget, GameManager.Layer_IgnoreCamera)) {
-                //            float distance = (hit.point - destinations[i]).magnitude;
-                //            Debug.DrawLine(destinations[i], hit.point, Color.yellow);
-                //            if (distance < smallestDistance) {
-                //                smallestIndex = i;
-                //                smallestHit = hit;
-                //                smallestDistance = distance;
-                //            }
-                //        }
-                //    }
-
-                //    if (smallestIndex > -1) { // A collision has occured
-                //        ActiveCamera.transform.position = smallestHit.point + (ActiveCamera.transform.position - origins[smallestIndex]);
-                //        Debug.DrawLine(destinations[smallestIndex], smallestHit.point, Color.red);
-                //    }
                 //} else {
                 //    // First person
                 //    // Decide position the camera should try to be at
@@ -294,28 +304,28 @@ public class CameraController : MonoBehaviour {
                 //    pos.y = playerLookAtTargetFirstPersonHeight;
                 //    playerLookAtTarget.transform.localPosition = pos;
 
-                //    Vector3[] origins = new Vector3[9];
-                //    origins[0] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, 0, ActiveCamera.nearClipPlane));
-                //    origins[1] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, .5f, ActiveCamera.nearClipPlane));
-                //    origins[2] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, 1, ActiveCamera.nearClipPlane));
-                //    origins[3] = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, 0, ActiveCamera.nearClipPlane));
-                //    origins[4] = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, .5f, ActiveCamera.nearClipPlane));
-                //    origins[5] = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, 1, ActiveCamera.nearClipPlane));
-                //    origins[6] = ActiveCamera.ViewportToWorldPoint(new Vector3(1, 0, ActiveCamera.nearClipPlane));
-                //    origins[7] = ActiveCamera.ViewportToWorldPoint(new Vector3(1, .5f, ActiveCamera.nearClipPlane));
-                //    origins[8] = ActiveCamera.ViewportToWorldPoint(new Vector3(1, 1, ActiveCamera.nearClipPlane));
+                //    Vector3[] destinationsCamera = new Vector3[9];
+                //    destinationsCamera[0] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, 0, ActiveCamera.nearClipPlane));
+                //    destinationsCamera[1] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, .5f, ActiveCamera.nearClipPlane));
+                //    destinationsCamera[2] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, 1, ActiveCamera.nearClipPlane));
+                //    destinationsCamera[3] = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, 0, ActiveCamera.nearClipPlane));
+                //    destinationsCamera[4] = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, .5f, ActiveCamera.nearClipPlane));
+                //    destinationsCamera[5] = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, 1, ActiveCamera.nearClipPlane));
+                //    destinationsCamera[6] = ActiveCamera.ViewportToWorldPoint(new Vector3(1, 0, ActiveCamera.nearClipPlane));
+                //    destinationsCamera[7] = ActiveCamera.ViewportToWorldPoint(new Vector3(1, .5f, ActiveCamera.nearClipPlane));
+                //    destinationsCamera[8] = ActiveCamera.ViewportToWorldPoint(new Vector3(1, 1, ActiveCamera.nearClipPlane));
 
-                //    Vector3 directionToTarget = playerLookAtTarget.position - origins[4]; // center
-                //    float distanceToTarget = directionToTarget.magnitude;
+                //    Vector3 directionToTarget = playerLookAtTarget.position - destinationsCamera[4]; // center
+                //    float distanceFromCameraToPlayer = directionToTarget.magnitude;
 
-                //    Vector3[] destinations = new Vector3[9];
+                //    Vector3[] originsPlayer = new Vector3[9];
                 //    for (int i = 0; i < 9; i++)
-                //        destinations[i] = origins[i] + directionToTarget;
+                //        originsPlayer[i] = destinationsCamera[i] + directionToTarget;
 
                 //    // Check if lookAtTarget would be clipping into a ceiling
                 //    Vector3[] playerDestinations = new Vector3[9];
                 //    for (int i = 0; i < 9; i++) {
-                //        playerDestinations[i] = destinations[i] - playerLookAtTarget.localPosition;
+                //        playerDestinations[i] = originsPlayer[i] - playerLookAtTarget.localPosition;
                 //    }
 
                 //    int smallestIndex = -1;
@@ -324,7 +334,7 @@ public class CameraController : MonoBehaviour {
 
                 //    for (int i = 0; i < 9; i++) {
                 //        // Check height of lookAtTarget
-                //        if (Physics.Raycast(playerDestinations[i], Vector3.up, out RaycastHit hit, (destinations[i] - playerDestinations[i]).magnitude, GameManager.Layer_IgnoreCamera)) {
+                //        if (Physics.Raycast(playerDestinations[i], Vector3.up, out RaycastHit hit, (originsPlayer[i] - playerDestinations[i]).magnitude, GameManager.Layer_IgnoreCamera)) {
                 //            float distance = (playerDestinations[i] - hit.point).magnitude;
                 //            Debug.DrawLine(playerDestinations[i], hit.point, Color.green);
                 //            if (distance < smallestDistance) {
@@ -336,7 +346,7 @@ public class CameraController : MonoBehaviour {
                 //    }
 
                 //    if (smallestIndex > -1) { // A collision has occured
-                //        playerLookAtTarget.position = smallestHit.point + (playerLookAtTarget.position - destinations[smallestIndex]) - new Vector3(0, .00001f, 0);
+                //        playerLookAtTarget.position = smallestHit.point + (playerLookAtTarget.position - originsPlayer[smallestIndex]) - new Vector3(0, .00001f, 0);
                 //    }
             }
         }
