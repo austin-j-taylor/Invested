@@ -2,13 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * Coins are metals with small enough masses to warrent special considerations for the physics engine.
+ */
 public class Coin : Magnetic {
 
     private const float airResistanceFactor = .1f;
     private const float minSpeed = 5f;
     private const float maxSpeed = 120f;
     private const float drag = 1.25f;
-    private const float stuckThreshold = 1000f; // Square magnitude of normal force necessary for friction
+    private const float highSpeedThresholdSqr = 100f; // what constitutes "high speed"
+    private const float stuckThresholdSqr = 1000f; // Square magnitude of normal force necessary for friction
     private const float dotThreshold = -.3f; // friction threshold for dot product between force and normal vector
     private const float equalMagnitudeConstant = .01f;
 
@@ -17,6 +21,16 @@ public class Coin : Magnetic {
     private Transform collisionCollider;
     private Vector3 collisionNormal;
 
+    /*
+     * Stuck
+     * 
+     * A coin is stuck when it is Pushed into a collider.
+     * Due to the shoddiness of Unity physics at high speeds, we need to override some things:
+     *   When a coin Collides with a Wall:
+     *      Raycast from LastPosition to current position. 
+     *      Set the coin's position to hit.point.
+     *      
+     */
     private bool isStuck;
 
     public override bool IsPerfectlyAnchored {
@@ -38,7 +52,19 @@ public class Coin : Magnetic {
         UnStick();
     }
 
+    /*
+     * When first colliding with a Wall at high speed,
+     */
     private void OnCollisionEnter(Collision collision) {
+        if(Rb.velocity.sqrMagnitude < highSpeedThresholdSqr) {
+            Debug.Log("High speed collision");
+            if(Physics.Raycast(LastPosition, LastVelocity, out RaycastHit hit, LastVelocity.magnitude)) {
+
+            } else {
+                Debug.LogError("Somehow did not find coin collision");
+            }
+        }
+
         OnCollisionStay(collision);
     }
 
@@ -52,11 +78,13 @@ public class Coin : Magnetic {
         if (!collision.collider.CompareTag("Player")) {
             // Could be colliding with multiple objects.
             // Only care about the oldest one, for now.
-            if (collisionCollider == collision.transform || collisionCollider == null) {
+            if(collisionCollider == null) {
                 collisionCollider = collision.transform;
+            }
+            if (collisionCollider == collision.transform) {
                 collisionNormal = collision.contacts[0].normal;
                 if(IsBeingPushPulled) {
-                    if (!isStuck) { // Only updates on first frame of being stuck
+                    if (!isStuck) { // Only updates on first frame of being stuck. Stops being stuck when force becomes weak or stops being pushed.
                         isStuck = IsStuckByFriction(collision.impulse / Time.deltaTime, LastNetForceOnTarget);
                         if (isStuck) {
                             CreateJoint(collision.rigidbody);
@@ -132,7 +160,10 @@ public class Coin : Magnetic {
         return IsStuckByFriction(allomanticForce, allomanticForce);
     }
     private bool IsStuckByFriction(Vector3 allomanticForce, Vector3 direction) {
-        return Vector3.Dot(direction.normalized, collisionNormal) < dotThreshold && Vector3.Project(allomanticForce, collisionNormal).sqrMagnitude > stuckThreshold;
+        // true if the coin "digs" into the ground enough to stick, determined by:
+        // the ANGLE of the collision is tall enough (dot product < threshold)
+        // the DOWNWARD FORCE of the collision is strong enough (projection > threshold)
+        return Vector3.Dot(direction.normalized, collisionNormal) < dotThreshold && Vector3.Project(allomanticForce, collisionNormal).sqrMagnitude > stuckThresholdSqr;
     }
 
     private void UnStick() {
