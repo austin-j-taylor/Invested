@@ -15,11 +15,6 @@ public class AllomanticIronSteel : Allomancer {
     private const double gramsIronPerSecondPerNewton = .001f;
     private const double gramsSteelPerSecondPerNewton = gramsIronPerSecondPerNewton;
     public const double gramsPerSecondPassiveBurn = -.005f; // 5 mg/s for passively burning iron or steel to see metal lines
-    // Blue metal line constants
-    public const float blueLineFirstPersonWidth = .02f;
-    public const float blueLineThirdPersonWidth = .04f;
-    protected const float blueLineChangeFactor = 1 / 4f;
-    protected const float blueLineBrightnessFactor = 1 / 6f;
     // Simple metal boolean constants for passing to methods
     protected const bool steel = false;
     protected const bool iron = true;

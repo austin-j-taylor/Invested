@@ -23,6 +23,10 @@ public class PlayerPullPushController : AllomanticIronSteel {
     private const float targetFocusOffScreenBound = .3f;      // Determines the luminosity of blue lines that are off-screen
     private const float targetLowTransition = .06f;
     private const float targetLowCurvePosition = .02f;
+    private const float firstPersonWidthFactor = .25f;
+    public const float blueLineWidthFactor = .04f;
+    public const float blueLineChangeFactor = 1 / 4f;
+    public const float blueLineBrightnessFactor = 1 / 6f;
 
     // Control Mode constants
     private const float minAreaRadius = .025f;
@@ -531,6 +535,9 @@ public class PlayerPullPushController : AllomanticIronSteel {
 
         if (SettingsMenu.settingsData.renderblueLines == 1) {
             float closeness = blueLineBrightnessFactor * Mathf.Pow(allomanticForce, blueLineChangeFactor);
+            //if(SettingsMenu.settingsData.cameraFirstPerson == 1) {
+            //    closeness *= perspectiveFactor;
+            //}
 
             // Make lines in-focus if near the center of the screen
             // If nearly off-screen, instead make lines dimmer
@@ -543,7 +550,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
             }
             target.SetBlueLine(
                 CenterOfMass,
-                target.Charge * (SettingsMenu.settingsData.cameraFirstPerson == 0 ? blueLineThirdPersonWidth : blueLineFirstPersonWidth),
+                target.Charge * blueLineWidthFactor * (SettingsMenu.settingsData.cameraFirstPerson == 1 ? firstPersonWidthFactor : 1),
                 1,
                 closeness
             );

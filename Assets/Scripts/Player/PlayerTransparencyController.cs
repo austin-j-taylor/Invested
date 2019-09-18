@@ -7,25 +7,25 @@ using UnityEngine;
  */
 public class PlayerTransparencyController : MonoBehaviour {
 
-    private const float distance = 2;
-    private const float distanceThresholdSqr = distance * distance;
+    private const float distanceThreshold = 2;
     private const float lookAtTransparency = .15f;
 
     private Renderer[] rends;
-    private bool isOpaque;
+    private bool isOpaque, overrideHidden = false;
     
-    void Start() {
+    
+    void Awake() {
         rends = GetComponentsInChildren<MeshRenderer>();
         SetAllOpaque();
     }
     
     void LateUpdate() {
-        if (Player.CanControl) {
-            float distanceSqr = (CameraController.ActiveCamera.transform.position - Player.PlayerInstance.transform.position).sqrMagnitude;
+        if (!overrideHidden && Player.CanControl) {
+            float distance = (CameraController.ActiveCamera.transform.position - Player.PlayerInstance.transform.position).magnitude;
             float percent = 0;
             // If camera is physically near the player, fade slowly to transparent
-            if (SettingsMenu.settingsData.cameraFirstPerson == 0 && distanceSqr < distanceThresholdSqr) {
-                percent = ((distanceSqr) / (distanceThresholdSqr));
+            if (SettingsMenu.settingsData.cameraFirstPerson == 0 && distance < distanceThreshold) {
+                percent = ((distance * distance) / (distanceThreshold * distanceThreshold));
             }
             // If the camera is directly looking at the player, set the transparency to a constant amount
             if ((percent == 0 || percent > lookAtTransparency) && Physics.Raycast(CameraController.ActiveCamera.transform.position, CameraController.ActiveCamera.transform.forward, out RaycastHit hit, distance, 1 << LayerMask.NameToLayer("Player"))) {
@@ -71,6 +71,15 @@ public class PlayerTransparencyController : MonoBehaviour {
                 rend.material.renderQueue = -1;
             }
             isOpaque = true;
+        }
+    }
+
+    public void SetOverrideHidden(bool hidden) {
+        if(hidden != overrideHidden) {
+            overrideHidden = hidden;
+            foreach (Renderer rend in rends) {
+                rend.enabled = !hidden;
+            }
         }
     }
 }

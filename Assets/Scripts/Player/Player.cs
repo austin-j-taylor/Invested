@@ -22,6 +22,7 @@ public class Player : PewterEntity {
     public static AllomanticPewter PlayerPewter { get; private set; }
     public static Magnetic PlayerMagnetic { get; private set; }
     public static FeruchemicalZinc PlayerZinc { get; set; }
+    public static PlayerTransparencyController PlayerTransparancy { get; set; }
 
     public Hand CoinHand { get; private set; }
     public CoinMode CoinThrowingMode;
@@ -91,6 +92,7 @@ public class Player : PewterEntity {
         PlayerPewter = GetComponentInChildren<AllomanticPewter>();
         PlayerMagnetic = GetComponentInChildren<Magnetic>();
         PlayerZinc = GetComponent<FeruchemicalZinc>();
+        PlayerTransparancy = GetComponentInChildren<PlayerTransparencyController>();
         Health = 100;
         CoinThrowingMode = CoinMode.Semi;
         CoinHand = GetComponentInChildren<Hand>();

@@ -353,6 +353,10 @@ public class CameraController : MonoBehaviour {
                 //    if (smallestIndex > -1) { // A collision has occured
                 //        playerLookAtTarget.position = smallestHit.point + (playerLookAtTarget.position - originsPlayer[smallestIndex]) - new Vector3(0, .00001f, 0);
                 //    }
+            } else {
+                Vector3 wantedPosition =  playerCameraController.position; // local
+
+                ActiveCamera.transform.position = wantedPosition;
             }
         }
     }
@@ -414,6 +418,7 @@ public class CameraController : MonoBehaviour {
     }
 
     public void SetThirdPerson() {
+        Player.PlayerTransparancy.SetOverrideHidden(false);
         firstPersonCamera.gameObject.SetActive(false);
         thirdPersonCamera.gameObject.SetActive(true);
         thirdPersonCamera.cullingMask = firstPersonCamera.cullingMask;
@@ -422,6 +427,7 @@ public class CameraController : MonoBehaviour {
     }
 
     public void SetFirstPerson() {
+        Player.PlayerTransparancy.SetOverrideHidden(true);
         thirdPersonCamera.gameObject.SetActive(false);
         firstPersonCamera.gameObject.SetActive(true);
         firstPersonCamera.cullingMask = thirdPersonCamera.cullingMask;

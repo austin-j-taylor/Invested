@@ -10,6 +10,7 @@ public class TargetArray {
     public const int arraySize = 30; // Area, Bubble Control Mode
 
     public const float lightSaberConstant = 1024;
+    public const float firstPersonLSFactor = .1f;
     private const float blueLineTargetedWidthFactor = .06f;
     public static readonly Color targetedRedLine = new Color(1, 0, 1);
     private static readonly Color targetedGreenLine = new Color(0, 1, 0);
@@ -200,7 +201,7 @@ public class TargetArray {
             targets[i].SetBlueLine(
                 startPos,
                 blueLineTargetedWidthFactor * targets[i].Charge,
-                Mathf.Exp(-targets[i].LastMaxPossibleAllomanticForce.magnitude * burnRate / lightSaberConstant),
+                Mathf.Exp(-targets[i].LastMaxPossibleAllomanticForce.magnitude * burnRate  * (SettingsMenu.settingsData.cameraFirstPerson == 1 ? firstPersonLSFactor : 1) / lightSaberConstant),
                 // 200IQ Ternary Operator
                 (pullingColor) ?
                     SettingsMenu.settingsData.pullTargetLineColor == 0 ? targetedBlueLine
