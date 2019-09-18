@@ -26,7 +26,7 @@ public class Magnetic : MonoBehaviour {
     ////[SerializeField]
     //private Renderer[] childMagnetics;
 
-    private bool thisFrameIsBeingPushPulled = false;
+    protected bool thisFrameIsBeingPushPulled = false;
     private bool isBeingPushPulled = false;
     public virtual bool IsBeingPushPulled {
         get {
@@ -221,7 +221,7 @@ public class Magnetic : MonoBehaviour {
         colliders = GetComponentsInChildren<Collider>();
         lightSaberFactor = 1;
         lastWasPulled = false;
-        IsBeingPushPulled = false;
+        isBeingPushPulled = false;
         isHighlighted = false;
         HasColliders = colliders.Length > 0;
 

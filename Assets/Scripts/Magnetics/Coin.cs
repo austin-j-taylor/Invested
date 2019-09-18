@@ -4,6 +4,7 @@ using UnityEngine;
 
 /*
  * Coins are metals with small enough masses to warrent special considerations for the physics engine.
+ * Due to the shoddiness of Unity physics at high speeds, we need to override some things.
  */
 public class Coin : Magnetic {
 
@@ -11,7 +12,7 @@ public class Coin : Magnetic {
     private const float minSpeed = 5f;
     private const float maxSpeed = 120f;
     private const float drag = 1.25f;
-    private const float highSpeedThresholdSqr = 100f; // what constitutes "high speed"
+    private const float highSpeedThreshold = 100; // what constitutes "high speed": meters per frame
     private const float stuckThresholdSqr = 1000f; // Square magnitude of normal force necessary for friction
     private const float dotThreshold = -.3f; // friction threshold for dot product between force and normal vector
     private const float equalMagnitudeConstant = .01f;
@@ -21,16 +22,6 @@ public class Coin : Magnetic {
     private Transform collisionCollider;
     private Vector3 collisionNormal;
 
-    /*
-     * Stuck
-     * 
-     * A coin is stuck when it is Pushed into a collider.
-     * Due to the shoddiness of Unity physics at high speeds, we need to override some things:
-     *   When a coin Collides with a Wall:
-     *      Raycast from LastPosition to current position. 
-     *      Set the coin's position to hit.point.
-     *      
-     */
     private bool isStuck;
 
     public override bool IsPerfectlyAnchored {
@@ -56,13 +47,18 @@ public class Coin : Magnetic {
      * When first colliding with a Wall at high speed,
      */
     private void OnCollisionEnter(Collision collision) {
-        if(Rb.velocity.sqrMagnitude < highSpeedThresholdSqr) {
-            Debug.Log("High speed collision");
-            if(Physics.Raycast(LastPosition, LastVelocity, out RaycastHit hit, LastVelocity.magnitude)) {
-
+        Debug.Log("ENTERING COLLISION");
+        if (LastVelocity.magnitude > highSpeedThreshold) {
+            Debug.DrawLine(LastPosition, LastPosition + (LastVelocity), Color.blue);
+            if (Physics.Raycast(LastPosition, LastVelocity, out RaycastHit hit, LastVelocity.magnitude)) {
+                Debug.Log("High speed collision" + LastVelocity.magnitude);
+                Debug.DrawLine(LastPosition, hit.point, Color.red);
+                transform.position = hit.point;
             } else {
-                Debug.LogError("Somehow did not find coin collision");
+                Debug.LogError("Did not find coin collision" + LastVelocity.magnitude);
             }
+        } else {
+            Debug.Log("Slow: " + LastVelocity.magnitude);
         }
 
         OnCollisionStay(collision);
@@ -86,6 +82,7 @@ public class Coin : Magnetic {
                 if(IsBeingPushPulled) {
                     if (!isStuck) { // Only updates on first frame of being stuck. Stops being stuck when force becomes weak or stops being pushed.
                         isStuck = IsStuckByFriction(collision.impulse / Time.deltaTime, LastNetForceOnTarget);
+                        Debug.Log("Now stuck");
                         if (isStuck) {
                             CreateJoint(collision.rigidbody);
                         }
@@ -125,8 +122,9 @@ public class Coin : Magnetic {
         if (collisionCollider) { // If in a collision..
             if (isStuck) { // and is stuck...
                 if (!IsStuckByFriction(netForce) && !IsStuckByFriction(allomanticForce)) { // ... but friction is too weak to keep the coin stuck in the target.
-                                                                                           // Check both netForce and allomanticForce because the APB may decrease
-                                                                                           // the netForce, even when the allomanticForce would be good enough for friction
+                    // Check both netForce and allomanticForce because the APB may decrease
+                    // the netForce, even when the allomanticForce would be good enough for friction
+                    // (for example, EwV will make the force -> 0 when the coin is speedy)
                     UnStick();
                 }
             } else { // and is not yet stuck from the previous pushes...
@@ -138,6 +136,8 @@ public class Coin : Magnetic {
         }
         LastExpectedAcceleration = newNetForce / NetMass; // LastPosition, LastVelocity are updated
         Rb.AddForce(newNetForce * (1 / Time.timeScale));
+
+        thisFrameIsBeingPushPulled = true;
     }
 
     /*
