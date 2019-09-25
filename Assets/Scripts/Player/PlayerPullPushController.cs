@@ -418,7 +418,8 @@ public class PlayerPullPushController : AllomanticIronSteel {
 
         // If the player is directly looking at a magnetic's collider
         if (Physics.Raycast(CameraController.ActiveCamera.transform.position, CameraController.ActiveCamera.transform.forward, out RaycastHit hit, 500, GameManager.Layer_IgnorePlayer)) {
-            Magnetic target = hit.collider.GetComponentInParent<Magnetic>();
+            //Magnetic target = hit.collider.GetComponentInParent<Magnetic>();
+            Magnetic target = hit.collider.GetComponent<Magnetic>();
             if (target && target.IsInRange(this, GreaterPassiveBurn)) {
                 centerObject = target;
                 mustCalculateCenter = false;

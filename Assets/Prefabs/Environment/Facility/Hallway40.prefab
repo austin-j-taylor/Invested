@@ -95,6 +95,70 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 14
   m_Mesh: {fileID: 804678099751418130, guid: 2011a1b17e82e47488ca2f599e10364b, type: 3}
+--- !u!1 &8286504918799008117
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5868380147685427112}
+  - component: {fileID: 352957935648406313}
+  m_Layer: 0
+  m_Name: reflectionProbe
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5868380147685427112
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8286504918799008117}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -20, y: 0, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5035673220544199100}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!215 &352957935648406313
+ReflectionProbe:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8286504918799008117}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Type: 0
+  m_Mode: 0
+  m_RefreshMode: 0
+  m_TimeSlicingMode: 0
+  m_Resolution: 128
+  m_UpdateFrequency: 0
+  m_BoxSize: {x: 40.004128, y: 4.971882, z: 10}
+  m_BoxOffset: {x: 0.020786285, y: 0.43229485, z: 0}
+  m_NearClip: 0.3
+  m_FarClip: 1000
+  m_ShadowDistance: 100
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IntensityMultiplier: 1
+  m_BlendDistance: 1
+  m_HDR: 1
+  m_BoxProjection: 0
+  m_RenderDynamicObjects: 0
+  m_UseOcclusionCulling: 1
+  m_Importance: 1
+  m_CustomBakedTexture: {fileID: 0}
 --- !u!1 &8338722323233049519
 GameObject:
   m_ObjectHideFlags: 0
@@ -130,6 +194,7 @@ Transform:
   - {fileID: 8537740425723122256}
   - {fileID: 8537740426198268620}
   - {fileID: 8537740425620074659}
+  - {fileID: 5868380147685427112}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: -90.00001, y: 0, z: 0}
@@ -679,15 +744,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2424457463789918557, guid: 66a60f7b0fac1714bb3d3123e6df916c,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.05
-      objectReference: {fileID: 0}
     - target: {fileID: 8567218120562958512, guid: 66a60f7b0fac1714bb3d3123e6df916c,
         type: 3}
       propertyPath: m_Name
       value: CeilingLight Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 2424457463789918557, guid: 66a60f7b0fac1714bb3d3123e6df916c,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 6740674609319441015, guid: 66a60f7b0fac1714bb3d3123e6df916c,
         type: 3}
