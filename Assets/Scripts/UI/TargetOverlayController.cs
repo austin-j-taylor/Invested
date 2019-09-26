@@ -23,15 +23,15 @@ public class TargetOverlayController : MonoBehaviour {
 
     // Use this for initialization
     void Awake() {
-        pullTargetsSumForce = new Text[AllomanticIronSteel.maxNumberOfTargets];
-        pushTargetsSumForce = new Text[AllomanticIronSteel.maxNumberOfTargets];
-        pullTargetsActualForce = new Text[AllomanticIronSteel.maxNumberOfTargets];
-        pushTargetsActualForce = new Text[AllomanticIronSteel.maxNumberOfTargets];
+        pullTargetsSumForce = new Text[TargetArray.arraySize];
+        pushTargetsSumForce = new Text[TargetArray.arraySize];
+        pullTargetsActualForce = new Text[TargetArray.arraySize];
+        pushTargetsActualForce = new Text[TargetArray.arraySize];
 
         highlightedTargetMass = Instantiate(templateMass, transform, false);
         highlightedTargetMass.text = "";
 
-        for (int i = 0; i < AllomanticIronSteel.maxNumberOfTargets; i++) {
+        for (int i = 0; i < TargetArray.arraySize; i++) {
             pullTargetsActualForce[i] = Instantiate(templateActualForce, transform, false);
             pushTargetsActualForce[i] = Instantiate(templateActualForce, transform, false);
             pullTargetsActualForce[i].text = "";
@@ -59,12 +59,12 @@ public class TargetOverlayController : MonoBehaviour {
     // Update number of targets
     public void HardRefresh() {
         SoftRefresh();
-        for (int i = Player.PlayerIronSteel.PullTargets.Count; i < AllomanticIronSteel.maxNumberOfTargets; i++) {
+        for (int i = Player.PlayerIronSteel.PullTargets.Count; i < TargetArray.arraySize; i++) {
             pullTargetsSumForce[i].text = "";
             pullTargetsActualForce[i].text = "";
         }
 
-        for (int i = Player.PlayerIronSteel.PushTargets.Count; i < AllomanticIronSteel.maxNumberOfTargets; i++) {
+        for (int i = Player.PlayerIronSteel.PushTargets.Count; i < TargetArray.arraySize; i++) {
             pushTargetsSumForce[i].text = "";
             pushTargetsActualForce[i].text = "";
         }
@@ -138,25 +138,25 @@ public class TargetOverlayController : MonoBehaviour {
     }
 
     public void SetPullTextColorStrong() {
-        for (int i = 0; i < AllomanticIronSteel.maxNumberOfTargets; i++) {
+        for (int i = 0; i < TargetArray.arraySize; i++) {
             pullTargetsActualForce[i].color = HUD.strongBlue;
         }
     }
 
     public void SetPushTextColorStrong() {
-        for (int i = 0; i < AllomanticIronSteel.maxNumberOfTargets; i++) {
+        for (int i = 0; i < TargetArray.arraySize; i++) {
             pushTargetsActualForce[i].color = HUD.strongBlue;
         }
     }
 
     public void SetPullTextColorWeak() {
-        for (int i = 0; i < AllomanticIronSteel.maxNumberOfTargets; i++) {
+        for (int i = 0; i < TargetArray.arraySize; i++) {
             pullTargetsActualForce[i].color = HUD.weakBlue;
         }
     }
 
     public void SetPushTextColorWeak() {
-        for (int i = 0; i < AllomanticIronSteel.maxNumberOfTargets; i++) {
+        for (int i = 0; i < TargetArray.arraySize; i++) {
             pushTargetsActualForce[i].color = HUD.weakBlue;
         }
     }
