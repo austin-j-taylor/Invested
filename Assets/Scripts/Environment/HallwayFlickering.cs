@@ -16,7 +16,7 @@ public class HallwayFlickering : MonoBehaviour {
     }
 
     private void OnTriggerEnter(Collider other) {
-        if (other.CompareTag("Player") && other.isTrigger) {
+        if (other.CompareTag("Player") && !other.isTrigger) { // => I am a trigger, and the player is not a trigger
             if (!done) {
                 done = true;
                 StartCoroutine(FlickerOnLights());

@@ -50,6 +50,9 @@ public class HUD : MonoBehaviour {
     public static HelpOverlayController HelpOverlayController {
         get; private set;
     }
+    public static ConsoleController ConsoleController {
+        get; private set;
+    }
 
     void Awake() {
         HudGameObject = gameObject;
@@ -67,6 +70,7 @@ public class HUD : MonoBehaviour {
         MetalReserveMeters = GetComponentInChildren<MetalReserveMeters>();
         ZincMeterController = GetComponentInChildren<ZincMeterController>();
         ControlWheelController = GetComponentInChildren<ControlWheelController>();
+        ConsoleController = GetComponentInChildren<ConsoleController>();
     }
 
 	void LateUpdate() {
@@ -106,6 +110,7 @@ public class HUD : MonoBehaviour {
                 HelpOverlayController.Clear();
                 ZincMeterController.Clear();
                 ControlWheelController.Clear();
+                ConsoleController.Clear();
                 anim.SetBool("ControlWheelVisible", false);
             }
         }

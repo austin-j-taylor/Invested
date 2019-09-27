@@ -4,40 +4,25 @@ using System.Collections;
 /*
  * A piece of tech that the Sphere can interface with, opening a console for communication.
  */
-public class Interfaceable : Source {
-
-    private bool Locked { get; set; }
-
-    private void Awake() {
-        Locked = false;
-    }
-
+public class Interfaceable : Powered {
+    
     // When player contacts the small tigger at the base of the bowl, they "enter it"
     // and are locked into the bowl.
     private void OnTriggerEnter(Collider other) {
-        if(other.CompareTag("PlayerBody")) {
+        if (other.CompareTag("Player") && !other.isTrigger) {
+            Debug.Log("", gameObject);
+            Debug.Log("", other.gameObject);
             // set player position to the bowl
-            other.transform.position = transform.position;
-            // remove player control
-            Locked = true;
-            Player.CanControl = false;
+            //Player.PlayerInstance.transform.position = transform.position;
+            //open the console and do whatever needs to be done in it
+            HUD.ConsoleController.Open();
         }
     }
 
-    private void Update() {
-        if(Locked) {
-            // if player jumps, exit
-            if (Keybinds.Jump()) {
-                FreePlayer();
-            } else {
-                // Rebind controls: Push goes Up, Pull goes Down
-            }
-        }
-    }
 
-    private void FreePlayer() {
-        Locked = false;
-        Player.CanControl = true;
-    
+    private void OnTriggerExit(Collider other) {
+        if (other.CompareTag("Player") && !other.isTrigger) {
+            HUD.ConsoleController.Close();
+        }
     }
 }

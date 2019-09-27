@@ -6,6 +6,5 @@ using System.Collections;
  * When On, the elevator reduces its weight with fIron.
  */
 public class Elevator : Interfaceable {
-
-
+    
 }

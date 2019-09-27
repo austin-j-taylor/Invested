@@ -18,6 +18,7 @@ public class LightFlickering : MonoBehaviour {
     }
 
     public void On() {
+        Debug.Log("turing");
         anim.SetTrigger("on");
     }
 }
