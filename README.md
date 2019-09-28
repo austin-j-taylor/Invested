@@ -17,6 +17,7 @@ This Unity project makes use of:
 - [Volumetric Lines by Johannes Unterguggenberger](https://assetstore.unity.com/packages/tools/particles-effects/volumetric-lines-29160)
 - [Cakeslice's Outline Effect](https://github.com/cakeslice/Outline-Effect)
 - [The Heebo font](https://fonts.google.com/specimen/Heebo)
+- [The Roboto Mono font](https://fonts.google.com/specimen/Roboto+Mono)
 - [The Steel Alphabet font. Original art by Isaac Stewart; .ttf by Claincy.](https://www.17thshard.com/forum/topic/86714-steel-alphabet-font-updated/)
 
 
