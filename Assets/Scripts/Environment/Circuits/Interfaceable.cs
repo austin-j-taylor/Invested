@@ -6,7 +6,32 @@ using System.Collections;
  */
 public abstract class Interfaceable : Powered {
 
+    protected const float cameraDistance = 5;
+
     public bool ReceivedReply { get; set; } = false;
+    // True while the player is connected and interfacing with this object
+    private bool interfaced = false;
+    public bool Interfaced {
+        get {
+            return interfaced;
+        }
+        protected set {
+            if(interfaced != value) {
+                interfaced = value;
+                if(value) {
+                    StartInterfacing();
+                } else {
+                    StopInterfacing();
+                }
+            }
+        }
+    }
+
+    private void FixedUpdate() {
+        if(interfaced) {
+            FixedUpdateInterfacing();
+        }
+    }
 
     // When player contacts the small tigger at the base of the bowl, they "enter it"
     // and are locked into the bowl.
@@ -19,14 +44,10 @@ public abstract class Interfaceable : Powered {
         }
     }
 
-    private void OnTriggerExit(Collider other) {
-        if (other.CompareTag("Player") && !other.isTrigger) {
-            HUD.ConsoleController.Close();
-            Player.CanControl = true;
-            StopAllCoroutines();
-        }
-    }
-    
+    protected abstract void StartInterfacing();
+    protected abstract void StopInterfacing();
+    protected abstract void FixedUpdateInterfacing();
+
     // Begins when the player starts a connection.
     // Is killed when the player ends the connection.
     protected abstract IEnumerator Interaction();

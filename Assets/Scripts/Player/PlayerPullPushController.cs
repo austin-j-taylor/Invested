@@ -39,6 +39,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
     private const float burnPercentageLerpConstant = .30f;
     private const int blueLineLayer = 10;
     private const float metalLinesLerpConstant = .30f;
+    private const float defaultCharge = 1;
 
     public enum ControlMode { Manual, Area, Bubble, Coinshot };
 
@@ -86,6 +87,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
     }
 
     public override void Clear() {
+        Charge = Mathf.Pow(Mass, chargePower);
         DisableRenderingBlueLines();
         base.Clear();
     }
@@ -270,7 +272,8 @@ public class PlayerPullPushController : AllomanticIronSteel {
                     if (IsBurning) {
 
                         SearchForMetalsManual();
-                        LerpToBurnPercentages();
+                        SetTargetedLineProperties();
+                        //LerpToBurnPercentages();
                         UpdateBurnRateMeter();
                         RefreshHUD();
                     }
@@ -312,7 +315,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
         }
     }
 
-    protected override bool StartBurning(bool startIron) {
+    public override bool StartBurning(bool startIron = true) {
         if (!base.StartBurning(startIron))
             return false;
         GamepadController.Shake(.1f, .1f, .3f);

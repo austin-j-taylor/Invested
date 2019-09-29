@@ -11,6 +11,8 @@ public class ConsoleController : MonoBehaviour {
     private const float typingSpeed = .025f,
                         delayAfterEntry = .5f;
 
+    public bool IsOpen { get; private set; }
+
     private Text headerTextLeft;
     private Text headerTextRight;
     private Text consoleTextLeft;
@@ -36,12 +38,14 @@ public class ConsoleController : MonoBehaviour {
     // Opens the console for a specific purpose.
     public void Open() {
         anim.SetBool("IsOpen", true);
+        IsOpen = true;
     }
 
     public void Close() {
         ClearLog();
         anim.SetBool("IsOpen", false);
         anim.Play("ConsoleController_Close", anim.GetLayerIndex("Base Layer"));
+        IsOpen = false;
     }
 
     public void ClearLog() {

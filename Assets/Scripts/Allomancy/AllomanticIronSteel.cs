@@ -118,7 +118,7 @@ public class AllomanticIronSteel : Allomancer {
     public bool SteelPushing { get; set; }
 
     public float Strength { get; set; } = 1; // Allomantic Strength
-    public float Charge { get; private set; } // Allomantic Charge
+    public float Charge { get; set; } // Allomantic Charge
     public Vector3 CenterOfMass {
         get {
             return transform.TransformPoint(rb.centerOfMass);
@@ -570,7 +570,7 @@ public class AllomanticIronSteel : Allomancer {
      * Start burning iron or steel. Passively burn iron or steel, depending on startIron.
      * Return true if not already burning metals and successfully started burning, false otherwise
      */
-    protected virtual bool StartBurning(bool startIron) {
+    public virtual bool StartBurning(bool startIron) {
         if (IsBurning || startIron && !HasIron || !startIron && !HasSteel)
             return false;
         IsBurning = true;

@@ -7,62 +7,111 @@ using System.Collections;
  */
 public class Elevator : Interfaceable {
 
+    protected new const float cameraDistance = 12;
+    private const float speed = 5;
+
+    [SerializeField]
+    private Magnetic floorAnchor = null;
+
+    protected override void StartInterfacing() {
+        Player.PlayerIronSteel.Clear();
+        Player.PlayerIronSteel.Charge *= 10;
+        Player.PlayerIronSteel.StartBurning();
+        Player.PlayerIronSteel.AddPullTarget(GetComponentInChildren<Magnetic>());
+        Player.PlayerIronSteel.AddPushTarget(floorAnchor);
+        Player.PlayerIronSteel.IronPulling = true;
+        CameraController.ExternalDistance = cameraDistance;
+    }
+    protected override void StopInterfacing() {
+        Player.PlayerIronSteel.Clear();
+        CameraController.ExternalDistance = 0;
+    }
+    protected override void FixedUpdateInterfacing() {
+        Player.PlayerIronSteel.AddPullTarget(GetComponentInChildren<Magnetic>());
+        Player.PlayerIronSteel.AddPushTarget(floorAnchor);
+        Player.PlayerIronSteel.IronPulling = true;
+        Player.PlayerIronSteel.IronBurnPercentageTarget = .1f;
+        if (Keybinds.SteelPushing()) {
+
+            Player.PlayerIronSteel.SteelPushing = true;
+            if (Player.PlayerIronSteel.LastMaximumNetForce == Vector3.zero) {
+                Player.PlayerIronSteel.SteelBurnPercentageTarget = .1f;
+            } else {
+                Player.PlayerIronSteel.SteelBurnPercentageTarget = .1f; // Force: speed * ()
+            }
+        } else if (Keybinds.IronPulling()) {
+            Player.PlayerIronSteel.IronPulling = false;
+        } else {
+            Player.PlayerIronSteel.SteelPushing = false;
+        }
+    }
+
     protected override IEnumerator Interaction() {
-        ReceivedReply = false;
+        //ReceivedReply = false;
 
-        HUD.ConsoleController.Log(" > ");
-        yield return new WaitForSeconds(2);
-        HUD.ConsoleController.TypeInLine("Please give me access to this elevator, kind soul.", this);
-        while(!ReceivedReply) {
-            yield return null;
-        }
-        ReceivedReply = false;
-        yield return new WaitForSeconds(2);
-        HUD.ConsoleController.LogLine("_CONTROLLER_INIT()");
-        yield return new WaitForSeconds(1.4f);
-        HUD.ConsoleController.LogLine("_SSSH_VALIDATE()");
-        yield return new WaitForSeconds(.6f);
-        HUD.ConsoleController.LogLine("[CRITICAL] Your SSSH certificate is out of date by 212 months. Please contact your spiritual service provider.");
-        yield return new WaitForSeconds(2.2f);
-        HUD.ConsoleController.LogLine("_AI_INIT()");
-        yield return new WaitForSeconds(2f);
-        HUD.ConsoleController.LogLine("_F_IRON_INIT()");
-        yield return new WaitForSeconds(2.5f);
-        HUD.ConsoleController.LogLine("_START_COROUTINE_F_IRON_STORE()");
-        yield return new WaitForSeconds(.5f);
-        HUD.ConsoleController.LogLine("_DOORS_INIT()");
+        //HUD.ConsoleController.Log(" > ");
+        //yield return new WaitForSeconds(2);
+        //HUD.ConsoleController.TypeInLine("Please give me access to this elevator, kind soul.", this);
+        //while(!ReceivedReply) {
+        yield return null;
+        //}
+        //ReceivedReply = false;
+        //yield return new WaitForSeconds(.1f);
+        //HUD.ConsoleController.LogLine("_CONTROLLER_INIT()");
+        //yield return new WaitForSeconds(.7f);
+        //HUD.ConsoleController.LogLine("_SSSH_VALIDATE()");
+        //yield return new WaitForSeconds(.3f);
+        //HUD.ConsoleController.LogLine("[CRITICAL] Your SSSH certificate is out of date by 212 months. Please contact your spiritual service provider.");
+        //yield return new WaitForSeconds(1.1f);
+        //HUD.ConsoleController.LogLine("_AI_INIT()");
+        //yield return new WaitForSeconds(1f);
+        //HUD.ConsoleController.LogLine("_F_IRON_INIT()");
+        //yield return new WaitForSeconds(.75f);
+        //HUD.ConsoleController.LogLine("_START_COROUTINE_F_IRON_STORE()");
+        //yield return new WaitForSeconds(.5f);
+        //HUD.ConsoleController.LogLine("_DOORS_INIT()");
 
-        HUD.ConsoleController.Log(" > ");
-        yield return new WaitForSeconds(3);
-        HUD.ConsoleController.TypeInLine("Please unlock the doors to the upper facilities, kind soul.", this);
-        while (!ReceivedReply) {
-            yield return null;
-        }
-        ReceivedReply = false;
-        yield return new WaitForSeconds(.25f);
-        HUD.ConsoleController.LogLine("Unlocking doors to upper facilities ...");
-        yield return new WaitForSeconds(3);
-        HUD.ConsoleController.LogLine("Door 0 unlocked.");
-        yield return new WaitForSeconds(.1f);
-        HUD.ConsoleController.LogLine("[ERROR] No response received from door 1.");
-        yield return new WaitForSeconds(.1f);
-        HUD.ConsoleController.LogLine("[ERROR] No response received from door 2.");
-        yield return new WaitForSeconds(.1f);
-        HUD.ConsoleController.LogLine("[ERROR] No response received from door 3.");
-        yield return new WaitForSeconds(.1f);
-        HUD.ConsoleController.LogLine("[ERROR] No response received from door 4.");
-        yield return new WaitForSeconds(2);
+        //HUD.ConsoleController.Log(" > ");
+        //yield return new WaitForSeconds(1f);
+        //HUD.ConsoleController.TypeInLine("Please unlock the doors to the upper facilities, kind soul.", this);
+        //while (!ReceivedReply) {
+        //    yield return null;
+        //}
+        //ReceivedReply = false;
 
-        HUD.ConsoleController.Log(" > ");
-        yield return new WaitForSeconds(1);
-        HUD.ConsoleController.TypeInLine("Thank you for your time, kind soul. I will come for you will I learn what happened here.", this);
-        while (!ReceivedReply) {
-            yield return null;
-        }
-        ReceivedReply = false;
+        Interfaced = true;
 
-        Player.CanControl = true;
-        yield return new WaitForSeconds(5);
-        HUD.MessageOverlayCinematic.FadeIn("Press " + TextCodes.Space + " to exit the console.");
+        //yield return new WaitForSeconds(.25f);
+        //HUD.ConsoleController.LogLine("Unlocking doors to upper facilities ...");
+        //yield return new WaitForSeconds(2);
+        //HUD.ConsoleController.LogLine("Door 0 unlocked.");
+        //yield return new WaitForSeconds(.1f);
+        //HUD.ConsoleController.LogLine("[ERROR] No response received from door 1.");
+        //yield return new WaitForSeconds(.025f);
+        //HUD.ConsoleController.LogLine("[ERROR] No response received from door 2.");
+        //yield return new WaitForSeconds(.025f);
+        //HUD.ConsoleController.LogLine("[ERROR] No response received from door 3.");
+        //yield return new WaitForSeconds(.025f);
+        //HUD.ConsoleController.LogLine("[ERROR] No response received from door 4.");
+        //yield return new WaitForSeconds(2);
+
+        //HUD.ConsoleController.Log(" > ");
+        //yield return new WaitForSeconds(1);
+        //HUD.ConsoleController.TypeInLine("Thank you for your time, kind soul. I will come for you will I learn what happened here.", this);
+        //while (!ReceivedReply) {
+        //    yield return null;
+        //}
+        //ReceivedReply = false;
+        
+        //yield return new WaitForSeconds(5);
+        //HUD.MessageOverlayCinematic.FadeIn("Press " + TextCodes.Space + " to exit the console.");
+        //while(HUD.ConsoleController.IsOpen) {
+        //    yield return null;
+        //}
+        //if(Keybinds.Jump()) {
+        //    HUD.MessageOverlayCinematic.FadeOut();
+        //    HUD.ConsoleController.Close();
+        //    Player.CanControl = true;
+        //}
     }
 }

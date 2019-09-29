@@ -17,6 +17,7 @@ public class CameraController : MonoBehaviour {
     private static readonly Vector3 playerLookAtTargetReferenceHeight = new Vector3(0, 1f, 0);
 
     public static Camera ActiveCamera { get; private set; }
+    public static float ExternalDistance { get; set; } // Assigned by another part of the program for controlling large objects
 
     private static Camera thirdPersonCamera;
     private static Camera firstPersonCamera;
@@ -142,7 +143,7 @@ public class CameraController : MonoBehaviour {
 
             if (SettingsMenu.settingsData.cameraFirstPerson == 0) { // Third person
                 
-                Vector3 wantedPosition = verticalRotation * new Vector3(0, 0, -SettingsMenu.settingsData.cameraDistance);
+                Vector3 wantedPosition = verticalRotation * new Vector3(0, 0, -(ExternalDistance == 0 ? SettingsMenu.settingsData.cameraDistance : ExternalDistance));
 
 
 
@@ -362,6 +363,7 @@ public class CameraController : MonoBehaviour {
     }
 
     public static void Clear(bool resetRotation = true) {
+        ExternalDistance = 0;
         TimeToLerp = -100;
         externalPositionTarget = null;
         externalLookAtTarget = null;

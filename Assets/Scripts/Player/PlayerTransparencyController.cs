@@ -21,7 +21,7 @@ public class PlayerTransparencyController : MonoBehaviour {
     }
     
     void LateUpdate() {
-        if (!overrideHidden && Player.CanControl) {
+        if (!overrideHidden) {
             float distance = (CameraController.ActiveCamera.transform.position - Player.PlayerInstance.transform.position).magnitude;
             // If the camera is SUPER close to the body, make it invisible
             if(distance < distanceThresholdInvisible) {
