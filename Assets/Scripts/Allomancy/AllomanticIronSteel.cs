@@ -117,6 +117,14 @@ public class AllomanticIronSteel : Allomancer {
     public bool IronPulling { get; set; }
     public bool SteelPushing { get; set; }
 
+    /*
+     * When ControlledExternally is false, this Allomancy works normally.
+     *  It sets a % of its maximum burn rates for iron and steel.
+     * When it is true, the Allomancer Pushes/Pulls with the following External Commands every frame (if possible).
+     */
+    public bool ExternalControl { get; set; } = false;
+    public float ExternalCommand { get; set; }
+
     public float Strength { get; set; } = 1; // Allomantic Strength
     public float Charge { get; private set; } // Allomantic Charge
     public Vector3 CenterOfMass {
@@ -182,6 +190,8 @@ public class AllomanticIronSteel : Allomancer {
         LastAllomanticForce = Vector3.zero;
         LastAnchoredPushBoost = Vector3.zero;
         LastMaximumNetForce = Vector3.zero;
+        ExternalControl = false;
+        ExternalCommand = 0;
     }
 
     /*
@@ -201,6 +211,19 @@ public class AllomanticIronSteel : Allomancer {
                 float netPushTargetsCharge = PushTargets.NetCharge();
                 float sumPullTargetsCharge = PullTargets.SumOfCharges();
                 float sumPushTargetsCharge = PushTargets.SumOfCharges();
+
+                if(ExternalControl) {
+                    // If trying to Push at a specific force, 
+                    // Push at a percentage of the last frame's Push.
+                    float maxNetForce = (LastMaximumNetForce).magnitude;
+                    if (maxNetForce > 0) {
+                        IronBurnPercentageTarget = IronBurnPercentageTarget;
+                        SteelBurnPercentageTarget = IronBurnPercentageTarget;
+                    } else {
+                        IronBurnPercentageTarget = 0;
+                        SteelBurnPercentageTarget = 0;
+                    }
+                }
 
                 // Calculate Allomantic Forces and APBs
                 // Execute AFs and APBs on target and Allomancer
@@ -321,11 +344,17 @@ public class AllomanticIronSteel : Allomancer {
                 }
         }
 
-        // If the target is blocked by a wall, reduce the force.
         // Do the final calculation
-        return SettingsMenu.settingsData.allomanticConstant * Strength * Charge * targetCharge * distanceFactor
+        Vector3 force = SettingsMenu.settingsData.allomanticConstant * Strength * Charge * targetCharge * distanceFactor
                 * ((Physics.Raycast(targetCenterOfMass, -positionDifference, out RaycastHit hit, (targetCenterOfMass - CenterOfMass).magnitude, GameManager.Layer_IgnoreCamera) && hit.transform != transform) ?
                 lineOfSightFactor : 1); // If there is something blocking line-of-sight, the force is reduced.
+
+        // If using an external force command, use that command instead if possible.
+        if (ExternalControl) {
+            return Vector3.ClampMagnitude(force, ExternalCommand);
+        } else {
+            return force;
+        }
     }
 
     /* 
@@ -370,8 +399,9 @@ public class AllomanticIronSteel : Allomancer {
             thisFrameMaximumNetForce += allomanticForce;
             target.LastMaxPossibleAllomanticForce = allomanticForce;
 
-            // Make the AF proportional to the burn percentage
-            allomanticForce *= (pulling ? IronBurnPercentageTarget : SteelBurnPercentageTarget);
+            // Make the AF proportional to the burn percentage, if the force is not overridden
+            if(!ExternalControl)
+                allomanticForce *= (pulling ? IronBurnPercentageTarget : SteelBurnPercentageTarget);
 
             switch (SettingsMenu.settingsData.anchoredBoost) {
                 case 0: { // Disabled
@@ -526,21 +556,42 @@ public class AllomanticIronSteel : Allomancer {
             restitutionForceFromAllomancer = -(fullForce - allomanticForce);
         }
 
-        thisFrameAllomanticForce += allomanticForce;
-        thisFrameAnchoredPushBoost += restitutionForceFromTarget;
+
+        // If using an external force command, all that matters is that the calculated force is at least the desired force.
+        // If so, make sure the AF and the ABP sum up to the external command.
+        if (ExternalControl) {
+            float netForce;
+            if(Vector3.Dot(allomanticForce, restitutionForceFromTarget) < 0) {
+                netForce = (allomanticForce + restitutionForceFromTarget).magnitude;
+            } else {
+                netForce = (allomanticForce + restitutionForceFromTarget).magnitude;
+            }
+            if (netForce > ExternalCommand) {
+                float percentage = ExternalCommand / netForce;
+                allomanticForce *= percentage;
+                restitutionForceFromTarget *= percentage;
+                restitutionForceFromAllomancer *= percentage;
+                Debug.Log(percentage + " " + ExternalCommand + " " + netForce);
+                Debug.Log(allomanticForce + " + " + restitutionForceFromTarget + " = " + netForce * percentage + " = " + ExternalCommand);
+            }
+            
         if (target.LastWasPulled) {
-            if (IronBurnPercentageTarget == 0) {
+            if (IronBurnPercentageTarget == 0 || ExternalControl) {
                 thisFrameMaximumNetForce += restitutionForceFromTarget;
             } else {
                 thisFrameMaximumNetForce += restitutionForceFromTarget / IronBurnPercentageTarget;
             }
         } else {
-            if (SteelBurnPercentageTarget == 0) {
+            if (SteelBurnPercentageTarget == 0 || ExternalControl) {
                 thisFrameMaximumNetForce += restitutionForceFromTarget;
             } else {
                 thisFrameMaximumNetForce += restitutionForceFromTarget / SteelBurnPercentageTarget;
             }
         }
+
+        thisFrameAllomanticForce += allomanticForce;
+        thisFrameAnchoredPushBoost += restitutionForceFromTarget;
+
         target.LastAllomanticForce = allomanticForce;
         target.LastAnchoredPushBoostFromAllomancer = restitutionForceFromAllomancer;
         target.LastAnchoredPushBoostFromTarget = restitutionForceFromTarget;
