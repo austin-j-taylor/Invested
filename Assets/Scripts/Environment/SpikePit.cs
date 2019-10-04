@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.EventSystems;
 
 public class SpikePit : MonoBehaviour {
 
@@ -195,7 +196,7 @@ public class SpikePit : MonoBehaviour {
                     Player.PlayerIronSteel.StopBurning();
 
                     Player.PlayerInstance.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-                    Player.PlayerInstance.transform.SetParent(GameObject.FindGameObjectWithTag("GameController").transform);
+                    Player.PlayerInstance.transform.SetParent(EventSystem.current.transform);
                
                     Player.PlayerInstance.GetComponent<Rigidbody>().velocity = splineDragging.GetVelocity(1);
                     Player.PlayerInstance.transform.position += splineDragging.GetVelocity(1) * Time.fixedDeltaTime;

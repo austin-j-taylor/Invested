@@ -37,17 +37,21 @@ public class MetalReserveMeters : MonoBehaviour {
     }
 
     private void UpdateReserve(MetalReserveElement element) {
-        if (element.reserve.IsInEquilibrium)
+        if(element.reserve.IsChanging)
             element.timeLastChanged = Time.time;
 
         element.massText.text = HUD.RoundStringToSigFigs((float)element.reserve.Mass, 3) + "g";
-        element.rateText.text = HUD.RoundStringToSigFigs((float)element.reserve.Rate * 1000, 2) + "mg/s";
+        if(element.reserve.Rate < .1) {
+            element.rateText.text = "<100mg/s";
+        } else {
+            element.rateText.text = HUD.RoundStringToSigFigs((float)element.reserve.Rate * 1000, 2) + "mg/s";
+        }
         element.fill.fillAmount = (float)element.reserve.Mass / maxMass;
 
         element.animator.SetBool("IsLow", element.fill.fillAmount < lowThreshold);
         element.animator.SetBool("IsVisible", Time.time - element.timeLastChanged < timeToFade);
 
-        element.animator.SetBool("IsDraining", !element.reserve.IsRestoring && (element.reserve.IsDraining || (element.reserve.Mass < criticalMassThreshold && element.reserve.HasMass)));
+        element.animator.SetBool("IsDraining", element.reserve.IsDraining || (element.reserve.Mass < criticalMassThreshold && element.reserve.HasMass));
     }
 
     public void Clear() {

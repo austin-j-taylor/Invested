@@ -3219,6 +3219,16 @@ PrefabInstance:
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8877620567584291085, guid: bca8c3d37406d2641acffa940e2dae5c,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: -8877620567584291085, guid: bca8c3d37406d2641acffa940e2dae5c,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.25
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1219440388285431724, guid: bca8c3d37406d2641acffa940e2dae5c, type: 3}
     - {fileID: -5700455605275725418, guid: bca8c3d37406d2641acffa940e2dae5c, type: 3}
@@ -3373,7 +3383,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 260825901}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: db43fede519ec9040bdd7c4a97526dfa, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -3387,7 +3397,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 260825907}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: db43fede519ec9040bdd7c4a97526dfa, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -3401,7 +3411,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 260825908}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: db43fede519ec9040bdd7c4a97526dfa, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -3415,7 +3425,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 260825909}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: db43fede519ec9040bdd7c4a97526dfa, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -3429,7 +3439,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 260825910}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: db43fede519ec9040bdd7c4a97526dfa, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -3467,7 +3477,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 260825916}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: db43fede519ec9040bdd7c4a97526dfa, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -3481,7 +3491,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 260825917}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: db43fede519ec9040bdd7c4a97526dfa, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -3495,7 +3505,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 260825918}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: db43fede519ec9040bdd7c4a97526dfa, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -3509,7 +3519,7 @@ MeshCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 260825919}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: db43fede519ec9040bdd7c4a97526dfa, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -15858,7 +15868,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 122
-  m_CollisionDetection: 1
+  m_CollisionDetection: 2
 --- !u!114 &1302713890
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21623,7 +21633,7 @@ PrefabInstance:
     - target: {fileID: 1211716288795521907, guid: 49cceaa69c351c142bd6e1340cd67d95,
         type: 3}
       propertyPath: m_Size.z
-      value: 3.42
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 1211716288795521917, guid: 49cceaa69c351c142bd6e1340cd67d95,
         type: 3}
@@ -23302,7 +23312,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 260825894}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &2143632418
+--- !u!114 &2143632421
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

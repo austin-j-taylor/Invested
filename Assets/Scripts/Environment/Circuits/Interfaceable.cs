@@ -6,7 +6,7 @@ using System.Collections;
  */
 public abstract class Interfaceable : Powered {
 
-    protected const float cameraDistance = 5;
+    protected readonly Vector2 cameraDistance = new Vector2(5, 5);
 
     public bool ReceivedReply { get; set; } = false;
     // True while the player is connected and interfacing with this object

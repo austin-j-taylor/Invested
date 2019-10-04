@@ -10,14 +10,14 @@ using UnityEngine;
 public class CameraController : MonoBehaviour {
 
     private const float playerLookAtTargetFirstPersonHeight = 1;
+    private const float playerLookAtTargetReferenceHeight = 1;
     private const float lerpConstantPosition = 5;
     private const float lerpConstantRotation = 15;
     private const float rootConstantScaling = .5f;
     private static readonly Vector3 cameraControllerOffset = new Vector3(0, 0.25f - .06f, 0);
-    private static readonly Vector3 playerLookAtTargetReferenceHeight = new Vector3(0, 1f, 0);
 
     public static Camera ActiveCamera { get; private set; }
-    public static float ExternalDistance { get; set; } // Assigned by another part of the program for controlling large objects
+    public static Vector2 ExternalDistance { get; set; } // Assigned by another part of the program for controlling large objects. X: Distance from target, Y: playerLookAtTargetReferenceHeight
 
     private static Camera thirdPersonCamera;
     private static Camera firstPersonCamera;
@@ -143,7 +143,7 @@ public class CameraController : MonoBehaviour {
 
             if (SettingsMenu.settingsData.cameraFirstPerson == 0) { // Third person
                 
-                Vector3 wantedPosition = verticalRotation * new Vector3(0, 0, -(ExternalDistance == 0 ? SettingsMenu.settingsData.cameraDistance : ExternalDistance));
+                Vector3 wantedPosition = verticalRotation * new Vector3(0, 0, -(ExternalDistance.x == 0 ? SettingsMenu.settingsData.cameraDistance : ExternalDistance.x));
 
 
 
@@ -161,17 +161,15 @@ public class CameraController : MonoBehaviour {
                 ActiveCamera.transform.localPosition = wantedPosition;
                 //    Vector3 pos = Vector3.zero;
                 //    pos.y = playerLookAtTargetHeight;
-                if(UpsideDown) {
-                    playerLookAtTarget.transform.localPosition = -playerLookAtTargetReferenceHeight;
-                } else {
-                    playerLookAtTarget.transform.localPosition = playerLookAtTargetReferenceHeight;
-                }
+                playerLookAtTarget.transform.localPosition = new Vector3(0, (ExternalDistance.x == 0 ? playerLookAtTargetReferenceHeight : ExternalDistance.y), 0);
+                if (UpsideDown)
+                    playerLookAtTarget.transform.localPosition = -playerLookAtTarget.transform.localPosition;
 
                 // Raycast from player to camera and from camera to player.
                 // In the event of a collision, scale THIS in all dimensions by (length from player to hit / length of camera distance)
 
-                // The destinationsCamera[] are at the 9 corners of the camera in world space (top-left to center-center bottom-right)
-                Vector3[] destinationsCamera = new Vector3[9];
+                    // The destinationsCamera[] are at the 9 corners of the camera in world space (top-left to center-center bottom-right)
+                    Vector3[] destinationsCamera = new Vector3[9];
                 destinationsCamera[0] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, 0, ActiveCamera.nearClipPlane));
                 destinationsCamera[1] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, .5f, ActiveCamera.nearClipPlane));
                 destinationsCamera[2] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, 1, ActiveCamera.nearClipPlane));
@@ -363,7 +361,7 @@ public class CameraController : MonoBehaviour {
     }
 
     public static void Clear(bool resetRotation = true) {
-        ExternalDistance = 0;
+        ExternalDistance = Vector2.zero;
         TimeToLerp = -100;
         externalPositionTarget = null;
         externalLookAtTarget = null;

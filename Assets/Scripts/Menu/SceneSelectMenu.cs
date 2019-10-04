@@ -108,7 +108,8 @@ public class SceneSelectMenu : MonoBehaviour {
 
     public static void LoadScene(int scene) {
         //CameraController.SetExternalSource(null, null);
-        Player.PlayerInstance.transform.parent = GameObject.FindGameObjectWithTag("GameController").transform;
+        Player.PlayerInstance.transform.parent = EventSystem.current.transform;
+        
         if (scene == sceneTitleScreen) {
             MainMenu.Open();
             //MainMenu.OpenSceneSelectMenu();

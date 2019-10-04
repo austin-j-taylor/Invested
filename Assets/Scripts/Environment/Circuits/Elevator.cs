@@ -7,11 +7,18 @@ using System.Collections;
  */
 public class Elevator : Interfaceable {
 
-    protected new const float cameraDistance = 12;
-    private const float speed = 5;
+    protected new readonly Vector2 cameraDistance = new Vector2(12, 5);
+    private const float upwardsSpeed = 5;
+    private const float downwardsSpeed = -1;
 
     [SerializeField]
     private Magnetic floorAnchor = null;
+
+    private Rigidbody rb;
+
+    private void Awake() {
+        rb = GetComponent<Rigidbody>();
+    }
 
     protected override void StartInterfacing() {
         Player.PlayerIronSteel.Clear();
@@ -24,26 +31,31 @@ public class Elevator : Interfaceable {
     }
     protected override void StopInterfacing() {
         Player.PlayerIronSteel.Clear();
-        CameraController.ExternalDistance = 0;
+        CameraController.ExternalDistance = Vector2.zero;
     }
     protected override void FixedUpdateInterfacing() {
         Player.PlayerIronSteel.AddPullTarget(GetComponentInChildren<Magnetic>());
         Player.PlayerIronSteel.AddPushTarget(floorAnchor);
         Player.PlayerIronSteel.IronPulling = true;
         Player.PlayerIronSteel.IronBurnPercentageTarget = .1f;
-        if (Keybinds.SteelPushing()) {
-
-            Player.PlayerIronSteel.SteelPushing = true;
-            if (Player.PlayerIronSteel.LastMaximumNetForce == Vector3.zero) {
-                Player.PlayerIronSteel.SteelBurnPercentageTarget = .1f;
-            } else {
-                Player.PlayerIronSteel.SteelBurnPercentageTarget = .1f; // Force: speed * ()
-            }
-        } else if (Keybinds.IronPulling()) {
-            Player.PlayerIronSteel.IronPulling = false;
+        
+        Player.PlayerIronSteel.SteelPushing = true;
+        if (Player.PlayerIronSteel.LastMaximumNetForce == Vector3.zero) {
+            Player.PlayerIronSteel.SteelBurnPercentageTarget = .1f;
         } else {
-            Player.PlayerIronSteel.SteelPushing = false;
+            if(Keybinds.SteelPushing()) { // go up
+                Player.PlayerIronSteel.SteelBurnPercentageTarget = getPercentage(upwardsSpeed);
+            } else if(Keybinds.IronPulling()) { // go down
+                Player.PlayerIronSteel.SteelBurnPercentageTarget = getPercentage(downwardsSpeed);
+            } else { // balance
+                Player.PlayerIronSteel.SteelBurnPercentageTarget = getPercentage(0);
+            }
+
+            //Debug.Log("Wanted: " + ((rb.mass + Player.PlayerIronSteel.Mass) * (1 + speed) * -Physics.gravity.y));
+            //Debug.Log("Have  : "  + Player.PlayerIronSteel.LastMaximumNetForce.magnitude);
+            //Debug.Log("Net force: " + Player.PlayerIronSteel.LastAllomanticForce);
         }
+
     }
 
     protected override IEnumerator Interaction() {
@@ -113,5 +125,12 @@ public class Elevator : Interfaceable {
         //    HUD.ConsoleController.Close();
         //    Player.CanControl = true;
         //}
+    }
+
+    private float getPercentage(float speed) {
+        Debug.Log("Wanted: " + ((rb.mass + Player.PlayerIronSteel.Mass) * (1 + speed) * -Physics.gravity.y));
+        Debug.Log("Have  : " + Player.PlayerIronSteel.LastMaximumNetForce.magnitude);
+        Debug.Log("Net force: " + Player.PlayerIronSteel.LastAllomanticForce);
+        return ((rb.mass + Player.PlayerIronSteel.Mass) * (1 + speed) * -Physics.gravity.y) / Player.PlayerIronSteel.LastMaximumNetForce.magnitude;
     }
 }
