@@ -87,7 +87,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
     }
 
     public override void Clear() {
-        Charge = Mathf.Pow(Mass, chargePower);
+        Strength = 1;
         DisableRenderingBlueLines();
         base.Clear();
     }
@@ -114,167 +114,163 @@ public class PlayerPullPushController : AllomanticIronSteel {
     private void Update() {
         if (!PauseMenu.IsPaused) {
 
-            AddPushTarget(GameObject.FindGameObjectWithTag("PlayerSpawn").GetComponentInChildren<Magnetic>());
-            ExternalControl = true;
-            ExternalCommand = -Physics.gravity.y * Mass;
-
             if (IsBurning) {
-
-                // Change Burn Percentage Targets
-                // Check scrollwheel for changing the max number of targets and burn percentage, or DPad if using gamepad
-                float scrollValue = 0;
-                if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) { // Gamepad
-                    scrollValue = Keybinds.DPadYAxis();
-                    if (SettingsMenu.settingsData.pushControlStyle == 1) {
-                        ChangeTargetForceMagnitude(Keybinds.DPadXAxis());
-                    }
-                } else { // Mouse and keyboard
-                    if (Keybinds.Negate()) {
-                        scrollValue = Keybinds.ScrollWheelAxis();
-                    } else {
-                        if (SettingsMenu.settingsData.pushControlStyle == 0) {
-                            ChangeBurnPercentageTarget(Keybinds.ScrollWheelAxis());
-                        } else {
-                            ChangeTargetForceMagnitude(Keybinds.ScrollWheelAxis());
-                        }
-                    }
-                }
-                // Change number of targets
-                if (scrollValue > 0) {
-                    IncrementTargets();
-                }
-                if (scrollValue < 0) {
-                    DecrementTargets();
-                }
-
-                // Assign Burn percentage targets based on the previously changed burn percentage/target magnitudes
-                if (SettingsMenu.settingsData.pushControlStyle == 0) { // Percentage
+                if (!ExternalControl) {
+                    // Change Burn Percentage Targets
+                    // Check scrollwheel for changing the max number of targets and burn percentage, or DPad if using gamepad
+                    float scrollValue = 0;
                     if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) { // Gamepad
-                        SetPullPercentageTarget(Keybinds.RightBurnPercentage());
-                        SetPushPercentageTarget(Keybinds.LeftBurnPercentage());
-                    }
-                } else { // Magnitude
-                    if (HasPullTarget || HasPushTarget) {
-
-                        float maxNetForce = (LastMaximumNetForce).magnitude;
-                        SetPullPercentageTarget(forceMagnitudeTarget / maxNetForce);
-                        SetPushPercentageTarget(forceMagnitudeTarget / maxNetForce);
-                    } else {
-                        SetPullPercentageTarget(0);
-                        SetPushPercentageTarget(0);
-                    }
-                }
-
-                LerpToBurnPercentages();
-                UpdateBurnRateMeter();
-
-                if (Player.CanControl) {
-                    // Could have stopped burning above. Check if the Allomancer is still burning.
-                    if (IsBurning) {
-                        // Swap pull- and push- targets
-                        if (Keybinds.NegateDown() && timeToSwapBurning > Time.time) {
-                            // Double-tapped, Swap targets
-                            PullTargets.SwapContents(PushTargets);
-                            // If vacuously targeting, swap statuses of vacuous targets
-                            SwapVacuousTargets();
-                        } else {
-                            if (Keybinds.NegateDown()) {
-                                timeToSwapBurning = Time.time + timeDoubleTapWindow;
-                            }
+                        scrollValue = Keybinds.DPadYAxis();
+                        if (SettingsMenu.settingsData.pushControlStyle == 1) {
+                            ChangeTargetForceMagnitude(Keybinds.DPadXAxis());
                         }
-
-                        // Changing status of Pushing and Pulling
-                        // Coinshot mode: 
-                        // If do not have pull-targets, pulling is also Pushing
-                        // Player.cs handles coin throwing
-                        bool pulling, pushing;
-                        bool keybindPulling = Keybinds.IronPulling();
-                        bool keybindPushing = Keybinds.SteelPushing();
-                        if (Mode == ControlMode.Coinshot) {
-                            pulling = keybindPulling && HasIron && HasPullTarget;
-                            pushing = keybindPushing && HasSteel;
-                            // if LMB while has a push target, Push and don't Pull.
-                            if(keybindPulling && !HasPullTarget) {
-                                pulling = false;
-                                keybindPulling = false;
-                                pushing = true;
-                                keybindPushing = true;
-                            }
+                    } else { // Mouse and keyboard
+                        if (Keybinds.Negate()) {
+                            scrollValue = Keybinds.ScrollWheelAxis();
                         } else {
-                            pulling = keybindPulling && HasIron;
-                            pushing = keybindPushing && HasSteel;
-                        }
-
-                        // Cannot Push and Pull on the same targets
-                        if (!HasPushTarget && HasPullTarget) {
-                            if (pulling)
-                                pushing = false;
-                        } else
-                        if (!HasPullTarget && HasPushTarget) {
-                            if (pushing)
-                                pulling = false;
-                        }
-                        IronPulling = pulling;
-                        SteelPushing = pushing;
-
-                        // Check input for target selection
-                        bool addingTargets = (Keybinds.Select() || Keybinds.SelectAlternate()) && !Keybinds.Negate();
-
-                        // Search for Metals
-                        if (Mode == ControlMode.Manual || Mode == ControlMode.Coinshot) {
-                            Magnetic target = SearchForMetalsManual();
-                            TryToAddTarget(target, addingTargets, !HasPullTarget, !HasPushTarget, keybindPulling, keybindPushing);
-                            // highlight the potential target you would select, if you targeted it
-                            HighlightedTarget = target;
-                        } else {
-                            Magnetic[] targets = SearchForMetalsAreaOrBubble();
-
-                            if(Keybinds.Negate()) {
-                                // Removing targets
-                                // For area/bubble targeting, Removing a target means to remove all targets.
-                                if(Keybinds.Select()) {
-                                    PullTargets.Clear();
-                                    VacuouslyPullTargeting = false;
-                                }
-                                if (Keybinds.SelectAlternate()) {
-                                    PushTargets.Clear();
-                                    VacuouslyPushTargeting = false;
-                                }
-                                // Consider preserving vacuous targets (consider coins, consider a vacuous cone/bubble)
+                            if (SettingsMenu.settingsData.pushControlStyle == 0) {
+                                ChangeBurnPercentageTarget(Keybinds.ScrollWheelAxis());
                             } else {
-                                // Adding targets
-                                // When targets change, remove all old targets and make space for the new ones
-                                if (Keybinds.Select() || (Keybinds.PullDown() && !HasPullTarget)) {// || VacuouslyPullTargeting) {
-                                    PullTargets.Size = targets.Length; // takes care of removing all targets if none are in sight
+                                ChangeTargetForceMagnitude(Keybinds.ScrollWheelAxis());
+                            }
+                        }
+                    }
+                    // Change number of targets
+                    if (scrollValue > 0) {
+                        IncrementTargets();
+                    }
+                    if (scrollValue < 0) {
+                        DecrementTargets();
+                    }
+
+                    // Assign Burn percentage targets based on the previously changed burn percentage/target magnitudes
+                    if (SettingsMenu.settingsData.pushControlStyle == 0) { // Percentage
+                        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) { // Gamepad
+                            SetPullPercentageTarget(Keybinds.RightBurnPercentage());
+                            SetPushPercentageTarget(Keybinds.LeftBurnPercentage());
+                        }
+                    } else { // Magnitude
+                        if (HasPullTarget || HasPushTarget) {
+
+                            float maxNetForce = (LastMaximumNetForce).magnitude;
+                            SetPullPercentageTarget(forceMagnitudeTarget / maxNetForce);
+                            SetPushPercentageTarget(forceMagnitudeTarget / maxNetForce);
+                        } else {
+                            SetPullPercentageTarget(0);
+                            SetPushPercentageTarget(0);
+                        }
+                    }
+
+                    LerpToBurnPercentages();
+                    UpdateBurnRateMeter();
+
+                    if (Player.CanControl) {
+                        // Could have stopped burning above. Check if the Allomancer is still burning.
+                        if (IsBurning) {
+                            // Swap pull- and push- targets
+                            if (Keybinds.NegateDown() && timeToSwapBurning > Time.time) {
+                                // Double-tapped, Swap targets
+                                PullTargets.SwapContents(PushTargets);
+                                // If vacuously targeting, swap statuses of vacuous targets
+                                SwapVacuousTargets();
+                            } else {
+                                if (Keybinds.NegateDown()) {
+                                    timeToSwapBurning = Time.time + timeDoubleTapWindow;
                                 }
-                                if (Keybinds.SelectAlternate() || (Keybinds.PushDown() && !HasPushTarget)) {// || VacuouslyPushTargeting) {
-                                    PushTargets.Size = targets.Length;
+                            }
+
+                            // Changing status of Pushing and Pulling
+                            // Coinshot mode: 
+                            // If do not have pull-targets, pulling is also Pushing
+                            // Player.cs handles coin throwing
+                            bool pulling, pushing;
+                            bool keybindPulling = Keybinds.IronPulling();
+                            bool keybindPushing = Keybinds.SteelPushing();
+                            if (Mode == ControlMode.Coinshot) {
+                                pulling = keybindPulling && HasIron && HasPullTarget;
+                                pushing = keybindPushing && HasSteel;
+                                // if LMB while has a push target, Push and don't Pull.
+                                if (keybindPulling && !HasPullTarget) {
+                                    pulling = false;
+                                    keybindPulling = false;
+                                    pushing = true;
+                                    keybindPushing = true;
                                 }
-                                bool nowVacuouslyPulling = !HasPullTarget;
-                                bool nowVacuouslyPushing = !HasPushTarget;
-                                if (targets.Length == 0) {
-                                    // No metals are in the scope of the area/bubble, but you are trying to select.
-                                    // Do nothing?
-                                    // Deselect everything?
-                                    // This at least handles vacuous targets
-                                    TryToAddTarget(null, addingTargets, nowVacuouslyPulling, nowVacuouslyPushing, keybindPulling, keybindPushing);
+                            } else {
+                                pulling = keybindPulling && HasIron;
+                                pushing = keybindPushing && HasSteel;
+                            }
+
+                            // Cannot Push and Pull on the same targets
+                            if (!HasPushTarget && HasPullTarget) {
+                                if (pulling)
+                                    pushing = false;
+                            } else
+                            if (!HasPullTarget && HasPushTarget) {
+                                if (pushing)
+                                    pulling = false;
+                            }
+                            IronPulling = pulling;
+                            SteelPushing = pushing;
+
+                            // Check input for target selection
+                            bool addingTargets = (Keybinds.Select() || Keybinds.SelectAlternate()) && !Keybinds.Negate();
+
+                            // Search for Metals
+                            if (Mode == ControlMode.Manual || Mode == ControlMode.Coinshot) {
+                                Magnetic target = SearchForMetalsManual();
+                                TryToAddTarget(target, addingTargets, !HasPullTarget, !HasPushTarget, keybindPulling, keybindPushing);
+                                // highlight the potential target you would select, if you targeted it
+                                HighlightedTarget = target;
+                            } else {
+                                Magnetic[] targets = SearchForMetalsAreaOrBubble();
+
+                                if (Keybinds.Negate()) {
+                                    // Removing targets
+                                    // For area/bubble targeting, Removing a target means to remove all targets.
+                                    if (Keybinds.Select()) {
+                                        PullTargets.Clear();
+                                        VacuouslyPullTargeting = false;
+                                    }
+                                    if (Keybinds.SelectAlternate()) {
+                                        PushTargets.Clear();
+                                        VacuouslyPushTargeting = false;
+                                    }
+                                    // Consider preserving vacuous targets (consider coins, consider a vacuous cone/bubble)
                                 } else {
-                                    foreach (Magnetic target in targets) {
-                                        TryToAddTarget(target, addingTargets, nowVacuouslyPulling, nowVacuouslyPushing, keybindPulling, keybindPushing);
+                                    // Adding targets
+                                    // When targets change, remove all old targets and make space for the new ones
+                                    if (Keybinds.Select() || (Keybinds.PullDown() && !HasPullTarget)) {// || VacuouslyPullTargeting) {
+                                        PullTargets.Size = targets.Length; // takes care of removing all targets if none are in sight
+                                    }
+                                    if (Keybinds.SelectAlternate() || (Keybinds.PushDown() && !HasPushTarget)) {// || VacuouslyPushTargeting) {
+                                        PushTargets.Size = targets.Length;
+                                    }
+                                    bool nowVacuouslyPulling = !HasPullTarget;
+                                    bool nowVacuouslyPushing = !HasPushTarget;
+                                    if (targets.Length == 0) {
+                                        // No metals are in the scope of the area/bubble, but you are trying to select.
+                                        // Do nothing?
+                                        // Deselect everything?
+                                        // This at least handles vacuous targets
+                                        TryToAddTarget(null, addingTargets, nowVacuouslyPulling, nowVacuouslyPushing, keybindPulling, keybindPushing);
+                                    } else {
+                                        foreach (Magnetic target in targets) {
+                                            TryToAddTarget(target, addingTargets, nowVacuouslyPulling, nowVacuouslyPushing, keybindPulling, keybindPushing);
+                                        }
                                     }
                                 }
                             }
-                        }
-                        SetTargetedLineProperties();
+                            SetTargetedLineProperties();
 
-                        RefreshHUD();
+                            RefreshHUD();
+                        }
                     }
                 } else { // If the player is not in control, but still burning metals, show blue lines to metals.
                     if (IsBurning) {
-
+                        LerpToBurnPercentages();
                         SearchForMetalsManual();
                         SetTargetedLineProperties();
-                        //LerpToBurnPercentages();
                         UpdateBurnRateMeter();
                         RefreshHUD();
                     }
@@ -282,7 +278,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
             }
 
             // Start and Stop Burning metals
-            if (Player.CanControl) {
+            if (Player.CanControl && !ExternalControl) {
                 if (IsBurning) {
                     // Stop burning
                     if (Keybinds.StopBurning()) {
@@ -305,8 +301,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
                         if (Keybinds.SelectDown() || Keybinds.PullDown()) {
                             StartBurning(true);
                             SearchForMetalsManual();
-                        }
-                        else if (Keybinds.SelectAlternateDown() || Keybinds.PushDown()) {
+                        } else if (Keybinds.SelectAlternateDown() || Keybinds.PushDown()) {
                             StartBurning(false);
                             SearchForMetalsManual();
                         }
@@ -630,15 +625,29 @@ public class PlayerPullPushController : AllomanticIronSteel {
     }
 
     private void ChangeTargetForceMagnitude(float change) {
-        if (change > 0) {
-            change = 100;
-            if (forceMagnitudeTarget < 100) {
-                change /= 10f;
+        if (SettingsMenu.settingsData.forceUnits == 0) {
+            if (change > 0) {
+                change = -Physics.gravity.y / 10 * Mass;
+                if (forceMagnitudeTarget < -Physics.gravity.y) {
+                    change /= 10f;
+                }
+            } else if (change < 0) {
+                change = Physics.gravity.y / 10 * Mass;
+                if (forceMagnitudeTarget <= -Physics.gravity.y) {
+                    change /= 10f;
+                }
             }
-        } else if (change < 0) {
-            change = -100;
-            if (forceMagnitudeTarget <= 100) {
-                change /= 10f;
+        } else {
+            if (change > 0) {
+                change = 100;
+                if (forceMagnitudeTarget < 100) {
+                    change /= 10f;
+                }
+            } else if (change < 0) {
+                change = -100;
+                if (forceMagnitudeTarget <= 100) {
+                    change /= 10f;
+                }
             }
         }
         forceMagnitudeTarget = forceMagnitudeTarget + change;
@@ -694,7 +703,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
     private void LerpToBurnPercentages() {
         IronBurnPercentageTarget = Mathf.Lerp(IronBurnPercentageTarget, ironBurnPercentageLerp, burnPercentageLerpConstant);
         SteelBurnPercentageTarget = Mathf.Lerp(SteelBurnPercentageTarget, steelBurnPercentageLerp, burnPercentageLerpConstant);
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad || SettingsMenu.settingsData.pushControlStyle == 1) {
             IronPassiveBurn = 1;
             SteelPassiveBurn = 1;
         } else {

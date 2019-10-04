@@ -28,17 +28,22 @@ public abstract class Interfaceable : Powered {
     }
 
     private void FixedUpdate() {
-        if(interfaced) {
+        if (interfaced) {
             FixedUpdateInterfacing();
+        }
+    }
+    private void Update() {
+        if (interfaced) {
+            UpdateInterfacing();
         }
     }
 
     // When player contacts the small tigger at the base of the bowl, they "enter it"
     // and are locked into the bowl.
     private void OnTriggerEnter(Collider other) {
-        if (other.CompareTag("Player") && !other.isTrigger) {
+        if (other.CompareTag("Player") && !other.isTrigger && !interfaced) {
             //open the console and do whatever needs to be done in it
-            HUD.ConsoleController.Open();
+            //HUD.ConsoleController.Open();
             Player.CanControl = false;
             StartCoroutine(Interaction());
         }
@@ -47,6 +52,7 @@ public abstract class Interfaceable : Powered {
     protected abstract void StartInterfacing();
     protected abstract void StopInterfacing();
     protected abstract void FixedUpdateInterfacing();
+    protected abstract void UpdateInterfacing();
 
     // Begins when the player starts a connection.
     // Is killed when the player ends the connection.

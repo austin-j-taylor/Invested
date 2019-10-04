@@ -19,7 +19,7 @@ public class AllomanticIronSteel : Allomancer {
     protected const bool steel = false;
     protected const bool iron = true;
 
-    protected Rigidbody rb;
+    public Rigidbody rb;
 
     public MetalReserve IronReserve { get; private set; }
     public MetalReserve SteelReserve { get; private set; }
@@ -126,7 +126,7 @@ public class AllomanticIronSteel : Allomancer {
     public float ExternalCommand { get; set; }
 
     public float Strength { get; set; } = 1; // Allomantic Strength
-    public float Charge { get; set; } // Allomantic Charge
+    protected float Charge { get; set; } // Allomantic Charge
     public Vector3 CenterOfMass {
         get {
             return transform.TransformPoint(rb.centerOfMass);
@@ -203,27 +203,15 @@ public class AllomanticIronSteel : Allomancer {
             if (IsBurning) {
                 // Remove all targets that are out of pushing range
                 // For Mouse/Keyboard, Iron and Steel burn percentages are equal, so it's somewhat redundant to specify
-                PullTargets.RemoveAllOutOfRange(IronBurnPercentageTarget, this);
-                PushTargets.RemoveAllOutOfRange(SteelBurnPercentageTarget, this);
-
+                if (!ExternalControl) {
+                    PullTargets.RemoveAllOutOfRange(IronBurnPercentageTarget, this);
+                    PushTargets.RemoveAllOutOfRange(SteelBurnPercentageTarget, this);
+                }
                 // Calculate net charges to know how pushes will be distributed amongst targets
                 float netPullTargetsCharge = PullTargets.NetCharge();
                 float netPushTargetsCharge = PushTargets.NetCharge();
                 float sumPullTargetsCharge = PullTargets.SumOfCharges();
                 float sumPushTargetsCharge = PushTargets.SumOfCharges();
-
-                if(ExternalControl) {
-                    // If trying to Push at a specific force, 
-                    // Push at a percentage of the last frame's Push.
-                    float maxNetForce = (LastMaximumNetForce).magnitude;
-                    if (maxNetForce > 0) {
-                        IronBurnPercentageTarget = IronBurnPercentageTarget;
-                        SteelBurnPercentageTarget = IronBurnPercentageTarget;
-                    } else {
-                        IronBurnPercentageTarget = 0;
-                        SteelBurnPercentageTarget = 0;
-                    }
-                }
 
                 // Calculate Allomantic Forces and APBs
                 // Execute AFs and APBs on target and Allomancer
@@ -239,7 +227,7 @@ public class AllomanticIronSteel : Allomancer {
                         AddForce(PullTargets[i]);
                         BurnSteel(PullTargets[i].LastNetForceOnAllomancer.magnitude);
                     }
-                } else if (HasPullTarget && !VacuouslyPushTargeting) {
+                } else if (HasPullTarget && !(HasPushTarget && SteelPushing) && !VacuouslyPushTargeting) {  // If nothing else, at least calculate the force on your inactive targets
                     for (int i = 0; i < PullTargets.Count; i++) {
                         CalculateForce(PullTargets[i], netPullTargetsCharge, sumPullTargetsCharge, iron);
                     }
@@ -257,7 +245,7 @@ public class AllomanticIronSteel : Allomancer {
                         AddForce(PushTargets[i]);
                         BurnSteel(PushTargets[i].LastNetForceOnAllomancer.magnitude);
                     }
-                } else if (HasPushTarget && !VacuouslyPullTargeting) {
+                } else if (HasPushTarget && !(HasPullTarget && IronPulling) && !VacuouslyPullTargeting) {
                     for (int i = 0; i < PushTargets.Count; i++) {
                         CalculateForce(PushTargets[i], netPushTargetsCharge, sumPushTargetsCharge, steel);
                     }
@@ -345,16 +333,10 @@ public class AllomanticIronSteel : Allomancer {
         }
 
         // Do the final calculation
-        Vector3 force = SettingsMenu.settingsData.allomanticConstant * Strength * Charge * targetCharge * distanceFactor
+        return SettingsMenu.settingsData.allomanticConstant * Strength * Charge * targetCharge * distanceFactor
                 * ((Physics.Raycast(targetCenterOfMass, -positionDifference, out RaycastHit hit, (targetCenterOfMass - CenterOfMass).magnitude, GameManager.Layer_IgnoreCamera) && hit.transform != transform) ?
                 lineOfSightFactor : 1); // If there is something blocking line-of-sight, the force is reduced.
 
-        // If using an external force command, use that command instead if possible.
-        if (ExternalControl) {
-            return Vector3.ClampMagnitude(force, ExternalCommand);
-        } else {
-            return force;
-        }
     }
 
     /* 
@@ -392,16 +374,19 @@ public class AllomanticIronSteel : Allomancer {
 
         if (SettingsMenu.settingsData.anchoredBoost != 3) {
             // APB: Disabled, Allomantic Normal Force, or Exponential with Velocity
-
             allomanticForce = CalculateAllomanticForce(target.CenterOfMass, effectiveCharge) * (pulling ? 1 : -1) /* / (usingIronTargets ? PullCount : PushCount) */;
             direction = allomanticForce.normalized;
 
             thisFrameMaximumNetForce += allomanticForce;
             target.LastMaxPossibleAllomanticForce = allomanticForce;
 
-            // Make the AF proportional to the burn percentage, if the force is not overridden
-            if(!ExternalControl)
+            // If using an external force command, use that command instead if possible.
+            if (ExternalControl) {
+                allomanticForce = Vector3.ClampMagnitude(allomanticForce, Mathf.Abs(ExternalCommand));
+            } else {
+                // Make the AF proportional to the burn percentage, if the force is not overridden
                 allomanticForce *= (pulling ? IronBurnPercentageTarget : SteelBurnPercentageTarget);
+            }
 
             switch (SettingsMenu.settingsData.anchoredBoost) {
                 case 0: { // Disabled
@@ -560,20 +545,8 @@ public class AllomanticIronSteel : Allomancer {
         // If using an external force command, all that matters is that the calculated force is at least the desired force.
         // If so, make sure the AF and the ABP sum up to the external command.
         if (ExternalControl) {
-            float netForce;
-            if(Vector3.Dot(allomanticForce, restitutionForceFromTarget) < 0) {
-                netForce = (allomanticForce + restitutionForceFromTarget).magnitude;
-            } else {
-                netForce = (allomanticForce + restitutionForceFromTarget).magnitude;
-            }
-            if (netForce > ExternalCommand) {
-                float percentage = ExternalCommand / netForce;
-                allomanticForce *= percentage;
-                restitutionForceFromTarget *= percentage;
-                restitutionForceFromAllomancer *= percentage;
-                Debug.Log(percentage + " " + ExternalCommand + " " + netForce);
-                Debug.Log(allomanticForce + " + " + restitutionForceFromTarget + " = " + netForce * percentage + " = " + ExternalCommand);
-            }
+            allomanticForce -= restitutionForceFromTarget;
+        }
             
         if (target.LastWasPulled) {
             if (IronBurnPercentageTarget == 0 || ExternalControl) {

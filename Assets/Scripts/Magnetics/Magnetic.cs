@@ -292,12 +292,12 @@ public class Magnetic : MonoBehaviour {
         GameManager.RemoveMagnetic(this);
     }
 
-    private void OnDisable() {
+    public void OnDisable() {
         DisableBlueLine();
         GameManager.RemoveMagnetic(this);
     }
 
-    private void OnEnable() {
+    public void OnEnable() {
         if (gameObject.layer != LayerMask.NameToLayer("Undetectable Magnetic"))
             GameManager.AddMagnetic(this);
     }

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Animations;
 using System.Collections;
 
 /*
@@ -12,50 +13,88 @@ public class Elevator : Interfaceable {
     private const float downwardsSpeed = -1;
 
     [SerializeField]
-    private Magnetic floorAnchor = null;
+    private Magnetic floorAnchor = null, ceilingAnchor = null;
+    private Magnetic thisMagnetic;
 
+    private Animator anim;
     private Rigidbody rb;
+    private ParentConstraint pc;
+    private Vector3 offset;
 
     private void Awake() {
+        anim = GetComponentInChildren<Animator>();
+        thisMagnetic = GetComponentInChildren<Magnetic>();
         rb = GetComponent<Rigidbody>();
+        pc = GetComponent<ParentConstraint>();
+        ConstraintSource source = new ConstraintSource {
+            weight = 1,
+            sourceTransform = Player.PlayerInstance.transform
+        };
+        pc.SetSource(0, source);
     }
 
     protected override void StartInterfacing() {
         Player.PlayerIronSteel.Clear();
-        Player.PlayerIronSteel.Charge *= 10;
+        Player.PlayerIronSteel.Strength *= 1000;
         Player.PlayerIronSteel.StartBurning();
-        Player.PlayerIronSteel.AddPullTarget(GetComponentInChildren<Magnetic>());
         Player.PlayerIronSteel.AddPushTarget(floorAnchor);
-        Player.PlayerIronSteel.IronPulling = true;
+        Player.PlayerIronSteel.AddPullTarget(thisMagnetic);
+        Player.PlayerIronSteel.AddPullTarget(ceilingAnchor);
+        //Player.PlayerIronSteel.AddPullTarget(thisMagnetic);
         CameraController.ExternalDistance = cameraDistance;
+        Player.PlayerIronSteel.ExternalControl = true;
+        Player.PlayerIronSteel.rb.angularVelocity = Vector3.zero;
+        offset = transform.position - Player.PlayerInstance.transform.position;
+        anim.SetTrigger("flickerOn");
+
+        //Vector3 positionOffset = Player.PlayerInstance.transform.InverseTransformPoint(transform.position);
+        //Quaternion rotationOffset = Quaternion.Inverse(Player.PlayerInstance.transform.rotation) * transform.rotation;
+        //pc.SetTranslationOffset(0, positionOffset);
+        //pc.SetRotationOffset(0, rotationOffset.eulerAngles);
+
+        //pc.constraintActive = true;
+        //rb.isKinematic = true;
+        //Player.PlayerIronSteel.rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePosition & ~RigidbodyConstraints.FreezePositionY;
+        //thisMagnetic.gameObject.SetActive(false);
     }
     protected override void StopInterfacing() {
+        Player.CanControl = true;
         Player.PlayerIronSteel.Clear();
         CameraController.ExternalDistance = Vector2.zero;
+        Player.PlayerIronSteel.ExternalControl = false;
+        anim.SetTrigger("turnOff");
+        //pc.constraintActive = false;
+        //rb.isKinematic = false;
+        //Player.PlayerIronSteel.rb.constraints = RigidbodyConstraints.None;
+        //thisMagnetic.gameObject.SetActive(true);
     }
     protected override void FixedUpdateInterfacing() {
-        Player.PlayerIronSteel.AddPullTarget(GetComponentInChildren<Magnetic>());
-        Player.PlayerIronSteel.AddPushTarget(floorAnchor);
         Player.PlayerIronSteel.IronPulling = true;
-        Player.PlayerIronSteel.IronBurnPercentageTarget = .1f;
-        
         Player.PlayerIronSteel.SteelPushing = true;
-        if (Player.PlayerIronSteel.LastMaximumNetForce == Vector3.zero) {
-            Player.PlayerIronSteel.SteelBurnPercentageTarget = .1f;
-        } else {
-            if(Keybinds.SteelPushing()) { // go up
-                Player.PlayerIronSteel.SteelBurnPercentageTarget = getPercentage(upwardsSpeed);
-            } else if(Keybinds.IronPulling()) { // go down
-                Player.PlayerIronSteel.SteelBurnPercentageTarget = getPercentage(downwardsSpeed);
-            } else { // balance
-                Player.PlayerIronSteel.SteelBurnPercentageTarget = getPercentage(0);
-            }
 
-            //Debug.Log("Wanted: " + ((rb.mass + Player.PlayerIronSteel.Mass) * (1 + speed) * -Physics.gravity.y));
-            //Debug.Log("Have  : "  + Player.PlayerIronSteel.LastMaximumNetForce.magnitude);
-            //Debug.Log("Net force: " + Player.PlayerIronSteel.LastAllomanticForce);
+        if (Keybinds.SteelPushing()) { // go up
+            Player.PlayerIronSteel.ExternalCommand = 2 * -Physics.gravity.y * ((Player.PlayerIronSteel.Mass + rb.mass));
+        } else if (Keybinds.IronPulling()) { // go down
+            Player.PlayerIronSteel.ExternalCommand = 1 / 2 * -Physics.gravity.y * ((Player.PlayerIronSteel.Mass + rb.mass));
+        } else { // balance
+            Player.PlayerIronSteel.ExternalCommand = -Physics.gravity.y * ((Player.PlayerIronSteel.Mass + rb.mass));
         }
 
+        Debug.Log("Wanted: " + Player.PlayerIronSteel.ExternalCommand);
+        Debug.Log("Have  : " + Player.PlayerIronSteel.LastMaximumNetForce.magnitude);
+        Debug.Log("Net force: " + Player.PlayerIronSteel.LastNetForceOnAllomancer);
+    }
+    protected override void UpdateInterfacing() {
+        if (Keybinds.Jump())
+            Interfaced = false;
+    }
+
+    private void LateUpdate() {
+        if(Interfaced) {
+            Vector3 temp = transform.position;
+            temp.y = Player.PlayerInstance.transform.position.y + offset.y;
+            transform.position = temp;
+        }
     }
 
     protected override IEnumerator Interaction() {
