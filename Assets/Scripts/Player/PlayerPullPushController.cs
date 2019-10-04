@@ -106,7 +106,6 @@ public class PlayerPullPushController : AllomanticIronSteel {
 
         Mode = ControlMode.Manual;
     }
-
     /*
      * Read inputs for selecting targets.
      * Update burn percentages.
@@ -114,7 +113,11 @@ public class PlayerPullPushController : AllomanticIronSteel {
      */
     private void Update() {
         if (!PauseMenu.IsPaused) {
-            
+
+            AddPushTarget(GameObject.FindGameObjectWithTag("PlayerSpawn").GetComponentInChildren<Magnetic>());
+            ExternalControl = true;
+            ExternalCommand = -Physics.gravity.y * Mass;
+
             if (IsBurning) {
 
                 // Change Burn Percentage Targets
@@ -152,8 +155,6 @@ public class PlayerPullPushController : AllomanticIronSteel {
                     }
                 } else { // Magnitude
                     if (HasPullTarget || HasPushTarget) {
-
-                        //Debug.Log(player.LastMaximumNetForce);
 
                         float maxNetForce = (LastMaximumNetForce).magnitude;
                         SetPullPercentageTarget(forceMagnitudeTarget / maxNetForce);
