@@ -27,7 +27,7 @@ public abstract class Interfaceable : Powered {
         }
     }
 
-    private void FixedUpdate() {
+    protected virtual void FixedUpdate() {
         if (interfaced) {
             FixedUpdateInterfacing();
         }

@@ -17,7 +17,7 @@ public class Destructable : Powered {
             health = value;
             if (health <= 0) {
                 health = 0;
-                if(on)
+                if(On)
                     Destroy();
             }
         }
@@ -25,7 +25,7 @@ public class Destructable : Powered {
 
     protected virtual void Start() {
         health = maxHealth;
-        on = true;
+        On = true;
     }
 
     protected virtual void Destroy() {

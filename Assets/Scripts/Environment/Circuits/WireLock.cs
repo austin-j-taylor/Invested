@@ -26,7 +26,7 @@ public class WireLock : Source {
                 if(repairing) {
                     // Do not destroy this; however, disable the magnetic and begin repairing.
                     DestroyButThenRepair();
-                } else if (on)
+                } else if (On)
                     Destroy();
             }
         }
@@ -49,7 +49,7 @@ public class WireLock : Source {
     }
 
     private void LateUpdate() {
-        if (on) {
+        if (On) {
             if (isBeingDestroyed) {
                 if (metal.IsBeingPushPulled) {
                     Health -= Time.deltaTime * 60;
@@ -68,7 +68,7 @@ public class WireLock : Source {
         }
     }
 
-    // If player Pulls or Pushes on the lock, it is destroyed.
+    // If player Pulls or Pushes On the lock, it is destroyed.
     protected override void Destroy() {
         base.Destroy();
         anim.SetTrigger("destroyed");
@@ -77,19 +77,19 @@ public class WireLock : Source {
         metal.enabled = false;
     }
 
-    // If player Pulls or Pushes on the lock, it is destroyed - until it repairs itself
+    // If player Pulls or Pushes On the lock, it is destroyed - until it repairs itself
     private void DestroyButThenRepair() {
         anim.SetTrigger("destroyed");
         PowerConnected(false);
 
-        on = false;
+        On = false;
         metal.enabled = false;
         anim.speed = 1f / timeToRepair;
     }
 
     private void Repair() {
         metal.enabled = true;
-        on = true;
+        On = true;
         health = maxHealth;
         PowerConnected(true);
 

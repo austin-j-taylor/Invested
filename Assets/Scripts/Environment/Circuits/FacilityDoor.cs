@@ -12,7 +12,7 @@ public class FacilityDoor : Powered {
     
     public override bool On {
         set {
-            if (on != value) {
+            if (On != value) {
                 if(value) {
                     rendererLeft.material = GameManager.Material_MARLmetal_lit;
                     rendererRight.material = GameManager.Material_MARLmetal_lit;
@@ -31,7 +31,7 @@ public class FacilityDoor : Powered {
                     magneticRight.enabled = true;
                 }
             }
-            base.on = value;
+            base.On = value;
         }
     }
 
@@ -66,7 +66,7 @@ public class FacilityDoor : Powered {
         magneticLeft = leftMetal.GetComponent<Magnetic>();
         magneticRight = rightMetal.GetComponent<Magnetic>();
 
-        on = true;
+        On = true;
         magneticLeft.enabled = false;
         magneticRight.enabled = false;
         jointLeft.useLimits = true;
@@ -91,7 +91,7 @@ public class FacilityDoor : Powered {
             if(lockOncePassed) {
                 On = true;
             } else {
-                On = !on;
+                On = !On;
             }
         }
     }

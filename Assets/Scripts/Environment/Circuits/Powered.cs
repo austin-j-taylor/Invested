@@ -6,7 +6,7 @@ using System.Collections;
  */
 public class Powered : MonoBehaviour {
 
-    protected bool on = false;
+    private bool on = false;
     public virtual bool On {
         get {
             return on;

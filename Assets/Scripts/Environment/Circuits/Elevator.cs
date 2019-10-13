@@ -34,6 +34,7 @@ public class Elevator : Interfaceable {
     }
 
     protected override void StartInterfacing() {
+        rb.isKinematic = false;
         Player.PlayerIronSteel.Clear();
         Player.PlayerIronSteel.Strength *= 1000;
         Player.PlayerIronSteel.StartBurning();
@@ -58,6 +59,7 @@ public class Elevator : Interfaceable {
         //thisMagnetic.gameObject.SetActive(false);
     }
     protected override void StopInterfacing() {
+        rb.isKinematic = true;
         Player.CanControl = true;
         Player.PlayerIronSteel.Clear();
         CameraController.ExternalDistance = Vector2.zero;
@@ -75,9 +77,18 @@ public class Elevator : Interfaceable {
         if (Keybinds.SteelPushing()) { // go up
             Player.PlayerIronSteel.ExternalCommand = 2 * -Physics.gravity.y * ((Player.PlayerIronSteel.Mass + rb.mass));
         } else if (Keybinds.IronPulling()) { // go down
-            Player.PlayerIronSteel.ExternalCommand = 1 / 2 * -Physics.gravity.y * ((Player.PlayerIronSteel.Mass + rb.mass));
+            Player.PlayerIronSteel.ExternalCommand = 0;// -Physics.gravity.y * ((Player.PlayerIronSteel.Mass + rb.mass));
         } else { // balance
-            Player.PlayerIronSteel.ExternalCommand = -Physics.gravity.y * ((Player.PlayerIronSteel.Mass + rb.mass));
+            float speed = rb.velocity.y;
+            float direction = Mathf.Sign(speed);
+            speed = Mathf.Abs(speed);
+            speed = 1 - Mathf.Exp(-speed / 5);
+            float factor = 1 - direction * speed;
+            Player.PlayerIronSteel.ExternalCommand = factor * -Physics.gravity.y * ((Player.PlayerIronSteel.Mass + rb.mass));
+            Debug.Log("raw:" + rb.velocity.y);
+            Debug.Log("Speed:" + speed);
+            Debug.Log("facto:" + factor);
+
         }
 
         Debug.Log("Wanted: " + Player.PlayerIronSteel.ExternalCommand);
