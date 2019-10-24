@@ -8,7 +8,7 @@ public class FlagsController : MonoBehaviour {
     public enum Level { Start01, Complete01, Complete02, Complete03, Complete04 };
     public enum Flag { ControlSchemeChosen };
 
-    private readonly string flagsFileName = Application.streamingAssetsPath + "/Data/flags.json";
+    private readonly string flagsFileName = Path.Combine(Application.streamingAssetsPath, "Data" + Path.DirectorySeparatorChar + "flags.json");
 
     // Flags
     // can't make them private because json-parsing has no brains
