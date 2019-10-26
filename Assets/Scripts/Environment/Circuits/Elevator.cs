@@ -18,25 +18,27 @@ public class Elevator : Interfaceable {
 
     private Animator anim;
     private Rigidbody rb;
-    private ParentConstraint pc;
+    //private ParentConstraint pc;
     private Vector3 offset;
 
     private void Awake() {
         anim = GetComponentInChildren<Animator>();
         thisMagnetic = GetComponentInChildren<Magnetic>();
         rb = GetComponent<Rigidbody>();
-        pc = GetComponent<ParentConstraint>();
-        ConstraintSource source = new ConstraintSource {
-            weight = 1,
-            sourceTransform = Player.PlayerInstance.transform
-        };
-        pc.SetSource(0, source);
+        //pc = GetComponent<ParentConstraint>();
+        //ConstraintSource source = new ConstraintSource {
+        //    weight = 1,
+        //    sourceTransform = Player.PlayerInstance.transform
+        //};
+        //pc.SetSource(0, source);
     }
 
     protected override void StartInterfacing() {
         rb.isKinematic = false;
+        rb.velocity = Vector3.zero;
+        Player.PlayerIronSteel.rb.velocity = Vector3.zero;
         Player.PlayerIronSteel.Clear();
-        Player.PlayerIronSteel.Strength *= 1000;
+        Player.PlayerIronSteel.Strength = 1000;
         Player.PlayerIronSteel.StartBurning();
         Player.PlayerIronSteel.AddPushTarget(floorAnchor);
         Player.PlayerIronSteel.AddPullTarget(thisMagnetic);
@@ -55,19 +57,20 @@ public class Elevator : Interfaceable {
 
         //pc.constraintActive = true;
         //rb.isKinematic = true;
-        //Player.PlayerIronSteel.rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePosition & ~RigidbodyConstraints.FreezePositionY;
+        Player.PlayerIronSteel.rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePosition & ~RigidbodyConstraints.FreezePositionY;
         //thisMagnetic.gameObject.SetActive(false);
     }
     protected override void StopInterfacing() {
         rb.isKinematic = true;
         Player.CanControl = true;
-        Player.PlayerIronSteel.Clear();
+        Player.PlayerIronSteel.StopBurning();
+        Player.PlayerIronSteel.Strength = 1;
         CameraController.ExternalDistance = Vector2.zero;
         Player.PlayerIronSteel.ExternalControl = false;
         anim.SetTrigger("turnOff");
         //pc.constraintActive = false;
         //rb.isKinematic = false;
-        //Player.PlayerIronSteel.rb.constraints = RigidbodyConstraints.None;
+        Player.PlayerIronSteel.rb.constraints = RigidbodyConstraints.None;
         //thisMagnetic.gameObject.SetActive(true);
     }
     protected override void FixedUpdateInterfacing() {
@@ -75,19 +78,20 @@ public class Elevator : Interfaceable {
         Player.PlayerIronSteel.SteelPushing = true;
 
         if (Keybinds.SteelPushing()) { // go up
-            Player.PlayerIronSteel.ExternalCommand = 2 * -Physics.gravity.y * ((Player.PlayerIronSteel.Mass + rb.mass));
+            Player.PlayerIronSteel.ExternalCommand = 2 * -Physics.gravity.y * ((Player.PlayerIronSteel.Mass));
         } else if (Keybinds.IronPulling()) { // go down
             Player.PlayerIronSteel.ExternalCommand = 0;// -Physics.gravity.y * ((Player.PlayerIronSteel.Mass + rb.mass));
         } else { // balance
-            float speed = rb.velocity.y;
-            float direction = Mathf.Sign(speed);
-            speed = Mathf.Abs(speed);
-            speed = 1 - Mathf.Exp(-speed / 5);
-            float factor = 1 - direction * speed;
-            Player.PlayerIronSteel.ExternalCommand = factor * -Physics.gravity.y * ((Player.PlayerIronSteel.Mass + rb.mass));
-            Debug.Log("raw:" + rb.velocity.y);
-            Debug.Log("Speed:" + speed);
-            Debug.Log("facto:" + factor);
+            //float speed = rb.velocity.y;
+            //float direction = Mathf.Sign(speed);
+            //speed = Mathf.Abs(speed);
+            //speed = 1 - Mathf.Exp(-speed / 5);
+            //float factor = 1 - direction * speed;
+            //Player.PlayerIronSteel.ExternalCommand = factor * -Physics.gravity.y * ((Player.PlayerIronSteel.Mass + rb.mass));
+            //Debug.Log("raw:" + rb.velocity);
+            //Debug.Log("Speed:" + speed);
+            //Debug.Log("facto:" + factor);
+            Player.PlayerIronSteel.ExternalCommand = 1 * -Physics.gravity.y * ((Player.PlayerIronSteel.Mass));
 
         }
 
@@ -105,6 +109,7 @@ public class Elevator : Interfaceable {
             Vector3 temp = transform.position;
             temp.y = Player.PlayerInstance.transform.position.y + offset.y;
             transform.position = temp;
+            rb.velocity = Player.PlayerIronSteel.rb.velocity;
         }
     }
 

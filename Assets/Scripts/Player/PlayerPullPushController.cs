@@ -87,8 +87,8 @@ public class PlayerPullPushController : AllomanticIronSteel {
     }
 
     public override void Clear() {
+        StopBurning();
         Strength = 1;
-        DisableRenderingBlueLines();
         base.Clear();
     }
 

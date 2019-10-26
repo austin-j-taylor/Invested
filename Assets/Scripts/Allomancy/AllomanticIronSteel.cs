@@ -377,16 +377,23 @@ public class AllomanticIronSteel : Allomancer {
             allomanticForce = CalculateAllomanticForce(target.CenterOfMass, effectiveCharge) * (pulling ? 1 : -1) /* / (usingIronTargets ? PullCount : PushCount) */;
             direction = allomanticForce.normalized;
 
-            thisFrameMaximumNetForce += allomanticForce;
-            target.LastMaxPossibleAllomanticForce = allomanticForce;
 
             // If using an external force command, use that command instead if possible.
             if (ExternalControl) {
-                allomanticForce = Vector3.ClampMagnitude(allomanticForce, Mathf.Abs(ExternalCommand));
+                // If you've already generated the desired force from other Pushes/Pulls this frame, clamp this Push/Pull's force
+                float forceWanted = ExternalCommand - thisFrameMaximumNetForce.magnitude;
+                if(forceWanted > 0) {
+                    allomanticForce = Vector3.ClampMagnitude(allomanticForce, forceWanted);
+                } else {
+                    allomanticForce = Vector3.zero;
+                }
             } else {
                 // Make the AF proportional to the burn percentage, if the force is not overridden
                 allomanticForce *= (pulling ? IronBurnPercentageTarget : SteelBurnPercentageTarget);
             }
+
+            thisFrameMaximumNetForce += allomanticForce;
+            target.LastMaxPossibleAllomanticForce = allomanticForce;
 
             switch (SettingsMenu.settingsData.anchoredBoost) {
                 case 0: { // Disabled

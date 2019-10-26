@@ -5,6 +5,8 @@ using static TextCodes;
 
 /*
  * Stores the strings written to the message overlays.
+ * I'm considering somehow restructuring this so it reads from file,
+ * but I'd have to think about the formatting for the Text Codes.
  */
 
 public class Messages : MonoBehaviour {
@@ -12,6 +14,7 @@ public class Messages : MonoBehaviour {
     // Each List of strings represents a series of messages that logicially appear after each other.
     // If it displays on the MessageOverlayDescriptive, the first element of each list is the header for that series of messages.
     public static List<string> tutorial_movement;
+    public static List<string> tutorial_targeting;
     public static List<string> pulling0;
     public static List<string> pushingAndPullingBasics;
     public static List<string> pulling1;
@@ -37,6 +40,14 @@ public class Messages : MonoBehaviour {
             KeyStartBurningIron + " to start burning " + Iron + ".",
             "Look at the " + LightBlue("blue line") + ".\n" + s_Hold_ + _KeyPull + " to " + Pull + ".",
             KeyMove + " to move."
+        };
+        tutorial_targeting = new List<string> {
+            KeyWalk + " to anchor yourself.",
+            s_Press_ + _KeySelect + " to select a " + Pull_target + ".\n"
+             + "You can " + Pull + " on a " + Pull_target + " without looking at it.",
+            KeyNumberOfTargets + " to change your " + Gray("max number of " + Pull_targets) + ".",
+            //s_Press_ + _KeySelect + " while holding " + KeyNegate + " to deselect a " + Pull_target + ".",
+
         };
         pulling0 = new List<string> {
             "Pulling",

@@ -50,7 +50,7 @@ public class Player : PewterEntity {
         set {
             canControl = value;
             if(!value) {
-                PlayerIronSteel.SoftClear();
+                PlayerIronSteel.StopBurning();
             }
         }
     }

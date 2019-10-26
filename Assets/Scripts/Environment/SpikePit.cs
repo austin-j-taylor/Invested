@@ -63,6 +63,10 @@ public class SpikePit : MonoBehaviour {
         progress = 0;
     }
 
+    /*
+     * This should've been done with a state machine
+     * imagine having a brain
+     */
     private void Update() {
         if (!PauseMenu.IsPaused) {
             //Debug.Log(facingPlayer + " . " + tracingPlayer + " > " + chasingPlayer + " > " + tracingPath + " > " + releasingPlayer);
