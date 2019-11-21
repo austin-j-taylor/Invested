@@ -9,13 +9,13 @@ public class AllomechanicalGlower : MonoBehaviour {
     private const int iron = 0;
     private const int steel = 1;
     private const int pewter = 2;
-    
+
     private readonly Color[] glowColors = {
             new Color(0, .35f, 1f),
             new Color(.7f, .025f, 0.05f),
             new Color(.75f, .25f, 0f)
     };
-    
+
     private Renderer[] irons;
     private Renderer[] steels;
     private Renderer[] pewters;
@@ -28,37 +28,48 @@ public class AllomechanicalGlower : MonoBehaviour {
         allomancerPewter = Player.PlayerPewter;
         irons = transform.Find("Irons").GetComponentsInChildren<Renderer>();
         steels = transform.Find("Steels").GetComponentsInChildren<Renderer>();
-        pewters = transform.Find("Pewters").GetComponentsInChildren<Renderer>();
-    }
-    
-    void LateUpdate() {
-        if (allomancer.IsBurning) {
-            if (allomancer.IronPulling) {
-                foreach (Renderer rend in irons) {
-                    EnableEmission(rend.material, glowColors[iron], 1 + 2 * allomancer.IronBurnPercentageTarget);
-                }
-            } else {
-                foreach (Renderer rend in irons) {
-                    DisableEmission(rend.material);
-                }
-            }
-            if (allomancer.SteelPushing) {
-                foreach (Renderer rend in steels) {
-                    EnableEmission(rend.material, glowColors[steel], 1 + 2 * allomancer.SteelBurnPercentageTarget);
-                }
-            } else {
-                foreach (Renderer rend in steels) {
-                    DisableEmission(rend.material);
-                }
-            }
+        Renderer[] pewterSymbols = transform.Find("Pewters").GetComponentsInChildren<Renderer>();
+        Transform wheels = transform.Find("Wheels");
+        pewters = new Renderer[pewterSymbols.Length + wheels.childCount];
+        for (int i = 0; i < pewterSymbols.Length; i++) {
+            pewters[i] = pewterSymbols[i];
         }
-        if (allomancerPewter.IsBurning) {
-            foreach (Renderer rend in pewters) {
-                EnableEmission(rend.material, glowColors[pewter], -2 * (float)allomancerPewter.PewterReserve.Rate);
+        for (int i = pewterSymbols.Length; i < pewters.Length; i++) {
+            pewters[i] = wheels.GetChild(i - pewterSymbols.Length).GetComponent<Renderer>();
+        }
+
+    }
+
+    void LateUpdate() {
+        if (!PauseMenu.IsPaused) {
+            if (allomancer.IsBurning) {
+                if (allomancer.IronPulling) {
+                    foreach (Renderer rend in irons) {
+                        EnableEmission(rend.material, glowColors[iron], 1 + 2 * allomancer.IronBurnPercentageTarget);
+                    }
+                } else {
+                    foreach (Renderer rend in irons) {
+                        DisableEmission(rend.material);
+                    }
+                }
+                if (allomancer.SteelPushing) {
+                    foreach (Renderer rend in steels) {
+                        EnableEmission(rend.material, glowColors[steel], 1 + 2 * allomancer.SteelBurnPercentageTarget);
+                    }
+                } else {
+                    foreach (Renderer rend in steels) {
+                        DisableEmission(rend.material);
+                    }
+                }
             }
-        } else {
-            foreach (Renderer rend in pewters) {
-                DisableEmission(rend.material);
+            if (allomancerPewter.IsBurning) {
+                foreach (Renderer rend in pewters) {
+                    EnableEmission(rend.material, glowColors[pewter], -2 * (float)allomancerPewter.PewterReserve.Rate);
+                }
+            } else {
+                foreach (Renderer rend in pewters) {
+                    DisableEmission(rend.material);
+                }
             }
         }
     }
