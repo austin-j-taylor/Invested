@@ -27,9 +27,4 @@ public class TimeController : MonoBehaviour {
     void Awake() {
         currentScale = -1;
     }
-
-    // Update is called once per frame
-    void Update() {
-
-    }
 }

@@ -261,9 +261,9 @@ public class PlayerMovementController : AllomanticPewter {
                 rb.AddForce((CameraController.UpsideDown ? -movement : movement) * airControlFactor * rollingAcceleration, ForceMode.Acceleration);
 
                 // Debug
-                Debug.DrawRay(transform.position, rb.angularVelocity, Color.red);
-                Debug.DrawRay(transform.position, torque, Color.white);
-                Debug.DrawRay(transform.position, movement, Color.blue);
+                //Debug.DrawRay(transform.position, rb.angularVelocity, Color.red);
+                //Debug.DrawRay(transform.position, torque, Color.white);
+                //Debug.DrawRay(transform.position, movement, Color.blue);
             }
         } else {
             rb.drag = SettingsMenu.settingsData.playerAirResistance * dragNoControl;

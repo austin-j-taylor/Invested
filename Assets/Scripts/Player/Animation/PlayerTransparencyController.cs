@@ -13,18 +13,23 @@ public class PlayerTransparencyController : MonoBehaviour {
 
     private Renderer[] rends;
     private bool isOpaque, overrideHidden = false, isHidden = false;
-    
-    
+
+
     void Awake() {
         rends = GetComponentsInChildren<MeshRenderer>();
+        for (int i = 0; i < rends.Length; i++) {
+            if (rends[i].material.color.a != 1) {
+                rends[i] = null;
+            }
+        }
         SetAllOpaque();
     }
-    
+
     void LateUpdate() {
         if (!overrideHidden) {
             float distance = (CameraController.ActiveCamera.transform.position - Player.PlayerInstance.transform.position).magnitude;
             // If the camera is SUPER close to the body, make it invisible
-            if(distance < distanceThresholdInvisible) {
+            if (distance < distanceThresholdInvisible) {
                 SetHidden(true);
             } else {
                 SetHidden(false);
@@ -53,16 +58,18 @@ public class PlayerTransparencyController : MonoBehaviour {
     // Set the rendering mode to Fade, and set the transparency to percent
     private void SetAllFade(float percent) {
         foreach (Renderer rend in rends) {
-            if (isOpaque) {
-                rend.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-                rend.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-                rend.material.EnableKeyword("_ALPHABLEND_ON");
-                rend.material.renderQueue = 3000;
-            }
+            if (rend) {
+                if (isOpaque) {
+                    rend.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+                    rend.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                    rend.material.EnableKeyword("_ALPHABLEND_ON");
+                    rend.material.renderQueue = 3000;
+                }
 
-            Color tempColor = rend.material.color;
-            tempColor.a = percent;
-            rend.material.color = tempColor;
+                Color tempColor = rend.material.color;
+                tempColor.a = percent;
+                rend.material.color = tempColor;
+            }
         }
         isOpaque = false;
     }
@@ -71,22 +78,26 @@ public class PlayerTransparencyController : MonoBehaviour {
     private void SetAllOpaque() {
         if (!isOpaque) {
             foreach (Renderer rend in rends) {
-                rend.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
-                rend.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
-                rend.material.SetInt("_ZWrite", 1);
-                rend.material.DisableKeyword("_ALPHABLEND_ON");
-                rend.material.renderQueue = -1;
+                if (rend) {
+                    rend.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                    rend.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
+                    rend.material.SetInt("_ZWrite", 1);
+                    rend.material.DisableKeyword("_ALPHABLEND_ON");
+                    rend.material.renderQueue = -1;
+                }
             }
             isOpaque = true;
         }
     }
 
     public void SetOverrideHidden(bool hidden) {
-        if(hidden != overrideHidden) {
+        if (hidden != overrideHidden) {
             overrideHidden = hidden;
             isHidden = hidden;
             foreach (Renderer rend in rends) {
-                rend.enabled = !hidden;
+                if (rend) {
+                    rend.enabled = !hidden;
+                }
             }
         }
     }
@@ -96,7 +107,9 @@ public class PlayerTransparencyController : MonoBehaviour {
             if (hidden != isHidden) {
                 isHidden = hidden;
                 foreach (Renderer rend in rends) {
-                    rend.enabled = !hidden;
+                    if (rend) {
+                        rend.enabled = !hidden;
+                    }
                 }
             }
         }
