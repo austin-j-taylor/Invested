@@ -20,6 +20,7 @@ public class Player : PewterEntity {
     public static Player PlayerInstance { get; private set; }
     public static PlayerPullPushController PlayerIronSteel { get; private set; }
     public static AllomanticPewter PlayerPewter { get; private set; }
+    public static PlayerFlywheelController PlayerFlywheelController { get; private set; }
     public static Magnetic PlayerMagnetic { get; private set; }
     public static FeruchemicalZinc PlayerZinc { get; set; }
     public static PlayerTransparencyController PlayerTransparancy { get; set; }
@@ -90,6 +91,7 @@ public class Player : PewterEntity {
         PlayerInstance = this;
         PlayerIronSteel = GetComponentInChildren<PlayerPullPushController>();
         PlayerPewter = GetComponentInChildren<AllomanticPewter>();
+        PlayerFlywheelController = GetComponentInChildren<PlayerFlywheelController>();
         PlayerMagnetic = GetComponentInChildren<Magnetic>();
         PlayerZinc = GetComponent<FeruchemicalZinc>();
         PlayerTransparancy = GetComponentInChildren<PlayerTransparencyController>();
@@ -154,6 +156,7 @@ public class Player : PewterEntity {
     public void ClearPlayerBeforeSceneChange(Scene scene) {
         GetComponentInChildren<AllomechanicalGlower>().RemoveAllEmissions();
         movementController.Clear();
+        PlayerFlywheelController.Clear();
         PlayerIronSteel.Clear();
         PlayerPewter.Clear();
         PlayerZinc.Clear();

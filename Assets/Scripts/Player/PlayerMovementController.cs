@@ -255,6 +255,8 @@ public class PlayerMovementController : AllomanticPewter {
                 //}
                 // Apply torque to player
                 rb.AddTorque(torque, ForceMode.Acceleration);
+                // Spin flywheels to match movement
+                Player.PlayerFlywheelController.SpinToTorque(torque);
                 // Apply a small amount of the movement force to player for tighter controls & air movement
                 rb.AddForce((CameraController.UpsideDown ? -movement : movement) * airControlFactor * rollingAcceleration, ForceMode.Acceleration);
 
