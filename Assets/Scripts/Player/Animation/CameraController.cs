@@ -10,7 +10,6 @@ using UnityEngine;
 public class CameraController : MonoBehaviour {
 
     private const float playerLookAtTargetFirstPersonHeight = 1;
-    private const float playerLookAtTargetReferenceHeight = 1;
     private const float lerpConstantPosition = 5;
     private const float lerpConstantRotation = 15;
     private const float rootConstantScaling = .5f;
@@ -27,6 +26,7 @@ public class CameraController : MonoBehaviour {
     private static Transform externalPositionTarget; // Assigned by another part of the program for tracking
     private static Transform externalLookAtTarget; // Assigned by another part of the program for tracking
 
+    private static float playerLookAtTargetReferenceHeight = 1;
     private static float currentX = 0;
     private static float currentY = 0;
     private static float startX = 0;
@@ -74,7 +74,6 @@ public class CameraController : MonoBehaviour {
         thirdPersonCamera = playerLookAtTarget.GetChild(0).GetComponent<Camera>();
         firstPersonCamera = playerLookAtTarget.GetChild(1).GetChild(0).GetComponent<Camera>();
         ActiveCamera = thirdPersonCamera;
-        Clear();
         UnlockCamera();
     }
 
@@ -161,6 +160,7 @@ public class CameraController : MonoBehaviour {
                 ActiveCamera.transform.localPosition = wantedPosition;
                 //    Vector3 pos = Vector3.zero;
                 //    pos.y = playerLookAtTargetHeight;
+                playerLookAtTargetReferenceHeight = SettingsMenu.settingsData.cameraDistance / 5;
                 playerLookAtTarget.transform.localPosition = new Vector3(0, (ExternalDistance.x == 0 ? playerLookAtTargetReferenceHeight : ExternalDistance.y), 0);
                 if (UpsideDown)
                     playerLookAtTarget.transform.localPosition = -playerLookAtTarget.transform.localPosition;

@@ -6,9 +6,14 @@ using UnityEngine;
  * Controls the motion of the 3 flywheels inside the player sphere.
  * When the player tries to move, these wheels spin in a way that would
  *  produce the player's rotational rotation.
+ *  
+ *  Also, spin the wheels a bit while burning pewter.
  */
 public class PlayerFlywheelController : MonoBehaviour {
+
     private const int speedFactor = 20;
+    private const int pewterSpinFactor = 20;
+    private const int passiveSpin = 10;
 
     // X rotates in the +Y
     // Y rotates in the +Z
@@ -23,6 +28,24 @@ public class PlayerFlywheelController : MonoBehaviour {
         wheelX = wheels.Find("Motor/WheelX");
         wheelY = wheels.Find("Motor_001/WheelY");
         wheelZ = wheels.Find("Motor_002/WheelZ");
+    }
+
+    private void FixedUpdate() {
+        if (!PauseMenu.IsPaused) {
+            if (Player.PlayerPewter.IsBurning) {
+                AddAngleX(pewterSpinFactor * -(float)Player.PlayerPewter.PewterReserve.Rate);
+                AddAngleY(pewterSpinFactor * -(float)Player.PlayerPewter.PewterReserve.Rate);
+                AddAngleZ(pewterSpinFactor * -(float)Player.PlayerPewter.PewterReserve.Rate);
+            }
+        }
+    }
+
+    private void Update() {
+        if (!PauseMenu.IsPaused) {
+            AddAngleX(passiveSpin);
+            AddAngleY(passiveSpin);
+            AddAngleZ(passiveSpin);
+        }
     }
 
     public void Clear() {
@@ -51,25 +74,26 @@ public class PlayerFlywheelController : MonoBehaviour {
         // apply the proportional rotations
         // i.e. "apply a torque" to each wheel
 
-        Vector3 eulers = wheelX.localEulerAngles;
-        eulers.y += angleX;
-        wheelX.localEulerAngles = eulers;
-
-        eulers = wheelY.localEulerAngles;
-        eulers.z += angleY;
-        wheelY.localEulerAngles = eulers;
-
-        eulers = wheelZ.localEulerAngles;
-        eulers.y += angleZ * TimeController.CurrentTimeScale;
-        wheelZ.localEulerAngles = eulers;
-
+        AddAngleX(angleX);
+        AddAngleY(angleY);
+        AddAngleZ(angleZ);
     }
 
-    private float TorqueToAngle(Vector3 v, Vector3 torque) {
-        float dot = Vector3.Dot(torque, v);
-        bool negative = dot < 0;
-        float angle = dot;
-        return angle;
+    // Spins the wheels by the given angle
+    private void AddAngleX(float angleX) {
+        Vector3 eulers = wheelX.localEulerAngles;
+        eulers.y += angleX * TimeController.CurrentTimeScale;
+        wheelX.localEulerAngles = eulers;
+    }
+    private void AddAngleY(float angleY) {
+        Vector3 eulers = wheelY.localEulerAngles;
+        eulers.z += angleY * TimeController.CurrentTimeScale;
+        wheelY.localEulerAngles = eulers;
+    }
+    private void AddAngleZ(float angleZ) {
+        Vector3 eulers = wheelZ.localEulerAngles;
+        eulers.y += angleZ * TimeController.CurrentTimeScale;
+        wheelZ.localEulerAngles = eulers;
     }
 
 }

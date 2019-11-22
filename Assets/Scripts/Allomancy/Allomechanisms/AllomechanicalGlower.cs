@@ -64,7 +64,7 @@ public class AllomechanicalGlower : MonoBehaviour {
             }
             if (allomancerPewter.IsBurning) {
                 foreach (Renderer rend in pewters) {
-                    EnableEmission(rend.material, glowColors[pewter], -2 * (float)allomancerPewter.PewterReserve.Rate);
+                    EnableEmission(rend.material, glowColors[pewter], 1 + -4 * (float)allomancerPewter.PewterReserve.Rate);
                 }
             } else {
                 foreach (Renderer rend in pewters) {

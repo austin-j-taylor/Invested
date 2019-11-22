@@ -35,8 +35,9 @@ public class PlayerTransparencyController : MonoBehaviour {
                 SetHidden(false);
                 float percent = -1;
                 // If camera is physically near the player, fade slowly to transparent
-                if (SettingsMenu.settingsData.cameraFirstPerson == 0 && distance < distanceThreshold) {
-                    percent = ((distance * distance) / (distanceThreshold * distanceThreshold));
+                float realThreshold = distanceThreshold * SettingsMenu.settingsData.cameraDistance / 10;
+                if (SettingsMenu.settingsData.cameraFirstPerson == 0 && distance < realThreshold) {
+                    percent = ((distance * distance) / (realThreshold * realThreshold));
                 }
                 // If the camera is directly looking at the player, set the transparency to a constant amount
                 if ((percent == -1 || percent > lookAtTransparency) && Physics.Raycast(CameraController.ActiveCamera.transform.position, CameraController.ActiveCamera.transform.forward, out RaycastHit hit, distance, 1 << LayerMask.NameToLayer("Player"))) {
