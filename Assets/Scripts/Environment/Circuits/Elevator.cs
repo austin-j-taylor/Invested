@@ -95,9 +95,9 @@ public class Elevator : Interfaceable {
 
         }
 
-        Debug.Log("Wanted: " + Player.PlayerIronSteel.ExternalCommand);
-        Debug.Log("Have  : " + Player.PlayerIronSteel.LastMaximumNetForce.magnitude);
-        Debug.Log("Net force: " + Player.PlayerIronSteel.LastNetForceOnAllomancer);
+        //Debug.Log("Wanted: " + Player.PlayerIronSteel.ExternalCommand);
+        //Debug.Log("Have  : " + Player.PlayerIronSteel.LastMaximumNetForce.magnitude);
+        //Debug.Log("Net force: " + Player.PlayerIronSteel.LastNetForceOnAllomancer);
     }
     protected override void UpdateInterfacing() {
         if (Keybinds.Jump())
