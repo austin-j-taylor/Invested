@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 /*
  * Controls feruchemical zinc.
@@ -31,6 +30,7 @@ public class FeruchemicalZinc : MonoBehaviour {
     public double Reserve { get; private set; }
     private double lastReserve;
     public double Rate { get; private set; }
+    public float Intensity { get; private set; }
     
     // Use this for initialization
     void Start() {
@@ -44,6 +44,7 @@ public class FeruchemicalZinc : MonoBehaviour {
         startReserve = 1;
         endReserve = 1;
         Rate = 0;
+        Intensity = 0;
         lastReserve = Reserve;
         TimeController.CurrentTimeScale = SettingsMenu.settingsData.timeScale;
         GameManager.GraphicsController.SetZincEffect(false);
@@ -66,15 +67,15 @@ public class FeruchemicalZinc : MonoBehaviour {
                     HUD.ZincMeterController.SideEnabled = false;
                     TimeController.CurrentTimeScale = SettingsMenu.settingsData.timeScale;
                     if (Reserve == 0) {
-                        GameManager.GraphicsController.SetZincEffect(false);
+                        Intensity = GameManager.GraphicsController.SetZincEffect(false);
                         recovering = false;
                     } else {
-                        GameManager.GraphicsController.SetZincEffect(true, calculateRecovering());
+                        Intensity = GameManager.GraphicsController.SetZincEffect(true, CalculateRecovering());
                         recovering = true;
                     }
                 } else {
                     // in zinc time, proceed with zinc effect
-                    GameManager.GraphicsController.SetZincEffect(true, calculateIntensity((float)Reserve));
+                    Intensity = GameManager.GraphicsController.SetZincEffect(true, CalculateIntensity((float)Reserve));
                 }
                 HUD.ZincMeterController.ChangeSpikePosition((float)Reserve);
             } else {
@@ -84,7 +85,7 @@ public class FeruchemicalZinc : MonoBehaviour {
                     if (Reserve > 1) {
                         if (recovering) {
                             recovering = false;
-                            GameManager.GraphicsController.SetZincEffect(false);
+                            Intensity = GameManager.GraphicsController.SetZincEffect(false);
                         }
                         Reserve = 1;
                         Rate = 0;
@@ -98,21 +99,21 @@ public class FeruchemicalZinc : MonoBehaviour {
                     startReserve = Reserve;
                     HUD.ZincMeterController.SideEnabled = true;
                     TimeController.CurrentTimeScale = slowPercent * SettingsMenu.settingsData.timeScale;
-                    GameManager.GraphicsController.SetZincEffect(true, calculateIntensity((float)Reserve));
+                    Intensity = GameManager.GraphicsController.SetZincEffect(true, CalculateIntensity((float)Reserve));
                 } else if (recovering) {
                     // player recently exiting zinc time; continue showing screen effect until it's gone
-                    GameManager.GraphicsController.SetZincEffect(true, calculateRecovering());
+                    Intensity = GameManager.GraphicsController.SetZincEffect(true, CalculateRecovering());
 
                     // if done recovering, truly end zinc effect
                     if (!recovering) {
-                        GameManager.GraphicsController.SetZincEffect(false);
+                        Intensity = GameManager.GraphicsController.SetZincEffect(false);
                     }
                 }
             }
         }
     }
     
-    private float calculateIntensity(float x) {
+    private float CalculateIntensity(float x) {
         float fStart = (float)startReserve;
         // hot formula that makes a nice curve
         //float intensity = a * (-Mathf.Exp(-b * x) + Mathf.Exp(-d * x)) + c * (Mathf.Exp(f * (x - 1)) - Mathf.Exp(g * (x - 1)));
@@ -121,12 +122,12 @@ public class FeruchemicalZinc : MonoBehaviour {
         return intensity;
     }
 
-    private float calculateRecovering() {
+    private float CalculateRecovering() {
         float fReserve = (float)Reserve;
         float fEnd = (float)endReserve;
         // hot formula that makes a nice curve
         //float intensity = a * (-Mathf.Exp(-b * x) + Mathf.Exp(-d * x)) + c * (Mathf.Exp(f * (x - 1)) - Mathf.Exp(g * (x - 1)));
-        float intensity = calculateIntensity(fEnd) * (2 - Mathf.Exp(-h * (fEnd - fReserve)));
+        float intensity = CalculateIntensity(fEnd) * (2 - Mathf.Exp(-h * (fEnd - fReserve)));
 
         if(intensity < 0) {
             recovering = false;

@@ -8,18 +8,21 @@ using UnityEngine;
 public class PlayerTransparencyController : MonoBehaviour {
 
     private const float distanceThreshold = 2;
-    private const float distanceThresholdInvisible = .5f;
+    private const float distanceThresholdInvisible = 0;//.5f;
     private const float lookAtTransparency = .15f;
 
     private Renderer[] rends;
     private bool isOpaque, overrideHidden = false, isHidden = false;
 
+    private Renderer transluscentPlayerCase;
+    private float playerCaseMaxTransluscency;
 
     void Awake() {
         rends = GetComponentsInChildren<MeshRenderer>();
         for (int i = 0; i < rends.Length; i++) {
             if (rends[i].material.color.a != 1) {
-                rends[i] = null;
+                transluscentPlayerCase = rends[i];
+                playerCaseMaxTransluscency = transluscentPlayerCase.material.color.a;
             }
         }
         SetAllOpaque();
@@ -35,15 +38,15 @@ public class PlayerTransparencyController : MonoBehaviour {
                 SetHidden(false);
                 float percent = -1;
                 // If camera is physically near the player, fade slowly to transparent
-                float realThreshold = distanceThreshold * SettingsMenu.settingsData.cameraDistance / 10;
+                float realThreshold = distanceThreshold * SettingsMenu.settingsData.cameraDistance / 5;
                 if (SettingsMenu.settingsData.cameraFirstPerson == 0 && distance < realThreshold) {
                     percent = ((distance * distance) / (realThreshold * realThreshold));
                 }
                 // If the camera is directly looking at the player, set the transparency to a constant amount
-                if ((percent == -1 || percent > lookAtTransparency) && Physics.Raycast(CameraController.ActiveCamera.transform.position, CameraController.ActiveCamera.transform.forward, out RaycastHit hit, distance, 1 << LayerMask.NameToLayer("Player"))) {
-                    // If reticle is on player, immediately fade to transparent
-                    percent = (lookAtTransparency);
-                }
+                //if ((percent == -1 || percent > lookAtTransparency) && Physics.Raycast(CameraController.ActiveCamera.transform.position, CameraController.ActiveCamera.transform.forward, out RaycastHit hit, distance, 1 << LayerMask.NameToLayer("Player"))) {
+                //    // If reticle is on player, immediately fade to transparent
+                //    percent = (lookAtTransparency);
+                //}
                 // Assign fade/opaque Rendering Mode
                 if (percent >= 0)
                     SetAllFade(percent);
@@ -58,33 +61,62 @@ public class PlayerTransparencyController : MonoBehaviour {
 
     // Set the rendering mode to Fade, and set the transparency to percent
     private void SetAllFade(float percent) {
-        foreach (Renderer rend in rends) {
-            if (rend) {
-                if (isOpaque) {
-                    rend.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
-                    rend.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
-                    rend.material.EnableKeyword("_ALPHABLEND_ON");
-                    rend.material.renderQueue = 3000;
+        Color tempColor;
+        if (isOpaque) {
+            foreach (Renderer rend in rends) {
+                foreach (Material mat in rend.materials) {
+                    mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+                    mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+                    mat.EnableKeyword("_ALPHABLEND_ON");
+                    mat.EnableKeyword("_SPECULARHIGHLIGHTS_OFF");
+                    mat.renderQueue = 3000;
                 }
-
-                Color tempColor = rend.material.color;
-                tempColor.a = percent;
+            }
+            isOpaque = false;
+        }
+        foreach (Renderer rend in rends) {
+            if (rend == transluscentPlayerCase) {
+                tempColor = rend.material.color;
+                tempColor.a = percent * playerCaseMaxTransluscency;
                 rend.material.color = tempColor;
+            } else {
+                foreach (Material mat in rend.materials) {
+                    tempColor = mat.color;
+                    tempColor.a = percent;
+                    mat.color = tempColor;
+                }
             }
         }
-        isOpaque = false;
     }
 
     // Set the rendering mode to Opaque
     private void SetAllOpaque() {
         if (!isOpaque) {
+            Color tempColor;
             foreach (Renderer rend in rends) {
-                if (rend) {
-                    rend.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
-                    rend.material.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
-                    rend.material.SetInt("_ZWrite", 1);
-                    rend.material.DisableKeyword("_ALPHABLEND_ON");
-                    rend.material.renderQueue = -1;
+                if (rend == transluscentPlayerCase) {
+                    transluscentPlayerCase.material.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                    transluscentPlayerCase.material.DisableKeyword("_ALPHABLEND_ON");
+                    transluscentPlayerCase.material.DisableKeyword("_SPECULARHIGHLIGHTS_OFF");
+
+                    tempColor = transluscentPlayerCase.material.color;
+                    tempColor.a = playerCaseMaxTransluscency;
+                    transluscentPlayerCase.material.color = tempColor;
+                } else {
+                    foreach (Material mat in rend.materials) {
+                        if (mat.mainTexture) {
+                            tempColor = mat.color;
+                            tempColor.a = 1;
+                            mat.color = tempColor;
+                        } else {
+                            mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
+                            mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
+                            mat.SetInt("_ZWrite", 1);
+                            mat.DisableKeyword("_ALPHABLEND_ON");
+                            mat.DisableKeyword("_SPECULARHIGHLIGHTS_OFF");
+                            mat.renderQueue = -1;
+                        }
+                    }
                 }
             }
             isOpaque = true;

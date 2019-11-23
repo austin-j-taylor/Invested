@@ -18,7 +18,8 @@ public class ZincMeterController : MonoBehaviour {
     private readonly Vector2 lowBottom = new Vector2(-highX, -highY);
     private readonly Vector2 highBottom = new Vector2(highX, highY);
 
-    private Color colorZinc;
+    public static Color ColorZinc { get { return colorZinc; } }
+    private static Color colorZinc;
 
     private Image spikeTop;
     private Image spikeBottom;
@@ -41,7 +42,7 @@ public class ZincMeterController : MonoBehaviour {
     }
 
     // Start is called before the first frame update
-    void Start() {
+    void Awake() {
         frame = transform.Find("frame").GetComponent<Image>();
         fill = frame.transform.Find("fill").GetComponent<Image>();
         spikeTop = transform.Find("spikes/spikeTop").GetComponent<Image>();

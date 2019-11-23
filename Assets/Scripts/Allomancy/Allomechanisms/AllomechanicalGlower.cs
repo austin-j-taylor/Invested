@@ -9,23 +9,23 @@ public class AllomechanicalGlower : MonoBehaviour {
     private const int iron = 0;
     private const int steel = 1;
     private const int pewter = 2;
+    private const int zinc = 3;
 
-    private readonly Color[] glowColors = {
-            new Color(0, .35f, 1f),
-            new Color(.7f, .025f, 0.05f),
-            new Color(.75f, .25f, 0f)
-    };
+    private Color[] glowColors;
 
     private Renderer[] irons;
     private Renderer[] steels;
     private Renderer[] pewters;
-
-    private AllomanticIronSteel allomancer;
-    private AllomanticPewter allomancerPewter;
+    private Renderer[] zincs;
 
     private void Start() {
-        allomancer = Player.PlayerIronSteel;
-        allomancerPewter = Player.PlayerPewter;
+        glowColors = new Color[] {
+            new Color(0, .35f, 1f),
+            new Color(.7f, .025f, 0.05f),
+            new Color(.75f, .25f, 0f),
+            ZincMeterController.ColorZinc
+        };
+
         irons = transform.Find("Irons").GetComponentsInChildren<Renderer>();
         steels = transform.Find("Steels").GetComponentsInChildren<Renderer>();
         Renderer[] pewterSymbols = transform.Find("Pewters").GetComponentsInChildren<Renderer>();
@@ -37,24 +37,25 @@ public class AllomechanicalGlower : MonoBehaviour {
         for (int i = pewterSymbols.Length; i < pewters.Length; i++) {
             pewters[i] = wheels.GetChild(i - pewterSymbols.Length).GetComponent<Renderer>();
         }
+        zincs = transform.Find("ZincPeripheral").GetComponentsInChildren<Renderer>();
 
     }
 
     void LateUpdate() {
         if (!PauseMenu.IsPaused) {
-            if (allomancer.IsBurning) {
-                if (allomancer.IronPulling) {
+            if (Player.PlayerIronSteel.IsBurning) {
+                if (Player.PlayerIronSteel.IronPulling) {
                     foreach (Renderer rend in irons) {
-                        EnableEmission(rend.material, glowColors[iron], 1 + 2 * allomancer.IronBurnPercentageTarget);
+                        EnableEmission(rend.material, glowColors[iron], 1 + 2 * Player.PlayerIronSteel.IronBurnPercentageTarget);
                     }
                 } else {
                     foreach (Renderer rend in irons) {
                         DisableEmission(rend.material);
                     }
                 }
-                if (allomancer.SteelPushing) {
+                if (Player.PlayerIronSteel.SteelPushing) {
                     foreach (Renderer rend in steels) {
-                        EnableEmission(rend.material, glowColors[steel], 1 + 2 * allomancer.SteelBurnPercentageTarget);
+                        EnableEmission(rend.material, glowColors[steel], 1 + 2 * Player.PlayerIronSteel.SteelBurnPercentageTarget);
                     }
                 } else {
                     foreach (Renderer rend in steels) {
@@ -62,12 +63,21 @@ public class AllomechanicalGlower : MonoBehaviour {
                     }
                 }
             }
-            if (allomancerPewter.IsBurning) {
+            if (Player.PlayerPewter.IsBurning) {
                 foreach (Renderer rend in pewters) {
-                    EnableEmission(rend.material, glowColors[pewter], 1 + -4 * (float)allomancerPewter.PewterReserve.Rate);
+                    EnableEmission(rend.material, glowColors[pewter], 1 + -4 * (float)Player.PlayerPewter.PewterReserve.Rate);
                 }
             } else {
                 foreach (Renderer rend in pewters) {
+                    DisableEmission(rend.material);
+                }
+            }
+            if(Player.PlayerZinc.InZincTime) {
+                foreach (Renderer rend in zincs) {
+                    EnableEmission(rend.material, glowColors[zinc], 1 + 2 * Player.PlayerZinc.Intensity);
+                }
+            } else {
+                foreach (Renderer rend in zincs) {
                     DisableEmission(rend.material);
                 }
             }

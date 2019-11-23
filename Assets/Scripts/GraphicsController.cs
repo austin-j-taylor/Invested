@@ -41,6 +41,7 @@ public class GraphicsController : MonoBehaviour {
         profile.motionBlur.enabled = enable; 
     }
 
+    // returns intensity
     public float SetZincEffect(bool enable, float intensity = 0) {
         if (HUD.ControlWheelController.IsOpen) {
             //enabled = false; // If Control Wheel is open, don't show the effect

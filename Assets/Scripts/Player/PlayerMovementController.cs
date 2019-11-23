@@ -66,7 +66,7 @@ public class PlayerMovementController : AllomanticPewter {
             return groundedChecker.IsGrounded;
         }
     }
-
+    public bool IsWalking { get; private set; }
     private bool jumpQueued;
     private bool lastWasSprintingOnGround;
     private bool invertGravity = false;
@@ -82,6 +82,41 @@ public class PlayerMovementController : AllomanticPewter {
 
     private void Update() {
         if (Player.CanControl && Player.CanControlMovement) {
+            // walking/rolling/sprinting state machine
+            if(IsWalking) {
+                // was walking
+                if(Keybinds.Sprint() && PewterReserve.HasMass) {
+                    // start sprinting
+                    IsSprinting = true;
+                    IsWalking = false;
+                    rb.inertiaTensor = new Vector3(momentOfInertiaMagnitude, momentOfInertiaMagnitude, momentOfInertiaMagnitude);
+                    Player.PlayerFlywheelController.Retract();
+                } else if(!Keybinds.Walk()) {
+                    // stop rolling
+                    IsWalking = false;
+                    rb.inertiaTensor = new Vector3(momentOfInertiaMagnitude, momentOfInertiaMagnitude, momentOfInertiaMagnitude);
+                    Player.PlayerFlywheelController.Retract();
+                } // continue walking
+            } else if(IsSprinting) {
+                // was sprinting
+                if(!Keybinds.Sprint() || !PewterReserve.HasMass) {
+                    // start rolling
+                    IsSprinting = false;
+                } // continue sprinting
+            } else {
+                // was rolling
+                if(Keybinds.Sprint() && PewterReserve.HasMass) {
+                    // start sprinting
+                    IsSprinting = true;
+
+                } else if(Keybinds.Walk()) {
+                    // start walking
+                    rb.inertiaTensor = new Vector3(momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking);
+                    Player.PlayerFlywheelController.Extend();
+                    IsWalking = true;
+                } // continue rolling
+            }
+            
             // Check if jumping
             if (IsGrounded && Keybinds.JumpDown()) {
                 // Queue a jump for the next FixedUpdate
@@ -90,15 +125,10 @@ public class PlayerMovementController : AllomanticPewter {
             } else {
                 jumpQueued = false;
             }
-            // Check if sprinting
-            if (Keybinds.Sprint() && PewterReserve.HasMass) {
-                IsSprinting = true;
-            } else {
-                IsSprinting = false;
-            }
         } else {
             jumpQueued = false;
             IsSprinting = false;
+            IsWalking = false;
         }
     }
 
@@ -106,7 +136,7 @@ public class PlayerMovementController : AllomanticPewter {
         base.FixedUpdate();
 
         // Apply the Fun Inverse Gravity
-        if(invertGravity) {
+        if (invertGravity) {
             rb.AddForce(-Physics.gravity, ForceMode.Acceleration);
         }
 
@@ -148,7 +178,7 @@ public class PlayerMovementController : AllomanticPewter {
                         } else if (Vector3.Dot(groundedChecker.Normal, movementForPewter) < -0.01f) { // Wall jump. Kick up off of wall.
                             float angle = Vector3.Angle(movementForPewter, groundedChecker.Normal) - 90;
                             movementForPewter = Quaternion.AngleAxis(angle, Vector3.Cross(Vector3.up, groundedChecker.Normal)) * movementForPewter;
-                            if(CameraController.UpsideDown) {
+                            if (CameraController.UpsideDown) {
                                 if (movementForPewter.y > 0)
                                     movementForPewter.y = -movementForPewter.y;
                             } else {
@@ -156,7 +186,7 @@ public class PlayerMovementController : AllomanticPewter {
                                     movementForPewter.y = -movementForPewter.y;
                             }
                         } // Either jumping in a direction or kicking off of a wall. Either way, do nothing special.
-                        jumpForce = Vector3.ClampMagnitude(groundedChecker.Normal * jumpHeight + movementForPewter  * jumpDirectionModifier, jumpPewterMagnitude);
+                        jumpForce = Vector3.ClampMagnitude(groundedChecker.Normal * jumpHeight + movementForPewter * jumpDirectionModifier, jumpPewterMagnitude);
 
                         particleDirection = Quaternion.LookRotation(-jumpForce);
                         particleSystem.transform.rotation = particleDirection;
@@ -228,12 +258,10 @@ public class PlayerMovementController : AllomanticPewter {
                     lastWasSprintingOnGround = false;
 
                     // If Walking, reduce movment
-                    if (Keybinds.Walk()) {
+                    if (IsWalking) {
                         movement *= walkingFactor;
-                        rb.inertiaTensor = new Vector3(momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking);
                         physicsMaterial.dynamicFriction = frictionDynamicWalking;
                     } else {
-                        rb.inertiaTensor = new Vector3(momentOfInertiaMagnitude, momentOfInertiaMagnitude, momentOfInertiaMagnitude);
                         physicsMaterial.dynamicFriction = frictionDynamicRolling;
                     }
                 }
@@ -244,7 +272,7 @@ public class PlayerMovementController : AllomanticPewter {
 
                 Vector3 feedback = rb.angularVelocity;
                 //Vector3 target  = torque * (IsSprinting ? targetSprintingSpeedRadial * (1 + sprintingAcceleration) : targetRollingSpeedRadial);
-                Vector3 target  = torque * (IsSprinting ? targetSprintingSpeedRadial : targetRollingSpeedRadial);
+                Vector3 target = torque * (IsSprinting ? targetSprintingSpeedRadial : targetRollingSpeedRadial);
 
                 torque = pidSpeed.Step(feedback, target);
                 //Debug.Log("speed    : " + rb.velocity.magnitude);
