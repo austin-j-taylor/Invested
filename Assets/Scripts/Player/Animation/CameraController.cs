@@ -73,6 +73,8 @@ public class CameraController : MonoBehaviour {
         playerLookAtTarget = transform.Find("CameraLookAtTarget");
         thirdPersonCamera = playerLookAtTarget.GetChild(0).GetComponent<Camera>();
         firstPersonCamera = playerLookAtTarget.GetChild(1).GetChild(0).GetComponent<Camera>();
+        thirdPersonCamera.depthTextureMode = DepthTextureMode.DepthNormals;
+        firstPersonCamera.depthTextureMode = DepthTextureMode.DepthNormals;
         ActiveCamera = thirdPersonCamera;
         UnlockCamera();
     }
