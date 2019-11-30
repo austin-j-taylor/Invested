@@ -7,13 +7,13 @@ Shader "Allomancy/Bubble"
 	{
 		_MainTex ("Texture", 2D) = "white" {}
 		_Color ("Color", Color) = (0,0,0,0)
+			_Speed("speed", Float) = 5
+
 	}
 
 	SubShader
 	{
 		Blend One One
-		ZWrite Off
-		Cull Off
 
 		Tags
 		{
@@ -50,6 +50,7 @@ Shader "Allomancy/Bubble"
 
 			sampler2D _MainTex;
 			float4 _MainTex_ST;
+			float _Speed;
 
 			v2f vert (appdata v)
 			{
@@ -79,7 +80,7 @@ Shader "Allomancy/Bubble"
 			fixed4 texColor(v2f i, float rim)
 			{
 				fixed4 mainTex = tex2D(_MainTex, i.uv);
-				mainTex.r *= triWave(_Time.x * 5, abs(i.objectPos.y) * 2, -0.7) * 6;
+				mainTex.r *= triWave(_Time.x * _Speed, abs(i.objectPos.y) * 2, -0.7) * 6;
 				// I ended up saturaing the rim calculation because negative values caused weird artifacts
 				mainTex.g *= saturate(rim) * (sin(_Time.z + mainTex.b * 5) + 1);
 				return mainTex.r * _Color + mainTex.g * _Color;

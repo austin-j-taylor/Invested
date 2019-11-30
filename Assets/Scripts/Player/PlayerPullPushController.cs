@@ -32,14 +32,15 @@ public class PlayerPullPushController : AllomanticIronSteel {
     private const float minAreaRadius = .025f;
     private const float maxAreaRadius = .25f;
     private const float areaRadiusIncrement = .025f;
-    private const float minBubbleRadius = 1f;
-    private const float maxBubbleRadius = 10f;
-    private const float bubbleRadiusIncrement = 1f;
+    private const int minBubbleRadius = 1;
+    private const int maxBubbleRadius = 10;
+    private const int bubbleRadiusIncrement = 1;
+    private const int bubbleSpeed = 10;
     // Other Constants
     private const float burnPercentageLerpConstant = .30f;
     private const int blueLineLayer = 10;
     private const float metalLinesLerpConstant = .30f;
-    private const float defaultCharge = 1;
+    private const int defaultCharge = 1;
 
     public enum ControlMode { Manual, Area, Bubble, Coinshot };
 
@@ -51,6 +52,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
     // radius for Area and Bubble
     private float selectionAreaRadius = .025f;
     private float selectionBubbleRadius = 2f;
+    private Renderer bubbleRenderer;
 
     // Lerp goals for burn percentage targets
     // These are displayed in the Burn Rate Meter
@@ -66,12 +68,12 @@ public class PlayerPullPushController : AllomanticIronSteel {
             return highlightedTarget;
         }
         private set {
-            if(highlightedTarget == null) {
-                if(value != null) {
+            if (highlightedTarget == null) {
+                if (value != null) {
                     value.IsHighlighted = true;
                 }
             } else {
-                if(value == null || value != highlightedTarget) {
+                if (value == null || value != highlightedTarget) {
                     highlightedTarget.IsHighlighted = false;
                 } else {
                     value.IsHighlighted = true;
@@ -105,6 +107,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
         base.Awake();
 
         Mode = ControlMode.Manual;
+        bubbleRenderer = transform.Find("BubbleRange").GetComponent<Renderer>();
     }
     /*
      * Read inputs for selecting targets.
@@ -115,7 +118,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
         if (!PauseMenu.IsPaused) {
 
             if (IsBurning) {
-                if (!ExternalControl) {
+                if (!ExternalControl && Player.CanControl) {
                     // Change Burn Percentage Targets
                     // Check scrollwheel for changing the max number of targets and burn percentage, or DPad if using gamepad
                     float scrollValue = 0;
@@ -164,107 +167,105 @@ public class PlayerPullPushController : AllomanticIronSteel {
                     LerpToBurnPercentages();
                     UpdateBurnRateMeter();
 
-                    if (Player.CanControl) {
-                        // Could have stopped burning above. Check if the Allomancer is still burning.
-                        if (IsBurning) {
-                            // Swap pull- and push- targets
-                            if (Keybinds.NegateDown() && timeToSwapBurning > Time.time) {
-                                // Double-tapped, Swap targets
-                                PullTargets.SwapContents(PushTargets);
-                                // If vacuously targeting, swap statuses of vacuous targets
-                                SwapVacuousTargets();
-                            } else {
-                                if (Keybinds.NegateDown()) {
-                                    timeToSwapBurning = Time.time + timeDoubleTapWindow;
-                                }
+                    // Could have stopped burning above. Check if the Allomancer is still burning.
+                    if (IsBurning) {
+                        // Swap pull- and push- targets
+                        if (Keybinds.NegateDown() && timeToSwapBurning > Time.time) {
+                            // Double-tapped, Swap targets
+                            PullTargets.SwapContents(PushTargets);
+                            // If vacuously targeting, swap statuses of vacuous targets
+                            SwapVacuousTargets();
+                        } else {
+                            if (Keybinds.NegateDown()) {
+                                timeToSwapBurning = Time.time + timeDoubleTapWindow;
                             }
-
-                            // Changing status of Pushing and Pulling
-                            // Coinshot mode: 
-                            // If do not have pull-targets, pulling is also Pushing
-                            // Player.cs handles coin throwing
-                            bool pulling, pushing;
-                            bool keybindPulling = Keybinds.IronPulling();
-                            bool keybindPushing = Keybinds.SteelPushing();
-                            if (Mode == ControlMode.Coinshot) {
-                                pulling = keybindPulling && HasIron && HasPullTarget;
-                                pushing = keybindPushing && HasSteel;
-                                // if LMB while has a push target, Push and don't Pull.
-                                if (keybindPulling && !HasPullTarget) {
-                                    pulling = false;
-                                    keybindPulling = false;
-                                    pushing = true;
-                                    keybindPushing = true;
-                                }
-                            } else {
-                                pulling = keybindPulling && HasIron;
-                                pushing = keybindPushing && HasSteel;
-                            }
-
-                            // Cannot Push and Pull on the same targets
-                            if (!HasPushTarget && HasPullTarget) {
-                                if (pulling)
-                                    pushing = false;
-                            } else
-                            if (!HasPullTarget && HasPushTarget) {
-                                if (pushing)
-                                    pulling = false;
-                            }
-                            IronPulling = pulling;
-                            SteelPushing = pushing;
-
-                            // Check input for target selection
-                            bool addingTargets = (Keybinds.Select() || Keybinds.SelectAlternate()) && !Keybinds.Negate();
-
-                            // Search for Metals
-                            if (Mode == ControlMode.Manual || Mode == ControlMode.Coinshot) {
-                                Magnetic target = SearchForMetalsManual();
-                                TryToAddTarget(target, addingTargets, !HasPullTarget, !HasPushTarget, keybindPulling, keybindPushing);
-                                // highlight the potential target you would select, if you targeted it
-                                HighlightedTarget = target;
-                            } else {
-                                Magnetic[] targets = SearchForMetalsAreaOrBubble();
-
-                                if (Keybinds.Negate()) {
-                                    // Removing targets
-                                    // For area/bubble targeting, Removing a target means to remove all targets.
-                                    if (Keybinds.Select()) {
-                                        PullTargets.Clear();
-                                        VacuouslyPullTargeting = false;
-                                    }
-                                    if (Keybinds.SelectAlternate()) {
-                                        PushTargets.Clear();
-                                        VacuouslyPushTargeting = false;
-                                    }
-                                    // Consider preserving vacuous targets (consider coins, consider a vacuous cone/bubble)
-                                } else {
-                                    // Adding targets
-                                    // When targets change, remove all old targets and make space for the new ones
-                                    if (Keybinds.Select() || (Keybinds.PullDown() && !HasPullTarget)) {// || VacuouslyPullTargeting) {
-                                        PullTargets.Size = targets.Length; // takes care of removing all targets if none are in sight
-                                    }
-                                    if (Keybinds.SelectAlternate() || (Keybinds.PushDown() && !HasPushTarget)) {// || VacuouslyPushTargeting) {
-                                        PushTargets.Size = targets.Length;
-                                    }
-                                    bool nowVacuouslyPulling = !HasPullTarget;
-                                    bool nowVacuouslyPushing = !HasPushTarget;
-                                    if (targets.Length == 0) {
-                                        // No metals are in the scope of the area/bubble, but you are trying to select.
-                                        // Do nothing?
-                                        // Deselect everything?
-                                        // This at least handles vacuous targets
-                                        TryToAddTarget(null, addingTargets, nowVacuouslyPulling, nowVacuouslyPushing, keybindPulling, keybindPushing);
-                                    } else {
-                                        foreach (Magnetic target in targets) {
-                                            TryToAddTarget(target, addingTargets, nowVacuouslyPulling, nowVacuouslyPushing, keybindPulling, keybindPushing);
-                                        }
-                                    }
-                                }
-                            }
-                            SetTargetedLineProperties();
-
-                            RefreshHUD();
                         }
+
+                        // Changing status of Pushing and Pulling
+                        // Coinshot mode: 
+                        // If do not have pull-targets, pulling is also Pushing
+                        // Player.cs handles coin throwing
+                        bool pulling, pushing;
+                        bool keybindPulling = Keybinds.IronPulling();
+                        bool keybindPushing = Keybinds.SteelPushing();
+                        if (Mode == ControlMode.Coinshot) {
+                            pulling = keybindPulling && HasIron && HasPullTarget;
+                            pushing = keybindPushing && HasSteel;
+                            // if LMB while has a push target, Push and don't Pull.
+                            if (keybindPulling && !HasPullTarget) {
+                                pulling = false;
+                                keybindPulling = false;
+                                pushing = true;
+                                keybindPushing = true;
+                            }
+                        } else {
+                            pulling = keybindPulling && HasIron;
+                            pushing = keybindPushing && HasSteel;
+                        }
+
+                        // Cannot Push and Pull on the same targets
+                        if (!HasPushTarget && HasPullTarget) {
+                            if (pulling)
+                                pushing = false;
+                        } else
+                        if (!HasPullTarget && HasPushTarget) {
+                            if (pushing)
+                                pulling = false;
+                        }
+                        IronPulling = pulling;
+                        SteelPushing = pushing;
+
+                        // Check input for target selection
+                        bool addingTargets = (Keybinds.Select() || Keybinds.SelectAlternate()) && !Keybinds.Negate();
+
+                        // Search for Metals
+                        if (Mode == ControlMode.Manual || Mode == ControlMode.Coinshot) {
+                            Magnetic target = SearchForMetalsManual();
+                            TryToAddTarget(target, addingTargets, !HasPullTarget, !HasPushTarget, keybindPulling, keybindPushing);
+                            // highlight the potential target you would select, if you targeted it
+                            HighlightedTarget = target;
+                        } else {
+                            Magnetic[] targets = SearchForMetalsAreaOrBubble();
+
+                            if (Keybinds.Negate()) {
+                                // Removing targets
+                                // For area/bubble targeting, Removing a target means to remove all targets.
+                                if (Keybinds.Select()) {
+                                    PullTargets.Clear();
+                                    VacuouslyPullTargeting = false;
+                                }
+                                if (Keybinds.SelectAlternate()) {
+                                    PushTargets.Clear();
+                                    VacuouslyPushTargeting = false;
+                                }
+                                // Consider preserving vacuous targets (consider coins, consider a vacuous cone/bubble)
+                            } else {
+                                // Adding targets
+                                // When targets change, remove all old targets and make space for the new ones
+                                if (Keybinds.Select() || (Keybinds.PullDown() && !HasPullTarget)) {// || VacuouslyPullTargeting) {
+                                    PullTargets.Size = targets.Length; // takes care of removing all targets if none are in sight
+                                }
+                                if (Keybinds.SelectAlternate() || (Keybinds.PushDown() && !HasPushTarget)) {// || VacuouslyPushTargeting) {
+                                    PushTargets.Size = targets.Length;
+                                }
+                                bool nowVacuouslyPulling = !HasPullTarget;
+                                bool nowVacuouslyPushing = !HasPushTarget;
+                                if (targets.Length == 0) {
+                                    // No metals are in the scope of the area/bubble, but you are trying to select.
+                                    // Do nothing?
+                                    // Deselect everything?
+                                    // This at least handles vacuous targets
+                                    TryToAddTarget(null, addingTargets, nowVacuouslyPulling, nowVacuouslyPushing, keybindPulling, keybindPushing);
+                                } else {
+                                    foreach (Magnetic target in targets) {
+                                        TryToAddTarget(target, addingTargets, nowVacuouslyPulling, nowVacuouslyPushing, keybindPulling, keybindPushing);
+                                    }
+                                }
+                            }
+                        }
+                        SetTargetedLineProperties();
+                        RefreshBubble();
+                        RefreshHUD();
                     }
                 } else { // If the player is not in control, but still burning metals, show blue lines to metals.
                     if (IsBurning) {
@@ -272,6 +273,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
                         SearchForMetalsManual();
                         SetTargetedLineProperties();
                         UpdateBurnRateMeter();
+                        RefreshBubble();
                         RefreshHUD();
                     }
                 }
@@ -333,6 +335,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
         GamepadController.SetRumble(0, 0);
         GetComponentInChildren<AllomechanicalGlower>().RemoveAllEmissions();
         DisableRenderingBlueLines();
+        bubbleRenderer.enabled = false;
         RefreshHUD();
     }
 
@@ -492,7 +495,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
             PushTargets.UpdateBlueLines(steel, 0, CenterOfMass);
         }
     }
-    
+
     /*
      * Checks several factors and sets the properties of the blue line pointing to target.
      * These factors are described in the above function.
@@ -764,6 +767,28 @@ public class PlayerPullPushController : AllomanticIronSteel {
         }
     }
 
+    // Refreshes the Bubble that shows the range of selecting targets in the "Bubble" mode
+    private void RefreshBubble() {
+        if (Mode == ControlMode.Bubble) {
+            bubbleRenderer.enabled = true;
+
+            // set size
+            float scale = selectionBubbleRadius * 2;
+            bubbleRenderer.transform.localScale = new Vector3(scale, scale, scale);
+
+            // set color
+            if (IronPulling) {
+                bubbleRenderer.material.color = AllomechanicalGlower.ColorIronTransparent;
+                bubbleRenderer.material.SetInt("_Speed", bubbleSpeed);
+            } else if (SteelPushing) {
+                bubbleRenderer.material.color = AllomechanicalGlower.ColorSteelTransparent;
+                bubbleRenderer.material.SetInt("_Speed", -bubbleSpeed);
+            }
+        } else {
+            bubbleRenderer.enabled = false;
+        }
+    }
+
     // Refreshes all elements of the hud relevent to pushing and pulling
     private void RefreshHUD() {
         if (IsBurning) {
@@ -822,24 +847,28 @@ public class PlayerPullPushController : AllomanticIronSteel {
     public void SetControlModeManual() {
         Mode = ControlMode.Manual;
         PullTargets.Size = sizeOfTargetArrays;
+        bubbleRenderer.enabled = false;
     }
     public void SetControlModeArea() {
         Mode = ControlMode.Area;
         PullTargets.Size = 0;
         HighlightedTarget = null;
+        bubbleRenderer.enabled = false;
     }
     public void SetControlModeBubble() {
         Mode = ControlMode.Bubble;
         PullTargets.Size = 0;
         HighlightedTarget = null;
+        bubbleRenderer.enabled = true;
     }
     public void SetControlModeCoinshot() {
         Mode = ControlMode.Coinshot;
         PullTargets.Size = sizeOfTargetArrays;
+        bubbleRenderer.enabled = false;
     }
 
     public void AddVacuousPushTarget(Magnetic target, bool keepAdding = false) {
-        if(keepAdding && PushTargets.IsFull()) {
+        if (keepAdding && PushTargets.IsFull()) {
             PushTargets.Size++;
         }
         VacuouslyPushTargeting = true;

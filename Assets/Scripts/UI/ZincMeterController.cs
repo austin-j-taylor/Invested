@@ -18,8 +18,7 @@ public class ZincMeterController : MonoBehaviour {
     private readonly Vector2 lowBottom = new Vector2(-highX, -highY);
     private readonly Vector2 highBottom = new Vector2(highX, highY);
 
-    public static Color ColorZinc { get { return colorZinc; } }
-    private static Color colorZinc;
+    public static readonly Color ColorZinc = new Color(0.7568628f, 0.8588235f, 1);
 
     private Image spikeTop;
     private Image spikeBottom;
@@ -52,7 +51,6 @@ public class ZincMeterController : MonoBehaviour {
         side = HUD.Crosshair.GetComponentInChildren<CanvasGroup>();
         sideImage = side.transform.Find("fill").GetComponent<Image>();
         animator = GetComponent<Animator>();
-        colorZinc = fill.color;
     }
 
     // Update is called once per frame
@@ -87,13 +85,13 @@ public class ZincMeterController : MonoBehaviour {
             position = 0;
             direction = up;
         }
-
-        colorZinc.a = 1 - Mathf.Sqrt(reserve);
+        Color newColorZinc = ColorZinc;
+        newColorZinc.a = 1 - Mathf.Sqrt(reserve);
 
         spikeTop.rectTransform.localPosition = Vector2.Lerp(lowTop, highTop, position);
         spikeBottom.rectTransform.localPosition = Vector2.Lerp(highBottom, lowBottom, position);
-        spikeTopFill.color = colorZinc;
-        spikeBottomFill.color = colorZinc;
+        spikeTopFill.color = newColorZinc;
+        spikeBottomFill.color = newColorZinc;
         fill.fillAmount = reserve;
         sideImage.fillAmount = reserve;
     }

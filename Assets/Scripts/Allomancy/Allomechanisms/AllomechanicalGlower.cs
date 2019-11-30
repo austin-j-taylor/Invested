@@ -6,12 +6,12 @@ public class AllomechanicalGlower : MonoBehaviour {
 
     private const int intensity = 2;
     // Metal/color indices
-    private const int iron = 0;
-    private const int steel = 1;
-    private const int pewter = 2;
-    private const int zinc = 3;
 
-    private Color[] glowColors;
+    public readonly static Color ColorIron = new Color(0, .35f, 1f);
+    public readonly static Color ColorIronTransparent = new Color(0, .35f, 1f, 0.01960784f);
+    public readonly static Color ColorSteel = new Color(.7f, .025f, 0.05f);
+    public readonly static Color ColorSteelTransparent = new Color(.7f, .025f, 0.05f, 0.01960784f);
+    public readonly static Color ColorPewter = new Color(.75f, .25f, 0f);
 
     private Renderer[] irons;
     private Renderer[] steels;
@@ -19,12 +19,6 @@ public class AllomechanicalGlower : MonoBehaviour {
     private Renderer[] zincs;
 
     private void Start() {
-        glowColors = new Color[] {
-            new Color(0, .35f, 1f),
-            new Color(.7f, .025f, 0.05f),
-            new Color(.75f, .25f, 0f),
-            ZincMeterController.ColorZinc
-        };
 
         irons = transform.Find("Irons").GetComponentsInChildren<Renderer>();
         steels = transform.Find("Steels").GetComponentsInChildren<Renderer>();
@@ -46,7 +40,7 @@ public class AllomechanicalGlower : MonoBehaviour {
             if (Player.PlayerIronSteel.IsBurning) {
                 if (Player.PlayerIronSteel.IronPulling) {
                     foreach (Renderer rend in irons) {
-                        EnableEmission(rend.material, glowColors[iron], 1 + 2 * Player.PlayerIronSteel.IronBurnPercentageTarget);
+                        EnableEmission(rend.material, ColorIron, 1 + 2 * Player.PlayerIronSteel.IronBurnPercentageTarget);
                     }
                 } else {
                     foreach (Renderer rend in irons) {
@@ -55,7 +49,7 @@ public class AllomechanicalGlower : MonoBehaviour {
                 }
                 if (Player.PlayerIronSteel.SteelPushing) {
                     foreach (Renderer rend in steels) {
-                        EnableEmission(rend.material, glowColors[steel], 1 + 2 * Player.PlayerIronSteel.SteelBurnPercentageTarget);
+                        EnableEmission(rend.material, ColorSteel, 1 + 2 * Player.PlayerIronSteel.SteelBurnPercentageTarget);
                     }
                 } else {
                     foreach (Renderer rend in steels) {
@@ -65,7 +59,7 @@ public class AllomechanicalGlower : MonoBehaviour {
             }
             if (Player.PlayerPewter.IsBurning) {
                 foreach (Renderer rend in pewters) {
-                    EnableEmission(rend.material, glowColors[pewter], 1 + -4 * (float)Player.PlayerPewter.PewterReserve.Rate);
+                    EnableEmission(rend.material, ColorPewter, 1 + -4 * (float)Player.PlayerPewter.PewterReserve.Rate);
                 }
             } else {
                 foreach (Renderer rend in pewters) {
@@ -74,7 +68,7 @@ public class AllomechanicalGlower : MonoBehaviour {
             }
             if(Player.PlayerZinc.InZincTime) {
                 foreach (Renderer rend in zincs) {
-                    EnableEmission(rend.material, glowColors[zinc], 1 + 2 * Player.PlayerZinc.Intensity);
+                    EnableEmission(rend.material, ZincMeterController.ColorZinc, 1 + 2 * Player.PlayerZinc.Intensity);
                 }
             } else {
                 foreach (Renderer rend in zincs) {
