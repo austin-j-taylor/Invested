@@ -36,8 +36,8 @@ public class PlayerFlywheelController : MonoBehaviour {
 
         Transform wheels = transform.Find("Wheels");
         wheelX = wheels.Find("Motor/WheelX");
-        wheelY = wheels.Find("Motor_001/WheelY");
-        wheelZ = wheels.Find("Motor_002/WheelZ");
+        wheelY = wheels.Find("Motor.001/WheelY");
+        wheelZ = wheels.Find("Motor.002/WheelZ");
         startX = wheelX.localRotation;
         startY = wheelY.localRotation;
         startZ = wheelZ.localRotation;

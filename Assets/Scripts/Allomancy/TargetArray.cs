@@ -7,7 +7,7 @@ using UnityEngine;
  */
 public class TargetArray {
 
-    public const int arraySize = 30; // Area, Bubble Control Mode
+    public const int arraySize = 100; // Area, Bubble Control Mode
 
     public const float lightSaberConstant = 1024;
     public const float firstPersonLSFactor = .1f;
