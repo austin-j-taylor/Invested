@@ -227,7 +227,7 @@ public class ControlWheelController : MonoBehaviour {
     private void UpdateBubble() {
         UpdateText();
         textBubble.text = _KeyPullAbridged + "/" + _KeyPushAbridged + ": " + Pull_Push + "\n"
-            + _KeySelectAbridged + "/" + _KeySelectAlternateAbridged + ":\nselect in a bubble\n"
+            + _KeySelectAbridged + "/" + _KeySelectAlternateAbridged + ":\ntoggle bubble\n"
         + KeyNegate + " + " + scrollWheel + ":\nsize of bubble";
     }
     private void UpdateCoinshot() {
