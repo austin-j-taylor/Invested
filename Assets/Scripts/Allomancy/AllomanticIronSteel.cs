@@ -642,16 +642,16 @@ public class AllomanticIronSteel : Allomancer {
 
     /*
      * Add a target
-     * If disallowDoubleDipping and it's a pushTarget, remove it from pushTargets and move it to pullTargets
+     * If not allowInBothArrays and it's a pushTarget, remove it from pushTargets and move it to pullTargets
      */
-    public void AddPullTarget(Magnetic target, bool disallowDoubleDipping = true) {
+    public void AddPullTarget(Magnetic target, bool allowInBothArrays = false, bool vacuous = false) {
         StartBurning(true);
         if (HasIron) {
-            if (disallowDoubleDipping && PushTargets.IsTarget(target)) {
+            if (!allowInBothArrays && PushTargets.IsTarget(target)) {
                 PushTargets.RemoveTarget(target, false);
             }
             if (target != null) {
-                if (PullTargets.AddTarget(target, this))
+                if (PullTargets.AddTarget(target, vacuous))
                     CalculateForce(target, PullTargets.NetCharge(), PullTargets.SumOfCharges(), iron);
             }
         }
@@ -659,16 +659,16 @@ public class AllomanticIronSteel : Allomancer {
 
     /*
      * Add a target
-     * If disallowDoubleDipping and it's a pullTarget, remove it from pullTargets and move it to pushTargets
+     * If allowInBothArrays and it's a pullTarget, remove it from pullTargets and move it to pushTargets
      */
-    public void AddPushTarget(Magnetic target, bool disallowDoubleDipping = true) {
+    public void AddPushTarget(Magnetic target, bool allowInBothArrays = false, bool vacuous = false) {
         StartBurning(false);
         if (HasSteel) {
-            if (disallowDoubleDipping && PullTargets.IsTarget(target)) {
+            if (!allowInBothArrays && PullTargets.IsTarget(target)) {
                 PullTargets.RemoveTarget(target, false);
             }
             if (target != null) {
-                if (PushTargets.AddTarget(target, this))
+                if (PushTargets.AddTarget(target, vacuous))
                     CalculateForce(target, PushTargets.NetCharge(), PushTargets.SumOfCharges(), steel);
             }
         }

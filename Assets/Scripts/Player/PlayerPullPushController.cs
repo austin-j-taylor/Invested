@@ -81,6 +81,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
     protected override void Awake() {
         base.Awake();
 
+        bubbleMetalStatus = iron;
         Mode = ControlMode.Manual;
         bubbleRenderer = transform.Find("BubbleRange").GetComponent<Renderer>();
     }
@@ -194,42 +195,52 @@ public class PlayerPullPushController : AllomanticIronSteel {
 
                         // Check input for target selection
                         bool select = Keybinds.Select();
+                        bool selectDown = Keybinds.SelectDown();
                         bool selectAlternate = Keybinds.SelectAlternate();
-                        bool addingTargets = (select || selectAlternate) && !Keybinds.Negate();
+                        bool selectAlternateDown = Keybinds.SelectAlternateDown();
+                        bool removing = Keybinds.Negate();
 
                         // If in bubble mode, LMB and RMB will open/close the bubble and Q/E/MB4/MB5 toggle it
                         if (Mode == ControlMode.Bubble) {
                             // Toggle the bubble being persistently open
-                            if (Mode == ControlMode.Bubble) {
-                                if (bubbleIsOpen) {
-                                    if (select) {
-                                        if (bubbleKeepOpen) {
-                                            if (bubbleMetalStatus == iron) {
-                                                bubbleKeepOpen = false;
-                                            } else {
-                                                OpenBubble(iron);
-                                            }
+                            if (bubbleIsOpen) {
+                                if (selectDown) {
+                                    if (bubbleKeepOpen) {
+                                        if (bubbleMetalStatus == iron) {
+                                            bubbleKeepOpen = false;
                                         } else {
-                                            bubbleKeepOpen = true;
                                             OpenBubble(iron);
                                         }
-                                    } else if (selectAlternate) {
-                                        if (bubbleKeepOpen) {
-                                            if (bubbleMetalStatus == steel) {
-                                                bubbleKeepOpen = false;
-                                            } else {
-                                                OpenBubble(steel);
-                                            }
+                                    } else {
+                                        bubbleKeepOpen = true;
+                                        OpenBubble(iron);
+                                    }
+                                } else if (selectAlternateDown) {
+                                    if (bubbleKeepOpen) {
+                                        if (bubbleMetalStatus == steel) {
+                                            bubbleKeepOpen = false;
                                         } else {
-                                            bubbleKeepOpen = true;
                                             OpenBubble(steel);
                                         }
+                                    } else {
+                                        bubbleKeepOpen = true;
+                                        OpenBubble(steel);
                                     }
+                                }
+                            } else {
+                                if(selectDown) {
+                                    OpenBubble(iron);
+                                    bubbleKeepOpen = true;
+                                } else if(selectAlternateDown) {
+                                    OpenBubble(steel);
+                                    bubbleKeepOpen = true;
                                 }
                             }
 
-                            if (keybindPulling || keybindPushing) {
-                                OpenBubble(pulling);
+                            if (keybindPulling) {
+                                OpenBubble(iron);
+                            } else if (keybindPushing) {
+                                OpenBubble(steel);
                             } else if (!bubbleKeepOpen) {
                                 CloseBubble();
                             }
@@ -238,6 +249,31 @@ public class PlayerPullPushController : AllomanticIronSteel {
                         // Search for Metals
                         IronSteelSight(out Magnetic bullseyeTarget, out List<Magnetic> targetsArea, out List<Magnetic> targetsBubble);
 
+                        //if (Mode == ControlMode.Manual || Mode == ControlMode.Coinshot) {
+                        //    if (removing) {
+                        //        if (select) {
+                        //            // If the player is hovering over a pullTarget, instantly remove that one
+                        //            if (!RemovePullTarget(bullseyeTarget)) {
+                        //                if (Keybinds.SelectDown() && !RemovePullTarget(bullseyeTarget)) { // If the highlighted Magnetic is not a pullTarget, remove the oldest pullTarget instead
+                        //                    RemovePullTargetAt(0);
+                        //                }
+                        //            }
+                        //        }
+                        //    } else {
+                        //        if (select) {
+                        //            AddPullTarget(bullseyeTarget);
+                        //        } else {
+                        //            // Not holding down Negate nor Select this round. Consider vacuous pulling.
+                        //            if(!keybindPulling) {
+                        //            }
+                        //        }
+                        //    }
+                        //}
+
+
+
+
+                        /*
                         if (Mode == ControlMode.Manual || Mode == ControlMode.Coinshot) {
 
                             TryToAddTarget(bullseyeTarget, addingTargets, !HasPullTarget, !HasPushTarget, keybindPulling, keybindPushing);
@@ -284,7 +320,9 @@ public class PlayerPullPushController : AllomanticIronSteel {
                             }
 
                             //}
+
                         }
+                        */
                         SetTargetedLineProperties();
                         RefreshHUD();
                     }
@@ -429,7 +467,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
      *  - The BRIGHTNESS of the line is dependent on the FORCE that would result from the Push
      *  - The "LIGHT SABER" FACTOR is dependent on the FORCE acting on the target. If the metal is not a target, it is 1 (no light saber factor).
      */
-    private void IronSteelSight(out Magnetic targetBullseye, out List<Magnetic> targetsArea, out List<Magnetic> targetsBubble) {
+                        private void IronSteelSight(out Magnetic targetBullseye, out List<Magnetic> targetsArea, out List<Magnetic> targetsBubble) {
         targetBullseye = null;
         targetsArea = new List<Magnetic>();
         targetsBubble = new List<Magnetic>();
@@ -761,18 +799,17 @@ public class PlayerPullPushController : AllomanticIronSteel {
         if (!bubbleIsOpen) {
             bubbleIsOpen = true;
             bubbleRenderer.enabled = true;
-            Debug.Log("setting open");
         }
         if (bubbleIsOpen) {
             // set color
             if (metal == iron && bubbleMetalStatus != iron) {
                 bubbleRenderer.material.color = AllomechanicalGlower.ColorIronTransparent;
                 bubbleRenderer.material.SetInt("_Speed", bubbleSpeed);
-                Debug.Log("setting iron");
+                bubbleMetalStatus = iron;
             } else if (metal == steel && bubbleMetalStatus != steel) {
                 bubbleRenderer.material.color = AllomechanicalGlower.ColorSteelTransparent;
                 bubbleRenderer.material.SetInt("_Speed", -bubbleSpeed);
-                Debug.Log("setting stee");
+                bubbleMetalStatus = steel;
             }
         }
     }
@@ -780,7 +817,6 @@ public class PlayerPullPushController : AllomanticIronSteel {
         if (bubbleIsOpen) {
             bubbleIsOpen = false;
             bubbleRenderer.enabled = false;
-            Debug.Log("close");
         }
     }
 
@@ -842,22 +878,18 @@ public class PlayerPullPushController : AllomanticIronSteel {
     public void SetControlModeManual() {
         Mode = ControlMode.Manual;
         PullTargets.Size = sizeOfTargetArrays;
-        bubbleRenderer.enabled = false;
     }
     public void SetControlModeArea() {
         Mode = ControlMode.Area;
         PullTargets.Size = 0;
-        bubbleRenderer.enabled = false;
     }
     public void SetControlModeBubble() {
         Mode = ControlMode.Bubble;
         PullTargets.Size = 0;
-        bubbleRenderer.enabled = true;
     }
     public void SetControlModeCoinshot() {
         Mode = ControlMode.Coinshot;
         PullTargets.Size = sizeOfTargetArrays;
-        bubbleRenderer.enabled = false;
     }
 
     public void AddVacuousPushTarget(Magnetic target, bool keepAdding = false) {
