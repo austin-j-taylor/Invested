@@ -1,19 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!64 &1989981254
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3902913017065656329}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 1
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 5689239496259190614, guid: cd0ac81f9292faa40b9e73bd4f510c24, type: 3}
 --- !u!54 &1989981255
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -30,6 +16,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!64 &1989981254
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3902913017065656329}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 1
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 5689239496259190614, guid: cd0ac81f9292faa40b9e73bd4f510c24, type: 3}
 --- !u!114 &1320975628376254383
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -51,11 +51,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: cd0ac81f9292faa40b9e73bd4f510c24,
-        type: 3}
-      propertyPath: m_Name
-      value: spike_2
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: cd0ac81f9292faa40b9e73bd4f510c24,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -110,6 +105,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: cd0ac81f9292faa40b9e73bd4f510c24,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: cd0ac81f9292faa40b9e73bd4f510c24,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: cd0ac81f9292faa40b9e73bd4f510c24,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: cd0ac81f9292faa40b9e73bd4f510c24,
+        type: 3}
+      propertyPath: m_Name
+      value: spike_2
       objectReference: {fileID: 0}
     - target: {fileID: -1504981713932161579, guid: cd0ac81f9292faa40b9e73bd4f510c24,
         type: 3}
