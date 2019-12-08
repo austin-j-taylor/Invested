@@ -374,6 +374,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
         GamepadController.Shake(.1f, .1f, .3f);
         if (SettingsMenu.settingsData.renderblueLines == 1)
             EnableRenderingBlueLines();
+        UpdateBlueLines();
         ironBurnPercentageLerp = 1;
         steelBurnPercentageLerp = 1;
         forceMagnitudeTarget = 600;
@@ -467,7 +468,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
      *  - The BRIGHTNESS of the line is dependent on the FORCE that would result from the Push
      *  - The "LIGHT SABER" FACTOR is dependent on the FORCE acting on the target. If the metal is not a target, it is 1 (no light saber factor).
      */
-                        private void IronSteelSight(out Magnetic targetBullseye, out List<Magnetic> targetsArea, out List<Magnetic> targetsBubble) {
+    private void IronSteelSight(out Magnetic targetBullseye, out List<Magnetic> targetsArea, out List<Magnetic> targetsBubble) {
         targetBullseye = null;
         targetsArea = new List<Magnetic>();
         targetsBubble = new List<Magnetic>();
@@ -481,33 +482,66 @@ public class PlayerPullPushController : AllomanticIronSteel {
             }
         }
 
+        // To determine the range of detection, find the force that would act on a supermassive metal.
+        // That way, we can ignore metals out of that range for efficiency.
+        float bigCharge = 5;
+        float distanceThresholdSqr;
+        switch (SettingsMenu.settingsData.forceDistanceRelationship) {
+            case 0: {
+                    distanceThresholdSqr = SettingsMenu.settingsData.maxPushRange;
+                    break;
+                }
+            case 1: {
+                    float lhs = SettingsMenu.settingsData.metalDetectionThreshold / (SettingsMenu.settingsData.allomanticConstant * Strength * Charge * bigCharge);
+                    if (SettingsMenu.settingsData.pushControlStyle == 0)
+                        lhs /= GreaterPassiveBurn;
+                    distanceThresholdSqr = 1 / lhs;
+                    break;
+                }
+            default: {
+                    float lhs = SettingsMenu.settingsData.metalDetectionThreshold / (SettingsMenu.settingsData.allomanticConstant * Strength * Charge * bigCharge);
+                    if (SettingsMenu.settingsData.pushControlStyle == 0)
+                        lhs /= GreaterPassiveBurn;
+                    distanceThresholdSqr = -(float)System.Math.Log(lhs) * SettingsMenu.settingsData.distanceConstant;
+                    break;
+                }
+        }
+        //Debug.Log("Distance threshold: " + distanceThresholdSqr);
+        distanceThresholdSqr *= distanceThresholdSqr;
+        int count = 0;
         // Go through every metal in the scene and update the blue lines pointing to them.
         // Add every metal near the center of the screen to the Lists of Magnetics that are in range for Area and Bubble selection.
         float bullseyeWeight = 0; // weight of the Magnetic currently "closest" to the bullseye
         foreach (Magnetic target in GameManager.MagneticsInScene) {
             if (target.isActiveAndEnabled && target != Player.PlayerMagnetic) {
-                float weight = SetLineProperties(target, out float radialDistance, out float linearDistance);
 
-                // If the Magnetic is on the screen
-                if (weight > 0) {
-                    // IF the new Magnetic is closer to the center of the screen than the previous most-center Magnetic
-                    // and IF the new Magnetic is in range
-                    if (weight > bullseyeWeight) {
-                        bullseyeWeight = weight;
-                        targetBullseye = target;
-                    }
-                    if (radialDistance < selectionAreaRadius) {
-                        targetsArea.Add(target);
-                    }
-                    if (linearDistance < selectionBubbleRadius) {
-                        targetsBubble.Add(target);
+                // skip this target completely if it is too far away
+                if((target.transform.position - transform.position).sqrMagnitude > distanceThresholdSqr) {
+                    target.DisableBlueLine();
+                    count++;
+                } else {
+                    float weight = SetLineProperties(target, out float radialDistance, out float linearDistance);
+                    // If the Magnetic is on the screen
+                    if (weight > 0) {
+                        // IF the new Magnetic is closer to the center of the screen than the previous most-center Magnetic
+                        // and IF the new Magnetic is in range
+                        if (weight > bullseyeWeight) {
+                            bullseyeWeight = weight;
+                            targetBullseye = target;
+                        }
+                        if (radialDistance < selectionAreaRadius) {
+                            targetsArea.Add(target);
+                        }
+                        if (linearDistance < selectionBubbleRadius) {
+                            targetsBubble.Add(target);
+                        }
                     }
                 }
             }
         }
         if (targetBullseye) {
             // Brighten the blue line to the Bullseye target.
-            targetBullseye.BrightenLine();
+            //targetBullseye.BrightenLine();
         }
     }
 
@@ -537,7 +571,8 @@ public class PlayerPullPushController : AllomanticIronSteel {
      * Returns the "weight" of the target, which increases within closeness to the player and the center of the screen.
      */
     private float SetLineProperties(Magnetic target, out float radialDistance, out float linearDistance) {
-        Vector3 allomanticForceVector = CalculateAllomanticForce(target);
+
+        Vector3 allomanticForceVector = CalculateAllomanticForce(target, false);
         float allomanticForce = allomanticForceVector.magnitude;
         // If using Percentage force mode, burn percentage affects your range for burning
         if (SettingsMenu.settingsData.pushControlStyle == 0)
@@ -552,7 +587,6 @@ public class PlayerPullPushController : AllomanticIronSteel {
             linearDistance = float.PositiveInfinity;
             return -1;
         }
-
         // Set line properties
         Vector3 screenPosition = CameraController.ActiveCamera.WorldToViewportPoint(target.transform.position);
 
@@ -577,7 +611,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
             //    closeness *= perspectiveFactor;
             //}
 
-            // If nearly off-screen, make lines dimmer
+            // If nearly off - screen, make lines dimmer
             if (screenPosition.z < 0) {
                 closeness *= targetFocusOffScreenBound;
             }
@@ -588,6 +622,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
                 closeness
             );
         }
+
         return weight;
     }
     public void UpdateBlueLines() {

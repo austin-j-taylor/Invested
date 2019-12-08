@@ -290,8 +290,8 @@ public class AllomanticIronSteel : Allomancer {
     }
 
     // Public function for CalculateAllomanticForce that only needs one argument
-    public Vector3 CalculateAllomanticForce(Magnetic target) {
-        return CalculateAllomanticForce(target.CenterOfMass, target.Charge);
+    public Vector3 CalculateAllomanticForce(Magnetic target, bool raycastForLOS = true) {
+        return CalculateAllomanticForce(target.CenterOfMass, target.Charge, raycastForLOS);
     }
 
     /*
@@ -312,8 +312,10 @@ public class AllomanticIronSteel : Allomancer {
      *      w: Wall factor (either 100% or 75%)
      *          If the target is behind a wall, the force is 75% as strong.
      *          
+     *      raycastForLOS: Do a raycast towards the target to see if it is behind a wall (and reduce the force accordingly)
+     *          
      */
-    private Vector3 CalculateAllomanticForce(Vector3 targetCenterOfMass, float targetCharge) {
+    private Vector3 CalculateAllomanticForce(Vector3 targetCenterOfMass, float targetCharge, bool raycastForLOS = true) {
         Vector3 distanceFactor;
         Vector3 positionDifference = targetCenterOfMass - CenterOfMass;
 
@@ -331,12 +333,13 @@ public class AllomanticIronSteel : Allomancer {
                     break;
                 }
         }
-
         // Do the final calculation
-        return SettingsMenu.settingsData.allomanticConstant * Strength * Charge * targetCharge * distanceFactor
-                * ((Physics.Raycast(targetCenterOfMass, -positionDifference, out RaycastHit hit, (targetCenterOfMass - CenterOfMass).magnitude, GameManager.Layer_IgnoreCamera) && hit.transform != transform) ?
-                lineOfSightFactor : 1); // If there is something blocking line-of-sight, the force is reduced.
-
+        Vector3 force = SettingsMenu.settingsData.allomanticConstant * Strength * Charge * targetCharge * distanceFactor;
+        // If there is something blocking line-of-sight, the force is reduced.
+        if(raycastForLOS && Physics.Raycast(targetCenterOfMass, -positionDifference, out RaycastHit hit, (targetCenterOfMass - CenterOfMass).magnitude, GameManager.Layer_IgnoreCamera) && hit.transform != transform) {
+            force *= lineOfSightFactor;
+        }
+        return force;
     }
 
     /* 
