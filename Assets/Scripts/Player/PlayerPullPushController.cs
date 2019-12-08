@@ -16,6 +16,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
     private const float horizontalImportanceFactor = .1f;
     private const float verticalImportanceFactor = .35f;
     private const float importanceRatio = (horizontalImportanceFactor / verticalImportanceFactor) * (horizontalImportanceFactor / verticalImportanceFactor);
+    private const float lineWeightThreshold = 1;
     private const float targetLateralConstant = .1f;
     private const float targetFocusFalloffConstant = 128;       // Determines how quickly blue lines blend from in-focus to out-of-focus
     private const float targetFocusLowerBound = .35f;            // Determines the luminosity of blue lines that are out of foucus
@@ -64,6 +65,8 @@ public class PlayerPullPushController : AllomanticIronSteel {
     private float forceMagnitudeTarget = 600;
 
     public override void Clear() {
+        bubbleIsOpen = false;
+        bubbleKeepOpen = false;
         StopBurning();
         Strength = 1;
         base.Clear();
@@ -71,10 +74,9 @@ public class PlayerPullPushController : AllomanticIronSteel {
 
     public void SoftClear() {
         bubbleIsOpen = false;
+        bubbleKeepOpen = false;
         IronPulling = false;
         SteelPushing = false;
-        VacuouslyPullTargeting = false;
-        VacuouslyPushTargeting = false;
         RemoveAllTargets();
     }
 
@@ -149,8 +151,6 @@ public class PlayerPullPushController : AllomanticIronSteel {
                         if (Keybinds.NegateDown() && timeToSwapBurning > Time.time) {
                             // Double-tapped, Swap targets
                             PullTargets.SwapContents(PushTargets);
-                            // If vacuously targeting, swap statuses of vacuous targets
-                            SwapVacuousTargets();
                         } else {
                             if (Keybinds.NegateDown()) {
                                 timeToSwapBurning = Time.time + timeDoubleTapWindow;
@@ -249,26 +249,51 @@ public class PlayerPullPushController : AllomanticIronSteel {
                         // Search for Metals
                         IronSteelSight(out Magnetic bullseyeTarget, out List<Magnetic> targetsArea, out List<Magnetic> targetsBubble);
 
-                        //if (Mode == ControlMode.Manual || Mode == ControlMode.Coinshot) {
-                        //    if (removing) {
-                        //        if (select) {
-                        //            // If the player is hovering over a pullTarget, instantly remove that one
-                        //            if (!RemovePullTarget(bullseyeTarget)) {
-                        //                if (Keybinds.SelectDown() && !RemovePullTarget(bullseyeTarget)) { // If the highlighted Magnetic is not a pullTarget, remove the oldest pullTarget instead
-                        //                    RemovePullTargetAt(0);
-                        //                }
-                        //            }
-                        //        }
-                        //    } else {
-                        //        if (select) {
-                        //            AddPullTarget(bullseyeTarget);
-                        //        } else {
-                        //            // Not holding down Negate nor Select this round. Consider vacuous pulling.
-                        //            if(!keybindPulling) {
-                        //            }
-                        //        }
-                        //    }
-                        //}
+                        if (Mode == ControlMode.Manual || Mode == ControlMode.Coinshot) {
+                            if (removing) {
+                                if (select) {
+                                    // If the player is hovering over a pullTarget, instantly remove that one
+                                    if (!RemovePullTarget(bullseyeTarget)) {
+                                        if (Keybinds.SelectDown() && !RemovePullTarget(bullseyeTarget)) { // If the highlighted Magnetic is not a pullTarget, remove the oldest pullTarget instead
+                                            RemovePullTargetAt(0);
+                                        }
+                                    }
+                                }
+                                if (selectAlternate) {
+                                    // If the player is hovering over a target, instantly remove that one
+                                    if (!RemovePushTarget(bullseyeTarget)) {
+                                        if (Keybinds.SelectAlternateDown() && !RemovePushTarget(bullseyeTarget)) { // If the highlighted Magnetic is not a target, remove the oldest target instead
+                                            RemovePushTargetAt(0);
+                                        }
+                                    }
+                                }
+                            } else {
+                                if (select) {
+                                    AddPullTarget(bullseyeTarget);
+                                } else {
+                                    // Not holding down Negate nor Select this round. Consider vacuous pulling.
+                                    if(!HasPullTarget) {
+                                        if(keybindPulling) {
+                                            AddPullTarget(bullseyeTarget, true, true);
+                                        }
+                                    } else if(!keybindPulling && PullTargets.VacuousCount > 0) {
+                                        PullTargets.RemoveAllVacuousTargets();
+                                    }
+                                }
+                                if (selectAlternate) {
+                                    AddPushTarget(bullseyeTarget);
+                                } else {
+                                    // Not holding down Negate nor selectAlternate this round. Consider vacuous pulling.
+                                    if (!HasPushTarget) {
+                                        if (keybindPushing) {
+                                            AddPushTarget(bullseyeTarget, true, true);
+                                        }
+                                    } else if (!keybindPushing && PushTargets.VacuousCount > 0) {
+                                        PushTargets.RemoveAllVacuousTargets();
+                                    }
+                                }
+                            }
+                        }
 
 
 
@@ -372,12 +397,12 @@ public class PlayerPullPushController : AllomanticIronSteel {
         if (!base.StartBurning(startIron))
             return false;
         GamepadController.Shake(.1f, .1f, .3f);
-        if (SettingsMenu.settingsData.renderblueLines == 1)
-            EnableRenderingBlueLines();
-        UpdateBlueLines();
         ironBurnPercentageLerp = 1;
         steelBurnPercentageLerp = 1;
         forceMagnitudeTarget = 600;
+        if (SettingsMenu.settingsData.renderblueLines == 1)
+            EnableRenderingBlueLines();
+        UpdateBlueLines();
 
         return true;
     }
@@ -386,6 +411,8 @@ public class PlayerPullPushController : AllomanticIronSteel {
         base.StopBurning();
         steelBurnPercentageLerp = 0;
         ironBurnPercentageLerp = 0;
+        IronPassiveBurn = 0;
+        SteelPassiveBurn = 0;
         forceMagnitudeTarget = 0;
         GamepadController.SetRumble(0, 0);
         GetComponentInChildren<AllomechanicalGlower>().RemoveAllEmissions();
@@ -393,7 +420,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
         bubbleRenderer.enabled = false;
         RefreshHUD();
     }
-
+    /*
     // Called on Magnetics that should be added or removed as Push/Pull-targets
     // This whoooole thing is bad coding practice
     private void TryToAddTarget(Magnetic target, bool addingTargets, bool nowVacuouslyPulling, bool nowVacuouslyPushing, bool keybindPulling, bool keybindPushing) {
@@ -452,6 +479,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
             }
         }
     }
+    */
 
     /*
      * STEEL/IRONSIGHT MANAGEMENT: blue lines pointing to nearby metals
@@ -522,7 +550,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
                 } else {
                     float weight = SetLineProperties(target, out float radialDistance, out float linearDistance);
                     // If the Magnetic is on the screen
-                    if (weight > 0) {
+                    if (weight > lineWeightThreshold) {
                         // IF the new Magnetic is closer to the center of the screen than the previous most-center Magnetic
                         // and IF the new Magnetic is in range
                         if (weight > bullseyeWeight) {
@@ -925,13 +953,5 @@ public class PlayerPullPushController : AllomanticIronSteel {
     public void SetControlModeCoinshot() {
         Mode = ControlMode.Coinshot;
         PullTargets.Size = sizeOfTargetArrays;
-    }
-
-    public void AddVacuousPushTarget(Magnetic target, bool keepAdding = false) {
-        if (keepAdding && PushTargets.IsFull()) {
-            PushTargets.Size++;
-        }
-        VacuouslyPushTargeting = true;
-        AddPushTarget(target, false);
     }
 }

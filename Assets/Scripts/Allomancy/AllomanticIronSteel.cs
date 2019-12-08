@@ -73,6 +73,16 @@ public class AllomanticIronSteel : Allomancer {
 
     // Number of targets for manual targeting
     protected int sizeOfTargetArrays = 1;
+    public int SizeOfTargetArrays {
+        get {
+            return sizeOfTargetArrays;
+        }
+        set {
+            sizeOfTargetArrays = value;
+            PullTargets.Size = sizeOfTargetArrays;
+            PushTargets.Size = sizeOfTargetArrays;
+        }
+    }
 
     // Used for calculating the acceleration over the last frame for pushing/pulling
     public Vector3 LastAllomancerVelocity { get; private set; } = Vector3.zero;
@@ -90,15 +100,6 @@ public class AllomanticIronSteel : Allomancer {
     public Vector3 LastMaximumNetForce { get; private set; } = Vector3.zero;
     private Vector3 thisFrameMaximumNetForce = Vector3.zero;
 
-    // Debug variables for viewing values in the Unity editor
-    //public float allomanticsForce;
-    //public float netAllomancersForce;
-    //public float netTargetsForce;
-    //public Vector3 allomanticsForces;
-    //public Vector3 resititutionFromTargetsForce;
-    //public Vector3 resititutionFromPlayersForce;
-    //public float percentOfTargetForceReturned;
-    //public float percentOfAllomancerForceReturned;
     // Metal burn percentages
     // Used when burning metals, but not necessarily immediately Pushing or Pulling. Hence, they are "targets" and not the actual burn percentage of the Allomancer.
     public float IronBurnPercentageTarget { get; set; }
@@ -138,36 +139,6 @@ public class AllomanticIronSteel : Allomancer {
         }
     }
 
-    protected bool vacuouslyPullTargeting = false;
-    protected bool vacuouslyPushTargeting = false;
-    protected bool VacuouslyPullTargeting {
-        get {
-            return vacuouslyPullTargeting;
-        }
-        set {
-            if (value != vacuouslyPullTargeting) {
-                PullTargets.Clear();
-                vacuouslyPullTargeting = value;
-                // Make sure that the array size is set correctly (you might be vacuously Pushing/Pulling on more metals than you can target)
-                if (!value)
-                    PullTargets.Size = sizeOfTargetArrays;
-            }
-        }
-    }
-    protected bool VacuouslyPushTargeting {
-        get {
-            return vacuouslyPushTargeting;
-        }
-        set {
-            if (value != vacuouslyPushTargeting) {
-                PushTargets.Clear();
-                vacuouslyPushTargeting = value;
-                // Make sure that the array size is set correctly (you might be vacuously Pushing/Pulling on more metals than you can target)
-                if (!value)
-                    PushTargets.Size = sizeOfTargetArrays;
-            }
-        }
-    }
 
     protected virtual void Awake() {
         rb = GetComponent<Rigidbody>();
@@ -227,7 +198,7 @@ public class AllomanticIronSteel : Allomancer {
                         AddForce(PullTargets[i]);
                         BurnSteel(PullTargets[i].LastNetForceOnAllomancer.magnitude);
                     }
-                } else if (HasPullTarget && !(HasPushTarget && SteelPushing) && !VacuouslyPushTargeting) {  // If nothing else, at least calculate the force on your inactive targets
+                } else if (HasPullTarget && !(HasPushTarget && SteelPushing)) {  // If nothing else, at least calculate the force on your inactive targets
                     for (int i = 0; i < PullTargets.Count; i++) {
                         CalculateForce(PullTargets[i], netPullTargetsCharge, sumPullTargetsCharge, iron);
                     }
@@ -245,7 +216,7 @@ public class AllomanticIronSteel : Allomancer {
                         AddForce(PushTargets[i]);
                         BurnSteel(PushTargets[i].LastNetForceOnAllomancer.magnitude);
                     }
-                } else if (HasPushTarget && !(HasPullTarget && IronPulling) && !VacuouslyPullTargeting) {
+                } else if (HasPushTarget && !(HasPullTarget && IronPulling)) {
                     for (int i = 0; i < PushTargets.Count; i++) {
                         CalculateForce(PushTargets[i], netPushTargetsCharge, sumPushTargetsCharge, steel);
                     }
@@ -707,11 +678,5 @@ public class AllomanticIronSteel : Allomancer {
 
     public void RemovePushTargetAt(int index) {
         PushTargets.RemoveTargetAt(index);
-    }
-
-    protected void SwapVacuousTargets() {
-        bool temp = vacuouslyPullTargeting;
-        vacuouslyPullTargeting = vacuouslyPushTargeting;
-        vacuouslyPushTargeting = temp;
     }
 }

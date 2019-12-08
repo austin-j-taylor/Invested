@@ -105,6 +105,10 @@ public class TargetArray {
     public void RemoveTargetAt(int index) {
         if (index < Count) {
             MoveDown(index);
+            // if that was a vacuous target, decrease that count
+            if(index < VacuousCount) {
+                VacuousCount--;
+            }
         }
     }
 
@@ -117,6 +121,10 @@ public class TargetArray {
         for (int i = 0; i < Count; i++) {
             if (targets[i] == target) { // Magnetic was found, move targets along
                 MoveDown(i, clear);
+                // if that was a vacuous target, decrease that count
+                if (i < VacuousCount) {
+                    VacuousCount--;
+                }
                 return true;
             }
         }
@@ -133,10 +141,11 @@ public class TargetArray {
      */
     public bool AddTarget(Magnetic newTarget, bool addingVacuous) {
         if(addingVacuous) {
+            Debug.Log("Adding vacuous target, count was  " + Count +" and vc was " + VacuousCount);
             // adding a vacuous target
             // All other targets must also be vacuous:
             if(Count != VacuousCount) {
-                Debug.LogError("TargetArray: adding a vacuous target when non-vacuous targets are already present");
+                Debug.LogError("TargetArray: adding a vacuous target when non-vacuous targets are already present (" + Count + " != " + VacuousCount + ")");
             }
             VacuousCount++;
         } else {
@@ -163,8 +172,9 @@ public class TargetArray {
             if (Count < Size) {
                 targets[Count] = newTarget;
                 Count++;
-            } else {    // Count == Size. Move all elements down, delete the first entry, and add newTarget to the end.
-                        // Do not increment Count, since the number of entries doesn't change.
+            } else {
+                // Count == Size. Move all elements down, delete the first entry, and add newTarget to the end.
+                // Do not increment Count, since the number of entries doesn't change.
                 MoveDown(0);
                 targets[Count] = newTarget;
                 Count++;
@@ -208,6 +218,10 @@ public class TargetArray {
         int tempCount = Count;
         Count = other.Count;
         other.Count = tempCount;
+
+        tempCount = VacuousCount;
+        VacuousCount = other.VacuousCount;
+        other.VacuousCount = tempCount;
     }
 
     /*

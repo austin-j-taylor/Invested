@@ -32,6 +32,7 @@ public class ControlWheelController : MonoBehaviour {
     private Text textBubble;
     private Text textCoinshot;
 
+
     private Selection highlit; // the selection being hovered over
     private Selection selectedSpoke; // manual, area, etc.
     private Selection selectedCoin; // semi auto, full auto, spray
@@ -78,6 +79,9 @@ public class ControlWheelController : MonoBehaviour {
                             selectedCoin = highlit;
                             Player.PlayerInstance.CoinThrowingMode = Player.CoinMode.Spray;
                             HUD.ThrowingAmmoMeter.Alert(Player.CoinMode.Spray);
+                            if(Player.PlayerIronSteel.SizeOfTargetArrays < 3) {
+                                Player.PlayerIronSteel.SizeOfTargetArrays = 3;
+                            }
                             break;
                         case Selection.Coin_Full:
                             selectedCoin = highlit;
