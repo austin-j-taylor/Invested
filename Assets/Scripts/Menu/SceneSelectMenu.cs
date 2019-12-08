@@ -15,12 +15,13 @@ public class SceneSelectMenu : MonoBehaviour {
     public const int sceneShootingGrounds = 4;
     public const int sceneSandbox = 5;
     public const int sceneSouthernMountains = 6;
-    public const int sceneSimulationDuel = 7;
-    public const int sceneSimulationWall = 8;
-    public const int sceneSimulationGround = 9;
-    public const int sceneLevel02 = 10;
-    public const int sceneLevel03 = 11;
-    public const int sceneLevel04 = 12;
+    public const int sceneSeaOfMetal = 7;
+    public const int sceneSimulationDuel = 8;
+    public const int sceneSimulationWall = 9;
+    public const int sceneSimulationGround = 10;
+    public const int sceneLevel02 = 11;
+    public const int sceneLevel03 = 12;
+    public const int sceneLevel04 = 13;
 
     public bool IsOpen {
         get {
@@ -42,6 +43,7 @@ public class SceneSelectMenu : MonoBehaviour {
     private Button shootingGroundsButton;
     private Button sandboxButton;
     private Button southernMountainsButton;
+    private Button seaOfMetalButton;
     private Button simulationDuelButton;
     private Button simulationWallButton;
     private Button simulationGroundButton;
@@ -60,6 +62,7 @@ public class SceneSelectMenu : MonoBehaviour {
         luthadelButton = sandboxesHeader.Find("Luthadel").GetComponent<Button>();
         shootingGroundsButton = sandboxesHeader.Find("ShootingGrounds").GetComponent<Button>();
         sandboxButton = sandboxesHeader.Find("Sandbox").GetComponent<Button>();
+        seaOfMetalButton = sandboxesHeader.Find("SeaOfMetal").GetComponent<Button>();
         southernMountainsButton = sandboxesHeader.Find("SouthernMountains").GetComponent<Button>();
         simulationDuelButton = simulationsHeader.Find("Duel").GetComponent<Button>();
         simulationWallButton = simulationsHeader.Find("CoinWall").GetComponent<Button>();
@@ -74,6 +77,7 @@ public class SceneSelectMenu : MonoBehaviour {
         shootingGroundsButton.onClick.AddListener(OnClickedShootingGrounds);
         sandboxButton.onClick.AddListener(OnClickedSandbox);
         southernMountainsButton.onClick.AddListener(OnClickedSouthernMountains);
+        seaOfMetalButton.onClick.AddListener(OnClickedSeaOfMetal);
         simulationDuelButton.onClick.AddListener(OnClickedSimulationDuel);
         simulationWallButton.onClick.AddListener(OnClickedSimulationWall);
         simulationGroundButton.onClick.AddListener(OnClickedSimulationGround);
@@ -183,6 +187,9 @@ public class SceneSelectMenu : MonoBehaviour {
     }
     private void OnClickedSimulationDuel() {
         LoadSceneFromClick(sceneSimulationDuel);
+    }
+    private void OnClickedSeaOfMetal() {
+        LoadSceneFromClick(sceneSeaOfMetal);
     }
     private void OnClickedSimulationWall() {
         LoadSceneFromClick(sceneSimulationWall);
