@@ -6,7 +6,9 @@ using VolumetricLines;
  * Controls the blue metal lines that point from the this non-player Allomancer to the Player, if this non-player Allomancer is pushing/pulling on the Player.
  */
 public class NonPlayerPushPullController : AllomanticIronSteel {
-    
+
+    private const int maxNumberOfTargets = 10;
+
     public VolumetricLineBehavior[] pullLines;
     public VolumetricLineBehavior[] pushLines;
 

@@ -30,7 +30,7 @@ public class Magnetic : MonoBehaviour {
     private bool isBeingPushPulled = false;
     public virtual bool IsBeingPushPulled {
         get {
-             return isBeingPushPulled;
+            return isBeingPushPulled;
         }
         protected set {
             isBeingPushPulled = value;
@@ -218,7 +218,6 @@ public class Magnetic : MonoBehaviour {
             IsStatic = (Rb == null);
         }
         blueLine = Instantiate(GameManager.MetalLineTemplate);
-        DisableBlueLine();
         colliders = GetComponentsInChildren<Collider>();
         lightSaberFactor = 1;
         lastWasPulled = false;
@@ -341,7 +340,7 @@ public class Magnetic : MonoBehaviour {
     }
 
     public void DisableBlueLine() {
-        if (blueLine && blueLine.gameObject.activeSelf)
+        if (blueLine)
             blueLine.gameObject.SetActive(false);
     }
 

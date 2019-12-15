@@ -29,6 +29,8 @@ public class SceneSelectMenu : MonoBehaviour {
         }
     }
 
+    public static bool NowLoadingScene { get; private set; } = true;
+
     private static Button highlitButton;
 
     private Text tooltip;
@@ -126,6 +128,7 @@ public class SceneSelectMenu : MonoBehaviour {
         LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
+
     private void ClearAfterSceneChange(Scene scene, LoadSceneMode mode) {
         if (mode == LoadSceneMode.Single) {
             PauseMenu.UnPause();
@@ -151,6 +154,7 @@ public class SceneSelectMenu : MonoBehaviour {
                 Player.PlayerPewter.PewterReserve.SetMass(150);
             }
         }
+        NowLoadingScene = false;
     }
 
     public void SetTooltip(string tip) {

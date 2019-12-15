@@ -79,6 +79,9 @@ public class GameManager : MonoBehaviour {
             AllomanticIronSteel ironSteel = allomancer.GetComponent<AllomanticIronSteel>();
             if (ironSteel) {
                 ironSteel.RemoveTarget(magnetic);
+                if(ironSteel.UsingBubble) {
+                    ironSteel.RemoveBubbleTarget(magnetic);
+                }
             }
         }
         MagneticsInScene.Remove(magnetic);

@@ -157,6 +157,7 @@ public class Player : PewterEntity {
         GetComponentInChildren<AllomechanicalGlower>().RemoveAllEmissions();
         movementController.Clear();
         PlayerFlywheelController.Clear();
+        PlayerIronSteel.StopBurning(false);
         PlayerIronSteel.Clear();
         PlayerPewter.Clear();
         PlayerZinc.Clear();

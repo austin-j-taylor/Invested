@@ -29,13 +29,16 @@ public class PlayerPullPushController : AllomanticIronSteel {
     public const float blueLineBrightnessFactor = 1 / 6f;
 
     // Control Mode constants
+    private const int maxNumberOfTargets = 10;
+    private const int minNumberOfTargets = 1;
     private const float minAreaRadius = .0251f;
     private const float maxAreaRadius = .25f;
     private const float areaRadiusIncrement = .025f;
     private const int minBubbleRadius = 1;
     private const int maxBubbleRadius = 10;
     private const int bubbleRadiusIncrement = 1;
-    private const int bubbleSpeed = 10;
+    private const float bubbleIntensityMin = 0.25f;
+    private const float bubbleIntensityMax = 0.75f;
     // Other Constants
     private const float burnPercentageLerpConstant = .30f;
     private const int blueLineLayer = 10;
@@ -49,32 +52,24 @@ public class PlayerPullPushController : AllomanticIronSteel {
     private float timeToSwapBurning = 0;
 
     public ControlMode Mode { get; private set; }
-    // radius for Area and Bubble
+    // radius for Area
     private float selectionAreaRadius = .025f;
-    private float selectionBubbleRadius = 2f;
-    private Renderer bubbleRenderer;
-    private bool bubbleIsOpen; // true when the bubble is open at all
-    private bool bubbleKeepOpen; // toggled by Q/E/MB4/MB5
-    private bool bubbleMetalStatus; // true for iron, false for steel
-
     // Lerp goals for burn percentage targets
+
     // These are displayed in the Burn Rate Meter
     private float ironBurnPercentageLerp = 0;
     private float steelBurnPercentageLerp = 0;
+    private float bubbleBurnPercentageLerp = 0;
     // for Magnitude control style
     private float forceMagnitudeTarget = 600;
 
     public override void Clear() {
-        bubbleIsOpen = false;
-        bubbleKeepOpen = false;
         StopBurning();
         Strength = 1;
         base.Clear();
     }
 
     public void SoftClear() {
-        bubbleIsOpen = false;
-        bubbleKeepOpen = false;
         IronPulling = false;
         SteelPushing = false;
         RemoveAllTargets();
@@ -86,6 +81,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
         bubbleMetalStatus = iron;
         Mode = ControlMode.Manual;
         bubbleRenderer = transform.Find("BubbleRange").GetComponent<Renderer>();
+        BubbleTargets = new TargetArray();
     }
     /*
      * Read inputs for selecting targets.
@@ -110,7 +106,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
                             scrollValue = Keybinds.ScrollWheelAxis();
                         } else {
                             if (SettingsMenu.settingsData.pushControlStyle == 0) {
-                                ChangeBurnPercentageTarget(Keybinds.ScrollWheelAxis());
+                                ChangeBurnPercentageTarget(Keybinds.ScrollWheelAxis(), Mode == ControlMode.Bubble);
                             } else {
                                 ChangeTargetForceMagnitude(Keybinds.ScrollWheelAxis());
                             }
@@ -164,15 +160,19 @@ public class PlayerPullPushController : AllomanticIronSteel {
                         bool pulling, pushing;
                         bool keybindPulling = Keybinds.IronPulling();
                         bool keybindPushing = Keybinds.SteelPushing();
+                        bool keybindPullingDown = Keybinds.PullDown();
+                        bool keybindPushingDown = Keybinds.PushDown();
                         if (Mode == ControlMode.Coinshot) {
                             pulling = keybindPulling && HasIron && HasPullTarget;
                             pushing = keybindPushing && HasSteel;
                             // if LMB while has a push target, Push and don't Pull.
                             if (keybindPulling && !HasPullTarget) {
-                                pulling = false;
-                                keybindPulling = false;
                                 pushing = true;
                                 keybindPushing = true;
+                                keybindPushingDown = keybindPullingDown;
+                                pulling = false;
+                                keybindPulling = false;
+                                keybindPullingDown = false;
                             }
                         } else {
                             pulling = keybindPulling && HasIron;
@@ -203,51 +203,51 @@ public class PlayerPullPushController : AllomanticIronSteel {
                         // If in bubble mode, LMB and RMB will open/close the bubble and Q/E/MB4/MB5 toggle it
                         if (Mode == ControlMode.Bubble) {
                             // Toggle the bubble being persistently open
-                            if (bubbleIsOpen) {
+                            if (BubbleIsOpen) {
                                 if (selectDown) {
                                     if (bubbleKeepOpen) {
                                         if (bubbleMetalStatus == iron) {
                                             bubbleKeepOpen = false;
                                         } else {
-                                            OpenBubble(iron);
+                                            BubbleOpen(iron);
                                         }
                                     } else {
                                         bubbleKeepOpen = true;
-                                        OpenBubble(iron);
+                                        BubbleOpen(iron);
                                     }
                                 } else if (selectAlternateDown) {
                                     if (bubbleKeepOpen) {
                                         if (bubbleMetalStatus == steel) {
                                             bubbleKeepOpen = false;
                                         } else {
-                                            OpenBubble(steel);
+                                            BubbleOpen(steel);
                                         }
                                     } else {
                                         bubbleKeepOpen = true;
-                                        OpenBubble(steel);
+                                        BubbleOpen(steel);
                                     }
                                 }
                             } else {
-                                if(selectDown) {
-                                    OpenBubble(iron);
+                                if (selectDown) {
+                                    BubbleOpen(iron);
                                     bubbleKeepOpen = true;
-                                } else if(selectAlternateDown) {
-                                    OpenBubble(steel);
+                                } else if (selectAlternateDown) {
+                                    BubbleOpen(steel);
                                     bubbleKeepOpen = true;
                                 }
                             }
 
                             if (keybindPulling) {
-                                OpenBubble(iron);
+                                BubbleOpen(iron);
                             } else if (keybindPushing) {
-                                OpenBubble(steel);
+                                BubbleOpen(steel);
                             } else if (!bubbleKeepOpen) {
-                                CloseBubble();
+                                BubbleClose();
                             }
                         }
 
                         // Search for Metals
-                        IronSteelSight(out Magnetic bullseyeTarget, out List<Magnetic> targetsArea, out List<Magnetic> targetsBubble);
+                        IronSteelSight(out Magnetic bullseyeTarget, out List<Magnetic> newTargetsArea, out List<Magnetic> newTargetsBubble);
 
                         if (Mode == ControlMode.Manual || Mode == ControlMode.Coinshot) {
                             if (removing) {
@@ -272,11 +272,11 @@ public class PlayerPullPushController : AllomanticIronSteel {
                                     AddPullTarget(bullseyeTarget);
                                 } else {
                                     // Not holding down Negate nor Select this round. Consider vacuous pulling.
-                                    if(!HasPullTarget) {
-                                        if(keybindPulling) {
+                                    if (!HasPullTarget) {
+                                        if (keybindPullingDown) {
                                             AddPullTarget(bullseyeTarget, true, true);
                                         }
-                                    } else if(!keybindPulling && PullTargets.VacuousCount > 0) {
+                                    } else if (!keybindPulling && PullTargets.VacuousCount > 0) {
                                         PullTargets.RemoveAllVacuousTargets();
                                     }
                                 }
@@ -285,7 +285,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
                                 } else {
                                     // Not holding down Negate nor selectAlternate this round. Consider vacuous pulling.
                                     if (!HasPushTarget) {
-                                        if (keybindPushing) {
+                                        if (keybindPushingDown) {
                                             AddPushTarget(bullseyeTarget, true, true);
                                         }
                                     } else if (!keybindPushing && PushTargets.VacuousCount > 0) {
@@ -295,7 +295,22 @@ public class PlayerPullPushController : AllomanticIronSteel {
                             }
                         }
 
-
+                        // Handle targets when bubble is open
+                        if (BubbleIsOpen) {
+                            // remove out-of-range targets
+                            BubbleTargets.RemoveAllOutOfBubble(SelectionBubbleRadius, this);
+                            BubbleTargets.Size = newTargetsBubble.Count;
+                            // add new in-range targets
+                            for (int i = 0; i < newTargetsBubble.Count; i++) {
+                                BubbleTargets.AddTarget(newTargetsBubble[i], false);
+                            }
+                            //// assign bubble targets to real targets
+                            //if (bubbleMetalStatus == iron) {
+                            //    PullTargets.SetContents(BubbleTargets, maxNumberOfTargets);
+                            //} else {
+                            //    PushTargets.SetContents(BubbleTargets, maxNumberOfTargets);
+                            //}
+                        }
 
 
                         /*
@@ -320,7 +335,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
                             //} else {
 
                             // If the Bubble is open, you need to add targets a) within the bubble and b) for what your other control mode is
-                            List<Magnetic> targets = (Mode == ControlMode.Area) ? targetsArea : targetsBubble;
+                            List<Magnetic> targets = (Mode == ControlMode.Area) ? newTargetsArea : newTargetsBubble;
                             // Adding targets
                             // When targets change, remove all old targets and make space for the new ones
                             if (select || (Keybinds.PullDown() && !HasPullTarget)) {// || VacuouslyPullTargeting) {
@@ -400,6 +415,9 @@ public class PlayerPullPushController : AllomanticIronSteel {
         ironBurnPercentageLerp = 1;
         steelBurnPercentageLerp = 1;
         forceMagnitudeTarget = 600;
+        if(Mode == ControlMode.Bubble) {
+            BubbleOpen(startIron);
+        }
         if (SettingsMenu.settingsData.renderblueLines == 1)
             EnableRenderingBlueLines();
         UpdateBlueLines();
@@ -407,8 +425,8 @@ public class PlayerPullPushController : AllomanticIronSteel {
         return true;
     }
 
-    public override void StopBurning() {
-        base.StopBurning();
+    public override void StopBurning(bool clearTargets = true) {
+        base.StopBurning(clearTargets);
         steelBurnPercentageLerp = 0;
         ironBurnPercentageLerp = 0;
         IronPassiveBurn = 0;
@@ -496,10 +514,10 @@ public class PlayerPullPushController : AllomanticIronSteel {
      *  - The BRIGHTNESS of the line is dependent on the FORCE that would result from the Push
      *  - The "LIGHT SABER" FACTOR is dependent on the FORCE acting on the target. If the metal is not a target, it is 1 (no light saber factor).
      */
-    private void IronSteelSight(out Magnetic targetBullseye, out List<Magnetic> targetsArea, out List<Magnetic> targetsBubble) {
+    private void IronSteelSight(out Magnetic targetBullseye, out List<Magnetic> newTargetsArea, out List<Magnetic> newTargetsBubble) {
         targetBullseye = null;
-        targetsArea = new List<Magnetic>();
-        targetsBubble = new List<Magnetic>();
+        newTargetsArea = new List<Magnetic>();
+        newTargetsBubble = new List<Magnetic>();
 
 
         // If the player is directly looking at a magnetic's collider, use that for the bullseye
@@ -544,7 +562,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
             if (target.isActiveAndEnabled && target != Player.PlayerMagnetic) {
 
                 // skip this target completely if it is too far away
-                if((target.transform.position - transform.position).sqrMagnitude > distanceThresholdSqr) {
+                if ((target.transform.position - transform.position).sqrMagnitude > distanceThresholdSqr) {
                     target.DisableBlueLine();
                     count++;
                 } else {
@@ -558,11 +576,11 @@ public class PlayerPullPushController : AllomanticIronSteel {
                             targetBullseye = target;
                         }
                         if (radialDistance < selectionAreaRadius) {
-                            targetsArea.Add(target);
+                            newTargetsArea.Add(target);
                         }
-                        if (linearDistance < selectionBubbleRadius) {
-                            targetsBubble.Add(target);
-                        }
+                    }
+                    if (linearDistance < SelectionBubbleRadius) {
+                        newTargetsBubble.Add(target);
                     }
                 }
             }
@@ -591,6 +609,8 @@ public class PlayerPullPushController : AllomanticIronSteel {
         } else if (HasPushTarget) {
             PushTargets.UpdateBlueLines(steel, 0, CenterOfMass);
         }
+
+        BubbleTargets.UpdateBlueLines(bubbleMetalStatus, BubbleBurnPercentageTarget, CenterOfMass);
     }
 
     /*
@@ -681,11 +701,8 @@ public class PlayerPullPushController : AllomanticIronSteel {
                 }
                 break;
             case ControlMode.Bubble:
-                if (selectionBubbleRadius < maxBubbleRadius) {
-                    selectionBubbleRadius += bubbleRadiusIncrement;
-                    // set size
-                    float scale = selectionBubbleRadius * 2;
-                    bubbleRenderer.transform.localScale = new Vector3(scale, scale, scale);
+                if (SelectionBubbleRadius < maxBubbleRadius) {
+                    BubbleSetSize(SelectionBubbleRadius + bubbleRadiusIncrement);
                 }
                 break;
         }
@@ -707,11 +724,8 @@ public class PlayerPullPushController : AllomanticIronSteel {
                 }
                 break;
             case ControlMode.Bubble:
-                if (selectionBubbleRadius > minBubbleRadius) {
-                    selectionBubbleRadius -= bubbleRadiusIncrement;
-                    // set size
-                    float scale = selectionBubbleRadius * 2;
-                    bubbleRenderer.transform.localScale = new Vector3(scale, scale, scale);
+                if (SelectionBubbleRadius > minBubbleRadius) {
+                    BubbleSetSize(SelectionBubbleRadius - bubbleRadiusIncrement);
                 }
                 break;
         }
@@ -749,20 +763,26 @@ public class PlayerPullPushController : AllomanticIronSteel {
     }
 
     // Increments or decrements the current burn percentage
-    private void ChangeBurnPercentageTarget(float change) {
-        if (change > 0) {
-            change = .10f;
-            if (ironBurnPercentageLerp < .09f || steelBurnPercentageLerp < .09f) {
-                change /= 10f;
+    private void ChangeBurnPercentageTarget(float change, bool percentageForBubble = false) {
+
+        if(percentageForBubble) {
+            SetBubblePercentageTarget(Mathf.Clamp(bubbleBurnPercentageLerp + change, 0, 1));
+        } else {
+            if (change > 0) {
+                change = .10f;
+                if (ironBurnPercentageLerp < .09f || steelBurnPercentageLerp < .09f) {
+                    change /= 10f;
+                }
+            } else if (change < 0) {
+                change = -.10f;
+                if (ironBurnPercentageLerp <= .10f || steelBurnPercentageLerp <= .10f) {
+                    change /= 10f;
+                }
             }
-        } else if (change < 0) {
-            change = -.10f;
-            if (ironBurnPercentageLerp <= .10f || steelBurnPercentageLerp <= .10f) {
-                change /= 10f;
-            }
+            SetPullPercentageTarget(Mathf.Clamp(ironBurnPercentageLerp + change, 0, 1));
+            SetPushPercentageTarget(Mathf.Clamp(steelBurnPercentageLerp + change, 0, 1));
         }
-        SetPullPercentageTarget(Mathf.Clamp(ironBurnPercentageLerp + change, 0, 1));
-        SetPushPercentageTarget(Mathf.Clamp(steelBurnPercentageLerp + change, 0, 1));
+
     }
 
     // Sets the lerp goal for iron burn percentage
@@ -787,6 +807,17 @@ public class PlayerPullPushController : AllomanticIronSteel {
                 steelBurnPercentageLerp = 0;
         }
     }
+    // Sets the lerp goal for the bubble
+    private void SetBubblePercentageTarget(float percentage) {
+        if (percentage > .005f) {
+            bubbleBurnPercentageLerp = Mathf.Min(1, percentage);
+        } else {
+            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+                bubbleBurnPercentageLerp = 1;
+            else
+                bubbleBurnPercentageLerp = 0;
+        }
+    }
 
     /*
      * Lerps from the current burn percentage to the burn percentage target for both metals.
@@ -796,6 +827,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
     private void LerpToBurnPercentages() {
         IronBurnPercentageTarget = Mathf.Lerp(IronBurnPercentageTarget, ironBurnPercentageLerp, burnPercentageLerpConstant);
         SteelBurnPercentageTarget = Mathf.Lerp(SteelBurnPercentageTarget, steelBurnPercentageLerp, burnPercentageLerpConstant);
+        BubbleBurnPercentageTarget = Mathf.Lerp(BubbleBurnPercentageTarget, bubbleBurnPercentageLerp, burnPercentageLerpConstant);
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad || SettingsMenu.settingsData.pushControlStyle == 1) {
             IronPassiveBurn = 1;
             SteelPassiveBurn = 1;
@@ -826,6 +858,8 @@ public class PlayerPullPushController : AllomanticIronSteel {
         }
     }
 
+    // Updates the burn rate meter with the current burn rates.
+    // Also updates the bubble's edge intensity wit the bubble burn rate.
     private void UpdateBurnRateMeter() {
         if (IsBurning) {
             if (SettingsMenu.settingsData.pushControlStyle == 1) // Magnitude
@@ -852,36 +886,14 @@ public class PlayerPullPushController : AllomanticIronSteel {
                 HUD.BurnPercentageMeter.SetBurnRateMeterPercentage(LastAllomanticForce, LastAnchoredPushBoost,
                     IronBurnPercentageTarget, SteelBurnPercentageTarget);
             }
+
+            // bubble
+            bubbleRenderer.material.SetFloat("_Intensity", bubbleIntensityMin + bubbleIntensityMax * BubbleBurnPercentageTarget);
         } else {
             HUD.BurnPercentageMeter.Clear();
         }
     }
-
-    // Refreshes the Bubble that shows the range of selecting targets
-    private void OpenBubble(bool metal) {
-        if (!bubbleIsOpen) {
-            bubbleIsOpen = true;
-            bubbleRenderer.enabled = true;
-        }
-        if (bubbleIsOpen) {
-            // set color
-            if (metal == iron && bubbleMetalStatus != iron) {
-                bubbleRenderer.material.color = AllomechanicalGlower.ColorIronTransparent;
-                bubbleRenderer.material.SetInt("_Speed", bubbleSpeed);
-                bubbleMetalStatus = iron;
-            } else if (metal == steel && bubbleMetalStatus != steel) {
-                bubbleRenderer.material.color = AllomechanicalGlower.ColorSteelTransparent;
-                bubbleRenderer.material.SetInt("_Speed", -bubbleSpeed);
-                bubbleMetalStatus = steel;
-            }
-        }
-    }
-    private void CloseBubble() {
-        if (bubbleIsOpen) {
-            bubbleIsOpen = false;
-            bubbleRenderer.enabled = false;
-        }
-    }
+    
 
     // Refreshes all elements of the hud relevent to pushing and pulling
     private void RefreshHUD() {
@@ -898,7 +910,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
                     HUD.BurnPercentageMeter.SetMetalLineCountTextArea(selectionAreaRadius);
                     break;
                 case ControlMode.Bubble:
-                    HUD.BurnPercentageMeter.SetMetalLineCountTextBubble(selectionBubbleRadius);
+                    HUD.BurnPercentageMeter.SetMetalLineCountTextBubble(SelectionBubbleRadius);
                     break;
             }
         } else {

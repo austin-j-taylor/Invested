@@ -106,7 +106,7 @@ public class TargetArray {
         if (index < Count) {
             MoveDown(index);
             // if that was a vacuous target, decrease that count
-            if(index < VacuousCount) {
+            if (index < VacuousCount) {
                 VacuousCount--;
             }
         }
@@ -140,20 +140,20 @@ public class TargetArray {
      * Returns true if newTarget was not already within the array and false if it was already in the array.
      */
     public bool AddTarget(Magnetic newTarget, bool addingVacuous) {
-        if(addingVacuous) {
-            Debug.Log("Adding vacuous target, count was  " + Count +" and vc was " + VacuousCount);
+        if (addingVacuous) {
+            //Debug.Log("Adding vacuous target, count was  " + Count + " and vc was " + VacuousCount);
             // adding a vacuous target
-            // All other targets must also be vacuous:
-            if(Count != VacuousCount) {
-                Debug.LogError("TargetArray: adding a vacuous target when non-vacuous targets are already present (" + Count + " != " + VacuousCount + ")");
-            }
+            //// All other targets must also be vacuous:
+            //if (Count != VacuousCount) {
+            //    Debug.LogError("TargetArray: adding a vacuous target when non-vacuous targets are already present (" + Count + " != " + VacuousCount + ")");
+            //}
             VacuousCount++;
         } else {
             // we are adding a non-vacuous target
             // if there are any vacuous targets present, remove them first
-            if(VacuousCount > 0) {
+            if (VacuousCount > 0) {
                 RemoveAllVacuousTargets();
-                Debug.LogWarning("TargetArray: adding a real target when non-vacuous targets are present. Removing all targets.");
+                //Debug.LogWarning("TargetArray: adding a real target when non-vacuous targets are present. Removing all targets.");
             }
         }
 
@@ -248,12 +248,25 @@ public class TargetArray {
             }
         } // else: maxrange < 0, no max range
     }
+    /*
+     * Removes all entries out of the bubble, using the distance from the allomancer
+     * 
+     * does CLEAR all removed entries.
+     */
+    public void RemoveAllOutOfBubble(float radius, AllomanticIronSteel allomancer) {
+        float sqrRadius = radius * radius;
+        for (int i = 0; i < Count; i++) {
+            if ((targets[i].CenterOfMass - allomancer.CenterOfMass).sqrMagnitude > sqrRadius) {
+                RemoveTargetAt(i);
+            }
+        }
+    }
 
     /*
      * Removes all vacuous targets. Called when adding a non-vacuous target.
      */
     public void RemoveAllVacuousTargets() {
-        if(VacuousCount > 0) {
+        if (VacuousCount > 0) {
             Clear();
         }
     }
@@ -311,16 +324,24 @@ public class TargetArray {
     }
 
     ///*
-    // * Copies the contents of targetsToSet into the array, starting at index indexToStart.
+    // * Copies the contents of targetsToSet into the array, starting at index indexToStart. For the Player, this is usually 10.
     // * Does NOT Clear() targets that are replaced by targetsToSet. The caller should Clear() them.
     // * 
     // * After copying, removes all targets after the last target in targetsToSet that was copied over (again, without Clear()ing them).
     // */
-    //public void SetContents(List<Magnetic> targetsToSet, int indexToStart) {
+    //public void SetContents(TargetArray targetsToSet, int indexToStart) {
     //    int i;
-    //    for(i = indexToStart; (i < indexToStart + targetsToSet.Count) && i < arraySize; i++) {
-    //        targets[i]
+    //    // assign every element from targetsToSet into targets
+    //    for (i = indexToStart; (i < indexToStart + targetsToSet.Count) && i < arraySize; i++) {
+    //        targets[i] = targetsToSet[i - indexToStart];
     //    }
+    //    // nullify every element past indexToStart without clearing
+    //    while(i < indexToStart + Count) {
+
+    //    }
+
+    //    Count = targetsToSet.Count;
+
     //}
 
     /*
