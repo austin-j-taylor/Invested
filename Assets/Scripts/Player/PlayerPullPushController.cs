@@ -420,7 +420,6 @@ public class PlayerPullPushController : AllomanticIronSteel {
         GamepadController.SetRumble(0, 0);
         GetComponentInChildren<AllomechanicalGlower>().RemoveAllEmissions();
         DisableRenderingBlueLines();
-        bubbleRenderer.enabled = false;
         RefreshHUD();
     }
     /*

@@ -626,6 +626,9 @@ public class AllomanticIronSteel : Allomancer {
         // Set burn percentages to a low burn
         IronBurnPercentageTarget = .1f;
         SteelBurnPercentageTarget = .1f;
+        if(bubbleKeepOpen) {
+            BubbleOpen(BubbleMetalStatus);
+        }
         if (startIron)
             lastWasPulling = true;
         else
@@ -754,7 +757,6 @@ public class AllomanticIronSteel : Allomancer {
     protected void BubbleClose(bool clearTargets = true) {
         if (BubbleIsOpen) {
             BubbleIsOpen = false;
-            bubbleKeepOpen = false;
             bubbleRenderer.enabled = false;
             if (clearTargets)
                 BubbleTargets.Clear();
