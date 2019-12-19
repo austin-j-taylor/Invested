@@ -323,26 +323,41 @@ public class TargetArray {
         return size == Count;
     }
 
-    ///*
-    // * Copies the contents of targetsToSet into the array, starting at index indexToStart. For the Player, this is usually 10.
-    // * Does NOT Clear() targets that are replaced by targetsToSet. The caller should Clear() them.
-    // * 
-    // * After copying, removes all targets after the last target in targetsToSet that was copied over (again, without Clear()ing them).
-    // */
-    //public void SetContents(TargetArray targetsToSet, int indexToStart) {
-    //    int i;
-    //    // assign every element from targetsToSet into targets
-    //    for (i = indexToStart; (i < indexToStart + targetsToSet.Count) && i < arraySize; i++) {
-    //        targets[i] = targetsToSet[i - indexToStart];
-    //    }
-    //    // nullify every element past indexToStart without clearing
-    //    while(i < indexToStart + Count) {
+    /*
+     * Replaces the contents of newTargets into the array. Clears any targets that are currently in targets, but not in newTargets.
+     */
+    public void ReplaceContents(List<Magnetic> newTargets, bool addingVacuous) {
+        // O(n^2)ish but n is never bigger than 100, so this is good enough
+        // 1) insert all of this frame's newTargets.
+        // 2) iterate over the combined this frame/last frame's targets.
+        //   if any of the elements of that list are not in this frame's targets, 
+        //   and are also not a bubble target,
+        //               remove and Clear() them.
 
-    //    }
+        if (addingVacuous) {
+            VacuousCount = newTargets.Count;
+        } else {
+            // we are adding a non-vacuous target
+            // if there are any vacuous targets present, remove them first
+            if (VacuousCount > 0) {
+                RemoveAllVacuousTargets();
+            }
+        }
 
-    //    Count = targetsToSet.Count;
-
-    //}
+        // 1) remove and clear all targets from last frame that are no longer in the array this frame
+        for (int i = 0; i < Count; i++) {
+            if (!newTargets.Contains(targets[i])) {
+                MoveDown(i);
+            }
+        }
+        // 2) make the size big enough to fit the new targets
+        Size = newTargets.Count;
+        Count = size;
+        // 3) copy contents of newTargets into our targets
+        for (int i = 0; i < newTargets.Count && i < targets.Length; i++) {
+            targets[i] = newTargets[i];
+        }
+    }
 
     /*
      * Refreshes the blue metal lies that point to each target.

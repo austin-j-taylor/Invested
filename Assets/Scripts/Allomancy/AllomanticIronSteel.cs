@@ -16,8 +16,8 @@ public class AllomanticIronSteel : Allomancer {
     // Bubble
     private const int bubbleSpeed = 10;
     // Simple metal boolean constants for passing to methods
-    protected const bool steel = false;
-    protected const bool iron = true;
+    public const bool steel = false;
+    public const bool iron = true;
 
     public Rigidbody rb;
 
@@ -130,9 +130,9 @@ public class AllomanticIronSteel : Allomancer {
     public bool IronPulling { get; set; }
     public bool SteelPushing { get; set; }
     // Bubble control
-    protected bool BubbleIsOpen { get; private set; } // true when the bubble is open at all
+    public bool BubbleIsOpen { get; private set; } // true when the bubble is open at all
+    public bool BubbleMetalStatus { get; protected set;  } // true for iron, false for steel
     protected bool bubbleKeepOpen; // toggled by Q/E/MB4/MB5
-    protected bool bubbleMetalStatus; // true for iron, false for steel
 
     /*
      * When ControlledExternally is false, this Allomancy works normally.
@@ -212,7 +212,7 @@ public class AllomanticIronSteel : Allomancer {
                     // If manually targeting a target within the bubble, don't apply the bubble's force on it
                     for (int i = 0; i < BubbleTargets.Count; i++) {
                         if (!PullTargets.IsTarget(BubbleTargets[i]) && !PushTargets.IsTarget(BubbleTargets[i])) {
-                            if (bubbleMetalStatus == iron) {
+                            if (BubbleMetalStatus == iron) {
                                 CalculateForce(BubbleTargets[i], netBubbleTargetsCharge, sumBubbleTargetsCharge, iron, BubbleBurnPercentageTarget);
                                 AddForce(BubbleTargets[i]);
                                 BurnIron(BubbleTargets[i].LastNetForceOnAllomancer.magnitude);
@@ -274,7 +274,7 @@ public class AllomanticIronSteel : Allomancer {
                 if (!HasIron) {
                     if (HasPullTarget)
                         PullTargets.Clear();
-                    if (UsingBubble && bubbleMetalStatus == iron)
+                    if (UsingBubble && BubbleMetalStatus == iron)
                         BubbleClose();
                     if (!HasSteel)
                         StopBurning();
@@ -282,7 +282,7 @@ public class AllomanticIronSteel : Allomancer {
                 if (!HasSteel) {
                     if (HasPushTarget)
                         PushTargets.Clear();
-                    if (UsingBubble && bubbleMetalStatus == steel)
+                    if (UsingBubble && BubbleMetalStatus == steel)
                         BubbleClose();
                 }
 
@@ -740,14 +740,14 @@ public class AllomanticIronSteel : Allomancer {
         }
         if (BubbleIsOpen) {
             // set color
-            if (metal == iron && bubbleMetalStatus != iron) {
+            if (metal == iron && BubbleMetalStatus != iron) {
                 bubbleRenderer.material.color = AllomechanicalGlower.ColorIronTransparent;
                 bubbleRenderer.material.SetInt("_Speed", bubbleSpeed);
-                bubbleMetalStatus = iron;
-            } else if (metal == steel && bubbleMetalStatus != steel) {
+                BubbleMetalStatus = iron;
+            } else if (metal == steel && BubbleMetalStatus != steel) {
                 bubbleRenderer.material.color = AllomechanicalGlower.ColorSteelTransparent;
                 bubbleRenderer.material.SetInt("_Speed", -bubbleSpeed);
-                bubbleMetalStatus = steel;
+                BubbleMetalStatus = steel;
             }
         }
     }

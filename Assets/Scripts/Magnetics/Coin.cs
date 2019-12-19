@@ -108,10 +108,11 @@ public class Coin : Magnetic {
     // Be caught by player if
     // - colliding with player
     // - player is pulling
+    //   or player has an iron bubble up
     private void OnTriggerStay(Collider other) {
         if (other.CompareTag("PlayerBody") &&
                     //Keybinds.IronPulling() && (!Player.PlayerIronSteel.HasPullTarget || Player.PlayerIronSteel.PullTargets.IsTarget(this))) {
-                    Keybinds.IronPulling()) {
+                    (Keybinds.IronPulling() || Player.PlayerIronSteel.BubbleIsOpen && Player.PlayerIronSteel.BubbleMetalStatus == AllomanticIronSteel.iron)) {
             BeCaughtByAllomancer(other.transform.parent.GetComponent<Player>());
         }
     }
