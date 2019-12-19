@@ -73,10 +73,10 @@ public class Keybinds : MonoBehaviour {
     public static bool Select() {
         switch (SettingsMenu.settingsData.controlScheme) {
             case SettingsData.MK54: {
-                    return Input.GetButton("Mouse4");
+                    return Input.GetKey(KeyCode.Mouse4);
                 }
             case SettingsData.MK45: {
-                    return Input.GetButton("Mouse3");
+                    return Input.GetKey(KeyCode.Mouse3);
                 }
             case SettingsData.MKEQ: {
                     return Input.GetKey(KeyCode.E);
@@ -93,16 +93,16 @@ public class Keybinds : MonoBehaviour {
     public static bool SelectAlternate() {
         switch (SettingsMenu.settingsData.controlScheme) {
             case SettingsData.MK54: {
-                    return Input.GetButton("Mouse3");
+                    return Input.GetKey(KeyCode.Mouse3);
                 }
             case SettingsData.MK45: {
-                    return Input.GetButton("Mouse4");
+                    return Input.GetKey(KeyCode.Mouse4);
                 }
             case SettingsData.MKEQ: {
-                    return Input.GetKeyDown(KeyCode.Q);
+                    return Input.GetKey(KeyCode.Q);
                 }
             case SettingsData.MKQE: {
-                    return Input.GetKeyDown(KeyCode.E);
+                    return Input.GetKey(KeyCode.E);
                 }
             default: {
                     return Input.GetButton("LeftBumper");
@@ -112,10 +112,10 @@ public class Keybinds : MonoBehaviour {
     public static bool SelectAlternateDown() {
         switch (SettingsMenu.settingsData.controlScheme) {
             case SettingsData.MK54: {
-                    return Input.GetKey(KeyCode.Mouse3);
+                    return Input.GetKeyDown(KeyCode.Mouse3);
                 }
             case SettingsData.MK45: {
-                    return Input.GetKey(KeyCode.Mouse4);
+                    return Input.GetKeyDown(KeyCode.Mouse4);
                 }
             case SettingsData.MKEQ: {
                     return Input.GetKeyDown(KeyCode.Q);

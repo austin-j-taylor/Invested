@@ -4,6 +4,8 @@ using UnityEngine;
 
 /*
  * Array-based data structure used for storing an Allomancer's Pull targets or Push targets
+ * 
+ * A "Vacuous" target is a target that is removed as soon as a non-vacuous target is added.
  */
 public class TargetArray {
 
@@ -38,11 +40,12 @@ public class TargetArray {
     }
 
     public int Count { get; private set; } = 0;
+    public int VacuousCount { get; private set; } = 0; // number of vacuous targets at the front of the array. Any targets after this are non-vacuous.
 
     public float MaxRange { get; set; } = 0; // 0 if ignored (use SettingsData), negative if infinite, positive if this Allomancer has a custom max range
 
-    public TargetArray() {
-        targets = new Magnetic[arraySize];
+    public TargetArray(int capacity = arraySize) {
+        targets = new Magnetic[capacity];
     }
 
     /*
@@ -102,6 +105,10 @@ public class TargetArray {
     public void RemoveTargetAt(int index) {
         if (index < Count) {
             MoveDown(index);
+            // if that was a vacuous target, decrease that count
+            if (index < VacuousCount) {
+                VacuousCount--;
+            }
         }
     }
 
@@ -114,6 +121,10 @@ public class TargetArray {
         for (int i = 0; i < Count; i++) {
             if (targets[i] == target) { // Magnetic was found, move targets along
                 MoveDown(i, clear);
+                // if that was a vacuous target, decrease that count
+                if (i < VacuousCount) {
+                    VacuousCount--;
+                }
                 return true;
             }
         }
@@ -128,7 +139,24 @@ public class TargetArray {
      * If newTarget is already within the array, it is moved to the front.
      * Returns true if newTarget was not already within the array and false if it was already in the array.
      */
-    public bool AddTarget(Magnetic newTarget, AllomanticIronSteel allomancer) {
+    public bool AddTarget(Magnetic newTarget, bool addingVacuous) {
+        if (addingVacuous) {
+            //Debug.Log("Adding vacuous target, count was  " + Count + " and vc was " + VacuousCount);
+            // adding a vacuous target
+            //// All other targets must also be vacuous:
+            //if (Count != VacuousCount) {
+            //    Debug.LogError("TargetArray: adding a vacuous target when non-vacuous targets are already present (" + Count + " != " + VacuousCount + ")");
+            //}
+            VacuousCount++;
+        } else {
+            // we are adding a non-vacuous target
+            // if there are any vacuous targets present, remove them first
+            if (VacuousCount > 0) {
+                RemoveAllVacuousTargets();
+                //Debug.LogWarning("TargetArray: adding a real target when non-vacuous targets are present. Removing all targets.");
+            }
+        }
+
         int indexOfTarget = GetIndex(newTarget);
         if (indexOfTarget >= 0) {   // Target is already in the array
 
@@ -144,8 +172,9 @@ public class TargetArray {
             if (Count < Size) {
                 targets[Count] = newTarget;
                 Count++;
-            } else {    // Count == Size. Move all elements down, delete the first entry, and add newTarget to the end.
-                        // Do not increment Count, since the number of entries doesn't change.
+            } else {
+                // Count == Size. Move all elements down, delete the first entry, and add newTarget to the end.
+                // Do not increment Count, since the number of entries doesn't change.
                 MoveDown(0);
                 targets[Count] = newTarget;
                 Count++;
@@ -168,14 +197,13 @@ public class TargetArray {
     /*
      * Removes all targets from the array
      */
-    public void Clear(bool setSizeTo1 = false) {
+    public void Clear() {
         for (int i = 0; i < Count; i++) {
             targets[i].Clear();
             targets[i] = null;
         }
         Count = 0;
-        if (setSizeTo1)
-            Size = 1;
+        VacuousCount = 0;
     }
 
     /*
@@ -190,30 +218,10 @@ public class TargetArray {
         int tempCount = Count;
         Count = other.Count;
         other.Count = tempCount;
-    }
-    /*
-     * Refreshes the blue metal lies that point to each target.
-     * pullTheme determines the color (green or red) that the line could have.
-     */
-    public void UpdateBlueLines(bool pullingColor, float burnRate, Vector3 startPos) {
-        // Go through targets and update their metal lines
-        for (int i = 0; i < Count; i++) {
-            targets[i].SetBlueLine(
-                startPos,
-                blueLineTargetedWidthFactor * targets[i].Charge,
-                Mathf.Exp(-targets[i].LastMaxPossibleAllomanticForce.magnitude * burnRate  * (SettingsMenu.settingsData.cameraFirstPerson == 1 ? firstPersonLSFactor : 1) / lightSaberConstant),
-                // 200IQ Ternary Operator
-                (pullingColor) ?
-                    SettingsMenu.settingsData.pullTargetLineColor == 0 ? targetedBlueLine
-                    :
-                        SettingsMenu.settingsData.pullTargetLineColor == 1 ? targetedLightBlueLine
-                        :
-                        targetedGreenLine
-                :
-                    SettingsMenu.settingsData.pushTargetLineColor == 0 ? targetedBlueLine : targetedRedLine
-                );
 
-        }
+        tempCount = VacuousCount;
+        VacuousCount = other.VacuousCount;
+        other.VacuousCount = tempCount;
     }
 
     /*
@@ -240,6 +248,29 @@ public class TargetArray {
             }
         } // else: maxrange < 0, no max range
     }
+    /*
+     * Removes all entries out of the bubble, using the distance from the allomancer
+     * 
+     * does CLEAR all removed entries.
+     */
+    public void RemoveAllOutOfBubble(float radius, AllomanticIronSteel allomancer) {
+        float sqrRadius = radius * radius;
+        for (int i = 0; i < Count; i++) {
+            if ((targets[i].CenterOfMass - allomancer.CenterOfMass).sqrMagnitude > sqrRadius) {
+                RemoveTargetAt(i);
+            }
+        }
+    }
+
+    /*
+     * Removes all vacuous targets. Called when adding a non-vacuous target.
+     */
+    public void RemoveAllVacuousTargets() {
+        if (VacuousCount > 0) {
+            Clear();
+        }
+    }
+
     /*
      * Removes targets at or above the specified index
      * e.g. for size 40 and count 4:
@@ -290,5 +321,66 @@ public class TargetArray {
 
     public bool IsFull() {
         return size == Count;
+    }
+
+    /*
+     * Replaces the contents of newTargets into the array. Clears any targets that are currently in targets, but not in newTargets.
+     */
+    public void ReplaceContents(List<Magnetic> newTargets, bool addingVacuous) {
+        // O(n^2)ish but n is never bigger than 100, so this is good enough
+        // 1) insert all of this frame's newTargets.
+        // 2) iterate over the combined this frame/last frame's targets.
+        //   if any of the elements of that list are not in this frame's targets, 
+        //   and are also not a bubble target,
+        //               remove and Clear() them.
+
+        if (addingVacuous) {
+            VacuousCount = newTargets.Count;
+        } else {
+            // we are adding a non-vacuous target
+            // if there are any vacuous targets present, remove them first
+            if (VacuousCount > 0) {
+                RemoveAllVacuousTargets();
+            }
+        }
+
+        // 1) remove and clear all targets from last frame that are no longer in the array this frame
+        for (int i = 0; i < Count; i++) {
+            if (!newTargets.Contains(targets[i])) {
+                MoveDown(i);
+            }
+        }
+        // 2) make the size big enough to fit the new targets
+        Size = newTargets.Count;
+        Count = size;
+        // 3) copy contents of newTargets into our targets
+        for (int i = 0; i < newTargets.Count && i < targets.Length; i++) {
+            targets[i] = newTargets[i];
+        }
+    }
+
+    /*
+     * Refreshes the blue metal lies that point to each target.
+     * pullTheme determines the color (green or red) that the line could have.
+     */
+    public void UpdateBlueLines(bool pullingColor, float burnRate, Vector3 startPos) {
+        // Go through targets and update their metal lines
+        for (int i = 0; i < Count; i++) {
+            targets[i].SetBlueLine(
+                startPos,
+                blueLineTargetedWidthFactor * targets[i].Charge,
+                Mathf.Exp(-targets[i].LastMaxPossibleAllomanticForce.magnitude * burnRate * (SettingsMenu.settingsData.cameraFirstPerson == 1 ? firstPersonLSFactor : 1) / lightSaberConstant),
+                // 200IQ Ternary Operator
+                (pullingColor) ?
+                    SettingsMenu.settingsData.pullTargetLineColor == 0 ? targetedBlueLine
+                    :
+                        SettingsMenu.settingsData.pullTargetLineColor == 1 ? targetedLightBlueLine
+                        :
+                        targetedGreenLine
+                :
+                    SettingsMenu.settingsData.pushTargetLineColor == 0 ? targetedBlueLine : targetedRedLine
+                );
+
+        }
     }
 }

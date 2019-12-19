@@ -32,6 +32,7 @@ public class ControlWheelController : MonoBehaviour {
     private Text textBubble;
     private Text textCoinshot;
 
+
     private Selection highlit; // the selection being hovered over
     private Selection selectedSpoke; // manual, area, etc.
     private Selection selectedCoin; // semi auto, full auto, spray
@@ -78,6 +79,9 @@ public class ControlWheelController : MonoBehaviour {
                             selectedCoin = highlit;
                             Player.PlayerInstance.CoinThrowingMode = Player.CoinMode.Spray;
                             HUD.ThrowingAmmoMeter.Alert(Player.CoinMode.Spray);
+                            if(Player.PlayerIronSteel.SizeOfTargetArrays < 3) {
+                                Player.PlayerIronSteel.SizeOfTargetArrays = 3;
+                            }
                             break;
                         case Selection.Coin_Full:
                             selectedCoin = highlit;
@@ -207,9 +211,10 @@ public class ControlWheelController : MonoBehaviour {
 
     public void UpdateText() {
         textManual.text = _KeyPullAbridged + "/" + _KeyPushAbridged + ": " + Pull_Push + "\non a single target\n\n\n\n\n";
-        textArea.text = _KeyPullAbridged + "/" + _KeyPushAbridged + ": " + Pull_Push + "\nin a cone in front of you\n\n\n";
-        textBubble.text = _KeyPullAbridged + "/" + _KeyPushAbridged + ": " + Pull_Push + "\nin a bubble around you\n\n\n";
-        textCoinshot.text = _KeyPullAbridged + " with no " + Pull_targets + ":\nthrow and " + Push + " on " + O_Coin + "\n";
+        textArea.text = _KeyPullAbridged + "/" + _KeyPushAbridged + ": " + Pull_Push + "\nin a cone in front of you\n\n\n\n";
+        textBubble.text = _KeyPullAbridged + "/" + _KeyPushAbridged + ": " + Pull_Push + "\nin a bubble around you\n\n"
+        + "The bubble can stay open\nin other modes.\n";
+        textCoinshot.text = _KeyPullAbridged + " with no " + Pull_targets + ":\nthrow and " + Push + " on " + O_Coin + "\n\n";
     }
     private void UpdateManual() {
         UpdateText();
@@ -221,19 +226,19 @@ public class ControlWheelController : MonoBehaviour {
     private void UpdateArea() {
         UpdateText();
         textArea.text = _KeyPullAbridged + "/" + _KeyPushAbridged + ": " + Pull_Push + "\n"
-            + _KeySelectAbridged + "/" + _KeySelectAlternateAbridged + ":\nselect in a cone\n"
-        + KeyNegate + " + " + scrollWheel + ":\nsize of cone";
+        + KeyNegate + " + " + scrollWheel + ":\nsize of cone"
+        + "\n\n(otherwise Manual)\n";
     }
     private void UpdateBubble() {
         UpdateText();
         textBubble.text = _KeyPullAbridged + "/" + _KeyPushAbridged + ": " + Pull_Push + "\n"
-            + _KeySelectAbridged + "/" + _KeySelectAlternateAbridged + ":\nselect in a bubble\n"
-        + KeyNegate + " + " + scrollWheel + ":\nsize of bubble";
+            + _KeySelectAbridged + "/" + _KeySelectAlternateAbridged + ": toggle bubble\n"
+        + KeyNegate + " + " + scrollWheel + ":\nsize of bubble\n\n";
     }
     private void UpdateCoinshot() {
         UpdateText();
         textCoinshot.text = _KeyPullAbridged + " with no " + Pull_targets + ":\nthrow and " + Push + " on " + O_Coin
-            +"\n(otherwise Manual)";
+            +"\n\n(otherwise Manual)";
     }
 
     // Set the color of all spokes:

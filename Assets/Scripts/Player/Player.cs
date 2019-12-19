@@ -129,9 +129,9 @@ public class Player : PewterEntity {
                         if (CoinThrowingMode == CoinMode.Spray) {
                             Coin[] coins = CoinHand.WithdrawCoinSprayToHand();
                             for (int i = 0; i < Hand.spraySize; i++)
-                                PlayerIronSteel.AddVacuousPushTarget(coins[i], true);
+                                PlayerIronSteel.AddPushTarget(coins[i], false, true);
                         } else
-                            PlayerIronSteel.AddVacuousPushTarget(CoinHand.WithdrawCoinToHand());
+                            PlayerIronSteel.AddPushTarget(CoinHand.WithdrawCoinToHand(), false, true);
 
                     }
                 } else {
@@ -157,6 +157,7 @@ public class Player : PewterEntity {
         GetComponentInChildren<AllomechanicalGlower>().RemoveAllEmissions();
         movementController.Clear();
         PlayerFlywheelController.Clear();
+        PlayerIronSteel.StopBurning(false);
         PlayerIronSteel.Clear();
         PlayerPewter.Clear();
         PlayerZinc.Clear();

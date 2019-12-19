@@ -139,6 +139,9 @@ public class Hand : MonoBehaviour {
     //}
 
     public void CatchCoin(Coin coin) {
+        if(!allomancer.RemovePushTarget(coin)) {
+            allomancer.RemovePullTarget(coin);
+        }
         Pouch.AddCoin(coin);
     }
 }

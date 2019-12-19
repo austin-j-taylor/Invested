@@ -6,8 +6,9 @@ Shader "Allomancy/Bubble"
 	Properties
 	{
 		_MainTex ("Texture", 2D) = "white" {}
-		_Color ("Color", Color) = (0,0,0,0)
-			_Speed("speed", Float) = 5
+		_Color("Color", Color) = (0,0,0,0)
+		_Speed("speed", Float) = 5
+		_Intensity("intensity", Range(0.0,2.0)) = 0.5
 
 	}
 
@@ -51,6 +52,7 @@ Shader "Allomancy/Bubble"
 			sampler2D _MainTex;
 			float4 _MainTex_ST;
 			float _Speed;
+			float _Intensity;
 
 			v2f vert (appdata v)
 			{
@@ -93,7 +95,7 @@ Shader "Allomancy/Bubble"
 				float intersect = 0;
 				
 				if (diff > 0)
-					intersect = 1 - smoothstep(0, _ProjectionParams.w * 0.5, diff);
+					intersect = 1 - smoothstep(0, _ProjectionParams.w * _Intensity, diff);
 
 				//float rim = 1 - abs(dot(i.normal, normalize(i.viewDir))) * 2;
 				float rim = 0;

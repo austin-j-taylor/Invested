@@ -30,7 +30,7 @@ public class Magnetic : MonoBehaviour {
     private bool isBeingPushPulled = false;
     public virtual bool IsBeingPushPulled {
         get {
-             return isBeingPushPulled;
+            return isBeingPushPulled;
         }
         protected set {
             isBeingPushPulled = value;
