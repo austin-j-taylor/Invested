@@ -737,20 +737,25 @@ public class AllomanticIronSteel : Allomancer {
 
     // Refreshes the Bubble that shows the range of selecting targets
     protected void BubbleOpen(bool metal) {
-        if (!BubbleIsOpen) {
-            BubbleIsOpen = true;
-            bubbleRenderer.enabled = true;
-        }
-        if (BubbleIsOpen) {
-            // set color
-            if (metal == iron && BubbleMetalStatus != iron) {
-                bubbleRenderer.material.color = AllomechanicalGlower.ColorIronTransparent;
-                bubbleRenderer.material.SetInt("_Speed", bubbleSpeed);
-                BubbleMetalStatus = iron;
-            } else if (metal == steel && BubbleMetalStatus != steel) {
-                bubbleRenderer.material.color = AllomechanicalGlower.ColorSteelTransparent;
-                bubbleRenderer.material.SetInt("_Speed", -bubbleSpeed);
-                BubbleMetalStatus = steel;
+        // if cannot open that bubble because we're out of metal, don't open it at all
+        if(metal == iron && !HasIron || metal == steel && !HasSteel) {
+            BubbleClose();
+        } else {
+            if (!BubbleIsOpen) {
+                BubbleIsOpen = true;
+                bubbleRenderer.enabled = true;
+            }
+            if (BubbleIsOpen) {
+                // set color
+                if (metal == iron && BubbleMetalStatus != iron) {
+                    bubbleRenderer.material.color = AllomechanicalGlower.ColorIronTransparent;
+                    bubbleRenderer.material.SetInt("_Speed", bubbleSpeed);
+                    BubbleMetalStatus = iron;
+                } else if (metal == steel && BubbleMetalStatus != steel) {
+                    bubbleRenderer.material.color = AllomechanicalGlower.ColorSteelTransparent;
+                    bubbleRenderer.material.SetInt("_Speed", -bubbleSpeed);
+                    BubbleMetalStatus = steel;
+                }
             }
         }
     }

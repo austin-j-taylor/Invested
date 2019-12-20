@@ -145,6 +145,10 @@ public class PlayerPullPushController : AllomanticIronSteel {
                     if (IsBurning) {
                         // Swap pull- and push- targets
                         if (Keybinds.NegateDown() && timeToSwapBurning > Time.time) {
+                            // swap bubble, if in that mode
+                            if(Mode == ControlMode.Bubble && BubbleIsOpen) {
+                                BubbleOpen(!BubbleMetalStatus);
+                            }
                             // Double-tapped, Swap targets
                             PullTargets.SwapContents(PushTargets);
                         } else {
@@ -193,10 +197,10 @@ public class PlayerPullPushController : AllomanticIronSteel {
                         SteelPushing = pushing;
 
                         // Check input for target selection
-                        bool select = Keybinds.Select();
-                        bool selectDown = Keybinds.SelectDown();
-                        bool selectAlternate = Keybinds.SelectAlternate();
-                        bool selectAlternateDown = Keybinds.SelectAlternateDown();
+                        bool select = Keybinds.Select() && HasIron;
+                        bool selectDown = Keybinds.SelectDown() && HasIron;
+                        bool selectAlternate = Keybinds.SelectAlternate() && HasSteel;
+                        bool selectAlternateDown = Keybinds.SelectAlternateDown() && HasSteel;
                         bool removing = Keybinds.Negate();
 
                         // Search for Metals
