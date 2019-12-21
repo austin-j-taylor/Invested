@@ -38,7 +38,7 @@ public class PlayerMovementController : AllomanticPewter {
     private const float dragGroundedLinear = 3f;
     private const float dragAirborneAngular = 1.5f;
     private const float dragGroundedAngular = 3f;
-    private const float dragNoControl = dragAirborneLinear;//10f;
+    private const float dragNoControl = 10f;
     // Friction
     [SerializeField]
     private float frictionDynamicRolling = 6;

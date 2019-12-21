@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /*
  * Controls the first- and third-person cameras.
@@ -18,8 +19,6 @@ public class CameraController : MonoBehaviour {
     public static Camera ActiveCamera { get; private set; }
     public static Vector2 ExternalDistance { get; set; } // Assigned by another part of the program for controlling large objects. X: Distance from target, Y: playerLookAtTargetReferenceHeight
 
-    private static Camera thirdPersonCamera;
-    private static Camera firstPersonCamera;
     private static Transform playerBody;
     private static Transform playerCameraController;
     private static Transform playerLookAtTarget;
@@ -32,6 +31,8 @@ public class CameraController : MonoBehaviour {
     private static float startX = 0;
     private static float startY = 0;
     private static bool cameraIsLocked;
+
+    private static CloudMaster clouds; // perceives clouds on certain levels
 
     public static bool HasNotMovedCamera {
         get {
@@ -71,12 +72,12 @@ public class CameraController : MonoBehaviour {
         playerCameraController = transform;
         playerBody = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         playerLookAtTarget = transform.Find("CameraLookAtTarget");
-        thirdPersonCamera = playerLookAtTarget.GetChild(0).GetComponent<Camera>();
-        firstPersonCamera = playerLookAtTarget.GetChild(1).GetChild(0).GetComponent<Camera>();
-        thirdPersonCamera.depthTextureMode = DepthTextureMode.DepthNormals;
-        firstPersonCamera.depthTextureMode = DepthTextureMode.DepthNormals;
-        ActiveCamera = thirdPersonCamera;
+        ActiveCamera = playerLookAtTarget.GetChild(0).GetComponent<Camera>();
+        ActiveCamera.depthTextureMode = DepthTextureMode.DepthNormals;
+        clouds = ActiveCamera.GetComponent<CloudMaster>();
         UnlockCamera();
+
+        SceneManager.sceneLoaded += LoadCloudData;
     }
 
     private void LateUpdate() {
@@ -112,7 +113,7 @@ public class CameraController : MonoBehaviour {
                     // If camera is upside-down, invert X controls, invert camera target
                     currentY += deltaY;
                     ModY();
-                    if(UpsideDown) {
+                    if (UpsideDown) {
                         currentX -= deltaX;
                     } else {
                         currentX += deltaX;
@@ -143,7 +144,7 @@ public class CameraController : MonoBehaviour {
             //}
 
             if (SettingsMenu.settingsData.cameraFirstPerson == 0) { // Third person
-                
+
                 Vector3 wantedPosition = verticalRotation * new Vector3(0, 0, -(ExternalDistance.x == 0 ? SettingsMenu.settingsData.cameraDistance : ExternalDistance.x));
 
 
@@ -170,8 +171,8 @@ public class CameraController : MonoBehaviour {
                 // Raycast from player to camera and from camera to player.
                 // In the event of a collision, scale THIS in all dimensions by (length from player to hit / length of camera distance)
 
-                    // The destinationsCamera[] are at the 9 corners of the camera in world space (top-left to center-center bottom-right)
-                    Vector3[] destinationsCamera = new Vector3[9];
+                // The destinationsCamera[] are at the 9 corners of the camera in world space (top-left to center-center bottom-right)
+                Vector3[] destinationsCamera = new Vector3[9];
                 destinationsCamera[0] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, 0, ActiveCamera.nearClipPlane));
                 destinationsCamera[1] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, .5f, ActiveCamera.nearClipPlane));
                 destinationsCamera[2] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, 1, ActiveCamera.nearClipPlane));
@@ -237,7 +238,7 @@ public class CameraController : MonoBehaviour {
                 if (smallestIndex > -1) { // A collision has occured
                     scale = (smallestHit.point - originsPlayer[smallestIndex]).magnitude / length;
 
-                    if(scale > lastScale) {
+                    if (scale > lastScale) {
                         // Before we were colliding with a closer wall, so "lerp" the scale to the further back one to be kind.
                         float newScale = Mathf.Pow(lastScale, rootConstantScaling);
                         if (newScale < scale) {
@@ -284,78 +285,15 @@ public class CameraController : MonoBehaviour {
                     }
                     playerCameraController.localPosition += (smallestHit.point - offset);
 
-                } else if(lastScale < .98f) { // fuzzy == 1
+                } else if (lastScale < .98f) { // fuzzy == 1
                     // No collision.
                     // The camera is "recovering" back to a farther position. LERP to it instead.
                     scale = Mathf.Pow(lastScale, rootConstantScaling);
                     playerCameraController.localScale = new Vector3(scale, scale, scale);
 
                 }
-                //} else {
-                //    // First person
-                //    // Decide position the camera should try to be at
-                //    Vector3 wantedPosition = Vector3.zero; // local
-                //    // If an external target was recently used, the camera should lerp back
-                //    if (timeToLerp < maxTimeToLerp) {
-                //        float distance = timeToLerp / maxTimeToLerp;
-                //        wantedPosition = Vector3.Slerp(ActiveCamera.transform.localPosition, Vector3.zero, lerpConstantPosition * Time.deltaTime);
-                //        timeToLerp += Time.deltaTime;
-
-                //        ActiveCamera.transform.localPosition = wantedPosition;
-                //    } else {
-
-                //    }
-
-                //    Vector3 pos = Vector3.zero;
-                //    pos.y = playerLookAtTargetFirstPersonHeight;
-                //    playerLookAtTarget.transform.localPosition = pos;
-
-                //    Vector3[] destinationsCamera = new Vector3[9];
-                //    destinationsCamera[0] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, 0, ActiveCamera.nearClipPlane));
-                //    destinationsCamera[1] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, .5f, ActiveCamera.nearClipPlane));
-                //    destinationsCamera[2] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, 1, ActiveCamera.nearClipPlane));
-                //    destinationsCamera[3] = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, 0, ActiveCamera.nearClipPlane));
-                //    destinationsCamera[4] = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, .5f, ActiveCamera.nearClipPlane));
-                //    destinationsCamera[5] = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, 1, ActiveCamera.nearClipPlane));
-                //    destinationsCamera[6] = ActiveCamera.ViewportToWorldPoint(new Vector3(1, 0, ActiveCamera.nearClipPlane));
-                //    destinationsCamera[7] = ActiveCamera.ViewportToWorldPoint(new Vector3(1, .5f, ActiveCamera.nearClipPlane));
-                //    destinationsCamera[8] = ActiveCamera.ViewportToWorldPoint(new Vector3(1, 1, ActiveCamera.nearClipPlane));
-
-                //    Vector3 directionToTarget = playerLookAtTarget.position - destinationsCamera[4]; // center
-                //    float distanceFromCameraToPlayer = directionToTarget.magnitude;
-
-                //    Vector3[] originsPlayer = new Vector3[9];
-                //    for (int i = 0; i < 9; i++)
-                //        originsPlayer[i] = destinationsCamera[i] + directionToTarget;
-
-                //    // Check if lookAtTarget would be clipping into a ceiling
-                //    Vector3[] playerDestinations = new Vector3[9];
-                //    for (int i = 0; i < 9; i++) {
-                //        playerDestinations[i] = originsPlayer[i] - playerLookAtTarget.localPosition;
-                //    }
-
-                //    int smallestIndex = -1;
-                //    RaycastHit smallestHit = new RaycastHit();
-                //    float smallestDistance = playerLookAtTargetHeight;
-
-                //    for (int i = 0; i < 9; i++) {
-                //        // Check height of lookAtTarget
-                //        if (Physics.Raycast(playerDestinations[i], Vector3.up, out RaycastHit hit, (originsPlayer[i] - playerDestinations[i]).magnitude, GameManager.Layer_IgnoreCamera)) {
-                //            float distance = (playerDestinations[i] - hit.point).magnitude;
-                //            Debug.DrawLine(playerDestinations[i], hit.point, Color.green);
-                //            if (distance < smallestDistance) {
-                //                smallestIndex = i;
-                //                smallestHit = hit;
-                //                smallestDistance = distance;
-                //            }
-                //        }
-                //    }
-
-                //    if (smallestIndex > -1) { // A collision has occured
-                //        playerLookAtTarget.position = smallestHit.point + (playerLookAtTarget.position - originsPlayer[smallestIndex]) - new Vector3(0, .00001f, 0);
-                //    }
-            } else {
-                Vector3 wantedPosition =  playerCameraController.position; // local
+            } else { // first person
+                Vector3 wantedPosition = playerCameraController.position;
 
                 ActiveCamera.transform.position = wantedPosition;
             }
@@ -367,8 +305,8 @@ public class CameraController : MonoBehaviour {
         TimeToLerp = -100;
         externalPositionTarget = null;
         externalLookAtTarget = null;
-        firstPersonCamera.transform.localPosition = Vector3.zero;
-        if(resetRotation) {
+        Player.PlayerTransparancy.SetOverrideHidden(SettingsMenu.settingsData.cameraFirstPerson == 1);
+        if (resetRotation) {
             Vector3 eulers = Player.PlayerInstance.transform.eulerAngles;
             //eulers.x = 0;
             //eulers.z = 0;
@@ -403,9 +341,11 @@ public class CameraController : MonoBehaviour {
             externalPositionTarget = null;
             externalLookAtTarget = null;
             LockCamera();
+            Player.PlayerTransparancy.SetOverrideHidden(SettingsMenu.settingsData.cameraFirstPerson == 1);
         } else {
             externalPositionTarget = position;
             externalLookAtTarget = lookAt;
+            Player.PlayerTransparancy.SetOverrideHidden(false);
         }
     }
 
@@ -421,19 +361,72 @@ public class CameraController : MonoBehaviour {
 
     public void SetThirdPerson() {
         Player.PlayerTransparancy.SetOverrideHidden(false);
-        firstPersonCamera.gameObject.SetActive(false);
-        thirdPersonCamera.gameObject.SetActive(true);
-        thirdPersonCamera.cullingMask = firstPersonCamera.cullingMask;
-        ActiveCamera = thirdPersonCamera;
-        Clear(false);
+        ActiveCamera.transform.SetParent(playerLookAtTarget);
+        if (!externalPositionTarget)
+            Clear(false);
     }
 
     public void SetFirstPerson() {
         Player.PlayerTransparancy.SetOverrideHidden(true);
-        thirdPersonCamera.gameObject.SetActive(false);
-        firstPersonCamera.gameObject.SetActive(true);
-        firstPersonCamera.cullingMask = thirdPersonCamera.cullingMask;
-        ActiveCamera = firstPersonCamera;
-        Clear(false);
+        ActiveCamera.transform.SetParent(playerLookAtTarget.Find("FirstPersonTarget"));
+        if (!externalPositionTarget)
+            Clear(false);
+    }
+
+    // On scene startup
+    // Copy parameters from this scene's cloud controller to the camera
+    private void LoadCloudData(Scene scene, LoadSceneMode mode) {
+        if (mode == LoadSceneMode.Single) {
+            GameObject otherObject = GameObject.Find("Clouds");
+            if (otherObject) {
+                ActiveCamera.clearFlags = CameraClearFlags.Nothing;
+
+                CloudMaster other = otherObject.GetComponent<CloudMaster>();
+                clouds.shader = other.shader;
+                clouds.container = other.container;
+                clouds.cloudTestParams = other.cloudTestParams;
+
+                clouds.numStepsLight = other.numStepsLight;
+                clouds.rayOffsetStrength = other.rayOffsetStrength;
+                clouds.blueNoise = other.blueNoise;
+
+                clouds.cloudScale = other.cloudScale;
+                clouds.densityMultiplier = other.densityMultiplier;
+                clouds.densityOffset = other.densityOffset;
+                clouds.shapeOffset = other.shapeOffset;
+                clouds.heightOffset = other.heightOffset;
+                clouds.shapeNoiseWeights = other.shapeNoiseWeights;
+
+                clouds.detailNoiseScale = other.detailNoiseScale;
+                clouds.detailNoiseWeight = other.detailNoiseWeight;
+                clouds.detailNoiseWeights = other.detailNoiseWeights;
+                clouds.detailOffset = other.detailOffset;
+
+                clouds.lightAbsorptionThroughCloud = other.lightAbsorptionThroughCloud;
+                clouds.lightAbsorptionTowardSun = other.lightAbsorptionTowardSun;
+                clouds.darknessThreshold = other.darknessThreshold;
+                clouds.forwardScattering = other.forwardScattering;
+                clouds.backScattering = other.backScattering;
+                clouds.baseBrightness = other.baseBrightness;
+                clouds.phaseFactor = other.phaseFactor;
+
+                clouds.timeScale = other.timeScale;
+                clouds.baseSpeed = other.baseSpeed;
+                clouds.detailSpeed = other.detailSpeed;
+
+                clouds.colA = other.colA;
+                clouds.colB = other.colB;
+
+                clouds.material = other.material;
+
+                clouds.enabled = true;
+
+                other.enabled = false;
+            } else {
+                clouds.enabled = false;
+
+                ActiveCamera.clearFlags = CameraClearFlags.Skybox;
+            }
+        }
     }
 }

@@ -8,7 +8,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{780E9F3A-FF2E-71BC-028C-EBECC50FF336}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -95,6 +96,63 @@
     <Compile Include="Assets\PostProcessing\Editor\Utils\FxStyles.cs" />
     <Compile Include="Assets\PostProcessing\Editor\Utils\ReflectionUtils.cs" />
     <Compile Include="Assets\Scripts\Editor\BezierCurveEditor.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\3rd Party\MouseFlight\Demo\Scripts\Hud.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\3rd Party\MouseFlight\Demo\Scripts\Plane.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\3rd Party\MouseFlight\Scripts\MouseFlightController.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\3rd Party\Simplify\Editor\LODGeneratorHelperEditor.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\3rd Party\Simplify\Editor\SerializedPropertyExtensions.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\3rd Party\Simplify\Runtime\BlendShape.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\3rd Party\Simplify\Runtime\Components\LODBackupComponent.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\3rd Party\Simplify\Runtime\Components\LODGeneratorHelper.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\3rd Party\Simplify\Runtime\LODGenerator.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\3rd Party\Simplify\Runtime\LODLevel.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\3rd Party\Simplify\Runtime\MeshCombiner.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\3rd Party\Simplify\Runtime\MeshSimplifier.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\3rd Party\Simplify\Runtime\SimplificationOptions.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\3rd Party\Simplify\Runtime\Utility\MathHelper.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\3rd Party\Simplify\Runtime\Utility\MeshUtils.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\3rd Party\Simplify\Runtime\Utility\ResizableArray.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\3rd Party\Simplify\Runtime\Utility\SymmetricMatrix.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\3rd Party\Simplify\Runtime\Utility\Vector3d.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Clouds\CloudMaster.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Clouds\CloudNoise.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Clouds\Editor\CloudNoiseEditor.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Clouds\Editor\NoiseGenEditor.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Clouds\Editor\ShaderEditorUtility.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Clouds\Editor\WeatherMapEditor.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Clouds\Noise\NoiseGenerator.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Clouds\Noise\NoiseSettings.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Clouds\Noise\Save\Save3D.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Clouds\Noise\SimplexNoiseSettings.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Clouds\Noise\WeatherMap.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Clouds\Noise\WorleyNoiseSettings.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Terrain\Editor\MeshEditor.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Terrain\Scripts\Erosion.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Terrain\Scripts\HeightMapGenerator.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Terrain\Scripts\TerrainGenerator.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Test\Container Ray\RayStepVis.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Test\ContainerVis.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Test\Debug Viewer\Core\DebugViewer.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Test\Debug Viewer\Core\DebugViewerAPI.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Test\Debug Viewer\Core\DebugViewerDrawFunctions.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Test\Debug Viewer\Mesh Generators\CircleMesh.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Test\Debug Viewer\Mesh Generators\CylinderMesh.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Test\Debug Viewer\Mesh Generators\MeshUtility.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Test\Debug Viewer\Mesh Generators\RingMesh.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Test\Debug Viewer\Mesh Generators\SphereMesh.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Test\FPSTest.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Test\Image Effect Test\ImageEffectTest.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Test\LightConeTest.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Test\Noise.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Test\PerlinTileTest.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Test\PlaneAnimation.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Test\SimplexNoise.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Test\SimplexSettings.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Test\Simplex\SimplexMaster.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Test\Simplex\SimplexMaster2D.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Test\TileWorleyTest.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Test\WorleySettings.cs" />
+    <Compile Include="Assets\SebLague-Clouds\Scripts\Test\Worley\Worley2D.cs" />
     <Reference Include="UnityEditor.TestRunner">
       <HintPath>C:/Users/Austin/Documents/Unity/Invested/Library/ScriptAssemblies/UnityEditor.TestRunner.dll</HintPath>
     </Reference>
@@ -762,6 +820,115 @@
       <Name>Assembly-CSharp</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\SebLague-Clouds\Materials\Terrain\Terrain Normal.png" />
+    <Content Include="Assets\SebLague-Clouds\Materials\Terrain\Terrain Tex.jpg" />
+    <Content Include="Assets\SebLague-Clouds\Models\Plane\piper_bump.jpg" />
+    <Content Include="Assets\SebLague-Clouds\Models\Plane\piper_diffuse.jpg" />
+    <Content Include="Assets\SebLague-Clouds\Models\Plane\piper_refl.jpg" />
+    <Content Include="Assets\SebLague-Clouds\Models\Plane\_CREDIT.txt" />
+    <Content Include="Assets\SebLague-Clouds\Resources\Blue\BlueNoise.png" />
+    <Content Include="Assets\SebLague-Clouds\Resources\Blue\BTest.png" />
+    <Content Include="Assets\SebLague-Clouds\Resources\Blue\LDR_LLL1_0.png" />
+    <Content Include="Assets\SebLague-Clouds\Scripts\3rd Party\MouseFlight\Demo\Materials\Textures\grid.png" />
+    <Content Include="Assets\SebLague-Clouds\Scripts\3rd Party\MouseFlight\Demo\UI\Crosshair.png" />
+    <Content Include="Assets\SebLague-Clouds\Scripts\3rd Party\MouseFlight\Demo\UI\MouseCrosshair.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Assets\SebLague-Clouds\Materials\Sky.mat" />
+    <None Include="Assets\SebLague-Clouds\Materials\Terrain\Grid 1.mat" />
+    <None Include="Assets\SebLague-Clouds\Materials\Terrain\TerrainShader.shader" />
+    <None Include="Assets\SebLague-Clouds\Materials\Test\Blue.mat" />
+    <None Include="Assets\SebLague-Clouds\Materials\Test\Glass.mat" />
+    <None Include="Assets\SebLague-Clouds\Materials\Test\Grey.mat" />
+    <None Include="Assets\SebLague-Clouds\Materials\Test\NewSurfaceShader.shader" />
+    <None Include="Assets\SebLague-Clouds\Materials\Test\Phase.mat" />
+    <None Include="Assets\SebLague-Clouds\Materials\Test\Prop.mat" />
+    <None Include="Assets\SebLague-Clouds\Materials\Test\Red 1.mat" />
+    <None Include="Assets\SebLague-Clouds\Materials\Test\Red 2.mat" />
+    <None Include="Assets\SebLague-Clouds\Materials\Test\Red.mat" />
+    <None Include="Assets\SebLague-Clouds\Materials\Test\Unlit Test 1.mat" />
+    <None Include="Assets\SebLague-Clouds\Materials\Test\Unlit Test.mat" />
+    <None Include="Assets\SebLague-Clouds\Materials\Test\Unlit.mat" />
+    <None Include="Assets\SebLague-Clouds\Models\DiscThick.fbx" />
+    <None Include="Assets\SebLague-Clouds\Models\Materials\Materials\Propeller2.mat" />
+    <None Include="Assets\SebLague-Clouds\Models\Materials\Propeller 1.mat" />
+    <None Include="Assets\SebLague-Clouds\Models\Materials\Propeller Blur.mat" />
+    <None Include="Assets\SebLague-Clouds\Models\Materials\Propeller2.psd" />
+    <None Include="Assets\SebLague-Clouds\Models\Plane\Glass.mat" />
+    <None Include="Assets\SebLague-Clouds\Models\Plane\New Material.mat" />
+    <None Include="Assets\SebLague-Clouds\Models\Plane\piper_pa18.fbx" />
+    <None Include="Assets\SebLague-Clouds\Models\Prop.fbx" />
+    <None Include="Assets\SebLague-Clouds\Noise Settings\Clouds Test\Detail_1.asset" />
+    <None Include="Assets\SebLague-Clouds\Noise Settings\Clouds Test\Detail_2.asset" />
+    <None Include="Assets\SebLague-Clouds\Noise Settings\Clouds Test\Detail_3.asset" />
+    <None Include="Assets\SebLague-Clouds\Noise Settings\Clouds Test\Shape_1.asset" />
+    <None Include="Assets\SebLague-Clouds\Noise Settings\Clouds Test\Shape_2.asset" />
+    <None Include="Assets\SebLague-Clouds\Noise Settings\Clouds Test\Shape_3.asset" />
+    <None Include="Assets\SebLague-Clouds\Noise Settings\Clouds Test\Shape_4.asset" />
+    <None Include="Assets\SebLague-Clouds\Noise Settings\Clouds Test\Weather.asset" />
+    <None Include="Assets\SebLague-Clouds\Noise Settings\Flight Demo\Detail_1.asset" />
+    <None Include="Assets\SebLague-Clouds\Noise Settings\Flight Demo\Detail_2.asset" />
+    <None Include="Assets\SebLague-Clouds\Noise Settings\Flight Demo\Detail_3.asset" />
+    <None Include="Assets\SebLague-Clouds\Noise Settings\Flight Demo\Shape_1.asset" />
+    <None Include="Assets\SebLague-Clouds\Noise Settings\Flight Demo\Shape_2.asset" />
+    <None Include="Assets\SebLague-Clouds\Noise Settings\Flight Demo\Shape_3.asset" />
+    <None Include="Assets\SebLague-Clouds\Noise Settings\Flight Demo\Shape_4.asset" />
+    <None Include="Assets\SebLague-Clouds\Noise Settings\Flight Demo\Weather.asset" />
+    <None Include="Assets\SebLague-Clouds\Resources\Clouds Test_DetailNoise.asset" />
+    <None Include="Assets\SebLague-Clouds\Resources\Clouds Test_ShapeNoise.asset" />
+    <None Include="Assets\SebLague-Clouds\Resources\Flight Demo_DetailNoise.asset" />
+    <None Include="Assets\SebLague-Clouds\Resources\Flight Demo_ShapeNoise.asset" />
+    <None Include="Assets\SebLague-Clouds\Scripts\3rd Party\MouseFlight\Demo\Materials\GridX10.mat" />
+    <None Include="Assets\SebLague-Clouds\Scripts\3rd Party\MouseFlight\Demo\Materials\GridX50.mat" />
+    <None Include="Assets\SebLague-Clouds\Scripts\3rd Party\MouseFlight\Demo\Prefabs\MouseFlightHud.prefab" />
+    <None Include="Assets\SebLague-Clouds\Scripts\3rd Party\MouseFlight\Demo\Prefabs\Plane.prefab" />
+    <None Include="Assets\SebLague-Clouds\Scripts\3rd Party\MouseFlight\License" />
+    <None Include="Assets\SebLague-Clouds\Scripts\3rd Party\MouseFlight\Prefabs\MouseFlightRig.prefab" />
+    <None Include="Assets\SebLague-Clouds\Scripts\3rd Party\Simplify\Editor\Whinarn.UnityMeshSimplifier.Editor.asmdef" />
+    <None Include="Assets\SebLague-Clouds\Scripts\3rd Party\Simplify\Runtime\Whinarn.UnityMeshSimplifier.Runtime.asmdef" />
+    <None Include="Assets\SebLague-Clouds\Scripts\Clouds\Noise\Compute\NoiseGenCompute.compute" />
+    <None Include="Assets\SebLague-Clouds\Scripts\Clouds\Noise\Compute\SimplexNoise.compute" />
+    <None Include="Assets\SebLague-Clouds\Scripts\Clouds\Noise\Compute\WeatherMapGen.compute" />
+    <None Include="Assets\SebLague-Clouds\Scripts\Clouds\Noise\Save\Copy.compute" />
+    <None Include="Assets\SebLague-Clouds\Scripts\Clouds\Noise\Save\Slicer.compute" />
+    <None Include="Assets\SebLague-Clouds\Scripts\Clouds\Shaders\CloudDebug.cginc" />
+    <None Include="Assets\SebLague-Clouds\Scripts\Clouds\Shaders\Clouds.shader" />
+    <None Include="Assets\SebLague-Clouds\Scripts\Clouds\Shaders\CloudSky.shader" />
+    <None Include="Assets\SebLague-Clouds\Scripts\Terrain\Materials\Terrain 2.mat" />
+    <None Include="Assets\SebLague-Clouds\Scripts\Terrain\Materials\Terrain 3.mat" />
+    <None Include="Assets\SebLague-Clouds\Scripts\Terrain\Materials\Terrain Grassy.mat" />
+    <None Include="Assets\SebLague-Clouds\Scripts\Terrain\Materials\Terrain Snowy.mat" />
+    <None Include="Assets\SebLague-Clouds\Scripts\Terrain\Materials\Terrain.mat" />
+    <None Include="Assets\SebLague-Clouds\Scripts\Terrain\Scenes\Small Terrain.unity" />
+    <None Include="Assets\SebLague-Clouds\Scripts\Terrain\Scripts\ComputeShaders\Erosion.compute" />
+    <None Include="Assets\SebLague-Clouds\Scripts\Terrain\Scripts\ComputeShaders\HeightMap.compute" />
+    <None Include="Assets\SebLague-Clouds\Scripts\Terrain\Shaders\Terrain.shader" />
+    <None Include="Assets\SebLague-Clouds\Scripts\Terrain\Shaders\Terrain2.shader" />
+    <None Include="Assets\SebLague-Clouds\Scripts\Terrain\Shaders\Terrain3.shader" />
+    <None Include="Assets\SebLague-Clouds\Scripts\Test\Debug Viewer\Resources\UnlitAlpha.shader" />
+    <None Include="Assets\SebLague-Clouds\Scripts\Test\Grid.shader" />
+    <None Include="Assets\SebLague-Clouds\Scripts\Test\Image Effect Test\ImageEffectTest.shader" />
+    <None Include="Assets\SebLague-Clouds\Scripts\Test\Phase.shader" />
+    <None Include="Assets\SebLague-Clouds\Scripts\Test\Simplex\CloudNoise.compute" />
+    <None Include="Assets\SebLague-Clouds\Scripts\Test\Simplex\Includes\Noise.compute" />
+    <None Include="Assets\SebLague-Clouds\Scripts\Test\Simplex\NoiseDensity.compute" />
+    <None Include="Assets\SebLague-Clouds\Scripts\Test\Simplex\SimplexNoise2D.compute" />
+    <None Include="Assets\SebLague-Clouds\Scripts\Test\UnlitTest.shader" />
+    <None Include="Assets\SebLague-Clouds\Scripts\Test\Worley\Worley3D.compute" />
+    <None Include="Assets\SebLague-Clouds\Scripts\Test\Worley\WorleyCompute2D.compute" />
+    <None Include="Assets\SebLague-Clouds\Scripts\Test\Worley\WorleyTest.renderTexture" />
+    <None Include="Assets\SebLague-Clouds\_Scenes\Flight Demo.unity" />
+    <None Include="Assets\SebLague-Clouds\_Scenes\PostProc\Main Camera Profile.asset" />
+    <None Include="Assets\SebLague-Clouds\_Scenes\Vis\Light cone Test.unity" />
+    <None Include="Assets\SebLague-Clouds\_Scenes\Vis\PerlinTileTest.unity" />
+    <None Include="Assets\SebLague-Clouds\_Scenes\Vis\Phase func.unity" />
+    <None Include="Assets\SebLague-Clouds\_Scenes\Vis\PostProcTest.unity" />
+    <None Include="Assets\SebLague-Clouds\_Scenes\Vis\Raystep vis.unity" />
+    <None Include="Assets\SebLague-Clouds\_Scenes\Vis\Tile Worley Test.unity" />
+    <None Include="Assets\SebLague-Clouds\_Scenes\Vis\Worley.unity" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

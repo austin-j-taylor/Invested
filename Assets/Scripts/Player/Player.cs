@@ -161,6 +161,9 @@ public class Player : PewterEntity {
         PlayerIronSteel.Clear();
         PlayerPewter.Clear();
         PlayerZinc.Clear();
+
+        // Disable the cloud controller
+        CameraController.ActiveCamera.GetComponent<CloudMaster>().enabled = false;
     }
 
     // Reset certain values AFTER the player enters a new scene
