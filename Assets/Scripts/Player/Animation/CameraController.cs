@@ -379,7 +379,7 @@ public class CameraController : MonoBehaviour {
         if (mode == LoadSceneMode.Single) {
             GameObject otherObject = GameObject.Find("Clouds");
             if (otherObject) {
-                ActiveCamera.clearFlags = CameraClearFlags.Nothing;
+                ActiveCamera.clearFlags = CameraClearFlags.SolidColor;
 
                 CloudMaster other = otherObject.GetComponent<CloudMaster>();
                 clouds.shader = other.shader;
@@ -416,10 +416,12 @@ public class CameraController : MonoBehaviour {
 
                 clouds.colA = other.colA;
                 clouds.colB = other.colB;
+                clouds.colFog = other.colFog;
 
                 clouds.material = other.material;
 
                 clouds.enabled = true;
+                clouds.Awake();
 
                 other.enabled = false;
             } else {

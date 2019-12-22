@@ -88,6 +88,7 @@ Shader "Hidden/Clouds"
             float4 _LightColor0;
             float4 colA;
             float4 colB;
+            float4 colFog;
 
             // Animation settings
             float timeScale;

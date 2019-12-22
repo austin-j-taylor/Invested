@@ -53,13 +53,18 @@ public class CloudMaster : MonoBehaviour {
     [Header(headerDecoration + "Sky" + headerDecoration)]
     public Color colA;
     public Color colB;
+    public Color colFog;
 
     // Internal
     [HideInInspector]
     public Material material;
 
-    void Awake() {
-        WeatherMap weatherMapGen = FindObjectOfType<WeatherMap>();
+    private WeatherMap weatherMapGen;
+    private NoiseGenerator noise;
+
+    public void Awake() {
+        weatherMapGen = FindObjectOfType<WeatherMap>();
+        noise = FindObjectOfType<NoiseGenerator>();
         if (Application.isPlaying && weatherMapGen) {
             weatherMapGen.UpdateMap();
         }
@@ -75,7 +80,6 @@ public class CloudMaster : MonoBehaviour {
         numStepsLight = Mathf.Max(1, numStepsLight);
 
         // Noise
-        var noise = FindObjectOfType<NoiseGenerator>();
         noise.UpdateNoise();
 
         material.SetTexture("NoiseTex", noise.shapeTexture);
@@ -83,7 +87,6 @@ public class CloudMaster : MonoBehaviour {
         material.SetTexture("BlueNoise", blueNoise);
 
         // Weathermap
-        var weatherMapGen = FindObjectOfType<WeatherMap>();
         if (!Application.isPlaying) {
             weatherMapGen.UpdateMap();
         }
@@ -127,6 +130,7 @@ public class CloudMaster : MonoBehaviour {
 
         material.SetColor("colA", colA);
         material.SetColor("colB", colB);
+        material.SetColor("colFog", colFog);
 
         // Bit does the following:
         // - sets _MainTex property on material to the source texture
@@ -137,10 +141,6 @@ public class CloudMaster : MonoBehaviour {
     }
 
     void SetDebugParams() {
-
-        var noise = FindObjectOfType<NoiseGenerator>();
-        var weatherMapGen = FindObjectOfType<WeatherMap>();
-
         int debugModeIndex = 0;
         if (noise.viewerEnabled) {
             debugModeIndex = (noise.activeTextureType == NoiseGenerator.CloudNoiseType.Shape) ? 1 : 2;

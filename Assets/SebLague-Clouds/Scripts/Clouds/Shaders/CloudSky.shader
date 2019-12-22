@@ -88,6 +88,7 @@ Shader "Hidden/Clouds"
             float4 _LightColor0;
             float4 colA;
             float4 colB;
+            float4 colFog;
 
             // Animation settings
             float timeScale;
@@ -337,13 +338,19 @@ Shader "Hidden/Clouds"
                 // Composite sky + background
                 float3 skyColBase = lerp(colA,colB, sqrt(abs(saturate(rayDir.y))));
                 float3 backgroundCol = tex2D(_MainTex,i.uv);
-                float dstFog = 1-exp(-max(0,depth) * 8*.0001);
-                float3 sky = dstFog * skyColBase;
-                backgroundCol = backgroundCol * (1-dstFog) + sky;
+				if (depth > 1000) {
+					backgroundCol = backgroundCol + skyColBase;
+				} else {
+					float dstFog = (1 - exp(-max(0, depth) * 8 * .0001));
+					float3 sky = dstFog * colFog;
+					backgroundCol = backgroundCol * (1 - dstFog) + sky;
+				}
+
 
                 // Sun
-                float focusedEyeCos = pow(saturate(cosAngle), params.x);
-                float sun = saturate(hg(focusedEyeCos, .9995)) * transmittance;
+                //float focusedEyeCos = pow(saturate(cosAngle), params.x);
+                //float sun = saturate(hg(focusedEyeCos, .9995)) * transmittance;
+				float sun = 0;
                 
                 // Add clouds
                 float3 cloudCol = lightEnergy * _LightColor0;
