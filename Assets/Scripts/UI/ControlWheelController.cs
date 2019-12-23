@@ -130,6 +130,46 @@ public class ControlWheelController : MonoBehaviour {
 
     private void LateUpdate() {
         if (!PauseMenu.IsPaused) {
+
+            // If the player hits certain keys, consider that selecting a sector of the control wheel.
+            if(Player.CanControl) {
+                if(Keybinds.ControlWheelManual()) {
+                    SectorManual();
+                    isOpen = true;
+                    IsOpen = false;
+                } else if (Keybinds.ControlWheelArea()) {
+                    SectorArea();
+                    isOpen = true;
+                    IsOpen = false;
+                } else if (Keybinds.ControlWheelBubble()) {
+                    SectorBubble();
+                    isOpen = true;
+                    IsOpen = false;
+                } else if (Keybinds.ControlWheelCoinshot()) {
+                    SectorCoinshot();
+                    isOpen = true;
+                    IsOpen = false;
+                } else if (Keybinds.ControlWheelThrowingMode()) {
+                    switch(Player.PlayerInstance.CoinThrowingMode) {
+                        case Player.CoinMode.Semi:
+                            SectorCoinFull();
+                            break;
+                        case Player.CoinMode.Full:
+                            SectorCoinSpray();
+                            break;
+                        case Player.CoinMode.Spray:
+                            SectorCoinSemi();
+                            break;
+                    }
+                    isOpen = true;
+                    IsOpen = false;
+                } else if(Keybinds.ControlWheelDeselectAll()) {
+                    SectorDeselectAll();
+                    isOpen = true;
+                    IsOpen = false;
+                }
+            }
+
             // State machine for Control Wheel
             if (IsOpen) {
                 if (!Keybinds.ControlWheel() || !Player.CanControl || (lockedState == LockedState.LockedFully)) {
@@ -164,35 +204,25 @@ public class ControlWheelController : MonoBehaviour {
                         UpdateText();
                     } else { // outside Cancel circle: depending on the angle, choose a selection
                         if (angle > angleDeselectAll_StopBurning) {
-                            UpdateText();
-                            highlit = Selection.DeselectAll;
+                            SectorDeselectAll();
                         } else if (angle > angleStopBurning_Manual) {
-                            UpdateText();
-                            highlit = Selection.StopBurning;
+                            SectorStopBurning();
                         } else if (angle > angleManual_Area) {
-                            UpdateManual();
-                            highlit = Selection.Manual;
+                            SectorManual();
                         } else if (angle > angleArea_Bubble) {
-                            UpdateArea();
-                            highlit = Selection.Area;
+                            SectorArea();
                         } else if (angle > angleBubble_Coinshot) {
-                            UpdateBubble();
-                            highlit = Selection.Bubble;
+                            SectorBubble();
                         } else if (angle > angleCoinshot_CoinSpray) {
-                            UpdateCoinshot();
-                            highlit = (lockedState == LockedState.Unlocked) ? Selection.Coinshot : Selection.Cancel;
+                            SectorCoinshot();
                         } else if (angle > angleCoinSpray_CoinFull) {
-                            UpdateText();
-                            highlit = (lockedState == LockedState.Unlocked) ? Selection.Coin_Spray : Selection.Cancel;
+                            SectorCoinSpray();
                         } else if (angle > angleCoinFull_CoinSemi) {
-                            UpdateText();
-                            highlit = (lockedState == LockedState.Unlocked) ? Selection.Coin_Full : Selection.Cancel;
+                            SectorCoinFull();
                         } else if (angle > angleCoinSemi_DeselectAll) {
-                            UpdateText();
-                            highlit = (lockedState == LockedState.Unlocked) ? Selection.Coin_Semi : Selection.Cancel;
+                            SectorCoinSemi();
                         } else {
-                            UpdateText();
-                            highlit = Selection.DeselectAll;
+                            SectorDeselectAll();
                         }
                     }
                     // Update spoke images to reflect current highlit option
@@ -207,6 +237,44 @@ public class ControlWheelController : MonoBehaviour {
                 }
             }
         }
+    }
+
+    // Sector commands
+    private void SectorDeselectAll() {
+        UpdateText();
+        highlit = Selection.DeselectAll;
+    }
+    private void SectorStopBurning() {
+        UpdateText();
+        highlit = Selection.StopBurning;
+    }
+    private void SectorManual() {
+        UpdateManual();
+        highlit = Selection.Manual;
+    }
+    private void SectorArea() {
+        UpdateArea();
+        highlit = Selection.Area;
+    }
+    private void SectorBubble() {
+        UpdateBubble();
+        highlit = Selection.Bubble;
+    }
+    private void SectorCoinshot() {
+        UpdateCoinshot();
+        highlit = (lockedState == LockedState.Unlocked) ? Selection.Coinshot : Selection.Cancel;
+    }
+    private void SectorCoinSpray() {
+        UpdateText();
+        highlit = (lockedState == LockedState.Unlocked) ? Selection.Coin_Spray : Selection.Cancel;
+    }
+    private void SectorCoinFull() {
+        UpdateText();
+        highlit = (lockedState == LockedState.Unlocked) ? Selection.Coin_Full : Selection.Cancel;
+    }
+    private void SectorCoinSemi() {
+        UpdateText();
+        highlit = (lockedState == LockedState.Unlocked) ? Selection.Coin_Semi : Selection.Cancel;
     }
 
     public void UpdateText() {

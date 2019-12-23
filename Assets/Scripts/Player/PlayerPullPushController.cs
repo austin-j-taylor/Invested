@@ -55,11 +55,12 @@ public class PlayerPullPushController : AllomanticIronSteel {
     // radius for Area
     private float selectionAreaRadius = .025f;
     // Lerp goals for burn percentage targets
-
     // These are displayed in the Burn Rate Meter
     private float ironBurnPercentageLerp = 0;
     private float steelBurnPercentageLerp = 0;
     private float bubbleBurnPercentageLerp = 0;
+    // Lerp goal for bubble radius
+    private float bubbleRadiusLerp = 0;
     // for Magnitude control style
     private float forceMagnitudeTarget = 600;
 
@@ -139,6 +140,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
                     }
 
                     LerpToBurnPercentages();
+                    LerpToBubbleSize();
                     UpdateBurnRateMeter();
 
                     // Could have stopped burning above. Check if the Allomancer is still burning.
@@ -359,6 +361,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
                 } else { // If the player is not in control, but still burning metals, show blue lines to metals.
                     if (IsBurning) {
                         LerpToBurnPercentages();
+                        LerpToBubbleSize();
                         UpdateBlueLines();
                         UpdateBurnRateMeter();
                         RefreshHUD();
@@ -404,6 +407,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
         GamepadController.Shake(.1f, .1f, .3f);
         ironBurnPercentageLerp = 1;
         steelBurnPercentageLerp = 1;
+        bubbleRadiusLerp = SelectionBubbleRadius;
         if (bubbleBurnPercentageLerp < 0.001f)
             bubbleBurnPercentageLerp = 1;
         forceMagnitudeTarget = 600;
@@ -690,7 +694,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
                 break;
             case ControlMode.Bubble:
                 if (SelectionBubbleRadius < maxBubbleRadius) {
-                    BubbleSetSize(SelectionBubbleRadius + bubbleRadiusIncrement);
+                    SelectionBubbleRadius += bubbleRadiusIncrement;
                 }
                 break;
         }
@@ -713,7 +717,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
                 break;
             case ControlMode.Bubble:
                 if (SelectionBubbleRadius > minBubbleRadius) {
-                    BubbleSetSize(SelectionBubbleRadius - bubbleRadiusIncrement);
+                    SelectionBubbleRadius -= bubbleRadiusIncrement;
                 }
                 break;
         }
@@ -853,6 +857,19 @@ public class PlayerPullPushController : AllomanticIronSteel {
         //      Then stop burning metals
         if (SettingsMenu.settingsData.pushControlStyle == 0 && SettingsMenu.settingsData.controlScheme != SettingsData.Gamepad && (IronBurnPercentageTarget < .001f && SteelBurnPercentageTarget < .001f)) {
             StopBurning();
+        }
+    }
+
+    // Smoothly changes the bubble renderer's scale to fit the target radius
+    private void LerpToBubbleSize() {
+        if(BubbleIsOpen) {
+            float diff = SelectionBubbleRadius - bubbleRadiusLerp;
+            if (diff < 0)
+                diff = -diff;
+            if (diff > .001f) {
+                bubbleRadiusLerp = Mathf.Lerp(bubbleRadiusLerp, SelectionBubbleRadius, burnPercentageLerpConstant);
+                BubbleSetVisualSize(bubbleRadiusLerp);
+            }
         }
     }
 

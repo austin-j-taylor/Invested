@@ -256,6 +256,7 @@ public class Keybinds : MonoBehaviour {
         }
     }
 
+    // Control wheel
     public static bool ControlWheel() {
         return ZincTime();
     }
@@ -276,7 +277,48 @@ public class Keybinds : MonoBehaviour {
             return Input.GetKeyDown(KeyCode.Mouse0);
         }
     }
-
+    public static bool ControlWheelManual() {
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+            return false;
+        } else {
+            return Input.GetKeyDown(KeyCode.Alpha1);
+        }
+    }
+    public static bool ControlWheelArea() {
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+            return false;
+        } else {
+            return Input.GetKeyDown(KeyCode.Alpha2);
+        }
+    }
+    public static bool ControlWheelBubble() {
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+            return false;
+        } else {
+            return Input.GetKeyDown(KeyCode.Alpha3);
+        }
+    }
+    public static bool ControlWheelCoinshot() {
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+            return false;
+        } else {
+            return Input.GetKeyDown(KeyCode.Alpha4);
+        }
+    }
+    public static bool ControlWheelThrowingMode() {
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+            return false;
+        } else {
+            return Input.GetKeyDown(KeyCode.C);
+        }
+    }
+    public static bool ControlWheelDeselectAll() {
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+            return false;
+        } else {
+            return Input.GetKeyDown(KeyCode.Z);
+        }
+    }
 
     // Only Gamepad
 

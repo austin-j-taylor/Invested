@@ -30,7 +30,18 @@ public class AllomanticIronSteel : Allomancer {
     // Optional TargetArray for Bubble pushing/pulling. Handled more by subclasses.
     public TargetArray BubbleTargets { get; protected set; } = null;
     protected Renderer bubbleRenderer = null;
-    protected float SelectionBubbleRadius { get; private set; } = 2f;
+    private float selectionBubbleRadius = 2;
+    protected float SelectionBubbleRadius {
+        get {
+            return selectionBubbleRadius;
+        }
+        set {
+            selectionBubbleRadius = value;
+            // remove out-of-range targets
+            BubbleTargets.RemoveAllOutOfBubble(SelectionBubbleRadius, this);
+            BubbleTargets.Size = BubbleTargets.Count;
+        }
+    }
 
     public bool PullingOnPullTargets {
         get {
@@ -767,13 +778,10 @@ public class AllomanticIronSteel : Allomancer {
                 BubbleTargets.Clear();
         }
     }
-    protected void BubbleSetSize(float radius) {
-        SelectionBubbleRadius = radius;
+    // Sets the VISUAL size of the bubble. Does not actually affect the radius for target selection.
+    protected void BubbleSetVisualSize(float visualRadius) {
         // set size
-        float scale = SelectionBubbleRadius * 2;
+        float scale = visualRadius * 2;
         bubbleRenderer.transform.localScale = new Vector3(scale, scale, scale);
-        // remove out-of-range targets
-        BubbleTargets.RemoveAllOutOfBubble(SelectionBubbleRadius, this);
-        BubbleTargets.Size = BubbleTargets.Count;
     }
 }
