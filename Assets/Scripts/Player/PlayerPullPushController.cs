@@ -13,9 +13,6 @@ public class PlayerPullPushController : AllomanticIronSteel {
     private const float timeToHoldDown = .5f;
     private const float timeDoubleTapWindow = .5f;
     // Blue Line constants
-    private const float horizontalImportanceFactor = .1f;
-    private const float verticalImportanceFactor = .35f;
-    private const float importanceRatio = (horizontalImportanceFactor / verticalImportanceFactor) * (horizontalImportanceFactor / verticalImportanceFactor);
     private const float lineWeightThreshold = 1;
     private const float targetLateralConstant = .1f;
     private const float targetFocusFalloffConstant = 128;       // Determines how quickly blue lines blend from in-focus to out-of-focus
@@ -32,7 +29,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
     private const int maxNumberOfTargets = 10;
     private const int minNumberOfTargets = 1;
     private const float minAreaRadius = .0251f;
-    private const float maxAreaRadius = .25f;
+    public const float maxAreaRadius = .25f;
     private const float areaRadiusIncrement = .025f;
     private const int minBubbleRadius = 1;
     private const int maxBubbleRadius = 10;
@@ -41,6 +38,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
     private const float bubbleIntensityMax = 0.75f;
     // Other Constants
     private const float burnPercentageLerpConstant = .30f;
+    private const float areaLerpConstant = .4f;
     private const int blueLineLayer = 10;
     private const float metalLinesLerpConstant = .30f;
     private const int defaultCharge = 1;
@@ -53,14 +51,15 @@ public class PlayerPullPushController : AllomanticIronSteel {
 
     public ControlMode Mode { get; private set; }
     // radius for Area
-    private float selectionAreaRadius = .025f;
+    private float selectionAreaRadius = maxAreaRadius;
     // Lerp goals for burn percentage targets
     // These are displayed in the Burn Rate Meter
     private float ironBurnPercentageLerp = 0;
     private float steelBurnPercentageLerp = 0;
     private float bubbleBurnPercentageLerp = 0;
-    // Lerp goal for bubble radius
+    // Lerp goal for bubble/area radius
     private float bubbleRadiusLerp = 0;
+    private float areaRadiusLerp = 0;
     // for Magnitude control style
     private float forceMagnitudeTarget = 600;
 
@@ -91,7 +90,6 @@ public class PlayerPullPushController : AllomanticIronSteel {
      */
     private void Update() {
         if (!PauseMenu.IsPaused) {
-
             if (IsBurning) {
                 if (!ExternalControl && Player.CanControl) {
                     // Change Burn Percentage Targets
@@ -148,7 +146,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
                         // Swap pull- and push- targets
                         if (Keybinds.NegateDown() && timeToSwapBurning > Time.time) {
                             // swap bubble, if in that mode
-                            if(Mode == ControlMode.Bubble && BubbleIsOpen) {
+                            if (Mode == ControlMode.Bubble && BubbleIsOpen) {
                                 BubbleOpen(!BubbleMetalStatus);
                             }
                             // Double-tapped, Swap targets
@@ -259,6 +257,9 @@ public class PlayerPullPushController : AllomanticIronSteel {
                                 }
                                 break;
                             case ControlMode.Area:
+                                // Crosshair: lerp to the correct size
+                                LerpToAreaSize();
+
                                 if (removing) {
                                     // Removing targets
                                     // For area/bubble targeting, Removing a target means to remove all targets.
@@ -389,7 +390,10 @@ public class PlayerPullPushController : AllomanticIronSteel {
                     }
                 } else {
                     // Start burning (as long as the Control Wheel isn't open to interfere)
-                    if (!Keybinds.Negate() && !HUD.ControlWheelController.IsOpen) {
+                    if (Keybinds.StopBurning()) {
+                        // toggle back on
+                        StartBurning();
+                    } else if (!Keybinds.Negate() && !HUD.ControlWheelController.IsOpen) {
                         if (Keybinds.SelectDown() || Keybinds.PullDown()) {
                             StartBurning(true);
                         } else if (Keybinds.SelectAlternateDown() || Keybinds.PushDown()) {
@@ -410,6 +414,14 @@ public class PlayerPullPushController : AllomanticIronSteel {
         bubbleRadiusLerp = SelectionBubbleRadius;
         if (bubbleBurnPercentageLerp < 0.001f)
             bubbleBurnPercentageLerp = 1;
+
+        areaRadiusLerp = 0;
+        if (Mode == ControlMode.Area) {
+            HUD.Crosshair.SetArea();
+        } else {
+            HUD.Crosshair.SetManual();
+        }
+
         forceMagnitudeTarget = 600;
         if (SettingsMenu.settingsData.renderblueLines == 1)
             EnableRenderingBlueLines();
@@ -428,6 +440,8 @@ public class PlayerPullPushController : AllomanticIronSteel {
         GamepadController.SetRumble(0, 0);
         GetComponentInChildren<AllomechanicalGlower>().RemoveAllEmissions();
         DisableRenderingBlueLines();
+
+        HUD.Crosshair.SetManual();
         RefreshHUD();
     }
     /*
@@ -560,10 +574,11 @@ public class PlayerPullPushController : AllomanticIronSteel {
                 } else {
                     float weight = SetLineProperties(target, out float radialDistance, out float linearDistance);
                     // If the Magnetic is on the screen
-                    if (weight > lineWeightThreshold) {
-                        // IF the new Magnetic is closer to the center of the screen than the previous most-center Magnetic
+                    if (weight > 0) {
+                        // IF that metal is reasonably close to the center of the screen
+                        // and IF the new Magnetic is closer to the center of the screen than the previous most-center Magnetic
                         // and IF the new Magnetic is in range
-                        if (weight > bullseyeWeight) {
+                        if (weight > lineWeightThreshold && weight > bullseyeWeight) {
                             bullseyeWeight = weight;
                             targetBullseye = target;
                         }
@@ -629,11 +644,17 @@ public class PlayerPullPushController : AllomanticIronSteel {
         }
         // Set line properties
         Vector3 screenPosition = CameraController.ActiveCamera.WorldToViewportPoint(target.transform.position);
+        // make the center be 0
+        screenPosition.x -= .5f;
+        screenPosition.y -= .5f;
+        // Pretend the screen is a square for radial distance. Scale down X.
+        screenPosition.x = screenPosition.x * Screen.width / Screen.height;
 
         // Calculate the distance from the center for deciding which blue lines are "in-focus"
+        // Radial distance: 
         radialDistance = Mathf.Sqrt(
-            (screenPosition.x - .5f) * (screenPosition.x - .5f) +
-            (screenPosition.y - .5f) * (screenPosition.y - .5f) * importanceRatio
+            (screenPosition.x) * (screenPosition.x) +
+            (screenPosition.y) * (screenPosition.y)
         );
         linearDistance = (transform.position - target.transform.position).magnitude;
 
@@ -862,7 +883,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
 
     // Smoothly changes the bubble renderer's scale to fit the target radius
     private void LerpToBubbleSize() {
-        if(BubbleIsOpen) {
+        if (BubbleIsOpen) {
             float diff = SelectionBubbleRadius - bubbleRadiusLerp;
             if (diff < 0)
                 diff = -diff;
@@ -870,6 +891,15 @@ public class PlayerPullPushController : AllomanticIronSteel {
                 bubbleRadiusLerp = Mathf.Lerp(bubbleRadiusLerp, SelectionBubbleRadius, burnPercentageLerpConstant);
                 BubbleSetVisualSize(bubbleRadiusLerp);
             }
+        }
+    }
+    private void LerpToAreaSize() {
+        float diff = selectionAreaRadius - areaRadiusLerp;
+        if (diff < 0)
+            diff = -diff;
+        if (diff > .001f) {
+            areaRadiusLerp = Mathf.Lerp(areaRadiusLerp, selectionAreaRadius, areaLerpConstant);
+            HUD.Crosshair.SetCircleRadius(areaRadiusLerp);
         }
     }
 
@@ -976,17 +1006,22 @@ public class PlayerPullPushController : AllomanticIronSteel {
     public void SetControlModeManual() {
         Mode = ControlMode.Manual;
         PullTargets.Size = sizeOfTargetArrays;
+        HUD.Crosshair.SetManual();
     }
     public void SetControlModeArea() {
         Mode = ControlMode.Area;
         PullTargets.Size = 0;
+        areaRadiusLerp = 0;
+        HUD.Crosshair.SetArea();
     }
     public void SetControlModeBubble() {
         Mode = ControlMode.Bubble;
         PullTargets.Size = 0;
+        HUD.Crosshair.SetManual();
     }
     public void SetControlModeCoinshot() {
         Mode = ControlMode.Coinshot;
         PullTargets.Size = sizeOfTargetArrays;
+        HUD.Crosshair.SetManual();
     }
 }

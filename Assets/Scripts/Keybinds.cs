@@ -215,7 +215,7 @@ public class Keybinds : MonoBehaviour {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
             return false;
         else
-            return Input.GetKey(KeyCode.X);
+            return Input.GetKeyDown(KeyCode.X);
     }
 
     public static float LeftBurnPercentage() {
