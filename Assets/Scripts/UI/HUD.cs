@@ -20,7 +20,7 @@ public class HUD : MonoBehaviour {
     public static GameObject HudGameObject {
         get; private set;
     }
-    public static Image Crosshair{
+    public static CrosshairController Crosshair {
         get; private set;
     }
     public static BurnPercentageMeter BurnPercentageMeter {
@@ -60,7 +60,7 @@ public class HUD : MonoBehaviour {
         hudGroup = GetComponent<CanvasGroup>();
         hudBehindWheelGroup = transform.Find("BehindControlWheel").GetComponent<CanvasGroup>();
         anim = GetComponent<Animator>();
-        Crosshair = transform.Find("BehindControlWheel/Crosshair").GetComponent<Image>();
+        Crosshair = GetComponentInChildren<CrosshairController>();
         BurnPercentageMeter = GetComponentInChildren<BurnPercentageMeter>();
         TargetOverlayController = GetComponentInChildren<TargetOverlayController>();
         ThrowingAmmoMeter = GetComponentInChildren<ThrowingAmmoMeter>();
@@ -111,6 +111,7 @@ public class HUD : MonoBehaviour {
                 ZincMeterController.Clear();
                 ControlWheelController.Clear();
                 ConsoleController.Clear();
+                Crosshair.Clear();
                 anim.SetBool("ControlWheelVisible", false);
             }
         }

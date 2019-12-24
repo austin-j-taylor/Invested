@@ -48,7 +48,7 @@ public class ZincMeterController : MonoBehaviour {
         spikeBottom = transform.Find("spikes/spikeBottom").GetComponent<Image>();
         spikeTopFill = spikeTop.transform.Find("fill").GetComponent<Image>();
         spikeBottomFill = spikeBottom.transform.Find("fill").GetComponent<Image>();
-        side = HUD.Crosshair.GetComponentInChildren<CanvasGroup>();
+        side = HUD.Crosshair.transform.Find("ZincSideMeter/Zinc_spikeSide").GetComponent<CanvasGroup>();
         sideImage = side.transform.Find("fill").GetComponent<Image>();
         animator = GetComponent<Animator>();
     }

@@ -912,6 +912,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
             bubbleRenderer.material.SetFloat("_Intensity", bubbleIntensityMin + bubbleIntensityMax * BubbleBurnPercentageTarget);
         } else {
             HUD.BurnPercentageMeter.Clear();
+            HUD.Crosshair.Clear();
         }
     }
 
@@ -936,6 +937,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
             }
         } else {
             HUD.BurnPercentageMeter.Clear();
+            HUD.Crosshair.Clear();
         }
     }
 

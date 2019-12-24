@@ -15,8 +15,6 @@ public class BurnPercentageMeter : MonoBehaviour {
     private Text sumForceText;
     private Text playerInputText;
     private Text metalLineCountText;
-    private Image burnRateImage;
-    private Image burnRateAlternateImage;
 
     void Awake() {
         Text[] texts = GetComponentsInChildren<Text>();
@@ -25,9 +23,6 @@ public class BurnPercentageMeter : MonoBehaviour {
         sumForceText = texts[2];
         metalLineCountText = texts[3];
 
-        Image[] images = GetComponentsInChildren<Image>();
-        burnRateImage = images[0];
-        burnRateAlternateImage = images[1];
         Clear();
     }
 
@@ -36,8 +31,6 @@ public class BurnPercentageMeter : MonoBehaviour {
         playerInputText.text = "";
         sumForceText.text = "";
         metalLineCountText.text = "";
-        burnRateImage.fillAmount = minAngle;
-        burnRateAlternateImage.fillAmount = minAngle;
     }
 
     // Hide unwanted fields after changing Settings
@@ -82,8 +75,7 @@ public class BurnPercentageMeter : MonoBehaviour {
     }
 
     private void SetFillPercent(float rate, float rateAlternate) {
-        burnRateImage.fillAmount = minAngle + (rate) * (maxAngle);
-        burnRateAlternateImage.fillAmount = minAngle + (rateAlternate) * (maxAngle);
+        HUD.Crosshair.SetFillPercent(rate);
     }
 
     public void SetForceTextColorStrong() {
