@@ -172,9 +172,12 @@ public class AllomanticIronSteel : Allomancer {
         Charge = Mathf.Pow(Mass, chargePower);
         IronReserve = gameObject.AddComponent<MetalReserve>();
         SteelReserve = gameObject.AddComponent<MetalReserve>();
-        PullTargets = new TargetArray();
-        PushTargets = new TargetArray();
+        InitArrays();
         GameManager.AddAllomancer(this);
+    }
+    protected virtual void InitArrays() {
+        PullTargets = new TargetArray(TargetArray.smallArrayCapacity);
+        PushTargets = new TargetArray(TargetArray.smallArrayCapacity);
     }
 
     public override void Clear() {

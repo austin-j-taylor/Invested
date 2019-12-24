@@ -9,7 +9,9 @@ using UnityEngine;
  */
 public class TargetArray {
 
-    public const int arraySize = 100; // Area, Bubble Control Mode
+    // Player can push on up to 300 targets at once
+    public const int largeArrayCapacity = 300; // Area, Bubble Control Mode
+    public const int smallArrayCapacity = 10; // Manual, and for Non-player allomancers
 
     public const float lightSaberConstant = 1024;
     public const float firstPersonLSFactor = .1f;
@@ -44,7 +46,7 @@ public class TargetArray {
 
     public float MaxRange { get; set; } = 0; // 0 if ignored (use SettingsData), negative if infinite, positive if this Allomancer has a custom max range
 
-    public TargetArray(int capacity = arraySize) {
+    public TargetArray(int capacity) {
         targets = new Magnetic[capacity];
     }
 
@@ -333,6 +335,10 @@ public class TargetArray {
         //   if any of the elements of that list are not in this frame's targets, 
         //   and are also not a bubble target,
         //               remove and Clear() them.
+        // make sure newTargets isn't too big
+        if (targets.Length < newTargets.Count) {
+            newTargets.RemoveRange(targets.Length, newTargets.Count - targets.Length);
+        }
 
         if (addingVacuous) {
             VacuousCount = newTargets.Count;
@@ -351,8 +357,9 @@ public class TargetArray {
             }
         }
         // 2) make the size big enough to fit the new targets
-        Size = newTargets.Count;
-        Count = size;
+        if (newTargets.Count > size)
+            Size = newTargets.Count;
+        Count = newTargets.Count;
         // 3) copy contents of newTargets into our targets
         for (int i = 0; i < newTargets.Count && i < targets.Length; i++) {
             targets[i] = newTargets[i];
@@ -365,6 +372,7 @@ public class TargetArray {
      */
     public void UpdateBlueLines(bool pullingColor, float burnRate, Vector3 startPos) {
         // Go through targets and update their metal lines
+        Debug.Log("updating count: " + Count);
         for (int i = 0; i < Count; i++) {
             targets[i].SetBlueLine(
                 startPos,

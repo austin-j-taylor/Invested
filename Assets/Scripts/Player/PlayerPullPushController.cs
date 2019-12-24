@@ -81,7 +81,11 @@ public class PlayerPullPushController : AllomanticIronSteel {
         BubbleMetalStatus = iron;
         Mode = ControlMode.Manual;
         bubbleRenderer = transform.Find("BubbleRange").GetComponent<Renderer>();
-        BubbleTargets = new TargetArray();
+        BubbleTargets = new TargetArray(TargetArray.largeArrayCapacity);
+    }
+    protected override void InitArrays() {
+        PullTargets = new TargetArray(TargetArray.largeArrayCapacity);
+        PushTargets = new TargetArray(TargetArray.largeArrayCapacity);
     }
     /*
      * Read inputs for selecting targets.
@@ -1006,22 +1010,26 @@ public class PlayerPullPushController : AllomanticIronSteel {
     public void SetControlModeManual() {
         Mode = ControlMode.Manual;
         PullTargets.Size = sizeOfTargetArrays;
+        PushTargets.Size = sizeOfTargetArrays;
         HUD.Crosshair.SetManual();
     }
     public void SetControlModeArea() {
         Mode = ControlMode.Area;
-        PullTargets.Size = 0;
+        PullTargets.Size = TargetArray.largeArrayCapacity;
+        PushTargets.Size = TargetArray.largeArrayCapacity;
         areaRadiusLerp = 0;
         HUD.Crosshair.SetArea();
     }
     public void SetControlModeBubble() {
         Mode = ControlMode.Bubble;
         PullTargets.Size = 0;
+        PushTargets.Size = 0;
         HUD.Crosshair.SetManual();
     }
     public void SetControlModeCoinshot() {
         Mode = ControlMode.Coinshot;
         PullTargets.Size = sizeOfTargetArrays;
+        PushTargets.Size = sizeOfTargetArrays;
         HUD.Crosshair.SetManual();
     }
 }

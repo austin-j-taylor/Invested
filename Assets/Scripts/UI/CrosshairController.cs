@@ -46,6 +46,7 @@ public class CrosshairController : MonoBehaviour
         for(int i = 0; i < size; i++) {
             fills[i].fillAmount = rate;
         }
+        circle.material.SetFloat("_Fill", rate);
     }
 
     public void SetCircleRadius(float screenPercentage) {

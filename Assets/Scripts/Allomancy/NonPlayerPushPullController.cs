@@ -7,20 +7,18 @@ using VolumetricLines;
  */
 public class NonPlayerPushPullController : AllomanticIronSteel {
 
-    private const int maxNumberOfTargets = 10;
-
     public VolumetricLineBehavior[] pullLines;
     public VolumetricLineBehavior[] pushLines;
 
     public bool LinesAreVisible {
         set {
             if (value) {
-                for (int i = 0; i < maxNumberOfTargets; i++) {
+                for (int i = 0; i < TargetArray.smallArrayCapacity; i++) {
                     pullLines[i].gameObject.layer = GameManager.Layer_BlueLinesVisible;
                     pushLines[i].gameObject.layer = GameManager.Layer_BlueLinesVisible;
                 }
             } else {
-                for (int i = 0; i < maxNumberOfTargets; i++) {
+                for (int i = 0; i < TargetArray.smallArrayCapacity; i++) {
                     pullLines[i].gameObject.layer = GameManager.Layer_BlueLines;
                     pushLines[i].gameObject.layer = GameManager.Layer_BlueLines;
                 }
@@ -35,19 +33,23 @@ public class NonPlayerPushPullController : AllomanticIronSteel {
         PullTargets.MaxRange = -1;
         PushTargets.MaxRange = -1;
 
-        pullLines = new VolumetricLineBehavior[maxNumberOfTargets];
-        pushLines = new VolumetricLineBehavior[maxNumberOfTargets];
-        for (int i = 0; i < maxNumberOfTargets; i++) {
+        pullLines = new VolumetricLineBehavior[TargetArray.smallArrayCapacity];
+        pushLines = new VolumetricLineBehavior[TargetArray.smallArrayCapacity];
+        for (int i = 0; i < TargetArray.smallArrayCapacity; i++) {
             pullLines[i] = Instantiate(GameManager.MetalLineTemplate);
             pushLines[i] = Instantiate(GameManager.MetalLineTemplate);
         }
 
         LinesAreVisible = true;
     }
+    protected override void InitArrays() {
+        PullTargets = new TargetArray(TargetArray.smallArrayCapacity);
+        PushTargets = new TargetArray(TargetArray.smallArrayCapacity);
+    }
 
     private void LateUpdate() {
         if (!PauseMenu.IsPaused) {
-            for (int i = 0; i < maxNumberOfTargets; i++) {
+            for (int i = 0; i < TargetArray.smallArrayCapacity; i++) {
                 // Non-existent target, disable blue line
                 //if (PullTargets[i] != Player.PlayerMagnetic || !IronPulling) {
                 if (i >= PullTargets.Count || !IronPulling) {

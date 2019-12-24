@@ -23,15 +23,15 @@ public class TargetOverlayController : MonoBehaviour {
 
     // Use this for initialization
     void Awake() {
-        pullTargetsSumForce = new Text[TargetArray.arraySize];
-        pushTargetsSumForce = new Text[TargetArray.arraySize];
-        pullTargetsActualForce = new Text[TargetArray.arraySize];
-        pushTargetsActualForce = new Text[TargetArray.arraySize];
+        pullTargetsSumForce = new Text[TargetArray.largeArrayCapacity];
+        pushTargetsSumForce = new Text[TargetArray.largeArrayCapacity];
+        pullTargetsActualForce = new Text[TargetArray.largeArrayCapacity];
+        pushTargetsActualForce = new Text[TargetArray.largeArrayCapacity];
 
         highlightedTargetMass = Instantiate(templateMass, transform, false);
         highlightedTargetMass.text = "";
 
-        for (int i = 0; i < TargetArray.arraySize; i++) {
+        for (int i = 0; i < TargetArray.largeArrayCapacity; i++) {
             pullTargetsActualForce[i] = Instantiate(templateActualForce, transform, false);
             pushTargetsActualForce[i] = Instantiate(templateActualForce, transform, false);
             pullTargetsActualForce[i].text = "";
@@ -59,12 +59,12 @@ public class TargetOverlayController : MonoBehaviour {
     // Update number of targets
     public void HardRefresh() {
         SoftRefresh();
-        for (int i = Player.PlayerIronSteel.PullTargets.Count; i < TargetArray.arraySize; i++) {
+        for (int i = Player.PlayerIronSteel.PullTargets.Count; i < TargetArray.largeArrayCapacity; i++) {
             pullTargetsSumForce[i].text = "";
             pullTargetsActualForce[i].text = "";
         }
 
-        for (int i = Player.PlayerIronSteel.PushTargets.Count; i < TargetArray.arraySize; i++) {
+        for (int i = Player.PlayerIronSteel.PushTargets.Count; i < TargetArray.largeArrayCapacity; i++) {
             pushTargetsSumForce[i].text = "";
             pushTargetsActualForce[i].text = "";
         }
@@ -138,25 +138,25 @@ public class TargetOverlayController : MonoBehaviour {
     }
 
     public void SetPullTextColorStrong() {
-        for (int i = 0; i < TargetArray.arraySize; i++) {
+        for (int i = 0; i < TargetArray.largeArrayCapacity; i++) {
             pullTargetsActualForce[i].color = HUD.strongBlue;
         }
     }
 
     public void SetPushTextColorStrong() {
-        for (int i = 0; i < TargetArray.arraySize; i++) {
+        for (int i = 0; i < TargetArray.largeArrayCapacity; i++) {
             pushTargetsActualForce[i].color = HUD.strongBlue;
         }
     }
 
     public void SetPullTextColorWeak() {
-        for (int i = 0; i < TargetArray.arraySize; i++) {
+        for (int i = 0; i < TargetArray.largeArrayCapacity; i++) {
             pullTargetsActualForce[i].color = HUD.weakBlue;
         }
     }
 
     public void SetPushTextColorWeak() {
-        for (int i = 0; i < TargetArray.arraySize; i++) {
+        for (int i = 0; i < TargetArray.largeArrayCapacity; i++) {
             pushTargetsActualForce[i].color = HUD.weakBlue;
         }
     }
