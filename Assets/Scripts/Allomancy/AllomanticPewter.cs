@@ -32,11 +32,14 @@ public class AllomanticPewter : Allomancer {
     protected new ParticleSystem particleSystem;
     protected Quaternion particleDirection;
 
+    // The mesh that has a "shielding" effect that flashes when taking damage
+    [SerializeField]
+    private readonly MeshRenderer shieldRenderer = null;
+
     protected virtual void Awake() {
         PewterReserve = gameObject.AddComponent<MetalReserve>();
         rb = GetComponent<Rigidbody>();
         particleSystem = transform.parent.GetComponentInChildren<ParticleSystem>();
-
         GameManager.AddAllomancer(this);
     }
 
@@ -94,8 +97,16 @@ public class AllomanticPewter : Allomancer {
     }
 
     // When taking damage, attempt to shield it
-    public float OnHit(float damage, bool automaticallyShield = false) {
+    public virtual float OnHit(Vector3 sourceLocation, float damage, bool automaticallyShield = false) {
         if (automaticallyShield || PewterReserve.IsDraining) {
+            // get local position of collision source
+            sourceLocation -= shieldRenderer.transform.position;
+            // get closest point on mesh where that happens (for now, assume it's a sphere w/ radius .5)
+            sourceLocation = sourceLocation / sourceLocation.magnitude * .5f;
+
+            // Flash the shield
+            shieldRenderer.material.SetVector("SourceLocation", sourceLocation);
+
             Drain(gramsPewterPerFall, timePewterPerFall);
             return 0;
         } else {

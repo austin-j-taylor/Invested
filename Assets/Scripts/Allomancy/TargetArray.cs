@@ -372,7 +372,6 @@ public class TargetArray {
      */
     public void UpdateBlueLines(bool pullingColor, float burnRate, Vector3 startPos) {
         // Go through targets and update their metal lines
-        Debug.Log("updating count: " + Count);
         for (int i = 0; i < Count; i++) {
             targets[i].SetBlueLine(
                 startPos,

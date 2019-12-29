@@ -62,11 +62,11 @@ public class Entity : MonoBehaviour {
         Vector3 vel = Player.PlayerInstance.GetComponent<Rigidbody>().velocity;
         Vector3 thisNormal = collision.GetContact(0).normal;
         if (Vector3.Project(collision.relativeVelocity, thisNormal).sqrMagnitude > fallDamageSquareSpeedThreshold) {
-            OnHit(collision.impulse.magnitude);
+            OnHit(collision.GetContact(0).point, collision.impulse.magnitude);
         }
     }
 
-    virtual public void OnHit(float damage) {
+    virtual public void OnHit(Vector3 sourceLocation, float damage) {
         //if (lastHitTime + hitstun < Time.time) {
         if (!hitThisFrame) {
             Health -= damage;

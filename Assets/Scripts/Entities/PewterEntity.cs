@@ -24,7 +24,7 @@ public class PewterEntity : Entity {
             Vector3 thisNormal = collision.GetContact(0).normal;
             if (Vector3.Project(collision.relativeVelocity, thisNormal).sqrMagnitude > fallDamageSquareSpeedThreshold) {
                 pewter.HitSurface(-thisNormal);
-                pewter.OnHit(collision.impulse.magnitude, true);
+                pewter.OnHit(collision.GetContact(0).point, collision.impulse.magnitude, true);
             }
         }
     }
@@ -32,7 +32,7 @@ public class PewterEntity : Entity {
     /*
      * When taking damage, use pewter, if available.
      */
-    public override void OnHit(float damage) {
-        base.OnHit(pewter.OnHit(damage));
+    public override void OnHit(Vector3 sourceLocation, float damage) {
+        base.OnHit(sourceLocation, pewter.OnHit(sourceLocation, damage));
     }
 }

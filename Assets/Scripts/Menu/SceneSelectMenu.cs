@@ -132,6 +132,7 @@ public class SceneSelectMenu : MonoBehaviour {
     private void ClearAfterSceneChange(Scene scene, LoadSceneMode mode) {
         if (mode == LoadSceneMode.Single) {
             PauseMenu.UnPause();
+            LevelCompletedScreen.Close();
 
             if (scene.buildIndex == sceneTitleScreen) {
 
