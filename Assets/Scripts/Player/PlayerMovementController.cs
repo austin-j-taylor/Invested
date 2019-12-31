@@ -22,7 +22,7 @@ public class PlayerMovementController : AllomanticPewter {
     private const float targetSprintingSpeedRadial = targetSprintingSpeed / radius;
     //private const float maxSprintingAngularVelocity = Mathf.Infinity;
     // Pewter burning
-    protected const float gramsPewterPerJump = 1f;
+    protected const double gramsPewterPerJump = .25f;
     protected const float timePewterPerJump = .5f;
     // Jumping
     private const float jumpHeight = 300;
@@ -167,9 +167,8 @@ public class PlayerMovementController : AllomanticPewter {
                     Vector3 jumpForce;
 
                     // Apply Pewter Jump, if sprinting
-                    if (IsSprinting) {
+                    if (IsSprinting && PewterReserve.Mass >= gramsPewterPerJump) {
                         Vector3 movementForPewter = CameraController.UpsideDown ? -movement : movement;
-
 
                         if (movementForPewter.sqrMagnitude <= .01f) { // Vertical jump. Jump straight up.
                             movementForPewter = groundedChecker.Normal;

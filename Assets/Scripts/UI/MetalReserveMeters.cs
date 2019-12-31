@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 public class MetalReserveMeters : MonoBehaviour {
 
-    private const float maxMass = 100;
     private const float lowThreshold = .15f;
     private const float criticalMassThreshold = 1f; // When reserve is < 1g, always flash red
     private const float timeToFade = 5;
@@ -41,17 +40,22 @@ public class MetalReserveMeters : MonoBehaviour {
             element.timeLastChanged = Time.time;
 
         element.massText.text = HUD.RoundStringToSigFigs((float)element.reserve.Mass, 3) + "g";
-        if(element.reserve.Rate < .1) {
-            element.rateText.text = "<100mg/s";
+        double threshold = .100 * Time.fixedDeltaTime;
+        if (element.reserve.Rate < threshold && element.reserve.Rate > -threshold) {
+            if(element.reserve.IsChanging) {
+                element.rateText.text = "<100mg/s";
+            } else {
+                element.rateText.text = "";
+            }
         } else {
             element.rateText.text = HUD.RoundStringToSigFigs((float)element.reserve.Rate * 1000, 2) + "mg/s";
         }
-        element.fill.fillAmount = (float)element.reserve.Mass / maxMass;
+        element.fill.fillAmount = (float)(element.reserve.Mass / element.reserve.Capacity);
 
         element.animator.SetBool("IsLow", element.fill.fillAmount < lowThreshold);
         element.animator.SetBool("IsVisible", Time.time - element.timeLastChanged < timeToFade);
 
-        element.animator.SetBool("IsDraining", element.reserve.IsDraining || (element.reserve.Mass < criticalMassThreshold && element.reserve.HasMass));
+        element.animator.SetBool("IsDraining", element.reserve.IsChanging || (element.reserve.Mass < criticalMassThreshold && element.reserve.HasMass));
     }
 
     public void Clear() {

@@ -5,12 +5,10 @@
  */
 public class MetalReserve : MonoBehaviour {
 
-    private const double maxCapacity = 150, // stomach can hold up to this much metal
-                         fuzzyThresholdFull = 1, // 1 gram
+    private const double fuzzyThresholdFull = 1, // 1 gram
                          fuzzyThresholdChanging = .001f; // 1 mg
 
     public bool IsEndless { get; set; } = false; // If true, this reserve will never run out
-    
     private double mass = 0;
     private double lastMass = 0;
     public double Rate { get; private set; } = 0; // in grams / second
@@ -22,10 +20,22 @@ public class MetalReserve : MonoBehaviour {
             mass = value;
             if (mass < 0)
                 mass = 0;
-            else if (mass > maxCapacity)
-                mass = maxCapacity;
+            else if (mass > capacity)
+                mass = capacity;
         }
     } // in grams
+    private double capacity = 150; // stomach can hold up to this much metal
+    public double Capacity {
+        get {
+            return capacity;
+        }
+        set {
+            capacity = value;
+            if (mass > capacity)
+                mass = capacity;
+        }
+    }
+
     public bool HasMass {
         get {
             return IsEndless || mass > 0;
@@ -33,23 +43,18 @@ public class MetalReserve : MonoBehaviour {
     }
     public bool IsChanging {
         get {
-            return Rate != 0;
-        }
-    }
-    public bool IsDraining {
-        get {
-            return Rate < -fuzzyThresholdChanging;
+            return Rate < -fuzzyThresholdChanging || Rate > fuzzyThresholdChanging;
         }
     }
 
     public bool IsFull {
         get {
-            return mass == maxCapacity;
+            return mass == capacity;
         }
     }
     public bool IsFullFuzzy {
         get {
-            return maxCapacity - mass < fuzzyThresholdFull;
+            return capacity - mass < fuzzyThresholdFull;
         }
     }
 
@@ -76,5 +81,10 @@ public class MetalReserve : MonoBehaviour {
             Mass = noMoreThan;
         else
             Mass = mass + volume;
+    }
+
+    // fully refills this reserve
+    public void Refill() {
+        Mass = capacity;
     }
 }

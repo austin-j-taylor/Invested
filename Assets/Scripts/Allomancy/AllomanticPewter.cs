@@ -11,8 +11,8 @@ using System.Collections;
 [RequireComponent(typeof(Rigidbody))]
 public class AllomanticPewter : Allomancer {
 
-    protected const float gramsPewterPerSecondSprint = .5f;
-    protected const float gramsPewterPerFall = 2f;
+    protected const double gramsPewterPerSecondSprint = .500f;
+    protected const double gramsPewterPerFall = .10f;
     protected const float timePewterPerFall = .75f;
 
     public MetalReserve PewterReserve { get; private set; }
@@ -40,6 +40,7 @@ public class AllomanticPewter : Allomancer {
 
     protected virtual void Awake() {
         PewterReserve = gameObject.AddComponent<MetalReserve>();
+        PewterReserve.Capacity = 1; // 1 gram of pewter investiture that regenerates
         rb = GetComponent<Rigidbody>();
         particleSystem = transform.parent.GetComponentInChildren<ParticleSystem>();
         GameManager.AddAllomancer(this);
@@ -55,13 +56,31 @@ public class AllomanticPewter : Allomancer {
         IsSprinting = false;
         shieldMaterial.SetFloat("_HitTime", -1); // off
         StopAllCoroutines();
+        PewterReserve.Refill();
         base.Clear();
     }
 
     protected virtual void FixedUpdate() {
         if (IsSprinting) {
-            //PewterReserve.Mass -= gramsPewterPerSecondSprint * Time.fixedDeltaTime;
+            PewterReserve.Mass -= gramsPewterPerSecondSprint * Time.fixedDeltaTime;
         }
+        // Regenerate pewter conditionally
+        if (!PewterReserve.IsFull) {
+            double delta = PewterReserve.Capacity / 2 * Time.fixedDeltaTime;
+
+            if (PewterReserve.Mass < PewterReserve.Capacity / 2 - delta) {
+                PewterReserve.Mass += delta;
+            } else {
+                delta /= 2;
+                if (PewterReserve.Mass > PewterReserve.Capacity / 2 - delta) {
+                    PewterReserve.Mass += delta;
+                } else {
+                    PewterReserve.Mass = PewterReserve.Capacity / 2;
+                }
+            }
+        }
+
+        Debug.Log("ending with:" + PewterReserve.Mass);
         // IsBurning mass drain is done through Drain()
     }
 
@@ -73,7 +92,7 @@ public class AllomanticPewter : Allomancer {
      *  
      *  If the Allomancer does not have enough pewter, this returns false.
      */
-    public bool Drain(Vector3 sourceLocationLocal, float totalMass, float maxTime) {
+    public bool Drain(Vector3 sourceLocationLocal, double totalMass, float maxTime) {
         if (PewterReserve.Mass < totalMass)
             return false;
         StartCoroutine(Burst(sourceLocationLocal, totalMass, maxTime));
@@ -85,7 +104,7 @@ public class AllomanticPewter : Allomancer {
      * 
      * Causes the shield to light up.
      */
-    private IEnumerator Burst(Vector3 sourceLocationLocal, float totalMass, float maxTime) {
+    private IEnumerator Burst(Vector3 sourceLocationLocal, double totalMass, float maxTime) {
         // Light up the shield:
         // get closest point on mesh where that happens (for now, assume it's a sphere w/ radius .5)
         sourceLocationLocal = sourceLocationLocal / sourceLocationLocal.magnitude * .5f;
@@ -127,7 +146,7 @@ public class AllomanticPewter : Allomancer {
 
     // When taking damage, attempt to shield it
     public virtual float OnHit(Vector3 sourceLocationLocal, float damage, bool automaticallyShield = false) {
-        if (automaticallyShield || PewterReserve.IsDraining) {
+        if (automaticallyShield || IsBurning) {
 
             Drain(sourceLocationLocal, gramsPewterPerFall, timePewterPerFall);
             return 0;

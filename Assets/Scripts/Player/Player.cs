@@ -175,7 +175,7 @@ public class Player : PewterEntity {
             CanControl = true;
             CanControlMovement = true;
             CanControlZinc = true;
-            GodMode = false;
+            GodMode = true;
 
             GameObject spawn = GameObject.FindGameObjectWithTag("PlayerSpawn");
             if (spawn && CameraController.ActiveCamera) { // if CameraController.Awake has been called
