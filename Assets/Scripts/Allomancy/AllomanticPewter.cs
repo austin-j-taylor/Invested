@@ -13,7 +13,7 @@ public class AllomanticPewter : Allomancer {
 
     protected const float gramsPewterPerSecondSprint = .5f;
     protected const float gramsPewterPerFall = 2f;
-    protected const float timePewterPerFall = 1f;
+    protected const float timePewterPerFall = .75f;
 
     public MetalReserve PewterReserve { get; private set; }
     public bool IsSprinting { get; protected set; } = false;
@@ -29,85 +29,107 @@ public class AllomanticPewter : Allomancer {
     }
 
     protected Rigidbody rb;
-    protected new ParticleSystem particleSystem;
+    private new ParticleSystem particleSystem;
     protected Quaternion particleDirection;
 
     // The mesh that has a "shielding" effect that flashes when taking damage
     [SerializeField]
-    private readonly MeshRenderer shieldRenderer = null;
+    private MeshRenderer shieldRenderer = null;
+    private Material shieldMaterial = null;
+    private Quaternion shieldRotation;
 
     protected virtual void Awake() {
         PewterReserve = gameObject.AddComponent<MetalReserve>();
         rb = GetComponent<Rigidbody>();
         particleSystem = transform.parent.GetComponentInChildren<ParticleSystem>();
         GameManager.AddAllomancer(this);
+        // find the shields' glowy material
+        for(int i = 0; i < shieldRenderer.materials.Length; i++) {
+            if(shieldRenderer.materials[i].name.Equals("PewterShock (Instance)")) {
+                shieldMaterial = shieldRenderer.materials[i];
+            }
+        }
     }
 
     public override void Clear() {
         IsSprinting = false;
+        shieldMaterial.SetFloat("_HitTime", -1); // off
         StopAllCoroutines();
         base.Clear();
     }
 
     protected virtual void FixedUpdate() {
         if (IsSprinting) {
-            PewterReserve.Mass -= gramsPewterPerSecondSprint * Time.fixedDeltaTime;
+            //PewterReserve.Mass -= gramsPewterPerSecondSprint * Time.fixedDeltaTime;
         }
         // IsBurning mass drain is done through Drain()
     }
 
     /*
-     * Drains totalMass grams of pewter over maxtime seconds.
+     * Drains totalMass grams of pewter over maxTime seconds.
      * This essentially finds a curve such that:
      *  - totalMass will be drained from the reserve by the time that:
-     *  - maxtime seconds have passed since this method was called
+     *  - maxTime seconds have passed since this method was called
      *  
      *  If the Allomancer does not have enough pewter, this returns false.
      */
-    public bool Drain(float totalMass, float maxtime) {
+    public bool Drain(Vector3 sourceLocationLocal, float totalMass, float maxTime) {
         if (PewterReserve.Mass < totalMass)
             return false;
-        StartCoroutine(Burst(totalMass, maxtime));
+        StartCoroutine(Burst(sourceLocationLocal, totalMass, maxTime));
         return true;
     }
 
-    private IEnumerator Burst(float totalMass, float maxtime) {
-        float massDrained = 0;
+    /*
+     * Release a burst of pewter.
+     * 
+     * Causes the shield to light up.
+     */
+    private IEnumerator Burst(Vector3 sourceLocationLocal, float totalMass, float maxTime) {
+        // Light up the shield:
+        // get closest point on mesh where that happens (for now, assume it's a sphere w/ radius .5)
+        sourceLocationLocal = sourceLocationLocal / sourceLocationLocal.magnitude * .5f;
+        // Flash the shield
+        shieldMaterial.SetVector("_SourcePosition", sourceLocationLocal);
+        shieldRotation = Quaternion.identity;
+
+        double massDrained = 0;
         float t = 0;
-        float b = totalMass / maxtime * 1.5f;
-        float m = b / (maxtime * maxtime);
-        float deltaMass = b * Time.fixedDeltaTime;
+        double b = totalMass / maxTime * 1.5f;
+        double m = b / (maxTime * maxTime);
+        double deltaMass = b * Time.fixedDeltaTime;
         // Because this is not actually a continuous function, checking t < maxTime will
         // not guarantee that the right amount of mass is consumed.
         // Thus:
-        while (massDrained + deltaMass < totalMass && t < maxtime) {
+        while (massDrained + deltaMass < totalMass && t + Time.fixedDeltaTime < maxTime) {
             IsDraining = true; // Repeatedly assigned in case of multiple coroutines are running at once and one finishes, setting IsDraining to false
+
             massDrained += deltaMass;
             PewterReserve.Mass -= deltaMass;
 
-            yield return new WaitForFixedUpdate();
+            // Set shield properties
+            shieldMaterial.SetFloat("_HitTime", t / maxTime);
+            shieldMaterial.SetFloat("_Intensity", (float)((totalMass - massDrained) / totalMass));
+            shieldRenderer.transform.rotation = shieldRotation;
 
+            yield return new WaitForFixedUpdate();
+            // Evaluate the cumulative function at this time
+            // and "set" the reserve to where it should be
+            deltaMass = (b * t - m * t * t * t / 3) - massDrained;
             t += Time.fixedDeltaTime;
-            deltaMass = (b - m * t * t) * Time.fixedDeltaTime;
         }
 
         // Drain remaining amount of mass
         PewterReserve.Mass -= totalMass - massDrained;
         IsDraining = false;
+        shieldMaterial.SetFloat("_HitTime", -1); // off
     }
 
     // When taking damage, attempt to shield it
-    public virtual float OnHit(Vector3 sourceLocation, float damage, bool automaticallyShield = false) {
+    public virtual float OnHit(Vector3 sourceLocationLocal, float damage, bool automaticallyShield = false) {
         if (automaticallyShield || PewterReserve.IsDraining) {
-            // get local position of collision source
-            sourceLocation -= shieldRenderer.transform.position;
-            // get closest point on mesh where that happens (for now, assume it's a sphere w/ radius .5)
-            sourceLocation = sourceLocation / sourceLocation.magnitude * .5f;
 
-            // Flash the shield
-            shieldRenderer.material.SetVector("SourceLocation", sourceLocation);
-
-            Drain(gramsPewterPerFall, timePewterPerFall);
+            Drain(sourceLocationLocal, gramsPewterPerFall, timePewterPerFall);
             return 0;
         } else {
             return damage;
@@ -118,8 +140,11 @@ public class AllomanticPewter : Allomancer {
      * Show particle effects of hitting a surface.
      */
     public void HitSurface(Vector3 normal) {
+        normal.Normalize();
         particleDirection = Quaternion.LookRotation(normal);
         particleSystem.transform.rotation = particleDirection;
+        particleSystem.transform.position = transform.position + normal * PlayerMovementController.radius;
+
         particleSystem.Play();
     }
 }

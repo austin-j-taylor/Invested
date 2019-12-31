@@ -180,8 +180,9 @@ public class Player : PewterEntity {
             GameObject spawn = GameObject.FindGameObjectWithTag("PlayerSpawn");
             if (spawn && CameraController.ActiveCamera) { // if CameraController.Awake has been called
                 transform.position = spawn.transform.position;
-                transform.rotation = spawn.transform.rotation;
+                //transform.rotation = spawn.transform.rotation;
                 CameraController.Clear();
+                CameraController.SetRotation(spawn.transform.eulerAngles);
             }
         }
     }

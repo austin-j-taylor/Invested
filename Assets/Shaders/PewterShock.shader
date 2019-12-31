@@ -4,9 +4,9 @@
 	{
 		_MainTex("Texture", 2D) = "white" {}
 		_Color("Color", Color) = (1,1,1,1)
-		_Speed("speed", Float) = 1
+		_Strength("General strength", Float) = 1
 		_Intensity("Intensity", Range(0.0,1.0)) = 1
-		_HitTime("Time since collision", Float) = 0 
+		_HitTime("Time since collision", Range(0.0,1.0)) = 0
 		_SourcePosition("Source Location", Vector) = (0, 0, 0, 0)
 	}
 
@@ -27,6 +27,7 @@
 			#pragma fragment frag
 
 			#include "UnityCG.cginc"
+			static const fixed offset = .55, thinness = 2;
 
 			struct appdata {
 				float4 vertex : POSITION;
@@ -43,7 +44,7 @@
 			float4 _MainTex_ST;
 			float4 _Color;
 			float _Intensity;
-			float _Speed;
+			float _Strength;
 			float _HitTime;
 			float4 _SourcePosition; // the source of the collision - local in position, global in rotation.
 
@@ -57,12 +58,23 @@
 
 			fixed4 frag(v2f i) : SV_Target
 			{
-			// sample the texture
-			fixed4 col = tex2D(_MainTex, i.uv) * _Color;
+				if (_HitTime < 0) {
+					return fixed4(0, 0, 0, 0);
+				} else {
+					// sample the texture
+					fixed4 col = tex2D(_MainTex, i.uv) * _Color;
 
-			float3 localpos = _SourcePosition.xyz - i.objectPos;
-			col.a = saturate(length(localpos) / _Intensity);
-			return col;
+					// as time moves on, the source of the shielding moves away from the source
+					float3 normal = normalize(_SourcePosition.xyz);
+					float3 timeOffset = _HitTime * normal * (1 + offset);
+					float dotty = dot(i.objectPos+ timeOffset, normal) + length(i.objectPos) - (offset / 2);
+
+					float glow = 1 - (.9 + .1 *_Intensity) * exp(-thinness * (dotty - 1) * (dotty - 1));
+
+					col.a = saturate(glow / (_Intensity * _Strength));
+
+					return col;
+				}
 			}
 			ENDCG
 		}

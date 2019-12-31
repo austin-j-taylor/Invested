@@ -300,28 +300,27 @@ public class CameraController : MonoBehaviour {
         }
     }
 
-    public static void Clear(bool resetRotation = true) {
+    public static void Clear() {
         ExternalDistance = Vector2.zero;
         TimeToLerp = -100;
         externalPositionTarget = null;
         externalLookAtTarget = null;
         Player.PlayerTransparancy.SetOverrideHidden(SettingsMenu.settingsData.cameraFirstPerson == 1);
-        if (resetRotation) {
-            Vector3 eulers = Player.PlayerInstance.transform.eulerAngles;
-            //eulers.x = 0;
-            //eulers.z = 0;
-            playerLookAtTarget.rotation = Quaternion.Euler(eulers);
-
-            currentX = playerLookAtTarget.localEulerAngles.y;
-            currentY = playerLookAtTarget.localEulerAngles.x;
-            startX = currentX;
-            startY = currentY;
-            ModY();
-        }
 
         if (Player.PlayerIronSteel.IsBurning) // Update blue lines when the camera is reset
             Player.PlayerIronSteel.UpdateBlueLines();
         UpdateCamera();
+    }
+    public static void SetRotation(Vector3 eulers) {
+        //eulers.x = 0;
+        //eulers.z = 0;
+        playerLookAtTarget.rotation = Quaternion.Euler(eulers);
+
+        currentX = playerLookAtTarget.localEulerAngles.y;
+        currentY = playerLookAtTarget.localEulerAngles.x;
+        startX = currentX;
+        startY = currentY;
+        ModY();
     }
 
     public static void LockCamera() {
@@ -363,14 +362,14 @@ public class CameraController : MonoBehaviour {
         Player.PlayerTransparancy.SetOverrideHidden(false);
         ActiveCamera.transform.SetParent(playerLookAtTarget);
         if (!externalPositionTarget)
-            Clear(false);
+            Clear();
     }
 
     public void SetFirstPerson() {
         Player.PlayerTransparancy.SetOverrideHidden(true);
         ActiveCamera.transform.SetParent(playerLookAtTarget.Find("FirstPersonTarget"));
         if (!externalPositionTarget)
-            Clear(false);
+            Clear();
     }
 
     // On scene startup

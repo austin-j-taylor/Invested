@@ -11,7 +11,7 @@ using UnityEngine;
 
 public class PlayerMovementController : AllomanticPewter {
 
-    private const float radius = .26f;
+    public const float radius = .26f; // radius of the player sphere collider
     // Rolling
     public const float rollingAcceleration = 5f;
     public const float targetRollingSpeed = 7.5f;
@@ -23,7 +23,7 @@ public class PlayerMovementController : AllomanticPewter {
     //private const float maxSprintingAngularVelocity = Mathf.Infinity;
     // Pewter burning
     protected const float gramsPewterPerJump = 1f;
-    protected const float timePewterPerJump = 1.5f;
+    protected const float timePewterPerJump = .5f;
     // Jumping
     private const float jumpHeight = 300;
     private const float jumpDirectionModifier = 400;
@@ -39,6 +39,9 @@ public class PlayerMovementController : AllomanticPewter {
     private const float dragAirborneAngular = 1.5f;
     private const float dragGroundedAngular = 3f;
     private const float dragNoControl = 10f;
+
+    private readonly Vector3 particleSystemPosition = new Vector3(0, -.2f, 0);
+
     // Friction
     [SerializeField]
     private float frictionDynamicRolling = 6;
@@ -53,7 +56,6 @@ public class PlayerMovementController : AllomanticPewter {
     private float momentOfInertiaMagnitudeSprinting = 25;
     [SerializeField]
     private float momentOfInertiaMagnitudeWalking = 50;
-    private readonly Vector3 particleSystemPosition = new Vector3(0, -.2f, 0);
     //private  Vector3 inertiaTensorRunning = new Vector3(momentOfInertiaMagnitude, momentOfInertiaMagnitude, momentOfInertiaMagnitude);
     //private  Vector3 inertiaTensorWalking = new Vector3(momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking);
 
@@ -168,10 +170,7 @@ public class PlayerMovementController : AllomanticPewter {
                     if (IsSprinting) {
                         Vector3 movementForPewter = CameraController.UpsideDown ? -movement : movement;
 
-                        Drain(gramsPewterPerJump, timePewterPerJump);
 
-                        particleSystem.transform.rotation = particleDirection;
-                        particleSystem.transform.position = Player.PlayerInstance.transform.position + particleSystemPosition;
                         if (movementForPewter.sqrMagnitude <= .01f) { // Vertical jump. Jump straight up.
                             movementForPewter = groundedChecker.Normal;
                             //movement = Vector3.up;
@@ -188,9 +187,8 @@ public class PlayerMovementController : AllomanticPewter {
                         } // Either jumping in a direction or kicking off of a wall. Either way, do nothing special.
                         jumpForce = Vector3.ClampMagnitude(groundedChecker.Normal * jumpHeight + movementForPewter * jumpDirectionModifier, jumpPewterMagnitude);
 
-                        particleDirection = Quaternion.LookRotation(-jumpForce);
-                        particleSystem.transform.rotation = particleDirection;
-                        particleSystem.Play();
+                        HitSurface(-jumpForce);
+                        Drain(-jumpForce, gramsPewterPerJump, timePewterPerJump);
                     } else {
                         jumpForce = groundedChecker.Normal * jumpHeight;
                     }
@@ -231,9 +229,7 @@ public class PlayerMovementController : AllomanticPewter {
                     // if sprinting
                     // Play particles if just sprinting on the ground for the first time
                     if (!lastWasSprintingOnGround && IsGrounded) {
-                        particleDirection = Quaternion.LookRotation(-movement);
-                        particleSystem.transform.rotation = particleDirection;
-                        particleSystem.Play();
+                        HitSurface(-movement);
                     }
                     lastWasSprintingOnGround = IsGrounded; // only show particles after hitting the ground
 
