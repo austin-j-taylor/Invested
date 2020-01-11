@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour {
         Allomancers = new List<Allomancer>();
         MagneticsInScene = new List<Magnetic>();
         Layer_IgnorePlayer = ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ignore Player")));
-        Layer_IgnoreCamera = ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ignore Camera")) | (1 << LayerMask.NameToLayer("Ignore Player")) | (1 << LayerMask.NameToLayer("Coin")));
+        Layer_IgnoreCamera = ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ignore Camera")) | (1 << LayerMask.NameToLayer("Ignore Player")) | (1 << LayerMask.NameToLayer("Coin")) | (1 << LayerMask.NameToLayer("Boid")));
         Layer_BlueLines = LayerMask.NameToLayer("Blue Lines");
         Layer_BlueLinesVisible = LayerMask.NameToLayer("Blue Lines Visible");
         SceneManager.sceneUnloaded += Clear;

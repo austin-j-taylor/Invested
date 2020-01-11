@@ -12,7 +12,8 @@ using System.Collections;
 public class AllomanticPewter : Allomancer {
 
     protected const double gramsPewterPerSecondSprint = .500f;
-    protected const double gramsPewterPerFall = .10f;
+    protected const double gramsPewterPerSecondRefill = .250f;
+    protected const double gramsPewterPerFall = .25f;
     protected const float timePewterPerFall = .75f;
 
     public MetalReserve PewterReserve { get; private set; }
@@ -54,6 +55,7 @@ public class AllomanticPewter : Allomancer {
 
     public override void Clear() {
         IsSprinting = false;
+        PewterReserve.IsBurnedOut = false;
         shieldMaterial.SetFloat("_HitTime", -1); // off
         StopAllCoroutines();
         PewterReserve.Refill();
@@ -61,26 +63,32 @@ public class AllomanticPewter : Allomancer {
     }
 
     protected virtual void FixedUpdate() {
-        if (IsSprinting) {
-            PewterReserve.Mass -= gramsPewterPerSecondSprint * Time.fixedDeltaTime;
-        }
-        // Regenerate pewter conditionally
-        if (!PewterReserve.IsFull) {
-            double delta = PewterReserve.Capacity / 2 * Time.fixedDeltaTime;
+        if(PewterReserve.IsBurnedOut) {
+            PewterReserve.Mass += gramsPewterPerSecondRefill * Time.fixedDeltaTime;
+            if(PewterReserve.Mass >= PewterReserve.Capacity) {
+                PewterReserve.IsBurnedOut = false;
+            }
+        } else {
+            if (IsSprinting) {
+                PewterReserve.Mass -= gramsPewterPerSecondSprint * Time.fixedDeltaTime;
+            }
+            // Regenerate pewter conditionally
+            if (!PewterReserve.IsFull) {
+                double delta = PewterReserve.Capacity / 2 * Time.fixedDeltaTime;
 
-            if (PewterReserve.Mass < PewterReserve.Capacity / 2 - delta) {
-                PewterReserve.Mass += delta;
-            } else {
-                delta /= 2;
-                if (PewterReserve.Mass > PewterReserve.Capacity / 2 - delta) {
+                if (PewterReserve.Mass < PewterReserve.Capacity / 2 - delta) {
                     PewterReserve.Mass += delta;
                 } else {
-                    PewterReserve.Mass = PewterReserve.Capacity / 2;
+                    delta /= 2;
+                    if (PewterReserve.Mass > PewterReserve.Capacity / 2 - delta) {
+                        PewterReserve.Mass += delta;
+                    } else {
+                        PewterReserve.Mass = PewterReserve.Capacity / 2;
+                    }
                 }
             }
-        }
 
-        Debug.Log("ending with:" + PewterReserve.Mass);
+        }
         // IsBurning mass drain is done through Drain()
     }
 
@@ -93,8 +101,11 @@ public class AllomanticPewter : Allomancer {
      *  If the Allomancer does not have enough pewter, this returns false.
      */
     public bool Drain(Vector3 sourceLocationLocal, double totalMass, float maxTime) {
-        if (PewterReserve.Mass < totalMass)
-            return false;
+        //if (PewterReserve.Mass < totalMass)
+        //    return false; // if it can't drain that much, fail
+        if (PewterReserve.Mass < totalMass) {
+            PewterReserve.IsBurnedOut = true;
+        }
         StartCoroutine(Burst(sourceLocationLocal, totalMass, maxTime));
         return true;
     }

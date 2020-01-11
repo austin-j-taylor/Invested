@@ -416,6 +416,7 @@ public class CameraController : MonoBehaviour {
                 clouds.colA = other.colA;
                 clouds.colB = other.colB;
                 clouds.colFog = other.colFog;
+                clouds.colClouds = other.colClouds;
 
                 clouds.material = other.material;
 

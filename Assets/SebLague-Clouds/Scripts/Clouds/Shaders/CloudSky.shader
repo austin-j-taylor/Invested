@@ -1,5 +1,5 @@
 
-Shader "Hidden/Clouds"
+Shader "Hidden/CloudSky"
 {
     
     Properties
@@ -89,6 +89,7 @@ Shader "Hidden/Clouds"
             float4 colA;
             float4 colB;
             float4 colFog;
+            float4 colClouds;
 
             // Animation settings
             float timeScale;
@@ -303,8 +304,9 @@ Shader "Hidden/Clouds"
                 randomOffset *= rayOffsetStrength;
                 
                 // Phase function makes clouds brighter around sun
-                float cosAngle = dot(rayDir, _WorldSpaceLightPos0.xyz);
-                float phaseVal = phase(cosAngle);
+                //float cosAngle = dot(rayDir, _WorldSpaceLightPos0.xyz);
+                //float phaseVal = phase(cosAngle);
+				float phaseVal = 1;
 
                 float dstTravelled = randomOffset;
                 float dstLimit = min(depth-dstToBox, dstInsideBox);
@@ -353,9 +355,9 @@ Shader "Hidden/Clouds"
 				float sun = 0;
                 
                 // Add clouds
-                float3 cloudCol = lightEnergy * _LightColor0;
-                float3 col = backgroundCol * transmittance + cloudCol;
-                col = saturate(col) * (1-sun) + _LightColor0*sun;
+                float3 finalColClouds = lightEnergy * colClouds;
+                float3 col = backgroundCol * transmittance + finalColClouds;
+                col = saturate(col) * (1-sun) + colClouds *sun;
                 return float4(col,0);
             }
             ENDCG

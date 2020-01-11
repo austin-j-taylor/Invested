@@ -54,6 +54,7 @@ public class CloudMaster : MonoBehaviour {
     public Color colA;
     public Color colB;
     public Color colFog;
+    public Color colClouds;
 
     // Internal
     [HideInInspector]
@@ -131,6 +132,7 @@ public class CloudMaster : MonoBehaviour {
         material.SetColor("colA", colA);
         material.SetColor("colB", colB);
         material.SetColor("colFog", colFog);
+        material.SetColor("colClouds", colClouds);
 
         // Bit does the following:
         // - sets _MainTex property on material to the source texture

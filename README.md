@@ -15,6 +15,8 @@ Here are some videos of the game:
 
 This Unity project makes use of:
 - [Volumetric Lines by Johannes Unterguggenberger](https://assetstore.unity.com/packages/tools/particles-effects/volumetric-lines-29160)
+- [Boids by Sebastian Lague](https://github.com/SebLague/Boids)
+- [Clouds by Sebastian Lague](https://github.com/SebLague/Clouds)
 - [Cakeslice's Outline Effect](https://github.com/cakeslice/Outline-Effect)
 - [The Heebo font](https://fonts.google.com/specimen/Heebo)
 - [The Roboto Mono font](https://fonts.google.com/specimen/Roboto+Mono)

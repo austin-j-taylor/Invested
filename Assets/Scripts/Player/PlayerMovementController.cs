@@ -34,10 +34,15 @@ public class PlayerMovementController : AllomanticPewter {
     private const float airControlFactor = .3f;
     private const float dotFactor = 10;
     // Air resistance
-    private const float dragAirborneLinear = .2f;
-    private const float dragGroundedLinear = 3f;
-    private const float dragAirborneAngular = 1.5f;
-    private const float dragGroundedAngular = 3f;
+    [SerializeField]
+    private  float dragAirborneLinear = .2f;
+    [SerializeField]
+    private  float dragGroundedLinear = 3f;
+    [SerializeField]
+    private  float dragAirborneAngular = 1.5f;
+    [SerializeField]
+    private  float dragGroundedAngular = 3f;
+    [SerializeField]
     private const float dragNoControl = 10f;
 
     private readonly Vector3 particleSystemPosition = new Vector3(0, -.2f, 0);
@@ -167,7 +172,7 @@ public class PlayerMovementController : AllomanticPewter {
                     Vector3 jumpForce;
 
                     // Apply Pewter Jump, if sprinting
-                    if (IsSprinting && PewterReserve.Mass >= gramsPewterPerJump) {
+                    if (IsSprinting && PewterReserve.HasMass) {
                         Vector3 movementForPewter = CameraController.UpsideDown ? -movement : movement;
 
                         if (movementForPewter.sqrMagnitude <= .01f) { // Vertical jump. Jump straight up.
@@ -208,6 +213,7 @@ public class PlayerMovementController : AllomanticPewter {
                     // You: "why use ints to represent binary values that should be represented by booleans"
                     // Me, an intellectual:
                     rb.drag = SettingsMenu.settingsData.playerAirResistance * dragAirborneLinear;
+                    rb.angularDrag = dragAirborneAngular;
                 } else {
                     // If not moving and not pushing or pulling, apply stronger drag and pull player to a stop
                     rb.drag = SettingsMenu.settingsData.playerAirResistance * dragGroundedLinear;
@@ -228,7 +234,7 @@ public class PlayerMovementController : AllomanticPewter {
                     // if sprinting
                     // Play particles if just sprinting on the ground for the first time
                     if (!lastWasSprintingOnGround && IsGrounded) {
-                        HitSurface(-movement);
+                        HitSurface(-groundedChecker.Normal - movement.normalized);
                     }
                     lastWasSprintingOnGround = IsGrounded; // only show particles after hitting the ground
 
@@ -262,12 +268,11 @@ public class PlayerMovementController : AllomanticPewter {
                 }
 
                 // Convert movement to torque
-                //Vector3 torque = Vector3.Cross(IsGrounded ? groundedChecker.Normal : Vector3.up, movement) * torqueFactor;
                 Vector3 torque = Vector3.Cross(Vector3.up, movement);
 
                 Vector3 feedback = rb.angularVelocity;
-                //Vector3 target  = torque * (IsSprinting ? targetSprintingSpeedRadial * (1 + sprintingAcceleration) : targetRollingSpeedRadial);
-                Vector3 target = torque * (IsSprinting ? targetSprintingSpeedRadial : targetRollingSpeedRadial);
+                // Also: add Force acting on the player from its Pushes/Pulls as desired movement
+                Vector3 target = torque * (IsSprinting ? targetSprintingSpeedRadial : targetRollingSpeedRadial)/* + Vector3.Cross(Vector3.up, Player.PlayerIronSteel.LastNetForceOnAllomancer)*/;
 
                 torque = pidSpeed.Step(feedback, target);
                 //Debug.Log("speed    : " + rb.velocity.magnitude);
@@ -306,7 +311,6 @@ public class PlayerMovementController : AllomanticPewter {
 
 
     public override void Clear() {
-        PewterReserve.SetMass(100);
         jumpQueued = false;
         lastWasSprintingOnGround = false;
         //rb.inertiaTensor = inertiaTensorRunning;

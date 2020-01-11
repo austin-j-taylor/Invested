@@ -9,6 +9,7 @@ public class MetalReserve : MonoBehaviour {
                          fuzzyThresholdChanging = .001f; // 1 mg
 
     public bool IsEndless { get; set; } = false; // If true, this reserve will never run out
+    public bool IsBurnedOut { get; set; } = false; // if the player burns all their mass, they can't use it till it refills
     private double mass = 0;
     private double lastMass = 0;
     public double Rate { get; private set; } = 0; // in grams / second
@@ -38,7 +39,7 @@ public class MetalReserve : MonoBehaviour {
 
     public bool HasMass {
         get {
-            return IsEndless || mass > 0;
+            return (IsEndless || mass > 0) && !IsBurnedOut;
         }
     }
     public bool IsChanging {
@@ -72,6 +73,10 @@ public class MetalReserve : MonoBehaviour {
         Mass = newMass;
         lastMass = mass;
         Rate = 0;
+
+        if(!HasMass) {
+            IsBurnedOut = true;
+        }
     }
 
     // Fill this reserve with the amount volume
@@ -86,5 +91,6 @@ public class MetalReserve : MonoBehaviour {
     // fully refills this reserve
     public void Refill() {
         Mass = capacity;
+        IsBurnedOut = false;
     }
 }
