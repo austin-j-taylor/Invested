@@ -86,10 +86,11 @@ Shader "Hidden/CloudSky"
             float lightAbsorptionThroughCloud;
             float darknessThreshold;
             float4 _LightColor0;
-            float4 colA;
-            float4 colB;
-            float4 colFog;
-            float4 colClouds;
+            float4 colA; // A and B are the gradiant for the sky
+            float4 colB; // A and B are not actually used, currently
+            float4 colFog; // color of fog in far-distant objects
+            float4 colClouds; // color of the clouds in the sky
+			float4 colSun; // color of the sun/directional light
 
             // Animation settings
             float timeScale;
@@ -302,11 +303,10 @@ Shader "Hidden/CloudSky"
                 // random starting offset (makes low-res results noisy rather than jagged/glitchy, which is nicer)
                 float randomOffset = BlueNoise.SampleLevel(samplerBlueNoise, squareUV(i.uv*3), 0);
                 randomOffset *= rayOffsetStrength;
-                
-                // Phase function makes clouds brighter around sun
-                //float cosAngle = dot(rayDir, _WorldSpaceLightPos0.xyz);
-                //float phaseVal = phase(cosAngle);
-				float phaseVal = 1;
+
+				// Phase function makes clouds brighter around sun
+				float cosAngle = dot(rayDir, _WorldSpaceLightPos0.xyz);
+				float phaseVal = phase(cosAngle);
 
                 float dstTravelled = randomOffset;
                 float dstLimit = min(depth-dstToBox, dstInsideBox);
@@ -338,10 +338,15 @@ Shader "Hidden/CloudSky"
 
                
                 // Composite sky + background
-                float3 skyColBase = lerp(colA,colB, sqrt(abs(saturate(rayDir.y))));
+                //float3 skyColBase = lerp(colA,colB, sqrt(abs(saturate(rayDir.y))));
                 float3 backgroundCol = tex2D(_MainTex,i.uv);
-				if (depth > 1000) {
-					backgroundCol = backgroundCol + skyColBase;
+				float sun = 0;
+				if (nonlin_depth == 0) { // only runs for pixels in the sky
+					backgroundCol = backgroundCol;// +skyColBase;
+
+					// Sun
+					float focusedEyeCos = pow(saturate(cosAngle), params.x);
+					sun = saturate(hg(focusedEyeCos, .9995)) * transmittance;
 				} else {
 					float dstFog = (1 - exp(-max(0, depth) * 8 * .0001));
 					float3 sky = dstFog * colFog;
@@ -349,15 +354,11 @@ Shader "Hidden/CloudSky"
 				}
 
 
-                // Sun
-                //float focusedEyeCos = pow(saturate(cosAngle), params.x);
-                //float sun = saturate(hg(focusedEyeCos, .9995)) * transmittance;
-				float sun = 0;
                 
                 // Add clouds
                 float3 finalColClouds = lightEnergy * colClouds;
                 float3 col = backgroundCol * transmittance + finalColClouds;
-                col = saturate(col) * (1-sun) + colClouds *sun;
+                col = saturate(col) * (1-sun) + colSun * sun;
                 return float4(col,0);
             }
             ENDCG

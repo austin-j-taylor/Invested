@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: 45203104d42b944c394bccf75b99b57b, type: 2}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 4c484afe79072ec41b89ce619f98b221, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -7102,10 +7102,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 421069872}
     m_Modifications:
-    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
-      propertyPath: m_Name
-      value: Window Latch (4)
-      objectReference: {fileID: 0}
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.499
@@ -7149,6 +7145,10 @@ PrefabInstance:
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.069999985
+      objectReference: {fileID: 0}
+    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
+      propertyPath: m_Name
+      value: Window Latch (4)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
@@ -8097,7 +8097,7 @@ Light:
   m_Enabled: 1
   serializedVersion: 9
   m_Type: 1
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.63529414, g: 0.24313727, b: 0.10588236, a: 1}
   m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
@@ -8137,7 +8137,7 @@ Light:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RenderingLayerMask: 1
-  m_Lightmapping: 1
+  m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
@@ -8154,13 +8154,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 170076733}
-  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0.5466547, y: -0.17734767, z: -0.42872846, w: 0.6970713}
   m_LocalPosition: {x: 0, y: 50, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 37.593002, y: -64.635, z: -87.489006}
 --- !u!1 &171043458
 GameObject:
   m_ObjectHideFlags: 0
@@ -10221,10 +10221,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1072497539}
     m_Modifications:
-    - target: {fileID: 1325121588408966, guid: 6cc26838783a16847863179d4483a994, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1328859222818856, guid: 6cc26838783a16847863179d4483a994, type: 3}
       propertyPath: m_Layer
       value: 14
@@ -10236,6 +10232,10 @@ PrefabInstance:
     - target: {fileID: 1442155464621728, guid: 6cc26838783a16847863179d4483a994, type: 3}
       propertyPath: m_Layer
       value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 1325121588408966, guid: 6cc26838783a16847863179d4483a994, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4256633393547034, guid: 6cc26838783a16847863179d4483a994, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11815,10 +11815,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 421069872}
     m_Modifications:
-    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
-      propertyPath: m_Name
-      value: Window Latch (9)
-      objectReference: {fileID: 0}
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.49899998
@@ -11862,6 +11858,10 @@ PrefabInstance:
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.069999985
+      objectReference: {fileID: 0}
+    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
+      propertyPath: m_Name
+      value: Window Latch (9)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
@@ -14694,10 +14694,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1793667736}
     m_Modifications:
-    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
-      propertyPath: m_Name
-      value: Window Latch (5)
-      objectReference: {fileID: 0}
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -14741,6 +14737,10 @@ PrefabInstance:
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.09000037
+      objectReference: {fileID: 0}
+    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
+      propertyPath: m_Name
+      value: Window Latch (5)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
@@ -17623,10 +17623,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 421069872}
     m_Modifications:
-    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
-      propertyPath: m_Name
-      value: Window Latch (3)
-      objectReference: {fileID: 0}
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.49899998
@@ -17670,6 +17666,10 @@ PrefabInstance:
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.069999985
+      objectReference: {fileID: 0}
+    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
+      propertyPath: m_Name
+      value: Window Latch (3)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
@@ -25407,10 +25407,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1793667736}
     m_Modifications:
-    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
-      propertyPath: m_Name
-      value: Window Latch (1)
-      objectReference: {fileID: 0}
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.49699986
@@ -25454,6 +25450,10 @@ PrefabInstance:
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.09000037
+      objectReference: {fileID: 0}
+    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
+      propertyPath: m_Name
+      value: Window Latch (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
@@ -31512,6 +31512,41 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 638656787}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!84 &641098618
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: DetailNoise
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  serializedVersion: 3
+  m_Width: 64
+  m_Height: 64
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthFormat: 0
+  m_ColorFormat: 24
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 1
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 0
+    m_WrapV: 0
+    m_WrapW: 0
+  m_Dimension: 3
+  m_VolumeDepth: 64
 --- !u!1 &652395399
 GameObject:
   m_ObjectHideFlags: 0
@@ -36466,10 +36501,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 421069872}
     m_Modifications:
-    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
-      propertyPath: m_Name
-      value: Window Latch (8)
-      objectReference: {fileID: 0}
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.49899998
@@ -36513,6 +36544,10 @@ PrefabInstance:
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.069999985
+      objectReference: {fileID: 0}
+    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
+      propertyPath: m_Name
+      value: Window Latch (8)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
@@ -38348,8 +38383,8 @@ MonoBehaviour:
   viewerTileAmount: 1
   viewerSize: 1
   showSettingsEditor: 0
-  shapeTexture: {fileID: 1472055391}
-  detailTexture: {fileID: 2077973202}
+  shapeTexture: {fileID: 1409573750}
+  detailTexture: {fileID: 641098618}
 --- !u!4 &847781466
 Transform:
   m_ObjectHideFlags: 0
@@ -39460,10 +39495,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 421069872}
     m_Modifications:
-    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
-      propertyPath: m_Name
-      value: Window Latch (1)
-      objectReference: {fileID: 0}
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.49899998
@@ -39507,6 +39538,10 @@ PrefabInstance:
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.069999985
+      objectReference: {fileID: 0}
+    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
+      propertyPath: m_Name
+      value: Window Latch (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
@@ -40505,10 +40540,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1793667736}
     m_Modifications:
-    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
-      propertyPath: m_Name
-      value: Window Latch (2)
-      objectReference: {fileID: 0}
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.49699986
@@ -40552,6 +40583,10 @@ PrefabInstance:
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.09000037
+      objectReference: {fileID: 0}
+    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
+      propertyPath: m_Name
+      value: Window Latch (2)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
@@ -44868,10 +44903,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 421069872}
     m_Modifications:
-    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
-      propertyPath: m_Name
-      value: Window Latch (2)
-      objectReference: {fileID: 0}
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.49899998
@@ -44915,6 +44946,10 @@ PrefabInstance:
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.069999985
+      objectReference: {fileID: 0}
+    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
+      propertyPath: m_Name
+      value: Window Latch (2)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
@@ -50161,10 +50196,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1793667736}
     m_Modifications:
-    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
-      propertyPath: m_Name
-      value: Window Latch (6)
-      objectReference: {fileID: 0}
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.498
@@ -50208,6 +50239,10 @@ PrefabInstance:
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.09000037
+      objectReference: {fileID: 0}
+    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
+      propertyPath: m_Name
+      value: Window Latch (6)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
@@ -51412,10 +51447,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 421069872}
     m_Modifications:
-    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
-      propertyPath: m_Name
-      value: Window Latch (10)
-      objectReference: {fileID: 0}
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.49899998
@@ -51459,6 +51490,10 @@ PrefabInstance:
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.069999985
+      objectReference: {fileID: 0}
+    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
+      propertyPath: m_Name
+      value: Window Latch (10)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
@@ -53781,10 +53816,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 421069872}
     m_Modifications:
-    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
-      propertyPath: m_Name
-      value: Window Latch (11)
-      objectReference: {fileID: 0}
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.49899998
@@ -53828,6 +53859,10 @@ PrefabInstance:
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.069999985
+      objectReference: {fileID: 0}
+    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
+      propertyPath: m_Name
+      value: Window Latch (11)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
@@ -58532,8 +58567,8 @@ MonoBehaviour:
   rayOffsetStrength: 9.19
   blueNoise: {fileID: 2800000, guid: 6d82457f96ba8449597922c106f17caa, type: 3}
   cloudScale: 0.6
-  densityMultiplier: 1
-  densityOffset: -3.69
+  densityMultiplier: 3.72
+  densityOffset: -4.84
   shapeOffset: {x: 0, y: 0, z: 1.11}
   heightOffset: {x: 0, y: 0}
   shapeNoiseWeights: {x: 2.43, y: 4.47, z: 0.96, w: 2.81}
@@ -58544,17 +58579,18 @@ MonoBehaviour:
   lightAbsorptionThroughCloud: 3.93
   lightAbsorptionTowardSun: -0.07
   darknessThreshold: 0.321
-  forwardScattering: 0.72
+  forwardScattering: 0.93
   backScattering: 0.33
-  baseBrightness: 1
+  baseBrightness: 0.332
   phaseFactor: 0.83
   timeScale: 1
-  baseSpeed: 0.5
-  detailSpeed: 1
+  baseSpeed: 0.05
+  detailSpeed: 0.12
   colA: {r: 1, g: 0, b: 0, a: 1}
   colB: {r: 1, g: 0.13043478, b: 0, a: 1}
   colFog: {r: 0.0754717, g: 0.035017315, b: 0.03097188, a: 1}
-  colClouds: {r: 0.047169805, g: 0.026032392, b: 0.026032392, a: 1}
+  colClouds: {r: 0.09433961, g: 0.0026620147, b: 0, a: 1}
+  colSun: {r: 1, g: 0.009412543, b: 0, a: 1}
   material: {fileID: 1524810695}
 --- !u!1 &1334334123
 GameObject:
@@ -60605,7 +60641,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1386071095
 Transform:
   m_ObjectHideFlags: 0
@@ -60857,10 +60893,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 421069872}
     m_Modifications:
-    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
-      propertyPath: m_Name
-      value: Window Latch (7)
-      objectReference: {fileID: 0}
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.49899998
@@ -60904,6 +60936,10 @@ PrefabInstance:
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.069999985
+      objectReference: {fileID: 0}
+    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
+      propertyPath: m_Name
+      value: Window Latch (7)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
@@ -61668,6 +61704,41 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1409200500}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!84 &1409573750
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ShapeNoise
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  serializedVersion: 3
+  m_Width: 132
+  m_Height: 132
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthFormat: 0
+  m_ColorFormat: 24
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 1
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 0
+    m_WrapV: 0
+    m_WrapW: 0
+  m_Dimension: 3
+  m_VolumeDepth: 132
 --- !u!1 &1413769706
 GameObject:
   m_ObjectHideFlags: 0
@@ -63378,41 +63449,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1468022606}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!84 &1472055391
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: ShapeNoise
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  serializedVersion: 3
-  m_Width: 132
-  m_Height: 132
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthFormat: 0
-  m_ColorFormat: 24
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 1
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 0
-    m_WrapV: 0
-    m_WrapW: 0
-  m_Dimension: 3
-  m_VolumeDepth: 132
 --- !u!1 &1472986397
 GameObject:
   m_ObjectHideFlags: 0
@@ -63648,10 +63684,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 421069872}
     m_Modifications:
-    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
-      propertyPath: m_Name
-      value: Window Latch (5)
-      objectReference: {fileID: 0}
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.49899998
@@ -63695,6 +63727,10 @@ PrefabInstance:
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.069999985
+      objectReference: {fileID: 0}
+    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
+      propertyPath: m_Name
+      value: Window Latch (5)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
@@ -76253,10 +76289,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1793667736}
     m_Modifications:
-    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
-      propertyPath: m_Name
-      value: Window Latch (3)
-      objectReference: {fileID: 0}
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.49699986
@@ -76300,6 +76332,10 @@ PrefabInstance:
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.09000039
+      objectReference: {fileID: 0}
+    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
+      propertyPath: m_Name
+      value: Window Latch (3)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
@@ -79612,10 +79648,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1072497539}
     m_Modifications:
-    - target: {fileID: 1325121588408966, guid: 6cc26838783a16847863179d4483a994, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1328859222818856, guid: 6cc26838783a16847863179d4483a994, type: 3}
       propertyPath: m_Layer
       value: 14
@@ -79627,6 +79659,10 @@ PrefabInstance:
     - target: {fileID: 1442155464621728, guid: 6cc26838783a16847863179d4483a994, type: 3}
       propertyPath: m_Layer
       value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 1325121588408966, guid: 6cc26838783a16847863179d4483a994, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4256633393547034, guid: 6cc26838783a16847863179d4483a994, type: 3}
       propertyPath: m_LocalPosition.x
@@ -81273,7 +81309,7 @@ MonoBehaviour:
   noiseCompute: {fileID: 7200000, guid: 610906fb135f245baaa76a04f34d7c24, type: 3}
   noiseSettings: {fileID: 11400000, guid: 509d54ed5f587459d99d1fc47b5d1459, type: 2}
   resolution: 512
-  weatherMap: {fileID: 1930815744}
+  weatherMap: {fileID: 2123258377}
   testParams: {x: 0, y: 1, z: 1, w: 0}
   container: {fileID: 1230604923}
   viewerEnabled: 0
@@ -82547,41 +82583,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1927550781}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!84 &1930815744
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Weather Map
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  serializedVersion: 3
-  m_Width: 512
-  m_Height: 512
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthFormat: 0
-  m_ColorFormat: 24
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 1
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 512
 --- !u!1 &1934039875
 GameObject:
   m_ObjectHideFlags: 0
@@ -85039,10 +85040,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 421069872}
     m_Modifications:
-    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
-      propertyPath: m_Name
-      value: Window Latch (6)
-      objectReference: {fileID: 0}
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.49899998
@@ -85086,6 +85083,10 @@ PrefabInstance:
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.069999985
+      objectReference: {fileID: 0}
+    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
+      propertyPath: m_Name
+      value: Window Latch (6)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
@@ -88063,41 +88064,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2076687685}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!84 &2077973202
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: DetailNoise
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  serializedVersion: 3
-  m_Width: 64
-  m_Height: 64
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthFormat: 0
-  m_ColorFormat: 24
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 1
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 0
-    m_WrapV: 0
-    m_WrapW: 0
-  m_Dimension: 3
-  m_VolumeDepth: 64
 --- !u!1 &2084824369
 GameObject:
   m_ObjectHideFlags: 0
@@ -88219,10 +88185,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1793667736}
     m_Modifications:
-    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
-      propertyPath: m_Name
-      value: Window Latch (4)
-      objectReference: {fileID: 0}
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.49699986
@@ -88266,6 +88228,10 @@ PrefabInstance:
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.42
+      objectReference: {fileID: 0}
+    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
+      propertyPath: m_Name
+      value: Window Latch (4)
       objectReference: {fileID: 0}
     - target: {fileID: 114850362326711204, guid: 9bbd906c324920b4c8512f2c5dd9b609,
         type: 3}
@@ -89490,6 +89456,41 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2121269175}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!84 &2123258377
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Weather Map
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  serializedVersion: 3
+  m_Width: 512
+  m_Height: 512
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthFormat: 0
+  m_ColorFormat: 24
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 1
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 512
 --- !u!1 &2125728456
 GameObject:
   m_ObjectHideFlags: 0

@@ -55,6 +55,7 @@ public class CloudMaster : MonoBehaviour {
     public Color colB;
     public Color colFog;
     public Color colClouds;
+    public Color colSun;
 
     // Internal
     [HideInInspector]
@@ -63,22 +64,19 @@ public class CloudMaster : MonoBehaviour {
     private WeatherMap weatherMapGen;
     private NoiseGenerator noise;
 
+    bool paramsSet;
+
     public void Awake() {
         weatherMapGen = FindObjectOfType<WeatherMap>();
         noise = FindObjectOfType<NoiseGenerator>();
         if (Application.isPlaying && weatherMapGen) {
             weatherMapGen.UpdateMap();
         }
+        paramsSet = false;
     }
 
     [ImageEffectOpaque]
     private void OnRenderImage(RenderTexture src, RenderTexture dest) {
-
-        // Validate inputs
-        if (material == null || material.shader != shader) {
-            material = new Material(shader);
-        }
-        numStepsLight = Mathf.Max(1, numStepsLight);
 
         // Noise
         noise.UpdateNoise();
@@ -92,6 +90,27 @@ public class CloudMaster : MonoBehaviour {
             weatherMapGen.UpdateMap();
         }
         material.SetTexture("WeatherMap", weatherMapGen.weatherMap);
+        if (!paramsSet) {
+            SetCloudParams(src, dest);
+        }
+
+        // Bit does the following:
+        // - sets _MainTex property on material to the source texture
+        // - sets the render target to the destination texture
+        // - draws a full-screen quad
+        // This copies the src texture to the dest texture, with whatever modifications the shader makes
+        Graphics.Blit(src, dest, material);
+    }
+
+    private void SetCloudParams(RenderTexture src, RenderTexture dest) {
+        paramsSet = false; // false for debugging
+
+        // Validate inputs
+        if (material == null || material.shader != shader) {
+            material = new Material(shader);
+        }
+        numStepsLight = Mathf.Max(1, numStepsLight);
+
 
         Vector3 size = container.localScale;
         int width = Mathf.CeilToInt(size.x);
@@ -133,13 +152,7 @@ public class CloudMaster : MonoBehaviour {
         material.SetColor("colB", colB);
         material.SetColor("colFog", colFog);
         material.SetColor("colClouds", colClouds);
-
-        // Bit does the following:
-        // - sets _MainTex property on material to the source texture
-        // - sets the render target to the destination texture
-        // - draws a full-screen quad
-        // This copies the src texture to the dest texture, with whatever modifications the shader makes
-        Graphics.Blit(src, dest, material);
+        material.SetColor("colSun", colSun);
     }
 
     void SetDebugParams() {
