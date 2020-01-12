@@ -9,6 +9,7 @@ public class CloudMaster : MonoBehaviour {
     [Header(headerDecoration + "Main" + headerDecoration)]
     public Shader shader;
     public Transform container;
+    public Light sunLight;
     public Vector3 cloudTestParams;
 
     [Header("March settings" + headerDecoration)]
@@ -123,6 +124,7 @@ public class CloudMaster : MonoBehaviour {
         material.SetFloat("lightAbsorptionThroughCloud", lightAbsorptionThroughCloud);
         material.SetFloat("lightAbsorptionTowardSun", lightAbsorptionTowardSun);
         material.SetFloat("darknessThreshold", darknessThreshold);
+        material.SetVector("sunLightDirection", sunLight.transform.rotation * Vector3.back);
         material.SetVector("params", cloudTestParams);
         material.SetFloat("rayOffsetStrength", rayOffsetStrength);
 
@@ -153,6 +155,7 @@ public class CloudMaster : MonoBehaviour {
         material.SetColor("colFog", colFog);
         material.SetColor("colClouds", colClouds);
         material.SetColor("colSun", colSun);
+        
     }
 
     void SetDebugParams() {

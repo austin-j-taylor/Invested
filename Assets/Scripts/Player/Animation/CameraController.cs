@@ -383,6 +383,7 @@ public class CameraController : MonoBehaviour {
                 CloudMaster other = otherObject.GetComponent<CloudMaster>();
                 clouds.shader = other.shader;
                 clouds.container = other.container;
+                clouds.sunLight = other.sunLight;
                 clouds.cloudTestParams = other.cloudTestParams;
 
                 clouds.numStepsLight = other.numStepsLight;

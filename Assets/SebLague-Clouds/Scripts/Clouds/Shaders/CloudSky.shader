@@ -11,7 +11,10 @@ Shader "Hidden/CloudSky"
         
         // No culling or depth
         Cull Off ZWrite Off ZTest Always
-
+		Tags 
+		{
+			"LightMode" = "ForwardBase"
+		}
         Pass
         {
             CGPROGRAM
@@ -85,7 +88,7 @@ Shader "Hidden/CloudSky"
             float lightAbsorptionTowardSun;
             float lightAbsorptionThroughCloud;
             float darknessThreshold;
-            float4 _LightColor0;
+            float4 sunLightDirection;
             float4 colA; // A and B are the gradiant for the sky
             float4 colB; // A and B are not actually used, currently
             float4 colFog; // color of fog in far-distant objects
@@ -219,7 +222,7 @@ Shader "Hidden/CloudSky"
 
             // Calculate proportion of light that reaches the given point from the lightsource
             float lightmarch(float3 p) {
-                float3 dirToLight = _WorldSpaceLightPos0.xyz;
+                float3 dirToLight = sunLightDirection.xyz;
                 float dstInsideBox = rayBoxDst(boundsMin, boundsMax, p, 1/dirToLight).y;
                 
                 float transmittance = 1;
@@ -305,7 +308,7 @@ Shader "Hidden/CloudSky"
                 randomOffset *= rayOffsetStrength;
 
 				// Phase function makes clouds brighter around sun
-				float cosAngle = dot(rayDir, _WorldSpaceLightPos0.xyz);
+				float cosAngle = dot(rayDir, sunLightDirection.xyz);
 				float phaseVal = phase(cosAngle);
 
                 float dstTravelled = randomOffset;
