@@ -13,7 +13,7 @@ Shader "Hidden/CloudSky"
         Cull Off ZWrite Off ZTest Always
 		Tags 
 		{
-			"LightMode" = "ForwardBase"
+			"LightMode" = "Deferred"
 		}
         Pass
         {
@@ -351,7 +351,8 @@ Shader "Hidden/CloudSky"
 					float focusedEyeCos = pow(saturate(cosAngle), params.x);
 					sun = saturate(hg(focusedEyeCos, .9995)) * transmittance;
 				} else {
-					float dstFog = (1 - exp(-max(0, depth) * 8 * .0001));
+					// wall in the way, do fog calculation
+					float dstFog = (1 - exp(-max(0, depth) * .0008));
 					float3 sky = dstFog * colFog;
 					backgroundCol = backgroundCol * (1 - dstFog) + sky;
 				}

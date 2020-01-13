@@ -79,6 +79,10 @@ public class CloudMaster : MonoBehaviour {
     [ImageEffectOpaque]
     private void OnRenderImage(RenderTexture src, RenderTexture dest) {
 
+        if (!paramsSet) {
+            SetCloudParams(src, dest);
+        }
+
         // Noise
         noise.UpdateNoise();
 
@@ -91,9 +95,6 @@ public class CloudMaster : MonoBehaviour {
             weatherMapGen.UpdateMap();
         }
         material.SetTexture("WeatherMap", weatherMapGen.weatherMap);
-        if (!paramsSet) {
-            SetCloudParams(src, dest);
-        }
 
         // Bit does the following:
         // - sets _MainTex property on material to the source texture
