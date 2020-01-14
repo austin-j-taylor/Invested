@@ -52,8 +52,6 @@ public class CloudMaster : MonoBehaviour {
     public float detailSpeed = 2;
 
     [Header(headerDecoration + "Sky" + headerDecoration)]
-    public Color colA;
-    public Color colB;
     public Color colFog;
     public Color colClouds;
     public Color colSun;
@@ -151,8 +149,6 @@ public class CloudMaster : MonoBehaviour {
         // Set debug params
         SetDebugParams();
 
-        material.SetColor("colA", colA);
-        material.SetColor("colB", colB);
         material.SetColor("colFog", colFog);
         material.SetColor("colClouds", colClouds);
         material.SetColor("colSun", colSun);

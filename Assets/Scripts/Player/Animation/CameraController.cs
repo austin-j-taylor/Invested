@@ -414,8 +414,6 @@ public class CameraController : MonoBehaviour {
                 clouds.baseSpeed = other.baseSpeed;
                 clouds.detailSpeed = other.detailSpeed;
 
-                clouds.colA = other.colA;
-                clouds.colB = other.colB;
                 clouds.colFog = other.colFog;
                 clouds.colClouds = other.colClouds;
                 clouds.colSun = other.colSun;

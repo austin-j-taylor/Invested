@@ -65,6 +65,10 @@ public class MetalReserve : MonoBehaviour {
         } else {
             Rate = (Mass - lastMass) / Time.fixedDeltaTime;
             lastMass = Mass;
+
+            if (IsBurnedOut && mass >= capacity / 2 ) { // stop being burned out once the reserve refills to half capacity
+                IsBurnedOut = false;
+            }
         }
     }
 
