@@ -22,7 +22,7 @@ public class SpikeSplineFollower : SpikeSpline {
             points[i] = GetPoint(i / (float)steps);
         }
 
-        volLines = Instantiate(GameManager.MetalLineStripTemplate);
+        volLines = Instantiate(GameManager.MetalLineStripTemplate, GameManager.MetalLinesTransform);
         volLines.GetComponent<MeshRenderer>().enabled = true;
         volLines.UpdateLineVertices(points);
         volLines.LineColor = new Color(0, Magnetic.lowLineColor * luminosityFactor, Magnetic.highLineColor * luminosityFactor, 1);

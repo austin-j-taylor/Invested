@@ -7102,6 +7102,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 421069872}
     m_Modifications:
+    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
+      propertyPath: m_Name
+      value: Window Latch (4)
+      objectReference: {fileID: 0}
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.499
@@ -7145,10 +7149,6 @@ PrefabInstance:
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.069999985
-      objectReference: {fileID: 0}
-    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
-      propertyPath: m_Name
-      value: Window Latch (4)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
@@ -10221,6 +10221,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1072497539}
     m_Modifications:
+    - target: {fileID: 1325121588408966, guid: 6cc26838783a16847863179d4483a994, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1328859222818856, guid: 6cc26838783a16847863179d4483a994, type: 3}
       propertyPath: m_Layer
       value: 14
@@ -10232,10 +10236,6 @@ PrefabInstance:
     - target: {fileID: 1442155464621728, guid: 6cc26838783a16847863179d4483a994, type: 3}
       propertyPath: m_Layer
       value: 14
-      objectReference: {fileID: 0}
-    - target: {fileID: 1325121588408966, guid: 6cc26838783a16847863179d4483a994, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4256633393547034, guid: 6cc26838783a16847863179d4483a994, type: 3}
       propertyPath: m_LocalPosition.x
@@ -11818,6 +11818,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 421069872}
     m_Modifications:
+    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
+      propertyPath: m_Name
+      value: Window Latch (9)
+      objectReference: {fileID: 0}
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.49899998
@@ -11861,10 +11865,6 @@ PrefabInstance:
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.069999985
-      objectReference: {fileID: 0}
-    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
-      propertyPath: m_Name
-      value: Window Latch (9)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
@@ -14697,6 +14697,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1793667736}
     m_Modifications:
+    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
+      propertyPath: m_Name
+      value: Window Latch (5)
+      objectReference: {fileID: 0}
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.5
@@ -14740,10 +14744,6 @@ PrefabInstance:
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.09000037
-      objectReference: {fileID: 0}
-    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
-      propertyPath: m_Name
-      value: Window Latch (5)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
@@ -16973,41 +16973,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 399946205}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!84 &402468317
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: ShapeNoise
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  serializedVersion: 3
-  m_Width: 132
-  m_Height: 132
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthFormat: 0
-  m_ColorFormat: 24
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 1
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 0
-    m_WrapV: 0
-    m_WrapW: 0
-  m_Dimension: 3
-  m_VolumeDepth: 132
 --- !u!1 &405319669
 GameObject:
   m_ObjectHideFlags: 0
@@ -17667,6 +17632,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 421069872}
     m_Modifications:
+    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
+      propertyPath: m_Name
+      value: Window Latch (3)
+      objectReference: {fileID: 0}
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.49899998
@@ -17710,10 +17679,6 @@ PrefabInstance:
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.069999985
-      objectReference: {fileID: 0}
-    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
-      propertyPath: m_Name
-      value: Window Latch (3)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
@@ -24782,6 +24747,41 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 466724963}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!84 &469192720
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: DetailNoise
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  serializedVersion: 3
+  m_Width: 64
+  m_Height: 64
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthFormat: 0
+  m_ColorFormat: 24
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 1
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 0
+    m_WrapV: 0
+    m_WrapW: 0
+  m_Dimension: 3
+  m_VolumeDepth: 64
 --- !u!1 &470161292
 GameObject:
   m_ObjectHideFlags: 0
@@ -25451,6 +25451,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1793667736}
     m_Modifications:
+    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
+      propertyPath: m_Name
+      value: Window Latch (1)
+      objectReference: {fileID: 0}
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.49699986
@@ -25494,10 +25498,6 @@ PrefabInstance:
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.09000037
-      objectReference: {fileID: 0}
-    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
-      propertyPath: m_Name
-      value: Window Latch (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
@@ -35059,6 +35059,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1072497539}
     m_Modifications:
+    - target: {fileID: 1054545554421348, guid: 5dc43a83ec5fd1e4caae54511e33da1f, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4958656091128614, guid: 5dc43a83ec5fd1e4caae54511e33da1f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 246.01
@@ -35094,10 +35098,6 @@ PrefabInstance:
     - target: {fileID: 4958656091128614, guid: 5dc43a83ec5fd1e4caae54511e33da1f, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 270
-      objectReference: {fileID: 0}
-    - target: {fileID: 1054545554421348, guid: 5dc43a83ec5fd1e4caae54511e33da1f, type: 3}
-      propertyPath: m_IsActive
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5dc43a83ec5fd1e4caae54511e33da1f, type: 3}
@@ -36530,6 +36530,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 421069872}
     m_Modifications:
+    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
+      propertyPath: m_Name
+      value: Window Latch (8)
+      objectReference: {fileID: 0}
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.49899998
@@ -36573,10 +36577,6 @@ PrefabInstance:
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.069999985
-      objectReference: {fileID: 0}
-    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
-      propertyPath: m_Name
-      value: Window Latch (8)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
@@ -38412,8 +38412,8 @@ MonoBehaviour:
   viewerTileAmount: 1
   viewerSize: 1
   showSettingsEditor: 0
-  shapeTexture: {fileID: 402468317}
-  detailTexture: {fileID: 874343365}
+  shapeTexture: {fileID: 1416763691}
+  detailTexture: {fileID: 469192720}
 --- !u!4 &847781466
 Transform:
   m_ObjectHideFlags: 0
@@ -39544,6 +39544,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 421069872}
     m_Modifications:
+    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
+      propertyPath: m_Name
+      value: Window Latch (1)
+      objectReference: {fileID: 0}
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.49899998
@@ -39588,10 +39592,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.069999985
       objectReference: {fileID: 0}
-    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
-      propertyPath: m_Name
-      value: Window Latch (1)
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
 --- !u!4 &872239855 stripped
@@ -39600,41 +39600,6 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 872239854}
   m_PrefabAsset: {fileID: 0}
---- !u!84 &874343365
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: DetailNoise
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  serializedVersion: 3
-  m_Width: 64
-  m_Height: 64
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthFormat: 0
-  m_ColorFormat: 24
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 1
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 0
-    m_WrapV: 0
-    m_WrapW: 0
-  m_Dimension: 3
-  m_VolumeDepth: 64
 --- !u!1 &874523560
 GameObject:
   m_ObjectHideFlags: 0
@@ -40624,6 +40589,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1793667736}
     m_Modifications:
+    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
+      propertyPath: m_Name
+      value: Window Latch (2)
+      objectReference: {fileID: 0}
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.49699986
@@ -40667,10 +40636,6 @@ PrefabInstance:
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.09000037
-      objectReference: {fileID: 0}
-    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
-      propertyPath: m_Name
-      value: Window Latch (2)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
@@ -44987,6 +44952,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 421069872}
     m_Modifications:
+    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
+      propertyPath: m_Name
+      value: Window Latch (2)
+      objectReference: {fileID: 0}
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.49899998
@@ -45030,10 +44999,6 @@ PrefabInstance:
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.069999985
-      objectReference: {fileID: 0}
-    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
-      propertyPath: m_Name
-      value: Window Latch (2)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
@@ -50280,6 +50245,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1793667736}
     m_Modifications:
+    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
+      propertyPath: m_Name
+      value: Window Latch (6)
+      objectReference: {fileID: 0}
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.498
@@ -50323,10 +50292,6 @@ PrefabInstance:
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.09000037
-      objectReference: {fileID: 0}
-    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
-      propertyPath: m_Name
-      value: Window Latch (6)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
@@ -51531,6 +51496,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 421069872}
     m_Modifications:
+    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
+      propertyPath: m_Name
+      value: Window Latch (10)
+      objectReference: {fileID: 0}
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.49899998
@@ -51574,10 +51543,6 @@ PrefabInstance:
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.069999985
-      objectReference: {fileID: 0}
-    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
-      propertyPath: m_Name
-      value: Window Latch (10)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
@@ -53900,6 +53865,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 421069872}
     m_Modifications:
+    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
+      propertyPath: m_Name
+      value: Window Latch (11)
+      objectReference: {fileID: 0}
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.49899998
@@ -53943,10 +53912,6 @@ PrefabInstance:
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.069999985
-      objectReference: {fileID: 0}
-    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
-      propertyPath: m_Name
-      value: Window Latch (11)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
@@ -54229,6 +54194,41 @@ Transform:
   m_Father: {fileID: 1331973712}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!84 &1232967011
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Weather Map
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  serializedVersion: 3
+  m_Width: 512
+  m_Height: 512
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthFormat: 0
+  m_ColorFormat: 24
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 1
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 512
 --- !u!1 &1235037843
 GameObject:
   m_ObjectHideFlags: 0
@@ -58657,7 +58657,7 @@ MonoBehaviour:
   shapeOffset: {x: 0, y: 0, z: 1.11}
   heightOffset: {x: 0, y: 0}
   shapeNoiseWeights: {x: 3.48, y: 1.71, z: 2.99, w: 1.31}
-  detailNoiseScale: 6.95
+  detailNoiseScale: 1
   detailNoiseWeight: 1.5
   detailNoiseWeights: {x: 0.32, y: 0.6, z: 0.4}
   detailOffset: {x: 0, y: 0, z: 0}
@@ -58671,8 +58671,6 @@ MonoBehaviour:
   timeScale: 1
   baseSpeed: 1
   detailSpeed: 1.69
-  colA: {r: 1, g: 0, b: 0, a: 1}
-  colB: {r: 1, g: 0.13043478, b: 0, a: 1}
   colFog: {r: 0.14150941, g: 0.048727296, b: 0.048727296, a: 1}
   colClouds: {r: 0.028301895, g: 0.0011792456, b: 0, a: 1}
   colSun: {r: 1, g: 0.009412543, b: 0, a: 1}
@@ -60864,6 +60862,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 235072602}
     m_Modifications:
+    - target: {fileID: 7960633994873659672, guid: 15c4f7b00b28fed4f907e213b5b969c9,
+        type: 3}
+      propertyPath: m_Name
+      value: Candlelight_ground
+      objectReference: {fileID: 0}
     - target: {fileID: 7960633994873659674, guid: 15c4f7b00b28fed4f907e213b5b969c9,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -60918,11 +60921,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7960633994873659672, guid: 15c4f7b00b28fed4f907e213b5b969c9,
-        type: 3}
-      propertyPath: m_Name
-      value: Candlelight_ground
       objectReference: {fileID: 0}
     - target: {fileID: 7960633994873659673, guid: 15c4f7b00b28fed4f907e213b5b969c9,
         type: 3}
@@ -61088,6 +61086,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 421069872}
     m_Modifications:
+    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
+      propertyPath: m_Name
+      value: Window Latch (7)
+      objectReference: {fileID: 0}
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.49899998
@@ -61131,10 +61133,6 @@ PrefabInstance:
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.069999985
-      objectReference: {fileID: 0}
-    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
-      propertyPath: m_Name
-      value: Window Latch (7)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
@@ -62013,6 +62011,41 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1413769706}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!84 &1416763691
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ShapeNoise
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  serializedVersion: 3
+  m_Width: 132
+  m_Height: 132
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthFormat: 0
+  m_ColorFormat: 24
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 1
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 0
+    m_WrapV: 0
+    m_WrapW: 0
+  m_Dimension: 3
+  m_VolumeDepth: 132
 --- !u!1 &1419088804
 GameObject:
   m_ObjectHideFlags: 0
@@ -63844,6 +63877,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 421069872}
     m_Modifications:
+    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
+      propertyPath: m_Name
+      value: Window Latch (5)
+      objectReference: {fileID: 0}
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.49899998
@@ -63887,10 +63924,6 @@ PrefabInstance:
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.069999985
-      objectReference: {fileID: 0}
-    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
-      propertyPath: m_Name
-      value: Window Latch (5)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
@@ -74427,41 +74460,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1722115850}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!84 &1724007616
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Weather Map
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  serializedVersion: 3
-  m_Width: 512
-  m_Height: 512
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthFormat: 0
-  m_ColorFormat: 24
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 1
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 512
 --- !u!1 &1728354937
 GameObject:
   m_ObjectHideFlags: 0
@@ -75798,21 +75796,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Luthadel_house_2f_tower
       objectReference: {fileID: 0}
-    - target: {fileID: -9194189640818266129, guid: 61584c87ad7dfce4198a65d68bd8413b,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -5535132306885184984, guid: 61584c87ad7dfce4198a65d68bd8413b,
-        type: 3}
-      propertyPath: m_ReceiveShadows
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -4408053705282377050, guid: 61584c87ad7dfce4198a65d68bd8413b,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 61584c87ad7dfce4198a65d68bd8413b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -75878,10 +75861,20 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -4408053705282377050, guid: 61584c87ad7dfce4198a65d68bd8413b,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2791395263377738437, guid: 61584c87ad7dfce4198a65d68bd8413b,
         type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -9194189640818266129, guid: 61584c87ad7dfce4198a65d68bd8413b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5231576454698162884, guid: 61584c87ad7dfce4198a65d68bd8413b,
         type: 3}
@@ -75893,6 +75886,11 @@ PrefabInstance:
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: ba924bc3768ae764aa679a4320db502f, type: 2}
+    - target: {fileID: -5535132306885184984, guid: 61584c87ad7dfce4198a65d68bd8413b,
+        type: 3}
+      propertyPath: m_ReceiveShadows
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6665803389586755487, guid: 61584c87ad7dfce4198a65d68bd8413b,
         type: 3}
       propertyPath: m_ReceiveShadows
@@ -76752,6 +76750,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1793667736}
     m_Modifications:
+    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
+      propertyPath: m_Name
+      value: Window Latch (3)
+      objectReference: {fileID: 0}
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.49699986
@@ -76795,10 +76797,6 @@ PrefabInstance:
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.09000039
-      objectReference: {fileID: 0}
-    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
-      propertyPath: m_Name
-      value: Window Latch (3)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
@@ -80026,6 +80024,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1072497539}
     m_Modifications:
+    - target: {fileID: 1325121588408966, guid: 6cc26838783a16847863179d4483a994, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1328859222818856, guid: 6cc26838783a16847863179d4483a994, type: 3}
       propertyPath: m_Layer
       value: 14
@@ -80037,10 +80039,6 @@ PrefabInstance:
     - target: {fileID: 1442155464621728, guid: 6cc26838783a16847863179d4483a994, type: 3}
       propertyPath: m_Layer
       value: 14
-      objectReference: {fileID: 0}
-    - target: {fileID: 1325121588408966, guid: 6cc26838783a16847863179d4483a994, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4256633393547034, guid: 6cc26838783a16847863179d4483a994, type: 3}
       propertyPath: m_LocalPosition.x
@@ -81687,7 +81685,7 @@ MonoBehaviour:
   noiseCompute: {fileID: 7200000, guid: 610906fb135f245baaa76a04f34d7c24, type: 3}
   noiseSettings: {fileID: 11400000, guid: 509d54ed5f587459d99d1fc47b5d1459, type: 2}
   resolution: 512
-  weatherMap: {fileID: 1724007616}
+  weatherMap: {fileID: 1232967011}
   testParams: {x: 0, y: 1, z: 1, w: 0}
   container: {fileID: 1230604923}
   viewerEnabled: 0
@@ -85418,6 +85416,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 421069872}
     m_Modifications:
+    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
+      propertyPath: m_Name
+      value: Window Latch (6)
+      objectReference: {fileID: 0}
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.49899998
@@ -85461,10 +85463,6 @@ PrefabInstance:
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.069999985
-      objectReference: {fileID: 0}
-    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
-      propertyPath: m_Name
-      value: Window Latch (6)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
@@ -88583,6 +88581,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1793667736}
     m_Modifications:
+    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
+      propertyPath: m_Name
+      value: Window Latch (4)
+      objectReference: {fileID: 0}
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.49699986
@@ -88626,10 +88628,6 @@ PrefabInstance:
     - target: {fileID: 4876561036024014, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.42
-      objectReference: {fileID: 0}
-    - target: {fileID: 1969037200912598, guid: 9bbd906c324920b4c8512f2c5dd9b609, type: 3}
-      propertyPath: m_Name
-      value: Window Latch (4)
       objectReference: {fileID: 0}
     - target: {fileID: 114850362326711204, guid: 9bbd906c324920b4c8512f2c5dd9b609,
         type: 3}
@@ -91325,6 +91323,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 235072602}
     m_Modifications:
+    - target: {fileID: 7960633994873659672, guid: 15c4f7b00b28fed4f907e213b5b969c9,
+        type: 3}
+      propertyPath: m_Name
+      value: Candlelight_tower
+      objectReference: {fileID: 0}
     - target: {fileID: 7960633994873659674, guid: 15c4f7b00b28fed4f907e213b5b969c9,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -91379,11 +91382,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7960633994873659672, guid: 15c4f7b00b28fed4f907e213b5b969c9,
-        type: 3}
-      propertyPath: m_Name
-      value: Candlelight_tower
       objectReference: {fileID: 0}
     - target: {fileID: 7960633994873659673, guid: 15c4f7b00b28fed4f907e213b5b969c9,
         type: 3}

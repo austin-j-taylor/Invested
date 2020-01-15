@@ -4,25 +4,28 @@ using UnityEngine;
 
 public class Environment_StormForce : MonoBehaviour {
     private const int exitSpeed = 100;
-    private const float restitution = 1.25f;
+    private const float restitution = 100;
 
-    private readonly Vector3 upForce = new Vector3(0, exitSpeed, 0);
+    [SerializeField]
+    private Vector3 forceDirection = new Vector3(0, 1, 0);
+
+    private float barrier;
+
+    private void Awake() {
+        barrier = transform.position.y + transform.localScale.y * forceDirection.y / 2;
+    }
 
     private void OnTriggerStay(Collider other) {
         if (!other.isTrigger && other.attachedRigidbody) {
-            Vector3 force = upForce;
+            Vector3 force = forceDirection * exitSpeed;
             other.attachedRigidbody.AddForce(force, ForceMode.Acceleration);
-            Debug.Log("forcedvan " + force);
-            if (Vector3.Dot(other.attachedRigidbody.velocity, Vector3.down) > 0) {
-                // if object is falling fast, bounce that velocity
-                force = 2 * restitution * Vector3.Project(-other.attachedRigidbody.velocity, Vector3.down);
-                other.attachedRigidbody.AddForce(force, ForceMode.Acceleration);
-                Debug.Log("forcedex " + force);
-            } else {
-                force = 2 * restitution * Vector3.Project(other.attachedRigidbody.velocity, Vector3.down);
-                other.attachedRigidbody.AddForce(force, ForceMode.Acceleration);
-                Debug.Log("forced ex up" + force);
-            }
+
+            // apply force like a spring from the barrier
+            float depth = barrier - other.transform.position.y;
+            if (depth < 0)
+                depth = -depth;
+            force = restitution * depth * forceDirection;
+            other.attachedRigidbody.AddForce(force, ForceMode.Acceleration);
         }
     }
 }

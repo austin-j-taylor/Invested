@@ -10,8 +10,9 @@ using VolumetricLines;
  */
 public class GameManager : MonoBehaviour {
 
-    // Sub-controllers
+    // Sub-controllers, transforms
     public static GraphicsController GraphicsController { get; private set; }
+    public static Transform MetalLinesTransform { get; private set; }
 
     // Resurces
     public static Material Material_MARLmetal_unlit { get; private set; }
@@ -35,6 +36,7 @@ public class GameManager : MonoBehaviour {
 
     void Awake() {
         GraphicsController = GetComponent<GraphicsController>();
+        MetalLinesTransform = transform.Find("MetalLines");
         
         Material_MARLmetal_unlit = Resources.Load<Material>("Materials/MARLmetal_unlit");
         Material_MARLmetal_lit = Resources.Load<Material>("Materials/MARLmetal_lit");
@@ -59,6 +61,9 @@ public class GameManager : MonoBehaviour {
 
     private void Clear(Scene scene) {
         MagneticsInScene = new List<Magnetic>();
+        foreach (Transform child in MetalLinesTransform) {
+            Destroy(child.gameObject);
+        }
     }
 
     public static void AddAllomancer(Allomancer allomancer) {
