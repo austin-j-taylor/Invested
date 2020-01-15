@@ -117,6 +117,7 @@
     <Compile Include="Assets\Scripts\Allomancy\MetalReserve.cs" />
     <Compile Include="Assets\Scripts\Allomancy\NonPlayerPushPullController.cs" />
     <Compile Include="Assets\Scripts\Allomancy\TargetArray.cs" />
+    <Compile Include="Assets\Scripts\Simulations\PhysicsInEditor.cs" />
     <Compile Include="Assets\Scripts\Entities\Entity.cs" />
     <Compile Include="Assets\Scripts\Entities\PewterEntity.cs" />
     <Compile Include="Assets\Scripts\Entities\Targ.cs" />
@@ -1009,7 +1010,9 @@
       <HintPath>C:/Program Files/Unity/Hub/Editor/2019.3.0a2/Editor/Data/MonoBleedingEdge/lib/mono/unityscript/Boo.Lang.dll</HintPath>
     </Reference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Assets\Scripts\Editor\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\SebLague-Clouds\Resources\Blue\BlueNoise.png" />
     <Content Include="Assets\SebLague-Clouds\Resources\Blue\BTest.png" />

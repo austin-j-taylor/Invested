@@ -3,11 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Environment_StormForce : MonoBehaviour {
-    private const int exitSpeed = 100;
-    private const float restitution = 100;
 
     [SerializeField]
     private Vector3 forceDirection = new Vector3(0, 1, 0);
+
+    [SerializeField]
+    private int exitSpeed = 100;
+    [SerializeField]
+    private float restitution = 10;
 
     private float barrier;
 

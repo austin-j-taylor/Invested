@@ -25,6 +25,8 @@ Shader "Hidden/CloudSky"
 			#include "UnityCG.cginc"
 			#include "Assets/SebLague-Clouds/Scripts/Clouds/Shaders/CloudDebug.cginc"
 
+			static const float trans = .01f;
+
 			// vertex input: position, UV
 			struct appdata {
 				float4 vertex : POSITION;
@@ -303,9 +305,19 @@ Shader "Hidden/CloudSky"
 
 			// Phase function makes clouds brighter around sun
 			float cosAngle = 0;
-			if (nonlin_depth == 0) {
+
+			if (nonlin_depth < trans / 2) {
 				cosAngle = dot(rayDir, sunLightDirection.xyz);
+			} else
+			if (nonlin_depth < trans) {
+				cosAngle = dot(rayDir, sunLightDirection.xyz);
+				cosAngle *= 4 * (1 - nonlin_depth / trans) * nonlin_depth / trans;
 			}
+
+
+			//if (nonlin_depth < .1) {
+			//	cosAngle = dot(rayDir, sunLightDirection.xyz);
+			//}
 			float phaseVal = phase(cosAngle);
 
 			float dstTravelled = randomOffset;
@@ -360,6 +372,6 @@ Shader "Hidden/CloudSky"
 			return float4(col,0);
 		}
 		ENDCG
-	}
+		}
 	}
 }
