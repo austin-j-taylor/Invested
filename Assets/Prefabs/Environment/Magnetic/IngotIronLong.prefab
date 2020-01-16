@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 6819196972760196225}
   - component: {fileID: 6819196972760196224}
   - component: {fileID: 6819196972760196227}
-  - component: {fileID: 110761581036705661}
   m_Layer: 14
   m_Name: IngotIronLong
   m_TagString: Untagged
@@ -69,6 +68,7 @@ MeshRenderer:
   m_ProbeAnchor: {fileID: 0}
   m_LightProbeVolumeOverride: {fileID: 0}
   m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
@@ -125,19 +125,3 @@ MonoBehaviour:
   netMass: 9.837499
   magneticMass: 9.464663
   density: 7870
---- !u!114 &110761581036705661
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6819196972760196228}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fbf3575480402db40813e763382412fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  color: 0
-  eraseRenderer: 0
-  originalLayer: 0
-  originalMaterials: []

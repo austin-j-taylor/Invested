@@ -86,9 +86,9 @@ public class CameraController : MonoBehaviour {
 
         if (externalPositionTarget) {
             // Called when the Camera is being controlled by some other source, i.e. HarmonyTarget
-            ActiveCamera.transform.position = Vector3.Lerp(ActiveCamera.transform.position, externalPositionTarget.position, lerpConstantPosition * Time.deltaTime);
+            ActiveCamera.transform.position = Vector3.Lerp(ActiveCamera.transform.position, externalPositionTarget.position, lerpConstantPosition * Time.unscaledDeltaTime);
             //ActiveCamera.transform.LookAt(externalLookAtTarget);
-            ActiveCamera.transform.rotation = Quaternion.Lerp(ActiveCamera.transform.rotation, Quaternion.LookRotation(externalLookAtTarget.position - ActiveCamera.transform.position, Vector3.up), lerpConstantRotation * Time.deltaTime);
+            ActiveCamera.transform.rotation = Quaternion.Lerp(ActiveCamera.transform.rotation, Quaternion.LookRotation(externalLookAtTarget.position - ActiveCamera.transform.position, Vector3.up), lerpConstantRotation * Time.unscaledDeltaTime);
         } else {
             if (cameraIsLocked) {
                 float deltaX;
@@ -138,7 +138,7 @@ public class CameraController : MonoBehaviour {
             ActiveCamera.transform.localRotation = verticalRotation;
             //// If an external target was recently used, the camera ROTATION should lerp back
             //if (timeToLerp < maxTimeToLerp) {
-            //    ActiveCamera.transform.localRotation = Quaternion.Slerp(ActiveCamera.transform.localRotation, verticalRotation, lerpConstantRotation * Time.deltaTime);
+            //    ActiveCamera.transform.localRotation = Quaternion.Slerp(ActiveCamera.transform.localRotation, verticalRotation, lerpConstantRotation * Time.unscaledDeltaTime);
             //} else {
             //    ActiveCamera.transform.localRotation = verticalRotation;
             //}
@@ -154,8 +154,8 @@ public class CameraController : MonoBehaviour {
                 //// If an external target was recently used, the camera POSITION should lerp back
                 //if (timeToLerp < maxTimeToLerp) {
                 //    float distance = timeToLerp / maxTimeToLerp;
-                //    wantedPosition = Vector3.Slerp(ActiveCamera.transform.localPosition, verticalRotation * new Vector3(0, 0, -SettingsMenu.settingsData.cameraDistance), lerpConstantPosition * Time.deltaTime);
-                //    timeToLerp += Time.deltaTime;
+                //    wantedPosition = Vector3.Slerp(ActiveCamera.transform.localPosition, verticalRotation * new Vector3(0, 0, -SettingsMenu.settingsData.cameraDistance), lerpConstantPosition * Time.unscaledDeltaTime);
+                //    timeToLerp += Time.unscaledDeltaTime;
                 //} else { // normal operation
                 //    wantedPosition = verticalRotation * new Vector3(0, 0, -SettingsMenu.settingsData.cameraDistance);
                 //}

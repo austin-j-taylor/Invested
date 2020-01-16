@@ -55,6 +55,7 @@ public class Player : PewterEntity {
             }
         }
     }
+    public static bool CanPause { get; set; }
     public static bool CanControlZinc { get; set; }
     public static bool CanControlMovement { get; set; }
 
@@ -143,7 +144,7 @@ public class Player : PewterEntity {
 
     protected override void LateUpdate() {
         // Pausing
-        if (Keybinds.EscapeDown() && !PauseMenu.IsPaused) {
+        if (Keybinds.EscapeDown() && !PauseMenu.IsPaused && CanPause) {
             PauseMenu.Pause();
         }
         // Displaying Help Overlay

@@ -53,7 +53,8 @@ public class TitleScreen : MonoBehaviour {
 
     public void Close() {
         if(gameObject.activeSelf) {
-            highlitButton = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
+            if(EventSystem.current.currentSelectedGameObject)
+                highlitButton = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
             gameObject.SetActive(false);
         }
     }

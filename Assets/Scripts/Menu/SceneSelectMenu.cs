@@ -140,8 +140,11 @@ public class SceneSelectMenu : MonoBehaviour {
 
             if (scene.buildIndex == sceneTitleScreen) {
 
-                Player.PlayerInstance.gameObject.SetActive(false);
+                Player.CanControl = false;
+                Player.CanPause = false;
+                Player.PlayerInstance.gameObject.SetActive(true);
                 CameraController.UnlockCamera();
+                CameraController.ActiveCamera.clearFlags = CameraClearFlags.SolidColor;
                 if (isActiveAndEnabled)
                     MainMenu.FocusOnButton(highlitButton);
             } else {
@@ -149,7 +152,9 @@ public class SceneSelectMenu : MonoBehaviour {
                 TimeController.CurrentTimeScale = SettingsMenu.settingsData.timeScale;
 
                 Player.PlayerInstance.gameObject.SetActive(true);
+                Player.CanPause = true;
                 CameraController.LockCamera();
+                CameraController.ActiveCamera.clearFlags = CameraClearFlags.Skybox;
                 HUD.ResetHUD();
 
                 // Set parameters for starting on certain scenes
