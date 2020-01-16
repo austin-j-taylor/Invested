@@ -120,10 +120,10 @@ public class SceneSelectMenu : MonoBehaviour {
         //CameraController.SetExternalSource(null, null);
         Player.PlayerInstance.transform.parent = EventSystem.current.transform;
         
-        if (scene == sceneTitleScreen) {
-            MainMenu.Open();
-            //MainMenu.OpenSceneSelectMenu();
-        }
+        //if (scene == sceneTitleScreen) {
+        //    MainMenu.Open();
+        //    //MainMenu.OpenSceneSelectMenu();
+        //}
         
         SceneManager.LoadScene(scene);
     }
@@ -139,6 +139,7 @@ public class SceneSelectMenu : MonoBehaviour {
             LevelCompletedScreen.Close();
 
             if (scene.buildIndex == sceneTitleScreen) {
+                MainMenu.Open();
 
                 Player.CanControl = false;
                 Player.CanPause = false;
@@ -217,5 +218,9 @@ public class SceneSelectMenu : MonoBehaviour {
 
     private void OnClickedBack() {
         Close();
+    }
+
+    public bool SceneIsMainOrTitleScreen(Scene scene) {
+        return scene.buildIndex == sceneMain || scene.buildIndex == sceneTitleScreen;
     }
 }

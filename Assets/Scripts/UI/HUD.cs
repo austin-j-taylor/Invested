@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /*
@@ -71,6 +72,7 @@ public class HUD : MonoBehaviour {
         ZincMeterController = GetComponentInChildren<ZincMeterController>();
         ControlWheelController = GetComponentInChildren<ControlWheelController>();
         ConsoleController = GetComponentInChildren<ConsoleController>();
+        SceneManager.sceneUnloaded += ClearHUDBeforeSceneChange;
     }
 
 	void LateUpdate() {
@@ -96,6 +98,10 @@ public class HUD : MonoBehaviour {
         hudGroup.alpha = 0;
     }
 
+    // Reset the hud
+    public void ClearHUDBeforeSceneChange(Scene scene) {
+        ResetHUD();
+    }
     // Clears the values currently on the HUD
     public static void ResetHUD() {
         if (SettingsMenu.settingsData.hudEnabled == 1) {

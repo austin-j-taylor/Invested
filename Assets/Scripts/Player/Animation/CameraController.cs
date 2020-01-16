@@ -24,6 +24,7 @@ public class CameraController : MonoBehaviour {
     private static Transform playerLookAtTarget;
     private static Transform externalPositionTarget; // Assigned by another part of the program for tracking
     private static Transform externalLookAtTarget; // Assigned by another part of the program for tracking
+    private static bool externalLerpToTarget = true; // Assigned by another part of the program for tracking
 
     private static float playerLookAtTargetReferenceHeight = 1;
     private static float currentX = 0;
@@ -76,7 +77,6 @@ public class CameraController : MonoBehaviour {
         ActiveCamera.depthTextureMode = DepthTextureMode.DepthNormals;
         clouds = ActiveCamera.GetComponent<CloudMaster>();
         UnlockCamera();
-
         SceneManager.sceneLoaded += LoadCloudData;
     }
 
@@ -86,9 +86,14 @@ public class CameraController : MonoBehaviour {
 
         if (externalPositionTarget) {
             // Called when the Camera is being controlled by some other source, i.e. HarmonyTarget
-            ActiveCamera.transform.position = Vector3.Lerp(ActiveCamera.transform.position, externalPositionTarget.position, lerpConstantPosition * Time.unscaledDeltaTime);
-            //ActiveCamera.transform.LookAt(externalLookAtTarget);
-            ActiveCamera.transform.rotation = Quaternion.Lerp(ActiveCamera.transform.rotation, Quaternion.LookRotation(externalLookAtTarget.position - ActiveCamera.transform.position, Vector3.up), lerpConstantRotation * Time.unscaledDeltaTime);
+            if(externalLerpToTarget) {
+                ActiveCamera.transform.position = Vector3.Lerp(ActiveCamera.transform.position, externalPositionTarget.position, lerpConstantPosition * Time.unscaledDeltaTime);
+                ActiveCamera.transform.rotation = Quaternion.Lerp(ActiveCamera.transform.rotation, Quaternion.LookRotation(externalLookAtTarget.position - ActiveCamera.transform.position, Vector3.up), lerpConstantRotation * Time.unscaledDeltaTime);
+            } else {
+                ActiveCamera.transform.position = externalPositionTarget.position;
+                ActiveCamera.transform.rotation = Quaternion.LookRotation(externalLookAtTarget.position - ActiveCamera.transform.position, Vector3.up);
+            }
+
         } else {
             if (cameraIsLocked) {
                 float deltaX;
@@ -335,7 +340,7 @@ public class CameraController : MonoBehaviour {
         Cursor.visible = true;
     }
 
-    public static void SetExternalSource(Transform position, Transform lookAt) {
+    public static void SetExternalSource(Transform position, Transform lookAt, bool lerp = true) {
         if (position == null) {
             externalPositionTarget = null;
             externalLookAtTarget = null;
@@ -344,6 +349,7 @@ public class CameraController : MonoBehaviour {
         } else {
             externalPositionTarget = position;
             externalLookAtTarget = lookAt;
+            externalLerpToTarget = lerp;
             Player.PlayerTransparancy.SetOverrideHidden(false);
         }
     }

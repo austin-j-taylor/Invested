@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class Environment_TitleScreen : MonoBehaviour {
 
@@ -16,15 +17,15 @@ public class Environment_TitleScreen : MonoBehaviour {
     void Start() {
         TimeController.CurrentTimeScale = 0;
         cameraPositionTarget = transform.Find("cameraTarget");
-        CameraController.SetExternalSource(cameraPositionTarget, Player.PlayerInstance.transform);
+        CameraController.SetExternalSource(cameraPositionTarget, Player.PlayerInstance.transform, false);
 
         Magnetic[] pulls = transform.Find("Magnetics").GetComponentsInChildren<Magnetic>();
         Magnetic[] pushes = transform.Find("MagneticsPush").GetComponentsInChildren<Magnetic>();
         Player.PlayerIronSteel.SizeOfTargetArrays = 5;
-        foreach(Magnetic m in pulls) {
+        foreach (Magnetic m in pulls) {
             Player.PlayerIronSteel.AddPullTarget(m);
         }
-        foreach(Magnetic m in pushes) {
+        foreach (Magnetic m in pushes) {
             Player.PlayerIronSteel.AddPushTarget(m);
         }
     }
