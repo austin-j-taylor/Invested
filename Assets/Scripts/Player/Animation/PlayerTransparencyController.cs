@@ -29,7 +29,8 @@ public class PlayerTransparencyController : MonoBehaviour {
     }
 
     void LateUpdate() {
-        if (!overrideHidden) {
+        // Player is always visible if the Camera is doing something cinematic
+        if (!overrideHidden && !CameraController.UsingExternalTarget) {
             float distance = (CameraController.ActiveCamera.transform.position - Player.PlayerInstance.transform.position).magnitude;
             // If the camera is SUPER close to the body, make it invisible
             if (distance < distanceThresholdInvisible) {
@@ -57,6 +58,14 @@ public class PlayerTransparencyController : MonoBehaviour {
             SetAllOpaque();
         }
 
+    }
+    public void Clear() {
+        //if(SettingsMenu.settingsData.cameraFirstPerson == 0) {
+        //    SetOverrideHidden(false);
+        //} else {
+        //    SetOverrideHidden(true);
+        //}
+        //LateUpdate();
     }
 
     // Set the rendering mode to Fade, and set the transparency to percent

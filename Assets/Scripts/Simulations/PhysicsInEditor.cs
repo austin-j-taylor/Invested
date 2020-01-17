@@ -9,7 +9,7 @@ public class PhysicsInEditor : MonoBehaviour
     PhysicsScene sce;
     void OnRenderObject() {
         //DeleteOutOfRange();
-        //sce.Simulate(Time.fixedDeltaTime / 10);
+        //sce.Simulate(Time.fixedDeltaTime);
     }
 
     private void DeleteOutOfRange() {

@@ -218,6 +218,7 @@ public class Magnetic : MonoBehaviour {
             IsStatic = (Rb == null);
         }
         blueLine = Instantiate(GameManager.MetalLineTemplate, GameManager.MetalLinesTransform);
+        blueLine.gameObject.SetActive(false);
         colliders = GetComponentsInChildren<Collider>();
         lightSaberFactor = 1;
         lastWasPulled = false;

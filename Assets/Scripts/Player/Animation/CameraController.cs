@@ -25,6 +25,11 @@ public class CameraController : MonoBehaviour {
     private static Transform externalPositionTarget; // Assigned by another part of the program for tracking
     private static Transform externalLookAtTarget; // Assigned by another part of the program for tracking
     private static bool externalLerpToTarget = true; // Assigned by another part of the program for tracking
+    public static bool UsingExternalTarget {
+        get {
+            return externalPositionTarget != null;
+        }
+    }
 
     private static float playerLookAtTargetReferenceHeight = 1;
     private static float currentX = 0;

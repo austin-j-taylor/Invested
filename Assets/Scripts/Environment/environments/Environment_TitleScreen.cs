@@ -15,6 +15,7 @@ public class Environment_TitleScreen : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
+        HUD.DisableHUD();
         TimeController.CurrentTimeScale = 0;
         cameraPositionTarget = transform.Find("cameraTarget");
         CameraController.SetExternalSource(cameraPositionTarget, Player.PlayerInstance.transform, false);
@@ -26,7 +27,7 @@ public class Environment_TitleScreen : MonoBehaviour {
             Player.PlayerIronSteel.AddPullTarget(m);
         }
         foreach (Magnetic m in pushes) {
-            Player.PlayerIronSteel.AddPushTarget(m);
+            Player.PlayerIronSteel.AddPullTarget(m);
         }
     }
 

@@ -162,6 +162,7 @@ public class Player : PewterEntity {
         PlayerIronSteel.Clear();
         PlayerPewter.Clear();
         PlayerZinc.Clear();
+        PlayerTransparancy.Clear();
 
         // Disable the cloud controller
         CameraController.ActiveCamera.GetComponent<CloudMaster>().enabled = false;
