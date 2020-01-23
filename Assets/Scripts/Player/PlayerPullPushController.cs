@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using VolumetricLines;
 
 /*
  * The AllomanticIronSteel specific for the Player.
@@ -14,16 +13,12 @@ public class PlayerPullPushController : AllomanticIronSteel {
     private const float timeDoubleTapWindow = .5f;
     // Blue Line constants
     private const float lineWeightThreshold = 1;
-    private const float targetLateralConstant = .1f;
-    private const float targetFocusFalloffConstant = 128;       // Determines how quickly blue lines blend from in-focus to out-of-focus
-    private const float targetFocusLowerBound = .35f;            // Determines the luminosity of blue lines that are out of foucus
-    private const float targetFocusOffScreenBound = .1f;      // Determines the luminosity of blue lines that are off-screen
-    private const float targetLowTransition = .06f;
-    private const float targetLowCurvePosition = .02f;
+    private const float targetFocusHighlitFactor = 3;       // Targets that would be selected have brighter lines
+    private const float targetFocusOffScreenBound = .2f;      // Determines the luminosity of blue lines that are off-screen
     private const float firstPersonWidthFactor = .25f;
-    public const float blueLineWidthFactor = .04f;
+    public const float blueLineWidthFactor = .02f;
     public const float blueLineChangeFactor = 1 / 4f;
-    public const float blueLineBrightnessFactor = 1 / 6f;
+    public const float blueLineBrightnessFactor = .15f;
 
     // Control Mode constants
     private const int maxNumberOfTargets = 10;
@@ -51,7 +46,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
 
     public ControlMode Mode { get; private set; }
     // radius for Area
-    private float selectionAreaRadius = maxAreaRadius;
+    private float selectionAreaRadius = maxAreaRadius / 2;
     // Lerp goals for burn percentage targets
     // These are displayed in the Burn Rate Meter
     private float ironBurnPercentageLerp = 0;
@@ -215,6 +210,9 @@ public class PlayerPullPushController : AllomanticIronSteel {
                             case ControlMode.Manual:
                             // fall through, same as coinshot
                             case ControlMode.Coinshot:
+                                // set the bullseye target to be brighter
+                                if(bullseyeTarget)
+                                    bullseyeTarget.BrightenLine(targetFocusHighlitFactor);
                                 if (removing) {
                                     if (select) {
                                         // If the player is hovering over a pullTarget, instantly remove that one
@@ -263,6 +261,10 @@ public class PlayerPullPushController : AllomanticIronSteel {
                             case ControlMode.Area:
                                 // Crosshair: lerp to the correct size
                                 LerpToAreaSize();
+                                // set the targets in the area to be brighter
+                                for(int i = 0; i < newTargetsArea.Count; i++) {
+                                    newTargetsArea[i].BrightenLine(targetFocusHighlitFactor);
+                                }
 
                                 if (removing) {
                                     // Removing targets
@@ -448,67 +450,6 @@ public class PlayerPullPushController : AllomanticIronSteel {
         HUD.Crosshair.SetManual();
         RefreshHUD();
     }
-    /*
-    // Called on Magnetics that should be added or removed as Push/Pull-targets
-    // This whoooole thing is bad coding practice
-    private void TryToAddTarget(Magnetic target, bool addingTargets, bool nowVacuouslyPulling, bool nowVacuouslyPushing, bool keybindPulling, bool keybindPushing) {
-        // Add/Remove Targets
-        // Pulling
-        if (Keybinds.Select()) {
-            VacuouslyPullTargeting = false;
-            // Modifying target arrays
-            if (addingTargets) {
-                AddPullTarget(target);
-            } else {
-                if (RemovePullTarget(target)) {// If the player is hovering over a pullTarget, instantly remove that one
-
-                } else if (Keybinds.SelectDown() && !RemovePullTarget(target)) { // If the highlighted Magnetic is not a pullTarget, remove the oldest pullTarget instead
-                    RemovePullTargetAt(0);
-                }
-            }
-        } else {
-            if (!nowVacuouslyPulling && VacuouslyPullTargeting) {
-                if (!keybindPulling) { // should no longer be vacuously pulling
-                    VacuouslyPullTargeting = false;
-                } else { // continue to vacuously Pull
-
-                }
-            } else {
-                if (nowVacuouslyPulling && Keybinds.PullDown() && Mode != ControlMode.Coinshot) { // should now be vacuously pulling on this target (ignored in Coinshot mode)
-                    VacuouslyPullTargeting = true;
-                    AddPullTarget(target, false);
-                }
-            }
-        }
-        // Pushing
-        if (Keybinds.SelectAlternate()) {
-            VacuouslyPushTargeting = false;
-            // Modifying target arrays
-            if (addingTargets) {
-                AddPushTarget(target);
-            } else {
-                if (RemovePushTarget(target)) {// If the player is hovering over a pushTarget, instantly remove that one. Keep it highlighted.
-                    //if (Mode == ControlMode.Manual || Mode == ControlMode.Coinshot)
-                    //    HighlightedTarget = target;
-                } else if (Keybinds.SelectAlternateDown() && !RemovePushTarget(target)) { // If the highlighted Magnetic is not a pushTarget, remove the oldest pushTarget instead
-                    RemovePushTargetAt(0);
-                }
-            }
-        } else {
-            if (!nowVacuouslyPushing && VacuouslyPushTargeting) {
-                if (!keybindPushing) { // should no longer be vacuously pushing
-                    VacuouslyPushTargeting = false;
-                }
-            } else {
-                if (nowVacuouslyPushing && Keybinds.PushDown()) { // should now be vacuously pushing
-                    VacuouslyPushTargeting = true;
-                    AddPushTarget(target, false);
-                }
-            }
-        }
-    }
-    */
-
     /*
      * STEEL/IRONSIGHT MANAGEMENT: blue lines pointing to nearby metals
      * 
