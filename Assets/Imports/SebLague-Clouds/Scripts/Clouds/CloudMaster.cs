@@ -89,7 +89,7 @@ public class CloudMaster : MonoBehaviour {
         material.SetTexture("BlueNoise", blueNoise);
 
         // Weathermap
-        if (!Application.isPlaying) {
+        if (!Application.isPlaying && weatherMapGen.gameObject != null) {
             weatherMapGen.UpdateMap();
         }
         material.SetTexture("WeatherMap", weatherMapGen.weatherMap);

@@ -75,20 +75,23 @@ public class GameManager : MonoBehaviour {
     }
 
     public static void AddMagnetic(Magnetic magnetic) {
-        MagneticsInScene.Add(magnetic);
+        if(MagneticsInScene != null)
+            MagneticsInScene.Add(magnetic);
     }
 
     public static void RemoveMagnetic(Magnetic magnetic) {
-        // Remove from all allomancers
-        foreach (Allomancer allomancer in Allomancers) {
-            AllomanticIronSteel ironSteel = allomancer.GetComponent<AllomanticIronSteel>();
-            if (ironSteel) {
-                ironSteel.RemoveTarget(magnetic);
-                if(ironSteel.UsingBubble) {
-                    ironSteel.RemoveBubbleTarget(magnetic);
+        if (MagneticsInScene != null) {
+            // Remove from all allomancers
+            foreach (Allomancer allomancer in Allomancers) {
+                AllomanticIronSteel ironSteel = allomancer.GetComponent<AllomanticIronSteel>();
+                if (ironSteel) {
+                    ironSteel.RemoveTarget(magnetic);
+                    if (ironSteel.UsingBubble) {
+                        ironSteel.RemoveBubbleTarget(magnetic);
+                    }
                 }
             }
+            MagneticsInScene.Remove(magnetic);
         }
-        MagneticsInScene.Remove(magnetic);
     }
 }
