@@ -73,7 +73,7 @@ ModelImporter:
   humanDescription:
     serializedVersion: 3
     human:
-    - boneName: Bone
+    - boneName: Root
       humanName: Hips
       limit:
         min: {x: 0, y: 0, z: 0}
@@ -219,177 +219,177 @@ ModelImporter:
       parentName: KOLOSS(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-      scale: {x: 100, y: 100, z: 100}
+      scale: {x: 1, y: 1, z: 1}
     - name: Torso
       parentName: KOLOSS(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-      scale: {x: 100, y: 100, z: 100}
+      scale: {x: 1, y: 1, z: 1}
     - name: Face
       parentName: KOLOSS(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-      scale: {x: 100, y: 100, z: 100}
+      scale: {x: 1, y: 1, z: 1}
     - name: Pauldrons
       parentName: KOLOSS(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-      scale: {x: 100, y: 100, z: 100}
+      scale: {x: 1, y: 1, z: 1}
     - name: Arms
       parentName: KOLOSS(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-      scale: {x: 100, y: 100, z: 100}
+      scale: {x: 1, y: 1, z: 1}
     - name: Armpit
       parentName: KOLOSS(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-      scale: {x: 100, y: 100, z: 100}
+      scale: {x: 1, y: 1, z: 1}
     - name: Belt
       parentName: KOLOSS(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-      scale: {x: 100, y: 100, z: 100}
+      scale: {x: 1, y: 1, z: 1}
     - name: Skirt
       parentName: KOLOSS(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-      scale: {x: 100, y: 100, z: 100}
+      scale: {x: 1, y: 1, z: 1}
     - name: Armature
       parentName: KOLOSS(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-      scale: {x: 100, y: 100, z: 100}
-    - name: Bone
+      scale: {x: 1, y: 1, z: 1}
+    - name: Root
       parentName: Armature
       position: {x: -0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 1, w: 0.00000004371139}
       scale: {x: 1, y: 1, z: 1}
     - name: Torso 1
-      parentName: Bone
-      position: {x: -0, y: 0, z: 0.018262329}
+      parentName: Root
+      position: {x: -0, y: 0, z: 1.8262329}
       rotation: {x: -0.00000005338508, y: 0.7071068, z: 0.7071067, w: -0.000000053385072}
       scale: {x: 1, y: 1, z: 1}
     - name: Shoulder.L
       parentName: Torso 1
-      position: {x: -0.0072169355, y: 0.009295068, z: -6.3092453e-10}
+      position: {x: -0.7216936, y: 0.9295068, z: -0.00000006309246}
       rotation: {x: 0.69901127, y: -0.6277002, z: -0.25490904, w: -0.22890407}
       scale: {x: 0.9999999, y: 0.9999997, z: 0.99999994}
     - name: UpperArm.L
       parentName: Shoulder.L
-      position: {x: 0.0000000023014453, y: 0.0028926814, z: -5.313296e-10}
+      position: {x: 0.00000023014454, y: 0.28926814, z: -0.00000005313296}
       rotation: {x: -0.010046419, y: 0.9365496, z: 0.003569376, w: -0.35037294}
       scale: {x: 0.9999999, y: 0.9999998, z: 0.99999994}
     - name: ForeArm.L
       parentName: UpperArm.L
-      position: {x: 7.45243e-10, y: 0.008564047, z: -6.46853e-11}
+      position: {x: 0.0000000745243, y: 0.85640466, z: -0.00000000646853}
       rotation: {x: 0.025166903, y: 0.7007722, z: -0.02475226, w: 0.7125113}
       scale: {x: 1, y: 1, z: 1}
     - name: Hand.L
       parentName: ForeArm.L
-      position: {x: -3.1086244e-16, y: 0.008722463, z: -2.6077032e-10}
+      position: {x: -3.1086245e-14, y: 0.87224627, z: -0.000000026077032}
       rotation: {x: 0.007729839, y: -0.000000062431404, z: -0.0000000039995225, w: 0.99997014}
       scale: {x: 1, y: 1, z: 1}
     - name: Hand.L_end
       parentName: Hand.L
-      position: {x: -0, y: 0.002467668, z: 0}
+      position: {x: -0, y: 0.2467668, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Shoulder.R
       parentName: Torso 1
-      position: {x: 0.0072169355, y: 0.009295068, z: 6.3092453e-10}
+      position: {x: 0.7216936, y: 0.9295068, z: 0.00000006309246}
       rotation: {x: 0.69901115, y: 0.62770027, z: 0.25490913, w: -0.22890414}
       scale: {x: 0.9999999, y: 0.9999997, z: 1}
     - name: UpperArm.R
       parentName: Shoulder.R
-      position: {x: 0.000000002762354, y: 0.0028926819, z: -4.5373857e-10}
+      position: {x: 0.0000002762354, y: 0.2892682, z: -0.00000004537386}
       rotation: {x: 0.010046433, y: 0.9365496, z: 0.0035693757, w: 0.35037294}
       scale: {x: 1, y: 1.0000001, z: 1}
     - name: ForeArm.R
       parentName: UpperArm.R
-      position: {x: -7.4398504e-10, y: 0.008564048, z: 1.5688112e-11}
+      position: {x: -0.00000007439851, y: 0.85640484, z: 0.0000000015688113}
       rotation: {x: 0.025166905, y: -0.7007721, z: 0.024752257, w: 0.71251136}
       scale: {x: 1, y: 1.0000001, z: 1}
     - name: Hand.R
       parentName: ForeArm.R
-      position: {x: -4.6185276e-16, y: 0.008722464, z: -2.6077032e-10}
+      position: {x: -4.6185278e-14, y: 0.8722464, z: -0.000000026077032}
       rotation: {x: 0.007729839, y: 0.000000046582734, z: 0.0000000019682918, w: 0.99997014}
       scale: {x: 1, y: 0.99999994, z: 1}
     - name: Hand.R_end
       parentName: Hand.R
-      position: {x: -0, y: 0.002467668, z: 0}
+      position: {x: -0, y: 0.2467668, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Head 1
       parentName: Torso 1
-      position: {x: -0, y: 0.009813223, z: 0}
+      position: {x: -0, y: 0.9813223, z: 0}
       rotation: {x: 0, y: -0.00000004371139, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Head_end
       parentName: Head 1
-      position: {x: -0, y: 0.004752247, z: 0}
+      position: {x: -0, y: 0.47522473, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
-    - name: Waist.L
-      parentName: Bone
-      position: {x: -0, y: 0, z: 0.016354067}
+    - name: Hips.L
+      parentName: Root
+      position: {x: -0, y: 0, z: 1.6354069}
       rotation: {x: -0.088334836, y: 0.08833476, z: -0.70156753, w: 0.7015675}
       scale: {x: 0.99999994, y: 0.99999994, z: 0.99999994}
     - name: Thigh.L
-      parentName: Waist.L
-      position: {x: -1.4210854e-16, y: 0.0029859685, z: 8.9406965e-10}
+      parentName: Hips.L
+      position: {x: -1.4210855e-14, y: 0.29859686, z: 0.00000008940697}
       rotation: {x: -0.43024853, y: 0.5896558, z: -0.39026427, w: 0.56114703}
       scale: {x: 1, y: 0.9999998, z: 1}
     - name: Calf.L
       parentName: Thigh.L
-      position: {x: -3.8199321e-10, y: 0.0069635217, z: -1.3271347e-10}
+      position: {x: -0.00000003819932, y: 0.6963522, z: -0.000000013271347}
       rotation: {x: 0.06327635, y: 0.00024806234, z: -0.040742576, w: 0.9971641}
       scale: {x: 1, y: 0.99999994, z: 1}
     - name: Foot.L
       parentName: Calf.L
-      position: {x: -5.9162414e-10, y: 0.008442059, z: -1.3659171e-11}
+      position: {x: -0.000000059162414, y: 0.844206, z: -0.0000000013659172}
       rotation: {x: -0.000000053846936, y: -0.6865676, z: 0.727066, w: 0.000000052991528}
       scale: {x: 1, y: 0.9999998, z: 0.99999994}
     - name: Foot.L_end
       parentName: Foot.L
-      position: {x: -0, y: 0.0015050551, z: 0}
+      position: {x: -0, y: 0.15050551, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
-    - name: Waist.R
-      parentName: Bone
-      position: {x: -0, y: 0, z: 0.016354067}
+    - name: Hips.R
+      parentName: Root
+      position: {x: -0, y: 0, z: 1.6354069}
       rotation: {x: -0.088334836, y: -0.08833476, z: 0.70156753, w: 0.7015675}
       scale: {x: 0.99999994, y: 0.99999994, z: 0.99999994}
     - name: Thigh.R
-      parentName: Waist.R
-      position: {x: 1.4210854e-16, y: 0.0029859685, z: 8.9406965e-10}
+      parentName: Hips.R
+      position: {x: 1.4210855e-14, y: 0.29859686, z: 0.00000008940697}
       rotation: {x: -0.43024853, y: -0.5896558, z: 0.39026427, w: 0.56114703}
       scale: {x: 1, y: 0.9999998, z: 1}
     - name: Calf.R
       parentName: Thigh.R
-      position: {x: 3.8199321e-10, y: 0.0069635217, z: -1.3271347e-10}
+      position: {x: 0.00000003819932, y: 0.6963522, z: -0.000000013271347}
       rotation: {x: 0.06327635, y: -0.00024806234, z: 0.040742576, w: 0.9971641}
       scale: {x: 1, y: 0.99999994, z: 1}
     - name: Foot.R
       parentName: Calf.R
-      position: {x: 5.9162414e-10, y: 0.008442059, z: -1.3659171e-11}
+      position: {x: 0.000000059162414, y: 0.844206, z: -0.0000000013659172}
       rotation: {x: 0.000000053846936, y: -0.6865676, z: 0.727066, w: -0.000000052991528}
       scale: {x: 1, y: 0.9999998, z: 0.99999994}
     - name: Foot.R_end
       parentName: Foot.R
-      position: {x: -0, y: 0.0015050551, z: 0}
+      position: {x: -0, y: 0.15050551, z: 0}
       rotation: {x: 0, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Legs
       parentName: KOLOSS(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-      scale: {x: 100, y: 100, z: 100}
+      scale: {x: 1, y: 1, z: 1}
     - name: Cube
       parentName: KOLOSS(Clone)
       position: {x: -0, y: 0, z: 0}
       rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-      scale: {x: 100, y: 100, z: 100}
+      scale: {x: 1, y: 1, z: 1}
     armTwist: 0.5
     foreArmTwist: 0.5
     upperLegTwist: 0.5
