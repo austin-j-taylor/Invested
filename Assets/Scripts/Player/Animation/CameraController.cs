@@ -10,10 +10,13 @@ using UnityEngine.SceneManagement;
 
 public class CameraController : MonoBehaviour {
 
+
     private const float playerLookAtTargetFirstPersonHeight = 1;
     private const float lerpConstantPosition = 5;
     private const float lerpConstantRotation = 15;
     private const float rootConstantScaling = .5f;
+    private const float stretchingRangeMax = 2;
+    private const float stretchingVelocityFactor = -100;
     private static readonly Vector3 cameraControllerOffset = new Vector3(0, 0.25f - .06f, 0);
 
     public static Camera ActiveCamera { get; private set; }
@@ -36,6 +39,7 @@ public class CameraController : MonoBehaviour {
     private static float currentY = 0;
     private static float startX = 0;
     private static float startY = 0;
+    private static float stretchedOut = 0; // if above 0, the camera will "stretch out" further backwards.
     private static bool cameraIsLocked;
 
     private static CloudMaster clouds; // perceives clouds on certain levels
@@ -91,7 +95,7 @@ public class CameraController : MonoBehaviour {
 
         if (externalPositionTarget) {
             // Called when the Camera is being controlled by some other source, i.e. HarmonyTarget
-            if(externalLerpToTarget) {
+            if (externalLerpToTarget) {
                 ActiveCamera.transform.position = Vector3.Lerp(ActiveCamera.transform.position, externalPositionTarget.position, lerpConstantPosition * Time.unscaledDeltaTime);
                 ActiveCamera.transform.rotation = Quaternion.Lerp(ActiveCamera.transform.rotation, Quaternion.LookRotation(externalLookAtTarget.position - ActiveCamera.transform.position, Vector3.up), lerpConstantRotation * Time.unscaledDeltaTime);
             } else {
@@ -155,9 +159,15 @@ public class CameraController : MonoBehaviour {
 
             if (SettingsMenu.settingsData.cameraFirstPerson == 0) { // Third person
 
-                Vector3 wantedPosition = verticalRotation * new Vector3(0, 0, -(ExternalDistance.x == 0 ? SettingsMenu.settingsData.cameraDistance : ExternalDistance.x));
-
-
+                float wantedCameraDistance;
+                if (UsingExternalTarget) {
+                    wantedCameraDistance = ExternalDistance.x;
+                } else {
+                    // If the player is moving quickly, the camera stretches outwards.
+                    stretchedOut = 1 - Mathf.Exp(Player.PlayerIronSteel.rb.velocity.sqrMagnitude / stretchingVelocityFactor);
+                    wantedCameraDistance = (1 + stretchedOut) * SettingsMenu.settingsData.cameraDistance;
+                }
+                Vector3 wantedPosition  = verticalRotation * new Vector3(0, 0, -wantedCameraDistance);
 
                 //// Decide position the camera should try to be at
                 //Vector3 wantedPosition; // local
@@ -174,7 +184,11 @@ public class CameraController : MonoBehaviour {
                 //    Vector3 pos = Vector3.zero;
                 //    pos.y = playerLookAtTargetHeight;
                 playerLookAtTargetReferenceHeight = SettingsMenu.settingsData.cameraDistance / 5;
-                playerLookAtTarget.transform.localPosition = new Vector3(0, (ExternalDistance.x == 0 ? playerLookAtTargetReferenceHeight : ExternalDistance.y), 0);
+                if (UsingExternalTarget) {
+                    playerLookAtTarget.transform.localPosition = new Vector3(0, ExternalDistance.y, 0);
+                } else {
+                    playerLookAtTarget.transform.localPosition = new Vector3(0, playerLookAtTargetReferenceHeight, 0);
+                }
                 if (UpsideDown)
                     playerLookAtTarget.transform.localPosition = -playerLookAtTarget.transform.localPosition;
 
@@ -235,12 +249,12 @@ public class CameraController : MonoBehaviour {
                 // check if the camera is angled such that it would clip into the ceiling
                 for (int i = 0; i < 9; i++) {
                     if (Physics.Raycast(originsPlayer[i], -fromCameraToPlayer, out RaycastHit hit, distanceFromCameraToPlayer, GameManager.Layer_IgnoreCamera)) {
-                        float distance = (hit.point - originsPlayer[i]).magnitude;
+                        float thisDistance = (hit.point - originsPlayer[i]).magnitude;
                         //Debug.DrawLine(originsPlayer[i], hit.point, Color.yellow);
-                        if (distance < smallestDistance) {
+                        if (thisDistance < smallestDistance) {
                             smallestIndex = i;
                             smallestHit = hit;
-                            smallestDistance = distance;
+                            smallestDistance = thisDistance;
                         }
                     }
                 }
