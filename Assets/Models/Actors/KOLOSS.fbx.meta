@@ -2,8 +2,32 @@ fileFormatVersion: 2
 guid: 1f032d533cf3b774a91f894149ec7f91
 ModelImporter:
   serializedVersion: 26
-  internalIDToNameTable: []
-  externalObjects: {}
+  internalIDToNameTable:
+  - first:
+      74: -7356388272829099247
+    second: Armature|Default Take
+  - first:
+      74: -4429111050638222661
+    second: Armature|TorsoAction
+  - first:
+      74: 6222486936928575395
+    second: Armature|Idle_Standing
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Casing
+    second: {fileID: 2100000, guid: 5c22d95f7fef49a459c444310d58d34e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Cloth
+    second: {fileID: 2100000, guid: d8583ea6978824f42a29d0682bf75ffd, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Glow
+    second: {fileID: 2100000, guid: f7070d5b127512f4c9c3a92c33de0176, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -30,7 +54,65 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths: []
     extraUserProperties: []
-    clipAnimations: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Armature|T-Pose
+      takeName: Armature|T-Pose
+      internalID: -7356388272829099247
+      firstFrame: 0
+      lastFrame: 1
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Armature|Idle_Standing
+      takeName: Armature|Idle_Standing
+      internalID: 6222486936928575395
+      firstFrame: 0
+      lastFrame: 179
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
     isReadable: 0
   meshes:
     lODScreenPercentages: []
@@ -73,7 +155,7 @@ ModelImporter:
   humanDescription:
     serializedVersion: 3
     human:
-    - boneName: Root
+    - boneName: Waist
       humanName: Hips
       limit:
         min: {x: 0, y: 0, z: 0}
@@ -215,180 +297,165 @@ ModelImporter:
       position: {x: 0, y: 0, z: 0}
       rotation: {x: 0, y: 0, z: 0, w: 1}
       scale: {x: 1, y: 1, z: 1}
-    - name: Head
+    - name: Armature
       parentName: KOLOSS(Clone)
       position: {x: -0, y: 0, z: 0}
-      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+      rotation: {x: 0.000000021855694, y: -0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
-    - name: Torso
+    - name: Root
+      parentName: Armature
+      position: {x: 2.2416499e-23, y: 0, z: -0.0000000810188}
+      rotation: {x: -0.000000037252832, y: -1.235904e-29, z: 2.842171e-14, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Waist
+      parentName: Root
+      position: {x: 1.01596344e-13, y: 1.7899468, z: 0.00000013336117}
+      rotation: {x: -0.0000000010120047, y: 2.8765176e-23, z: 8.727119e-35, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Thigh.L
+      parentName: Waist
+      position: {x: -0.28455845, y: -0.124167204, z: 0.00000022138691}
+      rotation: {x: 0.99485743, y: 0.0067180563, z: 0.015719077, w: 0.09983267}
+      scale: {x: 1.0000001, y: 1.0000001, z: 0.99999815}
+    - name: Calf.L
+      parentName: Thigh.L
+      position: {x: 0.00000003585592, y: 0.8426546, z: 0.000000055879354}
+      rotation: {x: 0.20241399, y: 0.011552078, z: 0.022239288, w: 0.97897935}
+      scale: {x: 0.9999999, y: 1, z: 0.99999994}
+    - name: Foot.L
+      parentName: Calf.L
+      position: {x: -0.000000007507445, y: 0.80740434, z: 0.0000000023623556}
+      rotation: {x: -0.027484952, y: -0.6334099, z: 0.77323765, w: -0.011833095}
+      scale: {x: 0.99999994, y: 1, z: 0.99999994}
+    - name: Thigh.R
+      parentName: Waist
+      position: {x: 0.2845585, y: -0.12416601, z: 0.000000097463264}
+      rotation: {x: 0.99485743, y: -0.0067194025, z: -0.015718425, w: 0.099832386}
+      scale: {x: 0.99999994, y: 1, z: 1.0000036}
+    - name: Calf.R
+      parentName: Thigh.R
+      position: {x: 0.0000000013969839, y: 0.8426551, z: 0.00000004656613}
+      rotation: {x: 0.20241304, y: -0.011554283, z: -0.02223949, w: 0.9789795}
+      scale: {x: 0.99999994, y: 0.9999998, z: 1}
+    - name: Foot.R
+      parentName: Calf.R
+      position: {x: -0.00000004669352, y: 0.8074042, z: 0.000000006956867}
+      rotation: {x: 0.027483808, y: -0.63341075, z: 0.773237, w: 0.011832369}
+      scale: {x: 1, y: 0.9999997, z: 1}
+    - name: Torso 1
+      parentName: Waist
+      position: {x: 1.8932662e-28, y: 0.09735501, z: 7.1054274e-15}
+      rotation: {x: 0.000000020738856, y: 5.375566e-22, z: -3.0323475e-14, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Head 1
+      parentName: Torso 1
+      position: {x: -1.735494e-29, y: 1.0692524, z: 0}
+      rotation: {x: -0.0000000043297117, y: 9.4322316e-24, z: 8.937573e-16, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Shoulder.L
+      parentName: Torso 1
+      position: {x: -0.72169334, y: 1.0174361, z: -0.0000009504739}
+      rotation: {x: 0.69901, y: -0.6277019, z: -0.25490835, w: -0.22890416}
+      scale: {x: 0.99999994, y: 1.0000001, z: 0.99999994}
+    - name: UpperArm.L
+      parentName: Shoulder.L
+      position: {x: -0.00000025132107, y: 0.28926754, z: 0.00000009774442}
+      rotation: {x: -0.032190196, y: 0.9360563, z: 0.011436797, w: -0.3501879}
+      scale: {x: 1.0000002, y: 0.99999994, z: 1.0000002}
+    - name: ForeArm.L
+      parentName: UpperArm.L
+      position: {x: 0.00000003010937, y: 0.85388505, z: 0.0000000029896796}
+      rotation: {x: 0.014487319, y: 0.7010648, z: -0.014248638, w: 0.7128081}
+      scale: {x: 0.9999998, y: 0.9999996, z: 0.99999976}
+    - name: Hand.L
+      parentName: ForeArm.L
+      position: {x: -0, y: 0.9481286, z: 0.000000112690614}
+      rotation: {x: -0.0007931114, y: -0.00000019122761, z: 0.000000016849183, w: 0.9999997}
+      scale: {x: 0.9999999, y: 0.99999994, z: 1}
+    - name: Shoulder.R
+      parentName: Torso 1
+      position: {x: 0.72169346, y: 1.0174361, z: -0.0000008632654}
+      rotation: {x: 0.6990102, y: 0.6277016, z: 0.2549086, w: -0.2289041}
+      scale: {x: 1, y: 1, z: 0.9999999}
+    - name: UpperArm.R
+      parentName: Shoulder.R
+      position: {x: 0.00000011803655, y: 0.28926793, z: -0.00000013196222}
+      rotation: {x: 0.03219078, y: 0.9360563, z: 0.011437038, w: 0.35018793}
+      scale: {x: 1, y: 1.0000001, z: 1}
+    - name: ForeArm.R
+      parentName: UpperArm.R
+      position: {x: -0.000000013031925, y: 0.8538856, z: 0.000000005454865}
+      rotation: {x: 0.014487205, y: -0.7010648, z: 0.014248524, w: 0.7128081}
+      scale: {x: 0.99999994, y: 1.0000001, z: 1.0000002}
+    - name: Hand.R
+      parentName: ForeArm.R
+      position: {x: -2.842171e-14, y: 0.94812876, z: -0.0000003399323}
+      rotation: {x: -0.0007932398, y: 0.00000025649868, z: -0.000000019540966, w: 0.9999997}
+      scale: {x: 0.99999994, y: 0.99999994, z: 0.9999999}
+    - name: Armpit
       parentName: KOLOSS(Clone)
       position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Arms
+      parentName: KOLOSS(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.00000008146034, y: 0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Belt
+      parentName: KOLOSS(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: EyebrowLower
+      parentName: KOLOSS(Clone)
+      position: {x: -0.12471323, y: 3.3461478, z: 0.18909381}
+      rotation: {x: -0.7065318, y: 0.028508969, z: -0.028508972, w: 0.7065319}
+      scale: {x: 1, y: 1, z: 1}
+    - name: EyebrowUpper
+      parentName: KOLOSS(Clone)
+      position: {x: -0.12471323, y: 3.1852424, z: 0.18909381}
       rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
       scale: {x: 1, y: 1, z: 1}
     - name: Face
       parentName: KOLOSS(Clone)
       position: {x: -0, y: 0, z: 0}
-      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+      rotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
-    - name: Pauldrons
+    - name: Hands
       parentName: KOLOSS(Clone)
       position: {x: -0, y: 0, z: 0}
-      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+      rotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
-    - name: Arms
+    - name: Head
       parentName: KOLOSS(Clone)
       position: {x: -0, y: 0, z: 0}
-      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+      rotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
-    - name: Armpit
+    - name: Joint
       parentName: KOLOSS(Clone)
-      position: {x: -0, y: 0, z: 0}
-      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-      scale: {x: 1, y: 1, z: 1}
-    - name: Belt
-      parentName: KOLOSS(Clone)
-      position: {x: -0, y: 0, z: 0}
-      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-      scale: {x: 1, y: 1, z: 1}
-    - name: Skirt
-      parentName: KOLOSS(Clone)
-      position: {x: -0, y: 0, z: 0}
-      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-      scale: {x: 1, y: 1, z: 1}
-    - name: Armature
-      parentName: KOLOSS(Clone)
-      position: {x: -0, y: 0, z: 0}
-      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
-      scale: {x: 1, y: 1, z: 1}
-    - name: Root
-      parentName: Armature
-      position: {x: -0, y: 0, z: 0}
-      rotation: {x: 0, y: 0, z: 1, w: 0.00000004371139}
-      scale: {x: 1, y: 1, z: 1}
-    - name: Torso 1
-      parentName: Root
-      position: {x: -0, y: 0, z: 1.8262329}
-      rotation: {x: -0.00000005338508, y: 0.7071068, z: 0.7071067, w: -0.000000053385072}
-      scale: {x: 1, y: 1, z: 1}
-    - name: Shoulder.L
-      parentName: Torso 1
-      position: {x: -0.7216936, y: 0.9295068, z: -0.00000006309246}
-      rotation: {x: 0.69901127, y: -0.6277002, z: -0.25490904, w: -0.22890407}
-      scale: {x: 0.9999999, y: 0.9999997, z: 0.99999994}
-    - name: UpperArm.L
-      parentName: Shoulder.L
-      position: {x: 0.00000023014454, y: 0.28926814, z: -0.00000005313296}
-      rotation: {x: -0.010046419, y: 0.9365496, z: 0.003569376, w: -0.35037294}
-      scale: {x: 0.9999999, y: 0.9999998, z: 0.99999994}
-    - name: ForeArm.L
-      parentName: UpperArm.L
-      position: {x: 0.0000000745243, y: 0.85640466, z: -0.00000000646853}
-      rotation: {x: 0.025166903, y: 0.7007722, z: -0.02475226, w: 0.7125113}
-      scale: {x: 1, y: 1, z: 1}
-    - name: Hand.L
-      parentName: ForeArm.L
-      position: {x: -3.1086245e-14, y: 0.87224627, z: -0.000000026077032}
-      rotation: {x: 0.007729839, y: -0.000000062431404, z: -0.0000000039995225, w: 0.99997014}
-      scale: {x: 1, y: 1, z: 1}
-    - name: Hand.L_end
-      parentName: Hand.L
-      position: {x: -0, y: 0.2467668, z: 0}
-      rotation: {x: 0, y: -0, z: -0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
-    - name: Shoulder.R
-      parentName: Torso 1
-      position: {x: 0.7216936, y: 0.9295068, z: 0.00000006309246}
-      rotation: {x: 0.69901115, y: 0.62770027, z: 0.25490913, w: -0.22890414}
-      scale: {x: 0.9999999, y: 0.9999997, z: 1}
-    - name: UpperArm.R
-      parentName: Shoulder.R
-      position: {x: 0.0000002762354, y: 0.2892682, z: -0.00000004537386}
-      rotation: {x: 0.010046433, y: 0.9365496, z: 0.0035693757, w: 0.35037294}
-      scale: {x: 1, y: 1.0000001, z: 1}
-    - name: ForeArm.R
-      parentName: UpperArm.R
-      position: {x: -0.00000007439851, y: 0.85640484, z: 0.0000000015688113}
-      rotation: {x: 0.025166905, y: -0.7007721, z: 0.024752257, w: 0.71251136}
-      scale: {x: 1, y: 1.0000001, z: 1}
-    - name: Hand.R
-      parentName: ForeArm.R
-      position: {x: -4.6185278e-14, y: 0.8722464, z: -0.000000026077032}
-      rotation: {x: 0.007729839, y: 0.000000046582734, z: 0.0000000019682918, w: 0.99997014}
-      scale: {x: 1, y: 0.99999994, z: 1}
-    - name: Hand.R_end
-      parentName: Hand.R
-      position: {x: -0, y: 0.2467668, z: 0}
-      rotation: {x: 0, y: -0, z: -0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
-    - name: Head 1
-      parentName: Torso 1
-      position: {x: -0, y: 0.9813223, z: 0}
-      rotation: {x: 0, y: -0.00000004371139, z: -0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
-    - name: Head_end
-      parentName: Head 1
-      position: {x: -0, y: 0.47522473, z: 0}
-      rotation: {x: 0, y: -0, z: -0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
-    - name: Hips.L
-      parentName: Root
-      position: {x: -0, y: 0, z: 1.6354069}
-      rotation: {x: -0.088334836, y: 0.08833476, z: -0.70156753, w: 0.7015675}
-      scale: {x: 0.99999994, y: 0.99999994, z: 0.99999994}
-    - name: Thigh.L
-      parentName: Hips.L
-      position: {x: -1.4210855e-14, y: 0.29859686, z: 0.00000008940697}
-      rotation: {x: -0.43024853, y: 0.5896558, z: -0.39026427, w: 0.56114703}
-      scale: {x: 1, y: 0.9999998, z: 1}
-    - name: Calf.L
-      parentName: Thigh.L
-      position: {x: -0.00000003819932, y: 0.6963522, z: -0.000000013271347}
-      rotation: {x: 0.06327635, y: 0.00024806234, z: -0.040742576, w: 0.9971641}
-      scale: {x: 1, y: 0.99999994, z: 1}
-    - name: Foot.L
-      parentName: Calf.L
-      position: {x: -0.000000059162414, y: 0.844206, z: -0.0000000013659172}
-      rotation: {x: -0.000000053846936, y: -0.6865676, z: 0.727066, w: 0.000000052991528}
-      scale: {x: 1, y: 0.9999998, z: 0.99999994}
-    - name: Foot.L_end
-      parentName: Foot.L
-      position: {x: -0, y: 0.15050551, z: 0}
-      rotation: {x: 0, y: -0, z: -0, w: 1}
-      scale: {x: 1, y: 1, z: 1}
-    - name: Hips.R
-      parentName: Root
-      position: {x: -0, y: 0, z: 1.6354069}
-      rotation: {x: -0.088334836, y: -0.08833476, z: 0.70156753, w: 0.7015675}
-      scale: {x: 0.99999994, y: 0.99999994, z: 0.99999994}
-    - name: Thigh.R
-      parentName: Hips.R
-      position: {x: 1.4210855e-14, y: 0.29859686, z: 0.00000008940697}
-      rotation: {x: -0.43024853, y: -0.5896558, z: 0.39026427, w: 0.56114703}
-      scale: {x: 1, y: 0.9999998, z: 1}
-    - name: Calf.R
-      parentName: Thigh.R
-      position: {x: 0.00000003819932, y: 0.6963522, z: -0.000000013271347}
-      rotation: {x: 0.06327635, y: -0.00024806234, z: 0.040742576, w: 0.9971641}
-      scale: {x: 1, y: 0.99999994, z: 1}
-    - name: Foot.R
-      parentName: Calf.R
-      position: {x: 0.000000059162414, y: 0.844206, z: -0.0000000013659172}
-      rotation: {x: 0.000000053846936, y: -0.6865676, z: 0.727066, w: -0.000000052991528}
-      scale: {x: 1, y: 0.9999998, z: 0.99999994}
-    - name: Foot.R_end
-      parentName: Foot.R
-      position: {x: -0, y: 0.15050551, z: 0}
-      rotation: {x: 0, y: -0, z: -0, w: 1}
+      position: {x: -0, y: 0.149, z: 0}
+      rotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     - name: Legs
       parentName: KOLOSS(Clone)
       position: {x: -0, y: 0, z: 0}
-      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+      rotation: {x: 0.00000008146034, y: 0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
-    - name: Cube
+    - name: Pauldrons
+      parentName: KOLOSS(Clone)
+      position: {x: -0.030373298, y: 0.002434808, z: -0.018784996}
+      rotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Skirt
       parentName: KOLOSS(Clone)
       position: {x: -0, y: 0, z: 0}
-      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+      rotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Torso
+      parentName: KOLOSS(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.000000021855694, y: 0, z: -0, w: 1}
       scale: {x: 1, y: 1, z: 1}
     armTwist: 0.5
     foreArmTwist: 0.5
