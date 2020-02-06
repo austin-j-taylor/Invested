@@ -82,6 +82,20 @@ public class Simulation_coinGround : Simulation {
         texts[texts.Length - 1].text = "Coin mass: " + coinTop.MagneticMass + "kg";
     }
 
+    protected override void Update() {
+        // Lower the timescale until the coin hits the ground
+        if (coinTop.transform.position.y - groundHeight - .125f > .01f) {
+            desiredTimeScale = .05f;
+            Debug.Log("setting to .05");
+        } else {
+            desiredTimeScale = SettingsMenu.settingsData.timeScale;
+        }
+
+        base.Update();
+
+        texts[texts.Length - 3].text = "Time scale: " + HUD.RoundStringToSigFigs(Time.timeScale);
+    }
+
     private void FixedUpdate() {
         if (allomancerTop && !PauseMenu.IsPaused) {
 
@@ -97,15 +111,6 @@ public class Simulation_coinGround : Simulation {
             } else {
                 counter += Time.deltaTime / Time.timeScale;
             }
-
-            // Lower the timescale until the coin hits the ground
-            if (coinTop.transform.position.y - groundHeight - .125f > .01f) {
-                TimeController.CurrentTimeScale = .05f;
-            } else {
-                TimeController.CurrentTimeScale = SettingsMenu.settingsData.timeScale;
-            }
-            texts[texts.Length - 3].text = "Time scale: " + HUD.RoundStringToSigFigs(Time.timeScale);
-
 
 
             float threshold = 0;

@@ -40,7 +40,8 @@ public class Simulation_duel : Simulation {
         allomancers[9].Strength = 1.5f;
     }
 
-    private void Update() {
+    protected override void Update() {
+        base.Update();
         if (allomancers != null) {
             for (int i = 0; i < 10; i++) {
                 string str = "";

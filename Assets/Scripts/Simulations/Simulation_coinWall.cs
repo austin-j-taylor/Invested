@@ -39,20 +39,8 @@ public class Simulation_coinWall : Simulation {
         texts[texts.Length - 6].text = "Coin: " + TextCodes.Gray("Unanchored");
         texts[texts.Length - 5].text = "Wall: " + TextCodes.LightBlue("Anchored");
 
-        if (SettingsMenu.settingsData.anchoredBoost == 1) {
-            texts[texts.Length - 4].text = "Allomantic Normal Force";
-            //Time.timeScale = 1f;
-        } else if (SettingsMenu.settingsData.anchoredBoost == 2) {
-            texts[texts.Length - 4].text = "Exponential w/ Velocity factor";
-            //Time.timeScale = 1f;
-        } else {
-            texts[texts.Length - 4].text = "Distributed Power";
-            //Time.timeScale = .2f;
-        }
-        // This is what messes up the DP's energy distribution
-        //Time.fixedDeltaTime = Time.timeScale * 1 / 60f;
 
-        if(SettingsMenu.settingsData.forceDistanceRelationship == 0) {
+        if (SettingsMenu.settingsData.forceDistanceRelationship == 0) {
             texts[texts.Length - 9].text = "Linear Distance Relationship";
         } else if(SettingsMenu.settingsData.forceDistanceRelationship == 1) {
             texts[texts.Length - 9].text = "Inverse Square Distance Relationship";
@@ -191,5 +179,23 @@ public class Simulation_coinWall : Simulation {
                     texts[15].text = TextCodes.Red(HUD.RoundStringToSigFigs(alloEnergy + coinEnergy));
             }
         }
+    }
+    protected override void Update() {
+        if (SettingsMenu.settingsData.anchoredBoost == 1) {
+            texts[texts.Length - 4].text = "Allomantic Normal Force";
+            //desiredTimeScale = 1;
+        } else if (SettingsMenu.settingsData.anchoredBoost == 2) {
+            texts[texts.Length - 4].text = "Exponential w/ Velocity factor";
+            //desiredTimeScale = 1;
+        } else {
+            texts[texts.Length - 4].text = "Distributed Power";
+            //desiredTimeScale = .2f;
+        }
+        // This is what messes up the DP's energy distribution
+        //Time.fixedDeltaTime = Time.timeScale * 1 / 60f;
+
+        base.Update();
+
+        texts[texts.Length - 3].text = "Time scale: " + HUD.RoundStringToSigFigs(Time.timeScale);
     }
 }
