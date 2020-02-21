@@ -22,6 +22,12 @@ public class Magnetic : MonoBehaviour {
     protected float netMass = 0;
     [SerializeField]
     private float magneticMass = 0;
+
+    // This only matters if this Magnetic is static (no rigidbody).
+    // If true, on startup, find the center of mass by the collider's positions.
+    // If false, find the center of pass by the gameobject's position.
+    [SerializeField]
+    private bool calculateCOMFromColliders = false;
     //// Assigned in the editor. Marks children that should also glow when this target is highlighted.
     ////[SerializeField]
     //private Renderer[] childMagnetics;
@@ -236,17 +242,20 @@ public class Magnetic : MonoBehaviour {
                 magneticMass = netMass;
             }
             if (HasColliders) {
-                //Vector3 centers = colliders[0].bounds.center;
-                //int triggerCount = 0;
-                //for (int i = 1; i < colliders.Length; i++) {
-                //    if (!colliders[i].isTrigger)
-                //        centers += colliders[i].bounds.center;
-                //    else
-                //        triggerCount++;
-                //}
-                //centerOfMass = transform.InverseTransformPoint(centers / (colliders.Length - triggerCount));
-                //centerOfMass = transform.InverseTransformPoint(GetComponentInChildren<Renderer>().bounds.center);
-                centerOfMass = Vector3.zero;
+                if(calculateCOMFromColliders) {
+                    Vector3 centers = colliders[0].bounds.center;
+                    int triggerCount = 0;
+                    for (int i = 1; i < colliders.Length; i++) {
+                        if (!colliders[i].isTrigger)
+                            centers += colliders[i].bounds.center;
+                        else
+                            triggerCount++;
+                    }
+                    centerOfMass = transform.InverseTransformPoint(centers / (colliders.Length - triggerCount));
+                    centerOfMass = transform.InverseTransformPoint(GetComponentInChildren<Renderer>().bounds.center);
+                } else {
+                    centerOfMass = Vector3.zero;
+                }
             }
         } else { // RigidBody attached, which has its own mass, which replaces netMass
             netMass = Rb.mass;

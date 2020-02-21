@@ -513,7 +513,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
             if (target.isActiveAndEnabled && target != Player.PlayerMagnetic) {
 
                 // skip this target completely if it is too far away
-                if ((target.transform.position - transform.position).sqrMagnitude > distanceThresholdSqr) {
+                if ((target.CenterOfMass - transform.position).sqrMagnitude > distanceThresholdSqr) {
                     target.DisableBlueLine();
                     count++;
                 } else {
@@ -588,7 +588,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
             return -1;
         }
         // Set line properties
-        Vector3 screenPosition = CameraController.ActiveCamera.WorldToViewportPoint(target.transform.position);
+        Vector3 screenPosition = CameraController.ActiveCamera.WorldToViewportPoint(target.CenterOfMass);
         // make the center be 0
         screenPosition.x -= .5f;
         screenPosition.y -= .5f;
@@ -601,7 +601,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
             (screenPosition.x) * (screenPosition.x) +
             (screenPosition.y) * (screenPosition.y)
         );
-        linearDistance = (transform.position - target.transform.position).magnitude;
+        linearDistance = (transform.position - target.CenterOfMass).magnitude;
 
         float weight;
         if (screenPosition.z < 0) { // the target is behind the player, off-screen
