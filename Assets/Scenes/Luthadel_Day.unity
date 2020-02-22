@@ -51752,8 +51752,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1230604921}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 236, z: 0}
-  m_LocalScale: {x: 10000, y: 1000, z: 10000}
+  m_LocalPosition: {x: 0, y: 300, z: 0}
+  m_LocalScale: {x: 5000, y: 200, z: 5000}
   m_Children: []
   m_Father: {fileID: 1331973712}
   m_RootOrder: 0
@@ -56200,12 +56200,12 @@ MonoBehaviour:
   rayOffsetStrength: 9.19
   blueNoise: {fileID: 2800000, guid: 6d82457f96ba8449597922c106f17caa, type: 3}
   cloudScale: 1
-  densityMultiplier: 3.72
-  densityOffset: -2.99
+  densityMultiplier: 5.3
+  densityOffset: -1.44
   shapeOffset: {x: 0, y: 0, z: 1.11}
   heightOffset: {x: 0, y: 0}
   shapeNoiseWeights: {x: 3.48, y: 1.71, z: 2.99, w: 1.31}
-  detailNoiseScale: 1
+  detailNoiseScale: -0.4
   detailNoiseWeight: 1.5
   detailNoiseWeights: {x: 0.32, y: 0.6, z: 0.4}
   detailOffset: {x: 0, y: 0, z: 0}
@@ -56216,13 +56216,13 @@ MonoBehaviour:
   backScattering: 0.33
   baseBrightness: 0.332
   phaseFactor: 0.83
-  timeScale: 1
+  timeScale: 0.3
   baseSpeed: 1
   detailSpeed: 1.69
   colFog: {r: 0.14150941, g: 0.048727296, b: 0.048727296, a: 1}
   colClouds: {r: 0.028301895, g: 0.0011792456, b: 0, a: 1}
   colSun: {r: 1, g: 0.009412543, b: 0, a: 1}
-  material: {fileID: 1719130220}
+  material: {fileID: 0}
 --- !u!1 &1334334123
 GameObject:
   m_ObjectHideFlags: 0
@@ -71814,31 +71814,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1718981509}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!21 &1719130220
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Hidden/CloudSky
-  m_Shader: {fileID: 4800000, guid: b63adce98e96243ecab49118e161e630, type: 3}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats: []
-    m_Colors: []
 --- !u!1 &1722115850
 GameObject:
   m_ObjectHideFlags: 0

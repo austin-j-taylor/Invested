@@ -30,12 +30,12 @@ public class ConsoleController : MonoBehaviour {
         consoleTextRight = headerTextRight.transform.Find("ConsoleTextRight").GetComponentInChildren<Text>();
         anim = GetComponent<Animator>();
     }
-    private void Update() {
-        if (Input.GetKey(KeyCode.R))
-            Open();
-        else
-            Close();
-    }
+    //private void Update() {
+    //    if (Input.GetKey(KeyCode.R))
+    //        Open();
+    //    else
+    //        Close();
+    //}
     public void Clear() {
         Close();
     }
