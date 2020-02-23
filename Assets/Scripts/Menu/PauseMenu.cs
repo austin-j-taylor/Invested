@@ -11,6 +11,7 @@ public class PauseMenu : MonoBehaviour {
     private static SettingsMenu settingsMenu;
 
     private static Transform buttonsHeader;
+    private static Transform titleText;
     private Button unpauseButton;
     private Button settingsButton;
     private Button resetButton;
@@ -25,6 +26,7 @@ public class PauseMenu : MonoBehaviour {
         settingsMenu = transform.parent.GetComponentInChildren<SettingsMenu>();
 
         buttonsHeader = transform.Find("Header");
+        titleText = transform.Find("TitleText");
         Button[] buttons = buttonsHeader.GetComponentsInChildren<Button>();
         unpauseButton = buttons[0];
         settingsButton = buttons[1];
@@ -52,11 +54,13 @@ public class PauseMenu : MonoBehaviour {
 
     public static void Open() {
         buttonsHeader.gameObject.SetActive(true);
+        titleText.gameObject.SetActive(true);
         MainMenu.FocusOnButton(instance.unpauseButton);
     }
 
     public static void Close() {
         buttonsHeader.gameObject.SetActive(false);
+        titleText.gameObject.SetActive(false);
     }
 
     public static void Pause() {

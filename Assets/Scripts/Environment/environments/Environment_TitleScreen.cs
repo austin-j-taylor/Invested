@@ -5,11 +5,11 @@ using UnityEngine.SceneManagement;
 public class Environment_TitleScreen : MonoBehaviour {
 
     [SerializeField]
-    private float speed = 1;
+    private float speed = .1f;
     [SerializeField]
-    private float speedVert = 1;
+    private float speedVert = .1f;
     [SerializeField]
-    private float speedAmp = 1;
+    private float speedAmp = 2;
 
     private Transform cameraPositionTarget;
 

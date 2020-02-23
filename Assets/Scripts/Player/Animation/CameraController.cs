@@ -163,9 +163,12 @@ public class CameraController : MonoBehaviour {
                 if (UsingExternalTarget) {
                     wantedCameraDistance = ExternalDistance.x;
                 } else {
+                    /*
                     // If the player is moving quickly, the camera stretches outwards.
                     stretchedOut = 1 - Mathf.Exp(Player.PlayerIronSteel.rb.velocity.sqrMagnitude / stretchingVelocityFactor);
                     wantedCameraDistance = (1 + stretchedOut) * SettingsMenu.settingsData.cameraDistance;
+                    */
+                    wantedCameraDistance = SettingsMenu.settingsData.cameraDistance;
                 }
                 Vector3 wantedPosition  = verticalRotation * new Vector3(0, 0, -wantedCameraDistance);
 
