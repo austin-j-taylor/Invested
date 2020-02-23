@@ -140,6 +140,11 @@ public class AllomanticIronSteel : Allomancer {
     private bool lastWasPushing = false;
     public bool IronPulling { get; set; }
     public bool SteelPushing { get; set; }
+    public bool PushingOrPulling {
+        get {
+            return IronPulling || SteelPushing;
+        }
+    }
     // Bubble control
     public bool BubbleIsOpen { get; private set; } // true when the bubble is open at all
     public bool BubbleMetalStatus { get; protected set;  } // true for iron, false for steel
