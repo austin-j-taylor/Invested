@@ -142,7 +142,7 @@ public class AllomanticIronSteel : Allomancer {
     public bool SteelPushing { get; set; }
     public bool PushingOrPulling {
         get {
-            return IronPulling || SteelPushing;
+            return IronPulling || SteelPushing || BubbleIsOpen;
         }
     }
     // Bubble control
