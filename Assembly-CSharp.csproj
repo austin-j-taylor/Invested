@@ -220,7 +220,9 @@
     <Compile Include="Assets\Scripts\Allomancy\NonPlayerPushPullController.cs" />
     <Compile Include="Assets\Scripts\Allomancy\TargetArray.cs" />
     <Compile Include="Assets\Scripts\Environment\Environments\Environment_SeaOfMetal.cs" />
+    <Compile Include="Assets\Scripts\Environment\Environments\IlluminatingStorms\Environment_IlluminatingStorms.cs" />
     <Compile Include="Assets\Scripts\Environment\Environments\Environment_TitleScreen.cs" />
+    <Compile Include="Assets\Scripts\Global\AudioManager.cs" />
     <Compile Include="Assets\Scripts\Player\PlayerAudioController.cs" />
     <Compile Include="Assets\Scripts\Simulations\PhysicsInEditor.cs" />
     <Compile Include="Assets\Scripts\Entities\Entity.cs" />
@@ -259,10 +261,10 @@
     <Compile Include="Assets\Scripts\Environment\SpikeSpline.cs" />
     <Compile Include="Assets\Scripts\Environment\SpikeSplineFollower.cs" />
     <Compile Include="Assets\Scripts\Feruchemy\FeruchemicalZinc.cs" />
-    <Compile Include="Assets\Scripts\GameManager.cs" />
-    <Compile Include="Assets\Scripts\GamepadController.cs" />
-    <Compile Include="Assets\Scripts\GraphicsController.cs" />
-    <Compile Include="Assets\Scripts\Keybinds.cs" />
+    <Compile Include="Assets\Scripts\Global\GameManager.cs" />
+    <Compile Include="Assets\Scripts\Global\GamepadController.cs" />
+    <Compile Include="Assets\Scripts\Global\GraphicsController.cs" />
+    <Compile Include="Assets\Scripts\Global\Keybinds.cs" />
     <Compile Include="Assets\Scripts\Magnetics\Coin.cs" />
     <Compile Include="Assets\Scripts\Magnetics\Magnetic.cs" />
     <Compile Include="Assets\Scripts\Magnetics\MagneticDense.cs" />
@@ -294,7 +296,7 @@
     <Compile Include="Assets\Scripts\Simulations\Simulation_coinGround.cs" />
     <Compile Include="Assets\Scripts\Simulations\Simulation_coinWall.cs" />
     <Compile Include="Assets\Scripts\Simulations\Simulation_duel.cs" />
-    <Compile Include="Assets\Scripts\TimeController.cs" />
+    <Compile Include="Assets\Scripts\Global\TimeController.cs" />
     <Compile Include="Assets\Scripts\UI\BurnPercentageMeter.cs" />
     <Compile Include="Assets\Scripts\UI\ConsoleController.cs" />
     <Compile Include="Assets\Scripts\UI\ControlWheelController.cs" />
