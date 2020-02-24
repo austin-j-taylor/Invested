@@ -170,7 +170,7 @@ public class CameraController : MonoBehaviour {
                     */
                     wantedCameraDistance = SettingsMenu.settingsData.cameraDistance;
                 }
-                Vector3 wantedPosition  = verticalRotation * new Vector3(0, 0, -wantedCameraDistance);
+                Vector3 wantedPosition = verticalRotation * new Vector3(0, 0, -wantedCameraDistance);
 
                 //// Decide position the camera should try to be at
                 //Vector3 wantedPosition; // local

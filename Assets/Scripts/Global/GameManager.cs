@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour {
         AudioManager = transform.Find("AudioManager").GetComponent<AudioManager>();
         GraphicsController = GetComponent<GraphicsController>();
         MetalLinesTransform = transform.Find("MetalLines");
-        
+
         Material_MARLmetal_unlit = Resources.Load<Material>("Materials/MARLmetal_unlit");
         Material_MARLmetal_lit = Resources.Load<Material>("Materials/MARLmetal_lit");
         Font_Heebo = Resources.Load<Font>("Fonts/Heebo-Medium");
@@ -77,7 +77,7 @@ public class GameManager : MonoBehaviour {
     }
 
     public static void AddMagnetic(Magnetic magnetic) {
-        if(MagneticsInScene != null)
+        if (MagneticsInScene != null)
             MagneticsInScene.Add(magnetic);
     }
 

@@ -51,7 +51,7 @@ public class Player : PewterEntity {
         }
         set {
             canControl = value;
-            if(!value) {
+            if (!value) {
                 PlayerIronSteel.StopBurning();
             }
         }
@@ -186,7 +186,7 @@ public class Player : PewterEntity {
             if (spawn && CameraController.ActiveCamera) { // if CameraController.Awake has been called
                 transform.position = spawn.transform.position;
                 //transform.rotation = spawn.transform.rotation;
-                if(scene.buildIndex != SceneSelectMenu.sceneMain) {
+                if (scene.buildIndex != SceneSelectMenu.sceneMain) {
                     CameraController.Clear();
                     CameraController.SetRotation(spawn.transform.eulerAngles);
                 }

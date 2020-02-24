@@ -59,8 +59,8 @@ public class AllomanticPewter : Allomancer {
         particleSystem = transform.parent.GetComponentInChildren<ParticleSystem>();
         GameManager.AddAllomancer(this);
         // find the shields' glowy material
-        for(int i = 0; i < shieldRenderer.materials.Length; i++) {
-            if(shieldRenderer.materials[i].name.Equals("PewterShock (Instance)")) {
+        for (int i = 0; i < shieldRenderer.materials.Length; i++) {
+            if (shieldRenderer.materials[i].name.Equals("PewterShock (Instance)")) {
                 shieldMaterial = shieldRenderer.materials[i];
             }
         }
@@ -76,9 +76,9 @@ public class AllomanticPewter : Allomancer {
     }
 
     protected virtual void FixedUpdate() {
-        if(PewterReserve.IsBurnedOut) {
+        if (PewterReserve.IsBurnedOut) {
             PewterReserve.Mass += gramsPewterPerSecondRefill * Time.fixedDeltaTime;
-            if(PewterReserve.Mass >= PewterReserve.Capacity) {
+            if (PewterReserve.Mass >= PewterReserve.Capacity) {
                 PewterReserve.IsBurnedOut = false;
             }
         } else {

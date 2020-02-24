@@ -35,13 +35,13 @@ public class PlayerMovementController : AllomanticPewter {
     private const float dotFactor = 10;
     // Air resistance
     [SerializeField]
-    private  float dragAirborneLinear = .2f;
+    private float dragAirborneLinear = .2f;
     [SerializeField]
-    private  float dragGroundedLinear = 3f;
+    private float dragGroundedLinear = 3f;
     [SerializeField]
-    private  float dragAirborneAngular = 1.5f;
+    private float dragAirborneAngular = 1.5f;
     [SerializeField]
-    private  float dragGroundedAngular = 3f;
+    private float dragGroundedAngular = 3f;
     [SerializeField]
     private const float dragNoControl = 10f;
 
@@ -90,40 +90,40 @@ public class PlayerMovementController : AllomanticPewter {
     private void Update() {
         if (Player.CanControl && Player.CanControlMovement) {
             // walking/rolling/sprinting state machine
-            if(IsWalking) {
+            if (IsWalking) {
                 // was walking
-                if(Keybinds.Sprint() && PewterReserve.HasMass) {
+                if (Keybinds.Sprint() && PewterReserve.HasMass) {
                     // start sprinting
                     IsSprinting = true;
                     IsWalking = false;
                     rb.inertiaTensor = new Vector3(momentOfInertiaMagnitude, momentOfInertiaMagnitude, momentOfInertiaMagnitude);
                     Player.PlayerFlywheelController.Retract();
-                } else if(!Keybinds.Walk()) {
+                } else if (!Keybinds.Walk()) {
                     // stop rolling
                     IsWalking = false;
                     rb.inertiaTensor = new Vector3(momentOfInertiaMagnitude, momentOfInertiaMagnitude, momentOfInertiaMagnitude);
                     Player.PlayerFlywheelController.Retract();
                 } // continue walking
-            } else if(IsSprinting) {
+            } else if (IsSprinting) {
                 // was sprinting
-                if(!Keybinds.Sprint() || !PewterReserve.HasMass) {
+                if (!Keybinds.Sprint() || !PewterReserve.HasMass) {
                     // start rolling
                     IsSprinting = false;
                 } // continue sprinting
             } else {
                 // was rolling
-                if(Keybinds.Sprint() && PewterReserve.HasMass) {
+                if (Keybinds.Sprint() && PewterReserve.HasMass) {
                     // start sprinting
                     IsSprinting = true;
 
-                } else if(Keybinds.Walk()) {
+                } else if (Keybinds.Walk()) {
                     // start walking
                     rb.inertiaTensor = new Vector3(momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking);
                     Player.PlayerFlywheelController.Extend();
                     IsWalking = true;
                 } // continue rolling
             }
-            
+
             // Check if jumping
             if (IsGrounded && Keybinds.JumpDown()) {
                 // Queue a jump for the next FixedUpdate
