@@ -166,7 +166,7 @@ public class PlayerMovementController : AllomanticPewter {
             Vector3 to = transform.position - targetPosition;
             //Debug.DrawRay(transform.position, to, Color.yellow);
             float angle = Vector3.Angle(from, to) / TimeController.CurrentTimeScale;
-            Debug.Log(Player.PlayerIronSteel.LastNetForceOnAllomancer);
+            //Debug.Log(Player.PlayerIronSteel.LastNetForceOnAllomancer);
             //Debug.Log(angle);
 
             Vector3 torqueDirection = Vector3.Cross(from, to).normalized;

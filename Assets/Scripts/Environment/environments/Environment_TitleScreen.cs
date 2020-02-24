@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-public class Environment_TitleScreen : MonoBehaviour {
+public class Environment_TitleScreen : Environment {
 
     [SerializeField]
     private float speed = .1f;
@@ -15,6 +15,7 @@ public class Environment_TitleScreen : MonoBehaviour {
 
     // Use this for initialization
     void Start() {
+
         HUD.DisableHUD();
         TimeController.CurrentTimeScale = 0;
         cameraPositionTarget = transform.Find("cameraTarget");

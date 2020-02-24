@@ -18,6 +18,7 @@ public class Player : PewterEntity {
 
     // Player components that need to be referenced elsewhere
     public static Player PlayerInstance { get; private set; }
+    public static PlayerAudioController PlayerAudioController { get; private set; }
     public static PlayerPullPushController PlayerIronSteel { get; private set; }
     public static AllomanticPewter PlayerPewter { get; private set; }
     public static PlayerFlywheelController PlayerFlywheelController { get; private set; }
@@ -90,6 +91,7 @@ public class Player : PewterEntity {
             }
         }
         PlayerInstance = this;
+        PlayerAudioController = CameraController.ActiveCamera.GetComponentInChildren<PlayerAudioController>();
         PlayerIronSteel = GetComponentInChildren<PlayerPullPushController>();
         PlayerPewter = GetComponentInChildren<AllomanticPewter>();
         PlayerFlywheelController = GetComponentInChildren<PlayerFlywheelController>();
@@ -172,6 +174,7 @@ public class Player : PewterEntity {
     // TODO Clear flags upon entering first level
     private void ClearPlayerAfterSceneChange(Scene scene, LoadSceneMode mode) {
         if (mode == LoadSceneMode.Single) { // Not loading all of the scenes, as it does at startup
+            PlayerAudioController.Clear();
             PlayerIronSteel.Clear();
             SetFrameMaterial(frameMaterial);
             CanControl = true;
