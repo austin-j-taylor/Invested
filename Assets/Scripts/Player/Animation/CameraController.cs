@@ -39,7 +39,7 @@ public class CameraController : MonoBehaviour {
     private static float currentY = 0;
     private static float startX = 0;
     private static float startY = 0;
-    private static float stretchedOut = 0; // if above 0, the camera will "stretch out" further backwards.
+    //private static float stretchedOut = 0; // if above 0, the camera will "stretch out" further backwards.
     private static bool cameraIsLocked;
 
     private static CloudMaster clouds; // perceives clouds on certain levels

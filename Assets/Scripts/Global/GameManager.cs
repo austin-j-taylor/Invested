@@ -11,6 +11,7 @@ using VolumetricLines;
 public class GameManager : MonoBehaviour {
 
     // Sub-controllers, transforms
+    public static AudioManager AudioManager { get; private set; }
     public static GraphicsController GraphicsController { get; private set; }
     public static Transform MetalLinesTransform { get; private set; }
 
@@ -35,6 +36,7 @@ public class GameManager : MonoBehaviour {
     public static int Layer_BlueLinesVisible { get; private set; }
 
     void Awake() {
+        AudioManager = transform.Find("AudioManager").GetComponent<AudioManager>();
         GraphicsController = GetComponent<GraphicsController>();
         MetalLinesTransform = transform.Find("MetalLines");
         

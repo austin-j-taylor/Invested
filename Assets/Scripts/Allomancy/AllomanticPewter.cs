@@ -17,7 +17,20 @@ public class AllomanticPewter : Allomancer {
     protected const float timePewterPerFall = .75f;
 
     public MetalReserve PewterReserve { get; private set; }
-    public bool IsSprinting { get; protected set; } = false;
+    private bool isSprinting = false;
+    public bool IsSprinting {
+        get {
+            return isSprinting;
+        }
+        protected set {
+            if (isSprinting && !value) {
+                GameManager.AudioManager.Stop_pewter();
+            } else if (value) {
+                GameManager.AudioManager.Play_pewter();
+            }
+            isSprinting = value;
+        }
+    }
     public bool IsDraining { get; protected set; } = false;
     public override bool IsBurning {
         get {
@@ -116,6 +129,8 @@ public class AllomanticPewter : Allomancer {
      * Causes the shield to light up.
      */
     private IEnumerator Burst(Vector3 sourceLocationLocal, double totalMass, float maxTime) {
+        GameManager.AudioManager.Play_pewter_burst();
+
         // Light up the shield:
         // get closest point on mesh where that happens (for now, assume it's a sphere w/ radius .5)
         sourceLocationLocal = sourceLocationLocal / sourceLocationLocal.magnitude * .5f;
@@ -158,7 +173,6 @@ public class AllomanticPewter : Allomancer {
     // When taking damage, attempt to shield it
     public virtual float OnHit(Vector3 sourceLocationLocal, float damage, bool automaticallyShield = false) {
         if (automaticallyShield || IsBurning) {
-
             Drain(sourceLocationLocal, gramsPewterPerFall, timePewterPerFall);
             return 0;
         } else {
