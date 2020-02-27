@@ -9,8 +9,7 @@ using UnityEngine.SceneManagement;
  */
 
 public class CameraController : MonoBehaviour {
-
-
+    
     private const float playerLookAtTargetFirstPersonHeight = 1;
     private const float lerpConstantPosition = 5;
     private const float lerpConstantRotation = 15;
@@ -168,7 +167,7 @@ public class CameraController : MonoBehaviour {
                     stretchedOut = 1 - Mathf.Exp(Player.PlayerIronSteel.rb.velocity.sqrMagnitude / stretchingVelocityFactor);
                     wantedCameraDistance = (1 + stretchedOut) * SettingsMenu.settingsData.cameraDistance;
                     */
-                    wantedCameraDistance = SettingsMenu.settingsData.cameraDistance;
+                    wantedCameraDistance = SettingsMenu.settingsData.cameraDistance * Player.FeelingScale;
                 }
                 Vector3 wantedPosition = verticalRotation * new Vector3(0, 0, -wantedCameraDistance);
 

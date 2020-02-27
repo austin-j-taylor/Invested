@@ -305,6 +305,7 @@ public class Magnetic : MonoBehaviour {
     }
 
     public void OnDisable() {
+        DisableBlueLine();
         GameManager.RemoveMagnetic(this);
     }
 

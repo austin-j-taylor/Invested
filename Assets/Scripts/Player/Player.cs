@@ -76,6 +76,18 @@ public class Player : PewterEntity {
             godMode = value;
         }
     }
+    // Some scenes (Storms, Sea of Metal) should feel larger than other scenes (Luthadel, MARL).
+    // This is done by increasing camera distance and Allomantic strength.
+    private static float feelingScale = 1;
+    public static float FeelingScale {
+        get {
+            return feelingScale;
+        }
+        set {
+            feelingScale = value;
+            PlayerIronSteel.Strength = value;
+        }
+    }
 
     private float coinCooldownTimer = 0;
 
@@ -165,6 +177,7 @@ public class Player : PewterEntity {
         PlayerPewter.Clear();
         PlayerZinc.Clear();
         PlayerTransparancy.Clear();
+        FeelingScale = 1;
 
         // Disable the cloud controller
         CameraController.ActiveCamera.GetComponent<CloudMaster>().enabled = false;
@@ -181,6 +194,7 @@ public class Player : PewterEntity {
             CanControlMovement = true;
             CanControlZinc = true;
             GodMode = true;
+
 
             GameObject spawn = GameObject.FindGameObjectWithTag("PlayerSpawn");
             if (spawn && CameraController.ActiveCamera) { // if CameraController.Awake has been called

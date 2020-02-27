@@ -9,6 +9,7 @@ public class MetalReserve : MonoBehaviour {
                          fuzzyThresholdChanging = .001f; // 1 mg
 
     public bool IsEndless { get; set; } = false; // If true, this reserve will never run out
+    public bool IsEnabled { get; set; } = true; // If false, this reserve is effectively always empty. Overrides IsEndless.
     public bool IsBurnedOut { get; set; } = false; // if the player burns all their mass, they can't use it till it refills
     private double mass = 0;
     private double lastMass = 0;
@@ -39,28 +40,29 @@ public class MetalReserve : MonoBehaviour {
 
     public bool HasMass {
         get {
-            return (IsEndless || mass > 0) && !IsBurnedOut;
+            Debug.Log(IsEnabled + " " + (IsEnabled && (IsEndless || mass > 0) && !IsBurnedOut));
+            return IsEnabled && (IsEndless || mass > 0) && !IsBurnedOut;
         }
     }
     public bool IsChanging {
         get {
-            return Rate < -fuzzyThresholdChanging || Rate > fuzzyThresholdChanging;
+            return IsEnabled && (Rate < -fuzzyThresholdChanging || Rate > fuzzyThresholdChanging);
         }
     }
 
     public bool IsFull {
         get {
-            return mass == capacity;
+            return IsEnabled && (mass == capacity);
         }
     }
     public bool IsFullFuzzy {
         get {
-            return capacity - mass < fuzzyThresholdFull;
+            return IsEnabled && (capacity - mass < fuzzyThresholdFull);
         }
     }
 
     private void FixedUpdate() {
-        if(IsEndless) {
+        if(IsEndless || !IsEnabled) {
             Rate = 0;
         } else {
             Rate = (Mass - lastMass) / Time.fixedDeltaTime;

@@ -22,9 +22,9 @@ public class Environment_MARL_SpawnRoom : Environment {
         Player.CanControl = false;
         Player.CanControlMovement = false;
         Player.PlayerInstance.CoinHand.Pouch.Clear();
-        Player.PlayerIronSteel.IronReserve.SetMass(100);
-        Player.PlayerIronSteel.SteelReserve.SetMass(0);
-        Player.PlayerPewter.PewterReserve.SetMass(0);
+        //Player.PlayerIronSteel.IronReserve.SetMass(100);
+        Player.PlayerIronSteel.SteelReserve.IsEnabled = false;
+        Player.PlayerPewter.PewterReserve.IsEnabled = false;
 
         yield return new WaitForSeconds(3);
 
