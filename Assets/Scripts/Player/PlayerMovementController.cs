@@ -138,7 +138,10 @@ public class PlayerMovementController : AllomanticPewter {
             IsWalking = false;
         }
     }
-
+    Vector3 lastpositiondiff = Vector3.zero;
+    float thetaE = 0;
+    float thetaO = 0;
+    float lastAngle = 0;
     protected override void FixedUpdate() {
         base.FixedUpdate();
 
@@ -160,29 +163,43 @@ public class PlayerMovementController : AllomanticPewter {
 
             //Vector3 angleChange = Vector3.Cross(rb.velocity, Player.PlayerIronSteel.LastNetForceOnAllomancer);
             //rb.AddTorque(angleChange, ForceMode.;
-
-            Vector3 from = lastpositiondiff;
-            //Debug.DrawRay(transform.position, from, Color.red);
             Vector3 to = transform.position - targetPosition;
-            //Debug.DrawRay(transform.position, to, Color.yellow);
+            Vector3 from;
+            Debug.DrawRay(transform.position, to, Color.yellow);
+            if (lastpositiondiff == Vector3.zero) { // if this is the first frame of spinning
+                from = to;
+            } else {
+                from = lastpositiondiff;
+            }
+            Debug.DrawRay(transform.position, from, Color.red);
             float angle = Vector3.Angle(from, to) / TimeController.CurrentTimeScale;
-            //Debug.Log(Player.PlayerIronSteel.LastNetForceOnAllomancer);
-            //Debug.Log(angle);
+            thetaO = angle - lastAngle;
+
+            float thetaR = thetaE - thetaO;
+            Debug.Log(thetaR + " = " + thetaE + " - " + thetaO);
+
 
             Vector3 torqueDirection = Vector3.Cross(from, to).normalized;
             Debug.DrawRay(transform.position, torqueDirection, Color.green);
 
-            Vector3 positionChange = torqueDirection * angle;
-            Vector3 desiredVelocity = positionChange / Time.deltaTime;
+            Vector3 positionChange = torqueDirection * thetaR;
+            Vector3 desiredVelocity = positionChange;
 
             Vector3 velChange = -(rb.angularVelocity - positionChange);
-            //Debug.Log(velChange + " " + rb.angularVelocity);
+            Debug.Log(velChange + " " + rb.angularVelocity);
 
             rb.AddTorque(velChange, ForceMode.VelocityChange);
 
             lastpositiondiff = to;
+            lastAngle = angle;
+            thetaE = lastAngle - thetaO;
+            //Debug.Log(Player.PlayerIronSteel.LastNetForceOnAllomancer);
+            //Debug.Log(angle);
         } else {
             lastpositiondiff = Vector3.zero;
+            thetaE = 0;
+            thetaO = 0;
+            lastAngle = 0;
         }
 
         // Apply the Fun Inverse Gravity
@@ -330,7 +347,7 @@ public class PlayerMovementController : AllomanticPewter {
                 Player.PlayerFlywheelController.SpinToTorque(torque);
                 // Apply a small amount of the movement force to player for tighter controls & air movement
                 rb.AddForce((CameraController.UpsideDown ? -movement : movement) * airControlFactor * rollingAcceleration, ForceMode.Acceleration);
-
+                 
                 // Debug
                 //Debug.DrawRay(transform.position, rb.angularVelocity, Color.red);
                 //Debug.DrawRay(transform.position, torque, Color.white);
@@ -341,7 +358,6 @@ public class PlayerMovementController : AllomanticPewter {
         }
 
     }
-    Vector3 lastpositiondiff = Vector3.zero;
 
     // Convert a movement vector into real player movement based on current velocity
     private Vector3 MovementMagnitude(Vector3 movement) {
