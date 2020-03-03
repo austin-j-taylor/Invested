@@ -73,6 +73,14 @@ public class CloudMaster : MonoBehaviour {
         }
         paramsSet = false;
     }
+    private void Update() {
+        // Keep the cloud container centered on the player to provide the illusion that the clouds are infinite
+        if(container && Player.PlayerInstance) {
+            Vector3 position = Player.PlayerInstance.transform.position;
+            position.y = container.position.y;
+            container.position = position;
+        }
+    }
 
     [ImageEffectOpaque]
     private void OnRenderImage(RenderTexture src, RenderTexture dest) {
