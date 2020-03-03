@@ -63,6 +63,11 @@ public class PlayerMovementController : AllomanticPewter {
     private float momentOfInertiaMagnitudeWalking = 50;
     //private  Vector3 inertiaTensorRunning = new Vector3(momentOfInertiaMagnitude, momentOfInertiaMagnitude, momentOfInertiaMagnitude);
     //private  Vector3 inertiaTensorWalking = new Vector3(momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking);
+    // For "Spider-Man Swinging" effect
+    [SerializeField]
+    private float swinging_gain_P = 0.05f;
+    private Vector3 lastFrom = Vector3.zero;
+    private float lastDeltaW = 0;
 
     private PlayerGroundedChecker groundedChecker;
     private PIDController_Vector3 pidSpeed;
@@ -138,75 +143,47 @@ public class PlayerMovementController : AllomanticPewter {
             IsWalking = false;
         }
     }
-    Vector3 lastpositiondiff = Vector3.zero;
-    float thetaE = 0;
-    float thetaO = 0;
-    float lastAngle = 0;
     protected override void FixedUpdate() {
         base.FixedUpdate();
 
         // "Spider-Man Swinging"
         // When the sphere is swinging through the air, rotate the player body to give the effect
         // that the player is physically swinging through the air, connected to the target by something like a rope.
-        // WIP
-        if (!PauseMenu.IsPaused && !IsGrounded && (Keybinds.Horizontal() == 0 && Keybinds.Vertical() == 0) && Player.PlayerIronSteel.PushingOrPulling) {
+        // Uses a simple Proportional error controller on the angle between the player and the target to get the effect.
+        if (Player.PlayerIronSteel.PushingOrPulling) {
+            // Get the angle between the player and the target
             Vector3 targetPosition = transform.position + Player.PlayerIronSteel.LastNetForceOnAllomancer;
-            //Vector3 from = transform.position - targetPosition;
-            //Debug.DrawRay(transform.position, from, Color.red);
-            //Vector3 to = (transform.position + rb.velocity) - targetPosition;
-            //Debug.DrawRay(transform.position, to, Color.yellow);
-            //float angleDelta = Vector3.Angle(from, to);
-            //Debug.Log(angleDelta);
-            //Vector3 torqueDirection = Vector3.Cross(rb.velocity, -from);
-            //Debug.DrawRay(transform.position, torqueDirection, Color.green);
-            //Player.PlayerInstance.transform.Rotate(torqueDirection, angleDelta);
-
-            //Vector3 angleChange = Vector3.Cross(rb.velocity, Player.PlayerIronSteel.LastNetForceOnAllomancer);
-            //rb.AddTorque(angleChange, ForceMode.;
             Vector3 to = transform.position - targetPosition;
             Vector3 from;
             Debug.DrawRay(transform.position, to, Color.yellow);
-            if (lastpositiondiff == Vector3.zero) { // if this is the first frame of spinning
+            if (lastFrom == Vector3.zero) { // if this is the first frame of spinning
                 from = to;
             } else {
-                from = lastpositiondiff;
+                from = lastFrom;
             }
-            Debug.DrawRay(transform.position, from, Color.red);
-            float angle = Vector3.Angle(from, to) / TimeController.CurrentTimeScale;
-            thetaO = angle - lastAngle;
+            //Debug.DrawRay(transform.position, from, Color.red);
 
-            float thetaR = thetaE - thetaO;
-            Debug.Log(thetaR + " = " + thetaE + " - " + thetaO);
-
+            // Make the player rotate based on that angle
+            float expectedDeltaW = Vector3.Angle(from, to);
+            float deltaW = swinging_gain_P * (expectedDeltaW - lastDeltaW);
+            //Debug.Log(deltaW + " = " + P + " * (" + expectedDeltaW + " - " + lastDeltaW + ")");
 
             Vector3 torqueDirection = Vector3.Cross(from, to).normalized;
-            Debug.DrawRay(transform.position, torqueDirection, Color.green);
+            rb.AddTorque(torqueDirection * deltaW, ForceMode.VelocityChange);
 
-            Vector3 positionChange = torqueDirection * thetaR;
-            Vector3 desiredVelocity = positionChange;
-
-            Vector3 velChange = -(rb.angularVelocity - positionChange);
-            Debug.Log(velChange + " " + rb.angularVelocity);
-
-            rb.AddTorque(velChange, ForceMode.VelocityChange);
-
-            lastpositiondiff = to;
-            lastAngle = angle;
-            thetaE = lastAngle - thetaO;
-            //Debug.Log(Player.PlayerIronSteel.LastNetForceOnAllomancer);
-            //Debug.Log(angle);
+            lastDeltaW = deltaW;
+            lastFrom = to;
         } else {
-            lastpositiondiff = Vector3.zero;
-            thetaE = 0;
-            thetaO = 0;
-            lastAngle = 0;
+            lastFrom = Vector3.zero;
+            lastDeltaW = 0;
         }
 
-        // Apply the Fun Inverse Gravity
+        // There's an option in the settings to invert gravity. Aplpy that here.
         if (invertGravity) {
             rb.AddForce(-Physics.gravity, ForceMode.Acceleration);
         }
 
+        // Handle all player movement control
         if (Player.CanControl && Player.CanControlMovement) {
             // Convert user input to movement vector
             Vector3 movement = new Vector3(Keybinds.Horizontal(), 0f, Keybinds.Vertical());
