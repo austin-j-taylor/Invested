@@ -11,6 +11,12 @@ public class HUD : MonoBehaviour {
     public static readonly Color weakBlue = new Color(0, .75f, 1, 1);
     public static readonly Color strongBlue = new Color(0, 1f, 1, 1);
 
+    public static bool IsOpen {
+        get {
+            return hudGroup.alpha > 0;
+        }
+    }
+
     private static Text fPSText;
     private static CanvasGroup hudGroup;
     private static CanvasGroup hudBehindWheelGroup;
@@ -192,14 +198,5 @@ public class HUD : MonoBehaviour {
     public void InterfaceRefresh() {
         BurnPercentageMeter.InterfaceRefresh();
         TargetOverlayController.InterfaceRefresh();
-    }
-
-    // Used by Settings to make HUD visible or invisible
-    public void ShowHUD() {
-        hudGroup.alpha = 1;
-    }
-
-    public void HideHUD() {
-        hudGroup.alpha = 0;
     }
 }

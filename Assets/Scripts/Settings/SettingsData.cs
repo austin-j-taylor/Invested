@@ -84,7 +84,6 @@ public class SettingsData : MonoBehaviour {
 
         } catch (DirectoryNotFoundException e) {
             Debug.LogError(e.Message);
-            timeScale = 1;
         }
     }
 
@@ -96,10 +95,12 @@ public class SettingsData : MonoBehaviour {
             writer.Write(jSONText);
             writer.Close();
 
+            // Manually apply certain setting effects
+            GameManager.AudioManager.SetAudioLevels(audioMaster, audioMusic, audioEffects);
+            TimeController.CurrentTimeScale = timeScale;
 
         } catch (DirectoryNotFoundException e) {
             Debug.LogError(e.Message);
-            timeScale = 1;
         }
     }
 

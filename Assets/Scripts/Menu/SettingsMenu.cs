@@ -316,6 +316,7 @@ public class SettingsMenu : MonoBehaviour {
     public bool BackAndSaveSettings() {
         if (!AreHeadersClosed)
             settingsData.SaveSettings();
+
         return BackSettings();
     }
 

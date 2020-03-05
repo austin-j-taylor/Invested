@@ -67,8 +67,9 @@ public class PauseMenu : MonoBehaviour {
         CameraController.UnlockCamera();
         GamepadController.SetRumble(0, 0);
         Time.timeScale = 0f;
+        HUD.DisableHUD();
 
-        // Update blue lines for this frame (workaround)
+        // Update blue lines for this frame
         Player.PlayerIronSteel.UpdateBlueLines();
 
         instance.gameObject.SetActive(true);
@@ -84,6 +85,8 @@ public class PauseMenu : MonoBehaviour {
                 CameraController.LockCamera();
             }
             Time.timeScale = TimeController.CurrentTimeScale;
+            if(SettingsMenu.settingsData.hudEnabled == 1)
+                HUD.EnableHUD();
             Close();
             instance.gameObject.SetActive(false);
             IsPaused = false;
