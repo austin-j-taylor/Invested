@@ -30,6 +30,8 @@ public class Environment_TitleScreen : Environment {
         foreach (Magnetic m in pushes) {
             Player.PlayerIronSteel.AddPullTarget(m);
         }
+
+        TimeController.CurrentTimeScale = 0;
     }
 
     // Update is called once per frame

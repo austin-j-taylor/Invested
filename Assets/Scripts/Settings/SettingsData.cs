@@ -47,6 +47,10 @@ public class SettingsData : MonoBehaviour {
     public int ambientOcclusion;
     public int motionBlur;
     public int bloom;
+    // Audio
+    public float audioMaster;
+    public float audioMusic;
+    public float audioEffects;
     // Allomancy
     public int pushControlStyle; // 0 for percentage, 1 for magnitude
     public int anchoredBoost; // 0 for Disabled, 1 for ANF, 2 for EWF, 3 for DP
@@ -80,7 +84,6 @@ public class SettingsData : MonoBehaviour {
 
         } catch (DirectoryNotFoundException e) {
             Debug.LogError(e.Message);
-            timeScale = 1;
         }
     }
 
@@ -92,10 +95,12 @@ public class SettingsData : MonoBehaviour {
             writer.Write(jSONText);
             writer.Close();
 
+            // Manually apply certain setting effects
+            GameManager.AudioManager.SetAudioLevels(audioMaster, audioMusic, audioEffects);
+            TimeController.CurrentTimeScale = timeScale;
 
         } catch (DirectoryNotFoundException e) {
             Debug.LogError(e.Message);
-            timeScale = 1;
         }
     }
 
@@ -277,6 +282,18 @@ public class SettingsData : MonoBehaviour {
                     gamepadSensitivityY = data;
                     return true;
                 }
+            case "audioMaster": {
+                    audioMaster = data;
+                    return true;
+                }
+            case "audioMusic": {
+                    audioMusic= data;
+                    return true;
+                }
+            case "audioEffects": {
+                    audioEffects = data;
+                    return true;
+                }
             case "velocityConstant": {
                     velocityConstant = data;
                     return true;
@@ -426,6 +443,15 @@ public class SettingsData : MonoBehaviour {
                 }
             case "velocityConstant": {
                     return velocityConstant;
+                }
+            case "audioMaster": {
+                    return audioMaster;
+                }
+            case "audioMusic": {
+                    return audioMusic;
+                }
+            case "audioEffects": {
+                    return audioEffects;
                 }
             case "distanceConstant": {
                     return distanceConstant;

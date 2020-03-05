@@ -13,11 +13,14 @@ public class TimeController : MonoBehaviour {
             return currentScale;
         }
         set {
-            if(currentScale != value && value > 0) {
+            if (currentScale != value && value > 0) {
                 Time.fixedDeltaTime = value / 60;
             }
             currentScale = value;
-            if (!PauseMenu.IsPaused) {
+            if(MainMenu.IsOpen || PauseMenu.IsPaused) {
+                // time scale stay at zero
+                Time.timeScale = 0;
+            } else {
                 Time.timeScale = currentScale;
             }
         }

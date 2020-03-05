@@ -40,7 +40,6 @@ public class MetalReserve : MonoBehaviour {
 
     public bool HasMass {
         get {
-            Debug.Log(IsEnabled + " " + (IsEnabled && (IsEndless || mass > 0) && !IsBurnedOut));
             return IsEnabled && (IsEndless || mass > 0) && !IsBurnedOut;
         }
     }

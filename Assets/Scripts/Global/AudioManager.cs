@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour {
 
     private const int index_shared = 0,
                       index_pewter = 1;
 
+    [SerializeField]
+    AudioMixer mixer;
     [SerializeField]
     AudioClip menu_select = null,
                 pewter_burst = null,
@@ -23,6 +26,12 @@ public class AudioManager : MonoBehaviour {
 
     public void Clear() {
         StopAllCoroutines();
+    }
+
+    public void SetAudioLevels(float master, float music, float effects) {
+        mixer.SetFloat("volumeMaster", master * 80 - 80); // 80 = effectively silent gain
+        mixer.SetFloat("volumeMusic", music * 80 - 80);
+        mixer.SetFloat("volumeEffects", effects * 80 - 80);
     }
 
     public void Play_menu_select() {

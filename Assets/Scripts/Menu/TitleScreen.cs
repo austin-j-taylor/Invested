@@ -25,6 +25,7 @@ public class TitleScreen : MonoBehaviour {
 
         highlitButton = playButton;
         EventSystem.current.SetSelectedGameObject(highlitButton.gameObject);
+
     }
 
     private void OnClickedPlay() {

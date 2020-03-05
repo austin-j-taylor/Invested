@@ -32,10 +32,10 @@ public class FeruchemicalZinc : MonoBehaviour {
     public double Rate { get; private set; }
     public float Intensity { get; private set; }
     
-    // Use this for initialization
-    void Start() {
-        Clear();
-    }
+    //// Use this for initialization
+    //void Start() {
+    //    Clear();
+    //}
 
     public void Clear() {
         InZincTime = false;

@@ -14,7 +14,7 @@ public class TargetOverlayController : MonoBehaviour {
     private Text templateMass = null;
     [SerializeField]
     private Text templateActualForce = null;
-    
+
     private Text[] pullTargetsSumForce;
     private Text[] pushTargetsSumForce;
     private Text[] pullTargetsActualForce;
@@ -46,8 +46,6 @@ public class TargetOverlayController : MonoBehaviour {
         }
     }
 
-    private void LateUpdate() {
-    }
 
     public void Clear() {
         HardRefresh();
@@ -72,45 +70,49 @@ public class TargetOverlayController : MonoBehaviour {
 
     // Update forces, positions on screen
     public void SoftRefresh() {
-        if (SettingsMenu.settingsData.hudForces == 1) {
-            SoftRefreshTargets(Player.PlayerIronSteel.PullTargets, pullTargetsActualForce, pullTargetsSumForce, SettingsMenu.settingsData.forceComplexity == 1);
-            SoftRefreshTargets(Player.PlayerIronSteel.PushTargets, pushTargetsActualForce, pushTargetsSumForce, SettingsMenu.settingsData.forceComplexity == 1);
-        }
-        // If the target is highlighted and on screen, display mass
-        if (SettingsMenu.settingsData.hudMasses == 1) {
-            //if (Player.PlayerIronSteel.HasHighlightedTarget) {
-            //    //Vector3 heightToTop = Vector3.zero;
-            //    //heightToTop.y = Player.PlayerIronSteel.HighlightedTarget.ColliderBodyBoundsSizeY / 2f;
+        if (HUD.IsOpen) {
+            if (SettingsMenu.settingsData.hudForces == 1) {
+                SoftRefreshTargets(Player.PlayerIronSteel.PullTargets, pullTargetsActualForce, pullTargetsSumForce, SettingsMenu.settingsData.forceComplexity == 1);
+                SoftRefreshTargets(Player.PlayerIronSteel.PushTargets, pushTargetsActualForce, pushTargetsSumForce, SettingsMenu.settingsData.forceComplexity == 1);
+            }
+            // If the target is highlighted and on screen, display mass
+            if (SettingsMenu.settingsData.hudMasses == 1) {
+                //if (Player.PlayerIronSteel.HasHighlightedTarget) {
+                //    //Vector3 heightToTop = Vector3.zero;
+                //    //heightToTop.y = Player.PlayerIronSteel.HighlightedTarget.ColliderBodyBoundsSizeY / 2f;
 
-            //    //highlightedTargetMass.text = HUD.MassString(Player.PlayerIronSteel.HighlightedTarget.MagneticMass);
-            //    //highlightedTargetMass.transform.position = CameraController.ActiveCamera.WorldToScreenPoint(Player.PlayerIronSteel.HighlightedTarget.transform.position + heightToTop) + new Vector3(0, pixelDelta);
-            //} else { // Target is not highlighted or is not on screen, hide mass label
-            //    highlightedTargetMass.text = "";
-            //}
+                //    //highlightedTargetMass.text = HUD.MassString(Player.PlayerIronSteel.HighlightedTarget.MagneticMass);
+                //    //highlightedTargetMass.transform.position = CameraController.ActiveCamera.WorldToScreenPoint(Player.PlayerIronSteel.HighlightedTarget.transform.position + heightToTop) + new Vector3(0, pixelDelta);
+                //} else { // Target is not highlighted or is not on screen, hide mass label
+                //    highlightedTargetMass.text = "";
+                //}
+            }
         }
     }
 
     // Clear unwanted fields after changing settings
     public void InterfaceRefresh() {
-        if (SettingsMenu.settingsData.hudMasses == 0) {
-            highlightedTargetMass.text = "";
-        }
-        if (SettingsMenu.settingsData.forceComplexity == 0 && SettingsMenu.settingsData.hudForces == 1) {
-            for (int i = 0; i < Player.PlayerIronSteel.PullTargets.Count; i++) {
-                pullTargetsSumForce[i].text = "";
+        if (HUD.IsOpen) {
+            if (SettingsMenu.settingsData.hudMasses == 0) {
+                highlightedTargetMass.text = "";
             }
-            for (int i = 0; i < Player.PlayerIronSteel.PushTargets.Count; i++) {
-                pushTargetsSumForce[i].text = "";
-            }
-        } else {
-            if (SettingsMenu.settingsData.hudForces == 0) {
+            if (SettingsMenu.settingsData.forceComplexity == 0 && SettingsMenu.settingsData.hudForces == 1) {
                 for (int i = 0; i < Player.PlayerIronSteel.PullTargets.Count; i++) {
                     pullTargetsSumForce[i].text = "";
-                    pullTargetsActualForce[i].text = "";
                 }
                 for (int i = 0; i < Player.PlayerIronSteel.PushTargets.Count; i++) {
                     pushTargetsSumForce[i].text = "";
-                    pushTargetsActualForce[i].text = "";
+                }
+            } else {
+                if (SettingsMenu.settingsData.hudForces == 0) {
+                    for (int i = 0; i < Player.PlayerIronSteel.PullTargets.Count; i++) {
+                        pullTargetsSumForce[i].text = "";
+                        pullTargetsActualForce[i].text = "";
+                    }
+                    for (int i = 0; i < Player.PlayerIronSteel.PushTargets.Count; i++) {
+                        pushTargetsSumForce[i].text = "";
+                        pushTargetsActualForce[i].text = "";
+                    }
                 }
             }
         }
@@ -128,7 +130,7 @@ public class TargetOverlayController : MonoBehaviour {
             if (positionActualForce.z > 0) {
                 actualForce[i].transform.position = positionActualForce;
                 actualForce[i].text = HUD.ForceString(target.LastNetForceOnTarget.magnitude, target.NetMass);
-                if(refreshSum)
+                if (refreshSum)
                     sumForce[i].text = HUD.AllomanticSumString(target.LastAllomanticForce, target.LastAnchoredPushBoostFromAllomancer, target.NetMass, 2, true);
             } else { // Target is not on screen
                 sumForce[i].text = "";
