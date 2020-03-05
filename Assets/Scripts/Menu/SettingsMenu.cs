@@ -12,6 +12,7 @@ public class SettingsMenu : MonoBehaviour {
     private const string s_gameplay = "Gameplay";
     private const string s_interface = "Interface";
     private const string s_graphics = "Graphics";
+    private const string s_audio = "Audio";
     private const string s_allomancy = "Allomancy Physics";
     private const string s_world = "World Physics";
     private const string s_back = "Back";
@@ -49,6 +50,11 @@ public class SettingsMenu : MonoBehaviour {
             return graphicsHeader.gameObject.activeSelf;
         }
     }
+    public bool IsAudioOpen {
+        get {
+            return audioHeader.gameObject.activeSelf;
+        }
+    }
     public bool IsAllomancyOpen {
         get {
             return allomancyHeader.gameObject.activeSelf;
@@ -70,12 +76,14 @@ public class SettingsMenu : MonoBehaviour {
     private Button gameplayButton;
     private Button interfaceButton;
     private Button graphicsButton;
+    private Button audioButton;
     private Button allomancyButton;
     private Button worldButton;
     private static Transform glossaryHeader;
     private static Transform gameplayHeader;
     private static Transform interfaceHeader;
     private static Transform graphicsHeader;
+    private static Transform audioHeader;
     private static Transform allomancyHeader;
     private static Transform worldHeader;
     private Button closeButton;
@@ -101,8 +109,9 @@ public class SettingsMenu : MonoBehaviour {
         gameplayButton = settingsHeaderButtons[1];
         interfaceButton = settingsHeaderButtons[2];
         graphicsButton = settingsHeaderButtons[3];
-        allomancyButton = settingsHeaderButtons[4];
-        worldButton = settingsHeaderButtons[5];
+        audioButton = settingsHeaderButtons[4];
+        allomancyButton = settingsHeaderButtons[5];
+        worldButton = settingsHeaderButtons[6];
         // Glossary
         glossaryHeader = transform.Find("GlossaryHeader");
         // Gameplay Header
@@ -111,6 +120,8 @@ public class SettingsMenu : MonoBehaviour {
         interfaceHeader = transform.Find("InterfaceHeader");
         // Graphics Header
         graphicsHeader = transform.Find("GraphicsHeader");
+        // Audio Header
+        audioHeader = transform.Find("AudioHeader");
         // Allomancy Header
         allomancyHeader = transform.Find("AllomancyHeader");
         // World Header
@@ -128,6 +139,7 @@ public class SettingsMenu : MonoBehaviour {
         gameplayButton.onClick.AddListener(OpenGameplay);
         interfaceButton.onClick.AddListener(OpenInterface);
         graphicsButton.onClick.AddListener(OpenGraphics);
+        audioButton.onClick.AddListener(OpenAudio);
         allomancyButton.onClick.AddListener(OpenAllomancy);
         worldButton.onClick.AddListener(OpenWorld);
         closeButton.onClick.AddListener(OnClickClose);
@@ -179,6 +191,7 @@ public class SettingsMenu : MonoBehaviour {
         CloseInterface();
         CloseGraphics();
         CloseGameplay();
+        CloseAudio();
         CloseAllomancy();
         CloseWorld();
         gameObject.SetActive(false);
@@ -259,6 +272,18 @@ public class SettingsMenu : MonoBehaviour {
         CloseHeader();
     }
 
+    private void OpenAudio() {
+        titleText.text = s_audio;
+        audioHeader.gameObject.SetActive(true);
+        OpenHeader();
+    }
+
+    private void CloseAudio() {
+        titleText.text = s_settings;
+        audioHeader.gameObject.SetActive(false);
+        CloseHeader();
+    }
+
     private void OpenAllomancy() {
         titleText.text = s_allomancy;
         allomancyHeader.gameObject.SetActive(true);
@@ -304,6 +329,8 @@ public class SettingsMenu : MonoBehaviour {
             CloseInterface();
         else if (IsGraphicsOpen)
             CloseGraphics();
+        else if (IsAudioOpen)
+            CloseAudio();
         else if (IsAllomancyOpen)
             CloseAllomancy();
         else if (IsWorldOpen)
