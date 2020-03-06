@@ -815,6 +815,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 0
   magneticMass: 0
+  calculateCOMFromColliders: 0
 --- !u!135 &366291962
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -939,6 +940,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 0
   magneticMass: 0
+  calculateCOMFromColliders: 0
 --- !u!65 &382789537
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1552,6 +1554,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 0
   magneticMass: 0
+  calculateCOMFromColliders: 0
 --- !u!135 &653810779
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1810,6 +1813,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 0
   magneticMass: 0
+  calculateCOMFromColliders: 0
 --- !u!65 &773549584
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3058,6 +3062,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 0
   magneticMass: 0
+  calculateCOMFromColliders: 0
 --- !u!135 &1583640718
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -4060,6 +4065,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 0
   magneticMass: 0
+  calculateCOMFromColliders: 0
 --- !u!65 &2049163091
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -4232,6 +4238,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 877769928}
     m_Modifications:
+    - target: {fileID: 3559297176007848099, guid: 4cde6ba5a87074e8a973d577574f33c1,
+        type: 3}
+      propertyPath: m_Name
+      value: Spawner
+      objectReference: {fileID: 0}
+    - target: {fileID: 3559297176007848099, guid: 4cde6ba5a87074e8a973d577574f33c1,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3559297176007848097, guid: 4cde6ba5a87074e8a973d577574f33c1,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -4286,16 +4302,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3559297176007848099, guid: 4cde6ba5a87074e8a973d577574f33c1,
-        type: 3}
-      propertyPath: m_Name
-      value: Spawner
-      objectReference: {fileID: 0}
-    - target: {fileID: 3559297176007848099, guid: 4cde6ba5a87074e8a973d577574f33c1,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3559297176007848096, guid: 4cde6ba5a87074e8a973d577574f33c1,
         type: 3}

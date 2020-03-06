@@ -86,7 +86,7 @@ public class PlayerMovementController : AllomanticPewter {
     protected override void Awake() {
         base.Awake();
         groundedChecker = transform.GetComponentInChildren<PlayerGroundedChecker>();
-        pidSpeed = GetComponent<PIDController_Vector3>();
+        pidSpeed = new PIDController_Vector3(25, 0, 0, 50);
         //rb.maxAngularVelocity = maxRollingAngularSpeed;
         rb.maxAngularVelocity = Mathf.Infinity;
         physicsMaterial = GetComponent<Collider>().material;
@@ -335,18 +335,6 @@ public class PlayerMovementController : AllomanticPewter {
         }
 
     }
-
-    // Convert a movement vector into real player movement based on current velocity
-    private Vector3 MovementMagnitude(Vector3 movement) {
-        //Vector3 feedback = Vector3.Project(rb.velocity, movement.normalized);
-        //Vector3 target = movement * targetRollingSpeedRadial;
-        //Vector3 command = pidSpeed.Step(feedback, target);
-
-        //return command;
-        return movement;
-        //return movement * rollingAcceleration * Mathf.Max(targetRollingSpeedRadial - Vector3.Project(rb.velocity, movement.normalized).magnitude, 0);
-    }
-
 
     public override void Clear() {
         jumpQueued = false;

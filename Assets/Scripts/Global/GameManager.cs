@@ -26,8 +26,8 @@ public class GameManager : MonoBehaviour {
     public static Coin Prefab_Coin;
 
     // Holds all Magnetics and Allomancers in scene
-    public static List<Allomancer> Allomancers { get; private set; }
-    public static List<Magnetic> MagneticsInScene { get; private set; }
+    public static List<Allomancer> Allomancers { get; private set; } = new List<Allomancer>();
+    public static List<Magnetic> MagneticsInScene { get; private set; } = new List<Magnetic>();
 
     // Masks that represent certain layers to ignore for Raycasting
     public static int Layer_IgnorePlayer { get; private set; }
@@ -48,8 +48,6 @@ public class GameManager : MonoBehaviour {
 
         Prefab_Coin = Resources.Load<Coin>("Objects/Imperial1-Boxing");
 
-        Allomancers = new List<Allomancer>();
-        MagneticsInScene = new List<Magnetic>();
         Layer_IgnorePlayer = ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ignore Player")));
         Layer_IgnoreCamera = ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ignore Camera")) | (1 << LayerMask.NameToLayer("Ignore Player")) | (1 << LayerMask.NameToLayer("Coin")) | (1 << LayerMask.NameToLayer("Boid")));
         Layer_BlueLines = LayerMask.NameToLayer("Blue Lines");
@@ -77,23 +75,20 @@ public class GameManager : MonoBehaviour {
     }
 
     public static void AddMagnetic(Magnetic magnetic) {
-        if (MagneticsInScene != null)
-            MagneticsInScene.Add(magnetic);
+        MagneticsInScene.Add(magnetic);
     }
 
     public static void RemoveMagnetic(Magnetic magnetic) {
-        if (MagneticsInScene != null) {
-            // Remove from all allomancers
-            foreach (Allomancer allomancer in Allomancers) {
-                AllomanticIronSteel ironSteel = allomancer.GetComponent<AllomanticIronSteel>();
-                if (ironSteel) {
-                    ironSteel.RemoveTarget(magnetic);
-                    if (ironSteel.UsingBubble) {
-                        ironSteel.RemoveBubbleTarget(magnetic);
-                    }
+        // Remove from all allomancers
+        foreach (Allomancer allomancer in Allomancers) {
+            AllomanticIronSteel ironSteel = allomancer.GetComponent<AllomanticIronSteel>();
+            if (ironSteel) {
+                ironSteel.RemoveTarget(magnetic);
+                if (ironSteel.UsingBubble) {
+                    ironSteel.RemoveBubbleTarget(magnetic);
                 }
             }
-            MagneticsInScene.Remove(magnetic);
         }
+        MagneticsInScene.Remove(magnetic);
     }
 }

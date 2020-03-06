@@ -6,38 +6,25 @@ using System.Collections;
  * Not using generic typing because you can't use operators with them.
  */
 
-public class PIDController_Vector3 : MonoBehaviour {
+public class PIDController_Vector3 {
 
-    [SerializeField]
     float gainP = 25, gainI = 0, gainD = 0, maxDelta = 50;
 
-    bool updating, lastWasStepped;
-    
     private Vector3 cmd_I, last_error, last_command;
 
 
     // Use this for initialization
-    void Awake() {
-        updating = false;
-        lastWasStepped = false;
+    public PIDController_Vector3(float p, float i, float d, float mD) {
+        gainP = p;
+        gainI = i;
+        gainD = d;
+        maxDelta = mD;
         cmd_I = Vector3.zero;
         last_error = Vector3.zero;
         last_command = Vector3.zero;
     }
 
-    private void FixedUpdate() {
-        updating = lastWasStepped;
-
-        lastWasStepped = false;
-    }
-
     public Vector3 Step(Vector3 feedback, Vector3 reference) {
-
-        // If this controller was not updating recently, discard old values
-        if(!updating) {
-            last_error = Vector3.zero;
-            last_command = Vector3.zero;
-        }
 
         Vector3 error = reference - feedback;
 
@@ -61,14 +48,9 @@ public class PIDController_Vector3 : MonoBehaviour {
         //Debug.Log("error:    " + error + " -> " + error.magnitude);
         //Debug.Log("command:  " + command + " -> " + command.magnitude);
 
-        lastWasStepped = true;
         last_error = error;
         last_command = command;
 
         return command;
-    }
-
-    // A step in which no inputs are needed, but last_* fields should be cleared
-    public void ClearStep() {
     }
 }
