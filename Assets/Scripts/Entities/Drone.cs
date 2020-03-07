@@ -92,8 +92,10 @@ public class Drone : MonoBehaviour {
 
         pidHeight.SetParams(height_p, height_i, height_d);
         thrust.y += StepHeight();
+        Debug.DrawRay(transform.position, thrust.normalized * motor_saturation, Color.black); // the maximum possible thrust we could have
         Debug.DrawRay(transform.position, thrust, Color.cyan); // unclamped
 
+        float desiredY = thrust.y;
         // saturate the force we can apply
         if (motor_saturation != 0) {
             if(thrust.y > 0) {
@@ -104,15 +106,16 @@ public class Drone : MonoBehaviour {
             }
         }
         pidHead.SetParams(head_p, head_i, head_d);
-        float angle = StepHeading(thrust.y);
+        float angle = StepHeading(desiredY);
         Debug.Log("Angle: " + angle);
 
         rotation = angle * Vector3.Cross(Vector3.up, targetPos - transform.position).normalized;
+        Debug.DrawRay(transform.position, Vector3.up, Color.green);
+        Debug.DrawRay(transform.position, targetPos - transform.position, Color.blue);
         Debug.DrawRay(transform.position, rotation, Color.red);
 
         thrust = thrust.magnitude * transform.up; // make thrust only act up/down from the drone's perspective
         Debug.DrawRay(transform.position, thrust, Color.green); // rotated
-        Debug.DrawRay(transform.position, thrust.normalized * motor_saturation, Color.black); // the maximum possible thrust we could have
 
         // thrust is now relative to world
 
@@ -127,8 +130,8 @@ public class Drone : MonoBehaviour {
     }
 
     private float StepHeading(float desiredY) {
-        float feedback = -(targetPos.y - transform.position.y); // distance from drone to target
-
+        //float feedback = -(targetPos.y - transform.position.y); // distance from drone to target
+        float feedback = Mathf.Acos(transform.up.y / 1) * Mathf.Sign(Vector3.Dot(targetPos - transform.position, transform.up)); // angle of drone
         // We want to rotate to an angle such that
         // the horizontal component of the thrust is in the direction towards the target, and
         // the vertical component of the thrust = the desired vertical thrust
@@ -136,9 +139,15 @@ public class Drone : MonoBehaviour {
         // Desired angle: the angle that is the most steep
         // that would not saturate the vertical thrust
         // The angle is measured from the vertical (i.e. 0 degrees for a stable hover)
-        float referencePitch = Mathf.Atan2(desiredY, motor_saturation);
 
+        // if can't reach desired angle, refer to perfectly straight up
+        float ratio = desiredY / motor_saturation;
+        float referencePitch = 0;
+        if(ratio > -1 && ratio < 1) {
+            referencePitch = Mathf.Acos(desiredY / motor_saturation);
+        }
 
+        Debug.Log("ERROR: " + (referencePitch - feedback) + " = " + referencePitch + " - " + feedback + " where trans.up.y = " + transform.up.y);
 
         return pidHead.Step(feedback, referencePitch);
     }
@@ -147,7 +156,7 @@ public class Drone : MonoBehaviour {
         float feedback = -(targetPos.y - transform.position.y); // distance from drone to target
         float reference = 0; // we want that distance to be zero
 
-        float y = Mathf.Max(0, pidHeight.Step(feedback, reference)) + -Physics.gravity.y;
+        float y = Mathf.Max(0, pidHeight.Step(feedback, reference) + -Physics.gravity.y);
 
 
         return y;
