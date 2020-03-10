@@ -107,7 +107,7 @@ public class Drone : MonoBehaviour {
         }
         pidHead.SetParams(head_p, head_i, head_d);
         float angle = StepHeading(desiredY);
-        Debug.Log("Angle: " + angle);
+        //Debug.Log("Angle: " + angle);
 
         rotation = angle * Vector3.Cross(Vector3.up, targetPos - transform.position).normalized;
         Debug.DrawRay(transform.position, Vector3.up, Color.green);
@@ -147,7 +147,7 @@ public class Drone : MonoBehaviour {
             referencePitch = Mathf.Acos(desiredY / motor_saturation);
         }
 
-        Debug.Log("ERROR: " + (referencePitch - feedback) + " = " + referencePitch + " - " + feedback + " where trans.up.y = " + transform.up.y);
+        //Debug.Log("ERROR: " + (referencePitch - feedback) + " = " + referencePitch + " - " + feedback + " where trans.up.y = " + transform.up.y);
 
         return pidHead.Step(feedback, referencePitch);
     }

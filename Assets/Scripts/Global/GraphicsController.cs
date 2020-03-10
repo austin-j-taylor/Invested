@@ -5,6 +5,7 @@ using UnityEngine.PostProcessing;
 
 public class GraphicsController : MonoBehaviour {
 
+    private static GraphicsController instance = null;
 
     [SerializeField]
     PostProcessingProfile profile = null;
@@ -12,7 +13,9 @@ public class GraphicsController : MonoBehaviour {
     ChromaticAberrationModel.Settings aberrationSettings;
     VignetteModel.Settings vignetteSettings;
 
-    // Use this for initialization
+    private void Awake() {
+        instance = this;
+    }
     void Start () {
         profile.bloom.enabled = SettingsMenu.settingsData.bloom == 1;
         profile.antialiasing.enabled = SettingsMenu.settingsData.antialiasing == 1;
@@ -25,20 +28,20 @@ public class GraphicsController : MonoBehaviour {
         vignetteSettings = profile.vignette.settings;
     }
 
-    public void SetAntialiasing(bool enable) {
-        profile.antialiasing.enabled = enable;
+    public static void SetAntialiasing(bool enable) {
+        instance.profile.antialiasing.enabled = enable;
     }
 
-    public void SetAmbientOcclusion(bool enable) {
-        profile.ambientOcclusion.enabled = enable;
+    public static void SetAmbientOcclusion(bool enable) {
+        instance.profile.ambientOcclusion.enabled = enable;
     }
 
-    public void SetBloom(bool enable) {
-        profile.bloom.enabled = enable;
+    public static void SetMotionBlur(bool enable) {
+        instance.profile.motionBlur.enabled = enable;
     }
 
-    public void SetMotionBlur(bool enable) {
-        profile.motionBlur.enabled = enable; 
+    public static void SetBloom(bool enable) {
+        instance.profile.bloom.enabled = enable;
     }
 
     // returns intensity
@@ -47,8 +50,8 @@ public class GraphicsController : MonoBehaviour {
             //enabled = false; // If Control Wheel is open, don't show the effect
             intensity = intensity / 3;
         }
-        profile.chromaticAberration.enabled = enable;
-        profile.vignette.enabled = enable;
+        profile.chromaticAberration.enabled = enable && (SettingsMenu.settingsData.aberration == 1);
+        profile.vignette.enabled = enable && (SettingsMenu.settingsData.vignetteZinc == 1);
         
         if (enable) {
             aberrationSettings.intensity = intensity;

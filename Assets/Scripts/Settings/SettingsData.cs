@@ -47,6 +47,8 @@ public class SettingsData : MonoBehaviour {
     public int ambientOcclusion;
     public int motionBlur;
     public int bloom;
+    public int aberration;
+    public int vignetteZinc;
     // Audio
     public float audioMaster;
     public float audioMusic;
@@ -98,6 +100,10 @@ public class SettingsData : MonoBehaviour {
             // Manually apply certain setting effects
             GameManager.AudioManager.SetAudioLevels(audioMaster, audioMusic, audioEffects);
             TimeController.CurrentTimeScale = timeScale;
+            GraphicsController.SetAntialiasing(antialiasing == 1);
+            GraphicsController.SetAmbientOcclusion(ambientOcclusion == 1);
+            GraphicsController.SetMotionBlur(motionBlur == 1);
+            GraphicsController.SetBloom(bloom == 1);
 
         } catch (DirectoryNotFoundException e) {
             Debug.LogError(e.Message);
@@ -215,6 +221,14 @@ public class SettingsData : MonoBehaviour {
                 }
             case "bloom": {
                     bloom = data;
+                    return true;
+                }
+            case "aberration": {
+                    aberration = data;
+                    return true;
+                }
+            case "vignetteZinc": {
+                    vignetteZinc = data;
                     return true;
                 }
             case "pushControlStyle": {
@@ -389,6 +403,12 @@ public class SettingsData : MonoBehaviour {
                 }
             case "bloom": {
                     return bloom;
+                }
+            case "aberration": {
+                    return aberration;
+                }
+            case "vignetteZinc": {
+                    return vignetteZinc;
                 }
             case "pushControlStyle": {
                     return pushControlStyle;
