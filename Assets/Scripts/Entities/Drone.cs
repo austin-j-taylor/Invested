@@ -121,7 +121,8 @@ public class Drone : MonoBehaviour {
 
 
         rb.AddForce(thrust, ForceMode.Acceleration);
-        rb.AddTorque(rotation, ForceMode.Acceleration);
+        if(!float.IsNaN(rotation.x))
+            rb.AddTorque(rotation, ForceMode.Acceleration);
     }
 
     public void SetTarget(Vector3 targetPosition) {
