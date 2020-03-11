@@ -46,7 +46,7 @@ public class Drone : MonoBehaviour {
     private float x_p = 1, x_i = 0, x_d = 0,
                   head_p = 1, head_i = 0, head_d = 0,
                   height_p = 20, height_i = 0, height_d = 470,
-                  speed_p = 1, speed_i = 0, speed_d = 0;
+                  horiz_p = 1, horiz_i = 0, horiz_d = 0;
 
 
     // PLANT PARAMETERS
@@ -54,7 +54,7 @@ public class Drone : MonoBehaviour {
     private float motor_saturation = 100; // max acceleration per frame
 
 
-    private PIDController_float pidX, pidY, pidHead, pidHeight, pidSpeed;
+    private PIDController_float pidX, pidY, pidHead, pidHeight, pidHoriz;
     [SerializeField]
     private Transform targetPosObject = null;
     private Vector3 targetPos;
@@ -66,7 +66,12 @@ public class Drone : MonoBehaviour {
         pidY = new PIDController_float(x_p, x_i, x_d);
         pidHead = new PIDController_float(head_p, head_i, head_d);
         pidHeight = new PIDController_float(height_p, height_i, height_d);
-        pidSpeed = new PIDController_float(speed_p, speed_i, speed_d);
+        pidHoriz = new PIDController_float(horiz_p, horiz_i, horiz_d);
+
+        if(Player.PlayerInstance != null) {
+            targetPosObject = Player.PlayerInstance.transform;
+        }
+
         SetTarget(targetPosObject.position);
     }
 
@@ -88,34 +93,51 @@ public class Drone : MonoBehaviour {
         Vector3 thrust = Vector3.zero;
         Vector3 rotation = Vector3.zero;
 
+        Vector3 distance = targetPos - transform.position;
+        float distanceAngle = Mathf.Atan2(distance.z, distance.x);
+        Debug.DrawRay(transform.position, distance, Color.gray);
+
         // thrust is now relative to frame of drone
 
         pidHeight.SetParams(height_p, height_i, height_d);
-        thrust.y += StepHeight();
+        thrust.y += StepHeight(distance);
+        
         Debug.DrawRay(transform.position, thrust.normalized * motor_saturation, Color.black); // the maximum possible thrust we could have
-        Debug.DrawRay(transform.position, thrust, Color.cyan); // unclamped
+        Debug.DrawRay(transform.position, thrust, Color.cyan); // unclamped vertical thrust
 
-        float desiredY = thrust.y;
+        // Idea: form desired thrust vector.
+        pidHoriz.SetParams(horiz_p, horiz_i, horiz_d);
+
+        float stepHoriz =  StepHoriz(distance);
+        thrust.x += Mathf.Cos(distanceAngle) * stepHoriz;
+        thrust.z += Mathf.Sin(distanceAngle) * stepHoriz;
+
+        Debug.DrawRay(transform.position, new Vector3(thrust.x, 0, thrust.z), Color.cyan); // unclamped horizontal thrust
+        Debug.Log("Horizontal angle: " + distanceAngle + "x: " + thrust.x + " z: " + thrust.z);
+
+        Debug.DrawRay(transform.position, thrust, Color.yellow); // desired
+        //float desiredY = thrust.y;
         // saturate the force we can apply
         if (motor_saturation != 0) {
-            if(thrust.y > 0) {
-                if(thrust.y > motor_saturation) {
-                    thrust.y = motor_saturation;
-                    Debug.DrawRay(transform.position, thrust, Color.blue); // saturated
-                }
-            }
+            thrust = Vector3.ClampMagnitude(thrust, motor_saturation);
+
+            //if(thrust.y > 0) {
+            //    if(thrust.y > motor_saturation) {
+            //        thrust.y = motor_saturation;
+            //        Debug.DrawRay(transform.position, thrust, Color.blue); // saturated
+            //    }
+            //}
         }
         pidHead.SetParams(head_p, head_i, head_d);
-        float angle = StepHeading(desiredY);
-        //Debug.Log("Angle: " + angle);
+        float angle = StepHeading(distance, thrust);
+        Debug.Log("Angle acceleration: " + angle + "(was " + rb.angularVelocity.magnitude * 180 / Mathf.PI + ")");
 
         rotation = angle * Vector3.Cross(Vector3.up, targetPos - transform.position).normalized;
         Debug.DrawRay(transform.position, Vector3.up, Color.green);
-        Debug.DrawRay(transform.position, targetPos - transform.position, Color.blue);
-        Debug.DrawRay(transform.position, rotation, Color.red);
+        //Debug.DrawRay(transform.position, rotation, Color.red);
 
         thrust = thrust.magnitude * transform.up; // make thrust only act up/down from the drone's perspective
-        Debug.DrawRay(transform.position, thrust, Color.green); // rotated
+        Debug.DrawRay(transform.position, thrust, Color.blue); // rotated
 
         // thrust is now relative to world
 
@@ -130,9 +152,15 @@ public class Drone : MonoBehaviour {
         //startPos = transform.position;
     }
 
-    private float StepHeading(float desiredY) {
-        //float feedback = -(targetPos.y - transform.position.y); // distance from drone to target
-        float feedback = Mathf.Acos(transform.up.y / 1) * Mathf.Sign(Vector3.Dot(targetPos - transform.position, transform.up)); // angle of drone
+    // INPUT: ANGLE of drone to get desired thrust
+    // OUTPUT: TORQUE to apply to frame
+    private float StepHeading(Vector3 distance, Vector3 desiredThrust) {
+        float feedback = Mathf.Acos(transform.up.y / 1); // angle of drone
+        // If the thrust is on the opposite side of the drone, the feedback is considered a negative angle
+        Vector3 desiredHorizThrust = desiredThrust;
+        desiredHorizThrust.y = 0;
+        Vector3 distanceHoriz = distance;
+        distanceHoriz.y = 0;
         // We want to rotate to an angle such that
         // the horizontal component of the thrust is in the direction towards the target, and
         // the vertical component of the thrust = the desired vertical thrust
@@ -142,19 +170,45 @@ public class Drone : MonoBehaviour {
         // The angle is measured from the vertical (i.e. 0 degrees for a stable hover)
 
         // if can't reach desired angle, refer to perfectly straight up
-        float ratio = desiredY / motor_saturation;
-        float referencePitch = 0;
-        if(ratio > -1 && ratio < 1) {
-            referencePitch = Mathf.Acos(desiredY / motor_saturation);
+        //float ratio = desiredY / motor_saturation;
+        //float referencePitch = 0;
+        //if(ratio > -1 && ratio < 1) {
+        //    referencePitch = Mathf.Acos(desiredY / motor_saturation);
+        //}
+
+        Vector3 forwardsProjection = desiredThrust;
+        forwardsProjection.y = 0;
+        Vector3 pitchProjection = transform.up;
+        pitchProjection.y = 0;
+
+        float referencePitch = Mathf.Acos(desiredThrust.y / desiredThrust.magnitude);
+        
+        // make TOWARDS TARGET be POSITIVE
+        if(Vector3.Dot(forwardsProjection, distance) < 0) {
+            referencePitch = -referencePitch;
+        }
+        if (Vector3.Dot(pitchProjection, distance) < 0) {
+            feedback = -feedback;
         }
 
-        //Debug.Log("ERROR: " + (referencePitch - feedback) + " = " + referencePitch + " - " + feedback + " where trans.up.y = " + transform.up.y);
+        //if (Vector3.Dot(forwardsProjection, pitchProjection) < 0) {
+        //    referencePitch = -referencePitch;
+        //}
+        Debug.Log("DOT of FORWARDS on PITCH: " + Vector3.Dot(forwardsProjection, pitchProjection));
+        Debug.Log("DOT of FORWARDS on DiSTANCE: " + Vector3.Dot(forwardsProjection, distance));
+        Debug.Log("DOT of PITCH on DISTANCE: " + Vector3.Dot(pitchProjection, distance));
+        Debug.DrawRay(transform.position, forwardsProjection, Color.white);
+        Debug.DrawRay(transform.position, pitchProjection, Color.black);
+
+        Debug.Log("ERROR: " + (referencePitch - feedback) + " = " + referencePitch + " - " + feedback);
 
         return pidHead.Step(feedback, referencePitch);
     }
 
-    private float StepHeight() {
-        float feedback = -(targetPos.y - transform.position.y); // distance from drone to target
+    // INPUT: DISTANCE to target
+    // OUTPUT: DESIRED VERTICAL THRUST
+    private float StepHeight(Vector3 distance) {
+        float feedback = -(distance.y); // vertical distance from drone to target
         float reference = 0; // we want that distance to be zero
 
         float y = Mathf.Max(0, pidHeight.Step(feedback, reference) + -Physics.gravity.y);
@@ -162,14 +216,20 @@ public class Drone : MonoBehaviour {
 
         return y;
     }
-    private void StepSpeed() {
-        //    float xVRef = VRef(startPos.x, targetPos.x, 1, transform.position.x - startPos.x);
-        //    float yVRef = VRef(startPos.z, targetPos.z, 1, transform.position.z - startPos.z);
 
-        //Vector3 temp = transform.position;
-        //temp.x += xVRef;
-        //temp.z += yVRef;
-        //transform.position = temp;
+    // Thrust PID:
+    // INPUT: DISTANCE to target
+    // OUTPUT: DESIRED HORIZONTAL THRUST
+
+    private float StepHoriz(Vector3 distance) {
+        distance.y = 0;
+        float feedback = -(distance.magnitude); // horizontal distance from drone to target
+        float reference = 0; // we want that distance to be zero
+
+        float x = /*Mathf.Max(0, */pidHoriz.Step(feedback, reference)/*)*/;
+
+
+        return x;
     }
 
     private float VRef(float A, float B, float R, float x) {
