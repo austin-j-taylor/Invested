@@ -138,22 +138,22 @@ public class ControlWheelController : MonoBehaviour {
                     SectorManual();
                     isOpen = true;
                     IsOpen = false;
-                } else if (Keybinds.ControlWheelArea()) {
+                } else if (Keybinds.ControlWheelArea() && lockedState != LockedState.LockedFully) {
                     Player.PlayerIronSteel.StartBurning();
                     SectorArea();
                     isOpen = true;
                     IsOpen = false;
-                } else if (Keybinds.ControlWheelBubble()) {
+                } else if (Keybinds.ControlWheelBubble() && lockedState != LockedState.LockedFully) {
                     Player.PlayerIronSteel.StartBurning();
                     SectorBubble();
                     isOpen = true;
                     IsOpen = false;
-                } else if (Keybinds.ControlWheelCoinshot()) {
+                } else if (Keybinds.ControlWheelCoinshot() && lockedState == LockedState.Unlocked) {
                     Player.PlayerIronSteel.StartBurning();
                     SectorCoinshot();
                     isOpen = true;
                     IsOpen = false;
-                } else if (Keybinds.ControlWheelThrowingMode()) {
+                } else if (Keybinds.ControlWheelThrowingMode() && lockedState == LockedState.Unlocked) {
                     switch(Player.PlayerInstance.CoinThrowingMode) {
                         case Player.CoinMode.Semi:
                             SectorCoinFull();
