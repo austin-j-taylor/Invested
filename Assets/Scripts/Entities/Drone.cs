@@ -130,11 +130,40 @@ public class Drone : MonoBehaviour {
         }
         pidHead.SetParams(head_p, head_i, head_d);
         float angle = StepHeading(distance, thrust);
+
+
+        Vector3 forwardsProjection = thrust;
+        forwardsProjection.y = 0;
+        Vector3 pitchProjection = transform.up;
+        pitchProjection.y = 0;
+
+        float referencePitch = Mathf.Acos(thrust.y / thrust.magnitude);
+
+        float angleFromThrust = Mathf.Abs(Vector3.Angle(Vector3.up, thrust));
+        float angleFromUp= Mathf.Abs(Vector3.Angle(Vector3.up, transform.up));
+        // make TOWARDS TARGET be POSITIVE
+        if (Vector3.Dot(forwardsProjection, distance) < 0) {
+            angleFromThrust = -angleFromThrust;
+        }
+        if (Vector3.Dot(pitchProjection, distance) < 0) {
+            angleFromUp = -angleFromUp;
+        }
+        if (angleFromThrust < angleFromUp) {
+            angle = -angle;
+            Debug.Log("NEGATING: " + angleFromThrust + " < " + angleFromUp);
+        }
+
         Debug.Log("Angle acceleration: " + angle + "(was " + rb.angularVelocity.magnitude * 180 / Mathf.PI + ")");
 
-        rotation = angle * Vector3.Cross(Vector3.up, targetPos - transform.position).normalized;
+        // So this angle will always be applied to accelerate the transform.up -> towards the -> thrust.
+        // Now, we want the thrust to be predictive: the angle of the thrust need a controller
+        
+
+
+
+        rotation = angle * Vector3.Cross(transform.up, thrust).normalized;
         Debug.DrawRay(transform.position, Vector3.up, Color.green);
-        //Debug.DrawRay(transform.position, rotation, Color.red);
+        Debug.DrawRay(transform.position, rotation, Color.red);
 
         thrust = thrust.magnitude * transform.up; // make thrust only act up/down from the drone's perspective
         Debug.DrawRay(transform.position, thrust, Color.blue); // rotated
