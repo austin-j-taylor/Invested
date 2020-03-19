@@ -86,7 +86,8 @@ public class PlayerMovementController : AllomanticPewter {
     protected override void Awake() {
         base.Awake();
         groundedChecker = transform.GetComponentInChildren<PlayerGroundedChecker>();
-        pidSpeed = new PIDController_Vector3(25, 0, 0, 50);
+        pidSpeed = gameObject.AddComponent<PIDController_Vector3>();
+        pidSpeed.SetParams(25, 0, 0, 50);
         //rb.maxAngularVelocity = maxRollingAngularSpeed;
         rb.maxAngularVelocity = Mathf.Infinity;
         physicsMaterial = GetComponent<Collider>().material;

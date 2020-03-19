@@ -6,21 +6,18 @@ using System.Collections;
  * Not using generic typing because you can't use operators with them.
  */
 
-public class PIDController_float {
+public class PIDController_float : MonoBehaviour {
 
     float gainP = 25, gainI = 0, gainD = 0;
 
     private float cmd_I, last_error, last_command;
 
+    // Watchdog: Keep true while the controller is updating
+    bool watchdog = false, lastWasStepped = false;
 
-    // Use this for initialization
-    public PIDController_float(float p, float i, float d) {
-        gainP = p;
-        gainI = i;
-        gainD = d;
-        cmd_I = 0;
-        last_error = 0;
-        last_command = 0;
+    private void FixedUpdate() {
+        lastWasStepped = watchdog;
+        watchdog = false;
     }
 
     public void Clear() {
@@ -36,6 +33,14 @@ public class PIDController_float {
     }
 
     public float Step(float feedback, float reference) {
+
+        // If the controller was not updated recently, reset the last error/command.
+        if (!lastWasStepped) {
+            cmd_I = 0;
+            last_error = 0;
+            last_command = 0;
+        }
+        watchdog = true;
 
         float error = reference - feedback;
 

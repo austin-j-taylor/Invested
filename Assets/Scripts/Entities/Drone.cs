@@ -62,11 +62,11 @@ public class Drone : MonoBehaviour {
 
     private void Awake() {
         rb = GetComponent<Rigidbody>();
-        pidX = new PIDController_float(x_p, x_i, x_d);
-        pidY = new PIDController_float(x_p, x_i, x_d);
-        pidHead = new PIDController_float(head_p, head_i, head_d);
-        pidHeight = new PIDController_float(height_p, height_i, height_d);
-        pidHoriz = new PIDController_float(horiz_p, horiz_i, horiz_d);
+        pidX = gameObject.AddComponent<PIDController_float>();
+        pidY = gameObject.AddComponent<PIDController_float>();
+        pidHead = gameObject.AddComponent<PIDController_float>();
+        pidHeight = gameObject.AddComponent<PIDController_float>();
+        pidHoriz = gameObject.AddComponent<PIDController_float>();
 
         if(Player.PlayerInstance != null) {
             targetPosObject = Player.PlayerInstance.transform;

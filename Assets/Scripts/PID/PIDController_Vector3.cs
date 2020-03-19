@@ -6,25 +6,35 @@ using System.Collections;
  * Not using generic typing because you can't use operators with them.
  */
 
-public class PIDController_Vector3 {
+public class PIDController_Vector3 : MonoBehaviour  {
 
     float gainP = 25, gainI = 0, gainD = 0, maxDelta = 50;
 
-    private Vector3 cmd_I, last_error, last_command;
+    private Vector3 cmd_I = Vector3.zero, last_error = Vector3.zero, last_command = Vector3.zero;
 
+    // Watchdog: Keep true while the controller is updating
+    bool watchdog = false, lastWasStepped = false;
 
-    // Use this for initialization
-    public PIDController_Vector3(float p, float i, float d, float mD) {
+    private void FixedUpdate() {
+        lastWasStepped = watchdog;
+        watchdog = false;
+    }
+
+    public void SetParams(float p, float i, float d, float mD) {
         gainP = p;
         gainI = i;
         gainD = d;
-        maxDelta = mD;
-        cmd_I = Vector3.zero;
-        last_error = Vector3.zero;
-        last_command = Vector3.zero;
     }
 
     public Vector3 Step(Vector3 feedback, Vector3 reference) {
+
+        // If the controller was not updated recently, reset the last error/command.
+        if(!lastWasStepped) {
+            cmd_I = Vector3.zero;
+            last_error = Vector3.zero;
+            last_command = Vector3.zero;
+        }
+        watchdog = true;
 
         Vector3 error = reference - feedback;
 
