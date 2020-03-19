@@ -113,7 +113,7 @@ public class Drone : MonoBehaviour {
         thrust.z += Mathf.Sin(distanceAngle) * stepHoriz;
 
         Debug.DrawRay(transform.position, new Vector3(thrust.x, 0, thrust.z), Color.cyan); // unclamped horizontal thrust
-        Debug.Log("Horizontal angle: " + distanceAngle + "x: " + thrust.x + " z: " + thrust.z);
+        //Debug.Log("Horizontal angle: " + distanceAngle + "x: " + thrust.x + " z: " + thrust.z);
 
         Debug.DrawRay(transform.position, thrust, Color.yellow); // desired
         //float desiredY = thrust.y;
@@ -131,7 +131,7 @@ public class Drone : MonoBehaviour {
         pidHead.SetParams(head_p, head_i, head_d);
         float angle = StepHeading(distance, thrust);
 
-
+        /*
         Vector3 forwardsProjection = thrust;
         forwardsProjection.y = 0;
         Vector3 pitchProjection = transform.up;
@@ -140,7 +140,7 @@ public class Drone : MonoBehaviour {
         float referencePitch = Mathf.Acos(thrust.y / thrust.magnitude);
 
         float angleFromThrust = Mathf.Abs(Vector3.Angle(Vector3.up, thrust));
-        float angleFromUp= Mathf.Abs(Vector3.Angle(Vector3.up, transform.up));
+        float angleFromUp = Mathf.Abs(Vector3.Angle(Vector3.up, transform.up));
         // make TOWARDS TARGET be POSITIVE
         if (Vector3.Dot(forwardsProjection, distance) < 0) {
             angleFromThrust = -angleFromThrust;
@@ -157,11 +157,12 @@ public class Drone : MonoBehaviour {
 
         // So this angle will always be applied to accelerate the transform.up -> towards the -> thrust.
         // Now, we want the thrust to be predictive: the angle of the thrust need a controller
-        
-
-
 
         rotation = angle * Vector3.Cross(transform.up, thrust).normalized;
+        */
+
+        rotation = angle * Vector3.Cross(Vector3.up, targetPos - transform.position).normalized;
+
         Debug.DrawRay(transform.position, Vector3.up, Color.green);
         Debug.DrawRay(transform.position, rotation, Color.red);
 
@@ -223,13 +224,13 @@ public class Drone : MonoBehaviour {
         //if (Vector3.Dot(forwardsProjection, pitchProjection) < 0) {
         //    referencePitch = -referencePitch;
         //}
-        Debug.Log("DOT of FORWARDS on PITCH: " + Vector3.Dot(forwardsProjection, pitchProjection));
-        Debug.Log("DOT of FORWARDS on DiSTANCE: " + Vector3.Dot(forwardsProjection, distance));
-        Debug.Log("DOT of PITCH on DISTANCE: " + Vector3.Dot(pitchProjection, distance));
+        //Debug.Log("DOT of FORWARDS on PITCH: " + Vector3.Dot(forwardsProjection, pitchProjection));
+        //Debug.Log("DOT of FORWARDS on DiSTANCE: " + Vector3.Dot(forwardsProjection, distance));
+        //Debug.Log("DOT of PITCH on DISTANCE: " + Vector3.Dot(pitchProjection, distance));
         Debug.DrawRay(transform.position, forwardsProjection, Color.white);
         Debug.DrawRay(transform.position, pitchProjection, Color.black);
 
-        Debug.Log("ERROR: " + (referencePitch - feedback) + " = " + referencePitch + " - " + feedback);
+        //Debug.Log("ERROR: " + (referencePitch - feedback) + " = " + referencePitch + " - " + feedback);
 
         return pidHead.Step(feedback, referencePitch);
     }
