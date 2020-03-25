@@ -37921,6 +37921,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1072497539}
+  - component: {fileID: 1072497540}
   m_Layer: 0
   m_Name: Environment
   m_TagString: Untagged
@@ -37951,6 +37952,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1072497540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1072497538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1e887542dd5acd40b86ddbca98c9fe0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1074204952
 GameObject:
   m_ObjectHideFlags: 0
@@ -78278,6 +78291,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 6959771431101134182, guid: 5db2781ffbc077a4b92cc34cbcf9ffee,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 6956911820928209865, guid: 5db2781ffbc077a4b92cc34cbcf9ffee,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 323599106669193516, guid: 5db2781ffbc077a4b92cc34cbcf9ffee,
+        type: 3}
+      propertyPath: m_Layer
+      value: 14
+      objectReference: {fileID: 0}
     - target: {fileID: 8125849798593502461, guid: 5db2781ffbc077a4b92cc34cbcf9ffee,
         type: 3}
       propertyPath: m_Name
@@ -78344,21 +78372,6 @@ PrefabInstance:
       value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 8598374956377373437, guid: 5db2781ffbc077a4b92cc34cbcf9ffee,
-        type: 3}
-      propertyPath: m_Layer
-      value: 14
-      objectReference: {fileID: 0}
-    - target: {fileID: 323599106669193516, guid: 5db2781ffbc077a4b92cc34cbcf9ffee,
-        type: 3}
-      propertyPath: m_Layer
-      value: 14
-      objectReference: {fileID: 0}
-    - target: {fileID: 6959771431101134182, guid: 5db2781ffbc077a4b92cc34cbcf9ffee,
-        type: 3}
-      propertyPath: m_Layer
-      value: 14
-      objectReference: {fileID: 0}
-    - target: {fileID: 6956911820928209865, guid: 5db2781ffbc077a4b92cc34cbcf9ffee,
         type: 3}
       propertyPath: m_Layer
       value: 14

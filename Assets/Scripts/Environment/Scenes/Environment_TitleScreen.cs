@@ -13,7 +13,6 @@ public class Environment_TitleScreen : Environment {
 
     private Transform cameraPositionTarget;
 
-    // Use this for initialization
     void Start() {
 
         HUD.DisableHUD();
@@ -34,7 +33,6 @@ public class Environment_TitleScreen : Environment {
         TimeController.CurrentTimeScale = 0;
     }
 
-    // Update is called once per frame
     void Update() {
         cameraPositionTarget.RotateAround(Player.PlayerInstance.transform.position, Vector3.up, speed);
         Vector3 pos = cameraPositionTarget.position;
