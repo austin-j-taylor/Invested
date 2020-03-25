@@ -78,7 +78,6 @@ public class PlayerMovementController : AllomanticPewter {
             return groundedChecker.IsGrounded;
         }
     }
-    public bool IsWalking { get; private set; }
     private bool jumpQueued;
     private bool lastWasSprintingOnGround;
     private bool invertGravity = false;
@@ -96,17 +95,17 @@ public class PlayerMovementController : AllomanticPewter {
     private void Update() {
         if (Player.CanControl && Player.CanControlMovement) {
             // walking/rolling/sprinting state machine
-            if (IsWalking) {
+            if (IsAnchoring) {
                 // was walking
                 if (Keybinds.Sprint() && PewterReserve.HasMass) {
                     // start sprinting
                     IsSprinting = true;
-                    IsWalking = false;
+                    IsAnchoring = false;
                     rb.inertiaTensor = new Vector3(momentOfInertiaMagnitude, momentOfInertiaMagnitude, momentOfInertiaMagnitude);
                     Player.PlayerFlywheelController.Retract();
                 } else if (!Keybinds.Walk()) {
                     // stop rolling
-                    IsWalking = false;
+                    IsAnchoring = false;
                     rb.inertiaTensor = new Vector3(momentOfInertiaMagnitude, momentOfInertiaMagnitude, momentOfInertiaMagnitude);
                     Player.PlayerFlywheelController.Retract();
                 } // continue walking
@@ -126,7 +125,7 @@ public class PlayerMovementController : AllomanticPewter {
                     // start walking
                     rb.inertiaTensor = new Vector3(momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking);
                     Player.PlayerFlywheelController.Extend();
-                    IsWalking = true;
+                    IsAnchoring = true;
                 } // continue rolling
             }
 
@@ -141,7 +140,7 @@ public class PlayerMovementController : AllomanticPewter {
         } else {
             jumpQueued = false;
             IsSprinting = false;
-            IsWalking = false;
+            IsAnchoring = false;
         }
     }
     protected override void FixedUpdate() {
@@ -297,7 +296,7 @@ public class PlayerMovementController : AllomanticPewter {
                     lastWasSprintingOnGround = false;
 
                     // If Walking, reduce movment
-                    if (IsWalking) {
+                    if (IsAnchoring) {
                         movement *= walkingFactor;
                         physicsMaterial.dynamicFriction = frictionDynamicWalking;
                     } else {

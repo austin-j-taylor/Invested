@@ -12,6 +12,7 @@ using System.Collections;
 public class AllomanticPewter : Allomancer {
 
     protected const double gramsPewterPerSecondSprint = .500f;
+    protected const double gramsPewterPerSecondAnchor = .250f;
     protected const double gramsPewterPerSecondRefill = .250f;
     protected const double gramsPewterPerFall = .25f;
     protected const float timePewterPerFall = .75f;
@@ -31,14 +32,24 @@ public class AllomanticPewter : Allomancer {
             isSprinting = value;
         }
     }
-    public bool IsDraining { get; protected set; } = false;
+    private bool isAnchoring = false;
+    public bool IsAnchoring {
+        get {
+            return isAnchoring;
+        }
+        protected set {
+            isAnchoring = value;
+        }
+    }
+    public bool IsBursting { get; private set; } = false;
     public override bool IsBurning {
         get {
-            return IsSprinting || IsDraining;
+            return IsSprinting || IsAnchoring || IsBursting;
         }
         protected set {
             IsSprinting = false;
-            IsDraining = false;
+            IsBursting = false;
+            IsAnchoring = false;
         }
     }
 
@@ -68,6 +79,7 @@ public class AllomanticPewter : Allomancer {
 
     public override void Clear() {
         IsSprinting = false;
+        IsAnchoring = false;
         PewterReserve.IsBurnedOut = false;
         shieldMaterial.SetFloat("_HitTime", -1); // off
         StopAllCoroutines();
@@ -84,6 +96,9 @@ public class AllomanticPewter : Allomancer {
         } else {
             if (IsSprinting) {
                 PewterReserve.Mass -= gramsPewterPerSecondSprint * Time.fixedDeltaTime;
+            }
+            if (IsAnchoring) {
+                PewterReserve.Mass -= gramsPewterPerSecondAnchor * Time.fixedDeltaTime;
             }
             // Regenerate pewter conditionally
             if (!PewterReserve.IsFull) {
@@ -147,7 +162,7 @@ public class AllomanticPewter : Allomancer {
         // not guarantee that the right amount of mass is consumed.
         // Thus:
         while (massDrained + deltaMass < totalMass && t + Time.fixedDeltaTime < maxTime) {
-            IsDraining = true; // Repeatedly assigned in case of multiple coroutines are running at once and one finishes, setting IsDraining to false
+            IsBursting = true; // Repeatedly assigned in case of multiple coroutines are running at once and one finishes, setting IsBursting to false
 
             massDrained += deltaMass;
             PewterReserve.Mass -= deltaMass;
@@ -166,7 +181,7 @@ public class AllomanticPewter : Allomancer {
 
         // Drain remaining amount of mass
         PewterReserve.Mass -= totalMass - massDrained;
-        IsDraining = false;
+        IsBursting = false;
         shieldMaterial.SetFloat("_HitTime", -1); // off
     }
 
