@@ -572,7 +572,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
      */
     private float SetLineProperties(Magnetic target, out float radialDistance, out float linearDistance) {
 
-        Vector3 allomanticForceVector = CalculateAllomanticForce(target, false);
+        Vector3 allomanticForceVector = CalculateAllomanticForce(target);
         float allomanticForce = allomanticForceVector.magnitude;
         // If using Percentage force mode, burn percentage affects your range for burning
         if (SettingsMenu.settingsData.pushControlStyle == 0)
