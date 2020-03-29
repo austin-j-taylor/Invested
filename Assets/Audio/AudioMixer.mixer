@@ -67,6 +67,8 @@ AudioMixerController:
     name: volumeEffects
   - guid: 6842b39860f934c458e3aa2954c54f58
     name: volumeMaster
+  - guid: 32e789d725e4e2241ba6cf76d9ab26ad
+    name: pitchMaster
   - guid: fec3a1ba1c1d4664c852ef07dfa81976
     name: volumeMusic
   m_AudioMixerGroupViews:
@@ -121,7 +123,14 @@ AudioMixerSnapshotController:
   m_Name: Snapshot
   m_AudioMixer: {fileID: 24100000}
   m_SnapshotID: d973e893da6a0d44a872fb7b6387e1ac
-  m_FloatValues: {}
+  m_FloatValues:
+    b67549c023ae071438e4e40bbb20099c: -0
+    9ecab5a25920f9b49b89c17a7ffced7f: 377
+    32e789d725e4e2241ba6cf76d9ab26ad: 0.5
+    b4c211a85b3bd154b9ef764cc2548d04: 1
+    4695220944bbb924f8c8717074fd7be2: 10
+    013e2c69dbd66f042932567a84487529: 10
+    8153192d6bec726449b2a6fe96773608: 1
   m_TransitionOverrides: {}
 --- !u!243 &6036969526085855130
 AudioMixerGroupController:
