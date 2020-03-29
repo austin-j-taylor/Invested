@@ -19,6 +19,8 @@ public class FeruchemicalZinc : MonoBehaviour {
     // the time scale that zinc slows time down to
     // interestingly, 1/8 is about the same that in-world speed bubbles slow time down by (Alloy of Law, 2 minutes into about 15s)
     private const float slowPercent = 1 / 8f;
+    // Pitch of all audio when in zinc time (%)
+    private const float slowPitch = slowPercent * 2;
 
     public bool InZincTime { get; private set; }
     private bool recovering;
@@ -62,10 +64,12 @@ public class FeruchemicalZinc : MonoBehaviour {
                 }
 
                 if (!Keybinds.ZincTime() || Reserve == 0 || !Player.CanControl || !Player.CanControlZinc) {
+                    // Exit zinc time
                     InZincTime = false;
                     endReserve = Reserve;
                     HUD.ZincMeterController.SideEnabled = false;
                     TimeController.CurrentTimeScale = SettingsMenu.settingsData.timeScale;
+                    GameManager.AudioManager.SetMasterPitch(1);
                     if (Reserve == 0) {
                         Intensity = GameManager.GraphicsController.SetZincEffect(false);
                         recovering = false;
@@ -94,11 +98,13 @@ public class FeruchemicalZinc : MonoBehaviour {
                 }
 
                 if (Keybinds.ZincTimeDown() && Reserve > 0 && Player.CanControl && Player.CanControlZinc) {
+                    // Enter zinc time
                     InZincTime = true;
                     recovering = false;
                     startReserve = Reserve;
                     HUD.ZincMeterController.SideEnabled = true;
                     TimeController.CurrentTimeScale = slowPercent * SettingsMenu.settingsData.timeScale;
+                    GameManager.AudioManager.SetMasterPitch(slowPitch);
                     Intensity = GameManager.GraphicsController.SetZincEffect(true, CalculateIntensity((float)Reserve));
                 } else if (recovering) {
                     // player recently exiting zinc time; continue showing screen effect until it's gone

@@ -64,6 +64,7 @@ public class GameManager : MonoBehaviour {
         foreach (Transform child in MetalLinesTransform) {
             Destroy(child.gameObject);
         }
+        AudioManager.Clear();
     }
 
     public static void AddAllomancer(Allomancer allomancer) {

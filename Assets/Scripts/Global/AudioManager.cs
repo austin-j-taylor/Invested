@@ -26,12 +26,16 @@ public class AudioManager : MonoBehaviour {
 
     public void Clear() {
         StopAllCoroutines();
+        SetMasterPitch(1);
     }
 
     public void SetAudioLevels(float master, float music, float effects) {
         mixer.SetFloat("volumeMaster", Mathf.Log10(master) * 20); // logarithmic volume slider
         mixer.SetFloat("volumeMusic", Mathf.Log10(music) * 20);
         mixer.SetFloat("volumeEffects", Mathf.Log10(effects) * 20);
+    }
+    public void SetMasterPitch(float pitch) {
+        mixer.SetFloat("pitchMaster", pitch);
     }
 
     public void Play_menu_select() {
