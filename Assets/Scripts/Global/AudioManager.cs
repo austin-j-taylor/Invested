@@ -8,7 +8,7 @@ public class AudioManager : MonoBehaviour {
                       index_pewter = 1;
 
     [SerializeField]
-    AudioMixer mixer;
+    AudioMixer mixer = null;
     [SerializeField]
     AudioClip menu_select = null,
                 pewter_burst = null,

@@ -43,8 +43,7 @@ public class Drone : MonoBehaviour {
 
     // COMPENSATOR PARAMETERS
     [SerializeField]
-    private float x_p = 1, x_i = 0, x_d = 0,
-                  head_p = 1, head_i = 0, head_d = 0,
+    private float head_p = 1, head_i = 0, head_d = 0,
                   height_p = 20, height_i = 0, height_d = 470,
                   horiz_p = 1, horiz_i = 0, horiz_d = 0;
 
