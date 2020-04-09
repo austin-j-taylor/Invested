@@ -13,7 +13,7 @@ public class Player : PewterEntity {
 
     //private Animator animator;
     private PlayerMovementController movementController;
-    private Material frameMaterial;
+    private Material frameMaterial, smokeMaterial;
     private Renderer playerFrame;
 
     // Player components that need to be referenced elsewhere
@@ -27,7 +27,7 @@ public class Player : PewterEntity {
     public static PlayerTransparencyController PlayerTransparancy { get; set; }
 
     public Hand CoinHand { get; private set; }
-    public CoinMode CoinThrowingMode;
+    public CoinMode CoinThrowingMode { get; set; }
 
     //public static bool CanControlWheel { get; set; }
     //public static bool CanControlZinc { get; set; }
@@ -102,6 +102,8 @@ public class Player : PewterEntity {
                 frameMaterial = playerFrame.material;
             }
         }
+        smokeMaterial = GetComponentInChildren<ParticleSystemRenderer>().material;
+
         PlayerInstance = this;
         PlayerAudioController = CameraController.ActiveCamera.GetComponentInChildren<PlayerAudioController>();
         PlayerIronSteel = GetComponentInChildren<PlayerPullPushController>();
@@ -189,12 +191,13 @@ public class Player : PewterEntity {
         if (mode == LoadSceneMode.Single) { // Not loading all of the scenes, as it does at startup
             PlayerAudioController.Clear();
             PlayerIronSteel.Clear();
-            SetFrameMaterial(frameMaterial);
             CanControl = true;
             CanControlMovement = true;
             CanControlZinc = true;
             GodMode = true;
 
+            SetFrameMaterial(frameMaterial);
+            SetSmokeMaterial(smokeMaterial);
 
             GameObject spawn = GameObject.FindGameObjectWithTag("PlayerSpawn");
             if (spawn && CameraController.ActiveCamera) { // if CameraController.Awake has been called
@@ -210,5 +213,9 @@ public class Player : PewterEntity {
 
     public void SetFrameMaterial(Material mat) {
         playerFrame.GetComponent<Renderer>().material = mat;
+    }
+
+    public void SetSmokeMaterial(Material mat) {
+        GetComponentInChildren<ParticleSystemRenderer>().material = mat;
     }
 }
