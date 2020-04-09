@@ -353,6 +353,12 @@ public class AllomanticIronSteel : Allomancer {
         Vector3 distanceFactor;
         Vector3 positionDifference = targetCenterOfMass - CenterOfMass;
 
+
+        if (positionDifference == Vector3.zero) {
+            // If the two objects truly occupy the same space, just say that one is slightly beneath the other. Physically this is impossible, but in simulation it can.
+            positionDifference = new Vector3(0, -0.0001f, 0);
+        }
+
         switch (SettingsMenu.settingsData.forceDistanceRelationship) {
             case 0: {
                     distanceFactor = positionDifference.normalized * (1 - positionDifference.magnitude / SettingsMenu.settingsData.maxPushRange);
