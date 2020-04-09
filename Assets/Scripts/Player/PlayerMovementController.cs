@@ -134,8 +134,6 @@ public class PlayerMovementController : AllomanticPewter {
                 // Queue a jump for the next FixedUpdate
                 // Actual jumping done in FixedUpdate to stay in sync with PlayerGroundedChecker
                 jumpQueued = true;
-            } else {
-                jumpQueued = false;
             }
         } else {
             jumpQueued = false;
