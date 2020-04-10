@@ -7,13 +7,13 @@ public class KOLOSSController : MonoBehaviour {
     private const float zeroThresholdSqr = 0.05f * 0.05f;
 
     // State for the KOLOSS
-    private enum State { Reaching, Throwing };
-    private State state;
+    public enum State { Reaching, Throwing };
+    public State state;
 
     protected Animator animator;
 
     [SerializeField]
-    public Transform target = null;
+    private Transform target = null;
     [SerializeField]
     private Transform hand = null;
     //public Transform pole = null;
@@ -77,7 +77,8 @@ public class KOLOSSController : MonoBehaviour {
             //if the IK is not active, set the position and rotation of the hand and head back to the original position
             else {
                 animator.SetIKPositionWeight(AvatarIKGoal.RightHand, 0);
-                //animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 0);
+                animator.SetIKRotationWeight(AvatarIKGoal.RightHand, 0);
+                animator.SetIKHintPositionWeight(AvatarIKHint.RightElbow, 0);
                 animator.SetLookAtWeight(0);
             }
         }
