@@ -47,6 +47,8 @@ public class ConversationHUDController : MonoBehaviour {
 
     public void Clear() {
         Close();
+        // immediately close
+        anim.Play("Close");
     }
 
     // Opens the dialogue for a specific purpose.

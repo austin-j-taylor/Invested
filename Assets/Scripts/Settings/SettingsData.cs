@@ -53,6 +53,7 @@ public class SettingsData : MonoBehaviour {
     public float audioMaster;
     public float audioMusic;
     public float audioEffects;
+    public float audioVoiceBeeps;
     // Allomancy
     public int pushControlStyle; // 0 for percentage, 1 for magnitude
     public int anchoredBoost; // 0 for Disabled, 1 for ANF, 2 for EWF, 3 for DP
@@ -98,7 +99,7 @@ public class SettingsData : MonoBehaviour {
             writer.Close();
 
             // Manually apply certain setting effects
-            GameManager.AudioManager.SetAudioLevels(audioMaster, audioMusic, audioEffects);
+            GameManager.AudioManager.SetAudioLevels(audioMaster, audioMusic, audioEffects, audioVoiceBeeps);
             TimeController.CurrentTimeScale = timeScale;
             GraphicsController.SetAntialiasing(antialiasing == 1);
             GraphicsController.SetAmbientOcclusion(ambientOcclusion == 1);
@@ -308,6 +309,10 @@ public class SettingsData : MonoBehaviour {
                     audioEffects = data;
                     return true;
                 }
+            case "audioVoiceBeeps": {
+                    audioVoiceBeeps = data;
+                    return true;
+                }
             case "velocityConstant": {
                     velocityConstant = data;
                     return true;
@@ -472,6 +477,9 @@ public class SettingsData : MonoBehaviour {
                 }
             case "audioEffects": {
                     return audioEffects;
+                }
+            case "audioVoiceBeeps": {
+                    return audioVoiceBeeps;
                 }
             case "distanceConstant": {
                     return distanceConstant;

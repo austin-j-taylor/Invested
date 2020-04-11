@@ -38,6 +38,8 @@ public class ConsoleController : MonoBehaviour {
     }
     public void Clear() {
         Close();
+        // immediately close
+        anim.Play("Close");
     }
 
     // Opens the console for a specific purpose.

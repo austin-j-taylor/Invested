@@ -25,6 +25,7 @@ public class ConversationManager : MonoBehaviour {
     }
     private List<Conversation> sceneConversations;
 
+
     void Start() {
         SceneManager.sceneLoaded += OnSceneLoaded;
         sceneConversations = new List<Conversation>();
@@ -33,6 +34,7 @@ public class ConversationManager : MonoBehaviour {
     public void Clear() {
 
     }
+
 
     // When a scene is loaded, load the conversation data for that scene.
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
