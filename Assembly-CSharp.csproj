@@ -47,6 +47,9 @@
     <ImplicitlyExpandNETStandardFacades>false</ImplicitlyExpandNETStandardFacades>
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2020.1.0b3\Editor\Data\Managed/UnityEngine/UnityEngine.dll</HintPath>
@@ -320,6 +323,7 @@
     <None Include="Assets\Imports\PostProcessing\Editor Resources\UI\Trackball.shader" />
     <None Include="Assets\Imports\PostProcessing\Editor Resources\Monitors\WaveformRender.shader" />
     <None Include="Assets\Imports\VolumetricLines\Shaders\Fast-AlphaBlended.shader" />
+    <None Include="Assets\StreamingAssets\Data\Conversations\sandbox.txt" />
     <None Include="Assets\Imports\PostProcessing\resources\Shaders\Common.cginc" />
     <None Include="Assets\Imports\PostProcessing\Editor Resources\Monitors\VectorscopeRender.shader" />
     <None Include="Assets\Imports\OutlineEffect\resources\OutlineShader.shader" />
