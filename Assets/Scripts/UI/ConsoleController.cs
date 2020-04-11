@@ -30,12 +30,12 @@ public class ConsoleController : MonoBehaviour {
         consoleTextRight = headerTextRight.transform.Find("ConsoleTextRight").GetComponentInChildren<Text>();
         anim = GetComponent<Animator>();
     }
-    //private void Update() {
-    //    if (Input.GetKey(KeyCode.R))
-    //        Open();
-    //    else
-    //        Close();
-    //}
+    private void Update() {
+        if (Input.GetKey(KeyCode.R))
+            Open();
+        else
+            Close();
+    }
     public void Clear() {
         Close();
     }
@@ -84,7 +84,7 @@ public class ConsoleController : MonoBehaviour {
     }
 
     private IEnumerator TypeInLineHelper(string text, Interfaceable interf) {
-        for(int i = 0; i < text.Length; i++) {
+        for (int i = 0; i < text.Length; i++) {
             Log(text[i]);
             yield return new WaitForSeconds(typingSpeed);
         }

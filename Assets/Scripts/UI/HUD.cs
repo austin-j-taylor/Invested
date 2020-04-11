@@ -60,6 +60,9 @@ public class HUD : MonoBehaviour {
     public static ConsoleController ConsoleController {
         get; private set;
     }
+    public static ConversationHUDController ConversationHUDController {
+        get; private set;
+    }
 
     void Awake() {
         HudGameObject = gameObject;
@@ -78,6 +81,7 @@ public class HUD : MonoBehaviour {
         ZincMeterController = GetComponentInChildren<ZincMeterController>();
         ControlWheelController = GetComponentInChildren<ControlWheelController>();
         ConsoleController = GetComponentInChildren<ConsoleController>();
+        ConversationHUDController = GetComponentInChildren<ConversationHUDController>();
         SceneManager.sceneUnloaded += ClearHUDBeforeSceneChange;
     }
 
@@ -123,6 +127,7 @@ public class HUD : MonoBehaviour {
                 ZincMeterController.Clear();
                 ControlWheelController.Clear();
                 ConsoleController.Clear();
+                ConversationHUDController.Clear();
                 Crosshair.Clear();
                 anim.SetBool("ControlWheelVisible", false);
             }

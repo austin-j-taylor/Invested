@@ -159,12 +159,12 @@ AnimatorController:
   m_Name: KOLOSSController
   serializedVersion: 5
   m_AnimatorParameters:
-  - m_Name: New Bool
+  - m_Name: Throwing
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Reaching Layer
@@ -205,6 +205,9 @@ AnimatorStateMachine:
   - serializedVersion: 1
     m_State: {fileID: -8423634388814641677}
     m_Position: {x: 590, y: 80, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: 3589050880720678918}
+    m_Position: {x: 310, y: 10, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -214,7 +217,7 @@ AnimatorStateMachine:
   m_EntryPosition: {x: 50, y: 120, z: 0}
   m_ExitPosition: {x: 800, y: 120, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
-  m_DefaultState: {fileID: 3203463771874582619}
+  m_DefaultState: {fileID: 3589050880720678918}
 --- !u!1102 &3056770387736134632
 AnimatorState:
   serializedVersion: 5
@@ -278,7 +281,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 1
-    m_ConditionEvent: New Bool
+    m_ConditionEvent: Throwing
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -8423634388814641677}
@@ -294,6 +297,33 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
+--- !u!1102 &3589050880720678918
+AnimatorState:
+  serializedVersion: 5
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Armature|Sitting
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 1889602709898029310, guid: 1f032d533cf3b774a91f894149ec7f91,
+    type: 3}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
 --- !u!1102 &4389887162751837161
 AnimatorState:
   serializedVersion: 5
@@ -329,7 +359,7 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 2
-    m_ConditionEvent: New Bool
+    m_ConditionEvent: Throwing
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 3203463771874582619}

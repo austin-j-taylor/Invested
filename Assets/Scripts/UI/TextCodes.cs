@@ -37,15 +37,25 @@ public class TextCodes : MonoBehaviour {
     public const string s_Tap_ = "Tap ";
     public const string s_Scroll_ = "Scroll ";
     
+    // Opening tags for certain colors
+    public static string Blue_Open() {
+        return "<color=#0080ff>";
+    }
+    public static string LightBlue_Open() {
+        return "<color=#7fdfff>";
+    }
+    public static string Gray_Open() {
+        return "<color=#bfbfbf>";
+    }
     // Methods that accept strings as arguments and return strings colored in their respective color
     public static string Blue(string s) {
-        return "<color=#0080ff>" + s + "</color>";
+        return Blue_Open() + s + "</color>";
     }
     public static string MidBlue(string s) {
         return "<color=#00bfff>" + s + "</color>";
     }
     public static string LightBlue(string s) {
-        return "<color=#7fdfff>" + s + "</color>";
+        return LightBlue_Open() + s + "</color>";
     }
     public static string ZincBlue(string s) {
         return "<color=#c1dbff>" + s + "</color>";
@@ -57,7 +67,7 @@ public class TextCodes : MonoBehaviour {
         return "<color=#ff8080>" + s + "</color>";
     }
     public static string Gray(string s) {
-        return "<color=#bfbfbf>" + s + "</color>";
+        return Gray_Open() + s + "</color>";
     }
     public static string Gold(string s) {
         return "<color=#fff080>" + s + "</color>";
@@ -67,6 +77,29 @@ public class TextCodes : MonoBehaviour {
     }
     public static string Bronze(string s) {
         return "<color=#ff9f00>" + s + "</color>";
+    }
+    // Same as above, but for specific characters
+    public static string Color_Kog(string s) {
+        return Gray(s);
+    }
+    public static string Color_Prima(string s) {
+        return LightBlue(s);
+    }
+    public static string Color_Machines(string s) {
+        return (s);
+    }
+    public static string Color_Kog_Open() {
+        return Gray_Open();
+    }
+    public static string Color_Prima_Open() {
+        return LightBlue_Open();
+    }
+    public static string Color_Machines_Open() {
+        return ("");
+    }
+    // Same as above, but for other key words
+    public static string Color_Location_Open() {
+        return Blue_Open();
     }
 
     // Known words that should always appear in a specific color

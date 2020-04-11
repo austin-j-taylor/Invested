@@ -12,6 +12,7 @@ public class GameManager : MonoBehaviour {
 
     // Sub-controllers, transforms
     public static AudioManager AudioManager { get; private set; }
+    public static ConversationManager ConversationManager { get; private set; }
     public static GraphicsController GraphicsController { get; private set; }
     public static Transform MetalLinesTransform { get; private set; }
 
@@ -37,6 +38,7 @@ public class GameManager : MonoBehaviour {
 
     void Awake() {
         AudioManager = transform.Find("AudioManager").GetComponent<AudioManager>();
+        ConversationManager = GetComponent<ConversationManager>();
         GraphicsController = GetComponent<GraphicsController>();
         MetalLinesTransform = transform.Find("MetalLines");
 

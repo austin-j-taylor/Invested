@@ -163,6 +163,9 @@ public class Keybinds : MonoBehaviour {
         else
             return Input.GetKeyDown(KeyCode.Space);
     }
+    public static bool AdvanceConversation() {
+        return JumpDown();
+    }
 
     public static bool Sprint() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)

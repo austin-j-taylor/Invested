@@ -12,20 +12,27 @@ public class ConversationManager : MonoBehaviour {
 
     private readonly string rootFilename = Path.Combine(Application.streamingAssetsPath, "Data" + Path.DirectorySeparatorChar + "Conversations" + Path.DirectorySeparatorChar);
 
-    private struct Conversation {
+    public enum Speaker { None, Kog, Prima, OtherMachine };
+    public struct Phrase {
+        public Speaker speaker; // the speaker of this phrase
+        public string content; // the parsed/formatted/colored contents of this phrase
+    }
+
+    public struct Conversation {
         public string key; // the header/title for the conversation, e.g. "CASUAL_CHAT"
         public string content; // the phrases, etc. in the conversation
         // keep track of questions/branches? or parse that at runtime? it's 2020, parsing that at runtime is fine
     }
     private List<Conversation> sceneConversations;
 
-    private int conversationIndex = 0, phraseIndex = 0;
-
     void Start() {
         SceneManager.sceneLoaded += OnSceneLoaded;
         sceneConversations = new List<Conversation>();
     }
 
+    public void Clear() {
+
+    }
 
     // When a scene is loaded, load the conversation data for that scene.
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
@@ -58,7 +65,6 @@ public class ConversationManager : MonoBehaviour {
             // Parse the full data file into a list of conversations
             try {
                 for (int i = 0; i < allFileLines.Length; i++) {
-                    Debug.Log(i);
                     // first step: find the conversation key
                     int colon = allFileLines[i].IndexOf(':');
                     if (colon == -1)
@@ -98,22 +104,29 @@ public class ConversationManager : MonoBehaviour {
         if (sceneConversations.Count == 0)
             return;
 
-        conversationIndex = GetIndexOfConversation(key);
-        phraseIndex = 0;
-        //HUD.SpeechBubble.SetSpeaker(speakerName);
-    }
-    public void Continue() {
-        if (sceneConversations.Count == 0)
+        int conversationIndex = GetIndexOfConversation(key);
+        if(conversationIndex == -1) {
+            Debug.LogError("Could not find key " + key + " in sceneConversations.");
             return;
-        phraseIndex++;
-        //HUD.SpeechBubble.SetText(textStrings[conversationIndex][phraseIndex]);
+        }
+
+        // Print the first phrase of that conversation.
+        HUD.ConversationHUDController.Open(sceneConversations[conversationIndex]);
     }
-    public void SetPhrase(int index) {
-        if (sceneConversations.Count == 0)
-            return;
-        phraseIndex = index;
-        //HUD.SpeechBubble.SetText(textStrings[conversationIndex][phraseIndex]);
-    }
+
+
+    //public void Continue() {
+    //    if (sceneConversations.Count == 0)
+    //        return;
+    //    phraseIndex++;
+    //    //HUD.SpeechBubble.SetText(textStrings[conversationIndex][phraseIndex]);
+    //}
+    //public void SetPhrase(int index) {
+    //    if (sceneConversations.Count == 0)
+    //        return;
+    //    phraseIndex = index;
+    //    //HUD.SpeechBubble.SetText(textStrings[conversationIndex][phraseIndex]);
+    //}
 
     // Gets the index in the sceneConversation array of the conversation with the given key.
     // Returns -1 if it can't be found.
@@ -128,11 +141,5 @@ public class ConversationManager : MonoBehaviour {
         }
         return -1;
     }
-
-    // Parses the input string, replacing formatted data in the input with the correct color tags and returning it
-    private string ParsePhrase(string input) {
-        // if character == \Cs then text = MidBlue(text up to \c)
-        return input;
-    }
-
+    
 }
