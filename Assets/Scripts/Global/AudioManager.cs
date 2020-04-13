@@ -5,7 +5,8 @@ using UnityEngine.Audio;
 public class AudioManager : MonoBehaviour {
 
     private const int index_shared = 0,
-                      index_pewter = 1;
+                      index_pewter = 1,
+                      index_rolling = 2;
 
     [SerializeField]
     AudioMixer mixer = null;
@@ -14,9 +15,10 @@ public class AudioManager : MonoBehaviour {
                 pewter_burst = null,
                 pewter_intro = null,
                 pewter_loop = null,
-                pewter_end = null;
+                pewter_end = null,
+                rolling_loop = null;
 
-    private Coroutine coroutine_pewter;
+    private Coroutine coroutine_pewter, coroutine_rolling;
 
     AudioSource[] sources;
 
@@ -59,6 +61,19 @@ public class AudioManager : MonoBehaviour {
         coroutine_pewter = StartCoroutine(Playing_pewter_end());
     }
 
+    public void Play_rolling() {
+        if (coroutine_rolling != null)
+            StopCoroutine(coroutine_rolling);
+
+        coroutine_rolling = StartCoroutine(Playing_rolling_start_loop());
+    }
+    public void Stop_rolling() {
+        if (coroutine_rolling != null)
+            StopCoroutine(coroutine_rolling);
+
+        coroutine_rolling = StartCoroutine(Playing_rolling_end());
+    }
+
     private IEnumerator Playing_pewter_start_loop() {
         // wait until the last sound effect is done
         sources[index_pewter].loop = false;
@@ -87,4 +102,31 @@ public class AudioManager : MonoBehaviour {
         sources[index_pewter].Play();
     }
 
+    private IEnumerator Playing_rolling_start_loop() {
+        // wait until the last sound effect is done
+        sources[index_rolling].loop = false;
+        while (sources[index_rolling].isPlaying) {
+            yield return null;
+        }
+
+        //// start the starting sound effect
+        //sources[index_rolling].clip = pewter_intro;
+        //sources[index_rolling].loop = false;
+        //sources[index_rolling].Play();
+        //while (sources[index_rolling].isPlaying) {
+        //    yield return null;
+        //}
+        sources[index_rolling].clip = rolling_loop;
+        sources[index_rolling].loop = true;
+        sources[index_rolling].Play();
+    }
+    private IEnumerator Playing_rolling_end() {
+        // wait until the last sound effect is done
+        sources[index_rolling].loop = false;
+        while (sources[index_rolling].isPlaying) {
+            yield return null;
+        }
+        //sources[index_rolling].clip = rolling_end;
+        //sources[index_rolling].Play();
+    }
 }

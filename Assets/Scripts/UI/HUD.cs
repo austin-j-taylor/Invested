@@ -117,7 +117,6 @@ public class HUD : MonoBehaviour {
         if (SettingsMenu.settingsData.hudEnabled == 1) {
             EnableHUD();
             if (BurnPercentageMeter) {
-                Debug.Log("resetting hud");
                 BurnPercentageMeter.Clear();
                 TargetOverlayController.Clear();
                 ThrowingAmmoMeter.Clear();

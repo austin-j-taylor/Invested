@@ -79,7 +79,7 @@ public class PlayerMovementController : AllomanticPewter {
         }
     }
     private bool jumpQueued;
-    private bool lastWasSprintingOnGround;
+    private bool lastWasSprintingOnGround, lastWasRollingOnGround;
     private bool invertGravity = false;
 
     protected override void Awake() {
@@ -126,7 +126,8 @@ public class PlayerMovementController : AllomanticPewter {
                     rb.inertiaTensor = new Vector3(momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking);
                     Player.PlayerFlywheelController.Extend();
                     IsAnchoring = true;
-                } // continue rolling
+                } else { // continue rolling
+                }
             }
 
             // Check if jumping
@@ -263,8 +264,8 @@ public class PlayerMovementController : AllomanticPewter {
 
             //float sprintingAcceleration = 0;
             if (movement.sqrMagnitude > 0) { // If moving at all
-                // Apply Pewter Sprint, if possible
 
+                // Apply Pewter Sprint, if possible
                 if (IsSprinting) {
                     // if sprinting
                     // Play particles if just sprinting on the ground for the first time
@@ -328,8 +329,17 @@ public class PlayerMovementController : AllomanticPewter {
                 //Debug.DrawRay(transform.position, torque, Color.white);
                 //Debug.DrawRay(transform.position, movement, Color.blue);
             }
+            // Play rolling audio
+            if (!lastWasRollingOnGround && IsGrounded && movement.sqrMagnitude > 0) {
+                GameManager.AudioManager.Play_rolling();
+                lastWasRollingOnGround = true;
+            } else if (lastWasRollingOnGround && (!IsGrounded || movement.sqrMagnitude == 0)) {
+                GameManager.AudioManager.Stop_rolling();
+                lastWasRollingOnGround = false;
+            }
         } else {
             rb.drag = SettingsMenu.settingsData.playerAirResistance * dragNoControl;
+            lastWasRollingOnGround = false;
         }
 
     }
@@ -337,6 +347,7 @@ public class PlayerMovementController : AllomanticPewter {
     public override void Clear() {
         jumpQueued = false;
         lastWasSprintingOnGround = false;
+        lastWasRollingOnGround = false;
         //rb.inertiaTensor = inertiaTensorRunning;
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
