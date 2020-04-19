@@ -4,9 +4,14 @@ using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour {
 
-    private const int index_shared = 0,
-                      index_pewter = 1,
-                      index_rolling = 2;
+    // Indexes for the audisources attached to the audimanager
+    // Each audiosource may be hot-swapped to different tracks on the fly that are mutually exclusive
+    private const int   index_shared = 0, // shared by all one-shot sound effects that are short enough to not worry about stacking
+                        index_pewter = 1,
+                        index_rolling = 2,
+                        index_wind = 3;
+
+    private const float velocityWindFactor = 20, lerpWindFactor = 10, velocityThreshold = 3;
 
     [SerializeField]
     AudioMixer mixer = null;
@@ -16,7 +21,8 @@ public class AudioManager : MonoBehaviour {
                 pewter_intro = null,
                 pewter_loop = null,
                 pewter_end = null,
-                rolling_loop = null;
+                rolling_loop = null,
+                wind_loop = null; // always playing, but becomes louder/higher pitch when moving quickly, especially through the air
 
     private Coroutine coroutine_pewter, coroutine_rolling;
 
@@ -24,6 +30,27 @@ public class AudioManager : MonoBehaviour {
 
     private void Start() {
         sources = GetComponents<AudioSource>();
+
+        sources[index_wind].clip = wind_loop;
+        sources[index_wind].loop = true;
+        sources[index_wind].volume = 0;
+        sources[index_wind].pitch = 1;
+        sources[index_wind].Play();
+    }
+
+    private void Update() {
+        // Make pitch and volume of the wind sfx a function of the player's speed
+        if(Player.PlayerInstance.isActiveAndEnabled && Time.timeScale > 0) {
+            float velocity = Player.PlayerIronSteel.rb.velocity.magnitude;
+            if (velocity > velocityThreshold) {
+                float factor = Mathf.Exp(-velocityWindFactor / (velocity - velocityThreshold));
+                sources[index_wind].volume = Mathf.Lerp(sources[index_wind].volume, factor, Time.deltaTime * lerpWindFactor);
+                sources[index_wind].pitch = Mathf.Lerp(sources[index_wind].pitch, 1 + factor, Time.deltaTime * lerpWindFactor);
+            } else {
+                sources[index_wind].volume = Mathf.Lerp(sources[index_wind].volume, 0, Time.deltaTime * lerpWindFactor);
+                sources[index_wind].pitch = Mathf.Lerp(sources[index_wind].pitch, 1, Time.deltaTime * lerpWindFactor);
+            }
+        }
     }
 
     public void Clear() {
