@@ -11,7 +11,7 @@ public class AudioManager : MonoBehaviour {
                         index_rolling = 2,
                         index_wind = 3;
 
-    private const float velocityWindFactor = 20, lerpWindFactor = 10, velocityThreshold = 3;
+    private const float velocityWindFactor = 20, lerpWindFactor = 10, velocityThreshold = 2;
 
     [SerializeField]
     AudioMixer mixer = null;
@@ -42,7 +42,7 @@ public class AudioManager : MonoBehaviour {
         // Make pitch and volume of the wind sfx a function of the player's speed
         if(Player.PlayerInstance.isActiveAndEnabled && Time.timeScale > 0) {
             float velocity = Player.PlayerIronSteel.rb.velocity.magnitude;
-            if (velocity > velocityThreshold) {
+            if (velocity > velocityThreshold && !Player.PlayerPewter.IsGrounded) {
                 float factor = Mathf.Exp(-velocityWindFactor / (velocity - velocityThreshold));
                 sources[index_wind].volume = Mathf.Lerp(sources[index_wind].volume, factor, Time.deltaTime * lerpWindFactor);
                 sources[index_wind].pitch = Mathf.Lerp(sources[index_wind].pitch, 1 + factor, Time.deltaTime * lerpWindFactor);

@@ -12,7 +12,6 @@ public class Player : PewterEntity {
     public enum CoinMode { Semi, Full, Spray };
 
     //private Animator animator;
-    private PlayerMovementController movementController;
     private Material frameMaterial, smokeMaterial;
     private Renderer playerFrame;
 
@@ -20,7 +19,7 @@ public class Player : PewterEntity {
     public static Player PlayerInstance { get; private set; }
     public static PlayerAudioController PlayerAudioController { get; private set; }
     public static PlayerPullPushController PlayerIronSteel { get; private set; }
-    public static AllomanticPewter PlayerPewter { get; private set; }
+    public static PlayerMovementController PlayerPewter { get; private set; }
     public static PlayerFlywheelController PlayerFlywheelController { get; private set; }
     public static Magnetic PlayerMagnetic { get; private set; }
     public static FeruchemicalZinc PlayerZinc { get; set; }
@@ -93,7 +92,6 @@ public class Player : PewterEntity {
 
     protected override void Awake() {
         base.Awake();
-        movementController = GetComponentInChildren<PlayerMovementController>();
         //animator = GetComponent<Animator>();
 
         foreach (Renderer rend in GetComponentsInChildren<Renderer>()) {
@@ -107,7 +105,7 @@ public class Player : PewterEntity {
         PlayerInstance = this;
         PlayerAudioController = CameraController.ActiveCamera.GetComponentInChildren<PlayerAudioController>();
         PlayerIronSteel = GetComponentInChildren<PlayerPullPushController>();
-        PlayerPewter = GetComponentInChildren<AllomanticPewter>();
+        PlayerPewter = GetComponentInChildren<PlayerMovementController>();
         PlayerFlywheelController = GetComponentInChildren<PlayerFlywheelController>();
         PlayerMagnetic = GetComponentInChildren<Magnetic>();
         PlayerZinc = GetComponent<FeruchemicalZinc>();
@@ -172,7 +170,6 @@ public class Player : PewterEntity {
     // Reset certain values BEFORE the player enters a new scene
     public void ClearPlayerBeforeSceneChange(Scene scene) {
         GetComponentInChildren<AllomechanicalGlower>().RemoveAllEmissions();
-        movementController.Clear();
         PlayerFlywheelController.Clear();
         PlayerIronSteel.StopBurning(false);
         PlayerIronSteel.Clear();
