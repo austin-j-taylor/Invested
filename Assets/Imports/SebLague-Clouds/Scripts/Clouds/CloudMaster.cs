@@ -51,31 +51,37 @@ public class CloudMaster : MonoBehaviour {
     public float baseSpeed = 1;
     public float detailSpeed = 2;
 
-    [Header(headerDecoration + "Sky" + headerDecoration)]
+    [Header(headerDecoration + "Sky and Fog" + headerDecoration)]
     public Color colFog;
     public Color colClouds;
     public Color colSun;
+    public bool haveSunInSky = true;
+    [Range(0, .1f)]
+    public float fogDensity = 0;
 
     // Internal
     [HideInInspector]
     public Material material;
 
-    private WeatherMap weatherMapGen;
-    private NoiseGenerator noise;
+    public WeatherMap weatherMapGen;
+    public NoiseGenerator noise;
 
     bool paramsSet;
 
     public void Awake() {
-        weatherMapGen = FindObjectOfType<WeatherMap>();
-        noise = FindObjectOfType<NoiseGenerator>();
+        if (weatherMapGen == null)
+            weatherMapGen = gameObject.GetComponentInChildren<WeatherMap>();
+        if (noise == null)
+            noise = gameObject.GetComponentInChildren<NoiseGenerator>();
         if (Application.isPlaying && weatherMapGen) {
+            weatherMapGen.container = container;
             weatherMapGen.UpdateMap();
         }
         paramsSet = false;
     }
     private void Update() {
         // Keep the cloud container centered on the player to provide the illusion that the clouds are infinite
-        if(container && Player.PlayerInstance) {
+        if (container && Player.PlayerInstance) {
             Vector3 position = Player.PlayerInstance.transform.position;
             position.y = container.position.y;
             container.position = position;
@@ -160,7 +166,9 @@ public class CloudMaster : MonoBehaviour {
         material.SetColor("colFog", colFog);
         material.SetColor("colClouds", colClouds);
         material.SetColor("colSun", colSun);
-        
+        material.SetFloat("haveSunInSky", haveSunInSky ? 1 : 0); // blame unity for not having a setBool
+        material.SetFloat("fogDensity", fogDensity);
+
     }
 
     void SetDebugParams() {

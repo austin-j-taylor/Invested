@@ -94,7 +94,9 @@ Shader "Hidden/CloudSky"
 			float4 colFog; // color of fog in far-distant objects
 			float4 colClouds; // color of the clouds in the sky
 			float4 colSun; // color of the sun/directional light
-
+			float haveSunInSky; // blame unity for not having a setBool
+			float fogDensity;
+			
 			// Animation settings
 			float timeScale;
 			float baseSpeed;
@@ -305,20 +307,19 @@ Shader "Hidden/CloudSky"
 
 			// Phase function makes clouds brighter around sun
 			float cosAngle = 0;
-
-			if (nonlin_depth < trans / 2) {
-				cosAngle = dot(rayDir, sunLightDirection.xyz);
-			} else
-			if (nonlin_depth < trans) {
-				cosAngle = dot(rayDir, sunLightDirection.xyz);
-				cosAngle *= 4 * (1 - nonlin_depth / trans) * nonlin_depth / trans;
+			if (haveSunInSky == 1) {
+				if (nonlin_depth < trans / 2) {
+					cosAngle = dot(rayDir, sunLightDirection.xyz);
+				} else if (nonlin_depth < trans) {
+					cosAngle = dot(rayDir, sunLightDirection.xyz);
+					cosAngle *= 4 * (1 - nonlin_depth / trans) * nonlin_depth / trans;
+				}
 			}
-
+			float phaseVal = phase(cosAngle);
 
 			//if (nonlin_depth < .1) {
 			//	cosAngle = dot(rayDir, sunLightDirection.xyz);
 			//}
-			float phaseVal = phase(cosAngle);
 
 			float dstTravelled = randomOffset;
 			float dstLimit = min(depth - dstToBox, dstInsideBox);
@@ -350,25 +351,42 @@ Shader "Hidden/CloudSky"
 
 			// Composite sky + background
 			//float3 skyColBase = lerp(colA,colB, sqrt(abs(saturate(rayDir.y))));
-			float3 backgroundCol = tex2D(_MainTex,i.uv);
-			float sun = 0;
-			if (nonlin_depth == 0) { // only runs for pixels in the sky
-				backgroundCol = backgroundCol;// +skyColBase;
 
-				// Sun
-				float focusedEyeCos = pow(saturate(cosAngle), params.x);
-				sun = saturate(hg(focusedEyeCos, .9995)) * transmittance;
-			} else {
-				// wall in the way, do fog calculation
-				float dstFog = (1 - exp(-max(0, depth) * .0008));
+			float3 backgroundCol = tex2D(_MainTex, i.uv);
+			float sun = 0;
+			// do fog calculation
+			if (fogDensity != 0) {
+				float dstFog = (1 - exp(-max(0, depth) * fogDensity));
 				float3 sky = dstFog * colFog;
 				backgroundCol = backgroundCol * (1 - dstFog) + sky;
+			}
+
+			if (nonlin_depth == 0) { // only runs for pixels in the sky
+				//backgroundCol = backgroundCol;// +skyColBase;
+
+				// Sun
+				// if sun exists
+				if (haveSunInSky == 1) {
+					float focusedEyeCos = saturate(cosAngle);
+					sun = saturate(hg(focusedEyeCos, .9995)) * transmittance;
+				}
+
+			} else {
+				// wall in the way, do fog calculation
+				//float dstFog = (1 - exp(-max(0, depth) * .008));
+				//float3 sky = dstFog * colFog;
+				//backgroundCol = backgroundCol * (1 - dstFog) + sky;
 			}
 
 			// Add clouds
 			float3 finalColClouds = lightEnergy * colClouds;
 			float3 col = backgroundCol * transmittance + finalColClouds;
-			col = saturate(col) * (1 - sun) + colSun * sun;
+			// if sun exists
+			if (haveSunInSky == 1) {
+				col = saturate(col) * (1 - sun) + colSun * sun;
+			} else {
+				col = saturate(col);
+			}
 			return float4(col,0);
 		}
 		ENDCG

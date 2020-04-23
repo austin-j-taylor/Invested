@@ -9,7 +9,7 @@ using UnityEngine.SceneManagement;
  */
 
 public class CameraController : MonoBehaviour {
-    
+
     private const float playerLookAtTargetFirstPersonHeight = 1;
     private const float lerpConstantPosition = 5;
     private const float lerpConstantRotation = 15;
@@ -85,7 +85,7 @@ public class CameraController : MonoBehaviour {
         ActiveCamera.depthTextureMode = DepthTextureMode.DepthNormals;
         clouds = ActiveCamera.GetComponent<CloudMaster>();
         UnlockCamera();
-        SceneManager.sceneLoaded += LoadCloudData;
+        SceneManager.sceneLoaded += LoadCloudDataFromScene;
     }
 
     private void LateUpdate() {
@@ -401,61 +401,72 @@ public class CameraController : MonoBehaviour {
 
     // On scene startup
     // Copy parameters from this scene's cloud controller to the camera
-    private void LoadCloudData(Scene scene, LoadSceneMode mode) {
+    private void LoadCloudDataFromScene(Scene scene, LoadSceneMode mode) {
         if (mode == LoadSceneMode.Single) {
             GameObject otherObject = GameObject.Find("Clouds");
             if (otherObject) {
                 //ActiveCamera.clearFlags = CameraClearFlags.SolidColor;
-
                 CloudMaster other = otherObject.GetComponent<CloudMaster>();
-                clouds.shader = other.shader;
-                clouds.container = other.container;
-                clouds.sunLight = other.sunLight;
-                clouds.cloudTestParams = other.cloudTestParams;
 
-                clouds.numStepsLight = other.numStepsLight;
-                clouds.rayOffsetStrength = other.rayOffsetStrength;
-                clouds.blueNoise = other.blueNoise;
-
-                clouds.cloudScale = other.cloudScale;
-                clouds.densityMultiplier = other.densityMultiplier;
-                clouds.densityOffset = other.densityOffset;
-                clouds.shapeOffset = other.shapeOffset;
-                clouds.heightOffset = other.heightOffset;
-                clouds.shapeNoiseWeights = other.shapeNoiseWeights;
-
-                clouds.detailNoiseScale = other.detailNoiseScale;
-                clouds.detailNoiseWeight = other.detailNoiseWeight;
-                clouds.detailNoiseWeights = other.detailNoiseWeights;
-                clouds.detailOffset = other.detailOffset;
-
-                clouds.lightAbsorptionThroughCloud = other.lightAbsorptionThroughCloud;
-                clouds.lightAbsorptionTowardSun = other.lightAbsorptionTowardSun;
-                clouds.darknessThreshold = other.darknessThreshold;
-                clouds.forwardScattering = other.forwardScattering;
-                clouds.backScattering = other.backScattering;
-                clouds.baseBrightness = other.baseBrightness;
-                clouds.phaseFactor = other.phaseFactor;
-
-                clouds.timeScale = other.timeScale;
-                clouds.baseSpeed = other.baseSpeed;
-                clouds.detailSpeed = other.detailSpeed;
-
-                clouds.colFog = other.colFog;
-                clouds.colClouds = other.colClouds;
-                clouds.colSun = other.colSun;
-
-                clouds.material = other.material;
-
-                clouds.enabled = true;
-                clouds.Awake();
-
-                other.enabled = false;
+                SetCloudData(other);
             } else {
+                // No clouds for this scene
                 clouds.enabled = false;
-
                 //ActiveCamera.clearFlags = CameraClearFlags.Skybox;
             }
         }
     }
+
+    // Loads cloud settings from the passed CloudMaster.
+    public static void SetCloudData(CloudMaster other) {
+
+        clouds.shader = other.shader;
+        clouds.container = other.container;
+        clouds.weatherMapGen = other.weatherMapGen;
+        clouds.noise = other.noise;
+        clouds.sunLight = other.sunLight;
+        clouds.cloudTestParams = other.cloudTestParams;
+
+        clouds.numStepsLight = other.numStepsLight;
+        clouds.rayOffsetStrength = other.rayOffsetStrength;
+        clouds.blueNoise = other.blueNoise;
+
+        clouds.cloudScale = other.cloudScale;
+        clouds.densityMultiplier = other.densityMultiplier;
+        clouds.densityOffset = other.densityOffset;
+        clouds.shapeOffset = other.shapeOffset;
+        clouds.heightOffset = other.heightOffset;
+        clouds.shapeNoiseWeights = other.shapeNoiseWeights;
+
+        clouds.detailNoiseScale = other.detailNoiseScale;
+        clouds.detailNoiseWeight = other.detailNoiseWeight;
+        clouds.detailNoiseWeights = other.detailNoiseWeights;
+        clouds.detailOffset = other.detailOffset;
+
+        clouds.lightAbsorptionThroughCloud = other.lightAbsorptionThroughCloud;
+        clouds.lightAbsorptionTowardSun = other.lightAbsorptionTowardSun;
+        clouds.darknessThreshold = other.darknessThreshold;
+        clouds.forwardScattering = other.forwardScattering;
+        clouds.backScattering = other.backScattering;
+        clouds.baseBrightness = other.baseBrightness;
+        clouds.phaseFactor = other.phaseFactor;
+
+        clouds.timeScale = other.timeScale;
+        clouds.baseSpeed = other.baseSpeed;
+        clouds.detailSpeed = other.detailSpeed;
+
+        clouds.colFog = other.colFog;
+        clouds.colClouds = other.colClouds;
+        clouds.colSun = other.colSun;
+        clouds.haveSunInSky = other.haveSunInSky;
+        clouds.fogDensity = other.fogDensity;
+
+        clouds.material = other.material;
+
+        clouds.enabled = true;
+        clouds.Awake();
+
+        other.enabled = false;
+    }
+
 }

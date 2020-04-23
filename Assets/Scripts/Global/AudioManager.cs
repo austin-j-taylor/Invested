@@ -56,6 +56,8 @@ public class AudioManager : MonoBehaviour {
     public void Clear() {
         StopAllCoroutines();
         SetMasterPitch(1);
+        sources[index_wind].volume = 0;
+        sources[index_wind].pitch = 1;
     }
 
     public void SetAudioLevels(float master, float music, float effects, float voiceBeeps) {

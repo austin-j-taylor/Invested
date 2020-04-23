@@ -8,7 +8,11 @@ public class Environment_Luthadel : Environment {
     [SerializeField]
     private bool dayMode = false;
 
-    // Objects that are enabled or disabled, depending on the time of day
+    // Objects that are enabled or disabled, etc., depending on the time of day
+    [SerializeField]
+    public CloudMaster dayClouds = null;
+    [SerializeField]
+    public CloudMaster nightClouds = null;
     [SerializeField]
     private Material daySkyBox = null;
     [SerializeField]
@@ -39,9 +43,11 @@ public class Environment_Luthadel : Environment {
         if (dayMode) {
             RenderSettings.skybox = daySkyBox;
             RenderSettings.sun = dayDirectionalLight;
+            CameraController.SetCloudData(dayClouds);
         } else {
             RenderSettings.skybox = nightSkyBox;
             RenderSettings.sun = nightDirectionalLight;
+            CameraController.SetCloudData(nightClouds);
         }
     }
 }
