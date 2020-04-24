@@ -10,7 +10,10 @@ Shader "Hidden/CloudSky"
 	{
 
 		// No culling or depth
-		Cull Off ZWrite Off ZTest Always
+		Cull Off
+		ZWrite Off 
+		ZTest Always
+
 		Tags
 		{
 			"LightMode" = "Deferred"
@@ -383,9 +386,7 @@ Shader "Hidden/CloudSky"
 			float3 col = backgroundCol * transmittance + finalColClouds;
 			// if sun exists
 			if (haveSunInSky == 1) {
-				col = saturate(col) * (1 - sun) + colSun * sun;
-			} else {
-				col = saturate(col);
+				col *= (1 - sun) + colSun * sun;
 			}
 			return float4(col,0);
 		}
