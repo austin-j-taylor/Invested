@@ -163,6 +163,16 @@ public class SceneSelectMenu : MonoBehaviour {
                 Player.PlayerIronSteel.IronReserve.SetMass(150);
                 Player.PlayerIronSteel.SteelReserve.SetMass(150);
                 Player.PlayerPewter.PewterReserve.SetMass(150);
+                // for now, just set flags from here
+                if(scene.buildIndex == sceneLevel01) {
+                    Player.CanControlZinc = false;
+                    HUD.ControlWheelController.SetLockedState(ControlWheelController.LockedState.LockedFully);
+                    HUD.HelpOverlayController.SetLockedState(HelpOverlayController.LockedState.Locked0);
+                } else {
+                    Player.CanControlZinc = true;
+                    HUD.ControlWheelController.SetLockedState(ControlWheelController.LockedState.Unlocked);
+                    HUD.HelpOverlayController.SetLockedState(HelpOverlayController.LockedState.Unlocked);
+                }
             }
         }
         NowLoadingScene = false;

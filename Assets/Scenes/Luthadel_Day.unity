@@ -11339,19 +11339,19 @@ MonoBehaviour:
   rayOffsetStrength: 26.4
   blueNoise: {fileID: 2800000, guid: 6d82457f96ba8449597922c106f17caa, type: 3}
   cloudScale: 2.5
-  densityMultiplier: 0.47
-  densityOffset: 2.13
+  densityMultiplier: 1.46
+  densityOffset: 1.42
   shapeOffset: {x: 0, y: 0, z: 1.11}
   heightOffset: {x: 0, y: 0}
   shapeNoiseWeights: {x: 3.48, y: 1.71, z: 1.71, w: 1.54}
-  detailNoiseScale: 1
-  detailNoiseWeight: 1.5
+  detailNoiseScale: 0
+  detailNoiseWeight: 0
   detailNoiseWeights: {x: 0.32, y: 0.6, z: 0.4}
   detailOffset: {x: 0, y: 0, z: 0}
   lightAbsorptionThroughCloud: 0.18
-  lightAbsorptionTowardSun: -0.16
-  darknessThreshold: 0.766
-  forwardScattering: 0.93
+  lightAbsorptionTowardSun: -0.09
+  darknessThreshold: 0.783
+  forwardScattering: 1
   backScattering: 0.33
   baseBrightness: 0.332
   phaseFactor: 0.83
@@ -11363,9 +11363,9 @@ MonoBehaviour:
   colSun: {r: 1, g: 1, b: 1, a: 1}
   haveSunInSky: 0
   fogDensity: 0
-  material: {fileID: 2041617960}
-  weatherMapGen: {fileID: 798733209}
-  noise: {fileID: 1005092246}
+  material: {fileID: 0}
+  weatherMapGen: {fileID: 0}
+  noise: {fileID: 0}
 --- !u!4 &2021298406
 Transform:
   m_ObjectHideFlags: 0
@@ -11496,32 +11496,6 @@ Transform:
   m_Father: {fileID: 1250851321}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!21 &2041617960
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Hidden/CloudSky
-  m_Shader: {fileID: 4800000, guid: b63adce98e96243ecab49118e161e630, type: 3}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  disabledShaderPasses: []
-  m_SavedProperties:
-    serializedVersion: 3
-    m_TexEnvs:
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats: []
-    m_Colors: []
-  m_BuildTextureStacks: []
 --- !u!1001 &2049675987
 PrefabInstance:
   m_ObjectHideFlags: 0
