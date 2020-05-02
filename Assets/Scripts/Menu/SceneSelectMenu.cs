@@ -10,7 +10,7 @@ public class SceneSelectMenu : MonoBehaviour {
     // Scene build indices
     public const int sceneMain = 0;
     public const int sceneTitleScreen = 1;
-    public const int sceneLevel01 = 2;
+    public const int sceneMARL1 = 2;
     public const int sceneLuthadel = 3;
     public const int sceneShootingGrounds = 4;
     public const int sceneSandbox = 5;
@@ -20,9 +20,7 @@ public class SceneSelectMenu : MonoBehaviour {
     public const int sceneSimulationDuel = 9;
     public const int sceneSimulationWall = 10;
     public const int sceneSimulationGround = 11;
-    public const int sceneLevel02 = 12;
-    public const int sceneLevel03 = 13;
-    public const int sceneLevel04 = 14;
+    public const int sceneTutorial1 = 12;
 
     public bool IsOpen {
         get {
@@ -35,13 +33,18 @@ public class SceneSelectMenu : MonoBehaviour {
     private static Button highlitButton;
 
     private Text tooltip;
+    private Transform tutorialsHeader;
     private Transform levelsHeader;
     private Transform sandboxesHeader;
     private Transform simulationsHeader;
-    private Button level01Button;
-    private Button level02Button;
-    private Button level03Button;
-    private Button level04Button;
+    private Button levelMARL1Button;
+    private Button levelMARL2Button;
+    private Button levelMARL3Button;
+    private Button levelMARL4Button;
+    private Button tutorial1Button;
+    private Button tutorial2Button;
+    private Button tutorial3Button;
+    private Button tutorial4Button;
     private Button luthadelButton;
     private Button shootingGroundsButton;
     private Button sandboxButton;
@@ -55,14 +58,19 @@ public class SceneSelectMenu : MonoBehaviour {
 
     void Start() {
         tooltip = transform.Find("Tooltip").GetComponent<Text>();
+        tutorialsHeader = transform.Find("Tutorials").transform;
         levelsHeader = transform.Find("Levels").transform;
         sandboxesHeader = transform.Find("Sandboxes").transform;
         simulationsHeader = transform.Find("Simulations").transform;
         
-        level01Button = levelsHeader.Find("Tutorial01").GetComponent<Button>();
-        level02Button = levelsHeader.Find("Tutorial02").GetComponent<Button>();
-        level03Button = levelsHeader.Find("Tutorial03").GetComponent<Button>();
-        level04Button = levelsHeader.Find("Tutorial04").GetComponent<Button>();
+        levelMARL1Button = levelsHeader.Find("MARL1").GetComponent<Button>();
+        levelMARL2Button = levelsHeader.Find("MARL2").GetComponent<Button>();
+        levelMARL3Button = levelsHeader.Find("MARL3").GetComponent<Button>();
+        levelMARL4Button = levelsHeader.Find("MARL4").GetComponent<Button>();
+        tutorial1Button = tutorialsHeader.Find("Tutorial1").GetComponent<Button>();
+        tutorial2Button = tutorialsHeader.Find("Tutorial2").GetComponent<Button>();
+        tutorial3Button = tutorialsHeader.Find("Tutorial3").GetComponent<Button>();
+        tutorial4Button = tutorialsHeader.Find("Tutorial4").GetComponent<Button>();
         luthadelButton = sandboxesHeader.Find("Luthadel").GetComponent<Button>();
         shootingGroundsButton = sandboxesHeader.Find("ShootingGrounds").GetComponent<Button>();
         sandboxButton = sandboxesHeader.Find("Sandbox").GetComponent<Button>();
@@ -74,10 +82,14 @@ public class SceneSelectMenu : MonoBehaviour {
         simulationGroundButton = simulationsHeader.Find("CoinGround").GetComponent<Button>();
         backButton = transform.Find("Back").GetComponent<Button>();
 
-        level01Button.onClick.AddListener(OnClickedLevel01Button);
-        level02Button.onClick.AddListener(OnClickedLevel02Button);
-        level03Button.onClick.AddListener(OnClickedLevel03Button);
-        level04Button.onClick.AddListener(OnClickedLevel04Button);
+        levelMARL1Button.onClick.AddListener(OnClickedlevelMARL1Button);
+        levelMARL2Button.onClick.AddListener(OnClickedlevelMARL2Button);
+        levelMARL3Button.onClick.AddListener(OnClickedlevelMARL3Button);
+        levelMARL4Button.onClick.AddListener(OnClickedlevelMARL4Button);
+        tutorial1Button.onClick.AddListener(OnClickedTutorial1Button);
+        tutorial2Button.onClick.AddListener(OnClickedTutorial2Button);
+        tutorial3Button.onClick.AddListener(OnClickedTutorial3Button);
+        tutorial4Button.onClick.AddListener(OnClickedTutorial4Button);
         luthadelButton.onClick.AddListener(OnClickedLuthadel);
         shootingGroundsButton.onClick.AddListener(OnClickedShootingGrounds);
         sandboxButton.onClick.AddListener(OnClickedSandbox);
@@ -89,7 +101,7 @@ public class SceneSelectMenu : MonoBehaviour {
         simulationGroundButton.onClick.AddListener(OnClickedSimulationGround);
         backButton.onClick.AddListener(OnClickedBack);
 
-        highlitButton = level01Button;
+        highlitButton = levelMARL1Button;
 
         // Only close the main menu after the scene loads to prevent jarring camera transitions
         SceneManager.sceneLoaded += ClearAfterSceneChange;
@@ -100,15 +112,20 @@ public class SceneSelectMenu : MonoBehaviour {
         tooltip.text = "";
         MainMenu.FocusOnButton(highlitButton);
         // Lock levels when previous levels are not completed
-        if (!FlagsController.GetLevel(FlagsController.Level.Complete03)) {
-            level04Button.interactable = false;
-        }
-        if (!FlagsController.GetLevel(FlagsController.Level.Complete02)) {
-            level03Button.interactable = false;
-        }
-        if (!FlagsController.GetLevel(FlagsController.Level.Complete01)) {
-            level02Button.interactable = false;
-        }
+        levelMARL1Button.interactable = FlagsController.GetLevel(FlagsController.Level.completeTutorial1);
+        levelMARL2Button.interactable = FlagsController.GetLevel(FlagsController.Level.completeTutorial2);
+        levelMARL3Button.interactable = FlagsController.GetLevel(FlagsController.Level.completeTutorial3);
+        levelMARL4Button.interactable = FlagsController.GetLevel(FlagsController.Level.completeTutorial4);
+        tutorial1Button.interactable = true;
+        tutorial2Button.interactable = FlagsController.GetLevel(FlagsController.Level.completeMARL1);
+        tutorial3Button.interactable = FlagsController.GetLevel(FlagsController.Level.completeMARL2);
+        tutorial4Button.interactable = FlagsController.GetLevel(FlagsController.Level.completeMARL3);
+        sandboxButton.interactable = true;
+        shootingGroundsButton.interactable = FlagsController.GetLevel(FlagsController.Level.completeTutorial1);
+        southernMountainsButton.interactable = FlagsController.GetLevel(FlagsController.Level.completeTutorial2);
+        seaOfMetalButton.interactable = FlagsController.GetLevel(FlagsController.Level.completeTutorial3);
+        stormsButton.interactable = FlagsController.GetLevel(FlagsController.Level.completeTutorial3);
+        luthadelButton.interactable = FlagsController.GetLevel(FlagsController.Level.completeTutorial4);
     }
 
     public void Close() {
@@ -164,7 +181,7 @@ public class SceneSelectMenu : MonoBehaviour {
                 Player.PlayerIronSteel.SteelReserve.SetMass(150);
                 Player.PlayerPewter.PewterReserve.SetMass(150);
                 // for now, just set flags from here
-                if(scene.buildIndex == sceneLevel01) {
+                if(scene.buildIndex == sceneMARL1) {
                     Player.CanControlZinc = false;
                     HUD.ControlWheelController.SetLockedState(ControlWheelController.LockedState.LockedFully);
                     HUD.HelpOverlayController.SetLockedState(HelpOverlayController.LockedState.Locked0);
@@ -186,18 +203,31 @@ public class SceneSelectMenu : MonoBehaviour {
         highlitButton = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
         LoadScene(scene);
     }
-    private void OnClickedLevel01Button() {
-        LoadSceneFromClick(sceneLevel01);
+    private void OnClickedlevelMARL1Button() {
+        LoadSceneFromClick(sceneMARL1);
     }
-    private void OnClickedLevel02Button() {
-        LoadSceneFromClick(sceneLevel02);
+    private void OnClickedlevelMARL2Button() {
+        //LoadSceneFromClick(sceneMARL2);
     }
-    private void OnClickedLevel03Button() {
-        LoadSceneFromClick(sceneLevel03);
+    private void OnClickedlevelMARL3Button() {
+        //LoadSceneFromClick(sceneMARL3);
     }
-    private void OnClickedLevel04Button() {
-        LoadSceneFromClick(sceneLevel04);
+    private void OnClickedlevelMARL4Button() {
+        //LoadSceneFromClick(sceneMARL4);
     }
+    private void OnClickedTutorial1Button() {
+        LoadSceneFromClick(sceneTutorial1);
+    }
+    private void OnClickedTutorial2Button() {
+        //LoadSceneFromClick(sceneTutorial2);
+    }
+    private void OnClickedTutorial3Button() {
+        //LoadSceneFromClick(sceneTutorial3);
+    }
+    private void OnClickedTutorial4Button() {
+        //LoadSceneFromClick(sceneTutorial4);
+    }
+
     private void OnClickedLuthadel() {
         LoadSceneFromClick(sceneLuthadel);
     }

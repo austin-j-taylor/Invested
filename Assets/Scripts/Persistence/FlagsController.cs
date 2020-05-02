@@ -5,7 +5,7 @@ using System.IO;
 [System.Serializable]
 public class FlagsController : MonoBehaviour {
 
-    public enum Level { Start01, Complete01, Complete02, Complete03, Complete04 };
+    public enum Level { completeTutorial1, completeTutorial2, completeTutorial3, completeTutorial4, completeMARL1, completeMARL2, completeMARL3, completeMARL4 };
     public enum Flag { ControlSchemeChosen };
 
     private readonly string flagsFileName = Path.Combine(Application.streamingAssetsPath, "Data" + Path.DirectorySeparatorChar + "flags.json");
@@ -13,10 +13,7 @@ public class FlagsController : MonoBehaviour {
     // Flags
     // can't make them private because json-parsing has no brains
     // "Please don't access these" is the best security I've got
-    public bool complete01;
-    public bool complete02;
-    public bool complete03;
-    public bool complete04;
+    public bool completeTutorial1, completeTutorial2, completeTutorial3, completeTutorial4, completeMARL1, completeMARL2, completeMARL3, completeMARL4;
     public bool controlSchemeChosen;
     
     private static FlagsController instance;
@@ -60,27 +57,29 @@ public class FlagsController : MonoBehaviour {
 
     public static void SetLevel(Level level) {
         switch(level) {
-            case Level.Start01:
+            case Level.completeTutorial1:
+                instance.completeTutorial1 = true;
                 break;
-            case Level.Complete01:
-                if (!instance.complete01) {
-                    instance.complete01 = true;
-                }
+            case Level.completeTutorial2:
+                instance.completeTutorial2 = true;
                 break;
-            case Level.Complete02:
-                if (!instance.complete02) {
-                    instance.complete02 = true;
-                }
+            case Level.completeTutorial3:
+                instance.completeTutorial3 = true;
                 break;
-            case Level.Complete03:
-                if (!instance.complete03) {
-                    instance.complete03 = true;
-                }
+            case Level.completeTutorial4:
+                instance.completeTutorial4 = true;
                 break;
-            case Level.Complete04:
-                if (!instance.complete04) {
-                    instance.complete04 = true;
-                }
+            case Level.completeMARL1:
+                instance.completeMARL1 = true;
+                break;
+            case Level.completeMARL2:
+                instance.completeMARL2 = true;
+                break;
+            case Level.completeMARL3:
+                instance.completeMARL3 = true;
+                break;
+            case Level.completeMARL4:
+                instance.completeMARL4 = true;
                 break;
         }
         instance.Refresh();
@@ -105,12 +104,22 @@ public class FlagsController : MonoBehaviour {
     }
     public static bool GetLevel(Level level) {
         switch (level) {
-            case Level.Complete01:
-                return instance.complete01;
-            case Level.Complete02:
-                return instance.complete02;
-            case Level.Complete03:
-                return instance.complete03;
+            case Level.completeTutorial1:
+                return instance.completeTutorial1;
+            case Level.completeTutorial2:
+                return instance.completeTutorial2;
+            case Level.completeTutorial3:
+                return instance.completeTutorial3;
+            case Level.completeTutorial4:
+                return instance.completeTutorial4;
+            case Level.completeMARL1:
+                return instance.completeMARL1;
+            case Level.completeMARL2:
+                return instance.completeMARL2;
+            case Level.completeMARL3:
+                return instance.completeMARL3;
+            case Level.completeMARL4:
+                return instance.completeMARL4;
         }
         return false; // never reached
     }
