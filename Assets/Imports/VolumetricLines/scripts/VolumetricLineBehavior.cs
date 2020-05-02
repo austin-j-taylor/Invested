@@ -84,15 +84,20 @@ namespace VolumetricLines
 		/// This GameObject's mesh filter
 		/// </summary>
 		private MeshFilter m_meshFilter;
-		#endregion
 
-		#region properties
-		/// <summary>
-		/// Gets or sets the tmplate material.
-		/// Setting this will only have an impact once. 
-		/// Subsequent changes will be ignored.
-		/// </summary>
-		public Material TemplateMaterial
+        /// <summary>
+        /// This mesh filters's shared mesh
+        /// </summary>
+        private Mesh m_sharedMesh;
+        #endregion
+
+        #region properties
+        /// <summary>
+        /// Gets or sets the tmplate material.
+        /// Setting this will only have an impact once. 
+        /// Subsequent changes will be ignored.
+        /// </summary>
+        public Material TemplateMaterial
 		{
 			get { return m_templateMaterial; }
 			set { m_templateMaterial = value; }
@@ -119,12 +124,12 @@ namespace VolumetricLines
 			get { return m_lineColor;  }
 			set
 			{
-				CreateMaterial();
-				if (null != m_material)
-				{
+				//CreateMaterial();
+				//if (null != m_material)
+				//{
 					m_lineColor = value;
 					m_material.color = m_lineColor;
-				}
+				//}
 			}
 		}
 
@@ -136,12 +141,12 @@ namespace VolumetricLines
 			get { return m_lineWidth; }
 			set
 			{
-				CreateMaterial();
-				if (null != m_material)
-				{
+				//CreateMaterial();
+				//if (null != m_material)
+				//{
 					m_lineWidth = value;
 					m_material.SetFloat("_LineWidth", m_lineWidth);
-				}
+				//}
 			}
 		}
 
@@ -153,12 +158,12 @@ namespace VolumetricLines
 			get { return m_lightSaberFactor; }
 			set
 			{
-				CreateMaterial();
-				if (null != m_material)
-				{
+				//CreateMaterial();
+				//if (null != m_material)
+				//{
 					m_lightSaberFactor = value;
 					m_material.SetFloat("_LightSaberFactor", m_lightSaberFactor);
-				}
+				//}
 			}
 		}
 
@@ -196,9 +201,9 @@ namespace VolumetricLines
 		/// </summary>
 		private void CreateMaterial()
 		{
-			if (null != m_templateMaterial && null == m_material)
+			if (null == m_material && null != m_templateMaterial)
 			{
-				m_material = Material.Instantiate(m_templateMaterial);
+				m_material = Instantiate(m_templateMaterial);
 				GetComponent<MeshRenderer>().sharedMaterial = m_material;
 				SetAllMaterialProperties();
 			}
@@ -263,21 +268,22 @@ namespace VolumetricLines
 				startPoint,
 			};
 
-			if (null != m_meshFilter)
-			{
-				var mesh = m_meshFilter.sharedMesh;
-				if (null != mesh)
-				{
-					mesh.vertices = vertexPositions;
-					mesh.normals = other;
-					mesh.RecalculateBounds();
-				}
-			}
+            //if (null != m_meshFilter)
+            //{
+            //if (null != mesh)
+            //{
+            if (m_sharedMesh != null) {
+                m_sharedMesh.vertices = vertexPositions;
+                m_sharedMesh.normals = other;
+                m_sharedMesh.RecalculateBounds();
+            }
+				//}
+			//}
 		}
 		#endregion
 
 		#region event functions
-		void Start () 
+		void Awake() 
 		{
 			Vector3[] vertexPositions = {
 				m_startPos,
@@ -300,20 +306,20 @@ namespace VolumetricLines
 				m_startPos,
 				m_startPos,
 			};
-			
-			// Need to set vertices before assigning new Mesh to the MeshFilter's mesh property
-			Mesh mesh = new Mesh();
-			mesh.vertices = vertexPositions;
-			mesh.normals = other;
-			mesh.uv = VolumetricLineVertexData.TexCoords;
-			mesh.uv2 = VolumetricLineVertexData.VertexOffsets;
-			mesh.SetIndices(VolumetricLineVertexData.Indices, MeshTopology.Triangles, 0);
+            // Need to set vertices before assigning new Mesh to the MeshFilter's mesh property
+            Mesh mesh = new Mesh();
+            mesh.vertices = vertexPositions;
+            mesh.normals = other;
+            mesh.uv = VolumetricLineVertexData.TexCoords;
+            mesh.uv2 = VolumetricLineVertexData.VertexOffsets;
+            mesh.SetIndices(VolumetricLineVertexData.Indices, MeshTopology.Triangles, 0);
             mesh.RecalculateBounds();
-			m_meshFilter = GetComponent<MeshFilter>();
-			m_meshFilter.mesh = mesh;
-			CreateMaterial();
+            m_meshFilter = GetComponent<MeshFilter>();
+            m_meshFilter.mesh = mesh;
+            m_meshFilter.sharedMesh = mesh;
+            m_sharedMesh = m_meshFilter.sharedMesh;
+            CreateMaterial();
 		}
-
 		void OnDestroy()
 		{
 			DestroyMaterial();
@@ -321,10 +327,10 @@ namespace VolumetricLines
 		
 		void Update()
 		{
-			if (transform.hasChanged && null != m_material)
-			{
-				m_material.SetFloat("_LineScale", transform.GetGlobalUniformScaleForLineWidth());
-			}
+			//if (transform.hasChanged && null != m_material)
+			//{
+			//	m_material.SetFloat("_LineScale", transform.GetGlobalUniformScaleForLineWidth());
+			//}
 		}
 
 		void OnValidate()

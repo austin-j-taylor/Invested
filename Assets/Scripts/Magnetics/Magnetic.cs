@@ -68,7 +68,6 @@ public class Magnetic : MonoBehaviour {
         }
         protected set {
             lastExpectedAcceleration = value;
-            LastPosition = transform.position;
         }
     }
     private Vector3 lastExpectedAcceleration;
@@ -170,23 +169,9 @@ public class Magnetic : MonoBehaviour {
     private Vector3 centerOfMass;
     public Vector3 CenterOfMass {
         get {
-            if (IsStatic) {
-                if (HasColliders) {
-                    return transform.TransformPoint(centerOfMass);
-                } else {
-                    // no collider or rigidbody, so center of mass is set to transform.position as a default
-                    return transform.position;
-                }
-            } else {
-                if (HasColliders) {
-                    // Not static, has colliders
-                    return transform.TransformPoint(centerOfMass);
-                } else {
-                    // no collider or rigidbody, so center of mass is set to transform.position as a default
-                    return transform.position;
-                }
+            if (transform.position != LastPosition) {
+                UpdateCenterOfMass();
             }
-
 
             //if (HasColliders && !IsStatic) {
             //    //Vector3 centers = colliders[0].bounds.center;
@@ -205,8 +190,11 @@ public class Magnetic : MonoBehaviour {
             //    // Not static, has colliders
             //    return transform.TransformPoint(centerOfMass);
             //}
+            return cachedCenterOfMass;
         }
     }
+    private Vector3 cachedCenterOfMass;
+
     public virtual bool IsPerfectlyAnchored { // Only relevant for low-mass targets
         get {
             return false;
@@ -267,9 +255,10 @@ public class Magnetic : MonoBehaviour {
             }
         }
 
+        UpdateCenterOfMass();
         Charge = Mathf.Pow(magneticMass, AllomanticIronSteel.chargePower);
-        LastPosition = transform.position;
         LastVelocity = Vector3.zero;
+        LastPosition = transform.position;
         LastExpectedAcceleration = Vector3.zero;
         //LastExpectedVelocityChange = Vector3.zero;
         //LastExpectedEnergyUsed = 0;
@@ -280,7 +269,10 @@ public class Magnetic : MonoBehaviour {
     }
 
     private void FixedUpdate() {
-        LastVelocity = Velocity;
+        if(!IsStatic) {
+            LastVelocity = Velocity;
+            LastPosition = transform.position;
+        }
         IsBeingPushPulled = thisFrameIsBeingPushPulled;
         thisFrameIsBeingPushPulled = false;
     }
@@ -302,6 +294,25 @@ public class Magnetic : MonoBehaviour {
     private void OnDestroy() {
         Destroy(blueLine);
         GameManager.RemoveMagnetic(this);
+    }
+
+    private void UpdateCenterOfMass() {
+        if (IsStatic) {
+            if (HasColliders) {
+                cachedCenterOfMass = transform.TransformPoint(centerOfMass);
+            } else {
+                // no collider or rigidbody, so center of mass is set to transform.position as a default
+                cachedCenterOfMass = transform.position;
+            }
+        } else {
+            if (HasColliders) {
+                // Not static, has colliders
+                cachedCenterOfMass = transform.TransformPoint(centerOfMass);
+            } else {
+                // no collider or rigidbody, so center of mass is set to transform.position as a default
+                cachedCenterOfMass = transform.position;
+            }
+        }
     }
 
     public void OnDisable() {
@@ -326,11 +337,12 @@ public class Magnetic : MonoBehaviour {
     public void SetBlueLine(Vector3 endPos, float width, float lsf, Color color) {
         if (blueLine) {
             blueLine.gameObject.SetActive(true);
-            blueLine.StartPos = CenterOfMass;
-            blueLine.EndPos = endPos;
+            blueLine.SetStartAndEndPoints(CenterOfMass, endPos);
             blueLine.LineWidth = width;
-            lightSaberFactor = Mathf.Lerp(lightSaberFactor, lsf, metalLinesLerpConstant);
-            blueLine.LightSaberFactor = lightSaberFactor;
+            if (lightSaberFactor != 0 || lsf != 0) {
+                lightSaberFactor = Mathf.Lerp(lightSaberFactor, lsf, metalLinesLerpConstant);
+                blueLine.LightSaberFactor = lightSaberFactor;
+            }
             blueLine.LineColor = color;
         } else {
             Debug.Log("Null: " + gameObject);
@@ -353,7 +365,7 @@ public class Magnetic : MonoBehaviour {
     }
 
     public void DisableBlueLine() {
-        if (blueLine)
+        if (blueLine && blueLine.gameObject.activeSelf)
             blueLine.gameObject.SetActive(false);
     }
 

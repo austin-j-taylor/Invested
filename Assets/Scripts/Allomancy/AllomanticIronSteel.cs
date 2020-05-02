@@ -162,9 +162,16 @@ public class AllomanticIronSteel : Allomancer {
     protected float Charge { get; set; } // Allomantic Charge
     public Vector3 CenterOfMass {
         get {
-            return transform.TransformPoint(rb.centerOfMass);
+            if (cachedCenterOfMassTime != Time.time) {
+                cachedCenterOfMass = transform.TransformPoint(rb.centerOfMass);
+                cachedCenterOfMassTime = Time.time;
+            }
+            return cachedCenterOfMass;
         }
     }
+    private Vector3 cachedCenterOfMass;
+    private float cachedCenterOfMassTime = -1;
+
     public float Mass {
         get {
             return rb.mass;
@@ -376,9 +383,9 @@ public class AllomanticIronSteel : Allomancer {
         // Do the final calculation
         Vector3 force = SettingsMenu.settingsData.allomanticConstant * Strength * Charge * targetCharge * distanceFactor;
         // If there is something blocking line-of-sight, the force is reduced.
-        if (raycastForLOS && Physics.Raycast(targetCenterOfMass, -positionDifference, out RaycastHit hit, (targetCenterOfMass - CenterOfMass).magnitude, GameManager.Layer_IgnoreCamera) && hit.transform != transform) {
-            force *= lineOfSightFactor;
-        }
+        //if (raycastForLOS && Physics.Raycast(targetCenterOfMass, -positionDifference, out RaycastHit hit, (targetCenterOfMass - CenterOfMass).magnitude, GameManager.Layer_IgnoreCamera) && hit.transform != transform) {
+        //    force *= lineOfSightFactor;
+        //}
         return force;
     }
 

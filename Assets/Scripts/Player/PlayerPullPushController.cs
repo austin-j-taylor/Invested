@@ -464,13 +464,15 @@ public class PlayerPullPushController : AllomanticIronSteel {
      *  - The WIDTH of the line is dependant on the MASS of the target
      *  - The BRIGHTNESS of the line is dependent on the FORCE that would result from the Push
      *  - The "LIGHT SABER" FACTOR is dependent on the FORCE acting on the target. If the metal is not a target, it is 1 (no light saber factor).
+     *  
+     *  This algorithm (specifically, setting the properties for the blue lines) gobbles up CPU usage. Once you have more than ~300 objects in range,
+     *      each of which performs an Allomantic Force calculation, you are guaranteed to lose frames.
      */
     private void IronSteelSight(out Magnetic targetBullseye, out List<Magnetic> newTargetsArea, out List<Magnetic> newTargetsBubble) {
         targetBullseye = null;
         newTargetsArea = new List<Magnetic>();
         newTargetsBubble = new List<Magnetic>();
-
-
+        
         // If the player is directly looking at a magnetic's collider, use that for the bullseye
         if (Physics.Raycast(CameraController.ActiveCamera.transform.position, CameraController.ActiveCamera.transform.forward, out RaycastHit hit, 500, GameManager.Layer_IgnorePlayer)) {
             Magnetic target = hit.collider.GetComponentInParent<Magnetic>();
@@ -503,9 +505,10 @@ public class PlayerPullPushController : AllomanticIronSteel {
                     break;
                 }
         }
+
         //Debug.Log("Distance threshold: " + distanceThresholdSqr);
         distanceThresholdSqr *= distanceThresholdSqr;
-        int count = 0;
+        //int countHit = 0, countSkipped = 0;
         // Go through every metal in the scene and update the blue lines pointing to them.
         // Add every metal near the center of the screen to the Lists of Magnetics that are in range for Area and Bubble selection.
         float bullseyeWeight = 0; // weight of the Magnetic currently "closest" to the bullseye
@@ -515,8 +518,10 @@ public class PlayerPullPushController : AllomanticIronSteel {
                 // skip this target completely if it is too far away
                 if ((target.CenterOfMass - transform.position).sqrMagnitude > distanceThresholdSqr) {
                     target.DisableBlueLine();
-                    count++;
+                    //countSkipped++;
                 } else {
+                    //countHit++;
+                    //float radialDistance = 0, linearDistance = 0;
                     float weight = SetLineProperties(target, out float radialDistance, out float linearDistance);
                     // If the Magnetic is on the screen
                     if (weight > 0) {
@@ -537,10 +542,11 @@ public class PlayerPullPushController : AllomanticIronSteel {
                 }
             }
         }
-        if (targetBullseye) {
+        //Debug.Log("Metals detected: " + countHit + " and skipped: " + countSkipped);
+        //if (targetBullseye) {
             // Brighten the blue line to the Bullseye target.
             //targetBullseye.BrightenLine();
-        }
+        //}
     }
 
 
@@ -564,14 +570,12 @@ public class PlayerPullPushController : AllomanticIronSteel {
 
         BubbleTargets.UpdateBlueLines(BubbleMetalStatus, BubbleBurnPercentageTarget, CenterOfMass);
     }
-
     /*
      * Checks several factors and sets the properties of the blue line pointing to target.
      * These factors are described in the above function.
      * Returns the "weight" of the target, which increases within closeness to the player and the center of the screen.
      */
     private float SetLineProperties(Magnetic target, out float radialDistance, out float linearDistance) {
-
         Vector3 allomanticForceVector = CalculateAllomanticForce(target);
         float allomanticForce = allomanticForceVector.magnitude;
         // If using Percentage force mode, burn percentage affects your range for burning
