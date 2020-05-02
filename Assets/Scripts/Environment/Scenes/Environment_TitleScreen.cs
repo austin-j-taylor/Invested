@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 public class Environment_TitleScreen : Environment {
 
     [SerializeField]
-    private float speed = .1f;
+    private float speed = .05f;
     [SerializeField]
     private float speedVert = .1f;
     [SerializeField]
