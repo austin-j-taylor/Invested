@@ -11,7 +11,8 @@ public class AllomechanicalGlower : MonoBehaviour {
     public readonly static Color ColorIronTransparent = new Color(0, .35f, 1f, 0.01960784f);
     public readonly static Color ColorSteel = new Color(.7f, .025f, 0.05f);
     public readonly static Color ColorSteelTransparent = new Color(.7f, .025f, 0.05f, 0.01960784f);
-    public readonly static Color ColorPewter = new Color(.75f, .25f, 0f);
+    public readonly static Color ColorPewter = new Color(.6f, .7f, 1f);
+    //public readonly static Color ColorPewter = new Color(.75f, .25f, 0f);
 
     private Renderer[] irons;
     private Renderer[] steels;
