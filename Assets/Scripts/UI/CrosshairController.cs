@@ -35,6 +35,10 @@ public class CrosshairController : MonoBehaviour
         fills[bottom] = hairs[bottom].transform.GetChild(0).GetComponent<Image>();
         fills[right] = hairs[right].transform.GetChild(0).GetComponent<Image>();
 
+        // Set circle material to be a copy of its template so we don't overwrite the actual material's values
+
+        circle.material = Instantiate(circle.material);
+
         SetManual();
     }
 
