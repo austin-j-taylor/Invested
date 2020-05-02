@@ -16,10 +16,10 @@ public class TargetArray {
     public const float lightSaberConstant = 1024;
     public const float firstPersonLSFactor = .1f;
     private const float blueLineTargetedWidthFactor = .06f;
-    public static readonly Color targetedRedLine = new Color(1, 0, 1);
-    private static readonly Color targetedGreenLine = new Color(0, 1, 0);
-    private static readonly Color targetedBlueLine = new Color(0, 0, 1);
-    private static readonly Color targetedLightBlueLine = new Color(0, .5f, 1f);
+    public static readonly Color targetedRedLine = new Color(1.2f, 0, 1.2f);
+    private static readonly Color targetedGreenLine = new Color(0, 1.2f, 0);
+    private static readonly Color targetedBlueLine = new Color(0, 0, 1.2f);
+    private static readonly Color targetedLightBlueLine = new Color(0, .5f, 1.2f);
 
     private Magnetic[] targets;
 
@@ -368,7 +368,6 @@ public class TargetArray {
 
     /*
      * Refreshes the blue metal lies that point to each target.
-     * pullTheme determines the color (green or red) that the line could have.
      */
     public void UpdateBlueLines(bool pullingColor, float burnRate, Vector3 startPos) {
         // Go through targets and update their metal lines
@@ -378,7 +377,7 @@ public class TargetArray {
                 blueLineTargetedWidthFactor * targets[i].Charge,
                 Mathf.Exp(-targets[i].LastMaxPossibleAllomanticForce.magnitude * burnRate * (SettingsMenu.settingsData.cameraFirstPerson == 1 ? firstPersonLSFactor : 1) / lightSaberConstant),
                 // 200IQ Ternary Operator
-                (pullingColor) ?
+                pullingColor ?
                     SettingsMenu.settingsData.pullTargetLineColor == 0 ? targetedBlueLine
                     :
                         SettingsMenu.settingsData.pullTargetLineColor == 1 ? targetedLightBlueLine

@@ -11,7 +11,7 @@ public class Keybinds : MonoBehaviour {
 
     private static float timeToHoldDPadY = 0f;
     private static float timeToHoldDPadX = 0f;
-    private static float doubleTapTimeWheel = float.NegativeInfinity;
+    //private static float doubleTapTimeWheel = float.NegativeInfinity;
 
     // Only used for convert Gamepad axes to binary buttons
     private static bool lastWasPulling = false;
@@ -201,18 +201,18 @@ public class Keybinds : MonoBehaviour {
             return Input.GetKey(KeyCode.Mouse2);
     }
 
-    public static bool NegateDown() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-            return Input.GetButtonDown("GamepadY");
-        else
-            return Input.GetKeyDown(KeyCode.R) || Input.GetKeyDown(KeyCode.LeftAlt);
-    }
-    public static bool Negate() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-            return Input.GetButton("GamepadY");
-        else
-            return Input.GetKey(KeyCode.R) || Input.GetKey(KeyCode.LeftAlt);
-    }
+    //public static bool NegateDown() {
+    //    if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+    //        return Input.GetButtonDown("GamepadY");
+    //    else
+    //        return Input.GetKeyDown(KeyCode.R) || Input.GetKeyDown(KeyCode.LeftAlt);
+    //}
+    //public static bool Negate() {
+    //    if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+    //        return Input.GetButton("GamepadY");
+    //    else
+    //        return Input.GetKey(KeyCode.R) || Input.GetKey(KeyCode.LeftAlt);
+    //}
 
     public static bool StopBurning() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
@@ -259,19 +259,32 @@ public class Keybinds : MonoBehaviour {
         }
     }
 
+    //    if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+    //        return Input.GetButtonDown("GamepadY");
+    //    else
+    //        return Input.GetKeyDown(KeyCode.R) || Input.GetKeyDown(KeyCode.LeftAlt);
     // Control wheel
     public static bool ControlWheel() {
-        return ZincTime();
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+            return Input.GetButton("GamepadY");
+        } else {
+            return Input.GetKey(KeyCode.R);
+        }
     }
     public static bool ControlWheelDown() {
-        if (ZincTimeDown()) {
-            if (Time.unscaledTime < doubleTapTimeWheel) {
-                doubleTapTimeWheel = Time.unscaledTime + doubleTapThreshold;
-                return true;
-            }
-            doubleTapTimeWheel = Time.unscaledTime + doubleTapThreshold;
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+            return Input.GetButtonDown("GamepadY");
+        } else {
+            return Input.GetKeyDown(KeyCode.R);
         }
-        return false;
+        //if (ZincTimeDown()) {
+        //    if (Time.unscaledTime < doubleTapTimeWheel) {
+        //        doubleTapTimeWheel = Time.unscaledTime + doubleTapThreshold;
+        //        return true;
+        //    }
+        //    doubleTapTimeWheel = Time.unscaledTime + doubleTapThreshold;
+        //}
+        //return false;
     }
     public static bool ControlWheelConfirm() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
