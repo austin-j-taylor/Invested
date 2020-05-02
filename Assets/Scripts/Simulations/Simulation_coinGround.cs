@@ -86,7 +86,6 @@ public class Simulation_coinGround : Simulation {
         // Lower the timescale until the coin hits the ground
         if (coinTop.transform.position.y - groundHeight - .125f > .01f) {
             desiredTimeScale = .05f;
-            Debug.Log("setting to .05");
         } else {
             desiredTimeScale = SettingsMenu.settingsData.timeScale;
         }
