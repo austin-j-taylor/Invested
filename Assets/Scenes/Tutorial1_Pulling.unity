@@ -159,35 +159,35 @@ MonoBehaviour:
   container: {fileID: 205531382}
   sunLight: {fileID: 566548528}
   cloudTestParams: {x: 0.9, y: 1.36, z: 0.64}
-  numStepsLight: 8
+  numStepsLight: 1
   rayOffsetStrength: 30
   blueNoise: {fileID: 2800000, guid: 6d82457f96ba8449597922c106f17caa, type: 3}
   cloudScale: 3.21
   densityMultiplier: -4.26
-  densityOffset: -0
+  densityOffset: 3.3
   shapeOffset: {x: 0, y: 0, z: 1.11}
   heightOffset: {x: 0, y: 0}
-  shapeNoiseWeights: {x: 3.48, y: 1.71, z: -4.76, w: 1.54}
+  shapeNoiseWeights: {x: 3.48, y: 1.71, z: 10.14, w: 1.54}
   detailNoiseScale: 10.53
   detailNoiseWeight: 1.5
-  detailNoiseWeights: {x: 0.32, y: 0.6, z: 0.4}
+  detailNoiseWeights: {x: -0.78, y: 0.6, z: 0.4}
   detailOffset: {x: 0, y: 0, z: 0}
   lightAbsorptionThroughCloud: 0.18
-  lightAbsorptionTowardSun: -0.13
-  darknessThreshold: 0.321
-  forwardScattering: 0.93
-  backScattering: 0.33
+  lightAbsorptionTowardSun: -0.03
+  darknessThreshold: 0.45
+  forwardScattering: 0.64
+  backScattering: 0.43
   baseBrightness: 0.332
   phaseFactor: 0.83
   timeScale: 1
-  baseSpeed: 1
+  baseSpeed: 0.2
   detailSpeed: 1.69
   colFog: {r: 0.0504628, g: 0.10849197, b: 0.3962264, a: 1}
   colClouds: {r: 0.063545726, g: 0.08310947, b: 0.11320752, a: 1}
   colSun: {r: 1, g: 1, b: 1, a: 1}
   haveSunInSky: 1
   fogDensity: 0
-  material: {fileID: 1646052205}
+  material: {fileID: 1182795172}
   weatherMapGen: {fileID: 2044844519}
   noise: {fileID: 742066503}
 --- !u!20 &30828804
@@ -251,41 +251,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!84 &145332985
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: Weather Map
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  serializedVersion: 3
-  m_Width: 512
-  m_Height: 512
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthFormat: 0
-  m_ColorFormat: 24
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 1
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 512
 --- !u!1 &205531381
 GameObject:
   m_ObjectHideFlags: 0
@@ -331,6 +296,41 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   colour: {r: 1, g: 0.6868738, b: 0, a: 0.4392157}
   displayOutline: 1
+--- !u!84 &552431331
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Weather Map
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  serializedVersion: 3
+  m_Width: 512
+  m_Height: 512
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthFormat: 0
+  m_ColorFormat: 24
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 1
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 512
 --- !u!1 &566548526
 GameObject:
   m_ObjectHideFlags: 0
@@ -577,9 +577,9 @@ MonoBehaviour:
   viewerTileAmount: 1
   viewerSize: 1
   showSettingsEditor: 0
-  shapeTexture: {fileID: 1035847594}
-  detailTexture: {fileID: 1895364805}
---- !u!84 &1035847594
+  shapeTexture: {fileID: 856620976}
+  detailTexture: {fileID: 2142758860}
+--- !u!84 &856620976
 RenderTexture:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -614,7 +614,7 @@ RenderTexture:
     m_WrapW: 0
   m_Dimension: 3
   m_VolumeDepth: 132
---- !u!21 &1646052205
+--- !u!21 &1182795172
 Material:
   serializedVersion: 6
   m_ObjectHideFlags: 0
@@ -640,41 +640,49 @@ Material:
     m_Floats: []
     m_Colors: []
   m_BuildTextureStacks: []
---- !u!84 &1895364805
-RenderTexture:
+--- !u!1 &1993043305
+GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: DetailNoise
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  serializedVersion: 3
-  m_Width: 64
-  m_Height: 64
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthFormat: 0
-  m_ColorFormat: 24
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 1
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 0
-    m_WrapV: 0
-    m_WrapW: 0
-  m_Dimension: 3
-  m_VolumeDepth: 64
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1993043307}
+  - component: {fileID: 1993043306}
+  m_Layer: 0
+  m_Name: Environment
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1993043306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1993043305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c107e2c29e934d448b321d4ff1c966f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1993043307
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1993043305}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2044844517
 GameObject:
   m_ObjectHideFlags: 0
@@ -722,9 +730,44 @@ MonoBehaviour:
   noiseCompute: {fileID: 7200000, guid: 610906fb135f245baaa76a04f34d7c24, type: 3}
   noiseSettings: {fileID: 11400000, guid: 509d54ed5f587459d99d1fc47b5d1459, type: 2}
   resolution: 512
-  weatherMap: {fileID: 145332985}
+  weatherMap: {fileID: 552431331}
   testParams: {x: 0, y: 1, z: 1, w: 0}
   container: {fileID: 205531382}
   viewerEnabled: 0
   showSettingsEditor: 1
   minMax: {x: -0.01, y: 0.47}
+--- !u!84 &2142758860
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: DetailNoise
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  serializedVersion: 3
+  m_Width: 64
+  m_Height: 64
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthFormat: 0
+  m_ColorFormat: 24
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 1
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 0
+    m_WrapV: 0
+    m_WrapW: 0
+  m_Dimension: 3
+  m_VolumeDepth: 64

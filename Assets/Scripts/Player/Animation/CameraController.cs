@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 /*
  * Controls the first- and third-person cameras.
+ * Also handles management of cloud shader data between scenes. Should change that.
  * Adapted from http://wiki.unity3d.com/index.php?title=SmoothFollowWithCameraBumper
  */
 
@@ -402,7 +403,9 @@ public class CameraController : MonoBehaviour {
     // On scene startup
     // Copy parameters from this scene's cloud controller to the camera
     private void LoadCloudDataFromScene(Scene scene, LoadSceneMode mode) {
-        if (mode == LoadSceneMode.Single) {
+        // mode is Single when it's loading scenes on startup, so skip those
+        // Also, skip Tutorial levels because they preserve cloud data from the title screen
+        if (mode == LoadSceneMode.Single /*&& !SceneSelectMenu.IsTutorial(scene.buildIndex)*/) {
             GameObject otherObject = GameObject.Find("Clouds");
             if (otherObject) {
                 //ActiveCamera.clearFlags = CameraClearFlags.SolidColor;

@@ -162,9 +162,9 @@ public class AllomanticIronSteel : Allomancer {
     protected float Charge { get; set; } // Allomantic Charge
     public Vector3 CenterOfMass {
         get {
-            if (cachedCenterOfMassTime != Time.time) {
+            if (cachedCenterOfMassTime != Time.unscaledTime) {
                 cachedCenterOfMass = transform.TransformPoint(rb.centerOfMass);
-                cachedCenterOfMassTime = Time.time;
+                cachedCenterOfMassTime = Time.unscaledTime;
             }
             return cachedCenterOfMass;
         }
@@ -184,6 +184,8 @@ public class AllomanticIronSteel : Allomancer {
         Charge = Mathf.Pow(Mass, chargePower);
         IronReserve = gameObject.AddComponent<MetalReserve>();
         SteelReserve = gameObject.AddComponent<MetalReserve>();
+        IronReserve.IsEndless = true;
+        SteelReserve.IsEndless = true;
         InitArrays();
         GameManager.AddAllomancer(this);
     }

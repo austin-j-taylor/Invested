@@ -59,22 +59,22 @@ public class Player : PewterEntity {
     public static bool CanControlZinc { get; set; }
     public static bool CanControlMovement { get; set; }
 
-    private static bool godMode = false;
-    public static bool GodMode { // Player does not run out of metals
-        get {
-            return godMode;
-        }
-        private set {
-            if (value) {
-                PlayerIronSteel.IronReserve.IsEndless = true;
-                PlayerIronSteel.SteelReserve.IsEndless = true;
-            } else {
-                PlayerIronSteel.IronReserve.IsEndless = false;
-                PlayerIronSteel.SteelReserve.IsEndless = false;
-            }
-            godMode = value;
-        }
-    }
+    //private static bool godMode = false;
+    //public static bool GodMode { // Player does not run out of metals
+    //    get {
+    //        return godMode;
+    //    }
+    //    private set {
+    //        if (value) {
+    //            PlayerIronSteel.IronReserve.IsEndless = true;
+    //            PlayerIronSteel.SteelReserve.IsEndless = true;
+    //        } else {
+    //            PlayerIronSteel.IronReserve.IsEndless = false;
+    //            PlayerIronSteel.SteelReserve.IsEndless = false;
+    //        }
+    //        godMode = value;
+    //    }
+    //}
     // Some scenes (Storms, Sea of Metal) should feel larger than other scenes (Luthadel, MARL).
     // This is done by increasing camera distance and Allomantic strength.
     private static float feelingScale = 1;
@@ -191,7 +191,7 @@ public class Player : PewterEntity {
             CanControl = true;
             CanControlMovement = true;
             CanControlZinc = true;
-            GodMode = true;
+            //GodMode = true;
 
             SetFrameMaterial(frameMaterial);
             SetSmokeMaterial(smokeMaterial);

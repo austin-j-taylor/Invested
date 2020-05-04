@@ -40,7 +40,7 @@ public class MetalReserve : MonoBehaviour {
 
     public bool HasMass {
         get {
-            return IsEnabled && (IsEndless || mass > 0) && !IsBurnedOut;
+            return IsEnabled && (IsEndless || (mass > 0 && !IsBurnedOut));
         }
     }
     public bool IsChanging {

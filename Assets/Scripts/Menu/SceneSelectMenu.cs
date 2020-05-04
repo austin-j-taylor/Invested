@@ -8,19 +8,30 @@ using UnityEngine.EventSystems;
 public class SceneSelectMenu : MonoBehaviour {
 
     // Scene build indices
-    public const int sceneMain = 0;
-    public const int sceneTitleScreen = 1;
-    public const int sceneMARL1 = 2;
-    public const int sceneLuthadel = 3;
-    public const int sceneShootingGrounds = 4;
-    public const int sceneSandbox = 5;
-    public const int sceneSouthernMountains = 6;
-    public const int sceneSeaOfMetal = 7;
-    public const int sceneStorms = 8;
-    public const int sceneSimulationDuel = 9;
-    public const int sceneSimulationWall = 10;
-    public const int sceneSimulationGround = 11;
-    public const int sceneTutorial1 = 12;
+    public const int sceneMain = 0,
+        sceneTitleScreen = 1,
+        sceneMARL1 = 2,
+        sceneLuthadel = 3,
+        sceneShootingGrounds = 4,
+        sceneSandbox = 5,
+        sceneSouthernMountains = 6,
+        sceneSeaOfMetal = 7,
+        sceneStorms = 8,
+        sceneSimulationDuel = 9,
+        sceneSimulationWall = 10,
+        sceneSimulationGround = 11,
+        sceneTutorial1 = 12,
+        sceneTutorial2 = 13,
+        sceneTutorial3 = 14,
+        sceneTutorial4 = 15;
+
+    public static bool IsTutorial(int sceneIndex) {
+        return sceneIndex == sceneTutorial1 ||
+                sceneIndex == sceneTutorial2 ||
+                sceneIndex == sceneTutorial3 ||
+                sceneIndex == sceneTutorial4;
+    }
+
 
     public bool IsOpen {
         get {
@@ -55,6 +66,7 @@ public class SceneSelectMenu : MonoBehaviour {
     private Button simulationWallButton;
     private Button simulationGroundButton;
     private Button backButton;
+
 
     void Start() {
         tooltip = transform.Find("Tooltip").GetComponent<Text>();
@@ -137,18 +149,12 @@ public class SceneSelectMenu : MonoBehaviour {
         //CameraController.SetExternalSource(null, null);
         Player.PlayerInstance.transform.parent = EventSystem.current.transform;
         
-        //if (scene == sceneTitleScreen) {
-        //    MainMenu.Open();
-        //    //MainMenu.OpenSceneSelectMenu();
-        //}
-        
         SceneManager.LoadScene(scene);
     }
 
     public static void ReloadScene() {
         LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
-
 
     private void ClearAfterSceneChange(Scene scene, LoadSceneMode mode) {
         if (mode == LoadSceneMode.Single) {
@@ -165,35 +171,41 @@ public class SceneSelectMenu : MonoBehaviour {
                 CameraController.ActiveCamera.clearFlags = CameraClearFlags.SolidColor;
                 if (isActiveAndEnabled)
                     MainMenu.FocusOnButton(highlitButton);
+            } else if (IsTutorial(scene.buildIndex)) {
+                // Tutorial levels have a special level transition from the title screen.
+                MainMenu.Close();
+                TimeController.CurrentTimeScale = SettingsMenu.settingsData.timeScale;
+                CameraController.LockCamera();
+                Player.CanPause = true;
+                HUD.ResetHUD();
+
             } else {
                 MainMenu.Close();
                 TimeController.CurrentTimeScale = SettingsMenu.settingsData.timeScale;
-
                 Player.PlayerInstance.gameObject.SetActive(true);
+                Player.CanControl = true;
+                Player.CanControlMovement = true;
                 Player.CanPause = true;
+                Player.CanControlZinc = true;
                 CameraController.LockCamera();
                 CameraController.ActiveCamera.clearFlags = CameraClearFlags.Skybox;
                 HUD.ResetHUD();
+                HUD.ControlWheelController.SetLockedState(ControlWheelController.LockedState.Unlocked);
+                HUD.HelpOverlayController.SetLockedState(HelpOverlayController.LockedState.Unlocked);
 
                 // Set parameters for starting on certain scenes
                 Player.PlayerInstance.CoinHand.Pouch.Fill();
                 Player.PlayerIronSteel.IronReserve.SetMass(150);
                 Player.PlayerIronSteel.SteelReserve.SetMass(150);
                 Player.PlayerPewter.PewterReserve.SetMass(150);
-                // for now, just set flags from here
-                if(scene.buildIndex == sceneMARL1) {
-                    Player.CanControlZinc = false;
-                    HUD.ControlWheelController.SetLockedState(ControlWheelController.LockedState.LockedFully);
-                    HUD.HelpOverlayController.SetLockedState(HelpOverlayController.LockedState.Locked0);
-                } else {
-                    Player.CanControlZinc = true;
-                    HUD.ControlWheelController.SetLockedState(ControlWheelController.LockedState.Unlocked);
-                    HUD.HelpOverlayController.SetLockedState(HelpOverlayController.LockedState.Unlocked);
-                }
+                Player.PlayerIronSteel.IronReserve.IsEnabled = true;
+                Player.PlayerIronSteel.SteelReserve.IsEnabled = true;
+                Player.PlayerPewter.PewterReserve.IsEnabled = true;
             }
         }
         NowLoadingScene = false;
     }
+
 
     public void SetTooltip(string tip) {
         tooltip.text = tip;

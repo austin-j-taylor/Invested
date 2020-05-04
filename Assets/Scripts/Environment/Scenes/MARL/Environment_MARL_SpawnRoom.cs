@@ -11,21 +11,19 @@ public class Environment_MARL_SpawnRoom : Environment {
     
 
     private void Start() {
-        // Flags Currently set in SceneSelectMenu
-        //Player.CanControlZinc = false;
-        //HUD.ControlWheelController.SetLockedState(ControlWheelController.LockedState.LockedFully);
-        //HUD.HelpOverlayController.SetLockedState(HelpOverlayController.LockedState.Locked0);
+        Player.CanControl = false;
+        Player.CanControlMovement = false;
+        Player.CanControlZinc = false;
+        Player.PlayerInstance.CoinHand.Pouch.Clear();
+        Player.PlayerIronSteel.SteelReserve.IsEnabled = false;
+        Player.PlayerPewter.PewterReserve.IsEnabled = false;
+        HUD.ControlWheelController.SetLockedState(ControlWheelController.LockedState.LockedFully);
+        HUD.HelpOverlayController.SetLockedState(HelpOverlayController.LockedState.Locked0);
         StartCoroutine(Procedure());
     }
 
     // State coroutines
     private IEnumerator Procedure() {
-        Player.CanControl = false;
-        Player.CanControlMovement = false;
-        Player.PlayerInstance.CoinHand.Pouch.Clear();
-        //Player.PlayerIronSteel.IronReserve.SetMass(100);
-        Player.PlayerIronSteel.SteelReserve.IsEnabled = false;
-        Player.PlayerPewter.PewterReserve.IsEnabled = false;
 
         yield return new WaitForSeconds(3);
 
