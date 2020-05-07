@@ -28,6 +28,6 @@ public class Environment_TitleScreen : EnvironmentCinematic {
     }
 
     void Update() {
-        cameraPositionTarget.position = new Vector3(Mathf.Cos(Time.unscaledTime * speedVert) * speedAmp, Mathf.Sin(Time.unscaledTime * speedVert) * speedAmp, Mathf.Sin(Time.unscaledTime * speedVert) * speedAmp);
+        cameraPositionTarget.position = new Vector3(Mathf.Cos(Time.unscaledTime * speedVert) * speedAmp, (1 + Mathf.Sin(Time.unscaledTime * speedVert)) * speedAmp, Mathf.Sin(Time.unscaledTime * speedVert) * speedAmp);
     }
 }

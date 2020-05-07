@@ -37,7 +37,6 @@ public class CameraController : MonoBehaviour {
     public static Transform CameraPositionTarget { get; private set; }
     public static bool UsingCinemachine { get; set; } // Set to true when using Cinemachine animation. Do pretty much nothing in our Update().
     public static CinemachineBrain Cinemachine;
-    private static CinemachineFreeLook freeLookCinemachine;
 
     private static float CameraLookAtTargetOffset = 1;// offset from player to lookat target
     private static float currentX = 0;
@@ -88,7 +87,6 @@ public class CameraController : MonoBehaviour {
         CameraLookAtTarget = transform.Find("CameraLookAtTarget");
         CameraPositionTarget = CameraLookAtTarget.Find("CameraPositionTarget");
         ActiveCamera = CameraPositionTarget.Find("Camera").GetComponent<Camera>();
-        freeLookCinemachine = CameraPositionTarget.Find("CM FreeLook").GetComponent<CinemachineFreeLook>();
         ActiveCamera.depthTextureMode = DepthTextureMode.DepthNormals;
         clouds = ActiveCamera.GetComponent<CloudMaster>();
         Cinemachine = ActiveCamera.GetComponent<CinemachineBrain>();
@@ -98,20 +96,13 @@ public class CameraController : MonoBehaviour {
 
     private void Update() {
 
-        if (!PauseMenu.IsPaused) {
-            freeLookCinemachine.m_YAxis.m_MaxSpeed = SettingsMenu.settingsData.mouseSensitivityY / 180;
-            freeLookCinemachine.m_XAxis.m_MaxSpeed = SettingsMenu.settingsData.mouseSensitivityX;
-
-            CameraLookAtTarget.transform.position = playerBody.transform.position + new Vector3(0, CameraLookAtTargetOffset, 0);
-        }
-
-
-        return;
         //if (UsingCinemachine) {
         //    return;
         //}
         transform.position = playerBody.position + cameraControllerOffset;
         CameraLookAtTarget.rotation = Quaternion.Euler(0, currentX, 0);
+        //GetComponentInChildren<CinemachineVirtualCamera>().transform.localRotation = Quaternion.identity;
+        //GetComponentInChildren<CinemachineVirtualCamera>().transform.localPosition = Vector3.zero;
 
         if (externalPositionTarget) {
             // Called when the Camera is being controlled by some other source, i.e. HarmonyTarget
@@ -160,8 +151,6 @@ public class CameraController : MonoBehaviour {
     }
 
     public static void UpdateCamera() {
-
-        return;
 
         if (!externalPositionTarget) {
 
@@ -354,7 +343,6 @@ public class CameraController : MonoBehaviour {
         ActiveCamera.transform.localPosition = Vector3.zero;
         ActiveCamera.transform.localRotation = Quaternion.identity;
         ExternalDistance = Vector2.zero;
-        EnablePlayerControl();
         TimeToLerp = -100;
         externalPositionTarget = null;
         externalLookAtTarget = null;
@@ -426,21 +414,6 @@ public class CameraController : MonoBehaviour {
             Clear();
     }
 
-    public static void EnablePlayerControl() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
-            freeLookCinemachine.m_XAxis.m_InputAxisName = Keybinds.JoystickRightHorizontal;
-            freeLookCinemachine.m_YAxis.m_InputAxisName = Keybinds.JoystickRightVertical;
-        } else {
-            freeLookCinemachine.m_XAxis.m_InputAxisName = Keybinds.MouseX;
-            freeLookCinemachine.m_YAxis.m_InputAxisName = Keybinds.MouseY;
-        }
-    }
-    public static void DisablePlayerControl() {
-        freeLookCinemachine.m_XAxis.m_InputAxisName = "";
-        freeLookCinemachine.m_YAxis.m_InputAxisName = "";
-        freeLookCinemachine.m_XAxis.m_InputAxisValue = 0;
-        freeLookCinemachine.m_YAxis.m_InputAxisValue = 0;
-    }
 
     // On scene startup
     // Copy parameters from this scene's cloud controller to the camera

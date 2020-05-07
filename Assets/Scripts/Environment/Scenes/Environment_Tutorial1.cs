@@ -19,18 +19,21 @@ public class Environment_Tutorial1 : EnvironmentCinematic {
         // Set cinemachine virtual camera properties
         InitializeCinemachine();
         // Set camera target position to be same as where we left of in tutorial (just a sine function of time)
-        cameraPositionTarget.position = new Vector3(Mathf.Cos(Time.unscaledTime * Environment_TitleScreen.speedVert) * Environment_TitleScreen.speedAmp, Mathf.Sin(Time.unscaledTime * Environment_TitleScreen.speedVert) * Environment_TitleScreen.speedAmp, Mathf.Sin(Time.unscaledTime * Environment_TitleScreen.speedVert) * Environment_TitleScreen.speedAmp);
+        cameraPositionTarget.position = new Vector3(Mathf.Cos(Time.unscaledTime * Environment_TitleScreen.speedVert) * Environment_TitleScreen.speedAmp, (1 + Mathf.Sin(Time.unscaledTime * Environment_TitleScreen.speedVert)) * Environment_TitleScreen.speedAmp, Mathf.Sin(Time.unscaledTime * Environment_TitleScreen.speedVert) * Environment_TitleScreen.speedAmp);
+        vcam.transform.position = cameraPositionTarget.position;
+        // Make camera look at Player
+        vcam.LookAt = Player.PlayerInstance.transform;
 
-        vcam.Follow = CameraController.CameraPositionTarget;
-        CinemachineSmoothPath path = GetComponent<CinemachineSmoothPath>();
-        CinemachineSmoothPath.Waypoint way0, way1;
-        way0.position = cameraPositionTarget.position;
-        way0.roll = 0;
-        way1.position = CameraController.CameraPositionTarget.position;
-        way1.roll = 0;
-        path.m_Waypoints[0] = way0;
-        path.m_Waypoints[1] = way1;
-        dolly.m_PathPosition = 0;
+
+        //CinemachineSmoothPath path = GetComponent<CinemachineSmoothPath>();
+        //CinemachineSmoothPath.Waypoint way0, way1;
+        //way0.position = cameraPositionTarget.position;
+        //way0.roll = 0;
+        //way1.position = CameraController.CameraPositionTarget.position;
+        //way1.roll = 0;
+        //path.m_Waypoints[0] = way0;
+        //path.m_Waypoints[1] = way1;
+        //dolly.m_PathPosition = 0;
 
 
         StartCoroutine(Procedure());
@@ -40,16 +43,16 @@ public class Environment_Tutorial1 : EnvironmentCinematic {
 
         yield return null;
 
-        CinemachineSmoothPath.Waypoint way1;
-        way1.roll = 0;
-        CinemachineSmoothPath path = GetComponent<CinemachineSmoothPath>();
-        dolly.m_PathPosition = dolly.m_Path.MaxPos;
-
-        while (DollyHasntReachedTarget()) {
-            way1.position = CameraController.CameraPositionTarget.position;
-            path.m_Waypoints[1] = way1;
-            yield return null;
-        }
+        //CinemachineSmoothPath.Waypoint way1;
+        //way1.roll = 0;
+        //CinemachineSmoothPath path = GetComponent<CinemachineSmoothPath>();
+        //dolly.m_PathPosition = dolly.m_Path.MaxPos;
+        yield return new WaitForSeconds(2);
+        //while (DollyHasntReachedTarget()) {
+        //    //way1.position = CameraController.CameraPositionTarget.position;
+        //    //path.m_Waypoints[1] = way1;
+        //    yield return null;
+        //}
         Player.CanControl = true;
         Player.CanControlMovement = true;
         vcam.enabled = false;
