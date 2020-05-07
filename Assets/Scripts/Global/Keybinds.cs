@@ -17,6 +17,31 @@ public class Keybinds : MonoBehaviour {
     private static bool lastWasPulling = false;
     private static bool lastWasPushing = false;
 
+    // Mouse/Stick Axis names
+    public static string MouseX {
+        get {
+            return "Mouse X";
+        }
+    }
+    public static string MouseY {
+        get {
+            return "Mouse Y";
+        }
+    }
+    public static string JoystickRightHorizontal {
+        get {
+
+            return "HorizontalRight";
+        }
+    }
+    public static string JoystickRightVertical {
+        get {
+
+            return "VerticalRight";
+
+        }
+    }
+
     private void LateUpdate() {
         lastWasPulling = IronPulling();
         lastWasPushing = SteelPushing();

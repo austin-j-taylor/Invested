@@ -2,24 +2,18 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-public class Environment_TitleScreen : Environment {
+public class Environment_TitleScreen : EnvironmentCinematic {
 
-    [SerializeField]
-    private float speed = .05f;
-    [SerializeField]
-    private float speedVert = .1f;
-    [SerializeField]
-    private float speedAmp = 2;
+    public const float speed = .05f;
+    public const float speedVert = .1f;
+    public const float speedAmp = 2;
 
-    private Transform cameraPositionTarget;
 
     void Start() {
+        InitializeCinemachine();
+        vcam.LookAt = Player.PlayerInstance.transform;
 
         HUD.DisableHUD();
-        TimeController.CurrentTimeScale = 0;
-        cameraPositionTarget = transform.Find("cameraTarget");
-        CameraController.SetExternalSource(cameraPositionTarget, Player.PlayerInstance.transform, false);
-
         Magnetic[] pulls = transform.Find("Magnetics").GetComponentsInChildren<Magnetic>();
         Magnetic[] pushes = transform.Find("MagneticsPush").GetComponentsInChildren<Magnetic>();
         Player.PlayerIronSteel.SizeOfTargetArrays = 5;
@@ -34,9 +28,6 @@ public class Environment_TitleScreen : Environment {
     }
 
     void Update() {
-        cameraPositionTarget.RotateAround(Player.PlayerInstance.transform.position, Vector3.up, speed);
-        Vector3 pos = cameraPositionTarget.position;
-        pos.y = Mathf.Sin(Time.unscaledTime * speedVert) * speedAmp;
-        cameraPositionTarget.position = pos;
+        cameraPositionTarget.position = new Vector3(Mathf.Cos(Time.unscaledTime * speedVert) * speedAmp, Mathf.Sin(Time.unscaledTime * speedVert) * speedAmp, Mathf.Sin(Time.unscaledTime * speedVert) * speedAmp);
     }
 }

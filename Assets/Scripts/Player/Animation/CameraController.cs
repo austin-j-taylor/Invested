@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Cinemachine;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,7 +12,7 @@ using UnityEngine.SceneManagement;
 
 public class CameraController : MonoBehaviour {
 
-    private const float playerLookAtTargetFirstPersonHeight = 1;
+    private const float CameraLookAtTargetFirstPersonHeight = 1;
     private const float lerpConstantPosition = 5;
     private const float lerpConstantRotation = 15;
     private const float rootConstantScaling = .5f;
@@ -20,11 +21,10 @@ public class CameraController : MonoBehaviour {
     private static readonly Vector3 cameraControllerOffset = new Vector3(0, 0.25f - .06f, 0);
 
     public static Camera ActiveCamera { get; private set; }
-    public static Vector2 ExternalDistance { get; set; } // Assigned by another part of the program for controlling large objects. X: Distance from target, Y: playerLookAtTargetReferenceHeight
+    public static Vector2 ExternalDistance { get; set; } // Assigned by another part of the program for controlling large objects. X: Distance from target, Y: CameraLookAtTargetOffset
 
     private static Transform playerBody;
     private static Transform playerCameraController;
-    private static Transform playerLookAtTarget;
     private static Transform externalPositionTarget; // Assigned by another part of the program for tracking
     private static Transform externalLookAtTarget; // Assigned by another part of the program for tracking
     private static bool externalLerpToTarget = true; // Assigned by another part of the program for tracking
@@ -33,8 +33,13 @@ public class CameraController : MonoBehaviour {
             return externalPositionTarget != null;
         }
     }
+    public static Transform CameraLookAtTarget { get; private set; }
+    public static Transform CameraPositionTarget { get; private set; }
+    public static bool UsingCinemachine { get; set; } // Set to true when using Cinemachine animation. Do pretty much nothing in our Update().
+    public static CinemachineBrain Cinemachine;
+    private static CinemachineFreeLook freeLookCinemachine;
 
-    private static float playerLookAtTargetReferenceHeight = 1;
+    private static float CameraLookAtTargetOffset = 1;// offset from player to lookat target
     private static float currentX = 0;
     private static float currentY = 0;
     private static float startX = 0;
@@ -78,33 +83,48 @@ public class CameraController : MonoBehaviour {
     }
 
     void Awake() {
-
         playerCameraController = transform;
         playerBody = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
-        playerLookAtTarget = transform.Find("CameraLookAtTarget");
-        ActiveCamera = playerLookAtTarget.GetChild(0).GetComponent<Camera>();
+        CameraLookAtTarget = transform.Find("CameraLookAtTarget");
+        CameraPositionTarget = CameraLookAtTarget.Find("CameraPositionTarget");
+        ActiveCamera = CameraPositionTarget.Find("Camera").GetComponent<Camera>();
+        freeLookCinemachine = CameraPositionTarget.Find("CM FreeLook").GetComponent<CinemachineFreeLook>();
         ActiveCamera.depthTextureMode = DepthTextureMode.DepthNormals;
         clouds = ActiveCamera.GetComponent<CloudMaster>();
+        Cinemachine = ActiveCamera.GetComponent<CinemachineBrain>();
         UnlockCamera();
         SceneManager.sceneLoaded += LoadCloudDataFromScene;
     }
 
-    private void LateUpdate() {
+    private void Update() {
+
+        if (!PauseMenu.IsPaused) {
+            freeLookCinemachine.m_YAxis.m_MaxSpeed = SettingsMenu.settingsData.mouseSensitivityY / 180;
+            freeLookCinemachine.m_XAxis.m_MaxSpeed = SettingsMenu.settingsData.mouseSensitivityX;
+
+            CameraLookAtTarget.transform.position = playerBody.transform.position + new Vector3(0, CameraLookAtTargetOffset, 0);
+        }
+
+
+        return;
+        //if (UsingCinemachine) {
+        //    return;
+        //}
         transform.position = playerBody.position + cameraControllerOffset;
-        playerLookAtTarget.rotation = Quaternion.Euler(0, currentX, 0);
+        CameraLookAtTarget.rotation = Quaternion.Euler(0, currentX, 0);
 
         if (externalPositionTarget) {
             // Called when the Camera is being controlled by some other source, i.e. HarmonyTarget
             if (externalLerpToTarget) {
-                ActiveCamera.transform.position = Vector3.Lerp(ActiveCamera.transform.position, externalPositionTarget.position, lerpConstantPosition * Time.unscaledDeltaTime);
-                ActiveCamera.transform.rotation = Quaternion.Lerp(ActiveCamera.transform.rotation, Quaternion.LookRotation(externalLookAtTarget.position - ActiveCamera.transform.position, Vector3.up), lerpConstantRotation * Time.unscaledDeltaTime);
+                CameraPositionTarget.transform.position = Vector3.Lerp(CameraPositionTarget.transform.position, externalPositionTarget.position, lerpConstantPosition * Time.unscaledDeltaTime);
+                CameraPositionTarget.transform.rotation = Quaternion.Lerp(CameraPositionTarget.transform.rotation, Quaternion.LookRotation(externalLookAtTarget.position - CameraPositionTarget.transform.position, Vector3.up), lerpConstantRotation * Time.unscaledDeltaTime);
             } else {
-                ActiveCamera.transform.position = externalPositionTarget.position;
-                ActiveCamera.transform.rotation = Quaternion.LookRotation(externalLookAtTarget.position - ActiveCamera.transform.position, Vector3.up);
+                CameraPositionTarget.transform.position = externalPositionTarget.position;
+                CameraPositionTarget.transform.rotation = Quaternion.LookRotation(externalLookAtTarget.position - CameraPositionTarget.transform.position, Vector3.up);
             }
 
         } else {
-            if (cameraIsLocked) {
+            if (cameraIsLocked && !UsingCinemachine) {
                 float deltaX;
                 float deltaY;
                 if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
@@ -140,6 +160,9 @@ public class CameraController : MonoBehaviour {
     }
 
     public static void UpdateCamera() {
+
+        return;
+
         if (!externalPositionTarget) {
 
             /* Reset camera properties for this frame */
@@ -149,7 +172,7 @@ public class CameraController : MonoBehaviour {
             // Vertical rotation (rotates camera up and down body)
             Quaternion verticalRotation = Quaternion.Euler(currentY, 0, 0);
 
-            ActiveCamera.transform.localRotation = verticalRotation;
+            CameraPositionTarget.transform.localRotation = verticalRotation;
             //// If an external target was recently used, the camera ROTATION should lerp back
             //if (timeToLerp < maxTimeToLerp) {
             //    ActiveCamera.transform.localRotation = Quaternion.Slerp(ActiveCamera.transform.localRotation, verticalRotation, lerpConstantRotation * Time.unscaledDeltaTime);
@@ -183,17 +206,17 @@ public class CameraController : MonoBehaviour {
                 //    wantedPosition = verticalRotation * new Vector3(0, 0, -SettingsMenu.settingsData.cameraDistance);
                 //}
 
-                ActiveCamera.transform.localPosition = wantedPosition;
+                CameraPositionTarget.transform.localPosition = wantedPosition;
                 //    Vector3 pos = Vector3.zero;
-                //    pos.y = playerLookAtTargetHeight;
-                playerLookAtTargetReferenceHeight = SettingsMenu.settingsData.cameraDistance / 5;
+                //    pos.y = CameraLookAtTargetHeight;
+                CameraLookAtTargetOffset = SettingsMenu.settingsData.cameraDistance / 5;
                 if (UsingExternalTarget) {
-                    playerLookAtTarget.transform.localPosition = new Vector3(0, ExternalDistance.y, 0);
+                    CameraLookAtTarget.transform.localPosition = new Vector3(0, ExternalDistance.y, 0);
                 } else {
-                    playerLookAtTarget.transform.localPosition = new Vector3(0, playerLookAtTargetReferenceHeight, 0);
+                    CameraLookAtTarget.transform.localPosition = new Vector3(0, CameraLookAtTargetOffset, 0);
                 }
                 if (UpsideDown)
-                    playerLookAtTarget.transform.localPosition = -playerLookAtTarget.transform.localPosition;
+                    CameraLookAtTarget.transform.localPosition = -CameraLookAtTarget.transform.localPosition;
 
                 // Raycast from player to camera and from camera to player.
                 // In the event of a collision, scale THIS in all dimensions by (length from player to hit / length of camera distance)
@@ -322,13 +345,16 @@ public class CameraController : MonoBehaviour {
             } else { // first person
                 Vector3 wantedPosition = playerCameraController.position;
 
-                ActiveCamera.transform.position = wantedPosition;
+                CameraPositionTarget.transform.position = wantedPosition;
             }
         }
     }
 
     public static void Clear() {
+        ActiveCamera.transform.localPosition = Vector3.zero;
+        ActiveCamera.transform.localRotation = Quaternion.identity;
         ExternalDistance = Vector2.zero;
+        EnablePlayerControl();
         TimeToLerp = -100;
         externalPositionTarget = null;
         externalLookAtTarget = null;
@@ -341,10 +367,10 @@ public class CameraController : MonoBehaviour {
     public static void SetRotation(Vector3 eulers) {
         //eulers.x = 0;
         //eulers.z = 0;
-        playerLookAtTarget.rotation = Quaternion.Euler(eulers);
+        CameraLookAtTarget.rotation = Quaternion.Euler(eulers);
 
-        currentX = playerLookAtTarget.localEulerAngles.y;
-        currentY = playerLookAtTarget.localEulerAngles.x;
+        currentX = CameraLookAtTarget.localEulerAngles.y;
+        currentY = CameraLookAtTarget.localEulerAngles.x;
         startX = currentX;
         startY = currentY;
         ModY();
@@ -388,16 +414,32 @@ public class CameraController : MonoBehaviour {
 
     public void SetThirdPerson() {
         Player.PlayerTransparancy.SetOverrideHidden(false);
-        ActiveCamera.transform.SetParent(playerLookAtTarget);
+        CameraPositionTarget.transform.SetParent(CameraLookAtTarget);
         if (!externalPositionTarget)
             Clear();
     }
 
     public void SetFirstPerson() {
         Player.PlayerTransparancy.SetOverrideHidden(true);
-        ActiveCamera.transform.SetParent(playerLookAtTarget.Find("FirstPersonTarget"));
+        CameraPositionTarget.transform.SetParent(CameraLookAtTarget.Find("FirstPersonTarget"));
         if (!externalPositionTarget)
             Clear();
+    }
+
+    public static void EnablePlayerControl() {
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+            freeLookCinemachine.m_XAxis.m_InputAxisName = Keybinds.JoystickRightHorizontal;
+            freeLookCinemachine.m_YAxis.m_InputAxisName = Keybinds.JoystickRightVertical;
+        } else {
+            freeLookCinemachine.m_XAxis.m_InputAxisName = Keybinds.MouseX;
+            freeLookCinemachine.m_YAxis.m_InputAxisName = Keybinds.MouseY;
+        }
+    }
+    public static void DisablePlayerControl() {
+        freeLookCinemachine.m_XAxis.m_InputAxisName = "";
+        freeLookCinemachine.m_YAxis.m_InputAxisName = "";
+        freeLookCinemachine.m_XAxis.m_InputAxisValue = 0;
+        freeLookCinemachine.m_YAxis.m_InputAxisValue = 0;
     }
 
     // On scene startup

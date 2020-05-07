@@ -113,7 +113,7 @@ public class SceneSelectMenu : MonoBehaviour {
         simulationGroundButton.onClick.AddListener(OnClickedSimulationGround);
         backButton.onClick.AddListener(OnClickedBack);
 
-        highlitButton = levelMARL1Button;
+        highlitButton = tutorial1Button;
 
         // Only close the main menu after the scene loads to prevent jarring camera transitions
         SceneManager.sceneLoaded += ClearAfterSceneChange;
@@ -168,7 +168,9 @@ public class SceneSelectMenu : MonoBehaviour {
                 Player.CanPause = false;
                 Player.PlayerInstance.gameObject.SetActive(true);
                 CameraController.UnlockCamera();
-                CameraController.ActiveCamera.clearFlags = CameraClearFlags.SolidColor;
+                CameraController.ActiveCamera.clearFlags = CameraClearFlags.Skybox;
+                CameraController.Cinemachine.m_IgnoreTimeScale = true;
+                //CameraController.ActiveCamera.clearFlags = CameraClearFlags.SolidColor;
                 if (isActiveAndEnabled)
                     MainMenu.FocusOnButton(highlitButton);
             } else if (IsTutorial(scene.buildIndex)) {
@@ -176,6 +178,8 @@ public class SceneSelectMenu : MonoBehaviour {
                 MainMenu.Close();
                 TimeController.CurrentTimeScale = SettingsMenu.settingsData.timeScale;
                 CameraController.LockCamera();
+                CameraController.ActiveCamera.clearFlags = CameraClearFlags.Skybox;
+                CameraController.Cinemachine.m_IgnoreTimeScale = false;
                 Player.CanPause = true;
                 HUD.ResetHUD();
 
@@ -187,6 +191,8 @@ public class SceneSelectMenu : MonoBehaviour {
                 Player.CanControlMovement = true;
                 Player.CanPause = true;
                 Player.CanControlZinc = true;
+                CameraController.UsingCinemachine = false;
+                CameraController.Cinemachine.m_IgnoreTimeScale = false;
                 CameraController.LockCamera();
                 CameraController.ActiveCamera.clearFlags = CameraClearFlags.Skybox;
                 HUD.ResetHUD();

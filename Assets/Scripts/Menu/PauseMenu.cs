@@ -64,6 +64,7 @@ public class PauseMenu : MonoBehaviour {
     }
 
     public static void Pause() {
+        CameraController.DisablePlayerControl();
         CameraController.UnlockCamera();
         GamepadController.SetRumble(0, 0);
         Time.timeScale = 0f;
@@ -82,7 +83,8 @@ public class PauseMenu : MonoBehaviour {
         if (IsPaused) {
             settingsMenu.Close();
 
-            if(!LevelCompletedScreen.IsOpen) {
+            if(!LevelCompletedScreen.IsOpen && !CameraController.UsingCinemachine) {
+                CameraController.EnablePlayerControl();
                 CameraController.LockCamera();
             }
             Time.timeScale = TimeController.CurrentTimeScale;
