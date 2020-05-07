@@ -3,6 +3,8 @@
 /*
  * Controls feruchemical zinc.
  * Controls "bullet time" effect.
+ * 
+ * Opening the Control Wheel also activates Zinc Time.
  */
 public class FeruchemicalZinc : MonoBehaviour {
 
@@ -63,7 +65,7 @@ public class FeruchemicalZinc : MonoBehaviour {
                     Rate = 0;
                 }
 
-                if (!Keybinds.ZincTime() || Reserve == 0 || !Player.CanControl || !Player.CanControlZinc) {
+                if (!(Keybinds.ZincTime() || Keybinds.ControlWheel())|| Reserve == 0 || !Player.CanControl || !Player.CanControlZinc) {
                     // Exit zinc time
                     InZincTime = false;
                     endReserve = Reserve;
@@ -97,7 +99,7 @@ public class FeruchemicalZinc : MonoBehaviour {
                     HUD.ZincMeterController.ChangeSpikePosition((float)Reserve);
                 }
 
-                if (Keybinds.ZincTimeDown() && Reserve > 0 && Player.CanControl && Player.CanControlZinc) {
+                if ((Keybinds.ZincTimeDown() || Keybinds.ControlWheelDown()) && Reserve > 0 && Player.CanControl && Player.CanControlZinc) {
                     // Enter zinc time
                     InZincTime = true;
                     recovering = false;
