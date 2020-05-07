@@ -25,12 +25,12 @@ public class SceneSelectMenu : MonoBehaviour {
         sceneTutorial3 = 14,
         sceneTutorial4 = 15;
 
-    public static bool IsTutorial(int sceneIndex) {
-        return sceneIndex == sceneTutorial1 ||
-                sceneIndex == sceneTutorial2 ||
-                sceneIndex == sceneTutorial3 ||
-                sceneIndex == sceneTutorial4;
-    }
+    //public static bool IsTutorial(int sceneIndex) {
+    //    return sceneIndex == sceneTutorial1 ||
+    //            sceneIndex == sceneTutorial2 ||
+    //            sceneIndex == sceneTutorial3 ||
+    //            sceneIndex == sceneTutorial4;
+    //}
 
 
     public bool IsOpen {
@@ -173,15 +173,15 @@ public class SceneSelectMenu : MonoBehaviour {
                 //CameraController.ActiveCamera.clearFlags = CameraClearFlags.SolidColor;
                 if (isActiveAndEnabled)
                     MainMenu.FocusOnButton(highlitButton);
-            } else if (IsTutorial(scene.buildIndex)) {
-                // Tutorial levels have a special level transition from the title screen.
-                MainMenu.Close();
-                TimeController.CurrentTimeScale = SettingsMenu.settingsData.timeScale;
-                CameraController.LockCamera();
-                CameraController.ActiveCamera.clearFlags = CameraClearFlags.Skybox;
-                CameraController.Cinemachine.m_IgnoreTimeScale = false;
-                Player.CanPause = true;
-                HUD.ResetHUD();
+            //} else if (IsTutorial(scene.buildIndex)) {
+            //    // Tutorial levels have a special level transition from the title screen.
+            //    MainMenu.Close();
+            //    TimeController.CurrentTimeScale = SettingsMenu.settingsData.timeScale;
+            //    CameraController.LockCamera();
+            //    CameraController.ActiveCamera.clearFlags = CameraClearFlags.Skybox;
+            //    CameraController.Cinemachine.m_IgnoreTimeScale = false;
+            //    Player.CanPause = true;
+            //    HUD.ResetHUD();
 
             } else {
                 MainMenu.Close();

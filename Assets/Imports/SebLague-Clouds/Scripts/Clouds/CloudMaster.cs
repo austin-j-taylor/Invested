@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-[ExecuteInEditMode, ImageEffectAllowedInSceneView]
+//[ExecuteInEditMode, ImageEffectAllowedInSceneView]
 public class CloudMaster : MonoBehaviour {
     const string headerDecoration = " --- ";
     [Header(headerDecoration + "Main" + headerDecoration)]
@@ -58,6 +58,9 @@ public class CloudMaster : MonoBehaviour {
     public bool haveSunInSky = true;
     [Range(0, .1f)]
     public float fogDensity = 0;
+    [Header(headerDecoration + "Other" + headerDecoration)]
+    public bool cloudsFollowPlayerXZ = true;
+    public bool cloudsFollowPlayerXYZ = false;
 
     // Internal
     [HideInInspector]
@@ -81,10 +84,14 @@ public class CloudMaster : MonoBehaviour {
     }
     private void Update() {
         // Keep the cloud container centered on the player to provide the illusion that the clouds are infinite
-        if (container && Player.PlayerInstance) {
+        if (container && Player.PlayerInstance && (cloudsFollowPlayerXZ || cloudsFollowPlayerXYZ)) {
             Vector3 position = Player.PlayerInstance.transform.position;
-            position.y = container.position.y;
+
+            if(!cloudsFollowPlayerXYZ) {
+                position.y = container.position.y;
+            }
             container.position = position;
+
         }
     }
 

@@ -479,6 +479,9 @@ public class CameraController : MonoBehaviour {
         clouds.haveSunInSky = other.haveSunInSky;
         clouds.fogDensity = other.fogDensity;
 
+        clouds.cloudsFollowPlayerXZ = other.cloudsFollowPlayerXZ;
+        clouds.cloudsFollowPlayerXYZ = other.cloudsFollowPlayerXYZ;
+
         clouds.material = other.material;
 
         clouds.enabled = true;
