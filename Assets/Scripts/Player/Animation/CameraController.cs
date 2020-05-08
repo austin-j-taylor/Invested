@@ -419,8 +419,7 @@ public class CameraController : MonoBehaviour {
     // Copy parameters from this scene's cloud controller to the camera
     private void LoadCloudDataFromScene(Scene scene, LoadSceneMode mode) {
         // mode is Single when it's loading scenes on startup, so skip those
-        // Also, skip Tutorial levels because they preserve cloud data from the title screen
-        if (mode == LoadSceneMode.Single /*&& !SceneSelectMenu.IsTutorial(scene.buildIndex)*/) {
+        if (mode == LoadSceneMode.Single) {
             GameObject otherObject = GameObject.Find("Clouds");
             if (otherObject) {
                 //ActiveCamera.clearFlags = CameraClearFlags.SolidColor;
@@ -437,7 +436,7 @@ public class CameraController : MonoBehaviour {
 
     // Loads cloud settings from the passed CloudMaster.
     public static void SetCloudData(CloudMaster other) {
-
+        Debug.Log("Copying cloud params.");
         clouds.shader = other.shader;
         clouds.container = other.container;
         clouds.weatherMapGen = other.weatherMapGen;
