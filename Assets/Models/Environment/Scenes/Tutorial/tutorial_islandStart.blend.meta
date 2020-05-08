@@ -3,7 +3,22 @@ guid: fd13af7e7ad747647a60da1b7a1f9b9e
 ModelImporter:
   serializedVersion: 20100
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Light
+    second: {fileID: 2100000, guid: 397a4d865ddc0bf45b4e7914edcc387a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Wire
+    second: {fileID: 2100000, guid: fdf62f6fb36b161449dacd4385a1e083, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: WireLit
+    second: {fileID: 2100000, guid: 7ed1ee0b38b4a8d4ba0e3b23840a75eb, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
@@ -36,7 +51,7 @@ ModelImporter:
     lODScreenPercentages: []
     globalScale: 1
     meshCompression: 0
-    addColliders: 0
+    addColliders: 1
     useSRGBMaterialColor: 1
     sortHierarchyByName: 1
     importVisibility: 1
@@ -56,12 +71,12 @@ ModelImporter:
     meshOptimizationFlags: -1
     indexFormat: 0
     secondaryUVAngleDistortion: 8
-    secondaryUVAreaDistortion: 15.000001
+    secondaryUVAreaDistortion: 15
     secondaryUVHardAngle: 88
     secondaryUVMarginMethod: 1
     secondaryUVMinLightmapResolution: 40
     secondaryUVMinObjectScale: 1
-    secondaryUVPackMargin: 4
+    secondaryUVPackMargin: 63
     useFileScale: 1
   tangentSpace:
     normalSmoothAngle: 60
