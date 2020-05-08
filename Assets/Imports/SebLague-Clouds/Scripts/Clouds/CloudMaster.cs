@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-//[ExecuteInEditMode, ImageEffectAllowedInSceneView]
+[ExecuteInEditMode, ImageEffectAllowedInSceneView]
 public class CloudMaster : MonoBehaviour {
     const string headerDecoration = " --- ";
     [Header(headerDecoration + "Main" + headerDecoration)]

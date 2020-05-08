@@ -209,7 +209,7 @@ public class Player : PewterEntity {
     }
 
     public void SetFrameMaterial(Material mat) {
-        playerFrame.GetComponent<Renderer>().material = mat;
+        //playerFrame.GetComponent<Renderer>().material = mat;
     }
 
     public void SetSmokeMaterial(Material mat) {

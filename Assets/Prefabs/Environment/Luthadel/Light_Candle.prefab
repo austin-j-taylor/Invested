@@ -11,11 +11,11 @@ GameObject:
   - component: {fileID: 7960633994873659674}
   - component: {fileID: 7960633994873659673}
   m_Layer: 0
-  m_Name: Candlelight
+  m_Name: Light_Candle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &7960633994873659674
 Transform:
@@ -39,8 +39,9 @@ Light:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7960633994873659672}
   m_Enabled: 1
-  serializedVersion: 9
+  serializedVersion: 10
   m_Type: 2
+  m_Shape: 0
   m_Color: {r: 0.9056604, g: 0.69989425, b: 0.3972944, a: 1}
   m_Intensity: 4.24
   m_Range: 8.5
