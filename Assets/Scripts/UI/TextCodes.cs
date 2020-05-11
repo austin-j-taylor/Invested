@@ -41,18 +41,24 @@ public class TextCodes : MonoBehaviour {
     public static string Blue_Open() {
         return "<color=#0080ff>";
     }
+    public static string MidBlue_Open() {
+        return "<color=#00bfff>";
+    }
     public static string LightBlue_Open() {
         return "<color=#7fdfff>";
     }
     public static string Gray_Open() {
         return "<color=#bfbfbf>";
     }
+    public static string Red_Open() {
+        return "<color=#ff8080>";
+    }
     // Methods that accept strings as arguments and return strings colored in their respective color
     public static string Blue(string s) {
         return Blue_Open() + s + "</color>";
     }
     public static string MidBlue(string s) {
-        return "<color=#00bfff>" + s + "</color>";
+        return MidBlue_Open() + s + "</color>";
     }
     public static string LightBlue(string s) {
         return LightBlue_Open() + s + "</color>";
@@ -64,7 +70,7 @@ public class TextCodes : MonoBehaviour {
         return "<color=#ffbfbf>" + s + "</color>";
     }
     public static string Red(string s) {
-        return "<color=#ff8080>" + s + "</color>";
+        return Red_Open() + s + "</color>";
     }
     public static string Gray(string s) {
         return Gray_Open() + s + "</color>";
@@ -100,6 +106,12 @@ public class TextCodes : MonoBehaviour {
     // Same as above, but for other key words
     public static string Color_Location_Open() {
         return Blue_Open();
+    }
+    public static string Color_Pull_Open() {
+        return MidBlue_Open();
+    }
+    public static string Color_Push_Open() {
+        return Red_Open();
     }
 
     // Known words that should always appear in a specific color

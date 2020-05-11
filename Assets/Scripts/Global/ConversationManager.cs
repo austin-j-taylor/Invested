@@ -44,6 +44,9 @@ public class ConversationManager : MonoBehaviour {
                 case SceneSelectMenu.sceneSandbox:
                     filename = "sandbox";
                     break;
+                case SceneSelectMenu.sceneTutorial1:
+                    filename = "tutorial1";
+                    break;
                 default:
                     // no text for this scene
                     break;
@@ -75,7 +78,7 @@ public class ConversationManager : MonoBehaviour {
                     newConversation.key = allFileLines[i].Substring(0, colon);
                     i++; // next line
                     // Remaining lines are put into the conversation's content, until you reach an ending signifier.
-                    // Could me more efficient.
+                    // Could be more efficient.
                     StringBuilder builder = new StringBuilder();
                     while(!allFileLines[i].Contains("\\%") && i < allFileLines.Length) {
                         builder.Append(allFileLines[i] + System.Environment.NewLine);
@@ -101,6 +104,7 @@ public class ConversationManager : MonoBehaviour {
 
     /*
      * Starts the conversation with the given key/title/header e.g. "CASUAL_CHAT"
+     * If a conversation is open, kill the old one.
      */
     public void StartConversation(string key) {
         if (sceneConversations.Count == 0)

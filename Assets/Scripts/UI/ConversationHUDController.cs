@@ -53,6 +53,8 @@ public class ConversationHUDController : MonoBehaviour {
 
     // Opens the dialogue for a specific purpose.
     public void Open(Conversation convo) {
+        StopAllCoroutines(); // kill old conversations
+
         anim.SetBool("IsOpen", true);
         IsOpen = true;
         currentConversation = convo;
@@ -103,6 +105,9 @@ public class ConversationHUDController : MonoBehaviour {
                         case 'm': // other machines
                             headerText.text = Color_Machines("Machine");
                             break;
+                        case '?': // ???
+                            headerText.text = Color_Prima("???");
+                            break;
                         default:
                             Debug.LogError("Failed to parse convesation text in " + currentConversation.key + ": " + currentConversation.content + ": invalid speaker");
                             break;
@@ -146,9 +151,13 @@ public class ConversationHUDController : MonoBehaviour {
                             break;
                         case 'p':
                             // Pause. Wait for a time equal to 1/8 * X, where X is [1,9]
+                            // If no number follows, just pause for 8 by default.
                             i++;
                             int time = (int)Char.GetNumericValue(currentConversation.content[i]);
-                            if (time < 0 || time > 9) {
+                            if (time == -1) {// no number, use 8
+                                time = 8;
+                                i--;
+                            } else if (time < 0 || time > 9) {
                                 Debug.LogError("Invalid pause time in " + currentConversation.key + ": " + currentConversation.content + ": " + time);
                             }
                             yield return new WaitForSeconds(delayPerPause * time);
@@ -156,6 +165,16 @@ public class ConversationHUDController : MonoBehaviour {
                         case 'L':
                             // color for LOCATIONS
                             parsed.Append(Color_Location_Open());
+                            currentStyle = Style.Colored;
+                            break;
+                        case 'S':
+                            // color for RED (PUSHES)
+                            parsed.Append(Color_Push_Open());
+                            currentStyle = Style.Colored;
+                            break;
+                        case 'U':
+                            // color for BLUE (PULLS
+                            parsed.Append(Color_Pull_Open());
                             currentStyle = Style.Colored;
                             break;
                         case 'C':
