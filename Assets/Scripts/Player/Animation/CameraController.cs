@@ -446,6 +446,7 @@ public class CameraController : MonoBehaviour {
 
         clouds.numStepsLight = other.numStepsLight;
         clouds.rayOffsetStrength = other.rayOffsetStrength;
+        clouds.especiallyNoisyRayOffsets = other.especiallyNoisyRayOffsets;
         clouds.blueNoise = other.blueNoise;
 
         clouds.cloudScale = other.cloudScale;

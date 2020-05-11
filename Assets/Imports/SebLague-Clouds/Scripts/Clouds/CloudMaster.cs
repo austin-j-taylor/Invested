@@ -15,6 +15,7 @@ public class CloudMaster : MonoBehaviour {
     [Header("March settings" + headerDecoration)]
     public int numStepsLight = 8;
     public float rayOffsetStrength;
+    public bool especiallyNoisyRayOffsets = false;
     public Texture2D blueNoise;
 
     [Header(headerDecoration + "Base Shape" + headerDecoration)]
@@ -147,6 +148,7 @@ public class CloudMaster : MonoBehaviour {
         material.SetVector("sunLightDirection", sunLight.transform.rotation * Vector3.back);
         material.SetVector("params", cloudTestParams);
         material.SetFloat("rayOffsetStrength", rayOffsetStrength);
+        material.SetFloat("especiallyNoisyRayOffsets", especiallyNoisyRayOffsets ? 1 : 0);
 
         material.SetFloat("detailNoiseScale", detailNoiseScale);
         material.SetFloat("detailNoiseWeight", detailNoiseWeight);

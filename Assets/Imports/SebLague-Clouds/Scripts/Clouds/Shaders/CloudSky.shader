@@ -82,6 +82,7 @@ Shader "Hidden/CloudSky"
 			// March settings
 			int numStepsLight;
 			float rayOffsetStrength;
+			float especiallyNoisyRayOffsets; // blame unity for not having a setBool
 
 			float3 boundsMin;
 			float3 boundsMax;
@@ -305,7 +306,14 @@ Shader "Hidden/CloudSky"
 			float3 entryPoint = rayPos + rayDir * dstToBox;
 
 			// random starting offset (makes low-res results noisy rather than jagged/glitchy, which is nicer)
+			//float2 samplePos;// = float3(uv.x, uv.y, debugNoiseSliceDepth);
+			//float3 samplePos = float3(squareUV(i.uv * 3), _Time.x);
+			//debugNoiseSliceDepth = _SinTime.z;
+			//DetailNoiseTex.SampleLevel(samplerDetailNoiseTex, detailSamplePos, mipLevel)
+			//float randomOffset = NoiseTex.SampleLevel(samplerNoiseTex, float3(squareUV(i.uv * .6), _Time.x), 0) *BlueNoise.SampleLevel(samplerBlueNoise, squareUV((i.uv + _Time / 5) * .01), 0);
 			float randomOffset = BlueNoise.SampleLevel(samplerBlueNoise, squareUV(i.uv * 3), 0);
+			if(especiallyNoisyRayOffsets)
+				randomOffset += DetailNoiseTex.SampleLevel(samplerDetailNoiseTex, float3(squareUV((i.uv * 3) * .1), _SinTime.z / 5), 0);
 			randomOffset *= rayOffsetStrength;
 
 			// Phase function makes clouds brighter around sun
