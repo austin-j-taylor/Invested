@@ -436,7 +436,6 @@ public class CameraController : MonoBehaviour {
 
     // Loads cloud settings from the passed CloudMaster.
     public static void SetCloudData(CloudMaster other) {
-        Debug.Log("Copying cloud params.");
         clouds.shader = other.shader;
         clouds.container = other.container;
         clouds.weatherMapGen = other.weatherMapGen;

@@ -93,7 +93,6 @@ public class Player : PewterEntity {
     protected override void Awake() {
         base.Awake();
         //animator = GetComponent<Animator>();
-        Debug.Log("Starting.");
 
         foreach (Renderer rend in GetComponentsInChildren<Renderer>()) {
             if (rend.CompareTag("PlayerFrame")) {

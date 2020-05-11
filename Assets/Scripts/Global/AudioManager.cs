@@ -1,7 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.Audio;
+using UnityEngine.SceneManagement;
 
+/*
+ * Manages global audio properties (volume, pitch) and certain audio sources.
+ * 
+ */
 public class AudioManager : MonoBehaviour {
 
     // Indexes for the audisources attached to the audimanager
@@ -9,7 +14,8 @@ public class AudioManager : MonoBehaviour {
     private const int   index_shared = 0, // shared by all one-shot sound effects that are short enough to not worry about stacking
                         index_pewter = 1,
                         index_rolling = 2,
-                        index_wind = 3;
+                        index_wind = 3,
+                        index_sceneTransition = 4; // used for music that needs to persist between scenes, e.g. the looping sound from the Title Screen to the Tutorial
 
     private const float velocityWindFactor = 20, lerpWindFactor = 10, velocityThreshold = 2;
 
@@ -22,11 +28,18 @@ public class AudioManager : MonoBehaviour {
                 pewter_loop = null,
                 pewter_end = null,
                 rolling_loop = null,
-                wind_loop = null; // always playing, but becomes louder/higher pitch when moving quickly, especially through the air
+                wind_loop = null, // always playing, but becomes louder/higher pitch when moving quickly, especially through the air
+                title_screen_loop = null;
 
     private Coroutine coroutine_pewter, coroutine_rolling;
 
     AudioSource[] sources;
+
+    public bool SceneTransitionIsPlaying {
+        get {
+            return sources[index_sceneTransition].isPlaying;
+        }
+    }
 
     private void Start() {
         sources = GetComponents<AudioSource>();
@@ -35,7 +48,9 @@ public class AudioManager : MonoBehaviour {
         sources[index_wind].loop = true;
         sources[index_wind].volume = 0;
         sources[index_wind].pitch = 1;
-        sources[index_wind].Play();
+        sources[index_wind].Play(); // always running in background
+
+        SceneManager.sceneLoaded += ClearAfterSceneChange;
     }
 
     private void Update() {
@@ -60,6 +75,14 @@ public class AudioManager : MonoBehaviour {
         sources[index_wind].pitch = 1;
     }
 
+    private void ClearAfterSceneChange(Scene scene, LoadSceneMode mode) {
+        // For most scenes, stop playing any sceneTransition music
+        if(!SceneSelectMenu.IsTutorial(scene.buildIndex)) {
+            sources[index_sceneTransition].Stop();
+        }
+        sources[index_sceneTransition].loop = false;
+    }
+
     public void SetAudioLevels(float master, float music, float effects, float voiceBeeps) {
         mixer.SetFloat("volumeMaster", Mathf.Log10(master) * 20); // logarithmic volume slider
         mixer.SetFloat("volumeMusic", Mathf.Log10(music) * 20);
@@ -70,6 +93,15 @@ public class AudioManager : MonoBehaviour {
         mixer.SetFloat("pitchMaster", pitch);
     }
 
+
+    // Play() commands for sound effects
+    public void Play_title_screen_loop() {
+        sources[index_sceneTransition].clip = title_screen_loop;
+        sources[index_sceneTransition].loop = true;
+        sources[index_sceneTransition].Play();
+    }
+
+    
     public void Play_menu_select() {
         sources[index_shared].PlayOneShot(menu_select);
     }

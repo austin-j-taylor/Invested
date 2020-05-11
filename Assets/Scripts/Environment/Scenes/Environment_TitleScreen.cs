@@ -25,9 +25,21 @@ public class Environment_TitleScreen : EnvironmentCinematic {
         }
 
         TimeController.CurrentTimeScale = 0;
+
+        // Handle music
+        StartCoroutine(Play_title_screen_music());
     }
 
     void Update() {
         cameraPositionTarget.position = new Vector3(Mathf.Cos(Time.unscaledTime * speedVert) * speedAmp, (1 + Mathf.Sin(Time.unscaledTime * speedVert)) * speedAmp, Mathf.Sin(Time.unscaledTime * speedVert) * speedAmp);
+    }
+
+    private IEnumerator Play_title_screen_music() {
+        AudioSource intro = GetComponent<AudioSource>();
+        while (intro.isPlaying) {
+            yield return null;
+        }
+        // Tell AudioManager to start the loop, which may carry into the next scene.
+        GameManager.AudioManager.Play_title_screen_loop();
     }
 }

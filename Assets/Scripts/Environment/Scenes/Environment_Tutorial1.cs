@@ -24,9 +24,10 @@ public class Environment_Tutorial1 : EnvironmentCinematic {
         // Make camera look at Player
         vcam.LookAt = Player.PlayerInstance.transform;
 
-
-
         StartCoroutine(Procedure());
+
+        // Handle music
+        StartCoroutine(Play_music());
     }
 
     private IEnumerator Procedure() {
@@ -38,5 +39,12 @@ public class Environment_Tutorial1 : EnvironmentCinematic {
         vcam.enabled = false;
         CameraController.UsingCinemachine = false;
         CameraController.Clear();
+    }
+
+    private IEnumerator Play_music() {
+        while (GameManager.AudioManager.SceneTransitionIsPlaying) {
+            yield return null;
+        }
+        GetComponent<AudioSource>().Play();
     }
 }

@@ -25,13 +25,12 @@ public class SceneSelectMenu : MonoBehaviour {
         sceneTutorial3 = 14,
         sceneTutorial4 = 15;
 
-    //public static bool IsTutorial(int sceneIndex) {
-    //    return sceneIndex == sceneTutorial1 ||
-    //            sceneIndex == sceneTutorial2 ||
-    //            sceneIndex == sceneTutorial3 ||
-    //            sceneIndex == sceneTutorial4;
-    //}
-
+    public static bool IsTutorial(int sceneIndex) {
+        return sceneIndex == sceneTutorial1 ||
+                sceneIndex == sceneTutorial2 ||
+                sceneIndex == sceneTutorial3 ||
+                sceneIndex == sceneTutorial4;
+    }
 
     public bool IsOpen {
         get {
