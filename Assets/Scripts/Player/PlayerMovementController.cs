@@ -11,6 +11,7 @@ using UnityEngine;
 
 public class PlayerMovementController : AllomanticPewter {
 
+    private const float shortHopThreshold = .1f;
     public const float radius = .26f; // radius of the player sphere collider
     // Rolling
     public const float rollingAcceleration = 5f;
@@ -80,6 +81,7 @@ public class PlayerMovementController : AllomanticPewter {
     }
     private bool jumpQueued;
     private bool lastWasSprintingOnGround, lastWasRollingOnGround;
+    private float lastJumpTime;
     private bool invertGravity = false;
 
     protected override void Awake() {
@@ -201,6 +203,7 @@ public class PlayerMovementController : AllomanticPewter {
                 // if a Jump is queued
                 if (jumpQueued) {
                     jumpQueued = false;
+                    lastJumpTime = Time.unscaledTime;
 
                     groundedChecker.UpdateStanding();
                     Rigidbody targetRb = groundedChecker.StandingOnCollider.attachedRigidbody;
@@ -229,7 +232,7 @@ public class PlayerMovementController : AllomanticPewter {
 
                         HitSurface(-jumpForce);
                         Drain(-jumpForce, gramsPewterPerJump, timePewterPerJump);
-                    } else {
+                    } else { // Normal jump
                         jumpForce = groundedChecker.Normal * jumpHeight;
                     }
 
@@ -255,8 +258,18 @@ public class PlayerMovementController : AllomanticPewter {
                     rb.drag = SettingsMenu.settingsData.playerAirResistance * dragGroundedLinear;
                     rb.angularDrag = dragGroundedAngular;
                 }
-            } else { // If airborne, reduce movement magnitude
+            } else { // Not grounded
+                // "Short hopping": if you tap the jump button instead of holding it, do a short hop.
+                // Effectively, if you release the jump button within a short window of jumping,
+                //  apply a small negative impulse to reduce the jump height.
+                if(!Keybinds.Jump() && Time.unscaledTime - lastJumpTime < shortHopThreshold) {
+                    Debug.Log("short hop");
+                    rb.AddForce(-groundedChecker.Normal * jumpHeight/2, ForceMode.Impulse);
+                    lastJumpTime = -1;
+                }
 
+
+                // In the air, reduce movement magnitude
                 rb.drag = SettingsMenu.settingsData.playerAirResistance * dragAirborneLinear;
                 rb.angularDrag = dragAirborneAngular;
                 //movement *= airControlFactor;
@@ -273,19 +286,6 @@ public class PlayerMovementController : AllomanticPewter {
                         HitSurface(-groundedChecker.Normal - movement.normalized);
                     }
                     lastWasSprintingOnGround = IsGrounded; // only show particles after hitting the ground
-
-                    //// Pewter acceleration: The faster you are going, the more you can keep going.
-                    //// 1x movement @ movement = half of sprinting speed
-                    //// i.e. the movement starts to increase when you are rolling above half the speed you can normally roll
-                    //// This factor is applied to the target speed for the the PID loop
-                    //float ratio = rb.angularVelocity.magnitude / targetRollingSpeedRadial * 4;
-                    //sprintingAcceleration = Mathf.Log(1 + ratio) / 4;
-                    //Debug.Log("Ratio: " + ratio + " ... " + sprintingAcceleration);
-
-                    //if (sprintingAcceleration < 0)
-                    //    sprintingAcceleration = 0;
-
-                    //rb.maxAngularVelocity = maxSprintingAngularVelocity;
                     physicsMaterial.dynamicFriction = frictionDynamicSprinting;
                     rb.inertiaTensor = new Vector3(momentOfInertiaMagnitudeSprinting, momentOfInertiaMagnitudeSprinting, momentOfInertiaMagnitudeSprinting);
                 } else {
@@ -346,6 +346,7 @@ public class PlayerMovementController : AllomanticPewter {
 
     public override void Clear() {
         jumpQueued = false;
+        lastJumpTime = -1;
         lastWasSprintingOnGround = false;
         lastWasRollingOnGround = false;
         //rb.inertiaTensor = inertiaTensorRunning;
