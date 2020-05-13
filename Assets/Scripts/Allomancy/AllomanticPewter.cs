@@ -187,7 +187,7 @@ public class AllomanticPewter : Allomancer {
 
     // When taking damage, attempt to shield it
     public virtual float OnHit(Vector3 sourceLocationLocal, float damage, bool automaticallyShield = false) {
-        if (automaticallyShield || IsBurning) {
+        if ((automaticallyShield || IsBurning) && PewterReserve.HasMass) {
             Drain(sourceLocationLocal, gramsPewterPerFall, timePewterPerFall);
             return 0;
         } else {
