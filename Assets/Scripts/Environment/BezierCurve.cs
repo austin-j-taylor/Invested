@@ -38,6 +38,14 @@ public class BezierCurve : MonoBehaviour {
             animationTime = value;
         }
     }
+    public float Scale {
+        get {
+            return scale;
+        }
+        set {
+            scale = value;
+        }
+    }
     public int ControlPointCount { get { return points.Length; } }
     public int CurveCount { get { return (points.Length - 1) / 3; } }
 
@@ -45,6 +53,8 @@ public class BezierCurve : MonoBehaviour {
     private bool loop;
     [SerializeField]
     private float animationTime = 5;
+    [SerializeField]
+    protected float scale = 1;
 
     public void Reset() {
         points = new Vector3[] {
@@ -57,6 +67,7 @@ public class BezierCurve : MonoBehaviour {
             BezierControlPointMode.Mirrored,
             BezierControlPointMode.Mirrored
         };
+        scale = 1;
     }
 
     public void FollowCurve(Transform target, float t, bool rotateToVelocity = true) {
@@ -214,7 +225,11 @@ public class BezierCurve : MonoBehaviour {
         }
         points[enforcedIndex] = middle + enforcedTangent;
     }
-
+    public void SetScale() {
+        for(int i = 0; i < points.Length; i++) {
+            points[i] *= scale;
+        }
+    }
     public void AddCurve() {
         Vector3 point = points[points.Length - 1];
         Array.Resize(ref points, points.Length + 3);

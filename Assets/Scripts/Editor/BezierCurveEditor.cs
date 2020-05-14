@@ -5,7 +5,7 @@ using UnityEngine;
  * 
  * Modified from https://catlikecoding.com/unity/tutorials/curves-and-splines/
  */
-[CustomEditor(typeof(BezierCurve), true)]
+[CustomEditor(typeof(BezierCurve), true), CanEditMultipleObjects]
 public class BezierCurveEditor : Editor {
 
     private const int stepsPerCurve = 30;
@@ -29,6 +29,7 @@ public class BezierCurveEditor : Editor {
         EditorGUI.BeginChangeCheck();
         serializedObject.FindProperty("loop").boolValue = EditorGUILayout.Toggle("Loop", spline.Loop);
         serializedObject.FindProperty("animationTime").floatValue = EditorGUILayout.FloatField("Animation Time", spline.AnimationTime);
+        serializedObject.FindProperty("scale").floatValue = EditorGUILayout.FloatField("Scale", spline.Scale);
         if (EditorGUI.EndChangeCheck()) {
             Undo.RecordObject(spline, "Toggle Loop");
             Undo.RecordObject(spline, "Change Animation Time");
@@ -43,6 +44,11 @@ public class BezierCurveEditor : Editor {
         if (GUILayout.Button("Add Curve")) {
             Undo.RecordObject(spline, "Add Curve");
             spline.AddCurve();
+            EditorUtility.SetDirty(spline);
+        }
+        if (GUILayout.Button("Set Scale")) {
+            Undo.RecordObject(spline, "Set Scale");
+            spline.SetScale();
             EditorUtility.SetDirty(spline);
         }
     }
