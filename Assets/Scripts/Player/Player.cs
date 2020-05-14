@@ -8,6 +8,7 @@ public class Player : PewterEntity {
 
     private const float coinCooldownThreshold = 1f / 10;
     private const float zincTimeCoinThrowModifier = 2; // throw coins faster while in zinc time
+    private const float voidHeight = -50; // Voiding out - if the player falls beneath voidHeight, respawn.
 
     public enum CoinMode { Semi, Full, Spray };
 
@@ -116,8 +117,16 @@ public class Player : PewterEntity {
         SceneManager.sceneLoaded += ClearPlayerAfterSceneChange;
         SceneManager.sceneUnloaded += ClearPlayerBeforeSceneChange;
     }
-
+    public Vector3 RespawnPoint { get; set; }
     void Update() {
+
+        // Handle "Voiding out" if the player falls too far into the "void"
+        // On all levels consider y = -100 as the void
+        if (transform.position.y < voidHeight) {
+            transform.position = RespawnPoint;
+            PlayerPewter.Clear();
+        }
+
         if (CanControl) {
             // On throwing a coin
             if (!CoinHand.Pouch.IsEmpty) {
@@ -205,6 +214,7 @@ public class Player : PewterEntity {
                     CameraController.SetRotation(spawn.transform.eulerAngles);
                 }
             }
+            RespawnPoint = transform.position;
         }
     }
 

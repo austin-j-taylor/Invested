@@ -263,7 +263,6 @@ public class PlayerMovementController : AllomanticPewter {
                 // Effectively, if you release the jump button within a short window of jumping,
                 //  apply a small negative impulse to reduce the jump height.
                 if(!Keybinds.Jump() && Time.unscaledTime - lastJumpTime < shortHopThreshold) {
-                    Debug.Log("short hop");
                     rb.AddForce(-groundedChecker.Normal * jumpHeight/2, ForceMode.Impulse);
                     lastJumpTime = -1;
                 }
