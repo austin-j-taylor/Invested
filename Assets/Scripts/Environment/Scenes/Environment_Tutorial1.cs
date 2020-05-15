@@ -5,6 +5,9 @@ using Cinemachine;
 
 public class Environment_Tutorial1 : EnvironmentCinematic {
 
+    [SerializeField]
+    private MessageTrigger trigger_pull;
+
     void Start() {
 
         Player.CanControl = false;
@@ -19,10 +22,11 @@ public class Environment_Tutorial1 : EnvironmentCinematic {
         // Set cinemachine virtual camera properties
         InitializeCinemachine();
         // Set camera target position to be same as where we left of in tutorial (just a sine function of time)
-        cameraPositionTarget.position = new Vector3(Mathf.Cos(Time.unscaledTime * Environment_TitleScreen.speedVert) * Environment_TitleScreen.speedAmp, (1 + Mathf.Sin(Time.unscaledTime * Environment_TitleScreen.speedVert)) * Environment_TitleScreen.speedAmp, Mathf.Sin(Time.unscaledTime * Environment_TitleScreen.speedVert) * Environment_TitleScreen.speedAmp);
-        vcam.transform.position = cameraPositionTarget.position;
+        vcam.transform.position = new Vector3(Mathf.Cos(Time.unscaledTime * Environment_TitleScreen.speedVert) * Environment_TitleScreen.speedAmp, (1 + Mathf.Sin(Time.unscaledTime * Environment_TitleScreen.speedVert)) * Environment_TitleScreen.speedAmp, Mathf.Sin(Time.unscaledTime * Environment_TitleScreen.speedVert) * Environment_TitleScreen.speedAmp);
         // Make camera look at Player
         vcam.LookAt = Player.PlayerInstance.transform;
+
+        trigger_pull.routine = Trigger_Pull();
 
         // Handle music
         StartCoroutine(Play_music());
@@ -38,14 +42,49 @@ public class Environment_Tutorial1 : EnvironmentCinematic {
     }
 
     private IEnumerator Procedure() {
-
         yield return null;
-
+        vcam.enabled = false;
+        yield return new WaitForSeconds(2);
+        CameraController.UsingCinemachine = false;
         Player.CanControl = true;
         Player.CanControlMovement = true;
-        vcam.enabled = false;
-        CameraController.UsingCinemachine = false;
         CameraController.Clear();
 
+        // Look
+        yield return new WaitForSeconds(2);
+        if (CameraController.HasNotMovedCamera) {
+            HUD.MessageOverlayCinematic.FadeIn(Messages.tutorial_look);
+            while (CameraController.HasNotMovedCamera)
+                yield return null;
+
+            HUD.MessageOverlayCinematic.FadeOut();
+            yield return new WaitForSeconds(5);
+        }
+
+        // Move
+        if (Player.PlayerInstance.GetComponent<Rigidbody>().velocity.sqrMagnitude < .25f) {
+            HUD.MessageOverlayCinematic.FadeIn(Messages.tutorial_move);
+
+            while (Player.PlayerInstance.GetComponent<Rigidbody>().velocity.sqrMagnitude < .25f)
+                yield return null;
+
+            HUD.MessageOverlayCinematic.FadeOut();
+        }
+
+    }
+    private IEnumerator Trigger_Pull() {
+        HUD.MessageOverlayCinematic.FadeIn(Messages.tutorial_pull);
+        while (!Player.PlayerIronSteel.IsBurning) {
+            yield return null;
+        }
+        HUD.MessageOverlayCinematic.FadeOut();
+        yield return new WaitForSeconds(1);
+        HUD.MessageOverlayCinematic.Next();
+
+
+        while (!Player.PlayerIronSteel.HasPullTarget) {
+            yield return null;
+        }
+        HUD.MessageOverlayCinematic.FadeOut();
     }
 }

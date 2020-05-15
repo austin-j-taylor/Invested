@@ -13,8 +13,8 @@ public class Messages : MonoBehaviour {
 
     // Each List of strings represents a series of messages that logicially appear after each other.
     // If it displays on the MessageOverlayDescriptive, the first element of each list is the header for that series of messages.
-    public static List<string> tutorial_movement;
-    public static List<string> tutorial_targeting;
+    public static List<string> marl_movement;
+    public static List<string> marl_targeting;
     public static List<string> pulling0;
     public static List<string> pushingAndPullingBasics;
     public static List<string> pulling1;
@@ -30,18 +30,32 @@ public class Messages : MonoBehaviour {
     public static List<string> zinc;
     public static List<string> coinshot;
 
+    public static List<string> tutorial_look,
+                                tutorial_move,
+                                tutorial_pull;
+    
 
     /* Called whenever certain settings change (i.e. the control scheme).
      * The strings on the message overlays change to reflect the new settings.
      */
     public static void Refresh() {
-        tutorial_movement = new List<string> {
+        tutorial_look = new List<string> {
+            KeyLook + " to look around.",
+        };
+        tutorial_move = new List<string> {
+            KeyMove + " to move.",
+        };
+        tutorial_pull = new List<string> {
+            KeyStartBurningIron + " to start burning " + Iron + ".",
+            "Look at a " + LightBlue("blue line") + " and " + s_Hold_ + _KeyPull + " to " + Pull + "."
+        };
+        marl_movement = new List<string> {
             KeyLook + " to look around.",
             KeyStartBurningIron + " to start burning " + Iron + ".",
             "Look at the " + LightBlue("blue line") + ".\n" + s_Hold_ + _KeyPull + " to " + Pull + ".",
             KeyMove + " to move."
         };
-        tutorial_targeting = new List<string> {
+        marl_targeting = new List<string> {
             KeyWalk + " to anchor yourself.",
             s_Press_ + _KeySelect + " to select a " + Pull_target + ".\n"
              + "You can " + Pull + " on a " + Pull_target + " without looking at it.",

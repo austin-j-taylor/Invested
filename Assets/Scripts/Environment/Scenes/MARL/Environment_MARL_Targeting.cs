@@ -35,7 +35,7 @@ public class Environment_MARL_Targeting : Environment {
 
     // State coroutines
     private IEnumerator Procedure0() {
-        HUD.MessageOverlayCinematic.FadeIn(Messages.tutorial_targeting);
+        HUD.MessageOverlayCinematic.FadeIn(Messages.marl_targeting);
         while (door0.On) {
             yield return null;
         }

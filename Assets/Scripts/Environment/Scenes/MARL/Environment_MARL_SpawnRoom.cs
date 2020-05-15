@@ -31,7 +31,7 @@ public class Environment_MARL_SpawnRoom : Environment {
         yield return new WaitForSeconds(2);
 
         if (CameraController.HasNotMovedCamera) {
-            HUD.MessageOverlayCinematic.FadeIn(Messages.tutorial_movement); // look
+            HUD.MessageOverlayCinematic.FadeIn(Messages.marl_movement); // look
             while (CameraController.HasNotMovedCamera)
                 yield return null;
 
@@ -39,7 +39,7 @@ public class Environment_MARL_SpawnRoom : Environment {
             HUD.MessageOverlayCinematic.FadeOut();
             yield return new WaitForSeconds(5);
         } else {
-            HUD.MessageOverlayCinematic.FadeIn(Messages.tutorial_movement); // look
+            HUD.MessageOverlayCinematic.FadeIn(Messages.marl_movement); // look
             HUD.MessageOverlayCinematic.FadeOut();
         }
         HUD.MessageOverlayCinematic.Next(); // start burning

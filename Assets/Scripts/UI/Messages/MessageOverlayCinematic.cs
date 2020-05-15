@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections.Generic;
 using static TextCodes;
+using System.Collections;
 
 /*
  * Displays a message about 1/3 from the top of the screen, in the center.
@@ -26,6 +27,7 @@ public class MessageOverlayCinematic : MonoBehaviour {
 
     // Fades newText into messageText on the screen.
     public void FadeIn(string newText) {
+        StopAllCoroutines();
         anim.SetBool("IsVisible", true);
         messageText.text = newText;
     }

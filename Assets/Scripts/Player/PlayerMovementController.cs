@@ -105,7 +105,7 @@ public class PlayerMovementController : AllomanticPewter {
                     IsAnchoring = false;
                     rb.inertiaTensor = new Vector3(momentOfInertiaMagnitude, momentOfInertiaMagnitude, momentOfInertiaMagnitude);
                     Player.PlayerFlywheelController.Retract();
-                } else if (!Keybinds.Walk()) {
+                } else if (!Keybinds.Walk() || !PewterReserve.HasMass   ) {
                     // stop rolling
                     IsAnchoring = false;
                     rb.inertiaTensor = new Vector3(momentOfInertiaMagnitude, momentOfInertiaMagnitude, momentOfInertiaMagnitude);
@@ -123,7 +123,7 @@ public class PlayerMovementController : AllomanticPewter {
                     // start sprinting
                     IsSprinting = true;
 
-                } else if (Keybinds.Walk()) {
+                } else if (Keybinds.Walk() && PewterReserve.HasMass) {
                     // start walking
                     rb.inertiaTensor = new Vector3(momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking);
                     Player.PlayerFlywheelController.Extend();
