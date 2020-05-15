@@ -18,19 +18,19 @@ public class Source : Destructable {
     protected void PowerConnected(bool on) {
         if(on) { // turn everything on, no questions asked
             foreach (Powered powered in connected) {
-                if(!powered.GetComponent<Source>() && powered.gameObject != gameObject)
+                if(powered != null && !powered.GetComponent<Source>() && powered.gameObject != gameObject)
                     powered.On = on;
             }
         } else {
             bool nodeIsOn = false;
             foreach (Powered powered in connected) {
-                if (powered.GetComponent<Source>() && powered.gameObject != gameObject && powered.On) { // if there is an active source on this node, don't remove power
+                if (powered != null && powered.GetComponent<Source>() && powered.gameObject != gameObject && powered.On) { // if there is an active source on this node, don't remove power
                     nodeIsOn = true;
                     break;
                 }
             }
             foreach (Powered powered in connected) {
-                if (!powered.GetComponent<Source>() && powered.gameObject != gameObject)
+                if (powered != null && !powered.GetComponent<Source>() && powered.gameObject != gameObject)
                     powered.On = nodeIsOn;
             }
         }

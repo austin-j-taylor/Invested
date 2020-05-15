@@ -31,6 +31,7 @@ public class TextCodes : MonoBehaviour {
     public const string s_Left_Right_on_the_D_Pad = "Left/Right on the D-Pad";
 
     public const string s_Press_ = "Press ";
+    public const string s_Pressing_ = "Pressing ";
     public const string s_Hold_ = "Hold ";
     public const string s_Click_in_ = "Click in ";
     public const string s_Use_ = "Use ";
@@ -183,6 +184,16 @@ public class TextCodes : MonoBehaviour {
     public static string Pull_targets {
         get {
             return LightBlue("Pull-targets");
+        }
+    }
+    public static string Mark_pulling {
+        get {
+            return LightBlue("Mark");
+        }
+    }
+    public static string Marked_metal{
+        get {
+            return LightBlue("Marked metal");
         }
     }
     public static string Push_target {
