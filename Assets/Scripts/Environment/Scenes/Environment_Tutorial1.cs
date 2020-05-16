@@ -6,7 +6,7 @@ using Cinemachine;
 public class Environment_Tutorial1 : EnvironmentCinematic {
 
     [SerializeField]
-    private MessageTrigger trigger_pull;
+    private MessageTrigger trigger_pull = null;
 
     void Start() {
 

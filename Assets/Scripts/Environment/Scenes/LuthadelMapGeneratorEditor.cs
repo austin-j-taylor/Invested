@@ -8,8 +8,14 @@ public class LuthadelMapGeneratorEditor : Editor {
         DrawDefaultInspector();
 
         Environment_LuthadelMapGenerator myScript = (Environment_LuthadelMapGenerator)target;
-        if (GUILayout.Button("Build House")) {
-            myScript.PlaceHouse();
+        if (GUILayout.Button("Generate Houses")) {
+            myScript.GenerateHouses();
+        }
+        if (GUILayout.Button("Destroy Houses")) {
+            myScript.DestroyHouses();
+        }
+        if (GUILayout.Button("Reset Map Colors")) {
+            myScript.ResetMapColors();
         }
     }
 

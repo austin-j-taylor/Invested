@@ -11,9 +11,9 @@ public class Environment_Tutorial1_Marking : Environment {
     FacilityDoor door2 = null;
 
     [SerializeField]
-    private MessageTrigger trigger_mark1,
-                            trigger_mark2,
-                            trigger_mark3;
+    private MessageTrigger trigger_mark1 = null,
+                            trigger_mark2 = null,
+                            trigger_mark3 = null;
 
     private void Start() {
         trigger_mark1.routine = Trigger_Mark1();
