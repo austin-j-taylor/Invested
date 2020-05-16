@@ -129,7 +129,10 @@ public class Environment_LuthadelMapGenerator : Environment {
                     Quaternion rotation = Quaternion.Euler(0, rot_z + 90, 0);
 
                     Vector3 worldPosition = new Vector3((j / (float)width - .5f) * scaleX, 0, (i / (float)height - .5f) * scaleY) + transform.position;
-                    Instantiate(houses[houseIndex], worldPosition, rotation, transform);
+                    GameObject house = UnityEditor.PrefabUtility.InstantiatePrefab(houses[houseIndex] as Object) as GameObject;
+                    house.transform.position = worldPosition;
+                    house.transform.rotation = rotation;
+                    house.transform.parent = transform;
                 }
             }
         }
