@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4924113850572641150}
+  - component: {fileID: 178188697157568728}
   m_Layer: 0
   m_Name: Luthadel_house_wealthier
   m_TagString: Untagged
@@ -33,6 +34,39 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!205 &178188697157568728
+LODGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1398188299408686168}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: -0.000015735626, y: 9.964941, z: -0.0000023841858}
+  m_Size: 19.929882
+  m_FadeMode: 0
+  m_AnimateCrossFading: 0
+  m_LastLODIsBillboard: 0
+  m_LODs:
+  - screenRelativeHeight: 0.05265096
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 5686259332704719910}
+    - renderer: {fileID: 6994232743714997067}
+    - renderer: {fileID: 6027004741283845242}
+    - renderer: {fileID: 9066107301830581590}
+    - renderer: {fileID: 7794388577055860038}
+    - renderer: {fileID: 5502015627629480101}
+    - renderer: {fileID: 6746785438346375349}
+  - screenRelativeHeight: 0.03601891
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 8933048117838682237}
+  - screenRelativeHeight: 0.0101720225
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 8933048117838682237}
+  m_Enabled: 1
 --- !u!1 &1798736208750790338
 GameObject:
   m_ObjectHideFlags: 0
@@ -228,6 +262,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 934869125754776758}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &9066107301830581590 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 8153795759049290208, guid: 671b63203eb40d44099d5f737002353a,
+    type: 3}
+  m_PrefabInstance: {fileID: 934869125754776758}
+  m_PrefabAsset: {fileID: 0}
+--- !u!199 &7794388577055860038 stripped
+ParticleSystemRenderer:
+  m_CorrespondingSourceObject: {fileID: 6976754878614931952, guid: 671b63203eb40d44099d5f737002353a,
+    type: 3}
+  m_PrefabInstance: {fileID: 934869125754776758}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &2762633764245706546
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -375,9 +421,33 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 2762633764245706546}
   m_PrefabAsset: {fileID: 0}
+--- !u!23 &5686259332704719910 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -1675481474297445612, guid: 47e40faa983da6f458c768af35528ed7,
+    type: 3}
+  m_PrefabInstance: {fileID: 2762633764245706546}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &8933048117838682237 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 6750428731847905103, guid: 47e40faa983da6f458c768af35528ed7,
+    type: 3}
+  m_PrefabInstance: {fileID: 2762633764245706546}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &5813852295635799257 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -650722757169144853, guid: 47e40faa983da6f458c768af35528ed7,
+    type: 3}
+  m_PrefabInstance: {fileID: 2762633764245706546}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &6994232743714997067 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -4087481368310426503, guid: 47e40faa983da6f458c768af35528ed7,
+    type: 3}
+  m_PrefabInstance: {fileID: 2762633764245706546}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &6027004741283845242 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -724270141783932088, guid: 47e40faa983da6f458c768af35528ed7,
     type: 3}
   m_PrefabInstance: {fileID: 2762633764245706546}
   m_PrefabAsset: {fileID: 0}
@@ -453,6 +523,18 @@ PrefabInstance:
 --- !u!4 &7078701882939805290 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6867872740015929135, guid: 671b63203eb40d44099d5f737002353a,
+    type: 3}
+  m_PrefabInstance: {fileID: 4427896075134236997}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &5502015627629480101 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 8153795759049290208, guid: 671b63203eb40d44099d5f737002353a,
+    type: 3}
+  m_PrefabInstance: {fileID: 4427896075134236997}
+  m_PrefabAsset: {fileID: 0}
+--- !u!199 &6746785438346375349 stripped
+ParticleSystemRenderer:
+  m_CorrespondingSourceObject: {fileID: 6976754878614931952, guid: 671b63203eb40d44099d5f737002353a,
     type: 3}
   m_PrefabInstance: {fileID: 4427896075134236997}
   m_PrefabAsset: {fileID: 0}

@@ -23,6 +23,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 248571439008907400}
+  - component: {fileID: 7899527660682275830}
   m_Layer: 0
   m_Name: Luthadel_citywall_tower
   m_TagString: Untagged
@@ -45,6 +46,33 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!205 &7899527660682275830
+LODGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5300505080260950567}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: 0.00000059604645, y: -0.60090995, z: -6.584097}
+  m_Size: 13.168196
+  m_FadeMode: 0
+  m_AnimateCrossFading: 0
+  m_LastLODIsBillboard: 0
+  m_LODs:
+  - screenRelativeHeight: 0.05265096
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 3955421367197173948}
+  - screenRelativeHeight: 0.035228778
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 8435236884396520187}
+  - screenRelativeHeight: 0.0101720225
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 8435236884396520187}
+  m_Enabled: 1
 --- !u!1001 &5226881125675005496
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -128,6 +156,18 @@ GameObject:
 --- !u!4 &1005191664716012834 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 7f873ebe119591940ba990896fcec214,
+    type: 3}
+  m_PrefabInstance: {fileID: 5226881125675005496}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &3955421367197173948 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -113181020801827196, guid: 7f873ebe119591940ba990896fcec214,
+    type: 3}
+  m_PrefabInstance: {fileID: 5226881125675005496}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &8435236884396520187 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 4433345171764495555, guid: 7f873ebe119591940ba990896fcec214,
     type: 3}
   m_PrefabInstance: {fileID: 5226881125675005496}
   m_PrefabAsset: {fileID: 0}
