@@ -21,8 +21,6 @@ public class PlayerPullPushController : AllomanticIronSteel {
     public const float blueLineBrightnessFactor = .15f;
 
     // Control Mode constants
-    private const int maxNumberOfTargets = 10;
-    private const int minNumberOfTargets = 1;
     private const float minAreaRadius = .0251f;
     public const float maxAreaRadius = .25f;
     private const float areaRadiusIncrement = .025f;
@@ -75,6 +73,8 @@ public class PlayerPullPushController : AllomanticIronSteel {
 
         BubbleMetalStatus = iron;
         Mode = ControlMode.Manual;
+        PullTargets.Size = TargetArray.smallArrayCapacity;
+        PushTargets.Size = TargetArray.smallArrayCapacity;
         bubbleRenderer = transform.Find("BubbleRange").GetComponent<Renderer>();
         BubbleTargets = new TargetArray(TargetArray.largeArrayCapacity);
     }
@@ -234,8 +234,11 @@ public class PlayerPullPushController : AllomanticIronSteel {
                                 //    }
                                 //} else {
                                 if (select && selectDown) {
-                                    // If the bullseye target is already selected, we want to remove it instead.
-                                    if (PullTargets.IsTarget(bullseyeTarget)) {
+                                    // If there is no bullseye target, deselect all targets.
+                                    if(bullseyeTarget == null) {
+                                        PullTargets.Clear();
+                                    } else if (PullTargets.IsTarget(bullseyeTarget)) {
+                                        // If the bullseye target is already selected, we want to remove it instead.
                                         RemovePullTarget(bullseyeTarget);
                                     } else {
                                         // It's not a target. Add it.
@@ -253,8 +256,11 @@ public class PlayerPullPushController : AllomanticIronSteel {
                                     }
                                 }
                                 if (selectAlternate && selectAlternateDown) {
-                                    // If the bullseye target is already selected, we want to remove it instead.
-                                    if (PushTargets.IsTarget(bullseyeTarget)) {
+                                    // If there is no bullseye target, deselect all targets.
+                                    if (bullseyeTarget == null) {
+                                        PushTargets.Clear();
+                                    } else if (PushTargets.IsTarget(bullseyeTarget)) {
+                                        // If the bullseye target is already selected, we want to remove it instead.
                                         RemovePushTarget(bullseyeTarget);
                                     } else {
                                         // It's not a target. Add it.
@@ -678,14 +684,6 @@ public class PlayerPullPushController : AllomanticIronSteel {
 
     private void IncrementTargets() {
         switch (Mode) {
-            case ControlMode.Manual: // fall through
-            case ControlMode.Coinshot:
-                if (sizeOfTargetArrays < maxNumberOfTargets) {
-                    sizeOfTargetArrays++;
-                    PullTargets.Size = sizeOfTargetArrays;
-                    PushTargets.Size = sizeOfTargetArrays;
-                }
-                break;
             case ControlMode.Area:
                 if (selectionAreaRadius < maxAreaRadius) {
                     selectionAreaRadius += areaRadiusIncrement;
@@ -701,14 +699,6 @@ public class PlayerPullPushController : AllomanticIronSteel {
 
     private void DecrementTargets() {
         switch (Mode) {
-            case ControlMode.Manual: // fall through
-            case ControlMode.Coinshot:
-                if (sizeOfTargetArrays > minNumberOfTargets) {
-                    sizeOfTargetArrays--;
-                    PullTargets.Size = sizeOfTargetArrays;
-                    PushTargets.Size = sizeOfTargetArrays;
-                }
-                break;
             case ControlMode.Area:
                 if (selectionAreaRadius > minAreaRadius) {
                     selectionAreaRadius -= areaRadiusIncrement;
@@ -932,10 +922,6 @@ public class PlayerPullPushController : AllomanticIronSteel {
             HUD.TargetOverlayController.HardRefresh();
             // number of targets
             switch (Mode) {
-                case ControlMode.Manual: // fall through
-                case ControlMode.Coinshot:
-                    HUD.BurnPercentageMeter.SetMetalLineCountTextManual(sizeOfTargetArrays);
-                    break;
                 case ControlMode.Area:
                     HUD.BurnPercentageMeter.SetMetalLineCountTextArea(selectionAreaRadius);
                     break;
@@ -983,9 +969,10 @@ public class PlayerPullPushController : AllomanticIronSteel {
 
     public void SetControlModeManual() {
         Mode = ControlMode.Manual;
-        PullTargets.Size = sizeOfTargetArrays;
-        PushTargets.Size = sizeOfTargetArrays;
+        PullTargets.Size = TargetArray.smallArrayCapacity;
+        PushTargets.Size = TargetArray.smallArrayCapacity;
         HUD.Crosshair.SetManual();
+        HUD.BurnPercentageMeter.SetMetalLineCountTextManual();
     }
     public void SetControlModeArea() {
         Mode = ControlMode.Area;
@@ -1002,8 +989,9 @@ public class PlayerPullPushController : AllomanticIronSteel {
     }
     public void SetControlModeCoinshot() {
         Mode = ControlMode.Coinshot;
-        PullTargets.Size = sizeOfTargetArrays;
-        PushTargets.Size = sizeOfTargetArrays;
+        PullTargets.Size = TargetArray.smallArrayCapacity;
+        PushTargets.Size = TargetArray.smallArrayCapacity;
         HUD.Crosshair.SetManual();
+        HUD.BurnPercentageMeter.SetMetalLineCountTextManual();
     }
 }

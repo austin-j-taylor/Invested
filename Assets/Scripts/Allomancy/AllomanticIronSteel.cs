@@ -92,19 +92,6 @@ public class AllomanticIronSteel : Allomancer {
         }
     }
 
-    // Number of targets for manual targeting
-    protected int sizeOfTargetArrays = 1;
-    public int SizeOfTargetArrays {
-        get {
-            return sizeOfTargetArrays;
-        }
-        set {
-            sizeOfTargetArrays = value;
-            PullTargets.Size = sizeOfTargetArrays;
-            PushTargets.Size = sizeOfTargetArrays;
-        }
-    }
-
     // Used for calculating the acceleration over the last frame for pushing/pulling
     public Vector3 LastAllomancerVelocity { get; private set; } = Vector3.zero;
     //private Vector3 lastExpectedAllomancerVelocityChange = Vector3.zero;

@@ -79,9 +79,6 @@ public class ControlWheelController : MonoBehaviour {
                             selectedCoin = highlit;
                             Player.PlayerInstance.CoinThrowingMode = Player.CoinMode.Spray;
                             HUD.ThrowingAmmoMeter.Alert(Player.CoinMode.Spray);
-                            if(Player.PlayerIronSteel.SizeOfTargetArrays < 3) {
-                                Player.PlayerIronSteel.SizeOfTargetArrays = 3;
-                            }
                             break;
                         case Selection.Coin_Full:
                             selectedCoin = highlit;

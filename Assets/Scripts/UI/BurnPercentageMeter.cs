@@ -86,8 +86,8 @@ public class BurnPercentageMeter : MonoBehaviour {
         actualForceText.color = HUD.weakBlue;
     }
 
-    public void SetMetalLineCountTextManual(int sizeOfTargetArrays) {
-        metalLineCountText.text = sizeOfTargetArrays.ToString();
+    public void SetMetalLineCountTextManual() {
+        metalLineCountText.text = "";
     }
     public void SetMetalLineCountTextArea(float radius) {
         metalLineCountText.text = HUD.RoundStringToSigFigs(radius) + "%";

@@ -16,13 +16,13 @@ public class Environment_TitleScreen : EnvironmentCinematic {
         HUD.DisableHUD();
         Magnetic[] pulls = transform.Find("Magnetics").GetComponentsInChildren<Magnetic>();
         Magnetic[] pushes = transform.Find("MagneticsPush").GetComponentsInChildren<Magnetic>();
-        Player.PlayerIronSteel.SizeOfTargetArrays = 5;
-        foreach (Magnetic m in pulls) {
-            Player.PlayerIronSteel.AddPullTarget(m);
-        }
-        foreach (Magnetic m in pushes) {
-            Player.PlayerIronSteel.AddPullTarget(m);
-        }
+        //Player.PlayerIronSteel.SizeOfTargetArrays = 5;
+        //foreach (Magnetic m in pulls) {
+        //    Player.PlayerIronSteel.AddPullTarget(m);
+        //}
+        //foreach (Magnetic m in pushes) {
+        //    Player.PlayerIronSteel.AddPullTarget(m);
+        //}
 
         TimeController.CurrentTimeScale = 0;
 

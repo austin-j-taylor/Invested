@@ -11,15 +11,15 @@ public class TargetArray {
 
     // Player can push on up to 300 targets at once
     public const int largeArrayCapacity = 300; // Area, Bubble Control Mode
-    public const int smallArrayCapacity = 10; // Manual, and for Non-player allomancers
+    public const int smallArrayCapacity = 30; // Manual, and for Non-player allomancers
 
     public const float lightSaberConstant = 1024;
     public const float firstPersonLSFactor = .1f;
     private const float blueLineTargetedWidthFactor = .06f;
-    public static readonly Color targetedRedLine = new Color(1.2f, 0, 1.2f);
-    private static readonly Color targetedGreenLine = new Color(0, 1.2f, 0);
-    private static readonly Color targetedBlueLine = new Color(0, 0, 1.2f);
-    private static readonly Color targetedLightBlueLine = new Color(0, .5f, 1.2f);
+    public static readonly Color targetedRedLine = new Color(1f, 0, 1f) * 2;
+    private static readonly Color targetedGreenLine = new Color(0, 1f, 0) * 2;
+    private static readonly Color targetedBlueLine = new Color(0, 0, 1f) * 2;
+    private static readonly Color targetedLightBlueLine = new Color(0, .5f, 1f)*2;
 
     private Magnetic[] targets;
 
