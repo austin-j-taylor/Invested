@@ -122,10 +122,10 @@ public class Player : PewterEntity {
 
         // Handle "Voiding out" if the player falls too far into the "void"
         // On all levels consider y = -100 as the void
-        if (transform.position.y < voidHeight) {
-            transform.position = RespawnPoint;
-            PlayerPewter.Clear();
-        }
+        //if (transform.position.y < voidHeight) {
+        //    transform.position = RespawnPoint;
+        //    PlayerPewter.Clear();
+        //}
 
         if (CanControl) {
             // On throwing a coin

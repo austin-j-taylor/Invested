@@ -29,7 +29,7 @@ public class PlayerMovementController : AllomanticPewter {
     private const float jumpHeight = 300;
     private const float jumpDirectionModifier = 400;
     private const float jumpPewterMagnitude = 350;
-
+     
     // Factors
     private const float walkingFactor = .15f;
     private const float airControlFactor = .3f;

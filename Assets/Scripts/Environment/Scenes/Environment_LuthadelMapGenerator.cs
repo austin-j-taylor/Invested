@@ -3,7 +3,7 @@ using System.Collections;
 
 // Handles the placement of houses on the luthadel map to generate the city.
 public class Environment_LuthadelMapGenerator : Environment {
-
+    
     [SerializeField]
     private Texture2D map = null;
 
@@ -12,8 +12,8 @@ public class Environment_LuthadelMapGenerator : Environment {
     public int[] houseSizes = null;
 
 
-    private Texture2D originalTexture;
-    private int width, height;
+    private Texture2D originalTexture = null;
+    private int width = 0, height = 0;
 
     private void OnValidate() {
         originalTexture = map;
@@ -32,6 +32,7 @@ public class Environment_LuthadelMapGenerator : Environment {
          *          While we were checking nearby pixels to place the house, find the closest black pixel, and face the house towards it (make the house face a road)
          *      
          */
+        Transform buildings = transform.Find("GeneratedBuildings");
 
         float scaleX = transform.Find("Map").localScale.x;
         float scaleY = transform.Find("Map").localScale.y;
@@ -42,15 +43,15 @@ public class Environment_LuthadelMapGenerator : Environment {
         for(int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 // tests: place houses in a small section
-                if(i >1300 && i < 1600 && j > 1300 && j < 1600) {
+                if(i >1300 && i < 1500 && j > 1200 && j < 1500) {
 
-                    // if not white, skip
-                    if(pixels[GetPixel(j, i)] != Color.white) {
+                    // if black, skip
+                    if(pixels[GetPixel(j, i)] == Color.black) {
                         continue;
                     }
 
                     // choose the building for this area
-                    int houseIndex = 0;
+                    int houseIndex = Random.Range(0, houses.Length);
                     int zoneSize = houseSizes[houseIndex];
                     bool bad = false;
                     // check if the zone has space (i.e. everything is white)
@@ -74,56 +75,72 @@ public class Environment_LuthadelMapGenerator : Environment {
                         }
                     }
 
-
                     // radial search around the zone to find the nearest road
-                    // does not account for edge of screen
+                    // does not account for edge of screen, but that's always black, so...
                     bool found = false;
                     int offset = 0;
-                    while(offset < 10 && !found) {
+                    int blackCount = 0;
+                    int blackI = 0, blackJ = 0;
+                    while (!found) {
                         zi = i - zoneSize / 2 - 1 - offset;
                         zj = j - zoneSize / 2 - offset;
+                        // Bottom row
                         while( zj < j + zoneSize/2+offset) {
                             if (pixels[GetPixel(zj, zi)] == Color.black) {
                                 //pixels[GetPixel(zj, zi)] = Color.red;
                                 found = true;
-                                break;
-                            } else {
-                                //pixels[GetPixel(zj, zi)] = Color.green;
-                                zj++;
+                                blackCount++;
+                                blackJ += zj;
+                                blackI += zi;
                             }
+                            //pixels[GetPixel(zj, zi)] = Color.green;
+                            zj++;
                         }
-                        while(zi < i + zoneSize / 2 + offset && !found) {
+                        // Right column
+                        while(zi < i + zoneSize / 2 + offset) {
                             if (pixels[GetPixel(zj, zi)] == Color.black) {
                                 //pixels[GetPixel(zj, zi)] = Color.red;
                                 found = true;
+                                blackCount++;
+                                blackJ += zj;
+                                blackI += zi;
                                 break;
-                            } else {
-                                //pixels[GetPixel(zj, zi)] = Color.green;
-                                zi++;
                             }
+                            //pixels[GetPixel(zj, zi)] = Color.green;
+                            zi++;
                         }
-                        while (zj > j - zoneSize / 2-1- offset && !found) {
+                        // Top row
+                        while (zj > j - zoneSize / 2-1- offset) {
                             if (pixels[GetPixel(zj, zi)] == Color.black) {
                                 //pixels[GetPixel(zj, zi)] = Color.red;
                                 found = true;
+                                blackCount++;
+                                blackJ += zj;
+                                blackI += zi;
                                 break;
-                            } else {
-                                //pixels[GetPixel(zj, zi)] = Color.green;
-                                zj--;
                             }
+                            //pixels[GetPixel(zj, zi)] = Color.green;
+                            zj--;
                         }
-                        while (zi > i - zoneSize / 2-2- offset && !found) {
+                        // Left column
+                        while (zi > i - zoneSize / 2-2- offset) {
                             if (pixels[GetPixel(zj, zi)] == Color.black) {
                                 //pixels[GetPixel(zj, zi)] = Color.red;
                                 found = true;
+                                blackCount++;
+                                blackJ += zj;
+                                blackI += zi;
                                 break;
-                            } else {
-                                //pixels[GetPixel(zj, zi)] = Color.green;
-                                zi--;
-                            }
+                            } 
+                            //pixels[GetPixel(zj, zi)] = Color.green;
+                            zi--;
                         }
                         offset++;
                     }
+                    // The house should look at the "road", defined by the average of the black squares in the first circle around the house with black squares.
+                    zj = blackJ / blackCount;
+                    zi = blackI / blackCount;
+                    
                     Vector2 diff = new Vector2(zj - j, i - zi);
                     float rot_z = Mathf.Atan2(diff.y, diff.x) * Mathf.Rad2Deg;
                     Quaternion rotation = Quaternion.Euler(0, rot_z + 90, 0);
@@ -132,7 +149,7 @@ public class Environment_LuthadelMapGenerator : Environment {
                     GameObject house = UnityEditor.PrefabUtility.InstantiatePrefab(houses[houseIndex] as Object) as GameObject;
                     house.transform.position = worldPosition;
                     house.transform.rotation = rotation;
-                    house.transform.parent = transform;
+                    house.transform.parent = buildings;
                 }
             }
         }
@@ -146,9 +163,10 @@ public class Environment_LuthadelMapGenerator : Environment {
     }
 
     public void DestroyHouses() {
-        for (int i = transform.childCount - 1; i >= 0; i--) {
-            if(transform.GetChild(i).name.Contains("Luthadel_house")) {
-                DestroyImmediate(transform.GetChild(i).gameObject);
+        Transform buildings = transform.Find("GeneratedBuildings");
+        for (int i = buildings.childCount - 1; i >= 0; i--) {
+            if(buildings.GetChild(i).name.Contains("Luthadel_")) {
+                DestroyImmediate(buildings.GetChild(i).gameObject);
             }
         }
     }
