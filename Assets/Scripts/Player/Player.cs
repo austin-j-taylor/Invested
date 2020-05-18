@@ -25,6 +25,7 @@ public class Player : PewterEntity {
     public static Magnetic PlayerMagnetic { get; private set; }
     public static FeruchemicalZinc PlayerZinc { get; set; }
     public static PlayerTransparencyController PlayerTransparancy { get; set; }
+    public static VoiceBeeper PlayerVoiceBeeper { get; set; }
 
     public Hand CoinHand { get; private set; }
     public CoinMode CoinThrowingMode { get; set; }
@@ -111,6 +112,7 @@ public class Player : PewterEntity {
         PlayerMagnetic = GetComponentInChildren<Magnetic>();
         PlayerZinc = GetComponent<FeruchemicalZinc>();
         PlayerTransparancy = GetComponentInChildren<PlayerTransparencyController>();
+        PlayerVoiceBeeper = GetComponentInChildren<VoiceBeeper>();
         Health = 100;
         CoinThrowingMode = CoinMode.Semi;
         CoinHand = GetComponentInChildren<Hand>();

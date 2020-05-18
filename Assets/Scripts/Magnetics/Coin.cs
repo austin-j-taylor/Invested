@@ -113,7 +113,10 @@ public class Coin : Magnetic {
         if (other.CompareTag("PlayerBody") &&
                     //Keybinds.IronPulling() && (!Player.PlayerIronSteel.HasPullTarget || Player.PlayerIronSteel.PullTargets.IsTarget(this))) {
                     (Keybinds.IronPulling() || Player.PlayerIronSteel.BubbleIsOpen && Player.PlayerIronSteel.BubbleMetalStatus == AllomanticIronSteel.iron)) {
-            BeCaughtByAllomancer(other.transform.parent.GetComponent<Player>());
+            // Make sure there's not a wall between the coin and the player
+            Vector3 direction = other.transform.position - transform.position;
+            if(!Physics.Raycast(transform.position, direction, direction.magnitude, GameManager.Layer_IgnoreCamera))
+                BeCaughtByAllomancer(other.transform.parent.GetComponent<Player>());
         }
     }
 

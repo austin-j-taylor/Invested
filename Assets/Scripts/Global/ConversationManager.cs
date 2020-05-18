@@ -12,11 +12,8 @@ public class ConversationManager : MonoBehaviour {
 
     private readonly string rootFilename = Path.Combine(Application.streamingAssetsPath, "Data" + Path.DirectorySeparatorChar + "Conversations" + Path.DirectorySeparatorChar);
 
+    // The different actors who can speak
     public enum Speaker { None, Kog, Prima, OtherMachine };
-    public struct Phrase {
-        public Speaker speaker; // the speaker of this phrase
-        public string content; // the parsed/formatted/colored contents of this phrase
-    }
 
     public struct Conversation {
         public string key; // the header/title for the conversation, e.g. "CASUAL_CHAT"
@@ -80,7 +77,7 @@ public class ConversationManager : MonoBehaviour {
                     // Remaining lines are put into the conversation's content, until you reach an ending signifier.
                     // Could be more efficient.
                     StringBuilder builder = new StringBuilder();
-                    while(!allFileLines[i].Contains("\\%") && i < allFileLines.Length) {
+                    while(i < allFileLines.Length && !allFileLines[i].Contains("\\%")) {
                         builder.Append(allFileLines[i] + System.Environment.NewLine);
                         i++;
                     }

@@ -34,6 +34,13 @@ public class AudioManager : MonoBehaviour {
     private Coroutine coroutine_pewter, coroutine_rolling;
 
     AudioSource[] sources;
+    
+    public AudioMixer Mixer {
+        get {
+            return mixer;
+        }
+    }
+    public AudioMixerGroup MixerVoiceBeepsGroup { get; private set; }
 
     public bool SceneTransitionIsPlaying {
         get {
@@ -41,8 +48,9 @@ public class AudioManager : MonoBehaviour {
         }
     }
 
-    private void Start() {
+    private void Awake() {
         sources = GetComponents<AudioSource>();
+        MixerVoiceBeepsGroup = mixer.FindMatchingGroups("VoiceBeeps")[0];
 
         sources[index_wind].clip = wind_loop;
         sources[index_wind].loop = true;

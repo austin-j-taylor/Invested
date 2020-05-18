@@ -81,6 +81,7 @@ public class ConversationHUDController : MonoBehaviour {
 
         StringBuilder parsed = new StringBuilder();
         Style currentStyle = Style.Clear;
+        VoiceBeeper currentSpeaker = Player.PlayerVoiceBeeper;
 
         // For each character in the conversation:
         for (int i = 0; i < currentConversation.content.Length; i++) {
@@ -95,18 +96,23 @@ public class ConversationHUDController : MonoBehaviour {
                     switch (currentConversation.content[i]) {
                         case 'n': // the environment/neutral/none
                             headerText.text = "";
+                            currentSpeaker = Player.PlayerVoiceBeeper;
                             break;
                         case 's': // the Sphere/Prima
                             headerText.text = Color_Prima("Primer Sphere");
+                            currentSpeaker = Player.PlayerVoiceBeeper;
                             break;
                         case 'k': // the KOLOSS
                             headerText.text = Color_Kog("Kog");
+                            currentSpeaker = Player.PlayerVoiceBeeper;
                             break;
                         case 'm': // other machines
                             headerText.text = Color_Machines("Machine");
+                            currentSpeaker = Player.PlayerVoiceBeeper;
                             break;
                         case '?': // ???
                             headerText.text = Color_Prima("???");
+                            currentSpeaker = Player.PlayerVoiceBeeper;
                             break;
                         default:
                             Debug.LogError("Failed to parse convesation text in " + currentConversation.key + ": " + currentConversation.content + ": invalid speaker");
@@ -216,6 +222,8 @@ public class ConversationHUDController : MonoBehaviour {
                 } else {
                     // just a character; say it, and wait a moment
                     parsed.Append(currentConversation.content[i]);
+                    // and the speaker beeps
+                    currentSpeaker.Beep();
                     yield return new WaitForSeconds(delayPerCharacter);
                 }
             }
