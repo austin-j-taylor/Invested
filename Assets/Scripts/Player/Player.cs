@@ -227,4 +227,9 @@ public class Player : PewterEntity {
     public void SetSmokeMaterial(Material mat) {
         GetComponentInChildren<ParticleSystemRenderer>().material = mat;
     }
+
+    // Used by Triggers to check if they collided with the player
+    public static bool IsPlayerTrigger(Collider other) {
+        return other.CompareTag("Player") && !other.isTrigger;
+    }
 }

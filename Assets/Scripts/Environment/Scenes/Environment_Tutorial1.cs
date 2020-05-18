@@ -8,7 +8,10 @@ public class Environment_Tutorial1 : EnvironmentCinematic {
     [SerializeField]
     private MessageTrigger trigger_pull = null;
 
+    EnvironmentalMusicManager musicManager;
+
     void Start() {
+        musicManager = GetComponentInChildren<EnvironmentalMusicManager>();
 
         Player.CanControl = false;
         Player.CanControlMovement = false;
@@ -38,7 +41,7 @@ public class Environment_Tutorial1 : EnvironmentCinematic {
         while (GameManager.AudioManager.SceneTransitionIsPlaying) {
             yield return null;
         }
-        GetComponent<AudioSource>().Play();
+        musicManager.StartExterior();
     }
 
     private IEnumerator Procedure() {
