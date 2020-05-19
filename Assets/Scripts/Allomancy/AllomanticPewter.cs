@@ -19,16 +19,11 @@ public class AllomanticPewter : Allomancer {
 
     public MetalReserve PewterReserve { get; private set; }
     private bool isSprinting = false;
-    public bool IsSprinting {
+    public virtual bool IsSprinting {
         get {
             return isSprinting;
         }
         protected set {
-            if (isSprinting && !value) {
-                GameManager.AudioManager.Stop_pewter();
-            } else if (value) {
-                GameManager.AudioManager.Play_pewter();
-            }
             isSprinting = value;
         }
     }
@@ -144,7 +139,7 @@ public class AllomanticPewter : Allomancer {
      * Causes the shield to light up.
      */
     private IEnumerator Burst(Vector3 sourceLocationLocal, double totalMass, float maxTime) {
-        GameManager.AudioManager.Play_pewter_burst();
+        Player.PlayerAudioController.Play_pewter_burst();
 
         // Light up the shield:
         // get closest point on mesh where that happens (for now, assume it's a sphere w/ radius .5)

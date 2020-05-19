@@ -75,10 +75,20 @@ public class PlayerMovementController : AllomanticPewter {
     private PhysicMaterial physicsMaterial;
 
     public bool IsGrounded {
-        get {
-            return groundedChecker.IsGrounded;
+        get => groundedChecker.IsGrounded;
+    }
+    public override bool IsSprinting {
+        get => base.IsSprinting;
+        protected set {
+            if (IsSprinting && !value) {
+                Player.PlayerAudioController.Stop_pewter();
+            } else if (value) {
+                Player.PlayerAudioController.Play_pewter();
+            }
+            base.IsSprinting = value;
         }
     }
+
     private bool jumpQueued;
     private bool lastWasSprintingOnGround, lastWasRollingOnGround;
     private float lastJumpTime;
@@ -330,10 +340,10 @@ public class PlayerMovementController : AllomanticPewter {
             }
             // Play rolling audio
             if (!lastWasRollingOnGround && IsGrounded && movement.sqrMagnitude > 0) {
-                GameManager.AudioManager.Play_rolling();
+                Player.PlayerAudioController.Play_rolling();
                 lastWasRollingOnGround = true;
             } else if (lastWasRollingOnGround && (!IsGrounded || movement.sqrMagnitude == 0)) {
-                GameManager.AudioManager.Stop_rolling();
+                Player.PlayerAudioController.Stop_rolling();
                 lastWasRollingOnGround = false;
             }
         } else {

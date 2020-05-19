@@ -105,7 +105,7 @@ public class Player : PewterEntity {
         smokeMaterial = GetComponentInChildren<ParticleSystemRenderer>().material;
 
         PlayerInstance = this;
-        PlayerAudioController = CameraController.ActiveCamera.GetComponentInChildren<PlayerAudioController>();
+        PlayerAudioController = GetComponentInChildren<PlayerAudioController>();
         PlayerIronSteel = GetComponentInChildren<PlayerPullPushController>();
         PlayerPewter = GetComponentInChildren<PlayerMovementController>();
         PlayerFlywheelController = GetComponentInChildren<PlayerFlywheelController>();

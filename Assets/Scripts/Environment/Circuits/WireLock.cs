@@ -17,6 +17,7 @@ public class WireLock : Source {
     private Magnetic metal;
     private Renderer mount;
     private Animator anim;
+    private AudioSource audioDestroying, audioDestroyed, audioRepairing;
 
     public override double Health {
         set {
@@ -39,6 +40,10 @@ public class WireLock : Source {
         metal = GetComponentInChildren<Magnetic>();
         mount = GetComponentInChildren<Renderer>();
         anim = GetComponent<Animator>();
+        AudioSource[] sources = GetComponents<AudioSource>();
+        audioDestroying = sources[0];
+        audioDestroyed = sources[1];
+        audioRepairing = sources[2];
     }
 
     protected override void Start() {
@@ -56,12 +61,14 @@ public class WireLock : Source {
                 } else {
                     isBeingDestroyed = false;
                     anim.SetBool("isBeingDestroyed", false);
+                    audioDestroying.Stop();
                     Health = maxHealth;
                 }
             } else {
                 if (metal.IsBeingPushPulled) {
                     isBeingDestroyed = true;
                     anim.SetBool("isBeingDestroyed", true);
+                    audioDestroying.Play();
                     Health -= Time.deltaTime * 60;
                 }
             }
@@ -72,6 +79,7 @@ public class WireLock : Source {
     protected override void Destroy() {
         base.Destroy();
         anim.SetTrigger("destroyed");
+        audioDestroyed.Play();
         PowerConnected(false);
 
         metal.enabled = false;
@@ -80,6 +88,8 @@ public class WireLock : Source {
     // If player Pulls or Pushes On the lock, it is destroyed - until it repairs itself
     private void DestroyButThenRepair() {
         anim.SetTrigger("destroyed");
+        audioDestroyed.Play();
+        audioRepairing.Play();
         PowerConnected(false);
 
         On = false;
