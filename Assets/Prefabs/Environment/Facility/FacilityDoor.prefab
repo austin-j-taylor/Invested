@@ -55,6 +55,8 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -79,6 +81,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &2840711310718476761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93,6 +96,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 0
   magneticMass: 50
+  calculateCOMFromColliders: 0
 --- !u!1 &4142846432606670533
 GameObject:
   m_ObjectHideFlags: 0
@@ -151,10 +155,12 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 80a1e8826d8b71346acafc8de471d250, type: 2}
+  - {fileID: 2100000, guid: e05143541ffb56a40b392d27617f4b61, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -175,6 +181,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!54 &4142846432606670532
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -201,9 +208,9 @@ MeshCollider:
   m_Material: {fileID: 13400000, guid: fd1f2e940faebe24da098ba27ef8e0d5, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 4
   m_Convex: 1
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 826980398051131412, guid: 7c8e082c9cf740b4cbfb6a33901c37d4, type: 3}
 --- !u!59 &4142846432606670531
 HingeJoint:
@@ -355,6 +362,8 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -379,6 +388,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &6878962752830198881
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -393,6 +403,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 0
   magneticMass: 50
+  calculateCOMFromColliders: 0
 --- !u!1 &8808651714341597951
 GameObject:
   m_ObjectHideFlags: 0
@@ -451,10 +462,12 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 80a1e8826d8b71346acafc8de471d250, type: 2}
+  - {fileID: 2100000, guid: e05143541ffb56a40b392d27617f4b61, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -475,6 +488,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!54 &8808651714341597950
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -501,9 +515,9 @@ MeshCollider:
   m_Material: {fileID: 13400000, guid: fd1f2e940faebe24da098ba27ef8e0d5, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 4
   m_Convex: 1
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 5021715064179871079, guid: f1dfdfa344af9ea43bb5901bf4158248, type: 3}
 --- !u!59 &8808651714341597948
 HingeJoint:

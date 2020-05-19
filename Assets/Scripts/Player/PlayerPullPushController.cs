@@ -241,7 +241,9 @@ public class PlayerPullPushController : AllomanticIronSteel {
                                         // If the bullseye target is already selected, we want to remove it instead.
                                         RemovePullTarget(bullseyeTarget);
                                     } else {
-                                        // It's not a target. Add it.
+                                        // It's not a target. Add it. If we're multitargeting, preserve the old target.
+                                        if (!Keybinds.MultipleMarks())
+                                            PullTargets.Clear();
                                         AddPullTarget(bullseyeTarget);
                                     }
                                 } else {
@@ -263,7 +265,9 @@ public class PlayerPullPushController : AllomanticIronSteel {
                                         // If the bullseye target is already selected, we want to remove it instead.
                                         RemovePushTarget(bullseyeTarget);
                                     } else {
-                                        // It's not a target. Add it.
+                                        // It's not a target. Add it. If we're multitargeting, preserve the old target.
+                                        if (!Keybinds.MultipleMarks())
+                                            PushTargets.Clear();
                                         AddPushTarget(bullseyeTarget);
                                     }
                                 } else {
@@ -303,8 +307,15 @@ public class PlayerPullPushController : AllomanticIronSteel {
                                     if (PullTargets.IsTarget(bullseyeTarget)) {
                                         PullTargets.Clear();
                                     } else {
-                                        // It's not a target. Add them.
-                                        PullTargets.ReplaceContents(newTargetsArea, false);
+                                        // They're not targets. Add them. If we're multitargeting, preserve the old targets.
+                                        if (Keybinds.MultipleMarks()) {
+                                            // O(n^2)ish
+                                            for(int i = 0; i < newTargetsArea.Count; i++) {
+                                                PullTargets.AddTarget(newTargetsArea[i], false);
+                                            }
+                                        } else {
+                                            PullTargets.ReplaceContents(newTargetsArea, false);
+                                        }
                                     }
                                 } else {
                                     // Not holding down Negate nor Select this round. Consider vacuous pulling.
@@ -321,8 +332,15 @@ public class PlayerPullPushController : AllomanticIronSteel {
                                     if (PushTargets.IsTarget(bullseyeTarget)) {
                                         PushTargets.Clear();
                                     } else {
-                                        // It's not a target. Add them.
-                                        PushTargets.ReplaceContents(newTargetsArea, false);
+                                        // They're not targets. Add them. If we're multitargeting, preserve the old targets.
+                                        if (Keybinds.MultipleMarks()) {
+                                            // O(n^2)ish
+                                            for (int i = 0; i < newTargetsArea.Count; i++) {
+                                                PushTargets.AddTarget(newTargetsArea[i], false);
+                                            }
+                                        } else {
+                                            PushTargets.ReplaceContents(newTargetsArea, false);
+                                        }
                                     }
                                 } else {
                                     // Not holding down Negate nor selectAlternate this round. Consider vacuous pulling.
