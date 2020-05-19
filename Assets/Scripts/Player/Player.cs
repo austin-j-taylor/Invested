@@ -8,7 +8,7 @@ public class Player : PewterEntity {
 
     private const float coinCooldownThreshold = 1f / 10;
     private const float zincTimeCoinThrowModifier = 2; // throw coins faster while in zinc time
-    private const float voidHeight = -50; // Voiding out - if the player falls beneath voidHeight, respawn.
+    private const float defaultVoidHeight = -50; // Voiding out - if the player falls beneath voidHeight, respawn.
 
     public enum CoinMode { Semi, Full, Spray };
 
@@ -89,6 +89,8 @@ public class Player : PewterEntity {
             PlayerIronSteel.Strength = value;
         }
     }
+    // Some scenes also set the void height
+    public static float VoidHeight { get; set; }
 
     private float coinCooldownTimer = 0;
 
@@ -123,11 +125,9 @@ public class Player : PewterEntity {
     void Update() {
 
         // Handle "Voiding out" if the player falls too far into the "void"
-        // On all levels consider y = -100 as the void
-        //if (transform.position.y < voidHeight) {
-        //    transform.position = RespawnPoint;
-        //    PlayerPewter.Clear();
-        //}
+        if (transform.position.y < VoidHeight) {
+            Respawn();
+        }
 
         if (CanControl) {
             // On throwing a coin
@@ -188,6 +188,7 @@ public class Player : PewterEntity {
         PlayerZinc.Clear();
         PlayerTransparancy.Clear();
         FeelingScale = 1;
+        VoidHeight = defaultVoidHeight;
 
         // Disable the cloud controller
         CameraController.ActiveCamera.GetComponent<CloudMaster>().enabled = false;
@@ -231,5 +232,10 @@ public class Player : PewterEntity {
     // Used by Triggers to check if they collided with the player
     public static bool IsPlayerTrigger(Collider other) {
         return other.CompareTag("Player") && !other.isTrigger;
+    }
+
+    public void Respawn() {
+        transform.position = RespawnPoint;
+        PlayerPewter.Clear();
     }
 }
