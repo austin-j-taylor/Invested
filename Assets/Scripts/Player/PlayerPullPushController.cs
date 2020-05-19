@@ -100,7 +100,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
                             ChangeTargetForceMagnitude(Keybinds.DPadXAxis());
                         }
                     } else { // Mouse and keyboard
-                        if (Keybinds.ZincTime()) {
+                        if (Keybinds.ZincTime() && Mode == ControlMode.Area || Mode == ControlMode.Bubble) {
                             scrollValue = Keybinds.ScrollWheelAxis();
                         } else {
                             if (SettingsMenu.settingsData.pushControlStyle == 0) {

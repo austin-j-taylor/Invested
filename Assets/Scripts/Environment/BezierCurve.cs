@@ -16,7 +16,7 @@ public class BezierCurve : MonoBehaviour {
     [SerializeField]
     private BezierControlPointMode[] modes;
     [SerializeField]
-    private Vector3[] points;
+    public Vector3[] points;
 
     public bool Loop {
         get {
@@ -46,6 +46,14 @@ public class BezierCurve : MonoBehaviour {
             scale = value;
         }
     }
+    public bool LocalSpace {
+        get {
+            return localSpace;
+        }
+        set {
+            localSpace = value;
+        }
+    }
     public int ControlPointCount { get { return points.Length; } }
     public int CurveCount { get { return (points.Length - 1) / 3; } }
 
@@ -55,6 +63,8 @@ public class BezierCurve : MonoBehaviour {
     private float animationTime = 5;
     [SerializeField]
     protected float scale = 1;
+    [SerializeField]
+    private bool localSpace = true;
 
     public void Reset() {
         points = new Vector3[] {
@@ -91,7 +101,10 @@ public class BezierCurve : MonoBehaviour {
             t -= i;
             i *= 3;
         }
-        return transform.TransformPoint(GetPoint(points[i], points[i + 1], points[i + 2], points[i + 3], t));
+        Vector3 point = GetPoint(points[i], points[i + 1], points[i + 2], points[i + 3], t);
+        if (localSpace)
+            point = transform.TransformPoint(point);
+        return point;
     }
 
     public static Vector3 GetPoint(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float t) {

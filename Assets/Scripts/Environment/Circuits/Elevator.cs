@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Animations;
 using System.Collections;
+using Cinemachine;
 
 /*
  * An elevator that travels up and down a shaft as the Sphere controls it.
@@ -16,6 +17,7 @@ public class Elevator : Interfaceable {
     private Magnetic floorAnchor = null, ceilingAnchor = null;
     private Magnetic thisMagnetic;
 
+    private CinemachineVirtualCamera vcam;
     private Animator anim;
     private Rigidbody rb;
     //private ParentConstraint pc;
@@ -25,6 +27,7 @@ public class Elevator : Interfaceable {
         anim = GetComponentInChildren<Animator>();
         thisMagnetic = GetComponentInChildren<Magnetic>();
         rb = GetComponent<Rigidbody>();
+        vcam = GetComponentInChildren<CinemachineVirtualCamera>();
         //pc = GetComponent<ParentConstraint>();
         //ConstraintSource source = new ConstraintSource {
         //    weight = 1,
@@ -44,7 +47,7 @@ public class Elevator : Interfaceable {
         Player.PlayerIronSteel.AddPullTarget(thisMagnetic);
         Player.PlayerIronSteel.AddPullTarget(ceilingAnchor);
         //Player.PlayerIronSteel.AddPullTarget(thisMagnetic);
-        CameraController.ExternalDistance = cameraDistance;
+        CameraController.SetCinemachineCamera(vcam);
         Player.PlayerIronSteel.ExternalControl = true;
         Player.PlayerIronSteel.rb.angularVelocity = Vector3.zero;
         offset = transform.position - Player.PlayerInstance.transform.position;
@@ -65,7 +68,7 @@ public class Elevator : Interfaceable {
         Player.CanControl = true;
         Player.PlayerIronSteel.StopBurning();
         Player.PlayerIronSteel.Strength = 1;
-        CameraController.ExternalDistance = Vector2.zero;
+        CameraController.DisableCinemachineCamera(vcam);
         Player.PlayerIronSteel.ExternalControl = false;
         anim.SetTrigger("turnOff");
         //pc.constraintActive = false;

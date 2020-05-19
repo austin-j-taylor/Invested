@@ -16,7 +16,7 @@ public class EnvironmentCinematic : Environment {
         vcam.LookAt = CameraController.CameraLookAtTarget;
         vcam.Follow = cameraPositionTarget;
         dolly = vcam.GetCinemachineComponent<CinemachineTrackedDolly>();
-        CameraController.UsingCinemachine = true;
+        CameraController.SetCinemachineCamera(vcam);
     }
 
     // For use in Coroutines. Returns true while the dolly is still moving towards the follow target.

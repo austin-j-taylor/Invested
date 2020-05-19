@@ -30,6 +30,7 @@ public class BezierCurveEditor : Editor {
         serializedObject.FindProperty("loop").boolValue = EditorGUILayout.Toggle("Loop", spline.Loop);
         serializedObject.FindProperty("animationTime").floatValue = EditorGUILayout.FloatField("Animation Time", spline.AnimationTime);
         serializedObject.FindProperty("scale").floatValue = EditorGUILayout.FloatField("Scale", spline.Scale);
+        serializedObject.FindProperty("localSpace").boolValue = EditorGUILayout.Toggle("Local Space", spline.LocalSpace);
         if (EditorGUI.EndChangeCheck()) {
             Undo.RecordObject(spline, "Toggle Loop");
             Undo.RecordObject(spline, "Change Animation Time");

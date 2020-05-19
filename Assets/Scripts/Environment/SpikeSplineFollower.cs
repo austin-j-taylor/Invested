@@ -11,10 +11,18 @@ public class SpikeSplineFollower : SpikeSpline {
 
     private const float forceConstantFar = 40f;
 
+    protected Spike spike;
+    protected Rigidbody spikeRb;
+    protected Transform spikeTarget;
     private VolumetricLineStripBehavior volLines;
     private float progress = 0;
 
     void Start() {
+        spike = GetComponentInChildren<Spike>();
+        spikeRb = spike.GetComponent<Rigidbody>();
+        spikeTarget = spike.transform.parent;
+        spike.transform.localPosition = spikeRb.centerOfMass;
+
         int steps = stepsPerCurve * CurveCount;
         Vector3[] points = new Vector3[steps + 1];
 
