@@ -33,7 +33,8 @@ public class Messages : MonoBehaviour {
     public static List<string> tutorial_look,
                                 tutorial_move,
                                 tutorial_pull,
-                                tutorial_mark;
+                                tutorial_mark,
+                                tutorial_controlwheel;
     
 
     /* Called whenever certain settings change (i.e. the control scheme).
@@ -53,8 +54,11 @@ public class Messages : MonoBehaviour {
         tutorial_mark = new List<string> {
             s_Press_ + _KeySelect + " while looking at a metal to " + Mark_pulling + " it for " + Pulling + ".\n"
              + "You can " + Pull + " on a " + Marked_metal + " without looking at it.",
-            "You can " + Mark_pulling + " multiple metals at once.",
-            "To remove a " + Marked_metal + ", " + s_Press_ + _KeySelect + " while looking at it.\nPressing Z also unmarks all metals."
+            s_Hold_ + KeyMultiMark + " to " + Mark_pulling + " multiple metals at once.",
+            "You can " + Pull + " on many metals simultaneously by " + Marking_pulling + " them.\n(again, " + s_Hold_ + KeyMultiMark + ")"
+        };
+        tutorial_controlwheel = new List<string> {
+            s_Hold_ + KeyControlWheel + " to open the " + ControlWheel + " and choose " + AreaMode + "."
         };
         marl_movement = new List<string> {
             KeyLook + " to look around.",

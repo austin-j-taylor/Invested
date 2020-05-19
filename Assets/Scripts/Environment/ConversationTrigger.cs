@@ -14,7 +14,7 @@ public class ConversationTrigger : MonoBehaviour {
     private void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Player") && !other.isTrigger) {
             GameManager.ConversationManager.StartConversation(conversationName);
-            Destroy(gameObject);
+            GetComponent<Collider>().enabled = false;
         }
     }
 }

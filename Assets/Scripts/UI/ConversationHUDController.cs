@@ -8,6 +8,7 @@ using System.Text;
 
 /*
  * Controls the HUD element for the dialogue window that appears for conversations.
+ * Parses conversations for colors, italics, pauses, etc.
  */
 public class ConversationHUDController : MonoBehaviour {
 
@@ -220,11 +221,14 @@ public class ConversationHUDController : MonoBehaviour {
                     // system newline. End the phrase. Wait until user advances text.
                     state = State.Waiting;
                 } else {
-                    // just a character; say it, and wait a moment
+                    // just a character; say it
                     parsed.Append(currentConversation.content[i]);
-                    // and the speaker beeps
-                    currentSpeaker.Beep();
-                    yield return new WaitForSeconds(delayPerCharacter);
+                    // and the speaker beeps, skipping some characters
+
+                    char character = currentConversation.content[i];
+                    if (character != '(' && character != ')') {
+                        currentSpeaker.Beep();
+                    }
                 }
             }
             // Finished this pass. Write content to the text object.
@@ -244,8 +248,18 @@ public class ConversationHUDController : MonoBehaviour {
                     conversationText.text = parsed.ToString() + "</color>";
                     break;
             }
+            // Pause. Some characters wait longer.
+            if(state == State.Writing) {
+                char character = currentConversation.content[i];
+                if (character == '.' || character == '?' || character == '!') {
+                    yield return new WaitForSeconds(delayPerPause * 3);
+                } else {
+                    yield return new WaitForSeconds(delayPerCharacter);
+                }
+            }
+
             // If the phrase just ended, wait until the user advances the text.
-            if(state == State.Waiting) {
+            if (state == State.Waiting) {
                 while (state == State.Waiting) {
                     yield return null;
                 }

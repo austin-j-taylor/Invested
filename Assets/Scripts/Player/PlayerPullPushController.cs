@@ -301,58 +301,60 @@ public class PlayerPullPushController : AllomanticIronSteel {
                                 //    }
                                 //} else {
                                 // Adding targets
-
-                                if (select && selectDown) {
-                                    // If the bullseye target is already selected, we want to remove targets instead.
-                                    if (PullTargets.IsTarget(bullseyeTarget)) {
-                                        PullTargets.Clear();
-                                    } else {
-                                        // They're not targets. Add them. If we're multitargeting, preserve the old targets.
-                                        if (Keybinds.MultipleMarks()) {
-                                            // O(n^2)ish
-                                            for(int i = 0; i < newTargetsArea.Count; i++) {
-                                                PullTargets.AddTarget(newTargetsArea[i], false);
-                                            }
+                                if(HasIron) {
+                                    if (select && selectDown && HasIron) {
+                                        // If the bullseye target is already selected, we want to remove targets instead.
+                                        if (PullTargets.IsTarget(bullseyeTarget)) {
+                                            PullTargets.Clear();
                                         } else {
-                                            PullTargets.ReplaceContents(newTargetsArea, false);
+                                            // They're not targets. Add them. If we're multitargeting, preserve the old targets.
+                                            if (Keybinds.MultipleMarks()) {
+                                                // O(n^2)ish
+                                                for (int i = 0; i < newTargetsArea.Count; i++) {
+                                                    PullTargets.AddTarget(newTargetsArea[i], false);
+                                                }
+                                            } else {
+                                                PullTargets.ReplaceContents(newTargetsArea, false);
+                                            }
                                         }
-                                    }
-                                } else {
-                                    // Not holding down Negate nor Select this round. Consider vacuous pulling.
-                                    if (!HasPullTarget) {
-                                        if (keybindPullingDown) {
-                                            PullTargets.ReplaceContents(newTargetsArea, true);
+                                    } else {
+                                        // Not holding down Negate nor Select this round. Consider vacuous pulling.
+                                        if (!HasPullTarget) {
+                                            if (keybindPullingDown) {
+                                                PullTargets.ReplaceContents(newTargetsArea, true);
+                                            }
+                                        } else if (!keybindPulling && PullTargets.VacuousCount > 0) {
+                                            PullTargets.RemoveAllVacuousTargets();
                                         }
-                                    } else if (!keybindPulling && PullTargets.VacuousCount > 0) {
-                                        PullTargets.RemoveAllVacuousTargets();
                                     }
                                 }
-                                if (selectAlternate && selectAlternateDown) {
-                                    // If the bullseye target is already selected, we want to remove targets instead.
-                                    if (PushTargets.IsTarget(bullseyeTarget)) {
-                                        PushTargets.Clear();
-                                    } else {
-                                        // They're not targets. Add them. If we're multitargeting, preserve the old targets.
-                                        if (Keybinds.MultipleMarks()) {
-                                            // O(n^2)ish
-                                            for (int i = 0; i < newTargetsArea.Count; i++) {
-                                                PushTargets.AddTarget(newTargetsArea[i], false);
-                                            }
+                                if(HasSteel) {
+                                    if (selectAlternate && selectAlternateDown) {
+                                        // If the bullseye target is already selected, we want to remove targets instead.
+                                        if (PushTargets.IsTarget(bullseyeTarget)) {
+                                            PushTargets.Clear();
                                         } else {
-                                            PushTargets.ReplaceContents(newTargetsArea, false);
+                                            // They're not targets. Add them. If we're multitargeting, preserve the old targets.
+                                            if (Keybinds.MultipleMarks()) {
+                                                // O(n^2)ish
+                                                for (int i = 0; i < newTargetsArea.Count; i++) {
+                                                    PushTargets.AddTarget(newTargetsArea[i], false);
+                                                }
+                                            } else {
+                                                PushTargets.ReplaceContents(newTargetsArea, false);
+                                            }
                                         }
-                                    }
-                                } else {
-                                    // Not holding down Negate nor selectAlternate this round. Consider vacuous pulling.
-                                    if (!HasPushTarget) {
-                                        if (keybindPushingDown) {
-                                            PushTargets.ReplaceContents(newTargetsArea, true);
+                                    } else {
+                                        // Not holding down Negate nor selectAlternate this round. Consider vacuous pulling.
+                                        if (!HasPushTarget) {
+                                            if (keybindPushingDown) {
+                                                PushTargets.ReplaceContents(newTargetsArea, true);
+                                            }
+                                        } else if (!keybindPushing && PushTargets.VacuousCount > 0) {
+                                            PushTargets.RemoveAllVacuousTargets();
                                         }
-                                    } else if (!keybindPushing && PushTargets.VacuousCount > 0) {
-                                        PushTargets.RemoveAllVacuousTargets();
                                     }
                                 }
-                                //}
                                 break;
                             case ControlMode.Bubble:
                                 // If in bubble mode, LMB and RMB will open/close the bubble and Q/E/MB4/MB5 toggle it

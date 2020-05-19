@@ -191,6 +191,11 @@ public class TextCodes : MonoBehaviour {
             return LightBlue("Mark");
         }
     }
+    public static string Marking_pulling {
+        get {
+            return LightBlue("Marking");
+        }
+    }
     public static string Marked_metal{
         get {
             return LightBlue("Marked metal");
@@ -219,6 +224,16 @@ public class TextCodes : MonoBehaviour {
     public static string ZincTime {
         get {
             return ZincBlue("Zinc Time");
+        }
+    }
+    public static string ControlWheel {
+        get {
+            return ZincBlue("Control Wheel");
+        }
+    }
+    public static string AreaMode {
+        get {
+            return Blue("Area Mode");
         }
     }
     public static string BurnPercentage {
@@ -398,7 +413,7 @@ public class TextCodes : MonoBehaviour {
     }
     public static string R {
         get {
-            return Gray("R");
+            return ZincBlue("R");
         }
     }
     public static string WASD {
@@ -503,6 +518,14 @@ public class TextCodes : MonoBehaviour {
                 return s_Click_in_ + "the " + ZincBlue("left joystick");
             else
                 return s_Hold_ + Tab;
+        }
+    }
+    public static string KeyControlWheel {
+        get {
+            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+                return s_Click_in_ + "the " + ZincBlue("left joystick");
+            else
+                return s_Hold_ + R;
         }
     }
     public static string _KeySelect {
@@ -654,6 +677,14 @@ public class TextCodes : MonoBehaviour {
                 return Y;
             else
                 return "(" + R + " or " + LeftAlt + ")";
+        }
+    }
+    public static string KeyMultiMark {
+        get {
+            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+                return Y;
+            else
+                return Shift;
         }
     }
     public static string KeyPushPullStrength {
