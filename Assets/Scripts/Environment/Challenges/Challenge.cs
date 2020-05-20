@@ -7,14 +7,17 @@ public class Challenge : MonoBehaviour {
     [SerializeField]
     ChallengesManager manager = null;
     [SerializeField]
-    SpikeSpline spikeSpline = null;
+    protected SpikeSpline spikeSpline = null;
     [SerializeField]
-    GameObject spike = null;
+    protected GameObject spike = null;
+    
+    public bool Completed { get; private set; }
 
     protected virtual void StartChallenge() {
 
     }
     protected virtual void CompleteChallenge() {
+        Completed = true;
         manager.CompleteChallege(spikeSpline, spike);
     }
 

@@ -188,6 +188,16 @@ public class HUD : MonoBehaviour {
         return (low * tenPower).ToString();
     }
 
+    // Formats a time string, where input is a float in seconds and returns:
+    // MM:SS:ms
+    // minutes:seconds:milliseconds, where seconds and milliseconds are 2 digits long
+    public static string TimeMMSSMS(double input) {
+        int minutes = (int)input / 60;
+        int seconds = (int)input % 60;
+        int milliseconds = (int)((input - (int)input) * 100);
+        return (minutes < 10 ? "0" : "") + minutes + (seconds < 10 ? ":0" : ":") + seconds + ':' + milliseconds;
+    }
+
     // Fade HUD in/out with Control Wheel
     public static void ShowControlWheel() {
         anim.SetBool("ControlWheelVisible", true);

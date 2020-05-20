@@ -15,10 +15,16 @@ public class ChallengesManager : MonoBehaviour {
 
         float progress = 0;
         // Spike starts at where it is now
-        spline.SetInitialPoint(spike.transform.position, spike.transform.forward);
+        Vector3[] points = new Vector3[4];
+        points[0] = spike.transform.position;
+        points[1] = spike.transform.position + spike.transform.forward;
+        Vector3 position = harmonyTarget.GetNextSpikePosition();
+        points[3] = position;
+        points[2] = harmonyTarget.GetNextSpikeAngle();
+        spline.SetPoints(points);
         // Spike ends at the harmony target's next spike position (needs to be constantly updated, as it moves in world space)
-        while(progress < 1) {
-            Vector3 position = harmonyTarget.GetNextSpikePosition();
+        while (progress < 1) {
+            position = harmonyTarget.GetNextSpikePosition();
             spline.SetControlPoint(3, position);
             spline.SetControlPoint(2, harmonyTarget.GetNextSpikeAngle());
             spline.FollowCurve(spike.transform, progress, true);

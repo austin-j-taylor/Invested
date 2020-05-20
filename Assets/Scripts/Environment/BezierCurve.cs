@@ -14,7 +14,7 @@ public enum BezierControlPointMode {
 public class BezierCurve : MonoBehaviour {
 
     [SerializeField]
-    private BezierControlPointMode[] modes;
+    public BezierControlPointMode[] modes;
     [SerializeField]
     public Vector3[] points;
 
@@ -200,6 +200,25 @@ public class BezierCurve : MonoBehaviour {
             }
         }
         EnforceMode(index);
+    }
+
+    // Sets the points in the vector without any modification, overriding the mode, etc.
+    // This assumes you know what you're doing.
+    // Remember: for every 4 points:
+    // point 0 = position of start
+    // point 1 = latter tangent of start
+    // point 2 = former tangent of end
+    // point 3 = position of end
+    // This loops, so point 4 is the latter tangent of end, etc...
+    public void SetPoints(Vector3[] newPoints) {
+        points = new Vector3[newPoints.Length];
+        for(int i = 0; i < newPoints.Length; i++) {
+            points[i] = newPoints[i];
+        }
+        Array.Resize(ref modes, newPoints.Length / 3+ 1);
+        for (int i = 0; i < modes.Length; i++) {
+            modes[i] = BezierControlPointMode.Free;
+        }
     }
 
     private void EnforceMode(int index) {
