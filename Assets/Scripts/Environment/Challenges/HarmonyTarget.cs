@@ -16,10 +16,9 @@ public class HarmonyTarget : MonoBehaviour {
     private bool playerHasEntered;
     private bool controllingPlayer;
     private Quaternion zeroRotation;
-    private float numSpikes;
+    private int numSpikes;
 
     private CinemachineVirtualCamera vcam;
-    private NonPlayerPushPullController allomancer;
     private Rigidbody rb;
     private Animator anim;
     private Renderer[] symbolRenderers;
@@ -36,10 +35,6 @@ public class HarmonyTarget : MonoBehaviour {
     private void Start() {
         vcam = GetComponentInChildren<CinemachineVirtualCamera>();
         vcam.enabled = false;
-        allomancer = GetComponentInChildren<NonPlayerPushPullController>();
-        allomancer.Strength = 1f;
-        allomancer.PullTargets.MaxRange = distanceThresholdPulling;
-        allomancer.IronBurnPercentageTarget = 1;
 
         rb = GetComponentInChildren<Rigidbody>(); 
         anim = GetComponent<Animator>();
@@ -80,14 +75,6 @@ public class HarmonyTarget : MonoBehaviour {
 
             transform.LookAt(CameraController.ActiveCamera.transform.position);
 
-            // If player is nearby, Pull on them
-
-            if (distancetoPlayer.magnitude < distanceThresholdPulling) {
-                if(!allomancer.HasPullTarget) {
-                    allomancer.AddPullTarget(Player.PlayerMagnetic);
-                }
-                allomancer.IronPulling = true;
-            }
         } else {
             transform.rotation = Quaternion.Slerp(transform.rotation, zeroRotation, Time.deltaTime * lerpConstant);
         }
@@ -121,13 +108,17 @@ public class HarmonyTarget : MonoBehaviour {
         Player.PlayerIronSteel.StopBurning();
         harmonySphere.GetComponent<Collider>().enabled = false;
         anim.SetTrigger("PlayerHasEntered");
-        HUD.DisableHUD();
+        if(numSpikes >= 3)
+            HUD.DisableHUD();
 
         //Player.PlayerIronSteel.StopBurning();
         Player.PlayerInstance.GetComponent<Rigidbody>().useGravity = false;
         CameraController.SetCinemachineCamera(vcam);
     }
-
+    private void InsufficentSpikesMessage() {
+        int spikesLeft = 3 - numSpikes;
+        HUD.MessageOverlayCinematic.FadeIn(spikesLeft + " Spike" + (spikesLeft == 1 ? " remains" : "s remain"));
+    }
     private void EndAnimation() {
         Player.PlayerInstance.SetFrameMaterial(GameManager.Material_MARLmetal_lit);
         //Player.PlayerInstance.GetComponentInChildren<MeshRenderer>().material = harmonySphere.GetComponent<Renderer>().material;
@@ -137,7 +128,20 @@ public class HarmonyTarget : MonoBehaviour {
         // Open menus
         LevelCompletedScreen.OpenScreen(this);
     }
-
+    private void EndAnimationInsufficient() {
+        playerHasEntered = false;
+        controllingPlayer = false;
+        Player.CanControl = true;
+        HUD.EnableHUD();
+        Player.PlayerInstance.GetComponent<Rigidbody>().useGravity = SettingsMenu.settingsData.playerGravity == 1;
+        CameraController.DisableCinemachineCamera(vcam);
+        HUD.MessageOverlayCinematic.FadeOut();
+        StartCoroutine(EnableColliderAfterDelay());
+    }
+    private IEnumerator EnableColliderAfterDelay() {
+        yield return new WaitForSeconds(3);
+        harmonySphere.GetComponent<Collider>().enabled = true;
+    }
     private class HarmonySphere : MonoBehaviour {
         private void OnTriggerEnter(Collider other) {
             if (Player.IsPlayerTrigger(other)) {
@@ -159,7 +163,6 @@ public class HarmonyTarget : MonoBehaviour {
     }
 
     public void AddSpike() {
-        Debug.Log("Spike added");
         if (numSpikes == 0) {
             spikeLeft.GetComponent<Renderer>().enabled = true;
         } else if (numSpikes == 1) {
@@ -168,7 +171,9 @@ public class HarmonyTarget : MonoBehaviour {
             spikeCenter.GetComponent<Renderer>().enabled = true;
         }
         numSpikes++;
+        anim.SetInteger("SpikeCount", numSpikes);
     }
+
     [SerializeField]
     private Vector3 positionLeft = new Vector3(0, 0, 2.39419f);
     public Vector3 GetNextSpikePosition() {

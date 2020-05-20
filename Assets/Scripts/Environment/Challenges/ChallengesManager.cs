@@ -22,7 +22,7 @@ public class ChallengesManager : MonoBehaviour {
             spline.SetControlPoint(3, position);
             spline.SetControlPoint(2, harmonyTarget.GetNextSpikeAngle());
             spline.FollowCurve(spike.transform, progress, true);
-            progress += Time.deltaTime / 3;
+            progress += Time.deltaTime / spline.AnimationTime;
             yield return null;
         }
         spike.SetActive(false);

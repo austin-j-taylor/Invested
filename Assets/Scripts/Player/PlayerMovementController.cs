@@ -348,7 +348,10 @@ public class PlayerMovementController : AllomanticPewter {
             }
         } else {
             rb.drag = SettingsMenu.settingsData.playerAirResistance * dragNoControl;
-            lastWasRollingOnGround = false;
+            if (lastWasRollingOnGround) {
+                Player.PlayerAudioController.Stop_rolling();
+                lastWasRollingOnGround = false;
+            }
         }
 
     }

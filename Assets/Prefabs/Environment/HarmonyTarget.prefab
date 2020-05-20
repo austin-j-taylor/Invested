@@ -103,8 +103,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2089367658}
-  m_LocalRotation: {x: -0.000000037252903, y: 1, z: -0.000000014901161, w: 0.00000008940697}
-  m_LocalPosition: {x: -1.1368684e-13, y: 1.3638003, z: 6.0000024}
+  m_LocalRotation: {x: -0, y: 1, z: -0, w: 0.00000008940697}
+  m_LocalPosition: {x: -1.1368684e-13, y: 1.3638, z: 6.000002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1603387748}
@@ -301,7 +301,6 @@ GameObject:
   - component: {fileID: 135173279549497598}
   - component: {fileID: 108113844945015804}
   - component: {fileID: 114235657525651034}
-  - component: {fileID: 1544155750}
   m_Layer: 11
   m_Name: HarmonySphere
   m_TagString: Untagged
@@ -428,21 +427,6 @@ MonoBehaviour:
   netMass: 0
   magneticMass: 1
   calculateCOMFromColliders: 0
---- !u!114 &1544155750
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1592751506933612}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c2788236ad887d40a34d1c55803b2b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rb: {fileID: 0}
-  pullLines: []
-  pushLines: []
 --- !u!1 &1797778727208666
 GameObject:
   m_ObjectHideFlags: 0
@@ -574,6 +558,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fe57380dd8cfe842aaacfb94d629e7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  positionLeft: {x: 0, y: 0, z: 2.39419}
 --- !u!114 &2000816013
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -586,6 +571,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a89970c8eccea34f9a3388b10f42d5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  harmonyTarget: {fileID: 0}
 --- !u!1 &1881854758097500
 GameObject:
   m_ObjectHideFlags: 0
