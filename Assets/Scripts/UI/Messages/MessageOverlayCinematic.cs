@@ -25,6 +25,10 @@ public class MessageOverlayCinematic : MonoBehaviour {
         messageText.text = string.Empty;
     }
 
+    public void SetText(string text) {
+        messageText.text = text;
+    }
+
     // Fades newText into messageText on the screen.
     public void FadeIn(string newText) {
         StopAllCoroutines();

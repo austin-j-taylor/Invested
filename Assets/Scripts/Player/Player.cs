@@ -221,6 +221,17 @@ public class Player : PewterEntity {
         }
     }
 
+    // Special collisions for player
+    protected override void OnCollisionEnter(Collision collision) {
+        base.OnCollisionEnter(collision);
+        // During challenges, check for The Floor Is Lava
+        if(GameManager.State == GameManager.GameState.Challenge) {
+            if(collision.transform.CompareTag("ChallengeFailure")) {
+                ChallengesManager.FailCurrentChallenge();
+            }
+        }
+    }
+
     public void SetFrameMaterial(Material mat) {
         playerFrame.GetComponent<Renderer>().material = mat;
     }

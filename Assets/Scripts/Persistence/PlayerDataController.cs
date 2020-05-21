@@ -9,7 +9,7 @@ public class PlayerDataController : MonoBehaviour {
 
     // Data (must be public for JSON)
     [HideInInspector]
-    public double timeTrial_TestingGrounds, timeTrial_Luthadel;
+    public double timeTrial_TestingGrounds, reachGoal_TestingGrounds, timeTrial_Luthadel;
     
     private static PlayerDataController instance;
 
@@ -55,6 +55,9 @@ public class PlayerDataController : MonoBehaviour {
                 case "timeTrial_TestingGrounds": 
                     instance.timeTrial_TestingGrounds = time;
                     break;
+                case "reachGoal_TestingGrounds": 
+                    instance.reachGoal_TestingGrounds = time;
+                    break;
                 case "timeTrial_Luthadel": 
                     instance.timeTrial_TestingGrounds = time;
                     break;
@@ -69,6 +72,8 @@ public class PlayerDataController : MonoBehaviour {
         switch(name) {
             case "timeTrial_TestingGrounds":
                 return instance.timeTrial_TestingGrounds;
+            case "reachGoal_TestingGrounds":
+                return instance.reachGoal_TestingGrounds;
             case "timeTrial_Luthadel":
                 return instance.timeTrial_Luthadel;
             default:

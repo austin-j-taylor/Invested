@@ -24,45 +24,19 @@ public class HUD : MonoBehaviour {
 
     private float deltaTimeFPS = 0.0f;
 
-    public static GameObject HudGameObject {
-        get; private set;
-    }
-    public static CrosshairController Crosshair {
-        get; private set;
-    }
-    public static BurnPercentageMeter BurnPercentageMeter {
-        get; private set;
-    }
-    public static MetalReserveMeters MetalReserveMeters {
-        get; private set;
-    }
-    public static ZincMeterController ZincMeterController {
-        get; private set;
-    }
-    public static ThrowingAmmoMeter ThrowingAmmoMeter {
-        get; private set;
-    }
-    public static TargetOverlayController TargetOverlayController {
-        get; private set;
-    }
-    public static ControlWheelController ControlWheelController {
-        get; private set;
-    }
-    public static MessageOverlayDescriptive MessageOverlayDescriptive {
-        get; private set;
-    }
-    public static MessageOverlayCinematic MessageOverlayCinematic {
-        get; private set;
-    }
-    public static HelpOverlayController HelpOverlayController {
-        get; private set;
-    }
-    public static ConsoleController ConsoleController {
-        get; private set;
-    }
-    public static ConversationHUDController ConversationHUDController {
-        get; private set;
-    }
+    public static GameObject HudGameObject { get; private set; }
+    public static CrosshairController Crosshair { get; private set; }
+    public static BurnPercentageMeter BurnPercentageMeter { get; private set; }
+    public static MetalReserveMeters MetalReserveMeters { get; private set; }
+    public static ZincMeterController ZincMeterController { get; private set; }
+    public static ThrowingAmmoMeter ThrowingAmmoMeter { get; private set; }
+    public static TargetOverlayController TargetOverlayController { get; private set; }
+    public static ControlWheelController ControlWheelController { get; private set; }
+    public static MessageOverlayDescriptive MessageOverlayDescriptive { get; private set; }
+    public static MessageOverlayCinematic MessageOverlayCinematic { get; private set; }
+    public static HelpOverlayController HelpOverlayController { get; private set; }
+    public static ConsoleController ConsoleController { get; private set; }
+    public static ConversationHUDController ConversationHUDController { get; private set; }
 
     void Awake() {
         HudGameObject = gameObject;
@@ -195,7 +169,7 @@ public class HUD : MonoBehaviour {
         int minutes = (int)input / 60;
         int seconds = (int)input % 60;
         int milliseconds = (int)((input - (int)input) * 100);
-        return (minutes < 10 ? "0" : "") + minutes + (seconds < 10 ? ":0" : ":") + seconds + ':' + milliseconds;
+        return (minutes < 10 ? "0" : "") + minutes + (seconds < 10 ? ":0" : ":") + seconds + (milliseconds < 10 ? ":0" : ":") + milliseconds;
     }
 
     // Fade HUD in/out with Control Wheel

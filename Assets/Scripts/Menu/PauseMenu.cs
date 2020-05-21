@@ -127,7 +127,7 @@ public class PauseMenu : MonoBehaviour {
                 SceneSelectMenu.ReloadScene();
                 break;
             case GameManager.GameState.Challenge:
-                ChallengeMenu.RestartCurrentChallenge();
+                ChallengesManager.RestartCurrentChallenge();
                 UnPause();
                 break;
         }
@@ -140,7 +140,7 @@ public class PauseMenu : MonoBehaviour {
                 SceneSelectMenu.LoadScene(SceneSelectMenu.sceneTitleScreen);
                 break;
             case GameManager.GameState.Challenge:
-                ChallengeMenu.LeaveCurrentChallenge();
+                ChallengesManager.LeaveCurrentChallenge();
                 UnPause();
                 break;
         }

@@ -7,76 +7,118 @@ public class Challenge : MonoBehaviour {
 
     private CinemachineVirtualCamera vcam;
 
-    public string challengeName = "";
+    [SerializeField]
+    protected string trialDataName = "";
+    [SerializeField]
+    private string challengeName = "";
     [TextArea]
     public string challengeDescription = "";
     [SerializeField]
-    ChallengesManager manager = null;
+    protected GameObject[] failureObjects = null;
+    private string[] failureObjectTags;
 
+    protected string challengeType = "";
+
+    private ChallengesManager manager;
+    private Transform challengeObjects; // objects that will only be active for this challenge
     private Collider introduceTrigger;
     protected SpikeSpline spikeSpline;
     protected GameObject spike;
     private Transform startPosition;
-    private Vector3 spikeStartPosition;
     private Quaternion spikeStartRotation;
     
     public bool Completed { get; private set; }
 
     protected virtual void Start() {
+        manager = GetComponentInParent<ChallengesManager>();
+        challengeObjects = transform.Find("ChallengeObjects");
         introduceTrigger = transform.Find("IntroductionTrigger").GetComponent<Collider>();
         introduceTrigger.gameObject.AddComponent<ChallengeTrigger>().parent = this;
         spike = transform.Find("Spike").gameObject;
         spikeSpline = transform.Find("SpikeSpline").GetComponent<SpikeSpline>();
         startPosition = transform.Find("StartPosition");
-        spikeStartPosition = spike.transform.position;
         spikeStartRotation = spike.transform.rotation;
         vcam = GetComponentInChildren<CinemachineVirtualCamera>();
         vcam.enabled = false;
+
+        challengeObjects.gameObject.SetActive(false);
     }
 
     protected virtual void IntroduceChallenge() {
         introduceTrigger.gameObject.SetActive(false);
         CameraController.UsingCinemachine = true;
         vcam.enabled = true;
-        ChallengeMenu.Open(this);
+        manager.IntroduceChallenge(this);
+
+        challengeObjects.gameObject.SetActive(true);
+        // Set the tags for all objects that cause failure when touched
+        if (failureObjects != null) {
+            failureObjectTags = new string[failureObjects.Length];
+            for (int i = 0; i < failureObjects.Length; i++) {
+                if (failureObjects[i] == null) {
+                    Debug.LogError("Error: Failure Object is null", gameObject);
+                }
+                failureObjectTags[i] = failureObjects[i].tag;
+                failureObjects[i].tag = "ChallengeFailure";
+            }
+        }
     }
     public virtual void LeaveChallenge() {
-        StopAllCoroutines();
-        HUD.MessageOverlayCinematic.Clear();
-        Player.CanControl = true;
+        CleanupChallenge();
 
-        CameraController.UsingCinemachine = false;
-        vcam.enabled = false;
-        spike.transform.position = spikeStartPosition;
+        spike.transform.position = introduceTrigger.transform.position + new Vector3(0, 2.5f, 0);
         spike.transform.rotation = spikeStartRotation;
-        GameManager.State = GameManager.GameState.Standard;
         StartCoroutine(EnableColliderAfterDelay());
     }
     public virtual void StartChallenge() {
         StopAllCoroutines();
         HUD.MessageOverlayCinematic.Clear();
 
-        CameraController.UsingCinemachine = false;
-        vcam.enabled = false;
-        spike.transform.position = spikeStartPosition;
+        spike.transform.position = startPosition.transform.position + new Vector3(0, 2.5f, 0);
         spike.transform.rotation = spikeStartRotation;
-        GameManager.State = GameManager.GameState.Challenge;
+        GameManager.SetState(GameManager.GameState.Challenge);
         // Move player to start and set camera rotation
         Player.PlayerPewter.Clear();
         Player.PlayerInstance.transform.position = startPosition.position;
         CameraController.Clear();
         CameraController.SetRotation(startPosition.eulerAngles);
 
+        CameraController.UsingCinemachine = false;
+        vcam.enabled = false;
+
+
     }
+    public virtual void FailChallenge() { }
     protected virtual void CompleteChallenge() {
         Completed = true;
+        CleanupChallenge();
         manager.CompleteChallege(spikeSpline, spike);
-        GameManager.State = GameManager.GameState.Standard;
     }
 
     private IEnumerator EnableColliderAfterDelay() {
         yield return new WaitForSeconds(2);
         introduceTrigger.gameObject.SetActive(true);
+    }
+
+    public string GetFullName() {
+        return "Challenge - " + challengeType + challengeName;
+    }
+
+    private void CleanupChallenge() {
+        StopAllCoroutines();
+        HUD.MessageOverlayCinematic.Clear();
+        Player.CanControl = true;
+        CameraController.UsingCinemachine = false;
+        vcam.enabled = false;
+        GameManager.SetState(GameManager.GameState.Standard);
+
+        challengeObjects.gameObject.SetActive(false);
+        // Reset failure tags
+        if (failureObjects != null) {
+            for (int i = 0; i < failureObjects.Length; i++) {
+                failureObjects[i].tag = failureObjectTags[i];
+            }
+        }
     }
 
     protected class ChallengeTrigger : MonoBehaviour {

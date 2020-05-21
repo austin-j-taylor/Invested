@@ -37,7 +37,8 @@ public class GameManager : MonoBehaviour {
     public static int Layer_BlueLinesVisible { get; private set; }
 
     public enum GameState { Standard, Challenge};
-    public static GameState State { get; set; }
+    public static GameState State { get; private set; }
+
 
     void Awake() {
         AudioManager = transform.Find("AudioManager").GetComponent<AudioManager>();
@@ -99,5 +100,20 @@ public class GameManager : MonoBehaviour {
             }
         }
         MagneticsInScene.Remove(magnetic);
+    }
+
+    // Changes the overall game state
+    public static void SetState(GameState newState) {
+        switch (State) {
+            case GameState.Standard:
+
+                State = newState;
+                break;
+            case GameState.Challenge:
+
+                State = newState;
+                break;
+
+        }
     }
 }
