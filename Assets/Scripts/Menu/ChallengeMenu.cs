@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class ChallengeMenu : MonoBehaviour {
 
-    private Text challengeText;
+    private Text challengeText, descriptionText;
     private Button startButton, exitButton;
     private Challenge currentChallenge;
 
@@ -18,6 +18,7 @@ public class ChallengeMenu : MonoBehaviour {
 
     private void Start() {
         challengeText = transform.Find("ChallengeText").GetComponent<Text>();
+        descriptionText = challengeText.transform.Find("Description").GetComponent<Text>();
         startButton = transform.Find("Header/StartButton").GetComponent<Button>();
         exitButton = transform.Find("Header/ExitButton").GetComponent<Button>();
         startButton.onClick.AddListener(OnClickStart);
@@ -38,6 +39,7 @@ public class ChallengeMenu : MonoBehaviour {
         MainMenu.FocusOnButton(instance.startButton);
         instance.currentChallenge = challenge;
         instance.challengeText.text = "Challenge - " + challenge.challengeName;
+        instance.descriptionText.text = challenge.challengeDescription;
 
     }
     public static void Close() {

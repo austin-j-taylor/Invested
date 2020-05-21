@@ -12,6 +12,7 @@ public class Challenge_TimeTrial : Challenge {
     protected override void Start() {
         base.Start();
         challengeName = "Time Trial: " + challengeName;
+        challengeDescription += "\n\nCurrent record: " + HUD.TimeMMSSMS(PlayerDataController.GetTime(trialName));
 
         rings = transform.Find("Rings").GetComponentsInChildren<TimeTrialRing>();
         HideAllRings();
@@ -75,14 +76,21 @@ public class Challenge_TimeTrial : Challenge {
             }
             ringIndex++;
         } while (ringIndex < rings.Length);
-
-        Debug.Log("Time: " + HUD.TimeMMSSMS(raceTime));
-        if (raceTime < recordTime) {
-            PlayerDataController.SetTimeTrial(trialName, raceTime);
-            Debug.Log("New record! " + HUD.TimeMMSSMS(PlayerDataController.GetTime(trialName)) + " replaces " + HUD.TimeMMSSMS(recordTime));
-        }
+        StartCoroutine(DisplayResults(raceTime, recordTime));
 
         CompleteChallenge();
+    }
+
+    private IEnumerator DisplayResults(double raceTime, double recordTime) {
+        Debug.Log("Time: " + HUD.TimeMMSSMS(raceTime));
+        if (raceTime < recordTime) {
+            HUD.MessageOverlayCinematic.FadeIn("Time: " + HUD.TimeMMSSMS(raceTime) + TextCodes.Blue("(new record!)"));
+            PlayerDataController.SetTimeTrial(trialName, raceTime);
+        } else {
+            HUD.MessageOverlayCinematic.FadeIn("Time: " + HUD.TimeMMSSMS(raceTime));
+        }
+        yield return new WaitForSeconds(5);
+        HUD.MessageOverlayCinematic.FadeOut();
     }
 
     // Makes the spike follow the path of the rings

@@ -8,6 +8,8 @@ public class Challenge : MonoBehaviour {
     private CinemachineVirtualCamera vcam;
 
     public string challengeName = "";
+    [TextArea]
+    public string challengeDescription = "";
     [SerializeField]
     ChallengesManager manager = null;
 
