@@ -8,11 +8,36 @@ public class TimeTrialRing : MonoBehaviour
     public Challenge_TimeTrial trial; // set by the Challenge_TimeTrial
     public bool Passed { get; private set; }
 
+    private Renderer rend;
+    private Collider col;
+
+    private void Awake() {
+        rend = GetComponent<Renderer>();
+        col = GetComponent<Collider>();
+    }
+
+    public void Clear() {
+        Passed = false;
+        rend.enabled = true;
+    }
+
+    public void Hide() {
+        Color color = rend.material.color;
+        color.a = 0;
+        rend.material.color = color;
+        col.enabled = false;
+    }
+    public void Show() {
+        Color color = rend.material.color;
+        color.a = 1;
+        rend.material.color = color;
+    }
+
     private void OnTriggerEnter(Collider other) {
         if(Player.IsPlayerTrigger(other)) {
             Passed = true;
-            GetComponent<MeshRenderer>().enabled = false;
-            GetComponent<Collider>().enabled = false;
+            rend.enabled = false;
+            col.enabled = false;
             GetComponent<AudioSource>().Play();
         }
     }

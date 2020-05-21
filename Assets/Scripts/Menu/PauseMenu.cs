@@ -16,6 +16,7 @@ public class PauseMenu : MonoBehaviour {
     private Button settingsButton;
     private Button resetButton;
     private Button quitButton;
+    private Text resetText, quitText;
 
     private static PauseMenu instance;
 
@@ -32,6 +33,8 @@ public class PauseMenu : MonoBehaviour {
         settingsButton = buttons[1];
         resetButton = buttons[2];
         quitButton = buttons[3];
+        resetText = resetButton.GetComponentInChildren<Text>();
+        quitText = quitButton.GetComponentInChildren<Text>();
 
         unpauseButton.onClick.AddListener(ClickUnpause);
         settingsButton.onClick.AddListener(ClickSettings);
@@ -65,7 +68,6 @@ public class PauseMenu : MonoBehaviour {
 
     public static void Pause() {
         CameraController.UnlockCamera();
-        GamepadController.SetRumble(0, 0);
         Time.timeScale = 0f;
         GameManager.AudioManager.SetMasterPitch(0);
         HUD.DisableHUD();
@@ -76,6 +78,19 @@ public class PauseMenu : MonoBehaviour {
         instance.gameObject.SetActive(true);
         Open();
         IsPaused = true;
+
+        switch (GameManager.State) {
+            case GameManager.GameState.Standard:
+                instance.resetText.text = "Reset Level";
+                instance.quitText.text = "Quit Level";
+                instance.settingsButton.gameObject.SetActive(true);
+                break;
+            case GameManager.GameState.Challenge:
+                instance.resetText.text = "Restart Challenge";
+                instance.quitText.text = "Exit Challenge";
+                instance.settingsButton.gameObject.SetActive(false);
+                break;
+        }
     }
 
     public static void UnPause() {
@@ -106,11 +121,28 @@ public class PauseMenu : MonoBehaviour {
     }
 
     private void ClickReset() {
-        SceneSelectMenu.ReloadScene();
+
+        switch (GameManager.State) {
+            case GameManager.GameState.Standard:
+                SceneSelectMenu.ReloadScene();
+                break;
+            case GameManager.GameState.Challenge:
+                ChallengeMenu.RestartCurrentChallenge();
+                UnPause();
+                break;
+        }
     }
 
     private void ClickQuit() {
-        CameraController.UnlockCamera();
-        SceneSelectMenu.LoadScene(SceneSelectMenu.sceneTitleScreen);
+        switch (GameManager.State) {
+            case GameManager.GameState.Standard:
+                CameraController.UnlockCamera();
+                SceneSelectMenu.LoadScene(SceneSelectMenu.sceneTitleScreen);
+                break;
+            case GameManager.GameState.Challenge:
+                ChallengeMenu.LeaveCurrentChallenge();
+                UnPause();
+                break;
+        }
     }
 }

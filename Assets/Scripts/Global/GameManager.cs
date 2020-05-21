@@ -36,6 +36,9 @@ public class GameManager : MonoBehaviour {
     public static int Layer_BlueLines { get; private set; }
     public static int Layer_BlueLinesVisible { get; private set; }
 
+    public enum GameState { Standard, Challenge};
+    public static GameState State { get; set; }
+
     void Awake() {
         AudioManager = transform.Find("AudioManager").GetComponent<AudioManager>();
         ConversationManager = GetComponent<ConversationManager>();
@@ -54,6 +57,9 @@ public class GameManager : MonoBehaviour {
         Layer_IgnoreCamera = ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ignore Camera")) | (1 << LayerMask.NameToLayer("Ignore Player")) | (1 << LayerMask.NameToLayer("Coin")) | (1 << LayerMask.NameToLayer("Boid")));
         Layer_BlueLines = LayerMask.NameToLayer("Blue Lines");
         Layer_BlueLinesVisible = LayerMask.NameToLayer("Blue Lines Visible");
+
+        State = GameState.Standard;
+
         SceneManager.sceneUnloaded += Clear;
     }
 

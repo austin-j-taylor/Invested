@@ -1,18 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+// Just touching the trigger completes the challenge.
 public class Challenge_Touch : Challenge {
 
-    private Collider sphere;
-
-    private void Start() {
-        sphere = GetComponentInChildren<Collider>();
-        sphere.gameObject.AddComponent<ChallengeTrigger>().parent = this;
-        
-    }
-    protected override void StartChallenge() {
-        base.StartChallenge();
-        sphere.gameObject.SetActive(false);
+    protected override void IntroduceChallenge() {
+        base.IntroduceChallenge();
         CompleteChallenge();
     }
 }

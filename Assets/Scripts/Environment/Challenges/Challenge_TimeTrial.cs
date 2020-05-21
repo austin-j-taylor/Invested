@@ -7,24 +7,85 @@ public class Challenge_TimeTrial : Challenge {
     [SerializeField]
     private string trialName = "";
 
-    private Collider sphere;
     private TimeTrialRing[] rings;
 
-    private void Start() {
-        sphere = GetComponentInChildren<Collider>();
-        sphere.gameObject.AddComponent<ChallengeTrigger>().parent = this;
+    protected override void Start() {
+        base.Start();
+        challengeName = "Time Trial: " + challengeName;
+
         rings = transform.Find("Rings").GetComponentsInChildren<TimeTrialRing>();
-        for(int i = 0; i < rings.Length; i++) {
-            rings[i].gameObject.SetActive(false);
-        }
+        HideAllRings();
     }
-    protected override void StartChallenge() {
+
+    protected override void IntroduceChallenge() {
+        base.IntroduceChallenge();
+        // Make all rings visible
+        ShowAllRings();
+    }
+    public override void LeaveChallenge() {
+        base.LeaveChallenge();
+        HideAllRings();
+    }
+    public override void StartChallenge() {
         base.StartChallenge();
-        sphere.gameObject.SetActive(false);
+        HideAllRings();
+        ClearAllRings();
+        // Set opacity of next few rings
+        SetRingOpacity(0);
+        StartCoroutine(Countdown());
+    }
+
+    private IEnumerator Countdown() {
+        CameraController.UsingCinemachine = true;
+        Player.CanControl = false;
+
         double recordTime = PlayerDataController.GetTime(trialName);
+        HUD.MessageOverlayCinematic.FadeIn("Record: " + HUD.TimeMMSSMS(recordTime));
+        yield return new WaitForSeconds(3);
+
+        HUD.MessageOverlayCinematic.FadeIn("3");
+        yield return new WaitForSeconds(1);
+        HUD.MessageOverlayCinematic.FadeIn("2");
+        yield return new WaitForSeconds(1);
+        HUD.MessageOverlayCinematic.FadeIn("1");
+        yield return new WaitForSeconds(1);
+        HUD.MessageOverlayCinematic.FadeIn("START");
+
         StartCoroutine(TimeTrial(recordTime));
         StartCoroutine(SpikeTracer(recordTime));
-    } 
+
+        yield return new WaitForSeconds(2);
+        HUD.MessageOverlayCinematic.FadeOut();
+    }
+    private IEnumerator TimeTrial(double recordTime) {
+
+        Player.CanControl = true;
+        CameraController.UsingCinemachine = false;
+
+        int ringIndex = 0;
+        double raceTime = 0;
+        Debug.Log("Starting challenge with record: " + HUD.TimeMMSSMS(recordTime));
+        do {
+            // Set opacity of next few rings
+            SetRingOpacity(ringIndex);
+            rings[ringIndex].GetComponent<Collider>().enabled = true;
+            while (!rings[ringIndex].Passed) {
+                raceTime += Time.deltaTime;
+                yield return null;
+            }
+            ringIndex++;
+        } while (ringIndex < rings.Length);
+
+        Debug.Log("Time: " + HUD.TimeMMSSMS(raceTime));
+        if (raceTime < recordTime) {
+            PlayerDataController.SetTimeTrial(trialName, raceTime);
+            Debug.Log("New record! " + HUD.TimeMMSSMS(PlayerDataController.GetTime(trialName)) + " replaces " + HUD.TimeMMSSMS(recordTime));
+        }
+
+        CompleteChallenge();
+    }
+
+    // Makes the spike follow the path of the rings
     private IEnumerator SpikeTracer(double recordTime) {
 
         double progress = 0;
@@ -53,27 +114,27 @@ public class Challenge_TimeTrial : Challenge {
             yield return null;
         }
     }
-    private IEnumerator TimeTrial(double recordTime) {
-
-        int ringIndex = 0;
-        double raceTime = 0;
-        Debug.Log("Starting challenge with record: " + HUD.TimeMMSSMS(recordTime));
-        do {
-            rings[ringIndex].gameObject.SetActive(true);
-            while (!rings[ringIndex].Passed) {
-                raceTime += Time.deltaTime;
-                yield return null;
-            }
-            ringIndex++;
-        } while (ringIndex < rings.Length);
-        
-        Debug.Log("Time: " + HUD.TimeMMSSMS(raceTime));
-        if(raceTime < recordTime) {
-            PlayerDataController.SetTimeTrial(trialName, raceTime);
-            Debug.Log("New record! " + HUD.TimeMMSSMS(PlayerDataController.GetTime(trialName)) + " replaces " + HUD.TimeMMSSMS(recordTime));
+    private void ClearAllRings() {
+        for (int i = 0; i < rings.Length; i++) {
+            rings[i].Clear();
         }
-
-        CompleteChallenge();
     }
-
+    private void HideAllRings() {
+        for (int i = 0; i < rings.Length; i++) {
+            rings[i].Hide();
+        }
+    }
+    private void ShowAllRings() {
+        for (int i = 0; i < rings.Length; i++) {
+            rings[i].Show();
+        }
+    }
+    private void SetRingOpacity(int ringIndex) {
+        for (int i = ringIndex; i < ringIndex + 4 && i < rings.Length; i++) {
+            Renderer rend = rings[i].GetComponent<Renderer>();
+            Color col = rend.material.color;
+            col.a = 1 - (i - ringIndex) / 3f;
+            rend.material.color = col;
+        }
+    }
 }

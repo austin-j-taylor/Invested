@@ -67,6 +67,10 @@ public class GamepadController : MonoBehaviour {
 #if UNITY_STANDALONE_WIN
         // Update is called once per frame
         void Update() {
+            if(Time.timeScale == 0f) {
+                // Make sure we don't vibrate when paused
+                SetRumble(0, 0);
+            }
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
                 if(SettingsMenu.settingsData.gamepadRumble == 1) {
                     if(updateRumble && !shaking) {
