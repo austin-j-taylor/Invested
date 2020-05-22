@@ -10,7 +10,7 @@ public class MagneticDense : Magnetic
     [SerializeField]
     private float density = 0;
 
-    protected new void Awake() {
+    protected override void Awake() {
 
         if (netMass == 0) {
             Rb = GetComponentInParent<Rigidbody>();

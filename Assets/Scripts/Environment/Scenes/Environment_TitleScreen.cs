@@ -16,6 +16,7 @@ public class Environment_TitleScreen : EnvironmentCinematic {
         HUD.DisableHUD();
         Magnetic[] pulls = transform.Find("Magnetics").GetComponentsInChildren<Magnetic>();
         Magnetic[] pushes = transform.Find("MagneticsPush").GetComponentsInChildren<Magnetic>();
+        Player.PlayerIronSteel.StartBurning();
         //Player.PlayerIronSteel.SizeOfTargetArrays = 5;
         //foreach (Magnetic m in pulls) {
         //    Player.PlayerIronSteel.AddPullTarget(m);

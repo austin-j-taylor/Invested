@@ -1,5 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Collections.Concurrent;
+using System;
+using Unity.Jobs;
+using Unity.Collections;
 
 /*
  * The AllomanticIronSteel specific for the Player.
@@ -100,7 +106,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
                             ChangeTargetForceMagnitude(Keybinds.DPadXAxis());
                         }
                     } else { // Mouse and keyboard
-                        if (Keybinds.ZincTime() && Mode == ControlMode.Area || Mode == ControlMode.Bubble) {
+                        if (Keybinds.ControlWheel() && (Mode == ControlMode.Area || Mode == ControlMode.Bubble)) {
                             scrollValue = Keybinds.ScrollWheelAxis();
                         } else {
                             if (SettingsMenu.settingsData.pushControlStyle == 0) {
@@ -203,7 +209,10 @@ public class PlayerPullPushController : AllomanticIronSteel {
                         //bool removing = Keybinds.Negate();
 
                         // Search for Metals
-                        IronSteelSight(out Magnetic bullseyeTarget, out List<Magnetic> newTargetsArea, out List<Magnetic> newTargetsBubble);
+                        Magnetic bullseyeTarget;
+                        List<Magnetic> newTargetsArea;
+                        List<Magnetic> newTargetsBubble;
+                        (bullseyeTarget, newTargetsArea, newTargetsBubble) = IronSteelSight();
 
                         // Assign targets depending on the control mode.
                         switch (Mode) {
@@ -289,19 +298,18 @@ public class PlayerPullPushController : AllomanticIronSteel {
                                 for (int i = 0; i < newTargetsArea.Count; i++) {
                                     newTargetsArea[i].BrightenLine(targetFocusHighlitFactor);
                                 }
-
-                                //if (removing) {
-                                //    // Removing targets
-                                //    // For area/bubble targeting, Removing a target means to remove all targets.
-                                //    if (selectDown) {
-                                //        PullTargets.Clear();
-                                //    }
-                                //    if (selectAlternateDown) {
-                                //        PushTargets.Clear();
-                                //    }
-                                //} else {
-                                // Adding targets
-                                if(HasIron) {
+                                    //if (removing) {
+                                    //    // Removing targets
+                                    //    // For area/bubble targeting, Removing a target means to remove all targets.
+                                    //    if (selectDown) {
+                                    //        PullTargets.Clear();
+                                    //    }
+                                    //    if (selectAlternateDown) {
+                                    //        PushTargets.Clear();
+                                    //    }
+                                    //} else {
+                                    // Adding targets
+                                    if (HasIron) {
                                     if (select && selectDown && HasIron) {
                                         // If the bullseye target is already selected, we want to remove targets instead.
                                         if (PullTargets.IsTarget(bullseyeTarget)) {
@@ -328,7 +336,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
                                         }
                                     }
                                 }
-                                if(HasSteel) {
+                                if (HasSteel) {
                                     if (selectAlternate && selectAlternateDown) {
                                         // If the bullseye target is already selected, we want to remove targets instead.
                                         if (PushTargets.IsTarget(bullseyeTarget)) {
@@ -523,10 +531,10 @@ public class PlayerPullPushController : AllomanticIronSteel {
      *  This algorithm (specifically, setting the properties for the blue lines) gobbles up CPU usage. Once you have more than ~300 objects in range,
      *      each of which performs an Allomantic Force calculation, you are guaranteed to lose frames.
      */
-    private void IronSteelSight(out Magnetic targetBullseye, out List<Magnetic> newTargetsArea, out List<Magnetic> newTargetsBubble) {
-        targetBullseye = null;
-        newTargetsArea = new List<Magnetic>();
-        newTargetsBubble = new List<Magnetic>();
+    private (Magnetic, List<Magnetic>, List<Magnetic>) IronSteelSight() {
+        Magnetic targetBullseye = null;
+        List<Magnetic> newTargetsArea = new List<Magnetic>();
+        List<Magnetic> newTargetsBubble = new List<Magnetic>();
 
         // If the player is directly looking at a magnetic's collider, use that for the bullseye
         if (Physics.Raycast(CameraController.ActiveCamera.transform.position, CameraController.ActiveCamera.transform.forward, out RaycastHit hit, 500, GameManager.Layer_IgnorePlayer)) {
@@ -560,23 +568,28 @@ public class PlayerPullPushController : AllomanticIronSteel {
                     break;
                 }
         }
-
-        //Debug.Log("Distance threshold: " + distanceThresholdSqr);
         distanceThresholdSqr *= distanceThresholdSqr;
-        //int countHit = 0, countSkipped = 0;
+
+        // Do this in a thread
+        
+
         // Go through every metal in the scene and update the blue lines pointing to them.
         // Add every metal near the center of the screen to the Lists of Magnetics that are in range for Area and Bubble selection.
         float bullseyeWeight = 0; // weight of the Magnetic currently "closest" to the bullseye
-        foreach (Magnetic target in GameManager.MagneticsInScene) {
-            if (target.isActiveAndEnabled && target != Player.PlayerMagnetic) {
 
+        //Action<float, ConcurrentBag<Magnetic>, ConcurrentBag<Magnetic>, Magnetic, Magnetic> action = (float distanceThresholdSqr, ConcurrentBag<Magnetic> newTargetsArea, ConcurrentBag<Magnetic> newTargetsBubble, Magnetic target, Magnetic targetBullseye) => {
+        //Action<ConcurrentBag<Magnetic>, ConcurrentBag<Magnetic>, Magnetic, Magnetic> action = (ConcurrentBag<Magnetic> targetsArea, ConcurrentBag<Magnetic> targetsBubble, Magnetic bullseye, Magnetic target) => {
+
+        //};
+        int numJobs = GameManager.MagneticsInScene.Count;
+
+        foreach (Magnetic target in GameManager.MagneticsInScene) {
+
+            if (target != Player.PlayerMagnetic) {
                 // skip this target completely if it is too far away
                 if ((target.CenterOfMass - transform.position).sqrMagnitude > distanceThresholdSqr) {
                     target.DisableBlueLine();
-                    //countSkipped++;
                 } else {
-                    //countHit++;
-                    //float radialDistance = 0, linearDistance = 0;
                     float weight = SetLineProperties(target, out float radialDistance, out float linearDistance);
                     // If the Magnetic is on the screen
                     if (weight > 0) {
@@ -597,34 +610,10 @@ public class PlayerPullPushController : AllomanticIronSteel {
                 }
             }
         }
-        //Debug.Log("Metals detected: " + countHit + " and skipped: " + countSkipped);
-        //if (targetBullseye) {
-        // Brighten the blue line to the Bullseye target.
-        //targetBullseye.BrightenLine();
-        //}
+
+        return (targetBullseye, newTargetsArea, newTargetsBubble);
     }
 
-
-    private void SetTargetedLineProperties() {
-        // Regardless of other factors, lines pointing to Push/Pull-targets have unique colors
-        // Update metal lines for Pull/PushTargets
-        if (PullingOnPullTargets) {
-            PullTargets.UpdateBlueLines(iron, IronBurnPercentageTarget, CenterOfMass);
-        } else if (PushingOnPullTargets) {
-            PullTargets.UpdateBlueLines(iron, SteelBurnPercentageTarget, CenterOfMass);
-        } else if (HasPullTarget) {
-            PullTargets.UpdateBlueLines(iron, 0, CenterOfMass);
-        }
-        if (PullingOnPushTargets) {
-            PushTargets.UpdateBlueLines(steel, IronBurnPercentageTarget, CenterOfMass);
-        } else if (PushingOnPushTargets) {
-            PushTargets.UpdateBlueLines(steel, SteelBurnPercentageTarget, CenterOfMass);
-        } else if (HasPushTarget) {
-            PushTargets.UpdateBlueLines(steel, 0, CenterOfMass);
-        }
-
-        BubbleTargets.UpdateBlueLines(BubbleMetalStatus, BubbleBurnPercentageTarget, CenterOfMass);
-    }
     /*
      * Checks several factors and sets the properties of the blue line pointing to target.
      * These factors are described in the above function.
@@ -691,8 +680,29 @@ public class PlayerPullPushController : AllomanticIronSteel {
         return weight;
     }
     public void UpdateBlueLines() {
-        IronSteelSight(out _, out _, out _);
+        IronSteelSight();
         SetTargetedLineProperties();
+    }
+
+    private void SetTargetedLineProperties() {
+        // Regardless of other factors, lines pointing to Push/Pull-targets have unique colors
+        // Update metal lines for Pull/PushTargets
+        if (PullingOnPullTargets) {
+            PullTargets.UpdateBlueLines(iron, IronBurnPercentageTarget, CenterOfMass);
+        } else if (PushingOnPullTargets) {
+            PullTargets.UpdateBlueLines(iron, SteelBurnPercentageTarget, CenterOfMass);
+        } else if (HasPullTarget) {
+            PullTargets.UpdateBlueLines(iron, 0, CenterOfMass);
+        }
+        if (PullingOnPushTargets) {
+            PushTargets.UpdateBlueLines(steel, IronBurnPercentageTarget, CenterOfMass);
+        } else if (PushingOnPushTargets) {
+            PushTargets.UpdateBlueLines(steel, SteelBurnPercentageTarget, CenterOfMass);
+        } else if (HasPushTarget) {
+            PushTargets.UpdateBlueLines(steel, 0, CenterOfMass);
+        }
+
+        BubbleTargets.UpdateBlueLines(BubbleMetalStatus, BubbleBurnPercentageTarget, CenterOfMass);
     }
 
     public void RemoveAllTargets() {

@@ -49,7 +49,7 @@ public class AllomanticPewter : Allomancer {
     }
 
     protected Rigidbody rb;
-    private new ParticleSystem particleSystem;
+    private ParticleSystem dustParticles;
     protected Quaternion particleDirection;
 
     // The mesh that has a "shielding" effect that flashes when taking damage
@@ -62,7 +62,7 @@ public class AllomanticPewter : Allomancer {
         PewterReserve = gameObject.AddComponent<MetalReserve>();
         PewterReserve.Capacity = 1; // 1 gram of pewter investiture that regenerates
         rb = GetComponent<Rigidbody>();
-        particleSystem = transform.parent.GetComponentInChildren<ParticleSystem>();
+        dustParticles = transform.parent.GetComponentInChildren<ParticleSystem>();
         GameManager.AddAllomancer(this);
         // find the shields' glowy material
         for (int i = 0; i < shieldRenderer.materials.Length; i++) {
@@ -196,9 +196,9 @@ public class AllomanticPewter : Allomancer {
     public void HitSurface(Vector3 normal) {
         normal.Normalize();
         particleDirection = Quaternion.LookRotation(normal);
-        particleSystem.transform.rotation = particleDirection;
-        particleSystem.transform.position = transform.position + normal * PlayerMovementController.radius;
+        dustParticles.transform.rotation = particleDirection;
+        dustParticles.transform.position = transform.position + normal * PlayerMovementController.radius;
 
-        particleSystem.Play();
+        dustParticles.Play();
     }
 }

@@ -1,6 +1,4 @@
 using UnityEngine;
-using System.Collections;
-using VolumetricLines.Utils;
 
 namespace VolumetricLines
 {
@@ -30,6 +28,9 @@ namespace VolumetricLines
 	[ExecuteInEditMode]
 	public class VolumetricLineBehavior : MonoBehaviour 
 	{
+		// Used to compute the average value of all the Vector3's components:
+		static readonly Vector3 Average = new Vector3(1f/3f, 1f/3f, 1f/3f);
+
 		#region private variables
 		/// <summary>
 		/// Template material to be used
@@ -79,16 +80,16 @@ namespace VolumetricLines
 		/// This GameObject's specific material
 		/// </summary>
 		private Material m_material;
+        private Material m_sharedMaterial;
 		
 		/// <summary>
 		/// This GameObject's mesh filter
 		/// </summary>
 		private MeshFilter m_meshFilter;
 
-        /// <summary>
-        /// This mesh filters's shared mesh
-        /// </summary>
-        private Mesh m_sharedMesh;
+        private Vector3[] vertexPositions;
+        private Vector3[] other;
+
         #endregion
 
         #region properties
@@ -124,12 +125,12 @@ namespace VolumetricLines
 			get { return m_lineColor;  }
 			set
 			{
-				//CreateMaterial();
-				//if (null != m_material)
-				//{
+				CreateMaterial();
+				if (null != m_material)
+				{
 					m_lineColor = value;
 					m_material.color = m_lineColor;
-				//}
+				}
 			}
 		}
 
@@ -141,12 +142,13 @@ namespace VolumetricLines
 			get { return m_lineWidth; }
 			set
 			{
-				//CreateMaterial();
-				//if (null != m_material)
-				//{
+				CreateMaterial();
+				if (null != m_material)
+				{
 					m_lineWidth = value;
 					m_material.SetFloat("_LineWidth", m_lineWidth);
-				//}
+				}
+				UpdateBounds();
 			}
 		}
 
@@ -158,12 +160,12 @@ namespace VolumetricLines
 			get { return m_lightSaberFactor; }
 			set
 			{
-				//CreateMaterial();
-				//if (null != m_material)
-				//{
+				CreateMaterial();
+				if (null != m_material)
+				{
 					m_lightSaberFactor = value;
 					m_material.SetFloat("_LightSaberFactor", m_lightSaberFactor);
-				//}
+				}
 			}
 		}
 
@@ -201,11 +203,19 @@ namespace VolumetricLines
 		/// </summary>
 		private void CreateMaterial()
 		{
-			if (null == m_material && null != m_templateMaterial)
+			if (null == m_material || null == m_sharedMaterial)
 			{
-				m_material = Instantiate(m_templateMaterial);
-				GetComponent<MeshRenderer>().sharedMaterial = m_material;
-				SetAllMaterialProperties();
+				if (null != m_templateMaterial)
+				{
+					m_material = Material.Instantiate(m_templateMaterial);
+					GetComponent<MeshRenderer>().sharedMaterial = m_material;
+                    m_sharedMaterial = GetComponent<MeshRenderer>().sharedMaterial;
+                    SetAllMaterialProperties();
+				}
+				else 
+				{
+					m_material = m_sharedMaterial;
+				}
 			}
 		}
 
@@ -218,6 +228,25 @@ namespace VolumetricLines
 			{
 				DestroyImmediate(m_material);
 				m_material = null;
+			}
+		}
+
+		/// <summary>
+		/// Calculates the (approximated) _LineScale factor based on the object's scale.
+		/// </summary>
+		private float CalculateLineScale()
+		{
+			return Vector3.Dot(transform.lossyScale, Average);
+		}
+
+		/// <summary>
+		/// Updates the line scaling of this volumetric line based on the current object scaling.
+		/// </summary>
+		public void UpdateLineScale()
+		{
+			if (null != m_material) 
+			{
+				m_material.SetFloat("_LineScale", CalculateLineScale());
 			}
 		}
 
@@ -236,109 +265,159 @@ namespace VolumetricLines
 					m_material.SetFloat("_LineWidth", m_lineWidth);
 					m_material.SetFloat("_LightSaberFactor", m_lightSaberFactor);
 				}
+				UpdateLineScale();
+			}
+		}
 
-				m_material.SetFloat("_LineScale", transform.GetGlobalUniformScaleForLineWidth());
+		/// <summary>
+		/// Calculate the bounds of this line based on start and end points,
+		/// the line width, and the scaling of the object.
+		/// </summary>
+		private Bounds CalculateBounds()
+		{
+			//var maxWidth = Mathf.Max(transform.lossyScale.x, transform.lossyScale.y, transform.lossyScale.z);
+			//var scaledLineWidth = maxWidth * LineWidth * 0.5f;
+
+			var min = new Vector3(
+				Mathf.Min(m_startPos.x, m_endPos.x),// - scaledLineWidth,
+				Mathf.Min(m_startPos.y, m_endPos.y),// - scaledLineWidth,
+				Mathf.Min(m_startPos.z, m_endPos.z)// - scaledLineWidth
+			);
+			var max = new Vector3(
+				Mathf.Max(m_startPos.x, m_endPos.x),// + scaledLineWidth,
+				Mathf.Max(m_startPos.y, m_endPos.y),// + scaledLineWidth,
+				Mathf.Max(m_startPos.z, m_endPos.z)// + scaledLineWidth
+			);
+			
+			return new Bounds
+			{
+				min = min,
+				max = max
+			};
+		}
+
+		/// <summary>
+		/// Updates the bounds of this line according to the current properties, 
+		/// which there are: start point, end point, line width, scaling of the object.
+		/// </summary>
+		public void UpdateBounds()
+		{
+			if (null != m_meshFilter)
+			{
+				var mesh = m_meshFilter.sharedMesh;
+				Debug.Assert(null != mesh);
+				if (null != mesh)
+				{
+					mesh.bounds = CalculateBounds();
+				}
 			}
 		}
 
 		/// <summary>
 		/// Sets the start and end points - updates the data of the Mesh.
 		/// </summary>
-		public void SetStartAndEndPoints(Vector3 startPoint, Vector3 endPoint)
-		{
-			Vector3[] vertexPositions = {
-				startPoint,
-				startPoint,
-				startPoint,
-				startPoint,
-				endPoint,
-				endPoint,
-				endPoint,
-				endPoint,
-			};
-			
-			Vector3[] other = {
-				endPoint,
-				endPoint,
-				endPoint,
-				endPoint,
-				startPoint,
-				startPoint,
-				startPoint,
-				startPoint,
-			};
-
-            //if (null != m_meshFilter)
-            //{
-            //if (null != mesh)
-            //{
-            if (m_sharedMesh != null) {
-                m_sharedMesh.vertices = vertexPositions;
-                m_sharedMesh.normals = other;
-                m_sharedMesh.RecalculateBounds();
+		public void SetStartAndEndAndWidth(Vector3 startPoint, Vector3 endPoint, float width) {
+        if (m_material == null)
+            Awake();
+            m_startPos = startPoint;
+			m_endPos = endPoint;
+            // just skip changing it if the difference is small
+            if(width - m_lineWidth > 0.01f || width - m_lineWidth < -0.01f) {
+                m_lineWidth = width;
+                m_material.SetFloat("_LineWidth", m_lineWidth);
             }
-				//}
-			//}
-		}
-		#endregion
 
-		#region event functions
-		void Awake() 
-		{
-			Vector3[] vertexPositions = {
-				m_startPos,
-				m_startPos,
-				m_startPos,
-				m_startPos,
-				m_endPos,
-				m_endPos,
-				m_endPos,
-				m_endPos,
-			};
-			
-			Vector3[] other = {
-				m_endPos,
-				m_endPos,
-				m_endPos,
-				m_endPos,
-				m_startPos,
-				m_startPos,
-				m_startPos,
-				m_startPos,
-			};
-            // Need to set vertices before assigning new Mesh to the MeshFilter's mesh property
+            vertexPositions[0] = vertexPositions[1] = vertexPositions[2] = vertexPositions[3] = m_startPos;
+            vertexPositions[4] = vertexPositions[5] = vertexPositions[6] = vertexPositions[7] = m_endPos;
+            other[0] = other[1] = other[2] = other[3] = m_endPos;
+            other[4] = other[5] = other[6] = other[7] = m_startPos;
+
+			if (null != m_meshFilter)
+			{
+				var mesh = m_meshFilter.sharedMesh;
+				Debug.Assert(null != mesh);
+				if (null != mesh)
+				{
+					mesh.vertices = vertexPositions;
+					mesh.normals = other;
+					UpdateBounds();
+				}
+			}
+        }
+        public void SetStartAndEndPoints(Vector3 startPoint, Vector3 endPoint) {
+            m_startPos = startPoint;
+            m_endPos = endPoint;
+
+            vertexPositions[0] = vertexPositions[1] = vertexPositions[2] = vertexPositions[3] = m_startPos;
+            vertexPositions[4] = vertexPositions[5] = vertexPositions[6] = vertexPositions[7] = m_endPos;
+            other[0] = other[1] = other[2] = other[3] = m_endPos;
+            other[4] = other[5] = other[6] = other[7] = m_startPos;
+
+            if (null != m_meshFilter) {
+                var mesh = m_meshFilter.sharedMesh;
+                Debug.Assert(null != mesh);
+                if (null != mesh) {
+                    mesh.vertices = vertexPositions;
+                    mesh.normals = other;
+                    UpdateBounds();
+                }
+            }
+        }
+        #endregion
+
+        #region event functions
+        void Awake () {
+            vertexPositions = new Vector3[8];
+            other = new Vector3[8];
+
             Mesh mesh = new Mesh();
-            mesh.vertices = vertexPositions;
-            mesh.normals = other;
+			m_meshFilter = GetComponent<MeshFilter>();
+			m_meshFilter.mesh = mesh;
+            SetStartAndEndPoints(m_startPos, m_endPos);
             mesh.uv = VolumetricLineVertexData.TexCoords;
-            mesh.uv2 = VolumetricLineVertexData.VertexOffsets;
-            mesh.SetIndices(VolumetricLineVertexData.Indices, MeshTopology.Triangles, 0);
-            mesh.RecalculateBounds();
-            m_meshFilter = GetComponent<MeshFilter>();
-            m_meshFilter.mesh = mesh;
-            m_meshFilter.sharedMesh = mesh;
-            m_sharedMesh = m_meshFilter.sharedMesh;
+			mesh.uv2 = VolumetricLineVertexData.VertexOffsets;
+			mesh.SetIndices(VolumetricLineVertexData.Indices, MeshTopology.Triangles, 0);
             CreateMaterial();
-		}
+            // TODO: Need to set vertices before assigning new Mesh to the MeshFilter's mesh property => Why?
+        }
+
 		void OnDestroy()
 		{
+			if (null != m_meshFilter) 
+			{
+				if (Application.isPlaying) 
+				{
+					Mesh.Destroy(m_meshFilter.sharedMesh);
+				}
+				else // avoid "may not be called from edit mode" error
+				{
+					Mesh.DestroyImmediate(m_meshFilter.sharedMesh);
+				}
+				m_meshFilter.sharedMesh = null;
+			}
 			DestroyMaterial();
 		}
 		
-		void Update()
-		{
-			//if (transform.hasChanged && null != m_material)
-			//{
-			//	m_material.SetFloat("_LineScale", transform.GetGlobalUniformScaleForLineWidth());
-			//}
-		}
+		//void Update()
+		//{
+		//	if (transform.hasChanged)
+		//	{
+		//		UpdateLineScale();
+		//		UpdateBounds();
+  //              transform.hasChanged = false;
+		//	}
+		//}
 
 		void OnValidate()
 		{
 			// This function is called when the script is loaded or a value is changed in the inspector (Called in the editor only).
 			//  => make sure, everything stays up-to-date
+			if(string.IsNullOrEmpty(gameObject.scene.name) || string.IsNullOrEmpty(gameObject.scene.path)) {
+				return; // ...but not if a Prefab is selected! (Only if we're using it within a scene.)
+			}
 			CreateMaterial();
 			SetAllMaterialProperties();
+			UpdateBounds();
 		}
 	
 		void OnDrawGizmos()

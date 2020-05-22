@@ -8,6 +8,7 @@ public class Environment_IlluminatingStorms : Environment {
         GetComponent<AudioSource>().Play();
 
         Player.FeelingScale = 2;
+        Player.VoidHeight = -1000;
     }
 
     // Update is called once per frame

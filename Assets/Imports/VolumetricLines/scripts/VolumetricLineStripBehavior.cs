@@ -1,6 +1,4 @@
 using UnityEngine;
-using System.Collections;
-using VolumetricLines.Utils;
 
 namespace VolumetricLines
 {
@@ -30,6 +28,9 @@ namespace VolumetricLines
     [ExecuteInEditMode]
 	public class VolumetricLineStripBehavior : MonoBehaviour 
 	{
+		// Used to compute the average value of all the Vector3's components:
+		static readonly Vector3 Average = new Vector3(1f/3f, 1f/3f, 1f/3f);
+		
 		#region private variables
 		/// <summary>
 		/// Template material to be used
@@ -136,6 +137,7 @@ namespace VolumetricLines
 					m_lineWidth = value;
 					m_material.SetFloat("_LineWidth", m_lineWidth);
 				}
+				UpdateBounds();
 			}
 		}
 
@@ -171,11 +173,18 @@ namespace VolumetricLines
 		/// </summary>
 		private void CreateMaterial()
 		{
-			if (null != m_templateMaterial && null == m_material)
+			if (null == m_material || null == GetComponent<MeshRenderer>().sharedMaterial)
 			{
-				m_material = Material.Instantiate(m_templateMaterial);
-				GetComponent<MeshRenderer>().sharedMaterial = m_material;
-				SetAllMaterialProperties();
+				if (null != m_templateMaterial)
+				{
+					m_material = Material.Instantiate(m_templateMaterial);
+					GetComponent<MeshRenderer>().sharedMaterial = m_material;
+					SetAllMaterialProperties();
+				}
+				else 
+				{
+					m_material = GetComponent<MeshRenderer>().sharedMaterial;
+				}
 			}
 		}
 
@@ -188,6 +197,25 @@ namespace VolumetricLines
 			{
 				DestroyImmediate(m_material);
 				m_material = null;
+			}
+		}
+
+		/// <summary>
+		/// Calculates the (approximated) _LineScale factor based on the object's scale.
+		/// </summary>
+		private float CalculateLineScale()
+		{
+			return Vector3.Dot(transform.lossyScale, Average);
+		}
+
+		/// <summary>
+		/// Updates the line scaling of this volumetric line based on the current object scaling.
+		/// </summary>
+		public void UpdateLineScale()
+		{
+			if (null != m_material) 
+			{
+				m_material.SetFloat("_LineScale", CalculateLineScale());
 			}
 		}
 
@@ -206,8 +234,64 @@ namespace VolumetricLines
 					m_material.SetFloat("_LineWidth", m_lineWidth);
 					m_material.SetFloat("_LightSaberFactor", m_lightSaberFactor);
 				}
+				UpdateLineScale();
+			}
+		}
 
-				m_material.SetFloat("_LineScale", transform.GetGlobalUniformScaleForLineWidth());
+
+		/// <summary>
+		/// Calculate the bounds of this line based on the coordinates of the line vertices,
+		/// the line width, and the scaling of the object.
+		/// </summary>
+		private Bounds CalculateBounds()
+		{
+			var maxWidth = Mathf.Max(transform.lossyScale.x, transform.lossyScale.y, transform.lossyScale.z);
+			var scaledLineWidth = maxWidth * LineWidth * 0.5f;
+			var scaledLineWidthVec = new Vector3(scaledLineWidth, scaledLineWidth, scaledLineWidth);
+
+			Debug.Assert(m_lineVertices.Length > 0);
+			if (m_lineVertices.Length == 0)
+			{
+				return new Bounds();
+			}
+
+			var min = m_lineVertices[0];
+			var max = m_lineVertices[0];
+			for (int i = 1; i < m_lineVertices.Length; ++i)
+			{
+				min = new Vector3(
+					Mathf.Min(min.x, m_lineVertices[i].x),
+					Mathf.Min(min.y, m_lineVertices[i].y),
+					Mathf.Min(min.z, m_lineVertices[i].z)
+				);
+				max = new Vector3(
+					Mathf.Max(max.x, m_lineVertices[i].x),
+					Mathf.Max(max.y, m_lineVertices[i].y),
+					Mathf.Max(max.z, m_lineVertices[i].z)
+				);
+			}
+
+			return new Bounds
+			{
+				min = min - scaledLineWidthVec,
+				max = max + scaledLineWidthVec
+			};
+		}
+
+		/// <summary>
+		/// Updates the bounds of this line according to the current properties, 
+		/// which there are: coordinates of the line vertices, line width, scaling of the object.
+		/// </summary>
+		public void UpdateBounds()
+		{
+			if (null != m_meshFilter)
+			{
+				var mesh = m_meshFilter.sharedMesh;
+				Debug.Assert(null != mesh);
+				if (null != mesh)
+				{
+					mesh.bounds = CalculateBounds();
+				}
 			}
 		}
 
@@ -215,21 +299,21 @@ namespace VolumetricLines
 		/// Updates the vertices of this VolumetricLineStrip.
 		/// This is an expensive operation.
 		/// </summary>
-		/// <param name="m_newSetOfVertices">M_new set of vertices.</param>
-		public void UpdateLineVertices(Vector3[] m_newSetOfVertices)
+		/// <param name="newSetOfVertices">new set of vertices for the line strip.</param>
+		public void UpdateLineVertices(Vector3[] newSetOfVertices)
 		{
-			if (null == m_newSetOfVertices)
+			if (null == newSetOfVertices)
 			{
 				return;
 			}
 
-			if (m_newSetOfVertices.Length < 3)
+			if (newSetOfVertices.Length < 3)
 			{
 				Debug.LogError("Add at least 3 vertices to the VolumetricLineStrip");
 				return;
 			}
 
-			m_lineVertices = m_newSetOfVertices;
+			m_lineVertices = newSetOfVertices;
 
 			// fill vertex positions, and indices
 			// 2 for each position, + 2 for the start, + 2 for the end
@@ -327,46 +411,74 @@ namespace VolumetricLines
 			nextPositions[n++] = m_lineVertices[m_lineVertices.Length - 2];
 			nextPositions[n++] = m_lineVertices[m_lineVertices.Length - 2];
 
-			// Need to set vertices before assigning new Mesh to the MeshFilter's mesh property
-			Mesh mesh = new Mesh();
-			mesh.vertices = vertexPositions;
-			mesh.normals = prevPositions;
-			mesh.tangents = nextPositions;
-			mesh.uv = texCoords;
-			mesh.uv2 = vertexOffsets;
-			mesh.SetIndices(indices, MeshTopology.Triangles, 0);
-			mesh.RecalculateBounds();
-			GetComponent<MeshFilter>().mesh = mesh;
+			if (null != m_meshFilter)
+			{
+				var mesh = m_meshFilter.sharedMesh;
+				Debug.Assert(null != mesh);
+				if (null != mesh)
+				{
+					mesh.SetIndices(null, MeshTopology.Triangles, 0); // Reset before setting again to prevent a unity error message.
+					mesh.vertices = vertexPositions;
+					mesh.normals = prevPositions;
+					mesh.tangents = nextPositions;
+					mesh.uv = texCoords;
+					mesh.uv2 = vertexOffsets;
+					mesh.SetIndices(indices, MeshTopology.Triangles, 0);
+					UpdateBounds();
+				}
+			}
+		
+
 		}
 		#endregion
 
 		#region event functions
 		void Start () 
 		{
+			Mesh mesh = new Mesh();
+			m_meshFilter = GetComponent<MeshFilter>();
+			m_meshFilter.mesh = mesh;
 			UpdateLineVertices(m_lineVertices);
 			CreateMaterial();
 		}
 
 		void OnDestroy()
 		{
+			if (null != m_meshFilter) 
+			{
+				if (Application.isPlaying) 
+				{
+					Mesh.Destroy(m_meshFilter.sharedMesh);
+				}
+				else // avoid "may not be called from edit mode" error
+				{
+					Mesh.DestroyImmediate(m_meshFilter.sharedMesh);
+				}
+				m_meshFilter.sharedMesh = null;
+			}
 			DestroyMaterial();
 		}
 
 		void Update()
 		{
-			if (transform.hasChanged && null != m_material)
+			if (transform.hasChanged)
 			{
-				m_material.SetFloat("_LineScale", transform.GetGlobalUniformScaleForLineWidth());
+				UpdateLineScale();
+				UpdateBounds();
 			}
 		}
 
-		//void OnValidate()
-		//{
-		//	// This function is called when the script is loaded or a value is changed in the inspector (Called in the editor only).
-		//	//  => make sure, everything stays up-to-date
-		//	CreateMaterial();
-		//	SetAllMaterialProperties();
-		//}
+		void OnValidate()
+		{
+			// This function is called when the script is loaded or a value is changed in the inspector (Called in the editor only).
+			//  => make sure, everything stays up-to-date
+			if(string.IsNullOrEmpty(gameObject.scene.name) || string.IsNullOrEmpty(gameObject.scene.path)) {
+				return; // ...but not if a Prefab is selected! (Only if we're using it within a scene.)
+			}
+			CreateMaterial();
+			SetAllMaterialProperties();
+			UpdateBounds();
+		}
 
 		void OnDrawGizmos()
 		{

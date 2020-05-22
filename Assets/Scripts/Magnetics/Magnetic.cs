@@ -169,8 +169,9 @@ public class Magnetic : MonoBehaviour {
     private Vector3 centerOfMass;
     public Vector3 CenterOfMass {
         get {
-            if (transform.position != LastPosition) {
+            if (transform.hasChanged) {
                 UpdateCenterOfMass();
+                transform.hasChanged = false;
             }
 
             //if (HasColliders && !IsStatic) {
@@ -201,7 +202,7 @@ public class Magnetic : MonoBehaviour {
         }
     }
 
-    protected void Awake() {
+    protected virtual void Awake() {
         //if (childMagnetics == null || childMagnetics.Length == 0) {
         //    // If not assigned in the editor, assume that all children should glow
         //    childMagnetics = GetComponentsInChildren<Renderer>();
@@ -213,7 +214,6 @@ public class Magnetic : MonoBehaviour {
         }
         if (GameManager.MetalLinesTransform != null) {
             blueLine = Instantiate(GameManager.MetalLineTemplate, GameManager.MetalLinesTransform);
-            blueLine.gameObject.SetActive(false);
         }
         colliders = GetComponentsInChildren<Collider>();
         lightSaberFactor = 1;
@@ -266,6 +266,10 @@ public class Magnetic : MonoBehaviour {
         LastMaxPossibleAllomanticForce = Vector3.zero;
         LastAnchoredPushBoostFromAllomancer = Vector3.zero;
         LastAnchoredPushBoostFromTarget = Vector3.zero;
+    }
+
+    protected void Start() {
+        blueLine.gameObject.SetActive(false);
     }
 
     private void FixedUpdate() {
@@ -337,8 +341,7 @@ public class Magnetic : MonoBehaviour {
     public void SetBlueLine(Vector3 endPos, float width, float lsf, Color color) {
         if (blueLine) {
             blueLine.gameObject.SetActive(true);
-            blueLine.SetStartAndEndPoints(CenterOfMass, endPos);
-            blueLine.LineWidth = width;
+            blueLine.SetStartAndEndAndWidth(CenterOfMass, endPos, width);
             if (lightSaberFactor != 0 || lsf != 0) {
                 lightSaberFactor = Mathf.Lerp(lightSaberFactor, lsf, metalLinesLerpConstant);
                 blueLine.LightSaberFactor = lightSaberFactor;

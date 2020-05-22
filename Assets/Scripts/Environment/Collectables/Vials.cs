@@ -18,7 +18,7 @@ public class Vials : MonoBehaviour {
     readonly Color pewter = new Color(1, .5f, .2f);
 
     Animator anim;
-    new Light light;
+    Light vialLight;
 
     bool empty = false;
 
@@ -28,23 +28,23 @@ public class Vials : MonoBehaviour {
             if (fillIron) {
                 if (!fillSteel && !fillPewter) {
                     // pure iron
-                    light.color = iron;
+                    vialLight.color = iron;
                 }
             } else if (fillSteel) {
                 if (!fillPewter) {
                     // pure steel
-                    light.color = steel;
+                    vialLight.color = steel;
                 }
             } else if (fillPewter) {
                 // pure pewter
-                light.color = pewter;
+                vialLight.color = pewter;
             }
         }
     }
 
     private void Awake() {
         anim = GetComponentInParent<Animator>();
-        light = GetComponentInParent<Light>();
+        vialLight = GetComponentInParent<Light>();
 
         if(fillIron) {
             if(fillSteel) {
@@ -55,16 +55,16 @@ public class Vials : MonoBehaviour {
                 }
             } else if(!fillPewter) {
                 // pure iron
-                light.color = iron;
+                vialLight.color = iron;
             }
         } else if(fillSteel) {
             if(!fillPewter) {
                 // pure steel
-                light.color = steel;
+                vialLight.color = steel;
             }
         } else if(fillPewter) {
             // pure pewter
-            light.color = pewter;
+            vialLight.color = pewter;
         }
 
     }
@@ -92,7 +92,7 @@ public class Vials : MonoBehaviour {
                     empty = true;
                     Destroy(transform.parent.Find("Fluid").gameObject);
                     anim.enabled = false;
-                    light.enabled = false;
+                    vialLight.enabled = false;
                     Collider col = GetComponent<Collider>();
                     col.isTrigger = false;
                     //gameObject.layer = LayerMask.NameToLayer("Ignore Player");
