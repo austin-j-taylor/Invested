@@ -17,7 +17,7 @@ public class FeruchemicalZinc : MonoBehaviour {
     private const float g = 72f;
     private const float h = 50;
     // The maximum time that zinc will slow down for
-    private const float maxTime = 8;
+    private const float maxTime = 12;
     // the time scale that zinc slows time down to
     // interestingly, 1/8 is about the same that in-world speed bubbles slow time down by (Alloy of Law, 2 minutes into about 15s)
     private const float slowPercent = 1 / 8f;
@@ -69,7 +69,6 @@ public class FeruchemicalZinc : MonoBehaviour {
                     // Exit zinc time
                     InZincTime = false;
                     endReserve = Reserve;
-                    HUD.ZincMeterController.SideEnabled = false;
                     TimeController.CurrentTimeScale = SettingsMenu.settingsData.timeScale;
                     GameManager.AudioManager.SetMasterPitch(1);
                     if (Reserve == 0) {
@@ -104,7 +103,6 @@ public class FeruchemicalZinc : MonoBehaviour {
                     InZincTime = true;
                     recovering = false;
                     startReserve = Reserve;
-                    HUD.ZincMeterController.SideEnabled = true;
                     TimeController.CurrentTimeScale = slowPercent * SettingsMenu.settingsData.timeScale;
                     GameManager.AudioManager.SetMasterPitch(slowPitch);
                     Intensity = GameManager.GraphicsController.SetZincEffect(true, CalculateIntensity((float)Reserve));

@@ -7,8 +7,8 @@ using VolumetricLines;
  */
 public class NonPlayerPushPullController : AllomanticIronSteel {
 
-    public VolumetricLineBehavior[] pullLines;
-    public VolumetricLineBehavior[] pushLines;
+    private VolumetricLineBehavior[] pullLines;
+    private VolumetricLineBehavior[] pushLines;
 
     public bool LinesAreVisible {
         set {
@@ -25,7 +25,6 @@ public class NonPlayerPushPullController : AllomanticIronSteel {
             }
         }
     }
-
     protected override void Awake() {
         base.Awake();
         IronReserve.IsEndless = true;
@@ -64,7 +63,6 @@ public class NonPlayerPushPullController : AllomanticIronSteel {
                     UpdateLines(false, i);
                 }
             }
-
         }
     }
 
@@ -90,10 +88,8 @@ public class NonPlayerPushPullController : AllomanticIronSteel {
         float closeness = Mathf.Exp(-PlayerPullPushController.blueLineChangeFactor * Mathf.Pow(1 / allomanticForce, PlayerPullPushController.blueLineBrightnessFactor));
 
         line.gameObject.SetActive(true);
-        line.StartPos = target.CenterOfMass;
-        line.EndPos = CenterOfMass;
-        line.LineWidth = target.Charge * PlayerPullPushController.blueLineWidthFactor;
-        line.LightSaberFactor = Mathf.Exp(-target.LastMaxPossibleAllomanticForce.magnitude * percentage / TargetArray.lightSaberConstant);
+        line.LightSaberFactor = 0;// Mathf.Exp(-target.LastMaxPossibleAllomanticForce.magnitude * percentage / TargetArray.lightSaberConstant);
         line.LineColor = pulling ? new Color(0, closeness * Magnetic.lowLineColor, closeness * Magnetic.highLineColor, 1) : TargetArray.targetedRedLine * closeness;
+        line.SetStartAndEndAndWidth(target.CenterOfMass, CenterOfMass, target.Charge * PlayerPullPushController.blueLineWidthFactor);
     }
 }

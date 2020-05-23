@@ -19,6 +19,7 @@ public class AllomanticIronSteel : Allomancer {
     public const bool steel = false;
     public const bool iron = true;
 
+    [HideInInspector]
     public Rigidbody rb;
 
     public MetalReserve IronReserve { get; private set; }
@@ -200,7 +201,7 @@ public class AllomanticIronSteel : Allomancer {
      * Every frame: Calculate and apply forces to targets being pushed on.
      *      Drain metal reserves.
      */
-    private void FixedUpdate() {
+    protected virtual void FixedUpdate() {
         if (!PauseMenu.IsPaused) {
             if (IsBurning) {
                 // Remove all targets that are out of pushing range

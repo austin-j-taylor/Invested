@@ -34,11 +34,6 @@ public class ZincMeterController : MonoBehaviour {
     private bool direction;
     private float timeLastChanged = -100;
 
-    public bool SideEnabled {
-        set {
-            side.alpha = value ? .5f : 0;
-        }
-    }
 
     // Start is called before the first frame update
     void Awake() {
@@ -50,7 +45,8 @@ public class ZincMeterController : MonoBehaviour {
         spikeBottomFill = spikeBottom.transform.Find("fill").GetComponent<Image>();
         side = HUD.Crosshair.transform.Find("ZincSideMeter/Zinc_spikeSide").GetComponent<CanvasGroup>();
         sideImage = side.transform.Find("fill").GetComponent<Image>();
-        animator = GetComponent<Animator>();
+        //animator = GetComponent<Animator>();
+        animator = side.GetComponent<Animator>();
     }
 
     // Update is called once per frame
