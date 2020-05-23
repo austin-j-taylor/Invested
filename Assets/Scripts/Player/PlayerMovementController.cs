@@ -105,53 +105,54 @@ public class PlayerMovementController : AllomanticPewter {
     }
 
     private void Update() {
-        if (Player.CanControl && Player.CanControlMovement) {
-            // walking/rolling/sprinting state machine
-            if (IsAnchoring) {
-                // was walking
-                if (Keybinds.Sprint() && PewterReserve.HasMass) {
-                    // start sprinting
-                    IsSprinting = true;
-                    IsAnchoring = false;
-                    rb.inertiaTensor = new Vector3(momentOfInertiaMagnitude, momentOfInertiaMagnitude, momentOfInertiaMagnitude);
-                    Player.PlayerFlywheelController.Retract();
-                } else if (!Keybinds.Walk() || !PewterReserve.HasMass   ) {
-                    // stop rolling
-                    IsAnchoring = false;
-                    rb.inertiaTensor = new Vector3(momentOfInertiaMagnitude, momentOfInertiaMagnitude, momentOfInertiaMagnitude);
-                    Player.PlayerFlywheelController.Retract();
-                } // continue walking
-            } else if (IsSprinting) {
-                // was sprinting
-                if (!Keybinds.Sprint() || !PewterReserve.HasMass) {
-                    // start rolling
-                    IsSprinting = false;
-                } // continue sprinting
-            } else {
-                // was rolling
-                if (Keybinds.Sprint() && PewterReserve.HasMass) {
-                    // start sprinting
-                    IsSprinting = true;
+        if(!PauseMenu.IsPaused) {
+            if (Player.CanControl && Player.CanControlMovement) {
+                // walking/rolling/sprinting state machine
+                if (IsAnchoring) {
+                    // was walking
+                    if (Keybinds.Sprint() && PewterReserve.HasMass) {
+                        // start sprinting
+                        IsSprinting = true;
+                        IsAnchoring = false;
+                        rb.inertiaTensor = new Vector3(momentOfInertiaMagnitude, momentOfInertiaMagnitude, momentOfInertiaMagnitude);
+                        Player.PlayerFlywheelController.Retract();
+                    } else if (!Keybinds.Walk() || !PewterReserve.HasMass) {
+                        // stop rolling
+                        IsAnchoring = false;
+                        rb.inertiaTensor = new Vector3(momentOfInertiaMagnitude, momentOfInertiaMagnitude, momentOfInertiaMagnitude);
+                        Player.PlayerFlywheelController.Retract();
+                    } // continue walking
+                } else if (IsSprinting) {
+                    // was sprinting
+                    if (!Keybinds.Sprint() || !PewterReserve.HasMass) {
+                        // start rolling
+                        IsSprinting = false;
+                    } // continue sprinting
+                } else {
+                    // was rolling
+                    if (Keybinds.Sprint() && PewterReserve.HasMass) {
+                        // start sprinting
+                        IsSprinting = true;
 
-                } else if (Keybinds.Walk() && PewterReserve.HasMass) {
-                    // start walking
-                    rb.inertiaTensor = new Vector3(momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking);
-                    Player.PlayerFlywheelController.Extend();
-                    IsAnchoring = true;
-                } else { // continue rolling
+                    } else if (Keybinds.Walk() && PewterReserve.HasMass) {
+                        // start walking
+                        rb.inertiaTensor = new Vector3(momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking);
+                        Player.PlayerFlywheelController.Extend();
+                        IsAnchoring = true;
+                    } else { // continue rolling
+                    }
                 }
+                // Check if jumping
+                if (IsGrounded && Keybinds.JumpDown()) {
+                    // Queue a jump for the next FixedUpdate
+                    // Actual jumping done in FixedUpdate to stay in sync with PlayerGroundedChecker
+                    jumpQueued = true;
+                }
+            } else {
+                jumpQueued = false;
+                IsSprinting = false;
+                IsAnchoring = false;
             }
-
-            // Check if jumping
-            if (IsGrounded && Keybinds.JumpDown()) {
-                // Queue a jump for the next FixedUpdate
-                // Actual jumping done in FixedUpdate to stay in sync with PlayerGroundedChecker
-                jumpQueued = true;
-            }
-        } else {
-            jumpQueued = false;
-            IsSprinting = false;
-            IsAnchoring = false;
         }
     }
     protected override void FixedUpdate() {

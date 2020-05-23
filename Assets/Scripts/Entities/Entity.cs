@@ -17,8 +17,10 @@ public class Entity : MonoBehaviour {
         }
         set {
             health = value;
-            if (health < 0)
+            if (health <= 0) {
                 health = 0;
+                Die();
+            }
         }
     }
     public double MaxHealth {
@@ -44,7 +46,7 @@ public class Entity : MonoBehaviour {
 
     private bool hitThisFrame;
 
-    virtual protected void Start() {
+    protected virtual void Start() {
         hitboxes = GetComponentsInChildren<BoxCollider>();
         anim = GetComponentInChildren<Animator>();
         rb = GetComponentInChildren<Rigidbody>();
@@ -54,7 +56,7 @@ public class Entity : MonoBehaviour {
         //lastHitTime = 0;
     }
 
-    virtual protected void LateUpdate() {
+    protected virtual void LateUpdate() {
         hitThisFrame = false;
     }
 
@@ -66,7 +68,7 @@ public class Entity : MonoBehaviour {
         }
     }
 
-    virtual public void OnHit(Vector3 sourceLocation, float damage) {
+    public virtual void OnHit(Vector3 sourceLocation, float damage) {
         //if (lastHitTime + hitstun < Time.time) {
         if (!hitThisFrame) {
             Health -= damage;
@@ -74,5 +76,9 @@ public class Entity : MonoBehaviour {
         }
         //    lastHitTime = Time.time;
         //}
+    }
+
+    protected virtual void Die() {
+        isDead = true;
     }
 }

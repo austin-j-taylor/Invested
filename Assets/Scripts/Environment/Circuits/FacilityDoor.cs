@@ -14,21 +14,9 @@ public class FacilityDoor : Powered {
         set {
             if (On != value) {
                 if(value) {
-                    rendererLeft.material = GameManager.Material_MARLmetal_lit;
-                    rendererRight.material = GameManager.Material_MARLmetal_lit;
-                    magneticLeft.enabled = false;
-                    magneticRight.enabled = false;
-                    StartCoroutine(SpringToLock());
+                    Lock();
                 } else {
-                    StopAllCoroutines();
-                    jointLeft.spring = lowSpring;
-                    jointRight.spring = lowSpring;
-                    jointLeft.useLimits = false;
-                    jointRight.useLimits = false;
-                    rendererLeft.material = GameManager.Material_MARLmetal_unlit;
-                    rendererRight.material = GameManager.Material_MARLmetal_unlit;
-                    magneticLeft.enabled = true;
-                    magneticRight.enabled = true;
+                    Unlock();
                 }
             }
             base.On = value;
@@ -46,7 +34,7 @@ public class FacilityDoor : Powered {
     private Magnetic magneticLeft;
     private Magnetic magneticRight;
 
-    private void Awake() {
+    protected virtual void Awake() {
         jointLeft = transform.Find("Left").GetComponent<HingeJoint>();
         jointRight = transform.Find("Right").GetComponent<HingeJoint>();
 
@@ -73,30 +61,35 @@ public class FacilityDoor : Powered {
         jointRight.useLimits = true;
     }
 
-    //private void Update() {
-    //    if (!On) {
-    //        // when the door is nearly closed, try harder to seal it shut
-    //        if (((jointLeft.angle < 0) ? -jointLeft.angle : jointLeft.angle) > angleForStopping
-    //                 || ((jointRight.angle < 0) ? -jointRight.angle : jointRight.angle) > angleForStopping)) {
-    //            jointLeft.spring = highSpring;
-    //            jointRight.spring = highSpring;
-    //        }
-    //    }
-
-    //}
-
     // close the door when the player passes it
     private void OnTriggerEnter(Collider other) {
         if(other.CompareTag("Player") && !other.isTrigger) {
             if(lockOncePassed) {
                 On = true;
-            } else {
-                On = !On;
             }
         }
     }
 
-    private IEnumerator SpringToLock() {
+    protected virtual void Lock() {
+        rendererLeft.material = GameManager.Material_MARLmetal_lit;
+        rendererRight.material = GameManager.Material_MARLmetal_lit;
+        magneticLeft.enabled = false;
+        magneticRight.enabled = false;
+        StartCoroutine(SpringToLock());
+    }
+    protected virtual void Unlock() {
+        StopAllCoroutines();
+        jointLeft.spring = lowSpring;
+        jointRight.spring = lowSpring;
+        jointLeft.useLimits = false;
+        jointRight.useLimits = false;
+        rendererLeft.material = GameManager.Material_MARLmetal_unlit;
+        rendererRight.material = GameManager.Material_MARLmetal_unlit;
+        magneticLeft.enabled = true;
+        magneticRight.enabled = true;
+    }
+
+    protected IEnumerator SpringToLock() {
         jointLeft.spring = highSpring;
         jointRight.spring = highSpring;
         float timer = 0;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class TargMobileController : Targ {
+public class TargMobileController : Entity {
 
     protected override void Start() {
         base.Start();

@@ -30,7 +30,6 @@ public class PlayerGroundedChecker : MonoBehaviour {
     private void OnCollisionStay(Collision collision) {
         if (StandingOnCollider == null)
             StandingOnCollider = collision.collider;
-
         if (collision.collider == StandingOnCollider) // Only check first collision
             if (!collision.collider.isTrigger) {
                 Point = collision.GetContact(0).point;
@@ -44,9 +43,7 @@ public class PlayerGroundedChecker : MonoBehaviour {
      * This facilitates wall-jumping, because the player may not be perfectly touching the wall when they try to jump.
      */
     private void OnTriggerExit(Collider other) {
-        if (other == StandingOnCollider) {
-            StandingOnCollider = null;
-        }
+        StandingOnCollider = null;
     }
 
     // Raycast downward; if there's a ground very close to your feet, always try to jump from that.

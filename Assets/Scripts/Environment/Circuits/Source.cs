@@ -10,6 +10,12 @@ public class Source : Destructable {
     [SerializeField]
     private Powered[] connected = null;
 
+    public override bool On {
+        set {
+            base.On = value;
+            PowerConnected(value);
+        }
+    }
     /*
      * Called when this power source turns on or off.
      * Go through all connected elements. If there are no connected power sources that are still on,
@@ -34,7 +40,5 @@ public class Source : Destructable {
                     powered.On = nodeIsOn;
             }
         }
-
-
     }
 }

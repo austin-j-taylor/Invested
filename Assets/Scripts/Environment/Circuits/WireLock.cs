@@ -80,7 +80,7 @@ public class WireLock : Source {
         base.Destroy();
         anim.SetTrigger("destroyed");
         audioDestroyed.Play();
-        PowerConnected(false);
+        On = false;
 
         metal.enabled = false;
     }
@@ -90,7 +90,6 @@ public class WireLock : Source {
         anim.SetTrigger("destroyed");
         audioDestroyed.Play();
         audioRepairing.Play();
-        PowerConnected(false);
 
         On = false;
         metal.enabled = false;
@@ -101,7 +100,6 @@ public class WireLock : Source {
         metal.enabled = true;
         On = true;
         health = maxHealth;
-        PowerConnected(true);
 
         anim.speed = 1;
     }

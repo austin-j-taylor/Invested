@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour {
     // Resurces
     public static Material Material_MARLmetal_unlit { get; private set; }
     public static Material Material_MARLmetal_lit { get; private set; }
+    public static Material Material_Steel_lit { get; private set; }
     public static Font Font_Heebo { get; private set; }
     public static VolumetricLineBehavior MetalLineTemplate { get; private set; }
     public static VolumetricLineStripBehavior MetalLineStripTemplate { get; private set; }
@@ -48,6 +49,7 @@ public class GameManager : MonoBehaviour {
 
         Material_MARLmetal_unlit = Resources.Load<Material>("Materials/MARLmetal_unlit");
         Material_MARLmetal_lit = Resources.Load<Material>("Materials/MARLmetal_lit");
+        Material_Steel_lit = Resources.Load<Material>("Materials/Steel_lit");
         Font_Heebo = Resources.Load<Font>("Fonts/Heebo-Medium");
         MetalLineTemplate = Resources.Load<VolumetricLineBehavior>("MetalLineTemplate");
         MetalLineStripTemplate = Resources.Load<VolumetricLineStripBehavior>("MetalLineStripTemplate");

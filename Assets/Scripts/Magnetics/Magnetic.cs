@@ -166,6 +166,7 @@ public class Magnetic : MonoBehaviour {
     // If the object has a Rigidbody, this is the real centerOfMass. Otherwise, it is just the transform position.
     //// if the object is made of multiple colliders, find the center of volume of all of those colliders.
     // If the object has only one collider, the local center of mass is calculated at startup.
+    private bool customCenterOfMass = false;
     private Vector3 centerOfMass;
     public Vector3 CenterOfMass {
         get {
@@ -192,6 +193,11 @@ public class Magnetic : MonoBehaviour {
             //    return transform.TransformPoint(centerOfMass);
             //}
             return cachedCenterOfMass;
+        }
+        set {
+            // Sets the local center of mass
+            customCenterOfMass = true;
+            centerOfMass = value;
         }
     }
     private Vector3 cachedCenterOfMass;
@@ -301,8 +307,8 @@ public class Magnetic : MonoBehaviour {
     }
 
     private void UpdateCenterOfMass() {
-        if (IsStatic) {
-            if (HasColliders) {
+        if (IsStatic || customCenterOfMass) {
+            if (HasColliders || customCenterOfMass) {
                 cachedCenterOfMass = transform.TransformPoint(centerOfMass);
             } else {
                 // no collider or rigidbody, so center of mass is set to transform.position as a default

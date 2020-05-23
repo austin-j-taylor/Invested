@@ -6,6 +6,8 @@ using System.Collections;
  */
 public class Destructable : Powered {
 
+    [SerializeField]
+    private bool OnByDefault = true;
     protected double maxHealth = 100;
 
     protected double health;
@@ -25,7 +27,7 @@ public class Destructable : Powered {
 
     protected virtual void Start() {
         health = maxHealth;
-        On = true;
+        On = OnByDefault;
     }
 
     protected virtual void Destroy() {
