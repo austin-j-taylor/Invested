@@ -33,7 +33,7 @@ public class Challenge_TimeTrial : Challenge {
         StartCoroutine(Countdown());
     }
 
-    private IEnumerator Countdown() {
+    protected IEnumerator Countdown() {
         CameraController.UsingCinemachine = true;
         Player.CanControl = false;
 
@@ -49,13 +49,13 @@ public class Challenge_TimeTrial : Challenge {
         yield return new WaitForSeconds(1);
         HUD.MessageOverlayCinematic.SetText("START");
 
+        Player.CanControl = true;
+        CameraController.UsingCinemachine = false;
+
         StartCoroutine(TimeTrial(recordTime));
         StartCoroutine(SpikeTracer(recordTime));
     }
-    private IEnumerator TimeTrial(double recordTime) {
-
-        Player.CanControl = true;
-        CameraController.UsingCinemachine = false;
+    protected virtual IEnumerator TimeTrial(double recordTime) {
 
         int ringIndex = 0;
         double raceTime = 0;
@@ -72,10 +72,9 @@ public class Challenge_TimeTrial : Challenge {
         } while (ringIndex < rings.Length);
         CompleteChallenge();
 
-        StartCoroutine(DisplayResults(raceTime, recordTime));
     }
 
-    private IEnumerator DisplayResults(double raceTime, double recordTime) {
+    protected IEnumerator DisplayResults(double raceTime, double recordTime) {
         Debug.Log("Time: " + HUD.TimeMMSSMS(raceTime));
         if (raceTime < recordTime) {
             HUD.MessageOverlayCinematic.FadeIn("Time: " + HUD.TimeMMSSMS(raceTime) + TextCodes.Blue(" (new record!)"));
@@ -88,7 +87,7 @@ public class Challenge_TimeTrial : Challenge {
     }
 
     // Makes the spike follow the path of the rings
-    private IEnumerator SpikeTracer(double recordTime) {
+    protected virtual IEnumerator SpikeTracer(double recordTime) {
 
         double progress = 0;
         // Spike starts at where it is now and goes through the rings

@@ -11,14 +11,4 @@ public class Challenge_ReachGoal : Challenge_TimeTrial {
         if (failureObjects.Length > 0)
             challengeDescription = challengeDescription + TextCodes.Red("\n - The Floor is Lava: Touching the ground fails the challenge.");
     }
-
-    public override void StartChallenge() {
-        base.StartChallenge();
-        if (failureObjects.Length > 0)
-            StartCoroutine(CheckForLava());
-    }
-
-    private IEnumerator CheckForLava() {
-        yield return null;
-    }
 }

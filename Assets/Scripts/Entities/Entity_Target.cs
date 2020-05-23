@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class Entity_Target : Entity {
 
+    private Source source;
+
     protected override void Start() {
         base.Start();
 
         MaxHealth = 10;
-        GetComponent<Source>().On = false;
+        source = GetComponent<Source>();
+        source.On = false;
         GetComponent<Magnetic>().CenterOfMass = transform.InverseTransformPoint(transform.Find("Body").position);
     }
 
@@ -18,5 +21,9 @@ public class Entity_Target : Entity {
         transform.Find("Body").GetComponent<MeshRenderer>().material = GameManager.Material_MARLmetal_lit;
         GetComponent<Magnetic>().enabled = false;
         GetComponent<Source>().On = true;
+    }
+
+    public bool On {
+        get => source.On;
     }
 }

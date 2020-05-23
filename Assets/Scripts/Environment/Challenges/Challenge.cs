@@ -20,7 +20,7 @@ public class Challenge : MonoBehaviour {
     protected string challengeType = "";
 
     private ChallengesManager manager;
-    private Transform challengeObjects; // objects that will only be active for this challenge
+    protected Transform challengeObjects; // objects that will only be active for this challenge
     private Collider introduceTrigger;
     protected SpikeSpline spikeSpline;
     protected GameObject spike;
