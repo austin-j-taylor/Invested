@@ -6,7 +6,7 @@ using System.Collections;
  */
 public class Source : Destructable {
 
-    Node parent;
+    protected Node parent;
 
     private void Awake() {
         parent = transform.parent.GetComponent<Node>();
@@ -15,7 +15,7 @@ public class Source : Destructable {
     public override bool On {
         set {
             base.On = value;
-            if(parent)
+            if(parent != null)
                 parent.Refresh();
         }
     }

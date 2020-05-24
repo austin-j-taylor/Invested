@@ -5,9 +5,7 @@ using System.Collections.Generic;
 // Represents a connected system of elements.
 // If any element in the system is on, the node is On.
 // If all elements in the system are off, the node is off.
-public class Node : Powered {
-
-    Node parent;
+public class Node : Source {
 
     public Source[] sources;
     public Powered[] receivers;
@@ -53,8 +51,5 @@ public class Node : Powered {
             receivers[i].On = state;
         }
         On = state;
-        // Refresh parent
-        if (parent)
-            parent.Refresh();
     }
 }

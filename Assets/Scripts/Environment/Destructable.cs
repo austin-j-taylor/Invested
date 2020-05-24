@@ -7,7 +7,7 @@ using System.Collections;
 public class Destructable : Powered {
 
     [SerializeField]
-    private bool OnByDefault = true;
+    private bool OnByDefault = false;
     protected double maxHealth = 100;
 
     protected double health;
