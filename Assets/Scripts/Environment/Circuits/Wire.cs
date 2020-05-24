@@ -31,14 +31,15 @@ public class Wire : Powered {
         Array.Resize(ref points, points.Length + 1);
         Array.Resize(ref rends, rends.Length + 1);
         Vector3 direction = transform.forward;
-        if (points.Length > 3)
+        if (points.Length > 2)
             direction = (points[points.Length - 2] - points[points.Length - 3]).normalized;
         point += direction;
         points[points.Length - 1] = point;
 
         // Instantiate a wire object
-        rends[rends.Length-1] = Instantiate(objectWire, transform.TransformPoint(points[points.Length - 1]), Quaternion.LookRotation(direction), transform).GetComponent<Renderer>();
+        rends[rends.Length-1] = Instantiate(objectWire, transform).GetComponent<Renderer>();
         UpdateWire(rends.Length - 1);
+        UpdateWire(rends.Length - 2);
     }
     public void RemoveWire() {
         if (PointCount > 0) {
@@ -48,10 +49,6 @@ public class Wire : Powered {
             if (i < transform.childCount) {
                 Transform child = transform.GetChild(i);
                 DestroyImmediate(child.gameObject);
-                Debug.Log("destroyed child " + i);
-            } else {
-                Debug.Log("too big child " + i);
-
             }
             Array.Resize(ref rends, i);
         }
@@ -68,15 +65,22 @@ public class Wire : Powered {
         // position: midpoint between last two points
         // rotation: angle between last two points
         // scale in the Z: distance between last two points
-        int last = i, next = i + 1;
-        Vector3 direction = (points[next] - points[last]);
-        float distance = (points[next] - points[last]).magnitude;
+        Vector3 endPosition = points[i + 1];
+        Vector3 startPosition = points[i];
+        if(i > 0) {
+            startPosition += (endPosition - startPosition).normalized * rends[i].transform.localScale.x / 2;
+        }
+        if (i < rends.Length - 1) {
+            endPosition += (endPosition - startPosition).normalized * rends[i].transform.localScale.x / 2;
+        }
+        Vector3 direction = endPosition - startPosition;
+        float distance = (endPosition - startPosition).magnitude;
 
-        rends[i].transform.localPosition = points[last] + (direction) /2;
+        rends[i].transform.localPosition = startPosition + (direction) /2;
         Vector3 scale = rends[i].transform.localScale;
         scale.z = distance;
         rends[i].transform.localScale = scale;
-        rends[i].transform.rotation = Quaternion.LookRotation(direction);
+        rends[i].transform.rotation = transform.rotation * Quaternion.LookRotation(direction);
     }
 
     public override bool On {

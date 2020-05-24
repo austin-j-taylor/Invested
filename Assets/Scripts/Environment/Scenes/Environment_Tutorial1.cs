@@ -45,9 +45,12 @@ public class Environment_Tutorial1 : EnvironmentCinematic {
     }
 
     private IEnumerator Procedure() {
-        yield return null;
-        vcam.enabled = false;
-        yield return new WaitForSeconds(2);
+        // Skip the intro cutscene if the player is starting elsewhere in the level
+        if ((Player.PlayerInstance.transform.position - vcam.transform.position).magnitude < 30) {
+            yield return null;
+            vcam.enabled = false;
+            yield return new WaitForSeconds(2);
+        }
         CameraController.DisableCinemachineCamera(vcam);
         Player.CanControl = true;
         Player.CanControlMovement = true;

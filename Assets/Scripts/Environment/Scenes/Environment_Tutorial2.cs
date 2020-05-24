@@ -6,6 +6,8 @@ using static TextCodes;
 public class Environment_Tutorial2 : EnvironmentCinematic {
 
     [SerializeField]
+    private Node doorNode = null;
+    [SerializeField]
     private MessageTrigger trigger_push = null;
     [SerializeField]
     private GameObject backWall = null;
@@ -47,9 +49,14 @@ public class Environment_Tutorial2 : EnvironmentCinematic {
     }
 
     private IEnumerator Procedure() {
-        yield return null;
-        vcam.enabled = false;
-        yield return new WaitForSeconds(2);
+        // Skip the intro cutscene if the player is starting elsewhere in the level
+        if((Player.PlayerInstance.transform.position - vcam.transform.position).magnitude < 30) {
+            yield return null;
+            vcam.enabled = false;
+            yield return new WaitForSeconds(2);
+        } else {
+            Player.PlayerIronSteel.SteelReserve.IsEnabled = true;
+        }
         CameraController.DisableCinemachineCamera(vcam);
         Player.CanControl = true;
         Player.CanControlMovement = true;
@@ -75,7 +82,9 @@ public class Environment_Tutorial2 : EnvironmentCinematic {
         HUD.MessageOverlayCinematic.FadeIn(
             "Hit the target on the ceiling."
         );
-        yield return new WaitForSeconds(5);
+        while (!doorNode.On) {
+            yield return null;
+        }
         HUD.MessageOverlayCinematic.FadeOut();
     }
 }

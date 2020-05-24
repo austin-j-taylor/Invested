@@ -6,7 +6,8 @@ using System.Collections;
 */
 public class Entity : MonoBehaviour {
 
-    protected const float fallDamageSquareSpeedThreshold = 150; // any fall speed above this -> painful
+    //protected const float fallDamageSquareSpeedThreshold = 150; // any fall speed above this -> painful
+    protected const float fallDamageSquareSpeedThreshold = 10; // any collision with more than this force is considered damage
 
     private double health;
     private double maxHealth;
@@ -63,6 +64,7 @@ public class Entity : MonoBehaviour {
     protected virtual void OnCollisionEnter(Collision collision) {
         Vector3 vel = Player.PlayerInstance.GetComponent<Rigidbody>().velocity;
         Vector3 thisNormal = collision.GetContact(0).normal;
+        Debug.Log("damage: " + collision.impulse.magnitude);
         if (Vector3.Project(collision.relativeVelocity, thisNormal).sqrMagnitude > fallDamageSquareSpeedThreshold) {
             OnHit(collision.GetContact(0).point - transform.position, collision.impulse.magnitude);
         }

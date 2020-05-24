@@ -19,12 +19,12 @@ public class WireEditor : Editor {
             DrawSelectedPointInspector();
         }
         if (GUILayout.Button("Add Wire")) {
-            Undo.RecordObject(wire, "Add Curve");
+            Undo.RegisterCompleteObjectUndo(wire, "Add Curve");
             wire.AddWire();
             EditorUtility.SetDirty(wire);
         }
         if (GUILayout.Button("Remove Wire")) {
-            Undo.RecordObject(wire, "Set Scale");
+            Undo.RegisterCompleteObjectUndo(wire, "Set Scale");
             wire.RemoveWire();
             EditorUtility.SetDirty(wire);
         }

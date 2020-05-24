@@ -20,7 +20,7 @@ public class Entity_Target : Entity {
 
     protected override void Die() {
         base.Die();
-
+        Debug.Log("dead");
         GetComponent<AudioSource>().Play();
         transform.Find("Body").GetComponent<MeshRenderer>().material = GameManager.Material_MARLmetal_lit;
         if(magnetic)
