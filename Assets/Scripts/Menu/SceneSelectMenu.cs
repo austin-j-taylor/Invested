@@ -236,13 +236,13 @@ public class SceneSelectMenu : MonoBehaviour {
         LoadSceneFromClick(sceneTutorial1);
     }
     private void OnClickedTutorial2Button() {
-        //LoadSceneFromClick(sceneTutorial2);
+        LoadSceneFromClick(sceneTutorial2);
     }
     private void OnClickedTutorial3Button() {
-        //LoadSceneFromClick(sceneTutorial3);
+        LoadSceneFromClick(sceneTutorial3);
     }
     private void OnClickedTutorial4Button() {
-        //LoadSceneFromClick(sceneTutorial4);
+        LoadSceneFromClick(sceneTutorial4);
     }
 
     private void OnClickedLuthadel() {

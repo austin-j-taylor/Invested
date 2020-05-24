@@ -50,7 +50,7 @@ public class WireLock : Source {
         base.Start();
         anim.SetBool("repairing", repairing);
 
-        PowerConnected(true);
+        On = true;
     }
 
     private void LateUpdate() {

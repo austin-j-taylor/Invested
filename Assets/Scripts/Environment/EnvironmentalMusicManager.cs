@@ -6,7 +6,7 @@ public class EnvironmentalMusicManager : MonoBehaviour {
     private const float crossfadeTime = 3;
     private AudioSource[] interiors, exteriors;
 
-    private void Start() {
+    private void Awake() {
         interiors = transform.Find("Interiors").GetComponents<AudioSource>();
         exteriors = transform.Find("Exteriors").GetComponents<AudioSource>();
     }
