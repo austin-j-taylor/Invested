@@ -275,7 +275,8 @@ public class Magnetic : MonoBehaviour {
     }
 
     protected void Start() {
-        blueLine.gameObject.SetActive(false);
+        if(blueLine)
+            blueLine.gameObject.SetActive(false);
     }
 
     private void FixedUpdate() {

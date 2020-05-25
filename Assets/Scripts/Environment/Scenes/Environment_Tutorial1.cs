@@ -8,10 +8,10 @@ public class Environment_Tutorial1 : EnvironmentCinematic {
     [SerializeField]
     private MessageTrigger trigger_pull = null;
 
-    EnvironmentalMusicManager musicManager;
+    EnvironmentalTransitionManager musicManager;
 
     void Start() {
-        musicManager = GetComponentInChildren<EnvironmentalMusicManager>();
+        musicManager = GetComponentInChildren<EnvironmentalTransitionManager>();
 
         Player.CanControl = false;
         Player.CanControlMovement = false;

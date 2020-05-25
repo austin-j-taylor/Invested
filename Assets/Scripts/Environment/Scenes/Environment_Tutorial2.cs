@@ -12,10 +12,10 @@ public class Environment_Tutorial2 : EnvironmentCinematic {
     [SerializeField]
     private GameObject backWall = null;
 
-    EnvironmentalMusicManager musicManager;
+    EnvironmentalTransitionManager musicManager;
 
     void Start() {
-        musicManager = GetComponentInChildren<EnvironmentalMusicManager>();
+        musicManager = GetComponentInChildren<EnvironmentalTransitionManager>();
 
         Player.CanControl = false;
         Player.CanControlMovement = false;
@@ -23,7 +23,7 @@ public class Environment_Tutorial2 : EnvironmentCinematic {
         Player.PlayerIronSteel.SteelReserve.IsEnabled = false;
         Player.PlayerPewter.PewterReserve.IsEnabled = false;
         Player.CanControlZinc = false;
-        HUD.ControlWheelController.SetLockedState(ControlWheelController.LockedState.LockedFully);
+        HUD.ControlWheelController.SetLockedState(ControlWheelController.LockedState.LockedTo3);
         HUD.HelpOverlayController.SetLockedState(HelpOverlayController.LockedState.Locked0);
 
         // Set cinemachine virtual camera properties

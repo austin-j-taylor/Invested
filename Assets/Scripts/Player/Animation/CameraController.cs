@@ -19,6 +19,7 @@ public class CameraController : MonoBehaviour {
     private static readonly Vector3 cameraControllerOffset = new Vector3(0, 0.25f - .06f, 0);
 
     public static Camera ActiveCamera { get; private set; }
+    private static CameraController instance;
 
     private static Transform playerBody;
     private static Transform playerCameraController;
@@ -36,6 +37,7 @@ public class CameraController : MonoBehaviour {
     private static bool cameraIsLocked;
 
     private static CloudMaster clouds; // perceives clouds on certain levels
+    private static float cloudsMaxDensity; // used for fading between densities
 
     public static bool HasNotMovedCamera {
         get {
@@ -59,6 +61,7 @@ public class CameraController : MonoBehaviour {
     }
 
     void Awake() {
+        instance = this;
         playerCameraController = transform;
         playerBody = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         CameraLookAtTarget = transform.Find("CameraLookAtTarget");
@@ -437,6 +440,51 @@ public class CameraController : MonoBehaviour {
         clouds.Awake();
 
         other.enabled = false;
+
+        cloudsMaxDensity = clouds.densityMultiplier;
     }
 
+    public static void FadeCloudsIn(float time) {
+        instance.StartCoroutine(instance.CloudsIn(time));
+    }
+    public static void FadeCloudsOut(float time) {
+        instance.StartCoroutine(instance.CloudsOut(time));
+    }
+    public static void FadeCloudsOutImmediate() {
+        clouds.densityMultiplier = 0;
+    }
+    private IEnumerator CloudsIn(float fadeTime) {
+        float density = 0;
+        if(cloudsMaxDensity < 0) {
+            while (density > cloudsMaxDensity) {
+                density += Time.deltaTime / fadeTime * cloudsMaxDensity;
+                clouds.densityMultiplier = density;
+                yield return null;
+            }
+        } else {
+            while (density < cloudsMaxDensity) {
+                density += Time.deltaTime / fadeTime * cloudsMaxDensity;
+                clouds.densityMultiplier = density;
+                yield return null;
+            }
+        }
+        clouds.densityMultiplier = cloudsMaxDensity;
+    }
+    private IEnumerator CloudsOut(float fadeTime) {
+        float density = cloudsMaxDensity;
+        if (cloudsMaxDensity < 0) {
+            while (density < 0) {
+                density -= Time.deltaTime / fadeTime * cloudsMaxDensity;
+                clouds.densityMultiplier = density;
+                yield return null;
+            }
+        } else {
+            while (density > 0) {
+                density -= Time.deltaTime / fadeTime * cloudsMaxDensity;
+                clouds.densityMultiplier = density;
+                yield return null;
+            }
+        }
+        clouds.densityMultiplier = 0;
+    }
 }

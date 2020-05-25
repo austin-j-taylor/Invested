@@ -6,7 +6,7 @@ using System.Collections;
 public class MusicTrigger : MonoBehaviour {
 
     [SerializeField]
-    EnvironmentalMusicManager musicManager = null;
+    EnvironmentalTransitionManager musicManager = null;
 
     private void OnTriggerEnter(Collider other) {
         if(Player.IsPlayerTrigger(other)) {

@@ -19,7 +19,7 @@ public class AllomechanicalGlower : MonoBehaviour {
     private Renderer[] pewters;
     private Renderer[] zincs;
 
-    private void Start() {
+    private void Awake() {
 
         irons = transform.Find("Irons").GetComponentsInChildren<Renderer>();
         steels = transform.Find("Steels").GetComponentsInChildren<Renderer>();

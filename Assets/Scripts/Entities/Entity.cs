@@ -64,7 +64,6 @@ public class Entity : MonoBehaviour {
     protected virtual void OnCollisionEnter(Collision collision) {
         Vector3 vel = Player.PlayerInstance.GetComponent<Rigidbody>().velocity;
         Vector3 thisNormal = collision.GetContact(0).normal;
-        Debug.Log("damage: " + collision.impulse.magnitude);
         if (Vector3.Project(collision.relativeVelocity, thisNormal).sqrMagnitude > fallDamageSquareSpeedThreshold) {
             OnHit(collision.GetContact(0).point - transform.position, collision.impulse.magnitude);
         }
