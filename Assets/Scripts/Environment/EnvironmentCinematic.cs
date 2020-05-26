@@ -2,7 +2,7 @@
 using System.Collections;
 using Cinemachine;
 
-public class EnvironmentCinematic : Environment {
+public class EnvironmentCinematic : EnvironmentWithTriggers {
 
     private const float closenessThresholdSqr = .001f;
 
@@ -23,4 +23,5 @@ public class EnvironmentCinematic : Environment {
     protected bool DollyHasntReachedTarget() {
         return (CameraController.ActiveCamera.transform.position - vcam.Follow.position).sqrMagnitude > closenessThresholdSqr;
     }
+
 }

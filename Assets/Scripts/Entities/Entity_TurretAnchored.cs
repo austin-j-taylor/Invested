@@ -13,8 +13,6 @@ public class Entity_TurretAnchored : NonPlayerPushPullController {
     [SerializeField]
     private float radiusOfDetection = 20;
     [SerializeField]
-    private float radiusOfAwake = 40;
-    [SerializeField]
     private double steelReserveCapacity = .25;
     [SerializeField]
     private int maxPushRange = 5;
@@ -51,35 +49,30 @@ public class Entity_TurretAnchored : NonPlayerPushPullController {
         PushTargets.MaxRange = maxPushRange;
         Strength = strength;
 
-        if (IsActive()) {
+        if (SearchForTarget()) {
             SteelReserve.Mass += Time.deltaTime * refillSpeed;
             fillBlock.SetFloat("_Fill", (float)(SteelReserve.Mass / steelReserveCapacity));
-            tubesRenderer.SetPropertyBlock(fillBlock);
-
-            if (SearchForTarget()) {
-                TrackTarget();
-                if (SteelReserve.Mass >= steelReserveCapacity) {
-                    ShootTarget();
-                }
+            TrackTarget();
+            if (SteelReserve.Mass >= steelReserveCapacity) {
+                ShootTarget();
             }
+        } else if (SteelReserve.Mass > 0) {
+            SteelReserve.Mass -= Time.deltaTime * refillSpeed;
+            fillBlock.SetFloat("_Fill", (float)(SteelReserve.Mass / steelReserveCapacity));
         }
+        tubesRenderer.SetPropertyBlock(fillBlock);
 
         base.FixedUpdate();
     }
 
-    // If the turret is active
-    private bool IsActive() {
-        return ((target.transform.position - transform.position).magnitude < radiusOfAwake);
-    }
     // Returns true if target is found
     private bool SearchForTarget() {
         // Check for LOS
         Vector3 direction = target.transform.position - neck.position;
         Debug.DrawRay(neck.position, direction);
         if (Physics.Raycast(neck.position, direction, out RaycastHit hit)) {
-            if(hit.transform == target) {
+            if (hit.transform == target)
                 return ((direction).magnitude < radiusOfDetection);
-            }
         }
         return false;
     }

@@ -9,16 +9,23 @@ using static TextCodes;
  */
 public class MessageOverlayDescriptive : MonoBehaviour {
 
-    public Text HeaderText { get; private set; }
-    public Text MessageText { get; private set; }
+    private Text headerText;
+    private Text hessageText;
     
     void Awake() {
-        HeaderText = transform.Find("Header").GetComponent<Text>();
-        MessageText = transform.Find("Message").GetComponent<Text>();
+        headerText = transform.Find("Header").GetComponent<Text>();
+        hessageText = transform.Find("Message").GetComponent<Text>();
     }
 
     public void Clear() {
-        HeaderText.text = string.Empty;
-        MessageText.text = string.Empty;
+        headerText.text = string.Empty;
+        hessageText.text = string.Empty;
+    }
+
+    public void SetHeader(string text) {
+        headerText.text = text;
+    }
+    public void SetMessage(string text) {
+        hessageText.text = text;
     }
 }

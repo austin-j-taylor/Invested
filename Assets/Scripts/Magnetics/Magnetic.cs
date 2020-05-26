@@ -230,7 +230,7 @@ public class Magnetic : MonoBehaviour {
 
         if (IsStatic) { // No RigidBody attached
             if (netMass == 0) {
-                Debug.LogError("Magnetic's netMass is 0 on an object without a RigidBody " + name + " at " + transform.position);
+                Debug.LogError("Magnetic's netMass is 0 on an object without a RigidBody " + name + " at " + transform.position, gameObject);
             }
             if (magneticMass == 0) {
                 magneticMass = netMass;

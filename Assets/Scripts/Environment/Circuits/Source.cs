@@ -8,8 +8,10 @@ public class Source : Destructable {
 
     protected Node parent;
 
-    private void Awake() {
-        parent = transform.parent.GetComponent<Node>();
+    protected override void Awake() {
+        base.Awake();
+        if(transform.parent)
+            parent = transform.parent.GetComponent<Node>();
     }
 
     public override bool On {

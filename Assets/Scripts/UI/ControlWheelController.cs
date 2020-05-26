@@ -23,10 +23,11 @@ public class ControlWheelController : MonoBehaviour {
     private readonly Color colorSelectedSpoke = new Color(1, 1, 1, .5f);
 
     enum Selection { Cancel, Manual, Area, Bubble, Coinshot, Coin_Spray, Coin_Full, Coin_Semi, DeselectAll, StopBurning };
-    public enum LockedState { Unlocked, LockedFully, LockedTo3 };
+    public enum LockedState { Unlocked, LockedFully, LockedToArea, LockedToBubble };
 
     private Image circle;
     private Image[] spokes;
+    private Text textCenter;
     private Text textManual;
     private Text textArea;
     private Text textBubble;
@@ -109,6 +110,7 @@ public class ControlWheelController : MonoBehaviour {
         selectedCoin = Selection.Coin_Semi;
         circle = transform.Find("Circle").GetComponent<Image>();
         spokes = transform.Find("Selections").GetComponentsInChildren<Image>();
+        textCenter = transform.Find("Selections/SpokeCircle/Text/Title").GetComponent<Text>();
         textManual = transform.Find("Selections/Spoke0/Text/Title/Description").GetComponent<Text>();
         textArea = transform.Find("Selections/Spoke1/Text/Title/Description").GetComponent<Text>();
         textBubble = transform.Find("Selections/Spoke2/Text/Title/Description").GetComponent<Text>();
@@ -284,25 +286,35 @@ public class ControlWheelController : MonoBehaviour {
         textBubble.text = _KeyPullAbridged + "/" + _KeyPushAbridged + ": " + Pull_Push + "\nin a bubble around you\n\n"
         + "The bubble can stay open\nin other modes.\n";
         textCoinshot.text = _KeyPullAbridged + " with no " + Pull_targets + ":\nthrow and " + Push + " on " + O_Coin + "\n\n";
+        switch(Player.PlayerIronSteel.Mode) {
+            case PlayerPullPushController.ControlMode.Coinshot: // fall through
+            case PlayerPullPushController.ControlMode.Manual:
+                textCenter.text = "";
+                break;
+            case PlayerPullPushController.ControlMode.Area:
+                textCenter.text = KeyNumberOfTargetsAbridged + "\n Area radius";
+                break;
+            case PlayerPullPushController.ControlMode.Bubble:
+                textCenter.text = KeyNumberOfTargetsAbridged + ":\nBubble radius";
+                break;
+        }
     }
     private void UpdateManual() {
         UpdateText();
         textManual.text = _KeyPullAbridged + "/" + _KeyPushAbridged + ": " + Pull_Push + "\n"
-            + _KeySelectAbridged + "/" + _KeySelectAlternateAbridged + ":\nselect targets\n"
-            + KeyNegate + " + " + _KeySelectAbridged + "/" + _KeySelectAlternateAbridged + ":\nDeselect targets\n"
-            + KeyNegate + " + " + scrollWheel + ":\n# of targets";
+            + _KeySelectAbridged + "/" + _KeySelectAlternateAbridged + ":\nMark targets\n";
     }
     private void UpdateArea() {
         UpdateText();
         textArea.text = _KeyPullAbridged + "/" + _KeyPushAbridged + ": " + Pull_Push + "\n"
-        + KeyNegate + " + " + scrollWheel + ":\nsize of cone"
+        + KeyNumberOfTargets + ":\nsize of cone"
         + "\n\n(otherwise Manual)\n";
     }
     private void UpdateBubble() {
         UpdateText();
         textBubble.text = _KeyPullAbridged + "/" + _KeyPushAbridged + ": " + Pull_Push + "\n"
             + _KeySelectAbridged + "/" + _KeySelectAlternateAbridged + ": toggle bubble\n"
-        + KeyNegate + " + " + scrollWheel + ":\nsize of bubble\n\n";
+        + KeyNumberOfTargets + ":\nsize of bubble\n\n";
     }
     private void UpdateCoinshot() {
         UpdateText();
@@ -319,11 +331,9 @@ public class ControlWheelController : MonoBehaviour {
         foreach (Image image in spokes) {
             image.color = colorBlankSpoke;
         }
-
         spokes[(int)selectedSpoke].color = colorSelectedSpoke;
         spokes[(int)selectedCoin].color = colorSelectedSpoke;
         spokes[(int)highlit].color = colorHighlitSpoke;
-
     }
 
     // Sets how many options are available on the control wheel
@@ -340,9 +350,19 @@ public class ControlWheelController : MonoBehaviour {
                 for (int i = 0; i < spokes.Length; i++) {
                     spokes[i].gameObject.SetActive(false);
                 }
-
                 break;
-            case LockedState.LockedTo3:
+            case LockedState.LockedToArea:
+                for (int i = 0; i < 3; i++) {
+                    spokes[i].gameObject.SetActive(true);
+                }
+                for (int i = 3; i < 8; i++) {
+                    spokes[i].gameObject.SetActive(false);
+                }
+                for (int i = 8; i < spokes.Length; i++) {
+                    spokes[i].gameObject.SetActive(true);
+                }
+                break;
+            case LockedState.LockedToBubble:
                 for (int i = 0; i < 4; i++) {
                     spokes[i].gameObject.SetActive(true);
                 }
@@ -352,7 +372,6 @@ public class ControlWheelController : MonoBehaviour {
                 for (int i = 8; i < spokes.Length; i++) {
                     spokes[i].gameObject.SetActive(true);
                 }
-
                 break;
         }
     }

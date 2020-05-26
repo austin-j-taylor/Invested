@@ -8,9 +8,9 @@ public class Environment_Tutorial2 : EnvironmentCinematic {
     [SerializeField]
     private Node doorNode = null;
     [SerializeField]
-    private MessageTrigger trigger_push = null;
-    [SerializeField]
     private GameObject backWall = null;
+    [SerializeField]
+    private FacilityDoor_Red door = null;
 
     EnvironmentalTransitionManager musicManager;
 
@@ -21,9 +21,9 @@ public class Environment_Tutorial2 : EnvironmentCinematic {
         Player.CanControlMovement = false;
         Player.PlayerInstance.CoinHand.Pouch.Clear();
         Player.PlayerIronSteel.SteelReserve.IsEnabled = false;
-        Player.PlayerPewter.PewterReserve.IsEnabled = false;
-        Player.CanControlZinc = false;
-        HUD.ControlWheelController.SetLockedState(ControlWheelController.LockedState.LockedTo3);
+        //Player.PlayerPewter.PewterReserve.IsEnabled = false;
+        //Player.CanControlZinc = false;
+        HUD.ControlWheelController.SetLockedState(ControlWheelController.LockedState.LockedToArea);
         HUD.HelpOverlayController.SetLockedState(HelpOverlayController.LockedState.Locked0);
 
         // Set cinemachine virtual camera properties
@@ -32,8 +32,6 @@ public class Environment_Tutorial2 : EnvironmentCinematic {
         vcam.transform.position = new Vector3(Mathf.Cos(Time.unscaledTime * Environment_TitleScreen.speedVert) * Environment_TitleScreen.speedAmp, (1 + Mathf.Sin(Time.unscaledTime * Environment_TitleScreen.speedVert)) * Environment_TitleScreen.speedAmp, Mathf.Sin(Time.unscaledTime * Environment_TitleScreen.speedVert) * Environment_TitleScreen.speedAmp);
         // Make camera look at Player
         vcam.LookAt = Player.PlayerInstance.transform;
-
-        trigger_push.routine = Trigger_Push();
 
         // Handle music
         StartCoroutine(Play_music());
@@ -50,7 +48,7 @@ public class Environment_Tutorial2 : EnvironmentCinematic {
 
     private IEnumerator Procedure() {
         // Skip the intro cutscene if the player is starting elsewhere in the level
-        if((Player.PlayerInstance.transform.position - vcam.transform.position).magnitude < 30) {
+        if ((Player.PlayerInstance.transform.position - vcam.transform.position).magnitude < 30) {
             yield return null;
             vcam.enabled = false;
             yield return new WaitForSeconds(2);
@@ -65,7 +63,7 @@ public class Environment_Tutorial2 : EnvironmentCinematic {
         backWall.SetActive(false);
     }
 
-    private IEnumerator Trigger_Push() {
+    protected override IEnumerator Trigger0() {
         backWall.SetActive(true);
         Player.PlayerIronSteel.SteelReserve.IsEnabled = true;
 
@@ -85,6 +83,13 @@ public class Environment_Tutorial2 : EnvironmentCinematic {
         while (!doorNode.On) {
             yield return null;
         }
+        HUD.MessageOverlayCinematic.FadeOut();
+    }
+
+    protected override IEnumerator Trigger1() {
+        HUD.MessageOverlayCinematic.FadeIn("Like with " + Pulling + ", you can " + Mark_pushing + " metals for " + Pushing + " with " + _KeySelectAlternate + ".\n Mark multiple by holding " + KeyMultiMark + ".");
+        while (!door.On)
+            yield return null;
         HUD.MessageOverlayCinematic.FadeOut();
     }
 }

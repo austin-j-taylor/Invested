@@ -25,7 +25,7 @@ public class Destructable : Powered {
         }
     }
 
-    protected virtual void Start() {
+    protected virtual void Awake() {
         health = maxHealth;
         On = OnByDefault;
     }

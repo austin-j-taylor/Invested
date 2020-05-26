@@ -20,7 +20,8 @@ public class Entity : MonoBehaviour {
             health = value;
             if (health <= 0) {
                 health = 0;
-                Die();
+                if(!isDead)
+                    Die();
             }
         }
     }

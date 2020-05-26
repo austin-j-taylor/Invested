@@ -16,7 +16,7 @@ public class Environment_Tutorial1_Swinging : Environment {
             yield return null;
         }
         HUD.MessageOverlayCinematic.FadeIn(Messages.tutorial_controlwheel);
-        HUD.ControlWheelController.SetLockedState(ControlWheelController.LockedState.LockedTo3);
+        HUD.ControlWheelController.SetLockedState(ControlWheelController.LockedState.LockedToArea);
         while (!HUD.ControlWheelController.IsOpen)
             yield return null;
         HUD.MessageOverlayCinematic.FadeOut();

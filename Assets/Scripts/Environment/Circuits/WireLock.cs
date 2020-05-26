@@ -34,8 +34,9 @@ public class WireLock : Source {
     }
 
 
-    private void Awake() {
+    protected override void Awake() {
         maxHealth = 120;
+        base.Awake();
 
         metal = GetComponentInChildren<Magnetic>();
         mount = GetComponentInChildren<Renderer>();
@@ -46,8 +47,7 @@ public class WireLock : Source {
         audioRepairing = sources[2];
     }
 
-    protected override void Start() {
-        base.Start();
+    private void Start() {
         anim.SetBool("repairing", repairing);
 
         On = true;

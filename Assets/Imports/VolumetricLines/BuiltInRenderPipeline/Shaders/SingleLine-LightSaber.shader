@@ -41,7 +41,7 @@ Shader "VolumetricLine/SingleLine-LightSaber" {
 			
 			Cull Off
 			ZWrite Off
-			ZTest LEqual
+			ZTest Off
 			Blend One One
 			Lighting Off
 			

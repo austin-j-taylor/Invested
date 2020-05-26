@@ -191,6 +191,11 @@ public class TextCodes : MonoBehaviour {
             return LightBlue("Mark");
         }
     }
+    public static string Mark_pushing {
+        get {
+            return Red("Mark");
+        }
+    }
     public static string Marking_pulling {
         get {
             return LightBlue("Marking");
@@ -338,6 +343,11 @@ public class TextCodes : MonoBehaviour {
     public static string scrollWheel {
         get {
             return Gray("scroll wheel");
+        }
+    }
+    public static string ScrollWheel {
+        get {
+            return Gray("Scroll wheel");
         }
     }
     public static string theLeftJoystick {
@@ -700,7 +710,15 @@ public class TextCodes : MonoBehaviour {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
                 return s_Press_ + Gray("Up/Down") + " on the D-Pad";
             else
-                return s_Press_ + KeyNegate + " and scroll " + theScrollWheel;
+                return R + " + " + s_Scroll_ + theScrollWheel;
+        }
+    }
+    public static string KeyNumberOfTargetsAbridged {
+        get {
+            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+                return "D-Pad " + Gray("Up/Down");
+            else
+                return ScrollWheel;
         }
     }
     public static string KeyThrow {

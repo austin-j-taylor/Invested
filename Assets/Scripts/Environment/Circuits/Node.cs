@@ -11,8 +11,9 @@ public class Node : Source {
     public Powered[] receivers;
 
     // An element is in this node if it is an immediate child of this game object.
-    void Awake() {
-        parent = transform.parent.GetComponent<Node>();
+    protected override void Awake() {
+        base.Awake();
+        
         List<Source> sourcesList = new List<Source>();
         List<Powered> receiversList = new List<Powered>();
         // Go through the immediate children
@@ -28,8 +29,10 @@ public class Node : Source {
         }
         sources = sourcesList.ToArray();
         receivers = receiversList.ToArray();
+    }
 
-        On = false;
+    private void Start() {
+        Refresh();
     }
 
     /*
