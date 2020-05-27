@@ -226,7 +226,7 @@ public class ConversationHUDController : MonoBehaviour {
                     // and the speaker beeps, skipping some characters
 
                     char character = currentConversation.content[i];
-                    if (character != '(' && character != ')') {
+                    if (state == State.Writing && character != '(' && character != ')' && character != '.' && character != '\n' && character != '\r') {
                         currentSpeaker.Beep();
                     }
                 }
@@ -251,7 +251,10 @@ public class ConversationHUDController : MonoBehaviour {
             // Pause. Some characters wait longer.
             if(state == State.Writing) {
                 char character = currentConversation.content[i];
-                if (character == '.' || character == '?' || character == '!') {
+                // Don't pause if we're at punctuation, unless we're right before the end of the message
+                // (a close parenthesis also indicates the end of a thought, so skip if that's up next)
+                if ((character == '.' || character == '?' || character == '!')
+                        && !(i+1 < currentConversation.content.Length && (currentConversation.content[i+1] == '(') || currentConversation.content[i+1] == ')')) {
                     yield return new WaitForSeconds(delayPerPause * 3);
                 } else {
                     yield return new WaitForSeconds(delayPerCharacter);
