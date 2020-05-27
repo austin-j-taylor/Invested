@@ -111,6 +111,16 @@ public class ConversationHUDController : MonoBehaviour {
                             headerText.text = Color_Machines("Machine");
                             currentSpeaker = Player.PlayerVoiceBeeper;
                             break;
+                        case '*': // Custom signifier. Need to parse up to the next backslash as the name to use.
+                            StringBuilder name = new StringBuilder();
+                            i++;
+                            while(currentConversation.content[i] != '\\') {
+                                name.Append(currentConversation.content[i]);
+                                i++;
+                            }
+                            headerText.text = Color_Machines(name.ToString());
+                            currentSpeaker = Player.PlayerVoiceBeeper;
+                            break;
                         case '?': // ???
                             headerText.text = Color_Prima("???");
                             currentSpeaker = Player.PlayerVoiceBeeper;

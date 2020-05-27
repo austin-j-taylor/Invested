@@ -44,6 +44,18 @@ public class ConversationManager : MonoBehaviour {
                 case SceneSelectMenu.sceneTutorial1:
                     filename = "tutorial1";
                     break;
+                case SceneSelectMenu.sceneTutorial2:
+                    filename = "tutorial2";
+                    break;
+                case SceneSelectMenu.sceneTutorial3:
+                    filename = "tutorial3";
+                    break;
+                case SceneSelectMenu.sceneTutorial4:
+                    filename = "tutorial4";
+                    break;
+                case SceneSelectMenu.sceneLuthadel:
+                    filename = "luthadel";
+                    break;
                 default:
                     // no text for this scene
                     break;

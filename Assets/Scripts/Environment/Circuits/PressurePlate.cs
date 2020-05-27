@@ -9,6 +9,8 @@ public class PressurePlate : Source {
 
     public override bool On {
         set {
+            if (value && !On)
+                GetComponent<AudioSource>().Play();
             base.On = value;
             GetComponent<MeshRenderer>().material = value ? GameManager.Material_MARLmetal_lit : GameManager.Material_MARLmetal_unlit;
         }
@@ -33,12 +35,12 @@ public class PressurePlate : Source {
     }
 
     private void OnTriggerEnter(Collider other) {
-        if (other.attachedRigidbody) {
+        if (other.attachedRigidbody && !other.isTrigger) {
             present.Add(other.attachedRigidbody);
         }
     }
     private void OnTriggerExit(Collider other) {
-        if (other.attachedRigidbody) {
+        if (other.attachedRigidbody && !other.isTrigger) {
             present.Remove(other.attachedRigidbody);
             if (present.Count == 0)
                 On = false;

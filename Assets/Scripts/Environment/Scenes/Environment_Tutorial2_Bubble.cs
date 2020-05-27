@@ -5,7 +5,7 @@ using static TextCodes;
 public class Environment_Tutorial2_Bubble : EnvironmentWithTriggers {
 
     private void Start() {
-        triggers[1].routine = ClearHUD();
+        triggers[2].routine = ClearHUD();
     }
 
     protected override IEnumerator Trigger0() {
@@ -16,7 +16,10 @@ public class Environment_Tutorial2_Bubble : EnvironmentWithTriggers {
         while (!HUD.ControlWheelController.IsOpen)
             yield return null;
         HUD.MessageOverlayCinematic.FadeOut();
+    }
 
+    protected override IEnumerator Trigger1() {
+        HUD.MessageOverlayCinematic.FadeIn(KeyNumberOfTargets + " to increase the radius of the bubble.");
         yield break;
     }
 }

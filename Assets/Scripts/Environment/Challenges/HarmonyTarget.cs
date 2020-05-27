@@ -12,7 +12,10 @@ public class HarmonyTarget : MonoBehaviour {
     private const float forceConstantClose = 10000f;
     private const float lerpConstant = 7;
     private const float timeToLerpBack = 2;
-    
+
+    [SerializeField]
+    private bool needsSpikes = true;
+
     private bool playerHasEntered;
     private bool controllingPlayer;
     private Quaternion zeroRotation;
@@ -50,13 +53,17 @@ public class HarmonyTarget : MonoBehaviour {
 
         symbolRenderers = GetComponentsInChildren<Renderer>();
         harmonySphere.gameObject.AddComponent<HarmonySphere>();
-        spikeLeft.GetComponent<Renderer>().enabled = false;
-        spikeCenter.GetComponent<Renderer>().enabled = false;
-        spikeRight.GetComponent<Renderer>().enabled = false;
 
         playerHasEntered = false;
         controllingPlayer = false;
-        numSpikes = 0;
+        if(needsSpikes) {
+            numSpikes = 0;
+            spikeLeft.GetComponent<Renderer>().enabled = false;
+            spikeCenter.GetComponent<Renderer>().enabled = false;
+            spikeRight.GetComponent<Renderer>().enabled = false;
+        } else {
+            numSpikes = 3;
+        }
         zeroRotation = transform.rotation;
     }
 

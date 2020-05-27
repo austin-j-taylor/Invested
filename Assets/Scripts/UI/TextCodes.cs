@@ -87,22 +87,22 @@ public class TextCodes : MonoBehaviour {
     }
     // Same as above, but for specific characters
     public static string Color_Kog(string s) {
-        return Gray(s);
-    }
-    public static string Color_Prima(string s) {
         return LightBlue(s);
     }
-    public static string Color_Machines(string s) {
+    public static string Color_Prima(string s) {
         return (s);
     }
-    public static string Color_Kog_Open() {
-        return Gray_Open();
+    public static string Color_Machines(string s) {
+        return Gray(s);
     }
-    public static string Color_Prima_Open() {
+    public static string Color_Kog_Open() {
         return LightBlue_Open();
     }
-    public static string Color_Machines_Open() {
+    public static string Color_Prima_Open() {
         return ("");
+    }
+    public static string Color_Machines_Open() {
+        return Gray_Open();
     }
     // Same as above, but for other key words
     public static string Color_Location_Open() {

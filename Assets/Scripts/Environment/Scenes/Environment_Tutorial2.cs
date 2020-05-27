@@ -78,7 +78,7 @@ public class Environment_Tutorial2 : EnvironmentCinematic {
         HUD.MessageOverlayCinematic.FadeOut();
         yield return new WaitForSeconds(1);
         HUD.MessageOverlayCinematic.FadeIn(
-            "Hit the target on the ceiling."
+            "Hit the target on the ceiling hard."
         );
         while (!doorNode.On) {
             yield return null;
