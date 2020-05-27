@@ -20,6 +20,8 @@ public class Environment_Tutorial2_Bubble : EnvironmentWithTriggers {
 
     protected override IEnumerator Trigger1() {
         HUD.MessageOverlayCinematic.FadeIn(KeyNumberOfTargets + " to increase the radius of the bubble.");
+        yield return new WaitForSeconds(5);
+        HUD.MessageOverlayCinematic.FadeOut();
         yield break;
     }
 }

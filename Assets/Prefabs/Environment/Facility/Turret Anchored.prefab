@@ -46,27 +46,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1290150466
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9143580618186244185}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 52da8c019ea807e44ab60b6c411fbc80, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rb: {fileID: 0}
-  projectile: {fileID: 6277683850600062820, guid: fe6c8d6a377ecf14d9222a285ec03585,
-    type: 3}
-  projectileSpawnLocation: {fileID: 365851059}
-  refillSpeed: 0.5
-  radiusOfDetection: 20
-  steelReserveCapacity: 1
-  maxPushRange: 20
-  strength: 2
 --- !u!82 &5481599695353720904
 AudioSource:
   m_ObjectHideFlags: 0
@@ -261,6 +240,27 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1290150466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9143580618186244185}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52da8c019ea807e44ab60b6c411fbc80, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 0}
+  projectile: {fileID: 6277683850600062820, guid: fe6c8d6a377ecf14d9222a285ec03585,
+    type: 3}
+  projectileSpawnLocation: {fileID: 365851059}
+  refillSpeed: 0.5
+  radiusOfDetection: 20
+  steelReserveCapacity: 1
+  maxPushRange: 20
+  strength: 2
 --- !u!1001 &992317176002910544
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -268,6 +268,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -9138384822779237652, guid: 3b7ea6d842eef7e4fb55976eb2038ecc,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: -5279512064861900962, guid: 3b7ea6d842eef7e4fb55976eb2038ecc,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 3b7ea6d842eef7e4fb55976eb2038ecc,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -323,10 +333,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -2324271141525611035, guid: 3b7ea6d842eef7e4fb55976eb2038ecc,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: -927199367670048503, guid: 3b7ea6d842eef7e4fb55976eb2038ecc,
         type: 3}
       propertyPath: m_Name
       value: Turret Anchored
+      objectReference: {fileID: 0}
+    - target: {fileID: 4565382436463193942, guid: 3b7ea6d842eef7e4fb55976eb2038ecc,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3b7ea6d842eef7e4fb55976eb2038ecc, type: 3}
