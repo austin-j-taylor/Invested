@@ -5,6 +5,7 @@ using System.Collections;
 public class Challenge_TimeTrial : Challenge {
 
     private TimeTrialRing[] rings;
+    private AudioSource[] sources;
 
     protected override void Start() {
         base.Start();
@@ -13,6 +14,8 @@ public class Challenge_TimeTrial : Challenge {
 
         rings = transform.Find("Rings").GetComponentsInChildren<TimeTrialRing>();
         HideAllRings();
+
+        sources = GetComponents<AudioSource>();
     }
 
     protected override void IntroduceChallenge() {
@@ -22,6 +25,7 @@ public class Challenge_TimeTrial : Challenge {
     }
     public override void LeaveChallenge() {
         base.LeaveChallenge();
+        sources[1].Stop();
         HideAllRings();
     }
     public override void StartChallenge() {
@@ -32,6 +36,11 @@ public class Challenge_TimeTrial : Challenge {
         SetRingOpacity(0);
         StartCoroutine(Countdown());
     }
+    protected override void CompleteChallenge() {
+        base.CompleteChallenge();
+        sources[1].Stop();
+        sources[2].Play();
+    }
 
     protected IEnumerator Countdown() {
         CameraController.UsingCinemachine = true;
@@ -40,7 +49,7 @@ public class Challenge_TimeTrial : Challenge {
         double recordTime = PlayerDataController.GetTime(trialDataName);
         HUD.MessageOverlayCinematic.FadeIn("Record: " + HUD.TimeMMSSMS(recordTime));
         yield return new WaitForSeconds(3);
-
+        sources[0].Play();
         HUD.MessageOverlayCinematic.SetText("3");
         yield return new WaitForSeconds(1);
         HUD.MessageOverlayCinematic.SetText("2");
@@ -48,6 +57,7 @@ public class Challenge_TimeTrial : Challenge {
         HUD.MessageOverlayCinematic.SetText("1");
         yield return new WaitForSeconds(1);
         HUD.MessageOverlayCinematic.SetText("START");
+        sources[1].Play();
 
         Player.CanControl = true;
         CameraController.UsingCinemachine = false;

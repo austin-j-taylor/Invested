@@ -19,9 +19,13 @@ public class Entity_TurretAnchored : NonPlayerPushPullController {
     [SerializeField]
     private float strength = 2;
 
+    private enum State { Sleeping, Discharching, Tracking }
+    private State currentState;
+
     private Transform swivel, neck, neckEnd;
     private Renderer tubesRenderer;
     private MaterialPropertyBlock fillBlock;
+    private AudioSource[] sources;
 
     private Transform target;
     private Rigidbody targetRb;
@@ -34,6 +38,9 @@ public class Entity_TurretAnchored : NonPlayerPushPullController {
         neckEnd = neck.Find("Neck_end");
         tubesRenderer = transform.Find("Rifle/Tubes/Tube").GetComponent<Renderer>();
         fillBlock = new MaterialPropertyBlock();
+        sources = GetComponents<AudioSource>();
+
+        currentState = State.Sleeping;
     }
 
     private void Start() {
@@ -49,18 +56,52 @@ public class Entity_TurretAnchored : NonPlayerPushPullController {
         PushTargets.MaxRange = maxPushRange;
         Strength = strength;
 
-        if (SearchForTarget()) {
-            SteelReserve.Mass += Time.deltaTime * refillSpeed;
-            fillBlock.SetFloat("_Fill", (float)(SteelReserve.Mass / steelReserveCapacity));
-            TrackTarget();
-            if (SteelReserve.Mass >= steelReserveCapacity) {
-                ShootTarget();
-            }
-        } else if (SteelReserve.Mass > 0) {
-            SteelReserve.Mass -= Time.deltaTime * refillSpeed;
-            fillBlock.SetFloat("_Fill", (float)(SteelReserve.Mass / steelReserveCapacity));
+        switch (currentState) {
+            case State.Sleeping:
+                if ((transform.position - target.position).sqrMagnitude < radiusOfDetection * radiusOfDetection) {
+                    currentState = State.Tracking;
+                    sources[0].Play();
+                }
+                break;
+            case State.Discharching:
+                if ((transform.position - target.position).sqrMagnitude < radiusOfDetection * radiusOfDetection)
+                    currentState = State.Tracking;
+                else if (SteelReserve.Mass == 0) {
+                    currentState = State.Sleeping;
+                    sources[0].Stop();
+                }
+                break;
+            case State.Tracking:
+                if ((transform.position - target.position).sqrMagnitude >= radiusOfDetection * radiusOfDetection
+                    || !SearchForTarget())
+                    currentState = State.Discharching;
+                
+                break;
         }
-        tubesRenderer.SetPropertyBlock(fillBlock);
+        switch (currentState) {
+            case State.Sleeping:
+                // do nothing
+                break;
+            case State.Discharching:
+                SteelReserve.Mass -= Time.deltaTime * refillSpeed;
+                float percent = (float)(SteelReserve.Mass / steelReserveCapacity);
+                fillBlock.SetFloat("_Fill", percent);
+                tubesRenderer.SetPropertyBlock(fillBlock);
+                sources[0].volume = percent;
+                break;
+            case State.Tracking:
+                SteelReserve.Mass += Time.deltaTime * refillSpeed;
+                percent = (float)(SteelReserve.Mass / steelReserveCapacity);
+                fillBlock.SetFloat("_Fill", percent);
+                tubesRenderer.SetPropertyBlock(fillBlock);
+                sources[0].volume = percent;
+                TrackTarget();
+                if (SteelReserve.Mass >= steelReserveCapacity) {
+                    ShootTarget();
+                    sources[1].Play();
+                }
+                break;
+        }
 
         base.FixedUpdate();
     }
@@ -71,8 +112,7 @@ public class Entity_TurretAnchored : NonPlayerPushPullController {
         Vector3 direction = target.transform.position - neck.position;
         Debug.DrawRay(neck.position, direction);
         if (Physics.Raycast(neck.position, direction, out RaycastHit hit)) {
-            if (hit.transform == target)
-                return ((direction).magnitude < radiusOfDetection);
+            return (hit.transform == target);
         }
         return false;
     }
