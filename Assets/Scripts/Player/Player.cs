@@ -152,12 +152,19 @@ public class Player : PewterEntity {
 
                     if (firing) {
                         coinCooldownTimer = 0;
+                        // Not burning: pressing key will toss coin
+                        // Burning: pressing key will add coin as Vacuous Push Target and Push on it
+                        // Holding MultiTarget will mark the coin, as well
                         if (CoinThrowingMode == CoinMode.Spray) {
-                            Coin[] coins = CoinHand.WithdrawCoinSprayToHand();
-                            for (int i = 0; i < Hand.spraySize; i++)
-                                PlayerIronSteel.AddPushTarget(coins[i], false, true);
-                        } else
-                            PlayerIronSteel.AddPushTarget(CoinHand.WithdrawCoinToHand(), false, true);
+                            Coin[] coins = CoinHand.WithdrawCoinSprayToHand(!PlayerIronSteel.IsBurning);
+                            if(PlayerIronSteel.IsBurning)
+                                for (int i = 0; i < Hand.spraySize; i++)
+                                    PlayerIronSteel.AddPushTarget(coins[i], false, !Keybinds.MultipleMarks());
+                        } else {
+                            Coin coin = CoinHand.WithdrawCoinToHand(!PlayerIronSteel.IsBurning);
+                            if(PlayerIronSteel.IsBurning)
+                                PlayerIronSteel.AddPushTarget(coin, false, !Keybinds.MultipleMarks());
+                        }
 
                     }
                 } else {

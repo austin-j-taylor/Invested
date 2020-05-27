@@ -19,7 +19,7 @@ public class TargetArray {
     public static readonly Color targetedRedLine = new Color(1f, 0, 1f) * 2;
     private static readonly Color targetedGreenLine = new Color(0, 1f, 0) * 2;
     private static readonly Color targetedBlueLine = new Color(0, 0, 1f) * 2;
-    private static readonly Color targetedLightBlueLine = new Color(0, .5f, 1f)*2;
+    private static readonly Color targetedLightBlueLine = new Color(0, .5f, 1f) * 2;
 
     private Magnetic[] targets;
 
@@ -146,9 +146,11 @@ public class TargetArray {
             //Debug.Log("Adding vacuous target, count was  " + Count + " and vc was " + VacuousCount);
             // adding a vacuous target
             //// All other targets must also be vacuous:
-            //if (Count != VacuousCount) {
-            //    Debug.LogError("TargetArray: adding a vacuous target when non-vacuous targets are already present (" + Count + " != " + VacuousCount + ")");
-            //}
+            if (Count != VacuousCount) {
+                //Debug.LogError("TargetArray: adding a vacuous target when non-vacuous targets are already present (" + Count + " != " + VacuousCount + ")");
+                // This happens naturally when e.g. throwing coins
+                Clear();
+            }
             VacuousCount++;
         } else {
             // we are adding a non-vacuous target
@@ -363,6 +365,18 @@ public class TargetArray {
         // 3) copy contents of newTargets into our targets
         for (int i = 0; i < newTargets.Count && i < targets.Length; i++) {
             targets[i] = newTargets[i];
+        }
+    }
+    /*
+     * Removes all targets that are in newTargets from the array.
+     */
+    public void RemoveTargets(List<Magnetic> newTargets) {
+        for (int i = 0; i < Count; i++) {
+            for(int j = 0; j < newTargets.Count; j++) {
+                if(targets[i] == newTargets[j]) {
+                    MoveDown(i);
+                }
+            }
         }
     }
 

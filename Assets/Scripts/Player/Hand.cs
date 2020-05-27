@@ -27,10 +27,7 @@ public class Hand : MonoBehaviour {
         distanceToHand = transform.localPosition.magnitude;
     }
 
-    private void RotateHand() {
-    }
-
-    public Coin WithdrawCoinToHand() {
+    public Coin WithdrawCoinToHand(bool addAllomancerVelocity) {
         if (Pouch.Count > 0) {
             Coin coin;
             RaycastHit hit;
@@ -67,7 +64,7 @@ public class Hand : MonoBehaviour {
             // If the wielder of this pouch is not simultaneously Pushing on the coin, add their velocity to the coin
             // The intent is that the coin would realisticially always start with the allomancer's velocity,
             //      but that throws off the aim of the coin.
-            if (!allomancer.SteelPushing) {
+            if (addAllomancerVelocity) {
                 coin.GetComponent<Rigidbody>().velocity = allomancer.GetComponent<Rigidbody>().velocity + transform.rotation * coinThrowSpeed;
             } else {
                 coin.GetComponent<Rigidbody>().velocity = transform.rotation * coinThrowSpeed;
@@ -77,7 +74,7 @@ public class Hand : MonoBehaviour {
         return null;
     }
 
-    public Coin[] WithdrawCoinSprayToHand() {
+    public Coin[] WithdrawCoinSprayToHand(bool addAllomancerVelocity) {
         if (Pouch.Count > 0) {
             Coin[] coins = new Coin[spraySize];
             RaycastHit hit;
@@ -118,7 +115,7 @@ public class Hand : MonoBehaviour {
                 // If the wielder of this pouch is not simultaneously Pushing on the coins, add their velocity to the coins
                 // The intent is that the coins would realisticially always start with the allomancer's velocity,
                 //      but that throws off the aim of the coins.
-                if (!allomancer.SteelPushing) {
+                if (addAllomancerVelocity) {
                     coins[i].GetComponent<Rigidbody>().velocity = allomancer.GetComponent<Rigidbody>().velocity + transform.rotation * coinThrowSpeed;
                 } else {
                     coins[i].GetComponent<Rigidbody>().velocity = transform.rotation * coinThrowSpeed;

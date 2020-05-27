@@ -28,7 +28,7 @@ public class AllomanticPewter : Allomancer {
         }
     }
     private bool isAnchoring = false;
-    public bool IsAnchoring {
+    public virtual bool IsAnchoring {
         get {
             return isAnchoring;
         }

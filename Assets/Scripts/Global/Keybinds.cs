@@ -114,7 +114,45 @@ public class Keybinds : MonoBehaviour {
                 }
         }
     }
+    public static bool SelectUp() {
+        switch (SettingsMenu.settingsData.controlScheme) {
+            case SettingsData.MK54: {
+                    return Input.GetKeyUp(KeyCode.Mouse4);
+                }
+            case SettingsData.MK45: {
+                    return Input.GetKeyUp(KeyCode.Mouse3);
+                }
+            case SettingsData.MKEQ: {
+                    return Input.GetKeyUp(KeyCode.E);
+                }
+            case SettingsData.MKQE: {
+                    return Input.GetKeyUp(KeyCode.Q);
+                }
+            default: {
+                    return Input.GetButtonUp("RightBumper");
+                }
+        }
+    }
 
+    public static bool SelectAlternateDown() {
+        switch (SettingsMenu.settingsData.controlScheme) {
+            case SettingsData.MK54: {
+                    return Input.GetKeyDown(KeyCode.Mouse3);
+                }
+            case SettingsData.MK45: {
+                    return Input.GetKeyDown(KeyCode.Mouse4);
+                }
+            case SettingsData.MKEQ: {
+                    return Input.GetKeyDown(KeyCode.Q);
+                }
+            case SettingsData.MKQE: {
+                    return Input.GetKeyDown(KeyCode.E);
+                }
+            default: {
+                    return Input.GetButtonDown("LeftBumper");
+                }
+        }
+    }
     public static bool SelectAlternate() {
         switch (SettingsMenu.settingsData.controlScheme) {
             case SettingsData.MK54: {
@@ -134,22 +172,22 @@ public class Keybinds : MonoBehaviour {
                 }
         }
     }
-    public static bool SelectAlternateDown() {
+    public static bool SelectAlternateUp() {
         switch (SettingsMenu.settingsData.controlScheme) {
             case SettingsData.MK54: {
-                    return Input.GetKeyDown(KeyCode.Mouse3);
+                    return Input.GetKeyUp(KeyCode.Mouse3);
                 }
             case SettingsData.MK45: {
-                    return Input.GetKeyDown(KeyCode.Mouse4);
+                    return Input.GetKeyUp(KeyCode.Mouse4);
                 }
             case SettingsData.MKEQ: {
-                    return Input.GetKeyDown(KeyCode.Q);
+                    return Input.GetKeyUp(KeyCode.Q);
                 }
             case SettingsData.MKQE: {
-                    return Input.GetKeyDown(KeyCode.E);
+                    return Input.GetKeyUp(KeyCode.E);
                 }
             default: {
-                    return Input.GetButtonDown("LeftBumper");
+                    return Input.GetButtonUp("LeftBumper");
                 }
         }
     }

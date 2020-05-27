@@ -80,12 +80,23 @@ public class PlayerMovementController : AllomanticPewter {
     public override bool IsSprinting {
         get => base.IsSprinting;
         protected set {
-            if (IsSprinting && !value) {
+            if (IsSprinting && !value && !IsAnchoring) {
                 Player.PlayerAudioController.Stop_pewter();
             } else if (value) {
                 Player.PlayerAudioController.Play_pewter();
             }
             base.IsSprinting = value;
+        }
+    }
+    public override bool IsAnchoring {
+        get => base.IsAnchoring;
+        protected set {
+            if (IsAnchoring && !value && !IsSprinting) {
+                Player.PlayerAudioController.Stop_pewter();
+            } else if (value) {
+                Player.PlayerAudioController.Play_pewter();
+            }
+            base.IsAnchoring = value;
         }
     }
 
@@ -124,10 +135,17 @@ public class PlayerMovementController : AllomanticPewter {
                     } // continue walking
                 } else if (IsSprinting) {
                     // was sprinting
-                    if (!Keybinds.Sprint() || !PewterReserve.HasMass) {
-                        // start rolling
-                        IsSprinting = false;
-                    } // continue sprinting
+                    if(!Keybinds.Sprint() || !PewterReserve.HasMass) {
+                        // stop sprinting
+                        if(Keybinds.Walk() && PewterReserve.HasMass) {
+                            // start anchoring
+                            IsAnchoring = true;
+                            IsSprinting = false;
+                        } else {
+                            // start rolling;
+                            IsSprinting = false;
+                        }
+                    }
                 } else {
                     // was rolling
                     if (Keybinds.Sprint() && PewterReserve.HasMass) {
