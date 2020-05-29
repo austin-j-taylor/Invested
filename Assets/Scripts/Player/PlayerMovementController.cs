@@ -11,7 +11,7 @@ using UnityEngine;
 
 public class PlayerMovementController : AllomanticPewter {
 
-    private const float shortHopThreshold = .1f;
+    private const float shortHopThreshold = .075f;
     public const float radius = .26f; // radius of the player sphere collider
     // Rolling
     public const float rollingAcceleration = 5f;

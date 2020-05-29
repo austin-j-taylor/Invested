@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: fd13af7e7ad747647a60da1b7a1f9b9e
 ModelImporter:
-  serializedVersion: 20100
+  serializedVersion: 20101
   internalIDToNameTable: []
   externalObjects:
   - first:
@@ -12,13 +12,18 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: Tile
+    second: {fileID: 2100000, guid: e05143541ffb56a40b392d27617f4b61, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: Wire
     second: {fileID: 2100000, guid: fdf62f6fb36b161449dacd4385a1e083, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: WireLit
-    second: {fileID: 2100000, guid: 7ed1ee0b38b4a8d4ba0e3b23840a75eb, type: 2}
+    second: {fileID: 2100000, guid: 397a4d865ddc0bf45b4e7914edcc387a, type: 2}
   materials:
     materialImportMode: 1
     materialName: 0
@@ -58,6 +63,7 @@ ModelImporter:
     importBlendShapes: 1
     importCameras: 1
     importLights: 1
+    fileIdsGeneration: 1
     swapUVChannels: 0
     generateSecondaryUV: 1
     useFileUnits: 1

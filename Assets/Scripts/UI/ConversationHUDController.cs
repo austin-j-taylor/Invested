@@ -190,8 +190,13 @@ public class ConversationHUDController : MonoBehaviour {
                             currentStyle = Style.Colored;
                             break;
                         case 'U':
-                            // color for BLUE (PULLS
+                            // color for BLUE (PULLS)
                             parsed.Append(Color_Pull_Open());
+                            currentStyle = Style.Colored;
+                            break;
+                        case 'W':
+                            // color for OFF-WHITe (PEWTER)
+                            parsed.Append(Color_Pewter_Open());
                             currentStyle = Style.Colored;
                             break;
                         case 'C':

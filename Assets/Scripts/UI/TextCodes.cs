@@ -51,6 +51,9 @@ public class TextCodes : MonoBehaviour {
     public static string Gray_Open() {
         return "<color=#bfbfbf>";
     }
+    public static string OffWhite_Open() {
+        return "<color=#99B2FF>";
+    }
     public static string Red_Open() {
         return "<color=#ff8080>";
     }
@@ -81,6 +84,9 @@ public class TextCodes : MonoBehaviour {
     }
     public static string Orange(string s) {
         return "<color=#ff9d60>" + s + "</color>";
+    }
+    public static string OffWhite(string s) {
+        return "<color=#99B2FF>" + s + "</color>";
     }
     public static string Bronze(string s) {
         return "<color=#ff9f00>" + s + "</color>";
@@ -114,6 +120,9 @@ public class TextCodes : MonoBehaviour {
     public static string Color_Push_Open() {
         return Red_Open();
     }
+    public static string Color_Pewter_Open() {
+        return OffWhite_Open();
+    }
 
     // Known words that should always appear in a specific color
     public static string Iron {
@@ -128,7 +137,7 @@ public class TextCodes : MonoBehaviour {
     }
     public static string Pewter {
         get {
-            return Orange("pewter");
+            return OffWhite("pewter");
         }
     }
     public static string Pull {
@@ -258,12 +267,12 @@ public class TextCodes : MonoBehaviour {
     }
     public static string PewterJump {
         get {
-            return Orange("Pewter Jump");
+            return OffWhite("Pewter Jump");
         }
     }
     public static string PewterJumping {
         get {
-            return Orange("Pewter Jumping");
+            return OffWhite("Pewter Jumping");
         }
     }
     public static string HelpOverlay {
