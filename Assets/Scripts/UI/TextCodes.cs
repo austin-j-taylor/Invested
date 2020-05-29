@@ -257,22 +257,22 @@ public class TextCodes : MonoBehaviour {
     }
     public static string Sprint {
         get {
-            return Orange("Sprint");
+            return OffWhite("sprint");
         }
     }
     public static string Sprinting {
         get {
-            return Orange("Sprinting");
+            return OffWhite("sprinting");
         }
     }
     public static string PewterJump {
         get {
-            return OffWhite("Pewter Jump");
+            return OffWhite("Jump");
         }
     }
     public static string PewterJumping {
         get {
-            return OffWhite("Pewter Jumping");
+            return OffWhite("Jumping");
         }
     }
     public static string HelpOverlay {

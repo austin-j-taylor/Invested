@@ -3,27 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using static TextCodes;
 
-public class Environment_Tutorial2 : EnvironmentCinematic {
-
-    [SerializeField]
-    private Node doorNode = null;
-    [SerializeField]
-    private GameObject backWall = null;
-    [SerializeField]
-    private FacilityDoor_Red door = null;
+public class Environment_Tutorial3 : EnvironmentCinematic {
 
     EnvironmentalTransitionManager musicManager;
 
     void Start() {
+        Player.VoidHeight = -1000;
         musicManager = GetComponentInChildren<EnvironmentalTransitionManager>();
 
         Player.CanControl = false;
         Player.CanControlMovement = false;
         Player.PlayerInstance.CoinHand.Pouch.Clear();
-        Player.PlayerIronSteel.SteelReserve.IsEnabled = false;
         Player.PlayerPewter.PewterReserve.IsEnabled = false;
         Player.CanControlZinc = false;
-        HUD.ControlWheelController.SetLockedState(ControlWheelController.LockedState.LockedToArea);
+        HUD.ControlWheelController.SetLockedState(ControlWheelController.LockedState.LockedToBubble);
         HUD.HelpOverlayController.SetLockedState(HelpOverlayController.LockedState.Locked0);
 
         // Set cinemachine virtual camera properties
@@ -53,43 +46,40 @@ public class Environment_Tutorial2 : EnvironmentCinematic {
             vcam.enabled = false;
             yield return new WaitForSeconds(2);
         } else {
-            Player.PlayerIronSteel.SteelReserve.IsEnabled = true;
+            Player.PlayerPewter.PewterReserve.IsEnabled = true;
         }
         CameraController.DisableCinemachineCamera(vcam);
         Player.CanControl = true;
         Player.CanControlMovement = true;
         CameraController.Clear();
-
-        backWall.SetActive(false);
     }
 
     protected override IEnumerator Trigger0() {
-        backWall.SetActive(true);
-        Player.PlayerIronSteel.SteelReserve.IsEnabled = true;
+        while (HUD.ConversationHUDController.IsOpen)
+            yield return null;
+        Player.PlayerPewter.PewterReserve.IsEnabled = true;
 
         HUD.MessageOverlayCinematic.FadeIn(
-            s_Hold_ + _KeyPush + " to " + Push + "."
+            KeySprint + " to burn " + Pewter + " to " + Sprint + " faster and " + PewterJump + " further."
         );
 
-        while (!Player.PlayerIronSteel.HasPushTarget) {
+        while (!Player.PlayerPewter.IsSprinting) {
             yield return null;
         }
-
-        HUD.MessageOverlayCinematic.FadeOut();
-        yield return new WaitForSeconds(1);
-        HUD.MessageOverlayCinematic.FadeIn(
-            "Hit the target on the ceiling hard."
-        );
-        while (!doorNode.On) {
-            yield return null;
-        }
+        yield return new WaitForSeconds(2);
         HUD.MessageOverlayCinematic.FadeOut();
     }
-
     protected override IEnumerator Trigger1() {
-        HUD.MessageOverlayCinematic.FadeIn("Like with " + Pulling + ", you can " + Mark_pushing + " metals for " + Pushing + " with " + _KeySelectAlternate + ".\n Mark multiple by holding " + KeyMultiMark + ".");
-        while (!door.On)
+        while (HUD.ConversationHUDController.IsOpen)
             yield return null;
+        HUD.MessageOverlayCinematic.FadeIn(
+            KeyWalk + " to burn " + Pewter + " to " + OffWhite("anchor") + " yourself and carefully " + OffWhite("balance") + "."
+        );
+
+        while (!Player.PlayerPewter.IsAnchoring) {
+            yield return null;
+        }
+        yield return new WaitForSeconds(2);
         HUD.MessageOverlayCinematic.FadeOut();
     }
 }

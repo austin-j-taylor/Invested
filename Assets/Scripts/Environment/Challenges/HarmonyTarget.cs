@@ -63,6 +63,7 @@ public class HarmonyTarget : MonoBehaviour {
             spikeRight.GetComponent<Renderer>().enabled = false;
         } else {
             numSpikes = 3;
+            anim.SetInteger("SpikeCount", numSpikes);
         }
         zeroRotation = transform.rotation;
     }

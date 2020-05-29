@@ -623,6 +623,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
      */
     private (Magnetic, List<Magnetic>, List<Magnetic>) IronSteelSight() {
         Magnetic targetBullseye = null;
+        bool centerWeightCheck = true;
         List<Magnetic> newTargetsArea = new List<Magnetic>();
         List<Magnetic> newTargetsBubble = new List<Magnetic>();
 
@@ -631,6 +632,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
             Magnetic target = hit.collider.GetComponentInParent<Magnetic>();
             if (target && target.IsInRange(this, GreaterPassiveBurn)) {
                 targetBullseye = target;
+                centerWeightCheck = false;
             }
         }
 
@@ -683,10 +685,10 @@ public class PlayerPullPushController : AllomanticIronSteel {
                     float weight = SetLineProperties(target, out float radialDistance, out float linearDistance);
                     // If the Magnetic is on the screen
                     if (weight > 0) {
-                        // IF that metal is reasonably close to the center of the screen
+                        // IF we're not looking directly at a metal's collider
+                        // and IF that metal is reasonably close to the center of the screen
                         // and IF the new Magnetic is closer to the center of the screen than the previous most-center Magnetic
-                        // and IF the new Magnetic is in range
-                        if (weight > lineWeightThreshold && weight > bullseyeWeight) {
+                        if (centerWeightCheck && weight > lineWeightThreshold && weight > bullseyeWeight) {
                             bullseyeWeight = weight;
                             targetBullseye = target;
                         }
