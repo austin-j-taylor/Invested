@@ -240,6 +240,11 @@ public class TextCodes : MonoBehaviour {
             return ZincBlue("Zinc Time");
         }
     }
+    public static string Zinc {
+        get {
+            return ZincBlue("zinc");
+        }
+    }
     public static string ControlWheel {
         get {
             return ZincBlue("Control Wheel");

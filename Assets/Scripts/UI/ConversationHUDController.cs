@@ -5,6 +5,7 @@ using System;
 using static TextCodes;
 using static ConversationManager;
 using System.Text;
+using TMPro;
 
 /*
  * Controls the HUD element for the dialogue window that appears for conversations.
@@ -15,7 +16,7 @@ public class ConversationHUDController : MonoBehaviour {
     private const float delayPerCharacter = .02f, delayPerPause = .125f;
 
     // The style of text as it's being parsed
-    private enum Style { Clear, Italic, Bold, Colored };
+    private enum Style { Clear, Italic, Bold, Colored, OtherFont };
     // Waiting: the element is idle, waiting for the user to advance text
     // Writing: the element is printing out text. The Speaker is speaking.
     private enum State { Waiting, Writing };
@@ -24,7 +25,7 @@ public class ConversationHUDController : MonoBehaviour {
 
     private Conversation currentConversation;
     private Text headerText; // contains the speaker's name?
-    private Text conversationText;
+    private TextMeshProUGUI conversationText;
 
     private Animator anim;
     private State state;
@@ -32,7 +33,7 @@ public class ConversationHUDController : MonoBehaviour {
     // Use this for initialization
     void Awake() {
         headerText = transform.Find("ConversationWindow/HeaderText").GetComponent<Text>();
-        conversationText = transform.Find("ConversationWindow/ConversationText").GetComponentInChildren<Text>();
+        conversationText = transform.Find("ConversationWindow/ConversationText").GetComponentInChildren<TextMeshProUGUI>();
         anim = GetComponent<Animator>();
         state = State.Waiting;
     }
@@ -148,6 +149,9 @@ public class ConversationHUDController : MonoBehaviour {
                                 case Style.Colored:
                                     parsed.Append("</color>");
                                     break;
+                                case Style.OtherFont:
+                                    parsed.Append("</font>");
+                                    break;
                             }
                             currentStyle = Style.Clear;
                             break;
@@ -161,6 +165,19 @@ public class ConversationHUDController : MonoBehaviour {
                             parsed.Append("<i>");
 
                             currentStyle = Style.Italic;
+                            break;
+                        case 'f':
+                            // other font, based on next character
+                            switch(currentConversation.content[++i]) {
+                                case 's': // steel alphabet
+                                    parsed.Append("<font=\"steelAlphabetTMP\">");
+                                    break;
+                                default:
+                                    Debug.LogError("Invalid font in " + currentConversation.key + ": " + currentConversation.content[i]);
+                                    break;
+                            }
+
+                            currentStyle = Style.OtherFont;
                             break;
                         case 'n':
                             // a newline
@@ -261,6 +278,9 @@ public class ConversationHUDController : MonoBehaviour {
                     break;
                 case Style.Colored:
                     conversationText.text = parsed.ToString() + "</color>";
+                    break;
+                case Style.OtherFont:
+                    conversationText.text = parsed.ToString() + "</font>";
                     break;
             }
             // Pause. Some characters wait longer.
