@@ -8,7 +8,7 @@ public class Environment_Tutorial4 : EnvironmentCinematic {
     EnvironmentalTransitionManager musicManager;
 
     void Start() {
-        Player.VoidHeight = -1000;
+        Player.VoidHeight = -100;
         musicManager = GetComponentInChildren<EnvironmentalTransitionManager>();
 
         Player.CanControl = false;

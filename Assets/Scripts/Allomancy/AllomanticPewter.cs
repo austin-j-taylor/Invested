@@ -197,7 +197,7 @@ public class AllomanticPewter : Allomancer {
         normal.Normalize();
         particleDirection = Quaternion.LookRotation(normal);
         dustParticles.transform.rotation = particleDirection;
-        dustParticles.transform.position = transform.position + normal * PlayerMovementController.radius;
+        dustParticles.transform.position = transform.position + normal * .2f;
 
         dustParticles.Play();
     }

@@ -52,7 +52,11 @@ public class PlayerMovementController : AllomanticPewter {
     [SerializeField]
     private float frictionDynamicRolling = 6;
     [SerializeField]
+    private float frictionStaticRolling = 1;
+    [SerializeField]
     private float frictionDynamicSprinting = 10f;
+    [SerializeField]
+    private float frictionStaticSprinting = 2f;
     [SerializeField]
     private float frictionDynamicWalking = 15f;
     // Misc
@@ -304,17 +308,18 @@ public class PlayerMovementController : AllomanticPewter {
             }
 
             //float sprintingAcceleration = 0;
-            if (movement.sqrMagnitude > 0) { // If moving at all
+            if (movement.sqrMagnitude > 0 || IsAnchoring) { // If moving at all, or if we're anchoring and don't want to spin much
 
                 // Apply Pewter Sprint, if possible
                 if (IsSprinting) {
                     // if sprinting
                     // Play particles if just sprinting on the ground for the first time
                     if (!lastWasSprintingOnGround && IsGrounded) {
-                        HitSurface(-groundedChecker.Normal - movement.normalized);
+                        HitSurface(-groundedChecker.Normal - rb.velocity.normalized);
                     }
                     lastWasSprintingOnGround = IsGrounded; // only show particles after hitting the ground
                     physicsMaterial.dynamicFriction = frictionDynamicSprinting;
+                    physicsMaterial.staticFriction = frictionStaticSprinting;
                     rb.inertiaTensor = new Vector3(momentOfInertiaMagnitudeSprinting, momentOfInertiaMagnitudeSprinting, momentOfInertiaMagnitudeSprinting);
                 } else {
                     // not Sprinting, move normally.
@@ -325,8 +330,10 @@ public class PlayerMovementController : AllomanticPewter {
                     // If Walking, reduce movment
                     if (IsAnchoring) {
                         movement *= walkingFactor;
+                        physicsMaterial.staticFriction = frictionStaticRolling;
                         physicsMaterial.dynamicFriction = frictionDynamicWalking;
                     } else {
+                        physicsMaterial.staticFriction = frictionStaticRolling;
                         physicsMaterial.dynamicFriction = frictionDynamicRolling;
                     }
                 }
