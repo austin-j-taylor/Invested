@@ -110,8 +110,7 @@ public class HelpOverlayController : MonoBehaviour {
                 Disable();
                 break;
         }
-
-        SettingsMenu.RefreshSettingHelpOverlay();
+        SettingsMenu.RefreshSettingHelpOverlay((int)currentState);
     }
 
     public void EnableSimple() {

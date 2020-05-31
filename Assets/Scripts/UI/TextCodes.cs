@@ -480,6 +480,16 @@ public class TextCodes : MonoBehaviour {
             return Gold("C");
         }
     }
+    public static string F1 {
+        get {
+            return Gray("F1");
+        }
+    }
+    public static string F5 {
+        get {
+            return Gray("F5");
+        }
+    }
 
 
 
@@ -853,9 +863,15 @@ public class TextCodes : MonoBehaviour {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
                 return Start + " > Settings > Interface";
             else
-                return H + " or " + Escape + " > Settings > Interface";
+                return H + ", " + F1 + ", or " + Escape + " > Settings > Interface";
         }
     }
-
-
+    public static string KeyPerspectiveAbridged {
+        get {
+            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+                return Start + " > Settings > Gameplay";
+            else
+                return F5 + " or " + Escape + " > Settings > Gameplay";
+        }
+    }
 }

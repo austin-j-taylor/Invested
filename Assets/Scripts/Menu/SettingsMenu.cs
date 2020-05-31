@@ -167,10 +167,17 @@ public class SettingsMenu : MonoBehaviour {
             setting.RefreshText();
         }
     }
-    public static void RefreshSettingHelpOverlay() {
+    public static void RefreshSettingHelpOverlay(int newHelpOverlay) {
+        settingsData.helpOverlay = newHelpOverlay;
         ButtonSetting helpOverlay = interfaceHeader.Find("HelpOverlayLabel").GetComponent<ButtonSetting>();
         helpOverlay.RefreshData();
         helpOverlay.RefreshText();
+    }
+    public static void RefreshSettingPerspective(int newCameraFirstPerson) {
+        settingsData.cameraFirstPerson = newCameraFirstPerson;
+        ButtonSetting perspective = gameplayHeader.Find("PerspectiveLabel").GetComponent<ButtonSetting>();
+        perspective.RefreshData();
+        perspective.RefreshText();
     }
 
     // Open, Close, and OnClicks

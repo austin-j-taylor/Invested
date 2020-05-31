@@ -38,6 +38,7 @@ public class CameraController : MonoBehaviour {
 
     private static CloudMaster clouds; // perceives clouds on certain levels
     private static float cloudsMaxDensity; // used for fading between densities
+    private static bool SceneUsesClouds;
 
     public static bool HasNotMovedCamera {
         get {
@@ -359,7 +360,6 @@ public class CameraController : MonoBehaviour {
         if (!UsingCinemachine)
             Clear();
     }
-
     public void SetFirstPerson() {
         Player.PlayerTransparancy.SetOverrideHidden(true);
         CameraPositionTarget.transform.SetParent(CameraLookAtTarget.Find("FirstPersonTarget"));
@@ -367,6 +367,15 @@ public class CameraController : MonoBehaviour {
             Clear();
     }
 
+    public static void TogglePerspective() {
+        if (SettingsMenu.settingsData.cameraFirstPerson == 0) {
+            instance.SetFirstPerson();
+            SettingsMenu.RefreshSettingPerspective(1);
+        } else {
+            instance.SetThirdPerson();
+            SettingsMenu.RefreshSettingPerspective(0);
+        }
+    }
 
     // On scene startup
     // Copy parameters from this scene's cloud controller to the camera
@@ -381,12 +390,21 @@ public class CameraController : MonoBehaviour {
                 SetCloudData(other);
             } else {
                 // No clouds for this scene
+                SceneUsesClouds = false;
                 clouds.enabled = false;
                 //ActiveCamera.clearFlags = CameraClearFlags.Skybox;
             }
         }
     }
 
+    public static void SetClouds(bool enable) {
+        if(enable) {
+            if (SceneUsesClouds)
+                clouds.enabled = true;
+        } else {
+            clouds.enabled = false;
+        }
+    }
     // Loads cloud settings from the passed CloudMaster.
     public static void SetCloudData(CloudMaster other) {
         clouds.shader = other.shader;
@@ -436,7 +454,8 @@ public class CameraController : MonoBehaviour {
 
         clouds.material = other.material;
 
-        clouds.enabled = true;
+        SceneUsesClouds = true;
+        clouds.enabled = GraphicsController.CloudsEnabled;
         clouds.Awake();
 
         other.enabled = false;

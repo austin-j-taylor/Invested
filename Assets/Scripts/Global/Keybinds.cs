@@ -310,7 +310,7 @@ public class Keybinds : MonoBehaviour {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
             return false; //return Input.GetButtonDown("GamepadBack"); ;
         } else {
-            return Input.GetKeyDown(KeyCode.H);
+            return Input.GetKeyDown(KeyCode.H) || Input.GetKeyDown(KeyCode.F1);
         }
     }
 
@@ -435,7 +435,6 @@ public class Keybinds : MonoBehaviour {
         }
     }
 
-
     // Only Mouse/Keyboard
     public static float ScrollWheelAxis() {
         return Input.GetAxis("Mouse ScrollWheel");
@@ -443,6 +442,9 @@ public class Keybinds : MonoBehaviour {
 
     public static bool ScrollWheelButton() {
         return Input.GetButton("Mouse2");
+    }
+    public static bool TogglePerspective() {
+        return Input.GetKeyDown(KeyCode.F5);
     }
 
 }

@@ -51,6 +51,7 @@ public class SettingsData : MonoBehaviour {
     public int bloom;
     public int aberration;
     public int vignetteZinc;
+    public int clouds;
     // Audio
     public float audioMaster;
     public float audioMusic;
@@ -232,6 +233,10 @@ public class SettingsData : MonoBehaviour {
                 }
             case "vignetteZinc": {
                     vignetteZinc = data;
+                    return true;
+                }
+            case "clouds": {
+                    clouds = data;
                     return true;
                 }
             case "pushControlStyle": {
@@ -416,6 +421,9 @@ public class SettingsData : MonoBehaviour {
                 }
             case "vignetteZinc": {
                     return vignetteZinc;
+                }
+            case "clouds": {
+                    return clouds;
                 }
             case "pushControlStyle": {
                     return pushControlStyle;

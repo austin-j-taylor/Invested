@@ -183,6 +183,10 @@ public class Player : PewterEntity {
         if (Keybinds.ToggleHelpOverlay()) {
             HUD.HelpOverlayController.Toggle();
         }
+        // Changing perspective
+        if(Keybinds.TogglePerspective()) {
+            CameraController.TogglePerspective();
+        }
     }
 
     // Reset certain values BEFORE the player enters a new scene
