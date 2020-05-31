@@ -229,6 +229,9 @@ public class Keybinds : MonoBehaviour {
     public static bool AdvanceConversation() {
         return JumpDown();
     }
+    public static bool AccelerateConversation() {
+        return Jump();
+    }
 
     public static bool Sprint() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)

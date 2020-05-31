@@ -194,7 +194,7 @@ public class ConversationHUDController : MonoBehaviour {
                             } else if (time < 0 || time > 9) {
                                 Debug.LogError("Invalid pause time in " + currentConversation.key + ": " + currentConversation.content + ": " + time);
                             }
-                            yield return new WaitForSeconds(delayPerPause * time);
+                            yield return Keybinds.AccelerateConversation() ? null : new WaitForSeconds(delayPerPause * time);
                             break;
                         case 'L':
                             // color for LOCATIONS
@@ -259,7 +259,8 @@ public class ConversationHUDController : MonoBehaviour {
 
                     char character = currentConversation.content[i];
                     if (state == State.Writing && character != '(' && character != ')' && character != '.' && character != '\n' && character != '\r') {
-                        currentSpeaker.Beep();
+                        if(!Keybinds.AccelerateConversation())
+                            currentSpeaker.Beep();
                     }
                 }
             }
@@ -290,9 +291,9 @@ public class ConversationHUDController : MonoBehaviour {
                 // (a close parenthesis also indicates the end of a thought, so skip if that's up next)
                 if ((character == '.' || character == '?' || character == '!')
                         && !(i+1 < currentConversation.content.Length && (currentConversation.content[i+1] == '(') || currentConversation.content[i+1] == ')')) {
-                    yield return new WaitForSeconds(delayPerPause * 3);
+                    yield return Keybinds.AccelerateConversation() ? null : new WaitForSeconds(delayPerPause * 3);
                 } else {
-                    yield return new WaitForSeconds(delayPerCharacter);
+                    yield return Keybinds.AccelerateConversation() ? null : new WaitForSeconds(delayPerCharacter);
                 }
             }
 
