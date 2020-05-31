@@ -81,7 +81,7 @@ public class PauseMenu : MonoBehaviour {
 
         switch (GameManager.State) {
             case GameManager.GameState.Standard:
-                instance.resetText.text = "Reset Level";
+                instance.resetText.text = "Return to Checkpoint";
                 instance.quitText.text = "Quit Level";
                 instance.settingsButton.gameObject.SetActive(true);
                 break;
@@ -124,7 +124,8 @@ public class PauseMenu : MonoBehaviour {
 
         switch (GameManager.State) {
             case GameManager.GameState.Standard:
-                SceneSelectMenu.ReloadScene();
+                //SceneSelectMenu.ReloadScene();
+                Player.PlayerInstance.Respawn();
                 break;
             case GameManager.GameState.Challenge:
                 ChallengesManager.RestartCurrentChallenge();

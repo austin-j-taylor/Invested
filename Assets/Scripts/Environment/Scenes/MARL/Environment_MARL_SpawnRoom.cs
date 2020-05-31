@@ -18,7 +18,6 @@ public class Environment_MARL_SpawnRoom : Environment {
         Player.PlayerIronSteel.SteelReserve.IsEnabled = false;
         Player.PlayerPewter.PewterReserve.IsEnabled = false;
         HUD.ControlWheelController.SetLockedState(ControlWheelController.LockedState.LockedFully);
-        HUD.HelpOverlayController.SetLockedState(HelpOverlayController.LockedState.Locked0);
         StartCoroutine(Procedure());
     }
 

@@ -60,6 +60,7 @@ public class Player : PewterEntity {
     public static bool CanPause { get; set; }
     public static bool CanControlZinc { get; set; }
     public static bool CanControlMovement { get; set; }
+    public static bool CanThrowCoins { get; set; }
 
     //private static bool godMode = false;
     //public static bool GodMode { // Player does not run out of metals
@@ -131,7 +132,7 @@ public class Player : PewterEntity {
 
         if (CanControl) {
             // On throwing a coin
-            if (!CoinHand.Pouch.IsEmpty) {
+            if (CanThrowCoins && !CoinHand.Pouch.IsEmpty) {
 
                 if (coinCooldownTimer > coinCooldownThreshold) {
                     // TODO: simplify logic. just like this for thinking
@@ -165,8 +166,7 @@ public class Player : PewterEntity {
                             if(PlayerIronSteel.IsBurning)
                                 PlayerIronSteel.AddPushTarget(coin, false, !Keybinds.MultipleMarks());
                         }
-
-                    }
+                    }   
                 } else {
                     coinCooldownTimer += Time.deltaTime * (PlayerZinc.InZincTime ? 2 : 1); // throw coins 
                 }
@@ -210,6 +210,8 @@ public class Player : PewterEntity {
             CanControl = true;
             CanControlMovement = true;
             CanControlZinc = true;
+            CanThrowCoins = true;
+            Player.CanPause = true;
             //GodMode = true;
 
             SetFrameMaterial(frameMaterial);

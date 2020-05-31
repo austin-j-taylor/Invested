@@ -17,7 +17,6 @@ public class Environment_Tutorial3 : EnvironmentCinematic {
         Player.PlayerPewter.PewterReserve.IsEnabled = false;
         Player.CanControlZinc = false;
         HUD.ControlWheelController.SetLockedState(ControlWheelController.LockedState.LockedToBubble);
-        HUD.HelpOverlayController.SetLockedState(HelpOverlayController.LockedState.Locked0);
 
         // Set cinemachine virtual camera properties
         InitializeCinemachine();

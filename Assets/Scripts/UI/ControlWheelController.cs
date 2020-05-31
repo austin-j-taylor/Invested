@@ -375,4 +375,7 @@ public class ControlWheelController : MonoBehaviour {
                 break;
         }
     }
+    public bool IsLocked() {
+        return lockedState == LockedState.LockedFully;
+    }
 }

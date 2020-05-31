@@ -13,10 +13,9 @@ public class Environment_Tutorial4 : EnvironmentCinematic {
 
         Player.CanControl = false;
         Player.CanControlMovement = false;
-        Player.PlayerInstance.CoinHand.Pouch.Clear();
         Player.CanControlZinc = false;
+        Player.CanThrowCoins = false;
         HUD.ControlWheelController.SetLockedState(ControlWheelController.LockedState.LockedToBubble);
-        HUD.HelpOverlayController.SetLockedState(HelpOverlayController.LockedState.Locked0);
 
         // Set cinemachine virtual camera properties
         InitializeCinemachine();

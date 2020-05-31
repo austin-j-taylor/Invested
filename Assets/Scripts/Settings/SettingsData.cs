@@ -18,6 +18,8 @@ public class SettingsData : MonoBehaviour {
     public const int MKQE = 3;
     public const int Gamepad = 4;
 
+    public bool UsingGamepad => controlScheme == Gamepad;
+
     // Gameplay
     public int controlScheme;
     public int gamepadRumble; // 0 for Disabled, 1 for Enabled
@@ -40,7 +42,7 @@ public class SettingsData : MonoBehaviour {
     public int hudForces; // 0 for Disabled, 1 for Enabled
     public int hudMasses; // 0 for Disabled, 1 for Enabled
     public int fpsCounter; // 0 for Disabled, 1 for Enabled
-    public int helpOverlay; // 0 for Disabled, 1 for Enabled
+    public int helpOverlay; // 0 for Disabled, 1 for Simple, 2 for Verbose
     // Graphics
     public int renderblueLines; // 0 for Disabled, 1 for Enabled
     public int antialiasing;

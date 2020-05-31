@@ -186,17 +186,11 @@ public class SceneSelectMenu : MonoBehaviour {
                 MainMenu.Close();
                 TimeController.CurrentTimeScale = SettingsMenu.settingsData.timeScale;
                 Player.PlayerInstance.gameObject.SetActive(true);
-                Player.CanControl = true;
-                Player.CanControlMovement = true;
-                Player.CanPause = true;
-                Player.CanControlZinc = true;
                 CameraController.UsingCinemachine = false;
                 CameraController.Cinemachine.m_IgnoreTimeScale = false;
                 CameraController.LockCamera();
                 CameraController.ActiveCamera.clearFlags = CameraClearFlags.Skybox;
                 HUD.ResetHUD();
-                HUD.ControlWheelController.SetLockedState(ControlWheelController.LockedState.Unlocked);
-                HUD.HelpOverlayController.SetLockedState(HelpOverlayController.LockedState.Unlocked);
 
                 // Set parameters for starting on certain scenes
                 Player.PlayerInstance.CoinHand.Pouch.Fill();

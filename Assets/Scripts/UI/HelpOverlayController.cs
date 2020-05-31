@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using System.Text;
 using static TextCodes;
 
 /*
@@ -7,103 +8,122 @@ using static TextCodes;
  */
 public class HelpOverlayController : MonoBehaviour {
 
-    public enum LockedState { Unlocked, Locked0, Locked1 }
-
-    public LockedState lockedState { get; private set; }
-
     private Text HelpTextLeft { get; set; }
-    private Text HelpTextRight { get; set; }
+    //private Text HelpTextRight { get; set; }
+
+    private enum State { Closed, Simple, Verbose}
+    private State currentState;
 
     public bool IsOpen {
         get {
-            return SettingsMenu.settingsData.helpOverlay == 1;
-        }
-        private set {
-            SettingsMenu.settingsData.helpOverlay = value ? 1 : 0;
+            return currentState != State.Closed;
         }
     }
+    private bool Verbose => currentState == State.Verbose;
 
     void Awake() {
         HelpTextLeft = transform.Find("HelpTextLeft").GetComponent<Text>();
-        HelpTextRight = transform.Find("HelpTextRight").GetComponent<Text>();
-        IsOpen = false;
+        //HelpTextRight = transform.Find("HelpTextRight").GetComponent<Text>();
+        currentState = State.Closed;
     }
 
     public void Clear() {
-        SetLockedState(LockedState.Unlocked);
+
     }
 
+    // Update the text in the help overlay to reflect verbosity, current abilities, and current mode (e.g. Bubble)
     public void UpdateText() {
-        HelpTextLeft.text = KeyHelp + " to toggle the " + HelpOverlay + ".\n\n" +
-            KeyLook + " to look.\n"
-        ;
-
-        switch (lockedState) {
-            case LockedState.Locked0:
-                HelpTextLeft.text += KeyMove + " to move.\n";
-                HelpTextRight.text = string.Empty;
-                break;
-            case LockedState.Unlocked: // fall through
-            case LockedState.Locked1:
-                HelpTextLeft.text += KeyMove + " to move.\n\t\t• " + KeyWalk + " to move slowly and anchor yourself.\n";
-
-                HelpTextRight.text =
-                    KeyPushPullStrength + " to change " + Push_Pull + " " + BurnPercentage + "\n" +
-                    KeyNumberOfTargets + " to change your " + Gray("max number of " + Push_Pull_targets + ".\n") +
-                    KeySwap + " to swap your " + Push_targets + " and " + Pull_targets + ".\n" +
-                    KeyStopBurning + " to stop burning " + Gray("Iron and Steel") +
-                    (SettingsMenu.settingsData.controlScheme == SettingsData.MKQE || SettingsMenu.settingsData.controlScheme == SettingsData.MKEQ ?
-                        "\n\t(Your keyboard may not support that last option.)\n\n" :
-                        ".\n\n"
-                    ) +
-                    KeyThrow + " to toss a " + O_Coin + ".\n" +
-                    KeyDrop + " to drop a " + O_Coin + " at your feet.\n\t\t• " + KeyDropDirection + " while dropping a " + O_Coin + " to toss the coin away from that direction.\n\n" +
-                    KeySprint + " to burn " + Pewter + " for " + Sprinting + " and " + PewterJumping + ".\n\n"
-                ;
-                break;
+        if(currentState == State.Closed) {
+            HelpTextLeft.gameObject.SetActive(false);
+            return;
+        }
+        HelpTextLeft.gameObject.SetActive(true);
+        StringBuilder builder = new StringBuilder();
+        builder.AppendLine(
+            KeyHelpAbridged + ": toggle this overlay\n" + 
+            WASD + ": Move\n" +
+            Mouse + ": Look"
+        ); 
+        if(Player.PlayerIronSteel.SteelReserve.IsEnabled) {
+            builder.AppendLine(
+                _KeyPullPushAbridged + ": " + Pull_Push + '\n' +
+                " • " + _KeyMarkAbridged + ": " + Mark + " for " + Pulling + '/' + Pushing
+            );
+            if(Verbose) {
+                builder.AppendLine(" • " + KeyMultiMark + " + " + _KeyMarkAbridged + ": " + Mark + " on multiple targets");
+            }
+        } else {
+            builder.AppendLine(
+                _KeyPullAbridged + ": " + Pull + '\n' +
+                " • " + _KeySelectAbridged + ": " + Mark + " for " + Pulling
+            );
+            if (Verbose) {
+                builder.AppendLine("• " + KeyMultiMark + " + " + _KeySelectAbridged + ": " + Mark + " on multiple targets");
+            }
+        }
+        builder.AppendLine(
+            " • " + KeyPushPullStrength + ": " + Push_Pull + " strength"
+        );
+        if(HUD.ControlWheelController.IsLocked()) {
+            builder.AppendLine(
+                KeyControlWheel + ": " + ControlWheel
+            );
+            if(Verbose && SettingsMenu.settingsData.controlScheme != SettingsData.Gamepad) {
+                builder.AppendLine(" • 1/2/3/4/C/X/Z: " + ControlWheel + " hotkeys");
+            }
         }
 
-
-        HelpTextLeft.text += KeyJump + " to jump.\n\n" +
-            KeyStartBurning + " to start burning " + Iron + "/" + Steel + ".\n" +
-            s_Press_ + _KeySelect + " to select " + Pull_targets + " and " + _KeySelectAlternate + " to select " + Push_targets + ".\n" +
-            s_Hold_ + _KeyPull + " to " + Pull + " and " + _KeyPush + " to " + Push + ".\n\n" +
-            "While holding " + KeyNegate +
-            ":\n\t\t• " + s_Press_ + _KeySelect + " to deselect a " + Pull_target +
-            ".\n\t\t• " + s_Press_ + _KeySelectAlternate + " to deselect a " + Push_target + "."
-        ;
-
-        if (lockedState == LockedState.Unlocked) {
-            HelpTextRight.text += KeyCoinshotMode + " to toggle " + CoinshotMode
-                + ".\n\t\t• While in " + CoinshotMode + ", " + KeyCoinshotThrow + " to throw coins.\n" +
-                KeyZincTime + " to activate " + ZincTime + "."
-            ;
+        if(Player.PlayerPewter.PewterReserve.IsEnabled) {
+            builder.AppendLine(
+                KeySprint + ": " + Sprint + '\n' + 
+                KeyWalk + ": " + Anchor
+            );
         }
+
+        if(Player.CanControlZinc) {
+            builder.AppendLine(KeyZincTime + ": " + Zinc);
+        }
+
+        if(Player.CanThrowCoins) {
+            builder.AppendLine(KeyThrowAbridged + ": Throw " + O_Coin);
+            if(Verbose) {
+                if(!SettingsMenu.settingsData.UsingGamepad) {
+                    builder.AppendLine(" • " + Shift + " + " + KeyThrowAbridged + ": Mark and Throw " + O_Coin);
+                }
+                builder.AppendLine(" • " + KeyJump + " + " + KeyThrowAbridged + ": Throw " + O_Coin + " downwards");
+            }
+        }
+
+        HelpTextLeft.text = builder.ToString();
     }
 
-    // Not called by Button
+    // Called by pressing the H or F1 key
     public void Toggle() {
-        SetVisible(!IsOpen);
+        switch(currentState) {
+            case State.Closed:
+                EnableSimple();
+                break;
+            case State.Simple:
+                EnableVerbose();
+                break;
+            case State.Verbose:
+                Disable();
+                break;
+        }
+
         SettingsMenu.RefreshSettingHelpOverlay();
     }
 
-    private void SetVisible(bool open) {
-        IsOpen = open;
-        HelpTextLeft.gameObject.SetActive(open);
-        HelpTextRight.gameObject.SetActive(open);
+    public void EnableSimple() {
+        currentState = State.Simple;
+        UpdateText();
     }
-
-    public void Enable() {
-        SetVisible(true);
+    public void EnableVerbose() {
+        currentState = State.Verbose;
+        UpdateText();
     }
-
     public void Disable() {
-        SetVisible(false);
-    }
-
-    // Sets how many options are visible in the help overlay
-    public void SetLockedState(LockedState newState) {
-        lockedState = newState;
+        currentState = State.Closed;
         UpdateText();
     }
 }

@@ -195,6 +195,11 @@ public class TextCodes : MonoBehaviour {
             return LightBlue("Pull-targets");
         }
     }
+    public static string Mark {
+        get {
+            return Gray("Mark");
+        }
+    }
     public static string Mark_pulling {
         get {
             return LightBlue("Mark");
@@ -262,7 +267,7 @@ public class TextCodes : MonoBehaviour {
     }
     public static string Sprint {
         get {
-            return OffWhite("sprint");
+            return OffWhite("Sprint");
         }
     }
     public static string Sprinting {
@@ -278,6 +283,11 @@ public class TextCodes : MonoBehaviour {
     public static string PewterJumping {
         get {
             return OffWhite("Jumping");
+        }
+    }
+    public static string Anchor {
+        get {
+            return OffWhite("Anchor");
         }
     }
     public static string HelpOverlay {
@@ -410,6 +420,11 @@ public class TextCodes : MonoBehaviour {
             return "the " + Gray("mouse");
         }
     }
+    public static string Mouse {
+        get {
+            return Gray("Mouse");
+        }
+    }
     public static string Shift {
         get {
             return Gray("Shift");
@@ -438,6 +453,11 @@ public class TextCodes : MonoBehaviour {
     public static string R {
         get {
             return ZincBlue("R");
+        }
+    }
+    public static string F {
+        get {
+            return Gold("F");
         }
     }
     public static string WASD {
@@ -536,6 +556,14 @@ public class TextCodes : MonoBehaviour {
                 return RightClickAbridged;
         }
     }
+    public static string _KeyPullPushAbridged {
+        get {
+            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+                return RightTriggerAbridged + '/' + LeftTriggerAbridged;
+            else
+                return LeftClickAbridged + '/' + RightClickAbridged;
+        }
+    }
     public static string KeyZincTime {
         get {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
@@ -632,6 +660,27 @@ public class TextCodes : MonoBehaviour {
                     }
                 default: {
                         return LightRed(s_Left_BumperAbridged);
+                    }
+            }
+        }
+    }
+    public static string _KeyMarkAbridged {
+        get {
+            switch (SettingsMenu.settingsData.controlScheme) {
+                case SettingsData.MK54: {
+                        return LightBlue(s_Mouse_Button_5Abridged) + '/' + LightRed(s_Mouse_Button_4Abridged);
+                    }
+                case SettingsData.MK45: {
+                        return LightBlue(s_Mouse_Button_4Abridged)  + '/' + LightRed(s_Mouse_Button_5Abridged);
+                    }
+                case SettingsData.MKEQ: {
+                        return LightBlue(s_E) + '/' + LightRed(s_Q);
+                    }
+                case SettingsData.MKQE: {
+                        return LightBlue(s_Q) + '/' + LightRed(s_E);
+                    }
+                default: {
+                        return LightBlue(s_Right_Bumper) + '/' + LightRed(s_Left_BumperAbridged);
                     }
             }
         }
@@ -740,7 +789,15 @@ public class TextCodes : MonoBehaviour {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
                 return s_Press_ + X;
             else
-                return s_Press_ + mouseButton3;
+                return s_Press_ + F;
+        }
+    }
+    public static string KeyThrowAbridged {
+        get {
+            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+                return X;
+            else
+                return F;
         }
     }
     public static string KeyDrop {
@@ -789,6 +846,14 @@ public class TextCodes : MonoBehaviour {
                 return s_Press_ +  Start + " > Settings > Interface > Help Overlay";
             else
                 return s_Press_ + H + " or " + s_Press_ + Escape + " > Settings > Interface > Help Overlay";
+        }
+    }
+    public static string KeyHelpAbridged {
+        get {
+            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+                return Start + " > Settings > Interface";
+            else
+                return H + " or " + Escape + " > Settings > Interface";
         }
     }
 

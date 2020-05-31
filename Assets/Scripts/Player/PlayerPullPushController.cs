@@ -243,10 +243,10 @@ public class PlayerPullPushController : AllomanticIronSteel {
                                         // If there is no bullseye target, deselect all targets.
                                         if (bullseyeTarget == null) {
                                             PullTargets.Clear();
-                                        } else if (PullTargets.IsTarget(bullseyeTarget)) {
-                                            // If the bullseye target is already selected, we want to remove it instead.
-                                            RemovePullTarget(bullseyeTarget);
-                                            removingTargets = PullTargets.VacuousCount == 0;
+                                        //} else if (PullTargets.IsTarget(bullseyeTarget)) {
+                                        //    // If the bullseye target is already selected, we want to remove it instead.
+                                        //    RemovePullTarget(bullseyeTarget);
+                                        //    removingTargets = PullTargets.VacuousCount == 0;
                                         } else {
                                             // It's not a target. Remove old target and add new one.
                                             PullTargets.Clear();
@@ -299,10 +299,10 @@ public class PlayerPullPushController : AllomanticIronSteel {
                                         // If there is no bullseye target, deselect all targets.
                                         if (bullseyeTarget == null) {
                                             PushTargets.Clear();
-                                        } else if (PushTargets.IsTarget(bullseyeTarget)) {
-                                            // If the bullseye target is already selected, we want to remove it instead.
-                                            RemovePushTarget(bullseyeTarget);
-                                            removingTargets = PushTargets.VacuousCount == 0;
+                                        //} else if (PushTargets.IsTarget(bullseyeTarget)) {
+                                        //    // If the bullseye target is already selected, we want to remove it instead.
+                                        //    RemovePushTarget(bullseyeTarget);
+                                        //    removingTargets = PushTargets.VacuousCount == 0;
                                         } else {
                                             // It's not a target. Remove old target and add new one.
                                             PushTargets.Clear();
@@ -351,17 +351,17 @@ public class PlayerPullPushController : AllomanticIronSteel {
                                     if (markForPullDown) {
                                         if (Keybinds.MultipleMarks()) {
                                             if (bullseyeTarget != null) {
-                                                if (PullTargets.IsTarget(bullseyeTarget)) {
-                                                    // If the bullseye target is already selected, we want to remove targets instead.
-                                                    PullTargets.RemoveTargets(newTargetsArea);
-                                                    //removingTargets = PullTargets.VacuousCount == 0;
-                                                } else {
+                                                //if (PullTargets.IsTarget(bullseyeTarget)) {
+                                                //    // If the bullseye target is already selected, we want to remove targets instead.
+                                                //    PullTargets.RemoveTargets(newTargetsArea);
+                                                //    //removingTargets = PullTargets.VacuousCount == 0;
+                                                //} else {
                                                     // They're not targets. Add them.
                                                     // O(n^2)ish
                                                     for (int i = 0; i < newTargetsArea.Count; i++) {
                                                         PullTargets.AddTarget(newTargetsArea[i], false);
                                                     }
-                                                }
+                                                //}
                                             }
                                         } else {
                                             //if (PullTargets.IsTarget(bullseyeTarget)) {
@@ -404,17 +404,17 @@ public class PlayerPullPushController : AllomanticIronSteel {
                                     if (markForPushDown) {
                                         if (Keybinds.MultipleMarks()) {
                                             if (bullseyeTarget != null) {
-                                                if (PushTargets.IsTarget(bullseyeTarget)) {
-                                                    // If the bullseye target is already selected, we want to remove targets instead.
-                                                    PushTargets.RemoveTargets(newTargetsArea);
-                                                    //removingTargets = PushTargets.VacuousCount == 0;
-                                                } else {
+                                                //if (PushTargets.IsTarget(bullseyeTarget)) {
+                                                //    // If the bullseye target is already selected, we want to remove targets instead.
+                                                //    PushTargets.RemoveTargets(newTargetsArea);
+                                                //    //removingTargets = PushTargets.VacuousCount == 0;
+                                                //} else {
                                                     // They're not targets. Add them.
                                                     // O(n^2)ish
                                                     for (int i = 0; i < newTargetsArea.Count; i++) {
                                                         PushTargets.AddTarget(newTargetsArea[i], false);
                                                     }
-                                                }
+                                                //}
                                             }
                                         } else {
                                             //if (PushTargets.IsTarget(bullseyeTarget)) {
