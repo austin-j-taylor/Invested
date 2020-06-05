@@ -17,7 +17,7 @@ public class Challenge_BreakTargets : Challenge_TimeTrial {
     }
 
     protected override IEnumerator TimeTrial(double recordTime) {
-        Entity_Target[] targets = challengeObjects.GetComponentsInChildren<Entity_Target>();
+        Target[] targets = challengeObjects.GetComponentsInChildren<Target>();
         double raceTime = 0;
         bool done = false;
         while (!done) {

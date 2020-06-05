@@ -11,6 +11,8 @@ public class Challenge_TimeTrial : Challenge {
         base.Start();
         challengeType = "Time Trial: ";
         challengeDescription = "Current record: " + HUD.TimeMMSSMS(PlayerDataController.GetTime(trialDataName)) + "\n\n" + challengeDescription;
+        if (failureObjects.Length > 0)
+            challengeDescription = challengeDescription + TextCodes.Red("\n - The Floor is Lava: Touching the ground fails the challenge.");
 
         rings = transform.Find("Rings").GetComponentsInChildren<TimeTrialRing>();
         HideAllRings();

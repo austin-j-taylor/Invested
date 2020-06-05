@@ -156,7 +156,6 @@
     <Compile Include="Assets\Scripts\Allomancy\TargetArray.cs" />
     <Compile Include="Assets\Scripts\Entities\Drone.cs" />
     <Compile Include="Assets\Scripts\Entities\Entity.cs" />
-    <Compile Include="Assets\Scripts\Entities\Entity_Target.cs" />
     <Compile Include="Assets\Scripts\Entities\Entity_TurretAnchored.cs" />
     <Compile Include="Assets\Scripts\Entities\PewterEntity.cs" />
     <Compile Include="Assets\Scripts\Entities\TargMobileController.cs" />
@@ -174,6 +173,7 @@
     <Compile Include="Assets\Scripts\Environment\Circuits\Elevator.cs" />
     <Compile Include="Assets\Scripts\Environment\Circuits\FacilityDoor.cs" />
     <Compile Include="Assets\Scripts\Environment\Circuits\FacilityDoor_Red.cs" />
+    <Compile Include="Assets\Scripts\Environment\Circuits\GateRising.cs" />
     <Compile Include="Assets\Scripts\Environment\Circuits\Gate_AND.cs" />
     <Compile Include="Assets\Scripts\Environment\Circuits\Interfaceable.cs" />
     <Compile Include="Assets\Scripts\Environment\Circuits\LightFlickering.cs" />
@@ -181,6 +181,8 @@
     <Compile Include="Assets\Scripts\Environment\Circuits\Powered.cs" />
     <Compile Include="Assets\Scripts\Environment\Circuits\PressurePlate.cs" />
     <Compile Include="Assets\Scripts\Environment\Circuits\Source.cs" />
+    <Compile Include="Assets\Scripts\Environment\Circuits\SourceBreakable.cs" />
+    <Compile Include="Assets\Scripts\Environment\Circuits\Target.cs" />
     <Compile Include="Assets\Scripts\Environment\Circuits\Wire.cs" />
     <Compile Include="Assets\Scripts\Environment\Circuits\WireLock.cs" />
     <Compile Include="Assets\Scripts\Environment\Collectables\TriggerBead.cs" />
@@ -339,6 +341,7 @@
      <None Include="Assets\Imports\VolumetricLines\BuiltInRenderPipeline\Shaders\_SingleLineShader.cginc" />
      <None Include="Assets\Imports\PostProcessing\resources\Shaders\AmbientOcclusion.shader" />
      <None Include="Assets\Imports\VolumetricLines\BuiltInRenderPipeline\Shaders\LineStrip-TextureAdditive.shader" />
+     <None Include="Assets\Shaders\RefillingCircle.shader" />
      <None Include="Assets\Imports\PostProcessing\resources\Shaders\FXAA.shader" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro_Properties.cginc" />
      <None Include="Assets\Imports\SebLague-Clouds\Scripts\Terrain\Scripts\ComputeShaders\HeightMap.compute" />

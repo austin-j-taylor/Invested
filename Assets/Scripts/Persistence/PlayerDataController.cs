@@ -9,7 +9,7 @@ public class PlayerDataController : MonoBehaviour {
 
     // Data (must be public for JSON)
     [HideInInspector]
-    public double timeTrial_TestingGrounds, reachGoal_TestingGrounds, breakTargets_TestingGrounds, timeTrial_Luthadel, breakTargets_Luthadel, reachGoal_Luthadel;
+    public double timeTrial_TestingGrounds, reachGoal_TestingGrounds, breakTargets_TestingGrounds, timeTrial1_Luthadel, timeTrial2_Luthadel, breakTargets_Luthadel;
     [HideInInspector]
     public int pwr_controlWheel, pwr_steel, pwr_pewter, pwr_zinc, pwr_coins; // for unlocking abilities
     
@@ -63,11 +63,11 @@ public class PlayerDataController : MonoBehaviour {
             case "breakTargets_TestingGrounds":
                 instance.breakTargets_TestingGrounds = time;
                 break;
-            case "timeTrial_Luthadel":
-                instance.timeTrial_Luthadel = time;
+            case "timeTrial1_Luthadel":
+                instance.timeTrial1_Luthadel = time;
                 break;
-            case "reachGoal_Luthadel":
-                instance.reachGoal_Luthadel = time;
+            case "timeTrial2_Luthadel":
+                instance.timeTrial2_Luthadel = time;
                 break;
             case "breakTargets_Luthadel":
                 instance.breakTargets_Luthadel = time;
@@ -110,10 +110,10 @@ public class PlayerDataController : MonoBehaviour {
                 return instance.reachGoal_TestingGrounds;
             case "breakTargets_TestingGrounds":
                 return instance.breakTargets_TestingGrounds;
-            case "timeTrial_Luthadel":
-                return instance.timeTrial_Luthadel;
-            case "reachGoal_Luthadel":
-                return instance.reachGoal_Luthadel;
+            case "timeTrial1_Luthadel":
+                return instance.timeTrial1_Luthadel;
+            case "timeTrial2_Luthadel":
+                return instance.timeTrial2_Luthadel;
             case "breakTargets_Luthadel":
                 return instance.breakTargets_Luthadel;
             default:

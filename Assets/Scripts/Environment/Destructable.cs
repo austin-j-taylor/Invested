@@ -7,8 +7,9 @@ using System.Collections;
 public class Destructable : Powered {
 
     [SerializeField]
-    private bool OnByDefault = false;
-    protected double maxHealth = 100;
+    protected bool OnByDefault = false;
+
+    protected double MaxHealth { get; private set; } = 1;
 
     protected double health;
     public virtual double Health {
@@ -19,18 +20,19 @@ public class Destructable : Powered {
             health = value;
             if (health <= 0) {
                 health = 0;
-                if(On)
-                    Destroy();
+                if(On == OnByDefault)
+                    Break();
             }
         }
     }
 
     protected virtual void Awake() {
-        health = maxHealth;
+        health = MaxHealth;
         On = OnByDefault;
     }
 
-    protected virtual void Destroy() {
-        On = false;
+    protected virtual void Break() {
+        health = 0;
+        On = !OnByDefault;
     }
 }

@@ -13,7 +13,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1345829311, guid: ee85669336ad7ce4dbbc04ae96cca873, type: 3}
       propertyPath: m_CollisionDetection
-      value: 0
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 114308040667166050, guid: ee85669336ad7ce4dbbc04ae96cca873,
         type: 3}
@@ -25,6 +25,11 @@ PrefabInstance:
       propertyPath: m_StaticEditorFlags
       value: 4294967295
       objectReference: {fileID: 0}
+    - target: {fileID: 604923544581325260, guid: ee85669336ad7ce4dbbc04ae96cca873,
+        type: 3}
+      propertyPath: m_Convex
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 644551006258808359, guid: ee85669336ad7ce4dbbc04ae96cca873,
         type: 3}
       propertyPath: connected.Array.size
@@ -34,7 +39,7 @@ PrefabInstance:
         type: 3}
       propertyPath: connected.Array.data[0]
       value: 
-      objectReference: {fileID: 7847480791129215596}
+      objectReference: {fileID: 0}
     - target: {fileID: 644551006258808359, guid: ee85669336ad7ce4dbbc04ae96cca873,
         type: 3}
       propertyPath: connected.Array.data[1]
@@ -139,15 +144,3 @@ PrefabInstance:
     - {fileID: 5794199172194939346, guid: ee85669336ad7ce4dbbc04ae96cca873, type: 3}
     - {fileID: 1345829312, guid: ee85669336ad7ce4dbbc04ae96cca873, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: ee85669336ad7ce4dbbc04ae96cca873, type: 3}
---- !u!114 &7847480791129215596 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 644551006258808359, guid: ee85669336ad7ce4dbbc04ae96cca873,
-    type: 3}
-  m_PrefabInstance: {fileID: 7212019516452639819}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 16431a00e5dd92045bdfb36e40d573e4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

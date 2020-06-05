@@ -2,105 +2,41 @@
 using System.Collections;
 
 /*
- * A "Lock" that, when destroyed, releases power.
+ * A "Lock" that, when destroyed, turns off.
  */
-public class WireLock : Source {
-
-    [SerializeField]
-    private bool repairing = false;
-    [SerializeField]
-    private float timeToRepair = 1;
-
-
-    private bool isBeingDestroyed = false;
+public class WireLock : SourceBreakable {
 
     private Magnetic metal;
     private Renderer mount;
-    private Animator anim;
-    private AudioSource audioDestroying, audioDestroyed, audioRepairing;
-
-    public override double Health {
-        set {
-            health = value;
-            if (health <= 0) {
-                health = 0;
-                if(repairing) {
-                    // Do not destroy this; however, disable the magnetic and begin repairing.
-                    DestroyButThenRepair();
-                } else if (On)
-                    Destroy();
-            }
-        }
-    }
-
 
     protected override void Awake() {
-        maxHealth = 120;
-        base.Awake();
-
         metal = GetComponentInChildren<Magnetic>();
         mount = GetComponentInChildren<Renderer>();
-        anim = GetComponent<Animator>();
-        AudioSource[] sources = GetComponents<AudioSource>();
-        audioDestroying = sources[0];
-        audioDestroyed = sources[1];
-        audioRepairing = sources[2];
-    }
+        OnByDefault = true;
 
-    private void Start() {
-        anim.SetBool("repairing", repairing);
-
-        On = true;
+        base.Awake();
     }
 
     private void LateUpdate() {
         if (On) {
             if (isBeingDestroyed) {
-                if (metal.IsBeingPushPulled) {
-                    Health -= Time.deltaTime * 60;
-                } else {
-                    isBeingDestroyed = false;
-                    anim.SetBool("isBeingDestroyed", false);
-                    audioDestroying.Stop();
-                    Health = maxHealth;
+                if (!metal.IsBeingPushPulled) {
+                    CeaseDestroying();
                 }
             } else {
                 if (metal.IsBeingPushPulled) {
-                    isBeingDestroyed = true;
-                    anim.SetBool("isBeingDestroyed", true);
-                    audioDestroying.Play();
-                    Health -= Time.deltaTime * 60;
+                    StartDestroying();
                 }
             }
         }
     }
 
-    // If player Pulls or Pushes On the lock, it is destroyed.
-    protected override void Destroy() {
-        base.Destroy();
-        anim.SetTrigger("destroyed");
-        audioDestroyed.Play();
-        On = false;
-
+    protected override void Break() {
+        base.Break();
         metal.enabled = false;
     }
-
-    // If player Pulls or Pushes On the lock, it is destroyed - until it repairs itself
-    private void DestroyButThenRepair() {
-        anim.SetTrigger("destroyed");
-        audioDestroyed.Play();
-        audioRepairing.Play();
-
-        On = false;
-        metal.enabled = false;
-        anim.speed = 1f / timeToRepair;
-    }
-
-    private void Repair() {
+    protected override void Repair() {
+        base.Repair();
         metal.enabled = true;
-        On = true;
-        health = maxHealth;
-
-        anim.speed = 1;
     }
 }

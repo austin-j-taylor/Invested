@@ -55,6 +55,19 @@ public class Environment_Tutorial4 : EnvironmentCinematic {
     protected override IEnumerator Trigger0() {
         while (HUD.ConversationHUDController.IsOpen)
             yield return null;
+        Player.CanThrowCoins = true;
+
+        HUD.MessageOverlayCinematic.FadeIn(
+            KeyCoinshotThrow + " while burning metals to throw and Push on a " + O_Coin + "."
+        );
+        yield return new WaitForSeconds(5);
+        HUD.MessageOverlayCinematic.FadeOut();
+
+    }
+
+    protected override IEnumerator Trigger1() {
+        while (HUD.ConversationHUDController.IsOpen)
+            yield return null;
         Player.CanControlZinc = false;
 
         HUD.MessageOverlayCinematic.FadeIn(
@@ -68,7 +81,7 @@ public class Environment_Tutorial4 : EnvironmentCinematic {
             "The " + ZincBlue("zinc bank") + "drains while tapping zinc, and recharges when not tapping zinc"
         );
     }
-    protected override IEnumerator Trigger1() {
+    protected override IEnumerator Trigger2() {
         HUD.MessageOverlayCinematic.FadeIn(
             "Opening the " + ControlWheel + " also taps " + Zinc + "."
         );
@@ -77,7 +90,7 @@ public class Environment_Tutorial4 : EnvironmentCinematic {
         }
         HUD.MessageOverlayCinematic.FadeOut();
     }
-    protected override IEnumerator Trigger2() {
+    protected override IEnumerator Trigger3() {
         while (HUD.ConversationHUDController.IsOpen)
             yield return null;
         HUD.MessageOverlayCinematic.FadeIn(

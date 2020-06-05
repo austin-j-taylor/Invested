@@ -6,8 +6,7 @@ using System.Collections;
 */
 public class Entity : MonoBehaviour {
 
-    //protected const float fallDamageSquareSpeedThreshold = 150; // any fall speed above this -> painful
-    protected const float fallDamageSquareSpeedThreshold = 10; // any collision with more than this force is considered damage
+    protected const float fallDamageSquareSpeedThreshold = 150; // any fall speed above this -> painful
 
     private double health;
     private double maxHealth;
