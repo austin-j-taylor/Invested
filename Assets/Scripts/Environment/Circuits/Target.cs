@@ -33,6 +33,23 @@ public class Target : SourceBreakable {
         goldRenderer.SetPropertyBlock(fillBlock);
     }
     protected override void Repair() {
+        // For repairable targets, don't lose power if all targets have been shot before this one finished repairing.
+        bool shouldStayDead = true;
+        bool foundSibling = false;
+        for(int i = 0; i < parent.sources.Length; i++) {
+            Target sibling = parent.sources[i].GetComponent<Target>();
+            if (sibling == null || !sibling.repairWhenDestroyed)
+                continue;
+            foundSibling = true;
+            if(!sibling.On) {
+                shouldStayDead = false;
+            }
+        }
+        if (!foundSibling || shouldStayDead) {
+            // Die for good
+            return;
+        }
+        
         base.Repair();
         transform.Find("Body").GetComponent<MeshRenderer>().material = GameManager.Material_MARLmetal_unlit;
         if (magnetic)

@@ -3,6 +3,8 @@ using System.Collections;
 
 /*
  * An Investiture power source.
+ * Is considered connected to any siblings.
+ * Should always be a child of a Node object.
  */
 public class Source : Destructable {
 

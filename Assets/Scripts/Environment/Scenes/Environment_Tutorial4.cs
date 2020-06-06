@@ -49,6 +49,7 @@ public class Environment_Tutorial4 : EnvironmentCinematic {
         } else {
             Player.CanControlZinc = true;
             Player.CanThrowCoins = true;
+            Player.PlayerInstance.CoinHand.Pouch.Fill();
         }
         CameraController.DisableCinemachineCamera(vcam);
         Player.CanControl = true;

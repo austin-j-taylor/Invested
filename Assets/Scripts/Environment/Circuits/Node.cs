@@ -2,13 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 
-// Represents a connected system of elements.
+// Represents a connected system of elements. The immediate children of this object are what are connected.
 // If any element in the system is on, the node is On.
 // If all elements in the system are off, the node is off.
 public class Node : Source {
 
     public Source[] sources;
-    public Powered[] receivers;
+    private Powered[] receivers;
+    [SerializeField]
+    private Node[] connectedNodes = null; // Breaking heirarchy, these nodes are also connected to this one.
 
     // An element is in this node if it is an immediate child of this game object.
     protected override void Awake() {
@@ -27,6 +29,13 @@ public class Node : Source {
             else if (powered)
                 receiversList.Add(powered);
         }
+        // Make sure connected nodes know we're connected to them
+        if (connectedNodes != null) {
+            for (int n = 0; n < connectedNodes.Length; n++) {
+                connectedNodes[n].ConnectNode(this);
+            }
+        }
+
         sources = sourcesList.ToArray();
         receivers = receiversList.ToArray();
     }
@@ -49,10 +58,40 @@ public class Node : Source {
                 break;
             }
         }
+        // Also check state of other connected nodes.
+        if(connectedNodes != null) {
+            for (int n = 0; n < connectedNodes.Length; n++) {
+                for(int i = 0; i < connectedNodes[n].sources.Length; i++) {
+                    if(connectedNodes[n].sources[i].On) {
+                        state = true;
+                        break;
+                    }
+                }
+            }
+        }
+        // If any are on, it is on. If all are off, it is off.
         // Set new state of child elements
-        for(int i = 0; i < receivers.Length; i++) {
+        for (int i = 0; i < receivers.Length; i++) {
             receivers[i].On = state;
         }
+        // Also set state of other connected nodes.
+        if (connectedNodes != null) {
+            for (int n = 0; n < connectedNodes.Length; n++) {
+                for (int i = 0; i < connectedNodes[n].receivers.Length; i++) {
+                    connectedNodes[n].receivers[i].On = state;
+                }
+                connectedNodes[n].On = state;
+            }
+        }
         On = state;
+    }
+
+    // Dynamically connects newNode to this node, regardless of positions in the heirarchy.
+    private void ConnectNode(Node newNode) {
+        Node[] newArray = new Node[connectedNodes.Length + 1];
+        for (int n = 0; n < connectedNodes.Length; n++)
+            newArray[n] = connectedNodes[n];
+        newArray[newArray.Length - 1] = newNode;
+        connectedNodes = newArray;
     }
 }
