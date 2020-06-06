@@ -169,7 +169,7 @@ public class ConversationHUDController : MonoBehaviour {
                         case 'f':
                             // other font, based on next character
                             switch(currentConversation.content[++i]) {
-                                case 's': // steel alphabet
+                                case 'S': // steel alphabet
                                     parsed.Append("<font=\"steelAlphabetTMP\">");
                                     break;
                                 default:
@@ -214,6 +214,16 @@ public class ConversationHUDController : MonoBehaviour {
                         case 'W':
                             // color for OFF-WHITe (PEWTER)
                             parsed.Append(Color_Pewter_Open());
+                            currentStyle = Style.Colored;
+                            break;
+                        case 'G':
+                            // color for GOLD (Coins)
+                            parsed.Append(Color_Coin_Open());
+                            currentStyle = Style.Colored;
+                            break;
+                        case 'Z':
+                            // color for LIGHT BLUE (ZINC)
+                            parsed.Append(Color_Zinc_Open());
                             currentStyle = Style.Colored;
                             break;
                         case 'C':

@@ -40,7 +40,7 @@ public class Target : SourceBreakable {
     }
     protected override void ContinueRepairing() {
         base.ContinueRepairing();
-        fillBlock.SetFloat("_Fill", (float)(health / timeToRepair));
+        fillBlock.SetFloat("_Fill", (float)(health / MaxHealth));
         goldRenderer.SetPropertyBlock(fillBlock);
     }
 

@@ -126,6 +126,7 @@ public class PauseMenu : MonoBehaviour {
             case GameManager.GameState.Standard:
                 //SceneSelectMenu.ReloadScene();
                 Player.PlayerInstance.Respawn();
+                UnPause();
                 break;
             case GameManager.GameState.Challenge:
                 ChallengesManager.RestartCurrentChallenge();

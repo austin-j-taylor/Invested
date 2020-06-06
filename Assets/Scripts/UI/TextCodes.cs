@@ -57,6 +57,12 @@ public class TextCodes : MonoBehaviour {
     public static string Red_Open() {
         return "<color=#ff8080>";
     }
+    public static string ZincBlue_Open() {
+        return "<color=#c1dbff>";
+    }
+    public static string Gold_Open() {
+        return "<color=#fff080>";
+    }
     // Methods that accept strings as arguments and return strings colored in their respective color
     public static string Blue(string s) {
         return Blue_Open() + s + "</color>";
@@ -68,7 +74,7 @@ public class TextCodes : MonoBehaviour {
         return LightBlue_Open() + s + "</color>";
     }
     public static string ZincBlue(string s) {
-        return "<color=#c1dbff>" + s + "</color>";
+        return ZincBlue_Open() + s + "</color>";
     }
     public static string LightRed(string s) {
         return "<color=#ffbfbf>" + s + "</color>";
@@ -80,7 +86,7 @@ public class TextCodes : MonoBehaviour {
         return Gray_Open() + s + "</color>";
     }
     public static string Gold(string s) {
-        return "<color=#fff080>" + s + "</color>";
+        return Gold_Open() + s + "</color>";
     }
     public static string Orange(string s) {
         return "<color=#ff9d60>" + s + "</color>";
@@ -122,6 +128,12 @@ public class TextCodes : MonoBehaviour {
     }
     public static string Color_Pewter_Open() {
         return OffWhite_Open();
+    }
+    public static string Color_Zinc_Open() {
+        return ZincBlue_Open();
+    }
+    public static string Color_Coin_Open() {
+        return Gold_Open();
     }
 
     // Known words that should always appear in a specific color
@@ -213,6 +225,11 @@ public class TextCodes : MonoBehaviour {
     public static string Marking_pulling {
         get {
             return LightBlue("Marking");
+        }
+    }
+    public static string Marked_pulling {
+        get {
+            return LightBlue("Marked");
         }
     }
     public static string Marked_metal{
@@ -532,6 +549,14 @@ public class TextCodes : MonoBehaviour {
                 return "press " + A;
             else
                 return "press " + Space;
+        }
+    }
+    public static string KeyPull {
+        get {
+            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+                return s_Press_ + RightTrigger;
+            else
+                return s_Press_ + LeftClick;
         }
     }
     public static string _KeyPull {

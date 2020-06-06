@@ -13,7 +13,7 @@ public class Environment_Tutorial3 : EnvironmentCinematic {
 
         Player.CanControl = false;
         Player.CanControlMovement = false;
-        Player.PlayerInstance.CoinHand.Pouch.Clear();
+        Player.CanThrowCoins = false;
         Player.PlayerPewter.PewterReserve.IsEnabled = false;
         Player.CanControlZinc = false;
         HUD.ControlWheelController.SetLockedState(ControlWheelController.LockedState.LockedToBubble);

@@ -630,7 +630,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
         // If the player is directly looking at a magnetic's collider, use that for the bullseye
         if (Physics.Raycast(CameraController.ActiveCamera.transform.position, CameraController.ActiveCamera.transform.forward, out RaycastHit hit, 500, GameManager.Layer_IgnorePlayer)) {
             Magnetic target = hit.collider.GetComponentInParent<Magnetic>();
-            if (target && target.IsInRange(this, GreaterPassiveBurn)) {
+            if (target && target.isActiveAndEnabled && target.IsInRange(this, GreaterPassiveBurn)) {
                 targetBullseye = target;
                 centerWeightCheck = false;
             }
@@ -677,7 +677,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
 
         foreach (Magnetic target in GameManager.MagneticsInScene) {
 
-            if (target != Player.PlayerMagnetic) {
+            if (target.isActiveAndEnabled && target != Player.PlayerMagnetic) {
                 // skip this target completely if it is too far away
                 if ((target.CenterOfMass - transform.position).sqrMagnitude > distanceThresholdSqr) {
                     target.DisableBlueLine();

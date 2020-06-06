@@ -5,9 +5,6 @@ using Cinemachine;
 
 public class Environment_Tutorial1 : EnvironmentCinematic {
 
-    [SerializeField]
-    private MessageTrigger trigger_pull = null;
-
     EnvironmentalTransitionManager musicManager;
 
     void Start() {
@@ -15,7 +12,8 @@ public class Environment_Tutorial1 : EnvironmentCinematic {
 
         Player.CanControl = false;
         Player.CanControlMovement = false;
-        Player.PlayerInstance.CoinHand.Pouch.Clear();
+        Player.CanThrowCoins = false;
+        Player.PlayerIronSteel.IronReserve.IsEnabled = false;
         Player.PlayerIronSteel.SteelReserve.IsEnabled = false;
         Player.PlayerPewter.PewterReserve.IsEnabled = false;
         Player.CanControlZinc = false;
@@ -27,9 +25,6 @@ public class Environment_Tutorial1 : EnvironmentCinematic {
         vcam.transform.position = new Vector3(Mathf.Cos(Time.unscaledTime * Environment_TitleScreen.speedVert) * Environment_TitleScreen.speedAmp, (1 + Mathf.Sin(Time.unscaledTime * Environment_TitleScreen.speedVert)) * Environment_TitleScreen.speedAmp, Mathf.Sin(Time.unscaledTime * Environment_TitleScreen.speedVert) * Environment_TitleScreen.speedAmp);
         // Make camera look at Player
         vcam.LookAt = Player.PlayerInstance.transform;
-
-        trigger_pull.routine = Trigger_Pull();
-
         // Handle music
         StartCoroutine(Play_music());
 
@@ -77,7 +72,15 @@ public class Environment_Tutorial1 : EnvironmentCinematic {
         }
 
     }
-    private IEnumerator Trigger_Pull() {
+    protected override IEnumerator Trigger0() {
+        HUD.HelpOverlayController.EnableSimple();
+        yield break;
+    }
+    protected override IEnumerator Trigger1() {
+        GameManager.ConversationManager.StartConversation("THINK2");
+        while (HUD.ConversationHUDController.IsOpen)
+            yield return null;
+        Player.PlayerIronSteel.IronReserve.IsEnabled = true;
         HUD.MessageOverlayCinematic.FadeIn(Messages.tutorial_pull);
         while (!Player.PlayerIronSteel.IsBurning) {
             yield return null;

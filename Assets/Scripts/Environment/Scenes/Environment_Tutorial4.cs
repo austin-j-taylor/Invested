@@ -6,6 +6,8 @@ using static TextCodes;
 public class Environment_Tutorial4 : EnvironmentCinematic {
 
     EnvironmentalTransitionManager musicManager;
+    [SerializeField]
+    private Node doorNode1 = null, doorNode2 = null;
 
     void Start() {
         Player.VoidHeight = -100;
@@ -15,6 +17,7 @@ public class Environment_Tutorial4 : EnvironmentCinematic {
         Player.CanControlMovement = false;
         Player.CanControlZinc = false;
         Player.CanThrowCoins = false;
+        Player.PlayerInstance.CoinHand.Pouch.Clear();
         HUD.ControlWheelController.SetLockedState(ControlWheelController.LockedState.LockedToBubble);
 
         // Set cinemachine virtual camera properties
@@ -53,54 +56,64 @@ public class Environment_Tutorial4 : EnvironmentCinematic {
     }
 
     protected override IEnumerator Trigger0() {
+        yield return null;
+
+        Player.CanThrowCoins = true;
         while (HUD.ConversationHUDController.IsOpen)
             yield return null;
-        Player.CanThrowCoins = true;
+        if(Player.PlayerInstance.CoinHand.Pouch.Count == 0) {
+            HUD.MessageOverlayCinematic.FadeIn(KeyPull + " near " + O_Coins + " to pick them up.");
+            while (Player.PlayerInstance.CoinHand.Pouch.Count == 0)
+                yield return null;
 
-        HUD.MessageOverlayCinematic.FadeIn(
-            KeyCoinshotThrow + " while burning metals to throw and Push on a " + O_Coin + "."
-        );
-        yield return new WaitForSeconds(5);
+            HUD.MessageOverlayCinematic.FadeOut();
+            yield return new WaitForSeconds(1);
+        }
+        HUD.MessageOverlayCinematic.FadeIn(KeyThrow + " while passively burning metals to throw and " + Push + " on a " + O_Coin + ".");
+        while(!doorNode1.On) {
+            yield return null;
+        }
         HUD.MessageOverlayCinematic.FadeOut();
-
+        yield return new WaitForSeconds(1);
+        HUD.ControlWheelController.SetLockedState(ControlWheelController.LockedState.Unlocked);
+        HUD.MessageOverlayCinematic.FadeIn("Open the " + ControlWheel + " and choose " + CoinshotMode + ".");
+        while (Player.PlayerIronSteel.Mode != PlayerPullPushController.ControlMode.Coinshot) {
+            yield return null;
+        }
+        HUD.MessageOverlayCinematic.FadeOut();
+        yield return new WaitForSeconds(1);
+        HUD.MessageOverlayCinematic.FadeIn("In " + CoinshotMode + ", " + LeftClick + " to throw " + O_Coins);
+        while (!doorNode2.On) {
+            yield return null;
+        }
+        HUD.MessageOverlayCinematic.FadeOut();
     }
 
     protected override IEnumerator Trigger1() {
         while (HUD.ConversationHUDController.IsOpen)
             yield return null;
-        Player.CanControlZinc = false;
+        yield return new WaitForSeconds(10);
+        GameManager.ConversationManager.StartConversation("THINK2");
 
-        HUD.MessageOverlayCinematic.FadeIn(
-            KeyZincTime + " to tap " + Zinc + "."
-        );
-        HUD.MessageOverlayCinematic.FadeOut();
-        while (!Player.PlayerZinc.InZincTime) {
-            yield return null;
-        }
-        HUD.MessageOverlayCinematic.FadeIn(
-            "The " + ZincBlue("zinc bank") + "drains while tapping zinc, and recharges when not tapping zinc"
-        );
-    }
-    protected override IEnumerator Trigger2() {
-        HUD.MessageOverlayCinematic.FadeIn(
-            "Opening the " + ControlWheel + " also taps " + Zinc + "."
-        );
-        while (!Player.PlayerZinc.InZincTime) {
-            yield return null;
-        }
-        HUD.MessageOverlayCinematic.FadeOut();
-    }
-    protected override IEnumerator Trigger3() {
         while (HUD.ConversationHUDController.IsOpen)
             yield return null;
-        HUD.MessageOverlayCinematic.FadeIn(
-            KeyWalk + " to burn " + Pewter + " to " + OffWhite("anchor") + " yourself and carefully " + OffWhite("balance") + "."
-        );
+        Player.CanControlZinc = true;
 
-        while (!Player.PlayerPewter.IsAnchoring) {
+        HUD.MessageOverlayCinematic.FadeIn(KeyZincTime + " to tap " + Zinc + ".");
+        while (!Player.PlayerZinc.InZincTime) {
             yield return null;
         }
-        yield return new WaitForSeconds(2);
+        HUD.MessageOverlayCinematic.FadeOut();
+        yield return new WaitForSeconds(1);
+        HUD.MessageOverlayCinematic.FadeIn("The " + ZincBlue("zinc bank") + " drains while tapping zinc, and recharges when not tapping zinc");
+        yield return new WaitForSeconds(5);
+        HUD.MessageOverlayCinematic.FadeOut();
+    }
+    protected override IEnumerator Trigger2() {
+        HUD.MessageOverlayCinematic.FadeIn("Opening the " + ControlWheel + " also taps " + Zinc + ".");
+        while (!Player.PlayerZinc.InZincTime) {
+            yield return null;
+        }
         HUD.MessageOverlayCinematic.FadeOut();
     }
 }

@@ -19,7 +19,7 @@ public class Environment_Tutorial2 : EnvironmentCinematic {
 
         Player.CanControl = false;
         Player.CanControlMovement = false;
-        Player.PlayerInstance.CoinHand.Pouch.Clear();
+        Player.CanThrowCoins = false;
         Player.PlayerIronSteel.SteelReserve.IsEnabled = false;
         Player.PlayerPewter.PewterReserve.IsEnabled = false;
         Player.CanControlZinc = false;
