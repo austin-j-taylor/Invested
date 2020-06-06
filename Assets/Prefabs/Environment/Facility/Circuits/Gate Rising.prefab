@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1453757393}
   - component: {fileID: 1453757392}
   - component: {fileID: 1453757391}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: Metal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27,13 +27,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1453757389}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0.70710707, y: -9.094947e-13, z: -9.094947e-13, w: 0.7071066}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7784156898614754082}
   m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!33 &1453757394
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -328,7 +328,7 @@ GameObject:
   - component: {fileID: 911074337776049718}
   - component: {fileID: 2404804193079052445}
   - component: {fileID: 2031847567}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -342,13 +342,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 911074337776049716}
-  m_LocalRotation: {x: -0, y: -0, z: 5.2028284e-16, w: 1}
+  m_LocalRotation: {x: -0.707107, y: -9.094947e-13, z: -0, w: 0.7071066}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7784156898614754082}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
 --- !u!33 &911074337776049715
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1091,17 +1091,9 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_IsSelectable: 1
-  m_SelectedFaces: 00000000
-  m_SelectedEdges:
-  - a: 0
-    b: 0
-  - a: 0
-    b: 0
-  - a: 0
-    b: 0
-  - a: 0
-    b: 0
-  m_SelectedVertices: 00000000000000000000000000000000
+  m_SelectedFaces: 
+  m_SelectedEdges: []
+  m_SelectedVertices: 
 --- !u!64 &911074337776049718
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -1156,7 +1148,7 @@ GameObject:
   - component: {fileID: 7784156898614754082}
   - component: {fileID: 911074335744464577}
   - component: {fileID: 911074335744464576}
-  m_Layer: 0
+  m_Layer: 18
   m_Name: Gate Rising
   m_TagString: Untagged
   m_Icon: {fileID: 0}

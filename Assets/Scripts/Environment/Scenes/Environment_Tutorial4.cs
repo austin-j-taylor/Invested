@@ -47,7 +47,8 @@ public class Environment_Tutorial4 : EnvironmentCinematic {
             vcam.enabled = false;
             yield return new WaitForSeconds(2);
         } else {
-            Player.PlayerPewter.PewterReserve.IsEnabled = true;
+            Player.CanControlZinc = true;
+            Player.CanThrowCoins = true;
         }
         CameraController.DisableCinemachineCamera(vcam);
         Player.CanControl = true;

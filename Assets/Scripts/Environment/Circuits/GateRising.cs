@@ -26,7 +26,7 @@ public class GateRising : Powered {
         allomancer.gameObject.GetComponent<Renderer>().materials[1].CopyPropertiesFromMaterial(GameManager.Material_Steel_lit);
 
         float distance = (allomancer.transform.position - target.transform.position).sqrMagnitude;
-        while (rb.velocity.sqrMagnitude > .01 || distance < 1) {
+        while (rb.velocity.sqrMagnitude > .01 || distance < height / 2) {
             allomancer.SteelPushing = distance < height * height;
             distance = (allomancer.transform.position - target.transform.position).sqrMagnitude;
             yield return null;
