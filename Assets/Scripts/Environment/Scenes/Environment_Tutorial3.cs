@@ -58,9 +58,7 @@ public class Environment_Tutorial3 : EnvironmentCinematic {
             yield return null;
         Player.PlayerPewter.PewterReserve.IsEnabled = true;
 
-        HUD.MessageOverlayCinematic.FadeIn(
-            KeySprint + " to burn " + Pewter + " to " + Sprint + " faster and " + PewterJump + " further."
-        );
+        HUD.MessageOverlayCinematic.FadeIn(KeySprint + " to burn " + Pewter + " to " + Sprint + " faster and " + PewterJump + " further.");
 
         while (!Player.PlayerPewter.IsSprinting) {
             yield return null;
@@ -71,9 +69,7 @@ public class Environment_Tutorial3 : EnvironmentCinematic {
     protected override IEnumerator Trigger1() {
         while (HUD.ConversationHUDController.IsOpen)
             yield return null;
-        HUD.MessageOverlayCinematic.FadeIn(
-            KeyWalk + " to burn " + Pewter + " to " + OffWhite("anchor") + " yourself and carefully " + OffWhite("balance") + "."
-        );
+        HUD.MessageOverlayCinematic.FadeIn(KeyWalk + " to burn " + Pewter + " to " + OffWhite("anchor") + " yourself and carefully " + OffWhite("balance") + ".");
 
         while (!Player.PlayerPewter.IsAnchoring) {
             yield return null;

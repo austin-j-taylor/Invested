@@ -551,6 +551,14 @@ public class TextCodes : MonoBehaviour {
                 return "press " + Space;
         }
     }
+    public static string KeyJumpAbridged {
+        get {
+            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+                return A;
+            else
+                return Space;
+        }
+    }
     public static string KeyPull {
         get {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)

@@ -158,12 +158,12 @@ public class Player : PewterEntity {
                         // Holding MultiTarget will mark the coin, as well
                         if (CoinThrowingMode == CoinMode.Spray) {
                             Coin[] coins = CoinHand.WithdrawCoinSprayToHand(!PlayerIronSteel.IsBurning);
-                            if(Keybinds.Walk())
+                            if(!Keybinds.Walk())
                                 for (int i = 0; i < Hand.spraySize; i++)
                                     PlayerIronSteel.AddPushTarget(coins[i], false, !Keybinds.MultipleMarks());
                         } else {
                             Coin coin = CoinHand.WithdrawCoinToHand(!PlayerIronSteel.IsBurning);
-                            if(Keybinds.Walk())
+                            if(!Keybinds.Walk())
                                 PlayerIronSteel.AddPushTarget(coin, false, !Keybinds.MultipleMarks());
                         }
                     }   

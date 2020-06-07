@@ -66,19 +66,13 @@ public class Environment_Tutorial2 : EnvironmentCinematic {
         backWall.SetActive(true);
         Player.PlayerIronSteel.SteelReserve.IsEnabled = true;
 
-        HUD.MessageOverlayCinematic.FadeIn(
-            s_Hold_ + _KeyPush + " to " + Push + "."
-        );
+        HUD.MessageOverlayCinematic.FadeIn(s_Hold_ + _KeyPush + " to " + Push + ".");
 
         while (!Player.PlayerIronSteel.HasPushTarget) {
             yield return null;
         }
 
-        HUD.MessageOverlayCinematic.FadeOut();
-        yield return new WaitForSeconds(1);
-        HUD.MessageOverlayCinematic.FadeIn(
-            "Hit the target on the ceiling hard."
-        );
+        HUD.MessageOverlayCinematic.FadeOutInto("Hit the target on the ceiling.");
         while (!doorNode.On) {
             yield return null;
         }

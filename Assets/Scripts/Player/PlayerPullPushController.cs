@@ -179,8 +179,6 @@ public class PlayerPullPushController : AllomanticIronSteel {
                             // if LMB while has a push target, Push and don't Pull.
                             if (keybindPulling && !HasPullTarget) {
                                 pushing = true;
-                                keybindPushing = true;
-                                keybindPushingDown = false;
                                 pulling = false;
                                 keybindPulling = false;
                                 keybindPullingDown = false;
@@ -274,13 +272,15 @@ public class PlayerPullPushController : AllomanticIronSteel {
                                     }
                                 } else {
                                     // Not holding down Negate nor Select this round. Consider vacuous pulling.
-                                    if (!HasPullTarget) {
-                                        if (keybindPullingDown) {
+                                    if (keybindPullingDown) {
+                                        if (!HasMarkedPullTarget) {
                                             AddPullTarget(bullseyeTarget, true, true);
                                         }
-                                    } else if (!keybindPulling && PullTargets.VacuousCount > 0) {
-                                        // If we were vacuously pulling but we just released the Pull, remove those targets.
-                                        PullTargets.RemoveAllVacuousTargets();
+                                    } else {
+                                        if (!keybindPulling && PullTargets.VacuousCount > 0) {
+                                            // If we were vacuously pulling but we just released the Pull, remove those targets.
+                                            PullTargets.RemoveAllVacuousTargets();
+                                        }
                                     }
                                 }
                                 if (markForPushDown) {
@@ -329,13 +329,16 @@ public class PlayerPullPushController : AllomanticIronSteel {
                                         }
                                     }
                                 } else {
-                                    // Not holding down Negate nor markForPush this round. Consider vacuous pulling.
-                                    if (!HasPushTarget) {
-                                        if (keybindPushingDown) {
+                                    // Not holding down Negate nor Select this round. Consider vacuous pulling.
+                                    if (keybindPushingDown) {
+                                        if (!HasMarkedPushTarget) {
                                             AddPushTarget(bullseyeTarget, true, true);
                                         }
-                                    } else if (!keybindPushing && PushTargets.VacuousCount > 0) {
-                                        PushTargets.RemoveAllVacuousTargets();
+                                    } else {
+                                        if (!keybindPushing && PushTargets.VacuousCount > 0) {
+                                            // If we were vacuously Pushing but we just released the Push, remove those targets.
+                                            PushTargets.RemoveAllVacuousTargets();
+                                        }
                                     }
                                 }
                                 //}

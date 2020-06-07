@@ -34,12 +34,15 @@ public class NonPlayerPushPullController : AllomanticIronSteel {
 
         pullLines = new VolumetricLineBehavior[TargetArray.smallArrayCapacity];
         pushLines = new VolumetricLineBehavior[TargetArray.smallArrayCapacity];
-        for (int i = 0; i < TargetArray.smallArrayCapacity; i++) {
-            pullLines[i] = Instantiate(GameManager.MetalLineTemplate, GameManager.MetalLinesTransform);
-            pushLines[i] = Instantiate(GameManager.MetalLineTemplate, GameManager.MetalLinesTransform);
+        if(GameManager.MetalLineTemplate != null) {
+            for (int i = 0; i < TargetArray.smallArrayCapacity; i++) {
+                pullLines[i] = Instantiate(GameManager.MetalLineTemplate, GameManager.MetalLinesTransform);
+                pushLines[i] = Instantiate(GameManager.MetalLineTemplate, GameManager.MetalLinesTransform);
+            }
+            LinesAreVisible = true;
+        } else {
+            enabled = false;
         }
-
-        LinesAreVisible = true;
     }
     protected override void InitArrays() {
         PullTargets = new TargetArray(TargetArray.smallArrayCapacity);

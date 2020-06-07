@@ -85,8 +85,6 @@ public class Environment_Tutorial1 : EnvironmentCinematic {
         while (!Player.PlayerIronSteel.IsBurning) {
             yield return null;
         }
-        HUD.MessageOverlayCinematic.FadeOut();
-        yield return new WaitForSeconds(1);
         HUD.MessageOverlayCinematic.Next();
 
 

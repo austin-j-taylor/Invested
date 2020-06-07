@@ -11,6 +11,8 @@ using System.Collections;
  */
 public class MessageOverlayCinematic : MonoBehaviour {
 
+    private const int transitionTime = 1;
+
     private Animator anim;
     private Text messageText;
     private List<string> currentTextList = null;
@@ -35,6 +37,13 @@ public class MessageOverlayCinematic : MonoBehaviour {
         anim.SetBool("IsVisible", true);
         messageText.text = newText;
     }
+    // Fades newText into messageText on the screen, waits time seconds, then fades out
+    public void FadeInFor(string newText, int time) {
+        StopAllCoroutines();
+        anim.SetBool("IsVisible", true);
+        messageText.text = newText;
+        StartCoroutine(WaitForThenFadeOut(time));
+    }
     // Fades the first element of newTextList into messageText on the screen.
     // Subsequent calls to Next() will display the next text element.
     public void FadeIn(List<string> newTextList) {
@@ -49,7 +58,7 @@ public class MessageOverlayCinematic : MonoBehaviour {
     public void Next() {
         textIndex++;
         if (currentTextList != null && currentTextList.Count > textIndex) {
-            FadeIn(currentTextList[textIndex]);
+            FadeOutInto(currentTextList[textIndex]);
         } else {
             FadeOut();
             currentTextList = null;
@@ -59,5 +68,21 @@ public class MessageOverlayCinematic : MonoBehaviour {
     // Fade out over 1-2 seconds
     public void FadeOut() {
         anim.SetBool("IsVisible", false);
+    }
+
+    // Fades out, then fades into newText
+    public void FadeOutInto(string newText) {
+        FadeOut();
+        StartCoroutine(WaitThenFadeInto(newText));
+    }
+
+    private IEnumerator WaitThenFadeInto(string newText) {
+        yield return new WaitForSecondsRealtime(1);
+        FadeIn(newText);
+    }
+
+    private IEnumerator WaitForThenFadeOut(int time) {
+        yield return new WaitForSecondsRealtime(time);
+        FadeOut();
     }
 }

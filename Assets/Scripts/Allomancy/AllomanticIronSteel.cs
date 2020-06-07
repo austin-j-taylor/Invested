@@ -75,6 +75,16 @@ public class AllomanticIronSteel : Allomancer {
             return PushTargets.Count != 0;
         }
     }
+    public bool HasMarkedPullTarget {
+        get {
+            return HasPullTarget && PullTargets.VacuousCount != PullTargets.Count;
+        }
+    }
+    public bool HasMarkedPushTarget {
+        get {
+            return HasPushTarget && PushTargets.VacuousCount != PushTargets.Count;
+        }
+    }
 
     public bool HasIron {
         get {

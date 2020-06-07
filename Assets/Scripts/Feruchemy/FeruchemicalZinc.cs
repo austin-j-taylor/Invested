@@ -9,15 +9,9 @@
 public class FeruchemicalZinc : MonoBehaviour {
 
     // intensity formula constants
-    private const float a = 2f;
-    private const float b = 42;
-    private const float c = 0.67f;
-    private const float d = 11f;
-    private const float f = 2.4f;
-    private const float g = 72f;
-    private const float h = 50;
+    private const float a = 2f, b = 42, c = 0.67f, d = 11f, f = 2.4f, g = 72f, h = 50;
     // The maximum time that zinc will slow down for
-    private const float maxTime = 12;
+    private const float maxTime = 10, recoveryFactor = .001f;
     // the time scale that zinc slows time down to
     // interestingly, 1/8 is about the same that in-world speed bubbles slow time down by (Alloy of Law, 2 minutes into about 15s)
     private const float slowPercent = 1 / 8f;
@@ -26,6 +20,7 @@ public class FeruchemicalZinc : MonoBehaviour {
 
     public bool InZincTime { get; private set; }
     private bool recovering;
+    private float timeSpentRecovering;
     private double startReserve; // the reserve that the player last entered zinc time at
     private double endReserve; // the reserve that the player last exited zinc time at
     // percentage of available zinc
@@ -44,6 +39,7 @@ public class FeruchemicalZinc : MonoBehaviour {
     public void Clear() {
         InZincTime = false;
         recovering = false;
+        timeSpentRecovering = 0;
         Reserve = 1;
         startReserve = 1;
         endReserve = 1;
@@ -58,6 +54,7 @@ public class FeruchemicalZinc : MonoBehaviour {
     void Update() {
         if (!PauseMenu.IsPaused) {
             if (InZincTime) {
+                // In Zinc Time
                 Rate = -Time.deltaTime / slowPercent / maxTime;
                 Reserve += Rate;
                 if (Reserve < 0) {
@@ -69,6 +66,7 @@ public class FeruchemicalZinc : MonoBehaviour {
                     // Exit zinc time
                     InZincTime = false;
                     endReserve = Reserve;
+                    timeSpentRecovering = 0;
                     TimeController.CurrentTimeScale = SettingsMenu.settingsData.timeScale;
                     GameManager.AudioManager.SetMasterPitch(1);
                     if (Reserve == 0) {
@@ -84,8 +82,11 @@ public class FeruchemicalZinc : MonoBehaviour {
                 }
                 HUD.ZincMeterController.ChangeSpikePosition((float)Reserve);
             } else {
+                // Not In Zinc Time
                 if (Reserve < 1) {
-                    Rate = Time.deltaTime / maxTime;
+                    // Recharge the bank at a flat rate + time spent recovering, making it recover faster when not used over time
+                    Rate = Time.deltaTime / maxTime + timeSpentRecovering;
+                    timeSpentRecovering += Time.deltaTime * recoveryFactor;
                     Reserve += Rate;
                     if (Reserve > 1) {
                         if (recovering) {

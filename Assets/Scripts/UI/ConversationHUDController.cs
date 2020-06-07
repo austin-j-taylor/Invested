@@ -14,6 +14,7 @@ using TMPro;
 public class ConversationHUDController : MonoBehaviour {
 
     private const float delayPerCharacter = .02f, delayPerPause = .125f;
+    private const int charsPerLine = 55;
 
     // The style of text as it's being parsed
     private enum Style { Clear, Italic, Bold, Colored, OtherFont };
@@ -24,16 +25,22 @@ public class ConversationHUDController : MonoBehaviour {
     public bool IsOpen { get; private set; }
 
     private Conversation currentConversation;
-    private Text headerText; // contains the speaker's name?
+    private Text headerText, advanceText; // contains the speaker's name
     private TextMeshProUGUI conversationText;
+    private GameObject advanceSymbol;
 
     private Animator anim;
     private State state;
 
     // Use this for initialization
     void Awake() {
-        headerText = transform.Find("ConversationWindow/HeaderText").GetComponent<Text>();
-        conversationText = transform.Find("ConversationWindow/ConversationText").GetComponentInChildren<TextMeshProUGUI>();
+        Transform conversationWindow = transform.Find("ConversationWindow");
+        headerText = conversationWindow.Find("HeaderText").GetComponent<Text>();
+        conversationText = conversationWindow.Find("ConversationText").GetComponentInChildren<TextMeshProUGUI>();
+        advanceSymbol = conversationWindow.Find("symbolAdvance").gameObject;
+        advanceText = conversationWindow.Find("advanceText").GetComponent<Text>();
+        advanceSymbol.SetActive(false);
+        advanceText.text = "";  
         anim = GetComponent<Animator>();
         state = State.Waiting;
     }
@@ -82,6 +89,7 @@ public class ConversationHUDController : MonoBehaviour {
         // if character == \Cs then text = MidBlue(text up to \c)
 
         StringBuilder parsed = new StringBuilder();
+        StringBuilder currentLineParsed = new StringBuilder();
         Style currentStyle = Style.Clear;
         VoiceBeeper currentSpeaker = Player.PlayerVoiceBeeper;
 
@@ -262,11 +270,38 @@ public class ConversationHUDController : MonoBehaviour {
                 } else if (currentConversation.content[i] == '\n') {
                     // system newline. End the phrase. Wait until user advances text.
                     state = State.Waiting;
-                } else {
-                    // just a character; say it
-                    parsed.Append(currentConversation.content[i]);
-                    // and the speaker beeps, skipping some characters
+                } else if (currentConversation.content[i] == ' ') {
+                    // If the word the character is a space, we are in-between words.
+                    // We need to decide if this word should appear on a new line.
+                    // For simplicity, limit each line to some number of characters (about 55)
+                    StringBuilder wrappingParsed = new StringBuilder(currentLineParsed.ToString());
+                    wrappingParsed.Append(' ');
+                    // Write up to the end of the next word, if it exists.
+                    for (int j = i + 1; j < currentConversation.content.Length && currentConversation.content[j] != ' '; j++) {
+                        // Approximately ignore signifies by discarding characters after backslashes.
+                        if (currentConversation.content[j] == '\\') {
+                            j += 2;
+                            continue;
+                        }
+                        wrappingParsed.Append(currentConversation.content[j]);
+                    }
 
+                    // Check if we've hit a new line
+                    if (wrappingParsed.Length > charsPerLine) {
+                        Debug.Log("Overflowing as of " + currentLineParsed + " at " + currentLineParsed.Length + " characters");
+                        currentLineParsed.Clear();
+                        parsed.Append(System.Environment.NewLine);
+                    } else {
+                        // Just a normal space, continue
+                        parsed.Append(currentConversation.content[i]);
+                        currentLineParsed.Append(currentConversation.content[i]);
+                    }
+                } else {
+                    // This is a normal character that should be printed to the screen. Write it.
+                    parsed.Append(currentConversation.content[i]);
+                    currentLineParsed.Append(currentConversation.content[i]);
+
+                    // and the speaker beeps, except for some punctuation-like characters
                     char character = currentConversation.content[i];
                     if (state == State.Writing && character != '(' && character != ')' && character != '.' && character != '\n' && character != '\r') {
                         if(!Keybinds.AccelerateConversation())
@@ -309,11 +344,17 @@ public class ConversationHUDController : MonoBehaviour {
 
             // If the phrase just ended, wait until the user advances the text.
             if (state == State.Waiting) {
+                // Make the advance symbol appear
+                advanceText.text = KeyJumpAbridged;
+                advanceSymbol.SetActive(true);
                 while (state == State.Waiting) {
                     yield return null;
                 }
+                advanceSymbol.SetActive(false);
+                advanceText.text = "";
                 // wipe the text on the screen
                 parsed.Clear();
+                currentLineParsed.Clear();
             }
         }
         // Only reach here if the EOF was reached without an ending signifier. Act like there was an ending signifier.
