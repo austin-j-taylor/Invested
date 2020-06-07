@@ -129,7 +129,8 @@ public class HelpOverlayController : MonoBehaviour {
                 if(!SettingsMenu.settingsData.UsingGamepad) {
                     builder.AppendLine(" • " + Shift + " + " + KeyThrowAbridged + ": Mark and Throw " + O_Coin);
                 }
-                builder.AppendLine(" • " + KeyJump + " + " + KeyThrowAbridged + ": Throw " + O_Coin + " downwards");
+                builder.AppendLine(" • " + KeyJump + " + " + KeyThrowAbridged + ": Throw " + O_Coin + " downwards" +
+                    "\n • " + KeyWalk + " + " + KeyThrowAbridged + ": Toss without " + Pushing);
             }
         }
 

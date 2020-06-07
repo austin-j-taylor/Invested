@@ -50,6 +50,7 @@ public class Environment_Tutorial4 : EnvironmentCinematic {
             Player.CanControlZinc = true;
             Player.CanThrowCoins = true;
             Player.PlayerInstance.CoinHand.Pouch.Fill();
+            HUD.ControlWheelController.SetLockedState(ControlWheelController.LockedState.Unlocked);
         }
         CameraController.DisableCinemachineCamera(vcam);
         Player.CanControl = true;
