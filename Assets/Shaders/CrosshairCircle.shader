@@ -7,6 +7,7 @@
 		_Radius("Radius", Range(0, .7071)) = .5
 		_Width("Width", Range(0, .5)) = .1
 		_Fill("Fill", Range(0, 1)) = 1
+		_RatioLow("RatioLow", Float) = .666
 	}
 		SubShader
 		{
@@ -24,7 +25,6 @@
 				#pragma fragment frag
 
 				#include "UnityCG.cginc"
-				static const fixed low = .666, high = 1.5;
 
 				struct appdata {
 					float4 vertex : POSITION;
@@ -50,6 +50,7 @@
 				float _Radius;
 				float _Width;
 				float _Fill;
+				float _RatioLow;
 
 				fixed4 frag(v2f i) : SV_Target
 				{
@@ -66,7 +67,7 @@
 						ratio = -ratio;
 					}
 
-					if (ratio < low || ratio > high) {
+					if (ratio < _RatioLow || ratio > 1/_RatioLow) {
 						return float4(0,0,0,0);
 					} else {
 						if (d > _Radius || d < _Radius - _Width) {

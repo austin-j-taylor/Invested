@@ -14,7 +14,7 @@ using TMPro;
 public class ConversationHUDController : MonoBehaviour {
 
     private const float delayPerCharacter = .02f, delayPerPause = .125f;
-    private const int charsPerLine = 55;
+    private const int charsPerLine = 53;
 
     // The style of text as it's being parsed
     private enum Style { Clear, Italic, Bold, Colored, OtherFont };
@@ -190,6 +190,7 @@ public class ConversationHUDController : MonoBehaviour {
                         case 'n':
                             // a newline
                             parsed.Append(System.Environment.NewLine);
+                            currentLineParsed.Clear();
                             break;
                         case 'p':
                             // Pause. Wait for a time equal to 1/8 * X, where X is [1,9]
@@ -288,7 +289,6 @@ public class ConversationHUDController : MonoBehaviour {
 
                     // Check if we've hit a new line
                     if (wrappingParsed.Length > charsPerLine) {
-                        Debug.Log("Overflowing as of " + currentLineParsed + " at " + currentLineParsed.Length + " characters");
                         currentLineParsed.Clear();
                         parsed.Append(System.Environment.NewLine);
                     } else {

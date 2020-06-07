@@ -181,6 +181,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
                                 pushing = true;
                                 pulling = false;
                                 keybindPulling = false;
+                                keybindPushing = true;
                                 keybindPullingDown = false;
                             }
                         } else {
@@ -345,7 +346,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
                                 break;
                             case ControlMode.Area:
                                 // Crosshair: lerp to the correct size
-                                LerpToAreaSize();
+                                LerpToAreaSize(selectionAreaRadius);
                                 // set the targets in the area to be brighter
                                 for (int i = 0; i < newTargetsArea.Count; i++) {
                                     newTargetsArea[i].BrightenLine(targetFocusHighlitFactor);
@@ -458,6 +459,8 @@ public class PlayerPullPushController : AllomanticIronSteel {
                                 }
                                 break;
                             case ControlMode.Bubble:
+                                // The Bubble crosshair also uses the area crosshair settings
+                                LerpToAreaSize(SelectionBubbleRadius / maxBubbleRadius * maxAreaRadius);
                                 // If in bubble mode, LMB and RMB will open/close the bubble and Q/E/MB4/MB5 toggle it
                                 if (BubbleIsOpen) {
                                     // Toggle the bubble being persistently open
@@ -574,16 +577,25 @@ public class PlayerPullPushController : AllomanticIronSteel {
         ironBurnPercentageLerp = 1;
         steelBurnPercentageLerp = 1;
         bubbleRadiusLerp = SelectionBubbleRadius;
+        areaRadiusLerp = selectionAreaRadius;
         if (bubbleBurnPercentageLerp < 0.001f)
             bubbleBurnPercentageLerp = 1;
 
-        areaRadiusLerp = 0;
-        if (Mode == ControlMode.Area) {
-            HUD.Crosshair.SetArea();
-        } else {
-            HUD.Crosshair.SetManual();
+        //areaRadiusLerp = 0;
+        switch(Mode) {
+            case ControlMode.Manual:
+                HUD.Crosshair.SetManual();
+                break;
+            case ControlMode.Coinshot:
+                HUD.Crosshair.SetCoinshot();
+                break;
+            case ControlMode.Area:
+                HUD.Crosshair.SetArea();
+                break;
+            case ControlMode.Bubble:
+                HUD.Crosshair.SetBubble();
+                break;
         }
-
         forceMagnitudeTarget = 600;
         if (SettingsMenu.settingsData.renderblueLines == 1)
             EnableRenderingBlueLines();
@@ -986,12 +998,12 @@ public class PlayerPullPushController : AllomanticIronSteel {
             }
         }
     }
-    private void LerpToAreaSize() {
-        float diff = selectionAreaRadius - areaRadiusLerp;
+    private void LerpToAreaSize(float targetRadius) {
+        float diff = targetRadius - areaRadiusLerp;
         if (diff < 0)
             diff = -diff;
         if (diff > .001f) {
-            areaRadiusLerp = Mathf.Lerp(areaRadiusLerp, selectionAreaRadius, areaLerpConstant);
+            areaRadiusLerp = Mathf.Lerp(areaRadiusLerp, targetRadius, areaLerpConstant);
             HUD.Crosshair.SetCircleRadius(areaRadiusLerp);
         }
     }
@@ -1093,6 +1105,8 @@ public class PlayerPullPushController : AllomanticIronSteel {
     }
 
     public void SetControlModeManual() {
+        if (Mode == ControlMode.Manual)
+            return;
         Mode = ControlMode.Manual;
         PullTargets.Size = TargetArray.smallArrayCapacity;
         PushTargets.Size = TargetArray.smallArrayCapacity;
@@ -1100,23 +1114,29 @@ public class PlayerPullPushController : AllomanticIronSteel {
         HUD.BurnPercentageMeter.SetMetalLineCountTextManual();
     }
     public void SetControlModeArea() {
+        if (Mode == ControlMode.Area)
+            return;
         Mode = ControlMode.Area;
         PullTargets.Size = TargetArray.largeArrayCapacity;
         PushTargets.Size = TargetArray.largeArrayCapacity;
-        areaRadiusLerp = 0;
+        //areaRadiusLerp = 0;
         HUD.Crosshair.SetArea();
     }
     public void SetControlModeBubble() {
+        if (Mode == ControlMode.Bubble)
+            return;
         Mode = ControlMode.Bubble;
         PullTargets.Size = 0;
         PushTargets.Size = 0;
-        HUD.Crosshair.SetManual();
+        HUD.Crosshair.SetBubble();
     }
     public void SetControlModeCoinshot() {
+        if (Mode == ControlMode.Coinshot)
+            return;
         Mode = ControlMode.Coinshot;
         PullTargets.Size = TargetArray.smallArrayCapacity;
         PushTargets.Size = TargetArray.smallArrayCapacity;
-        HUD.Crosshair.SetManual();
+        HUD.Crosshair.SetCoinshot();
         HUD.BurnPercentageMeter.SetMetalLineCountTextManual();
     }
 }

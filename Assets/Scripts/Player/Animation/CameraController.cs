@@ -14,8 +14,8 @@ public class CameraController : MonoBehaviour {
 
     private const float CameraLookAtTargetFirstPersonHeight = 1;
     private const float rootConstantScaling = .5f;
-    private const float stretchingRangeMax = 2;
     private const float stretchingVelocityFactor = -100;
+    private const float cameraStretchingLerpFactor = 7;
     private static readonly Vector3 cameraControllerOffset = new Vector3(0, 0.25f - .06f, 0);
 
     public static Camera ActiveCamera { get; private set; }
@@ -33,6 +33,7 @@ public class CameraController : MonoBehaviour {
     private static float currentY = 0;
     private static float startX = 0;
     private static float startY = 0;
+    private static float lastCameraDistance = 0;
     //private static float stretchedOut = 0; // if above 0, the camera will "stretch out" further backwards.
     private static bool cameraIsLocked;
 
@@ -119,7 +120,6 @@ public class CameraController : MonoBehaviour {
         }
         UpdateCamera();
     }
-
     public static void UpdateCamera() {
         /* Reset camera properties for this frame */
         float lastScale = playerCameraController.localScale.x;
@@ -138,16 +138,13 @@ public class CameraController : MonoBehaviour {
 
         if (SettingsMenu.settingsData.cameraFirstPerson == 0) { // Third person
 
-            float wantedCameraDistance;
-
-            /*
             // If the player is moving quickly, the camera stretches outwards.
-            stretchedOut = 1 - Mathf.Exp(Player.PlayerIronSteel.rb.velocity.sqrMagnitude / stretchingVelocityFactor);
-            wantedCameraDistance = (1 + stretchedOut) * SettingsMenu.settingsData.cameraDistance;
-            */
-            wantedCameraDistance = SettingsMenu.settingsData.cameraDistance * Player.FeelingScale;
-            Vector3 wantedPosition = verticalRotation * new Vector3(0, 0, -wantedCameraDistance);
+            float cameraDistance = -(2 - Mathf.Exp(Player.PlayerIronSteel.rb.velocity.sqrMagnitude / stretchingVelocityFactor)) * SettingsMenu.settingsData.cameraDistance;
+            if (lastCameraDistance != 0)
+                cameraDistance = Mathf.Lerp(lastCameraDistance, cameraDistance, Time.deltaTime * cameraStretchingLerpFactor);
+            Vector3 wantedPosition = verticalRotation * new Vector3(0, 0, cameraDistance);
 
+            lastCameraDistance = cameraDistance;
             //// Decide position the camera should try to be at
             //Vector3 wantedPosition; // local
             //// If an external target was recently used, the camera POSITION should lerp back
@@ -299,6 +296,7 @@ public class CameraController : MonoBehaviour {
     }
 
     public static void Clear() {
+        lastCameraDistance = 0;
         ActiveCamera.transform.localPosition = Vector3.zero;
         ActiveCamera.transform.localRotation = Quaternion.identity;
         UsingCinemachine = false;

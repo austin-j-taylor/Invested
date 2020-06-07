@@ -10,9 +10,10 @@ public class CrosshairController : MonoBehaviour
 {
     // positions in the hairs array
     private const int top = 0, left = 1, bottom = 2, right = 3, size = 4;
+    private const float alphaHigh = .75f, alphaLow = .25f;
 
     private Image circle;
-
+    private Color blueColor, goldColor = new Color(1, 0.9411765f, .5f, alphaHigh);
     private Image[] hairs;
     private Image[] fills;
     private Transform hairsHeader;
@@ -36,10 +37,9 @@ public class CrosshairController : MonoBehaviour
         fills[right] = hairs[right].transform.GetChild(0).GetComponent<Image>();
 
         // Set circle material to be a copy of its template so we don't overwrite the actual material's values
-
         circle.material = Instantiate(circle.material);
 
-        SetManual();
+        blueColor = fills[top].color;
     }
 
     public void Clear() {
@@ -64,13 +64,49 @@ public class CrosshairController : MonoBehaviour
     
     // Sets the crosshairs for the "Manual" control mode
     public void SetManual() {
-        circle.gameObject.SetActive(false);
+        StopAllCoroutines();
+        //circle.gameObject.SetActive(false);
+        blueColor.a = alphaHigh;
         hairsHeader.gameObject.SetActive(true);
-        circle.material.SetFloat("_Radius", 0);
+        for (int i = 0; i < size; i++) {
+            fills[i].color = blueColor;
+        }
+        StartCoroutine(LerpToCircleRatio(1));
     }
     // Sets the crosshairs for the "Area" control mode
     public void SetArea() {
-        circle.gameObject.SetActive(true);
+        StopAllCoroutines();
+        //circle.gameObject.SetActive(true);
         hairsHeader.gameObject.SetActive(false);
+        StartCoroutine(LerpToCircleRatio(.66666f));
+        blueColor.a = alphaHigh;
+        circle.material.SetColor("_Color", blueColor);
+    }
+    public void SetBubble() {
+        StopAllCoroutines();
+        //circle.gameObject.SetActive(true);
+        hairsHeader.gameObject.SetActive(false);
+        blueColor.a = alphaLow;
+        circle.material.SetColor("_Color", blueColor);
+        StartCoroutine(LerpToCircleRatio(0));
+    }
+    public void SetCoinshot() {
+        StopAllCoroutines();
+        //circle.gameObject.SetActive(false);
+        hairsHeader.gameObject.SetActive(true);
+        for (int i = 0; i < size; i++) {
+            fills[i].color = goldColor;
+        }
+        StartCoroutine(LerpToCircleRatio(1));
+    }
+
+    private IEnumerator LerpToCircleRatio(float targetRatio) {
+        float count = 0, ratio = circle.material.GetFloat("_RatioLow");
+        while(count < 1) {
+            count += Time.unscaledDeltaTime * 4;
+            circle.material.SetFloat("_RatioLow", Mathf.Lerp(ratio, targetRatio, count));
+            yield return null;
+        }
+        circle.material.SetFloat("_RatioLow", targetRatio);
     }
 }

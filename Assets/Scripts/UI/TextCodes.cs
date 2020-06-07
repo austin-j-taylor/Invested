@@ -139,12 +139,12 @@ public class TextCodes : MonoBehaviour {
     // Known words that should always appear in a specific color
     public static string Iron {
         get {
-            return Gray("iron");
+            return MidBlue("iron");
         }
     }
     public static string Steel {
         get {
-            return Gray("steel");
+            return Red("steel");
         }
     }
     public static string Pewter {
@@ -888,7 +888,7 @@ public class TextCodes : MonoBehaviour {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
                 return s_Press_ +  Start + " > Settings > Interface > Help Overlay";
             else
-                return s_Press_ + H + " or " + s_Press_ + Escape + " > Settings > Interface > Help Overlay";
+                return s_Press_ + H + " or " + s_Press_ + F1;
         }
     }
     public static string KeyHelpAbridged {
@@ -896,7 +896,7 @@ public class TextCodes : MonoBehaviour {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
                 return Start + " > Settings > Interface";
             else
-                return H + ", " + F1 + ", or " + Escape + " > Settings > Interface";
+                return H + " or " + F1;
         }
     }
     public static string KeyPerspectiveAbridged {
