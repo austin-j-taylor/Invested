@@ -333,13 +333,11 @@ public class CameraController : MonoBehaviour {
     public static void SetCinemachineCamera(CinemachineVirtualCamera vcam) {
         UsingCinemachine = true;
         vcam.enabled = true;
-        Player.PlayerTransparancy.SetOverrideHidden(false);
     }
     public static void DisableCinemachineCamera(CinemachineVirtualCamera vcam) {
         UsingCinemachine = false;
         vcam.enabled = false;
         LockCamera();
-        Player.PlayerTransparancy.SetOverrideHidden(SettingsMenu.settingsData.cameraFirstPerson == 1);
     }
 
     private void ClampY() {

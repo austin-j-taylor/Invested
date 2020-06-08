@@ -133,22 +133,18 @@ public class ControlWheelController : MonoBehaviour {
             // If the player hits certain keys, consider that selecting a sector of the control wheel.
             if(Player.CanControl) {
                 if(Keybinds.ControlWheelManual()) {
-                    Player.PlayerIronSteel.StartBurning();
                     SectorManual();
                     isOpen = true;
                     IsOpen = false;
                 } else if (Keybinds.ControlWheelArea() && lockedState != LockedState.LockedFully) {
-                    Player.PlayerIronSteel.StartBurning();
                     SectorArea();
                     isOpen = true;
                     IsOpen = false;
                 } else if (Keybinds.ControlWheelBubble() && lockedState != LockedState.LockedFully) {
-                    Player.PlayerIronSteel.StartBurning();
                     SectorBubble();
                     isOpen = true;
                     IsOpen = false;
                 } else if (Keybinds.ControlWheelCoinshot() && lockedState == LockedState.Unlocked) {
-                    Player.PlayerIronSteel.StartBurning();
                     SectorCoinshot();
                     isOpen = true;
                     IsOpen = false;

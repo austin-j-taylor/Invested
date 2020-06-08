@@ -229,12 +229,12 @@ namespace VolumetricLines
 				DestroyImmediate(m_material);
 				m_material = null;
 			}
-		}
+        }
 
-		/// <summary>
-		/// Calculates the (approximated) _LineScale factor based on the object's scale.
-		/// </summary>
-		private float CalculateLineScale()
+        /// <summary>
+        /// Calculates the (approximated) _LineScale factor based on the object's scale.
+        /// </summary>
+        private float CalculateLineScale()
 		{
 			return Vector3.Dot(transform.lossyScale, Average);
 		}
@@ -248,12 +248,12 @@ namespace VolumetricLines
 			{
 				m_material.SetFloat("_LineScale", CalculateLineScale());
 			}
-		}
+        }
 
-		/// <summary>
-		/// Sets all material properties (color, width, light saber factor, start-, endpos)
-		/// </summary>
-		private void SetAllMaterialProperties()
+        /// <summary>
+        /// Sets all material properties (color, width, light saber factor, start-, endpos)
+        /// </summary>
+        private void SetAllMaterialProperties()
 		{
 			SetStartAndEndPoints(m_startPos, m_endPos);
 

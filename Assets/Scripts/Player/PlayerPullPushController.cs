@@ -577,7 +577,6 @@ public class PlayerPullPushController : AllomanticIronSteel {
         ironBurnPercentageLerp = 1;
         steelBurnPercentageLerp = 1;
         bubbleRadiusLerp = SelectionBubbleRadius;
-        areaRadiusLerp = selectionAreaRadius;
         if (bubbleBurnPercentageLerp < 0.001f)
             bubbleBurnPercentageLerp = 1;
 
@@ -590,9 +589,13 @@ public class PlayerPullPushController : AllomanticIronSteel {
                 HUD.Crosshair.SetCoinshot();
                 break;
             case ControlMode.Area:
+                areaRadiusLerp = selectionAreaRadius;
+                HUD.Crosshair.SetCircleRadius(areaRadiusLerp);
                 HUD.Crosshair.SetArea();
                 break;
             case ControlMode.Bubble:
+                areaRadiusLerp = SelectionBubbleRadius / maxBubbleRadius * maxAreaRadius;
+                HUD.Crosshair.SetCircleRadius(areaRadiusLerp);
                 HUD.Crosshair.SetBubble();
                 break;
         }
@@ -998,7 +1001,8 @@ public class PlayerPullPushController : AllomanticIronSteel {
             }
         }
     }
-    private void LerpToAreaSize(float targetRadius) {
+
+    private void LerpToAreaSize(float targetRadius) { 
         float diff = targetRadius - areaRadiusLerp;
         if (diff < 0)
             diff = -diff;
@@ -1112,6 +1116,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
         PushTargets.Size = TargetArray.smallArrayCapacity;
         HUD.Crosshair.SetManual();
         HUD.BurnPercentageMeter.SetMetalLineCountTextManual();
+        StartBurning();
     }
     public void SetControlModeArea() {
         if (Mode == ControlMode.Area)
@@ -1121,6 +1126,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
         PushTargets.Size = TargetArray.largeArrayCapacity;
         //areaRadiusLerp = 0;
         HUD.Crosshair.SetArea();
+        StartBurning();
     }
     public void SetControlModeBubble() {
         if (Mode == ControlMode.Bubble)
@@ -1129,6 +1135,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
         PullTargets.Size = 0;
         PushTargets.Size = 0;
         HUD.Crosshair.SetBubble();
+        StartBurning();
     }
     public void SetControlModeCoinshot() {
         if (Mode == ControlMode.Coinshot)
@@ -1138,5 +1145,6 @@ public class PlayerPullPushController : AllomanticIronSteel {
         PushTargets.Size = TargetArray.smallArrayCapacity;
         HUD.Crosshair.SetCoinshot();
         HUD.BurnPercentageMeter.SetMetalLineCountTextManual();
+        StartBurning();
     }
 }

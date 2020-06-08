@@ -30,29 +30,30 @@ public class PlayerTransparencyController : MonoBehaviour {
 
     void LateUpdate() {
         // Player is always visible if the Camera is doing something cinematic
-        if (!overrideHidden && !CameraController.UsingCinemachine) {
+        if (!overrideHidden && !CameraController.UsingCinemachine && Player.CanControl) {
             float distance = (CameraController.ActiveCamera.transform.position - Player.PlayerInstance.transform.position).magnitude;
             // If the camera is SUPER close to the body, make it invisible
             if (distance < distanceThresholdInvisible) {
                 SetHidden(true);
             } else {
                 SetHidden(false);
-                float percent = -1;
-                // If camera is physically near the player, fade slowly to transparent
-                float realThreshold = distanceThreshold * SettingsMenu.settingsData.cameraDistance / 5;
-                if (SettingsMenu.settingsData.cameraFirstPerson == 0 && distance < realThreshold) {
-                    percent = ((distance * distance) / (realThreshold * realThreshold));
-                }
                 // If the camera is directly looking at the player, set the transparency to a constant amount
-                //if ((percent == -1 || percent > lookAtTransparency) && Physics.Raycast(CameraController.ActiveCamera.transform.position, CameraController.ActiveCamera.transform.forward, out RaycastHit hit, distance, 1 << LayerMask.NameToLayer("Player"))) {
-                //    // If reticle is on player, immediately fade to transparent
-                //    percent = (lookAtTransparency);
-                //}
-                // Assign fade/opaque Rendering Mode
-                if (percent >= 0)
-                    SetAllFade(percent);
-                else // Do not fade camera at all
-                    SetAllOpaque();
+                if (Physics.Raycast(CameraController.ActiveCamera.transform.position, CameraController.ActiveCamera.transform.forward, out RaycastHit hit, distance, 1 << LayerMask.NameToLayer("Player"))) {
+                    // If reticle is on player, immediately fade to transparent
+                    SetAllFade(lookAtTransparency);
+                } else {
+                    // If camera is physically near the player, fade slowly to transparent
+                    float realThreshold = distanceThreshold * SettingsMenu.settingsData.cameraDistance / 5;
+                    if (SettingsMenu.settingsData.cameraFirstPerson == 0 && distance < realThreshold) {
+                        float percent = ((distance * distance) / (realThreshold * realThreshold));
+                        if (percent >= 0)
+                            SetAllFade(percent);
+                        else
+                            SetAllOpaque();
+                    } else {
+                        SetAllOpaque();
+                    }
+                }
             }
         } else {
             SetAllOpaque();

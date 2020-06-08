@@ -14,7 +14,7 @@ public class SpikePit : MonoBehaviour {
     private const float angleEqualThreshold = 1f;
     private const float pullPercentage = 1f;
     private const float distanceThresholdSpiking = 1.9f;
-    private const float distanceThresholdEqual = .3f;
+    private const float distanceThresholdEqual = 1;
     private const float distanceThresholdReturn = 5;
     private const float forwardTimeOffset = .2f;
     private const float forceConstantFar = 200f;
