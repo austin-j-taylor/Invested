@@ -108,7 +108,7 @@ public class ControlWheelController : MonoBehaviour {
     void Awake() {
         selectedSpoke = Selection.Manual;
         selectedCoin = Selection.Coin_Semi;
-        circle = transform.Find("Circle").GetComponent<Image>();
+        circle = transform.Find("Selections/Circle").GetComponent<Image>();
         spokes = transform.Find("Selections").GetComponentsInChildren<Image>();
         textCenter = transform.Find("Selections/SpokeCircle/Text/Title").GetComponent<Text>();
         textManual = transform.Find("Selections/Spoke0/Text/Title/Description").GetComponent<Text>();

@@ -1109,8 +1109,10 @@ public class PlayerPullPushController : AllomanticIronSteel {
     }
 
     public void SetControlModeManual() {
-        if (Mode == ControlMode.Manual)
+        if (Mode == ControlMode.Manual) {
+            StartBurning();
             return;
+        }
         Mode = ControlMode.Manual;
         PullTargets.Size = TargetArray.smallArrayCapacity;
         PushTargets.Size = TargetArray.smallArrayCapacity;
@@ -1119,8 +1121,10 @@ public class PlayerPullPushController : AllomanticIronSteel {
         StartBurning();
     }
     public void SetControlModeArea() {
-        if (Mode == ControlMode.Area)
+        if (Mode == ControlMode.Area) {
+            StartBurning();
             return;
+        }
         Mode = ControlMode.Area;
         PullTargets.Size = TargetArray.largeArrayCapacity;
         PushTargets.Size = TargetArray.largeArrayCapacity;
@@ -1129,8 +1133,10 @@ public class PlayerPullPushController : AllomanticIronSteel {
         StartBurning();
     }
     public void SetControlModeBubble() {
-        if (Mode == ControlMode.Bubble)
+        if (Mode == ControlMode.Bubble) {
+            StartBurning();
             return;
+        }
         Mode = ControlMode.Bubble;
         PullTargets.Size = 0;
         PushTargets.Size = 0;
@@ -1138,8 +1144,10 @@ public class PlayerPullPushController : AllomanticIronSteel {
         StartBurning();
     }
     public void SetControlModeCoinshot() {
-        if (Mode == ControlMode.Coinshot)
+        if (Mode == ControlMode.Coinshot) {
+            StartBurning();
             return;
+        }
         Mode = ControlMode.Coinshot;
         PullTargets.Size = TargetArray.smallArrayCapacity;
         PushTargets.Size = TargetArray.smallArrayCapacity;
