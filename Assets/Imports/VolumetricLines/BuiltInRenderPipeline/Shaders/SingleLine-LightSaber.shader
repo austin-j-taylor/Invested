@@ -42,7 +42,7 @@ Shader "VolumetricLine/SingleLine-LightSaber" {
 			Cull Off
 			ZWrite Off
 			ZTest Off
-			Blend One One
+			Blend SrcAlpha One
 			Lighting Off
 			
 			CGPROGRAM
