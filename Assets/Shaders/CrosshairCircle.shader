@@ -67,8 +67,8 @@
 						ratio = -ratio;
 					}
 
-					if (ratio < _RatioLow || ratio > 1/_RatioLow) {
-						return float4(0,0,0,0);
+					if (ratio <= _RatioLow || ratio >= 1/_RatioLow) {
+						return 0;
 					} else {
 						if (d > _Radius || d < _Radius - _Width) {
 							return float4(0, 0, 0, 0);

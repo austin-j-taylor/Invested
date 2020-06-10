@@ -14,6 +14,7 @@ public class Environment_TitleScreen : EnvironmentCinematic {
         vcam.LookAt = Player.PlayerInstance.transform;
 
         HUD.DisableHUD();
+        Player.PlayerTransparancy.SetOverrideHidden(false);
         Magnetic[] pulls = transform.Find("Magnetics").GetComponentsInChildren<Magnetic>();
         Magnetic[] pushes = transform.Find("MagneticsPush").GetComponentsInChildren<Magnetic>();
         Player.PlayerIronSteel.StartBurning();

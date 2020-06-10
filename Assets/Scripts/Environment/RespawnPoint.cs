@@ -7,7 +7,7 @@ public class RespawnPoint : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Player") && !other.isTrigger) {
-            Player.PlayerInstance.RespawnPoint = transform.position;
+            Player.PlayerInstance.RespawnPoint = transform;
         }
     }
 }

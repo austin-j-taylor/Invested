@@ -76,13 +76,11 @@ public class CameraController : MonoBehaviour {
         SceneManager.sceneLoaded += LoadCloudDataFromScene;
     }
 
-    private void Update() {
+    private void LateUpdate() {
 
         //if (UsingCinemachine) {
         //    return;
         //}
-        transform.position = playerBody.position + cameraControllerOffset;
-        CameraLookAtTarget.rotation = Quaternion.Euler(0, currentX, 0);
         //GetComponentInChildren<CinemachineVirtualCamera>().transform.localRotation = Quaternion.identity;
         //GetComponentInChildren<CinemachineVirtualCamera>().transform.localPosition = Vector3.zero;
 
@@ -120,7 +118,12 @@ public class CameraController : MonoBehaviour {
         }
         UpdateCamera();
     }
+
+    // Set camera position and rotation to follow the player for this frame.
     public static void UpdateCamera() {
+        instance.transform.position = playerBody.position + cameraControllerOffset;
+        CameraLookAtTarget.rotation = Quaternion.Euler(0, currentX, 0);
+
         /* Reset camera properties for this frame */
         float lastScale = playerCameraController.localScale.x;
         playerCameraController.localScale = new Vector3(1, 1, 1);

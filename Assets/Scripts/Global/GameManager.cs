@@ -37,7 +37,7 @@ public class GameManager : MonoBehaviour {
     public static int Layer_BlueLines { get; private set; }
     public static int Layer_BlueLinesVisible { get; private set; }
 
-    public enum GameState { Standard, Challenge};
+    public enum GameState { Standard, Challenge, Cutscene};
     public static GameState State { get; private set; }
 
 

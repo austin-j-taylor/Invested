@@ -29,6 +29,7 @@ public class Player : PewterEntity {
 
     public Hand CoinHand { get; private set; }
     public CoinMode CoinThrowingMode { get; set; }
+    public Transform RespawnPoint { get; set; }
 
     //public static bool CanControlWheel { get; set; }
     //public static bool CanControlZinc { get; set; }
@@ -122,9 +123,8 @@ public class Player : PewterEntity {
         SceneManager.sceneLoaded += ClearPlayerAfterSceneChange;
         SceneManager.sceneUnloaded += ClearPlayerBeforeSceneChange;
     }
-    public Vector3 RespawnPoint { get; set; }
-    void Update() {
 
+    void Update() {
         // Handle "Voiding out" if the player falls too far into the "void"
         if (transform.position.y < VoidHeight) {
             Respawn();
@@ -215,7 +215,7 @@ public class Player : PewterEntity {
             CanControlMovement = true;
             CanControlZinc = true;
             CanThrowCoins = true;
-            Player.CanPause = true;
+            CanPause = true;
             //GodMode = true;
 
             SetFrameMaterial(frameMaterial);
@@ -226,11 +226,11 @@ public class Player : PewterEntity {
                 transform.position = spawn.transform.position;
                 //transform.rotation = spawn.transform.rotation;
                 if (scene.buildIndex != SceneSelectMenu.sceneMain) {
-                    CameraController.Clear();
                     CameraController.SetRotation(spawn.transform.eulerAngles);
+                    CameraController.Clear();
                 }
             }
-            RespawnPoint = transform.position;
+            RespawnPoint = spawn.transform;
         }
     }
 
@@ -259,7 +259,9 @@ public class Player : PewterEntity {
     }
 
     public void Respawn() {
-        transform.position = RespawnPoint;
+        transform.position = RespawnPoint.position;
         PlayerPewter.Clear();
+        CameraController.Clear();
+        CameraController.SetRotation(RespawnPoint.eulerAngles);
     }
 }
