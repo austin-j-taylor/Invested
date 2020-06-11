@@ -641,18 +641,9 @@ public class PlayerPullPushController : AllomanticIronSteel {
      */
     private (Magnetic, List<Magnetic>, List<Magnetic>) IronSteelSight() {
         Magnetic targetBullseye = null;
-        bool centerWeightCheck = true;
         List<Magnetic> newTargetsArea = new List<Magnetic>();
         List<Magnetic> newTargetsBubble = new List<Magnetic>();
 
-        // If the player is directly looking at a magnetic's collider, use that for the bullseye
-        if (Physics.Raycast(CameraController.ActiveCamera.transform.position, CameraController.ActiveCamera.transform.forward, out RaycastHit hit, 500, GameManager.Layer_IgnorePlayer)) {
-            Magnetic target = hit.collider.GetComponentInParent<Magnetic>();
-            if (target && target.isActiveAndEnabled && target.IsInRange(this, GreaterPassiveBurn)) {
-                targetBullseye = target;
-                centerWeightCheck = false;
-            }
-        }
 
         // To determine the range of detection, find the force that would act on a supermassive metal.
         // That way, we can ignore metals out of that range for efficiency.
@@ -706,7 +697,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
                         // IF we're not looking directly at a metal's collider
                         // and IF that metal is reasonably close to the center of the screen
                         // and IF the new Magnetic is closer to the center of the screen than the previous most-center Magnetic
-                        if (centerWeightCheck && weight > lineWeightThreshold && weight > bullseyeWeight) {
+                        if (weight > lineWeightThreshold && weight > bullseyeWeight) {
                             bullseyeWeight = weight;
                             targetBullseye = target;
                         }
@@ -718,6 +709,15 @@ public class PlayerPullPushController : AllomanticIronSteel {
                         newTargetsBubble.Add(target);
                     }
                 }
+            }
+        }
+        // If the player is directly looking at a magnetic's collider, use that for the bullseye isntead
+        if (Physics.Raycast(CameraController.ActiveCamera.transform.position, CameraController.ActiveCamera.transform.forward, out RaycastHit hit, 500, GameManager.Layer_IgnorePlayer)) {
+            Magnetic target = hit.collider.GetComponentInParent<Magnetic>();
+            if (target && target.isActiveAndEnabled && target.IsInRange(this, GreaterPassiveBurn)) {
+                targetBullseye = target;
+                if (!newTargetsArea.Contains(targetBullseye))
+                    newTargetsArea.Add(targetBullseye);
             }
         }
 
