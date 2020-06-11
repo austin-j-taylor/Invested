@@ -8,9 +8,11 @@ public class TargetRing : Source {
 
     protected virtual void OnTriggerEnter(Collider other) {
         if (Player.IsPlayerTrigger(other)) {
-            On = true;
-            GetComponent<Renderer>().material.CopyPropertiesFromMaterial(GameManager.Material_MARLmetal_unlit);
-            GetComponent<AudioSource>().Play();
+            if(!On) {
+                On = true;
+                GetComponent<Renderer>().material.CopyPropertiesFromMaterial(GameManager.Material_MARLmetal_unlit);
+                GetComponent<AudioSource>().Play();
+            }
         }
     }
 }

@@ -15,7 +15,7 @@ public class AudioManager : MonoBehaviour {
                         index_wind = 1,
                         index_sceneTransition = 2; // used for music that needs to persist between scenes, e.g. the looping sound from the Title Screen to the Tutorial
 
-    private const float velocityWindFactor = 20, lerpWindFactor = 10, velocityThreshold = 2;
+    private const float windVelocityFactor = 20, windLerpFactor = 10, windVolumeVactor = 2, velocityThreshold = 2;
 
     [SerializeField]
     AudioMixer mixer = null;
@@ -57,12 +57,12 @@ public class AudioManager : MonoBehaviour {
         if(Player.PlayerInstance.isActiveAndEnabled && Time.timeScale > 0) {
             float velocity = Player.PlayerIronSteel.rb.velocity.magnitude;
             if (velocity > velocityThreshold && !Player.PlayerPewter.IsGrounded) {
-                float factor = Mathf.Exp(-velocityWindFactor / (velocity - velocityThreshold));
-                sources[index_wind].volume = Mathf.Lerp(sources[index_wind].volume, factor, Time.deltaTime * lerpWindFactor);
-                sources[index_wind].pitch = Mathf.Lerp(sources[index_wind].pitch, 1 + factor, Time.deltaTime * lerpWindFactor);
+                float factor = Mathf.Exp(-windVelocityFactor / (velocity - velocityThreshold));
+                sources[index_wind].volume = Mathf.Lerp(sources[index_wind].volume, factor * windVolumeVactor, Time.deltaTime * windLerpFactor);
+                sources[index_wind].pitch = Mathf.Lerp(sources[index_wind].pitch, 1 + factor, Time.deltaTime * windLerpFactor);
             } else {
-                sources[index_wind].volume = Mathf.Lerp(sources[index_wind].volume, 0, Time.deltaTime * lerpWindFactor);
-                sources[index_wind].pitch = Mathf.Lerp(sources[index_wind].pitch, 1, Time.deltaTime * lerpWindFactor);
+                sources[index_wind].volume = Mathf.Lerp(sources[index_wind].volume, 0, Time.deltaTime * windLerpFactor);
+                sources[index_wind].pitch = Mathf.Lerp(sources[index_wind].pitch, 1, Time.deltaTime * windLerpFactor);
             }
         }
     }

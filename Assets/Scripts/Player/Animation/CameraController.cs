@@ -142,9 +142,12 @@ public class CameraController : MonoBehaviour {
         if (SettingsMenu.settingsData.cameraFirstPerson == 0) { // Third person
 
             // If the player is moving quickly, the camera stretches outwards.
-            float cameraDistance = -(2 - Mathf.Exp(Player.PlayerIronSteel.rb.velocity.sqrMagnitude / stretchingVelocityFactor)) * SettingsMenu.settingsData.cameraDistance;
-            if (lastCameraDistance != 0)
-                cameraDistance = Mathf.Lerp(lastCameraDistance, cameraDistance, Time.deltaTime * cameraStretchingLerpFactor);
+            float cameraDistance = -SettingsMenu.settingsData.cameraDistance;
+            if (SettingsMenu.settingsData.velocityZoom == 1) {
+                cameraDistance = (2 - Mathf.Exp(Player.PlayerIronSteel.rb.velocity.sqrMagnitude / stretchingVelocityFactor)) * cameraDistance;
+                if (lastCameraDistance != 0)
+                    cameraDistance = Mathf.Lerp(lastCameraDistance, cameraDistance, Time.deltaTime * cameraStretchingLerpFactor);
+            }
             Vector3 wantedPosition = verticalRotation * new Vector3(0, 0, cameraDistance);
 
             lastCameraDistance = cameraDistance;
@@ -301,6 +304,15 @@ public class CameraController : MonoBehaviour {
 
             CameraPositionTarget.transform.position = wantedPosition;
         }
+
+        //// If the camera's pitch is exactly 0, the nature of the VolumetricLines shader makes the blue lines to metals invisible.
+        //// so, if it's exactly 0, give it a nudge.
+        //if(CameraPositionTarget.transform.localEulerAngles.x == 0) {
+        //    Debug.Log("zeroed");
+        //    Vector3 angles = CameraPositionTarget.transform.localEulerAngles;
+        //    angles.y = 0.00001f;
+        //    CameraPositionTarget.transform.localEulerAngles = angles;
+        //}
     }
 
     public static void Clear() {

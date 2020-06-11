@@ -10,12 +10,15 @@ using UnityEngine.UI;
 public class SliderSetting : Setting {
     private float data;
 
-    private Slider slider;
-    private Text valueText;
+    [HideInInspector]
+    public Slider slider;
+    [HideInInspector]
+    public Text valueText;
     // Assigned in inspector
     public float min = 0;
     public float max = 100;
     public float defaultValue = 0;
+    public bool updateTextWhenChanged = true;
     public bool showDecimals;
 
     void Awake() {
@@ -55,10 +58,12 @@ public class SliderSetting : Setting {
      * Updates the text fields for this setting to reflect the setting's data
      */
     public override void RefreshText() {
-        if(showDecimals)
-            valueText.text = ((int)(100 * data) / 100f).ToString(); // rounds to two decimal places
-        else
-            valueText.text = ((int)data).ToString();
+        if (updateTextWhenChanged) {
+            if (showDecimals)
+                valueText.text = ((int)(100 * data) / 100f).ToString(); // rounds to two decimal places
+            else
+                valueText.text = ((int)data).ToString();
+        }
 
     }
 

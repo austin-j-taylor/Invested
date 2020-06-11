@@ -45,6 +45,8 @@ public class SettingsData : MonoBehaviour {
     public int helpOverlay; // 0 for Disabled, 1 for Simple, 2 for Verbose
     // Graphics
     public int renderblueLines; // 0 for Disabled, 1 for Enabled
+    public int velocityZoom;
+    public int postProcessingEnabled;
     public int antialiasing;
     public int ambientOcclusion;
     public int motionBlur;
@@ -52,6 +54,8 @@ public class SettingsData : MonoBehaviour {
     public int aberration;
     public int vignetteZinc;
     public int clouds;
+    public int fullscreen;
+    public float resolution;
     // Audio
     public float audioMaster;
     public float audioMusic;
@@ -104,10 +108,11 @@ public class SettingsData : MonoBehaviour {
             // Manually apply certain setting effects
             GameManager.AudioManager.SetAudioLevels(audioMaster, audioMusic, audioEffects, audioVoiceBeeps);
             TimeController.CurrentTimeScale = timeScale;
-            GraphicsController.SetAntialiasing(antialiasing == 1);
-            GraphicsController.SetAmbientOcclusion(ambientOcclusion == 1);
-            GraphicsController.SetMotionBlur(motionBlur == 1);
-            GraphicsController.SetBloom(bloom == 1);
+            //GraphicsController.SetAntialiasing(antialiasing == 1);
+            //GraphicsController.SetAmbientOcclusion(ambientOcclusion == 1);
+            //GraphicsController.SetMotionBlur(motionBlur == 1);
+            //GraphicsController.SetBloom(bloom == 1);
+            GraphicsController.SetFullscreenResolution(resolution, (FullScreenMode)fullscreen);
 
         } catch (DirectoryNotFoundException e) {
             Debug.LogError(e.Message);
@@ -211,6 +216,14 @@ public class SettingsData : MonoBehaviour {
                     highlightedTargetOutline = data;
                     return true;
                 }
+            case "velocityZoom": {
+                    velocityZoom = data;
+                    return true;
+                }
+            case "postProcessingEnabled": {
+                    postProcessingEnabled = data;
+                    return true;
+                }
             case "antialiasing": {
                     antialiasing = data;
                     return true;
@@ -237,6 +250,10 @@ public class SettingsData : MonoBehaviour {
                 }
             case "clouds": {
                     clouds = data;
+                    return true;
+                }
+            case "fullscreen": {
+                    fullscreen = data;
                     return true;
                 }
             case "pushControlStyle": {
@@ -340,6 +357,10 @@ public class SettingsData : MonoBehaviour {
                     metalDetectionThreshold = data;
                     return true;
                 }
+            case "resolution": {
+                    resolution = data;
+                    return true;
+                }
             case "timeScale": {
                     timeScale = data;
                     return true;
@@ -404,6 +425,12 @@ public class SettingsData : MonoBehaviour {
             case "highlightedTargetOutline": {
                     return highlightedTargetOutline;
                 }
+            case "velocityZoom": {
+                    return velocityZoom;
+                }
+            case "postProcessingEnabled": {
+                    return postProcessingEnabled;
+                }
             case "antialiasing": {
                     return antialiasing;
                 }
@@ -424,6 +451,9 @@ public class SettingsData : MonoBehaviour {
                 }
             case "clouds": {
                     return clouds;
+                }
+            case "fullscreen": {
+                    return fullscreen;
                 }
             case "pushControlStyle": {
                     return pushControlStyle;
@@ -502,6 +532,9 @@ public class SettingsData : MonoBehaviour {
                 }
             case "metalDetectionThreshold": {
                     return metalDetectionThreshold;
+                }
+            case "resolution": {
+                    return resolution;
                 }
             case "timeScale": {
                     return timeScale;
