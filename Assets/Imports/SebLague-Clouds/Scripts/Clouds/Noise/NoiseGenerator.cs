@@ -21,6 +21,7 @@ public class NoiseGenerator : MonoBehaviour {
     [Header ("Noise Settings")]
     public int shapeResolution = 132;
     public int detailResolution = 32;
+    public string textureName = "";
 
     public WorleyNoiseSettings[] shapeSettings;
     public WorleyNoiseSettings[] detailSettings;
@@ -42,6 +43,7 @@ public class NoiseGenerator : MonoBehaviour {
     List<ComputeBuffer> buffersToRelease;
     bool updateNoise;
 
+    public string NoiseNameRoot => Path.Combine("Clouds", textureName + "_");
     [HideInInspector]
     public bool showSettingsEditor = true;
     [SerializeField, HideInInspector]
@@ -104,10 +106,8 @@ public class NoiseGenerator : MonoBehaviour {
             }
         }
     }
-
-    public void Load (string saveName, RenderTexture target) {
-        string sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene ().name;
-        saveName = Path.Combine("Clouds", sceneName + "_" + saveName);
+    public void Load (string nameLeaf, RenderTexture target) {
+        string saveName = NoiseNameRoot + nameLeaf;
         Texture3D savedTex = (Texture3D) Resources.Load (saveName);
         if (savedTex != null && savedTex.width == target.width) {
             copy.SetTexture (0, "tex", savedTex);
@@ -229,5 +229,8 @@ public class NoiseGenerator : MonoBehaviour {
     void ValidateParamaters () {
         detailResolution = Mathf.Max (1, detailResolution);
         shapeResolution = Mathf.Max (1, shapeResolution);
+        if(textureName == "") {
+            textureName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
+        }
     }
 }

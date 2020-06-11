@@ -10,11 +10,9 @@ public class Save3D : MonoBehaviour {
 
     public void Save (RenderTexture volumeTexture, string saveName) {
 #if UNITY_EDITOR
-        string sceneName = UnityEditor.SceneManagement.EditorSceneManager.GetActiveScene ().name;
-        saveName = sceneName + "_" + saveName;
+        volumeTexture.enableRandomWrite = true;
         int resolution = volumeTexture.width;
         Texture2D[] slices = new Texture2D[resolution];
-
         slicer.SetInt ("resolution", resolution);
         slicer.SetTexture (0, "volumeTexture", volumeTexture);
 
@@ -34,7 +32,7 @@ public class Save3D : MonoBehaviour {
         }
 
         var x = Tex3DFromTex2DArray (slices, resolution);
-        UnityEditor.AssetDatabase.CreateAsset (x, Path.Combine("Assets", "Resources", "Clouds", saveName + ".asset"));
+        UnityEditor.AssetDatabase.CreateAsset (x, Path.Combine("Assets", "Resources", saveName + ".asset"));
 #endif
     }
 

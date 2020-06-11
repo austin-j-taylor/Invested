@@ -34,8 +34,8 @@ public class NoiseGenEditor : Editor {
 
     void Save () {
 
-        FindObjectOfType<Save3D> ().Save (noise.shapeTexture, NoiseGenerator.shapeNoiseName);
-        FindObjectOfType<Save3D> ().Save (noise.detailTexture, NoiseGenerator.detailNoiseName);
+        FindObjectOfType<Save3D> ().Save (noise.shapeTexture, noise.NoiseNameRoot + NoiseGenerator.shapeNoiseName);
+        FindObjectOfType<Save3D> ().Save (noise.detailTexture, noise.NoiseNameRoot + NoiseGenerator.detailNoiseName);
     }
 
     void Load () {
