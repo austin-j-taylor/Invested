@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.IO;
+using System.Reflection;
 /*
  * Stores the variables determining each setting that are read from and written to the JSON configuration file.
  * Should not be modified outside of a Setting.
@@ -147,409 +148,38 @@ public class SettingsData : MonoBehaviour {
      * really liking that O(2*n) efficiency every time you click a button
      */
     public bool SetData(string name, int data) {
-        switch (name) {
-            case "controlScheme": {
-                    controlScheme = data;
-                    return true;
-                }
-            case "gamepadRumble": {
-                    gamepadRumble = data;
-                    return true;
-                }
-            case "cameraFirstPerson": {
-                    cameraFirstPerson = data;
-                    return true;
-                }
-            case "cameraClamping": {
-                    cameraClamping = data;
-                    return true;
-                }
-            case "cameraInvertX": {
-                    cameraInvertX = data;
-                    return true;
-                }
-            case "cameraInvertY": {
-                    cameraInvertY = data;
-                    return true;
-                }
-            case "forceUnits": {
-                    forceUnits = data;
-                    return true;
-                }
-            case "forceComplexity": {
-                    forceComplexity = data;
-                    return true;
-                }
-            case "hudForces": {
-                    hudForces = data;
-                    return true;
-                }
-            case "hudEnabled": {
-                    hudEnabled = data;
-                    return true;
-                }
-            case "hudMasses": {
-                    hudMasses = data;
-                    return true;
-                }
-            case "fpsCounter": {
-                    fpsCounter = data;
-                    return true;
-                }
-            case "helpOverlay": {
-                    helpOverlay = data;
-                    return true;
-                }
-            case "renderblueLines": {
-                    renderblueLines = data;
-                    return true;
-                }
-            case "pullTargetLineColor": {
-                    pullTargetLineColor = data;
-                    return true;
-                }
-            case "pushTargetLineColor": {
-                    pushTargetLineColor = data;
-                    return true;
-                }
-            case "highlightedTargetOutline": {
-                    highlightedTargetOutline = data;
-                    return true;
-                }
-            case "velocityZoom": {
-                    velocityZoom = data;
-                    return true;
-                }
-            case "postProcessingEnabled": {
-                    postProcessingEnabled = data;
-                    return true;
-                }
-            case "antialiasing": {
-                    antialiasing = data;
-                    return true;
-                }
-            case "ambientOcclusion": {
-                    ambientOcclusion = data;
-                    return true;
-                }
-            case "motionBlur": {
-                    motionBlur = data;
-                    return true;
-                }
-            case "bloom": {
-                    bloom = data;
-                    return true;
-                }
-            case "aberration": {
-                    aberration = data;
-                    return true;
-                }
-            case "vignetteZinc": {
-                    vignetteZinc = data;
-                    return true;
-                }
-            case "clouds": {
-                    clouds = data;
-                    return true;
-                }
-            case "fullscreen": {
-                    fullscreen = data;
-                    return true;
-                }
-            case "pushControlStyle": {
-                    pushControlStyle = data;
-                    return true;
-                }
-            case "anchoredBoost": {
-                    anchoredBoost = data;
-                    return true;
-                }
-            case "normalForceMin": {
-                    normalForceMin = data;
-                    return true;
-                }
-            case "normalForceMax": {
-                    normalForceMax = data;
-                    return true;
-                }
-            case "normalForceEquality": {
-                    normalForceEquality = data;
-                    return true;
-                }
-            case "exponentialWithVelocitySignage": {
-                    exponentialWithVelocitySignage = data;
-                    return true;
-                }
-            case "forceDistanceRelationship": {
-                    forceDistanceRelationship = data;
-                    return true;
-                }
-            case "playerGravity": {
-                    playerGravity = data;
-                    return true;
-                }
-            case "playerAirResistance": {
-                    playerAirResistance = data;
-                    return true;
-                }
-            default: {
-                    Debug.LogError("SetData with invalid ID: " + name);
-                    return false;
-                }
+        FieldInfo field = GetType().GetField(name);
+        if(field == null) {
+            Debug.LogError("SetData with invalid name: " + name);
+            return false;
         }
+        field.SetValue(this, data);
+        return true;
     }
-
     public bool SetData(string name, float data) {
-        switch (name) {
-            case "cameraDistance": {
-                    cameraDistance = data;
-                    return true;
-                }
-            case "mouseSensitivityX": {
-                    mouseSensitivityX = data;
-                    return true;
-                }
-            case "mouseSensitivityY": {
-                    mouseSensitivityY = data;
-                    return true;
-                }
-            case "gamepadSensitivityX": {
-                    gamepadSensitivityX = data;
-                    return true;
-                }
-            case "gamepadSensitivityY": {
-                    gamepadSensitivityY = data;
-                    return true;
-                }
-            case "audioMaster": {
-                    audioMaster = data;
-                    return true;
-                }
-            case "audioMusic": {
-                    audioMusic= data;
-                    return true;
-                }
-            case "audioEffects": {
-                    audioEffects = data;
-                    return true;
-                }
-            case "audioVoiceBeeps": {
-                    audioVoiceBeeps = data;
-                    return true;
-                }
-            case "velocityConstant": {
-                    velocityConstant = data;
-                    return true;
-                }
-            case "distanceConstant": {
-                    distanceConstant = data;
-                    return true;
-                }
-            case "allomanticConstant": {
-                    allomanticConstant = data;
-                    return true;
-                }
-            case "maxPushRange": {
-                    maxPushRange = data;
-                    return true;
-                }
-            case "metalDetectionThreshold": {
-                    metalDetectionThreshold = data;
-                    return true;
-                }
-            case "resolution": {
-                    resolution = data;
-                    return true;
-                }
-            case "timeScale": {
-                    timeScale = data;
-                    return true;
-                }
-            default: {
-                    Debug.LogError("SetData with invalid ID: " + name);
-                    return false;
-                }
+        FieldInfo field = GetType().GetField(name);
+        if (field == null) {
+            Debug.LogError("SetData with invalid name: " + name);
+            return false;
         }
+        field.SetValue(this, data);
+        return true;
     }
 
     public int GetDataInt(string name) {
-        switch (name) {
-            case "controlScheme": {
-                    return controlScheme;
-                }
-            case "gamepadRumble": {
-                    return gamepadRumble;
-                }
-            case "cameraFirstPerson": {
-                    return cameraFirstPerson;
-                }
-            case "cameraClamping": {
-                    return cameraClamping;
-                }
-            case "cameraInvertX": {
-                    return cameraInvertX;
-                }
-            case "cameraInvertY": {
-                    return cameraInvertY;
-                }
-            case "forceUnits": {
-                    return forceUnits;
-                }
-            case "forceComplexity": {
-                    return forceComplexity;
-                }
-            case "hudForces": {
-                    return hudForces;
-                }
-            case "hudEnabled": {
-                    return hudEnabled;
-                }
-            case "hudMasses": {
-                    return hudMasses;
-                }
-            case "fpsCounter": {
-                    return fpsCounter;
-                }
-            case "helpOverlay": {
-                    return helpOverlay;
-                }
-            case "renderblueLines": {
-                    return renderblueLines;
-                }
-            case "pullTargetLineColor": {
-                    return pullTargetLineColor;
-                }
-            case "pushTargetLineColor": {
-                    return pushTargetLineColor;
-                }
-            case "highlightedTargetOutline": {
-                    return highlightedTargetOutline;
-                }
-            case "velocityZoom": {
-                    return velocityZoom;
-                }
-            case "postProcessingEnabled": {
-                    return postProcessingEnabled;
-                }
-            case "antialiasing": {
-                    return antialiasing;
-                }
-            case "ambientOcclusion": {
-                    return ambientOcclusion;
-                }
-            case "motionBlur": {
-                    return motionBlur;
-                }
-            case "bloom": {
-                    return bloom;
-                }
-            case "aberration": {
-                    return aberration;
-                }
-            case "vignetteZinc": {
-                    return vignetteZinc;
-                }
-            case "clouds": {
-                    return clouds;
-                }
-            case "fullscreen": {
-                    return fullscreen;
-                }
-            case "pushControlStyle": {
-                    return pushControlStyle;
-                }
-            case "anchoredBoost": {
-                    return anchoredBoost;
-                }
-            case "normalForceMin": {
-                    return normalForceMin;
-                }
-            case "normalForceMax": {
-                    return normalForceMax;
-                }
-            case "normalForceEquality": {
-                    return normalForceEquality;
-                }
-            case "exponentialWithVelocitySignage": {
-                    return exponentialWithVelocitySignage;
-                }
-            case "forceDistanceRelationship": {
-                    return forceDistanceRelationship;
-                }
-            case "playerGravity": {
-                    return playerGravity;
-                }
-            case "playerAirResistance": {
-                    return playerAirResistance;
-                }
-            default: {
-                    Debug.LogError("GetDataInt with invalid ID: " + name);
-                    return -1;
-                }
+        FieldInfo field = GetType().GetField(name);
+        if (field == null) {
+            Debug.LogError("GetDataInt with invalid name: " + name);
+            return -1;
         }
+        return (int)field.GetValue(this);
     }
-
     public float GetDataFloat(string name) {
-        switch (name) {
-            case "cameraDistance": {
-                    return cameraDistance;
-                }
-            case "mouseSensitivityX": {
-                    return mouseSensitivityX;
-                }
-            case "mouseSensitivityY": {
-                    return mouseSensitivityY;
-                }
-            case "gamepadSensitivityX": {
-                    return gamepadSensitivityX;
-                }
-            case "gamepadSensitivityY": {
-                    return gamepadSensitivityY;
-                }
-            case "velocityConstant": {
-                    return velocityConstant;
-                }
-            case "audioMaster": {
-                    return audioMaster;
-                }
-            case "audioMusic": {
-                    return audioMusic;
-                }
-            case "audioEffects": {
-                    return audioEffects;
-                }
-            case "audioVoiceBeeps": {
-                    return audioVoiceBeeps;
-                }
-            case "distanceConstant": {
-                    return distanceConstant;
-                }
-            case "allomanticConstant": {
-                    return allomanticConstant;
-                }
-            case "maxPushRange": {
-                    return maxPushRange;
-                }
-            case "metalDetectionThreshold": {
-                    return metalDetectionThreshold;
-                }
-            case "resolution": {
-                    return resolution;
-                }
-            case "timeScale": {
-                    return timeScale;
-                }
-            default: {
-                    Debug.LogError("GetDataFloat with invalid ID: " + name);
-                    return -1;
-                }
+        FieldInfo field = GetType().GetField(name);
+        if (field == null) {
+            Debug.LogError("GetDataFloat with invalid name: " + name);
+            return -1;
         }
+        return (float)field.GetValue(this);
     }
-
-    ///*
-    // * Just in case the player quits with the settings menu still open
-    // */
-    //private void OnApplicationQuit() {
-    //    SaveSettings();
-    //}
 }
