@@ -17,7 +17,6 @@ public class Environment_MARL_SpawnRoom : Environment {
         Player.PlayerInstance.CoinHand.Pouch.Clear();
         Player.PlayerIronSteel.SteelReserve.IsEnabled = false;
         Player.PlayerPewter.PewterReserve.IsEnabled = false;
-        HUD.ControlWheelController.SetLockedState(ControlWheelController.LockedState.LockedFully);
         StartCoroutine(Procedure());
     }
 

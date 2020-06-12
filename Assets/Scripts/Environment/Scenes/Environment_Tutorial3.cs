@@ -13,10 +13,6 @@ public class Environment_Tutorial3 : EnvironmentCinematic {
 
         Player.CanControl = false;
         Player.CanControlMovement = false;
-        Player.CanThrowCoins = false;
-        Player.PlayerPewter.PewterReserve.IsEnabled = false;
-        Player.CanControlZinc = false;
-        HUD.ControlWheelController.SetLockedState(ControlWheelController.LockedState.LockedToBubble);
 
         // Set cinemachine virtual camera properties
         InitializeCinemachine();
@@ -44,8 +40,6 @@ public class Environment_Tutorial3 : EnvironmentCinematic {
             yield return null;
             vcam.enabled = false;
             yield return new WaitForSeconds(2);
-        } else {
-            Player.PlayerPewter.PewterReserve.IsEnabled = true;
         }
         CameraController.DisableCinemachineCamera(vcam);
         Player.CanControl = true;
@@ -56,7 +50,7 @@ public class Environment_Tutorial3 : EnvironmentCinematic {
     protected override IEnumerator Trigger0() {
         while (HUD.ConversationHUDController.IsOpen)
             yield return null;
-        Player.PlayerPewter.PewterReserve.IsEnabled = true;
+        FlagsController.SetFlag("pwr_pewter");
 
         HUD.MessageOverlayCinematic.FadeIn(KeySprint + " to burn " + Pewter + " to " + Sprint + " faster and " + PewterJump + " further.");
 

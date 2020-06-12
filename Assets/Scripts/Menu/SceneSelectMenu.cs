@@ -74,7 +74,7 @@ public class SceneSelectMenu : MonoBehaviour {
         levelsHeader = transform.Find("Levels").transform;
         sandboxesHeader = transform.Find("Sandboxes").transform;
         simulationsHeader = transform.Find("Simulations").transform;
-        
+
         levelMARL1Button = levelsHeader.Find("MARL1").GetComponent<Button>();
         levelMARL2Button = levelsHeader.Find("MARL2").GetComponent<Button>();
         levelMARL3Button = levelsHeader.Find("MARL3").GetComponent<Button>();
@@ -119,6 +119,9 @@ public class SceneSelectMenu : MonoBehaviour {
 
         // Only close the main menu after the scene loads to prevent jarring camera transitions
         SceneManager.sceneLoaded += ClearAfterSceneChange;
+        // Open and immediately close to quickly grab those Flags and read them behind the scenes
+        Open();
+        Close();
     }
 
     public void Open() {
@@ -126,21 +129,21 @@ public class SceneSelectMenu : MonoBehaviour {
         tooltip.text = "";
         MainMenu.FocusOnButton(highlitButton);
         // Lock levels when previous levels are not completed
-        levelMARL1Button.interactable = FlagsController.GetLevel(FlagsController.Level.completeTutorial1);
-        levelMARL2Button.interactable = FlagsController.GetLevel(FlagsController.Level.completeTutorial2);
-        levelMARL3Button.interactable = FlagsController.GetLevel(FlagsController.Level.completeTutorial3);
-        levelMARL4Button.interactable = FlagsController.GetLevel(FlagsController.Level.completeTutorial4);
+        levelMARL1Button.interactable = FlagsController.GetData("completeTutorial1");
+        levelMARL2Button.interactable = FlagsController.GetData("completeTutorial2");
+        levelMARL3Button.interactable = FlagsController.GetData("completeTutorial3");
+        levelMARL4Button.interactable = FlagsController.GetData("completeTutorial4");
         tutorial1Button.interactable = true;
-        tutorial2Button.interactable = FlagsController.GetLevel(FlagsController.Level.completeMARL1);
-        tutorial3Button.interactable = FlagsController.GetLevel(FlagsController.Level.completeMARL2);
-        tutorial4Button.interactable = FlagsController.GetLevel(FlagsController.Level.completeMARL3);
+        tutorial2Button.interactable = FlagsController.GetData("completeMARL1");
+        tutorial3Button.interactable = FlagsController.GetData("completeMARL2");
+        tutorial4Button.interactable = FlagsController.GetData("completeMARL3");
         sandboxButton.interactable = true;
-        shootingGroundsButton.interactable = FlagsController.GetLevel(FlagsController.Level.completeTutorial1);
-        southernMountainsButton.interactable = FlagsController.GetLevel(FlagsController.Level.completeTutorial2);
-        seaOfMetalButton.interactable = FlagsController.GetLevel(FlagsController.Level.completeTutorial3);
-        stormsButton.interactable = FlagsController.GetLevel(FlagsController.Level.completeTutorial3);
-        luthadelButtonDay.interactable = FlagsController.GetLevel(FlagsController.Level.completeTutorial4);
-        luthadelButtonNight.interactable = FlagsController.GetLevel(FlagsController.Level.completeTutorial4);
+        shootingGroundsButton.interactable = FlagsController.GetData("completeTutorial1");
+        southernMountainsButton.interactable = FlagsController.GetData("completeTutorial2");
+        seaOfMetalButton.interactable = FlagsController.GetData("completeTutorial3");
+        stormsButton.interactable = FlagsController.GetData("completeTutorial3");
+        luthadelButtonDay.interactable = FlagsController.GetData("completeTutorial4");
+        luthadelButtonNight.interactable = FlagsController.GetData("completeTutorial4");
     }
 
     public void Close() {
@@ -151,7 +154,7 @@ public class SceneSelectMenu : MonoBehaviour {
     public static void LoadScene(int scene) {
         //CameraController.SetExternalSource(null, null);
         Player.PlayerInstance.transform.parent = EventSystem.current.transform;
-        
+
         SceneManager.LoadScene(scene);
     }
 
@@ -173,19 +176,8 @@ public class SceneSelectMenu : MonoBehaviour {
                 CameraController.UnlockCamera();
                 CameraController.ActiveCamera.clearFlags = CameraClearFlags.Skybox;
                 CameraController.Cinemachine.m_IgnoreTimeScale = true;
-                //CameraController.ActiveCamera.clearFlags = CameraClearFlags.SolidColor;
                 if (isActiveAndEnabled)
                     MainMenu.FocusOnButton(highlitButton);
-            //} else if (IsTutorial(scene.buildIndex)) {
-            //    // Tutorial levels have a special level transition from the title screen.
-            //    MainMenu.Close();
-            //    TimeController.CurrentTimeScale = SettingsMenu.settingsData.timeScale;
-            //    CameraController.LockCamera();
-            //    CameraController.ActiveCamera.clearFlags = CameraClearFlags.Skybox;
-            //    CameraController.Cinemachine.m_IgnoreTimeScale = false;
-            //    Player.CanPause = true;
-            //    HUD.ResetHUD();
-
             } else {
                 MainMenu.Close();
                 TimeController.CurrentTimeScale = SettingsMenu.settingsData.timeScale;
@@ -196,14 +188,6 @@ public class SceneSelectMenu : MonoBehaviour {
                 CameraController.ActiveCamera.clearFlags = CameraClearFlags.Skybox;
                 HUD.ResetHUD();
 
-                // Set parameters for starting on certain scenes
-                Player.PlayerInstance.CoinHand.Pouch.Fill();
-                Player.PlayerIronSteel.IronReserve.SetMass(150);
-                Player.PlayerIronSteel.SteelReserve.SetMass(150);
-                Player.PlayerPewter.PewterReserve.SetMass(150);
-                Player.PlayerIronSteel.IronReserve.IsEnabled = true;
-                Player.PlayerIronSteel.SteelReserve.IsEnabled = true;
-                Player.PlayerPewter.PewterReserve.IsEnabled = true;
             }
         }
         NowLoadingScene = false;

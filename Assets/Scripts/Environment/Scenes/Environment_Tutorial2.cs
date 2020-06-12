@@ -19,11 +19,6 @@ public class Environment_Tutorial2 : EnvironmentCinematic {
 
         Player.CanControl = false;
         Player.CanControlMovement = false;
-        Player.CanThrowCoins = false;
-        Player.PlayerIronSteel.SteelReserve.IsEnabled = false;
-        Player.PlayerPewter.PewterReserve.IsEnabled = false;
-        Player.CanControlZinc = false;
-        HUD.ControlWheelController.SetLockedState(ControlWheelController.LockedState.LockedToArea);
 
         // Set cinemachine virtual camera properties
         InitializeCinemachine();
@@ -51,8 +46,6 @@ public class Environment_Tutorial2 : EnvironmentCinematic {
             yield return null;
             vcam.enabled = false;
             yield return new WaitForSeconds(2);
-        } else {
-            Player.PlayerIronSteel.SteelReserve.IsEnabled = true;
         }
         CameraController.DisableCinemachineCamera(vcam);
         Player.CanControl = true;
@@ -64,8 +57,7 @@ public class Environment_Tutorial2 : EnvironmentCinematic {
 
     protected override IEnumerator Trigger0() {
         backWall.SetActive(true);
-        Player.PlayerIronSteel.SteelReserve.IsEnabled = true;
-
+        FlagsController.SetFlag("pwr_steel");
         HUD.MessageOverlayCinematic.FadeIn(s_Hold_ + _KeyPush + " to " + Push + ".");
 
         while (!Player.PlayerIronSteel.HasPushTarget) {

@@ -23,7 +23,7 @@ public class ControlWheelController : MonoBehaviour {
     private readonly Color colorSelectedSpoke = new Color(1, 1, 1, .5f);
 
     enum Selection { Cancel, Manual, Area, Bubble, Coinshot, Coin_Spray, Coin_Full, Coin_Semi, DeselectAll, StopBurning };
-    public enum LockedState { Unlocked, LockedFully, LockedToArea, LockedToBubble };
+    private enum LockedState { Unlocked, LockedFully, LockedToArea, LockedToBubble };
 
     private Image circle;
     private Image[] spokes;
@@ -115,7 +115,10 @@ public class ControlWheelController : MonoBehaviour {
         textArea = transform.Find("Selections/Spoke1/Text/Title/Description").GetComponent<Text>();
         textBubble = transform.Find("Selections/Spoke2/Text/Title/Description").GetComponent<Text>();
         textCoinshot = transform.Find("Selections/Spoke3/Text/Title/Description").GetComponent<Text>();
-        SetLockedState(LockedState.Unlocked);
+    }
+
+    void Start() {
+        RefreshLocked(); // query Flags for how unlocked the wheel should be
     }
 
     public void Clear() {
@@ -123,7 +126,6 @@ public class ControlWheelController : MonoBehaviour {
         isOpen = false;
         HUD.HideControlWheel(true);
         highlit = Selection.Cancel;
-        SetLockedState(LockedState.Unlocked);
         RefreshSpokes();
     }
 
@@ -140,7 +142,7 @@ public class ControlWheelController : MonoBehaviour {
                     SectorArea();
                     isOpen = true;
                     IsOpen = false;
-                } else if (Keybinds.ControlWheelBubble() && lockedState != LockedState.LockedFully) {
+                } else if (Keybinds.ControlWheelBubble() && (lockedState == LockedState.LockedToBubble || lockedState == LockedState.Unlocked)) { // bad logic
                     SectorBubble();
                     isOpen = true;
                     IsOpen = false;
@@ -255,12 +257,12 @@ public class ControlWheelController : MonoBehaviour {
     private void SectorArea() {
         UpdateText();
         UpdateArea();
-        highlit = Selection.Area;
+        highlit = (lockedState != LockedState.LockedFully) ? Selection.Area : Selection.Cancel;
     }
     private void SectorBubble() {
         UpdateText();
         UpdateBubble();
-        highlit = Selection.Bubble;
+        highlit = (lockedState == LockedState.LockedToBubble || lockedState == LockedState.Unlocked) ? Selection.Bubble : Selection.Cancel;
     }
     private void SectorCoinshot() {
         UpdateText();
@@ -341,45 +343,43 @@ public class ControlWheelController : MonoBehaviour {
         spokes[(int)highlit].color = colorHighlitSpoke;
     }
 
-    // Sets how many options are available on the control wheel
-    public void SetLockedState(LockedState newState) {
-        lockedState = newState;
-
-        switch (newState) {
-            case LockedState.Unlocked:
-                for (int i = 0; i < spokes.Length; i++) {
-                    spokes[i].gameObject.SetActive(true);
-                }
-                break;
-            case LockedState.LockedFully:
-                for (int i = 0; i < spokes.Length; i++) {
-                    spokes[i].gameObject.SetActive(false);
-                }
-                break;
-            case LockedState.LockedToArea:
-                for (int i = 0; i < 3; i++) {
-                    spokes[i].gameObject.SetActive(true);
-                }
-                for (int i = 3; i < 8; i++) {
-                    spokes[i].gameObject.SetActive(false);
-                }
-                for (int i = 8; i < spokes.Length; i++) {
-                    spokes[i].gameObject.SetActive(true);
-                }
-                break;
-            case LockedState.LockedToBubble:
-                for (int i = 0; i < 4; i++) {
-                    spokes[i].gameObject.SetActive(true);
-                }
-                for (int i = 4; i < 8; i++) {
-                    spokes[i].gameObject.SetActive(false);
-                }
-                for (int i = 8; i < spokes.Length; i++) {
-                    spokes[i].gameObject.SetActive(true);
-                }
-                break;
+    // Sets how many options are available on the control wheel, depending on what Flags are met
+    public void RefreshLocked() {
+        if(FlagsController.GetData("pwr_coins")) {
+            lockedState = LockedState.Unlocked;
+            for (int i = 0; i < spokes.Length; i++) {
+                spokes[i].gameObject.SetActive(true);
+            }
+        } else if(FlagsController.GetData("wheel_bubble")) {
+            lockedState = LockedState.LockedToBubble;
+            for (int i = 0; i < 4; i++) {
+                spokes[i].gameObject.SetActive(true);
+            }
+            for (int i = 4; i < 8; i++) {
+                spokes[i].gameObject.SetActive(false);
+            }
+            for (int i = 8; i < spokes.Length; i++) {
+                spokes[i].gameObject.SetActive(true);
+            }
+        } else if(FlagsController.GetData("wheel_area")) {
+            lockedState = LockedState.LockedToArea;
+            for (int i = 0; i < 3; i++) {
+                spokes[i].gameObject.SetActive(true);
+            }
+            for (int i = 3; i < 8; i++) {
+                spokes[i].gameObject.SetActive(false);
+            }
+            for (int i = 8; i < spokes.Length; i++) {
+                spokes[i].gameObject.SetActive(true);
+            }
+        } else {
+            lockedState = LockedState.LockedFully;
+            for (int i = 0; i < spokes.Length; i++) {
+                spokes[i].gameObject.SetActive(false);
+            }
         }
     }
+
     public bool IsLocked() {
         return lockedState == LockedState.LockedFully;
     }

@@ -43,7 +43,7 @@ public class MainMenu : MonoBehaviour {
         HUD.DisableHUD();
         
         Open();
-        if(FlagsController.GetFlag(FlagsController.Flag.ControlSchemeChosen)) {
+        if (FlagsController.GetData("controlSchemeChosen")) {
             controlSchemeScreen.Close();
             OpenTitleScreen();
         } else {

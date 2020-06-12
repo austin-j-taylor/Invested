@@ -1,21 +1,24 @@
 ﻿using UnityEngine;
 using System.IO;
+using System.Collections.Generic;
+using System;
+using System.Reflection;
 
 // Triggers flags when certain conditions are met
+// Includes completed levels and unlocked abilities
+// These are all flags that can become true, but never return to false once unlocked.
 [System.Serializable]
 public class FlagsController : MonoBehaviour {
-
-    public enum Level { completeTutorial1, completeTutorial2, completeTutorial3, completeTutorial4, completeMARL1, completeMARL2, completeMARL3, completeMARL4 };
-    public enum Flag { ControlSchemeChosen };
 
     private readonly string flagsFileName = Path.Combine(Application.streamingAssetsPath, "Data" + Path.DirectorySeparatorChar + "flags.json");
 
     // Flags
-    // can't make them private because json-parsing has no brains
-    // "Please don't access these" is the best security I've got
+    // can't make them private because json-parsing needs them to be public
     public bool completeTutorial1, completeTutorial2, completeTutorial3, completeTutorial4, completeMARL1, completeMARL2, completeMARL3, completeMARL4;
     public bool controlSchemeChosen;
-    
+    public bool pwr_steel, pwr_pewter, pwr_zinc, pwr_coins; // for unlocking abilities
+    public bool wheel_area, wheel_bubble;
+
     private static FlagsController instance;
 
     private void Awake() {
@@ -28,7 +31,6 @@ public class FlagsController : MonoBehaviour {
         HUD.UpdateText();
     }
     
-
     public void LoadSettings() {
         try {
             StreamReader reader = new StreamReader(flagsFileName, true);
@@ -55,72 +57,39 @@ public class FlagsController : MonoBehaviour {
         }
     }
 
-    public static void SetLevel(Level level) {
-        switch(level) {
-            case Level.completeTutorial1:
-                instance.completeTutorial1 = true;
+    public static void SetFlag(string name) {
+
+        instance.GetType().GetField(name).SetValue(instance, true);
+
+        // When ability flags are set, the corresponding power should be immediately unlocked.
+        switch (name) {
+            case "pwr_steel":
+                Player.PlayerIronSteel.SteelReserve.IsEnabled = true;
                 break;
-            case Level.completeTutorial2:
-                instance.completeTutorial2 = true;
+            case "pwr_pewter":
+                Player.PlayerPewter.PewterReserve.IsEnabled = true;
                 break;
-            case Level.completeTutorial3:
-                instance.completeTutorial3 = true;
+            case "pwr_zinc":
+                Player.CanControlZinc = true;
                 break;
-            case Level.completeTutorial4:
-                instance.completeTutorial4 = true;
+            case "pwr_coins":
+                Player.CanThrowCoins = true;
+                HUD.ControlWheelController.RefreshLocked();
                 break;
-            case Level.completeMARL1:
-                instance.completeMARL1 = true;
+            case "wheel_area":
+                Player.CanThrowCoins = true;
+                HUD.ControlWheelController.RefreshLocked();
                 break;
-            case Level.completeMARL2:
-                instance.completeMARL2 = true;
-                break;
-            case Level.completeMARL3:
-                instance.completeMARL3 = true;
-                break;
-            case Level.completeMARL4:
-                instance.completeMARL4 = true;
+            case "wheel_bubble":
+                Player.CanThrowCoins = true;
+                HUD.ControlWheelController.RefreshLocked();
                 break;
         }
+
         instance.Refresh();
     }
 
-    public static void SetFlag(Flag flag) {
-        switch (flag) {
-            case Flag.ControlSchemeChosen:
-                if(!instance.controlSchemeChosen) {
-                    instance.controlSchemeChosen = true;
-                }
-                break;
-        }
-        instance.Refresh();
-    }
-    public static bool GetFlag(Flag flag) {
-        switch(flag) {
-            case Flag.ControlSchemeChosen:
-                return instance.controlSchemeChosen;
-        }
-        return false; // never reached
-    }
-    public static bool GetLevel(Level level) {
-        switch (level) {
-            case Level.completeTutorial1:
-                return instance.completeTutorial1;
-            case Level.completeTutorial2:
-                return instance.completeTutorial2;
-            case Level.completeTutorial3:
-                return instance.completeTutorial3;
-            case Level.completeTutorial4:
-                return instance.completeTutorial4;
-            case Level.completeMARL1:
-                return instance.completeMARL1;
-            case Level.completeMARL2:
-                return instance.completeMARL2;
-            case Level.completeMARL3:
-                return instance.completeMARL3;
-            case Level.completeMARL4:
-                return instance.completeMARL4;
-        }
-        return false; // never reached
+    public static bool GetData(string name) {
+        return (bool)instance.GetType().GetField(name).GetValue(instance);
     }
 }

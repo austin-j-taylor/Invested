@@ -15,10 +15,6 @@ public class Environment_Tutorial4 : EnvironmentCinematic {
 
         Player.CanControl = false;
         Player.CanControlMovement = false;
-        Player.CanControlZinc = false;
-        Player.CanThrowCoins = false;
-        Player.PlayerInstance.CoinHand.Pouch.Clear();
-        HUD.ControlWheelController.SetLockedState(ControlWheelController.LockedState.LockedToBubble);
 
         // Set cinemachine virtual camera properties
         InitializeCinemachine();
@@ -46,11 +42,6 @@ public class Environment_Tutorial4 : EnvironmentCinematic {
             yield return null;
             vcam.enabled = false;
             yield return new WaitForSeconds(2);
-        } else {
-            Player.CanControlZinc = true;
-            Player.CanThrowCoins = true;
-            Player.PlayerInstance.CoinHand.Pouch.Fill();
-            HUD.ControlWheelController.SetLockedState(ControlWheelController.LockedState.Unlocked);
         }
         CameraController.DisableCinemachineCamera(vcam);
         Player.CanControl = true;
@@ -62,6 +53,7 @@ public class Environment_Tutorial4 : EnvironmentCinematic {
         yield return null;
 
         Player.CanThrowCoins = true;
+        FlagsController.SetFlag("pwr_coins");
         while (HUD.ConversationHUDController.IsOpen)
             yield return null;
         if(Player.PlayerInstance.CoinHand.Pouch.Count == 0) {
@@ -76,7 +68,6 @@ public class Environment_Tutorial4 : EnvironmentCinematic {
         while(!doorNode1.On) {
             yield return null;
         }
-        HUD.ControlWheelController.SetLockedState(ControlWheelController.LockedState.Unlocked);
         HUD.MessageOverlayCinematic.FadeOutInto("Open the " + ControlWheel + " and choose " + CoinshotMode + ".");
         while (Player.PlayerIronSteel.Mode != PlayerPullPushController.ControlMode.Coinshot) {
             yield return null;
@@ -96,8 +87,7 @@ public class Environment_Tutorial4 : EnvironmentCinematic {
 
         while (HUD.ConversationHUDController.IsOpen)
             yield return null;
-        Player.CanControlZinc = true;
-
+        FlagsController.SetFlag("pwr_zinc");
         HUD.MessageOverlayCinematic.FadeIn(KeyZincTime + " to tap " + Zinc + ".");
         while (!Player.PlayerZinc.InZincTime) {
             yield return null;

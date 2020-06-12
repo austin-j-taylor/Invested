@@ -22,6 +22,7 @@ public class SpikePit : MonoBehaviour {
     private const float dragChasing = .3f;
     private const float animationTime = 4;
 
+    // NEED to replace this with a FSM eventually good lord what was I doing in 2018
     private bool facingPlayer;
     private bool tracingPlayer;
     private bool chasingPlayer;
@@ -63,10 +64,6 @@ public class SpikePit : MonoBehaviour {
         progress = 0;
     }
 
-    /*
-     * This should've been done with a state machine
-     * imagine having a brain
-     */
     private void Update() {
         if (!PauseMenu.IsPaused) {
             //Debug.Log(facingPlayer + " . " + tracingPlayer + " > " + chasingPlayer + " > " + tracingPath + " > " + releasingPlayer);

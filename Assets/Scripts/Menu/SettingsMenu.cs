@@ -169,7 +169,7 @@ public class SettingsMenu : MonoBehaviour {
     }
     public static void RefreshSettingHelpOverlay(int newHelpOverlay) {
         settingsData.helpOverlay = newHelpOverlay;
-        ButtonSetting helpOverlay = interfaceHeader.Find("HelpOverlayLabel").GetComponent<ButtonSetting>();
+        ButtonSetting helpOverlay = interfaceHeader.Find("HUDLabel/Children/HelpOverlayLabel").GetComponent<ButtonSetting>();
         helpOverlay.RefreshData();
         helpOverlay.RefreshText();
     }

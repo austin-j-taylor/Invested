@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.IO;
 
-// Handles saving certain data associated with the player, like time trial completions and abilities.
+// Handles saving certain data associated with the player, like time trial completions.
 [System.Serializable]
 public class PlayerDataController : MonoBehaviour {
 
@@ -10,8 +10,6 @@ public class PlayerDataController : MonoBehaviour {
     // Data (must be public for JSON)
     [HideInInspector]
     public double timeTrial_TestingGrounds, reachGoal_TestingGrounds, breakTargets_TestingGrounds, timeTrial1_Luthadel, timeTrial2_Luthadel, breakTargets_Luthadel;
-    [HideInInspector]
-    public int pwr_controlWheel, pwr_steel, pwr_pewter, pwr_zinc, pwr_coins; // for unlocking abilities
     
     private static PlayerDataController instance;
 
@@ -78,29 +76,29 @@ public class PlayerDataController : MonoBehaviour {
         }
         instance.Refresh();
     }
-    public static void SetData(string name, int data) {
-        switch (name) {
-            case "pwr_steel":
-                instance.pwr_steel = data;
-                break;
-            case "pwr_controlWheel":
-                instance.pwr_controlWheel = data;
-                break;
-            case "pwr_pewter":
-                instance.pwr_pewter = data;
-                break;
-            case "pwr_zinc":
-                instance.pwr_zinc = data;
-                break;
-            case "pwr_coins":
-                instance.pwr_coins = data;
-                break;
-            default:
-                Debug.LogError("SetData with invalid ID: " + name);
-                break;
-        }
-        instance.Refresh();
-    }
+    //public static void SetData(string name, int data) {
+    //    switch (name) {
+    //        case "pwr_steel":
+    //            instance.pwr_steel = data;
+    //            break;
+    //        case "pwr_controlWheel":
+    //            instance.pwr_controlWheel = data;
+    //            break;
+    //        case "pwr_pewter":
+    //            instance.pwr_pewter = data;
+    //            break;
+    //        case "pwr_zinc":
+    //            instance.pwr_zinc = data;
+    //            break;
+    //        case "pwr_coins":
+    //            instance.pwr_coins = data;
+    //            break;
+    //        default:
+    //            Debug.LogError("SetData with invalid ID: " + name);
+    //            break;
+    //    }
+    //    instance.Refresh();
+    //}
 
     public static double GetTime(string name) {
         switch (name) {
@@ -120,21 +118,5 @@ public class PlayerDataController : MonoBehaviour {
                 Debug.LogError("GetTime with invalid ID: " + name);
                 return -1;
         }
-    }
-
-    public static bool UnlockedControlWheel() {
-        return instance.pwr_controlWheel == 1;
-    }
-    public static bool UnlockedSteel() {
-        return instance.pwr_steel == 1;
-    }
-    public static bool UnlockedPewter() {
-        return instance.pwr_pewter == 1;
-    }
-    public static bool UnlockedZinc() {
-        return instance.pwr_zinc == 1;
-    }
-    public static bool UnlockedCoins() {
-        return instance.pwr_coins == 1;
     }
 }

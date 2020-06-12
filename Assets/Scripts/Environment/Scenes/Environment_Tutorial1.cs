@@ -12,12 +12,7 @@ public class Environment_Tutorial1 : EnvironmentCinematic {
 
         Player.CanControl = false;
         Player.CanControlMovement = false;
-        Player.CanThrowCoins = false;
         Player.PlayerIronSteel.IronReserve.IsEnabled = false;
-        Player.PlayerIronSteel.SteelReserve.IsEnabled = false;
-        Player.PlayerPewter.PewterReserve.IsEnabled = false;
-        Player.CanControlZinc = false;
-        HUD.ControlWheelController.SetLockedState(ControlWheelController.LockedState.LockedFully);
 
         // Set cinemachine virtual camera properties
         InitializeCinemachine();

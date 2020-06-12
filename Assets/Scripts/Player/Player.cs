@@ -211,12 +211,24 @@ public class Player : PewterEntity {
         if (mode == LoadSceneMode.Single) { // Not loading all of the scenes, as it does at startup
             PlayerAudioController.Clear();
             PlayerIronSteel.Clear();
+            CanPause = true;
             CanControl = true;
             CanControlMovement = true;
-            CanControlZinc = true;
-            CanThrowCoins = true;
-            CanPause = true;
-            //GodMode = true;
+
+            // Set unlocked abilities
+            PlayerIronSteel.IronReserve.IsEnabled = true;
+            PlayerIronSteel.SteelReserve.IsEnabled = FlagsController.GetData("pwr_steel");
+            PlayerPewter.PewterReserve.IsEnabled = FlagsController.GetData("pwr_pewter");
+            CanControlZinc = FlagsController.GetData("pwr_zinc");
+            CanThrowCoins = FlagsController.GetData("pwr_coins");
+            if(FlagsController.GetData("pwr_coins")) {
+                CanThrowCoins = true;
+                CoinHand.Pouch.Fill();
+            } else {
+                CanThrowCoins = false;
+                CoinHand.Pouch.Clear();
+            }
+
 
             SetFrameMaterial(frameMaterial);
             SetSmokeMaterial(smokeMaterial);

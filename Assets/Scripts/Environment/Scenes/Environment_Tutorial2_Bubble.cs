@@ -11,7 +11,7 @@ public class Environment_Tutorial2_Bubble : EnvironmentWithTriggers {
     protected override IEnumerator Trigger0() {
         while (HUD.ConversationHUDController.IsOpen)
             yield return null;
-        HUD.ControlWheelController.SetLockedState(ControlWheelController.LockedState.LockedToBubble);
+        FlagsController.SetFlag("wheel_bubble");
         HUD.MessageOverlayCinematic.FadeIn("Open the " + ControlWheel + " and choose " + Red("Bubble") + " to Push on all nearby metals.");
         while (!HUD.ControlWheelController.IsOpen)
             yield return null;

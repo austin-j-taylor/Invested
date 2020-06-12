@@ -5,13 +5,10 @@ using UnityEngine.UI;
  */
 public class ControlSchemeScreen : MonoBehaviour {
 
-
     private Button mouseKeyboardButton;
     private Button gamepadButton;
     private Button mkEQButton;
     private Button mk54Button;
-
-    public static FlagsController flagsData;
 
     public bool IsOpen {
         get {
@@ -20,8 +17,6 @@ public class ControlSchemeScreen : MonoBehaviour {
     }
 
     private void Awake() {
-        flagsData = gameObject.AddComponent<FlagsController>();
-
         Button[] buttons = GetComponentsInChildren<Button>();
         mouseKeyboardButton = buttons[0];
         gamepadButton = buttons[1];
@@ -44,7 +39,7 @@ public class ControlSchemeScreen : MonoBehaviour {
         SettingsMenu.settingsData.SaveSettings();
         Messages.Refresh();
         HUD.UpdateText();
-        FlagsController.SetFlag(FlagsController.Flag.ControlSchemeChosen);
+        FlagsController.SetFlag("controlSchemeChosen");
         gameObject.SetActive(false);
         MainMenu.OpenTitleScreen();
     }
