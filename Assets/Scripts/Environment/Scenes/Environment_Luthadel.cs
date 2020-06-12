@@ -5,10 +5,9 @@ public class Environment_Luthadel : Environment {
 
     [SerializeField]
     private Material Material_smokeMaterial = null;
-    [SerializeField]
-    private bool dayMode = false;
 
     // Objects that are enabled or disabled, etc., depending on the time of day
+    public static bool DayMode { get; set; } = false;
     [SerializeField]
     public CloudMaster dayClouds = null;
     [SerializeField]
@@ -34,13 +33,13 @@ public class Environment_Luthadel : Environment {
 
         // Enable/disable objects and set other style properties depending on the time of day
         for (int i = 0; i < dayObjects.Length; i++) {
-            dayObjects[i].SetActive(dayMode);
+            dayObjects[i].SetActive(DayMode);
         }
         for (int i = 0; i < nightObjects.Length; i++) {
-            nightObjects[i].SetActive(!dayMode);
+            nightObjects[i].SetActive(!DayMode);
         }
 
-        if (dayMode) {
+        if (DayMode) {
             RenderSettings.skybox = daySkyBox;
             RenderSettings.sun = dayDirectionalLight;
             CameraController.SetCloudData(dayClouds);

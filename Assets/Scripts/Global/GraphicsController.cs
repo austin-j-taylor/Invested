@@ -76,11 +76,14 @@ public class GraphicsController : MonoBehaviour {
     public static void SetMotionBlur(bool enable) {
         instance.profile.motionBlur.enabled = enable && MotionBlur;
     }
+    // Doesn't actually toggle aberration/vignette on and off; just gives then the option of doing so in zinc time
     public static void SetAberration(bool enable) {
-        instance.profile.chromaticAberration.enabled = enable && Aberration;
+        if (!enable)
+            instance.profile.chromaticAberration.enabled = false;
     }
     public static void SetVignette(bool enable) {
-        instance.profile.vignette.enabled = enable && Vignette;
+        if (!enable)
+            instance.profile.vignette.enabled = false;
     }
     public static void SetClouds(bool enable) {
         CloudsEnabled = enable;
@@ -115,11 +118,11 @@ public class GraphicsController : MonoBehaviour {
     // returns intensity
     public float SetZincEffect(bool enable, float intensity = 0) {
         if (HUD.ControlWheelController.IsOpen) {
-            //enabled = false; // If Control Wheel is open, don't show the effect
+            //enable = false; // If Control Wheel is open, don't show the effect
             intensity = intensity / 3;
         }
-        SetAberration(enable);
-        SetVignette(enable);
+        instance.profile.chromaticAberration.enabled = enable && Aberration;
+        instance.profile.vignette.enabled = enable && Vignette;
 
         if (enable) {
             aberrationSettings.intensity = intensity;

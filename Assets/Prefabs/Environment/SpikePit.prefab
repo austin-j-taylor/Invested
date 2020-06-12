@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7346809778411457202}
   - component: {fileID: 7346809778411457205}
   - component: {fileID: 7346809778411457204}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: SpikePit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,7 +93,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7346809778430334438}
-  m_Layer: 12
+  m_Layer: 14
   m_Name: SpikeTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -128,7 +128,7 @@ GameObject:
   - component: {fileID: 7346809780105839781}
   - component: {fileID: 7346809780105839779}
   - component: {fileID: 7346809780105839778}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: SpikeHome
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -176,6 +176,10 @@ MonoBehaviour:
   - {x: 3.969293, y: 17.375532, z: 0}
   - {x: 5.233758, y: 17.124815, z: 0}
   - {x: 6.091099, y: 16.940683, z: 0}
+  loop: 0
+  animationTime: 5
+  scale: 1
+  localSpace: 1
 --- !u!114 &7346809780105839778
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -198,6 +202,10 @@ MonoBehaviour:
   - {x: 0, y: 15.035717, z: 0}
   - {x: 0, y: 2.5, z: 0}
   - {x: 0, y: 2, z: 0}
+  loop: 0
+  animationTime: 5
+  scale: 1
+  localSpace: 1
 --- !u!1 &7346809780361428419
 GameObject:
   m_ObjectHideFlags: 0
@@ -214,7 +222,7 @@ GameObject:
   - component: {fileID: 7346809780361428478}
   - component: {fileID: 7346809780361428417}
   - component: {fileID: 7346809780361428474}
-  m_Layer: 13
+  m_Layer: 14
   m_Name: Spike
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -260,6 +268,8 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -284,6 +294,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &7346809780361428479
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -297,11 +308,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7a7e821bb4857f4e84128d2a61ff6dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wieght: 0
-  radis: 0
   netMass: 0
   magneticMass: 0
-  childMagnetics: []
+  calculateCOMFromColliders: 0
 --- !u!54 &7346809780361428478
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -332,8 +341,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c2788236ad887d40a34d1c55803b2b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pullLines: []
-  pushLines: []
+  rb: {fileID: 0}
 --- !u!64 &7346809780361428474
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -344,7 +352,7 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 4
   m_Convex: 1
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 4300000, guid: dc980bdf44050ce4492a391ce5c88da6, type: 3}

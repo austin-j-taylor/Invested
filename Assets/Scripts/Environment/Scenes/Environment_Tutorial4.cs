@@ -72,7 +72,7 @@ public class Environment_Tutorial4 : EnvironmentCinematic {
             HUD.MessageOverlayCinematic.FadeOut();
             yield return new WaitForSecondsRealtime(1);
         }
-        HUD.MessageOverlayCinematic.FadeIn(KeyThrow + " while passively burning metals to throw and " + Push + " on a " + O_Coin + ".");
+        HUD.MessageOverlayCinematic.FadeIn(KeyThrow + "  to throw and " + Push + " on a " + O_Coin + ".");
         while(!doorNode1.On) {
             yield return null;
         }

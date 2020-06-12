@@ -55,7 +55,8 @@ public class SceneSelectMenu : MonoBehaviour {
     private Button tutorial2Button;
     private Button tutorial3Button;
     private Button tutorial4Button;
-    private Button luthadelButton;
+    private Button luthadelButtonDay;
+    private Button luthadelButtonNight;
     private Button shootingGroundsButton;
     private Button sandboxButton;
     private Button southernMountainsButton;
@@ -82,7 +83,8 @@ public class SceneSelectMenu : MonoBehaviour {
         tutorial2Button = tutorialsHeader.Find("Tutorial2").GetComponent<Button>();
         tutorial3Button = tutorialsHeader.Find("Tutorial3").GetComponent<Button>();
         tutorial4Button = tutorialsHeader.Find("Tutorial4").GetComponent<Button>();
-        luthadelButton = sandboxesHeader.Find("Luthadel").GetComponent<Button>();
+        luthadelButtonDay = sandboxesHeader.Find("LuthadelDay").GetComponent<Button>();
+        luthadelButtonNight = sandboxesHeader.Find("LuthadelNight").GetComponent<Button>();
         shootingGroundsButton = sandboxesHeader.Find("ShootingGrounds").GetComponent<Button>();
         sandboxButton = sandboxesHeader.Find("Sandbox").GetComponent<Button>();
         seaOfMetalButton = sandboxesHeader.Find("SeaOfMetal").GetComponent<Button>();
@@ -101,7 +103,8 @@ public class SceneSelectMenu : MonoBehaviour {
         tutorial2Button.onClick.AddListener(OnClickedTutorial2Button);
         tutorial3Button.onClick.AddListener(OnClickedTutorial3Button);
         tutorial4Button.onClick.AddListener(OnClickedTutorial4Button);
-        luthadelButton.onClick.AddListener(OnClickedLuthadel);
+        luthadelButtonDay.onClick.AddListener(OnClickedLuthadelDay);
+        luthadelButtonNight.onClick.AddListener(OnClickedLuthadelNight);
         shootingGroundsButton.onClick.AddListener(OnClickedShootingGrounds);
         sandboxButton.onClick.AddListener(OnClickedSandbox);
         southernMountainsButton.onClick.AddListener(OnClickedSouthernMountains);
@@ -136,7 +139,8 @@ public class SceneSelectMenu : MonoBehaviour {
         southernMountainsButton.interactable = FlagsController.GetLevel(FlagsController.Level.completeTutorial2);
         seaOfMetalButton.interactable = FlagsController.GetLevel(FlagsController.Level.completeTutorial3);
         stormsButton.interactable = FlagsController.GetLevel(FlagsController.Level.completeTutorial3);
-        luthadelButton.interactable = FlagsController.GetLevel(FlagsController.Level.completeTutorial4);
+        luthadelButtonDay.interactable = FlagsController.GetLevel(FlagsController.Level.completeTutorial4);
+        luthadelButtonNight.interactable = FlagsController.GetLevel(FlagsController.Level.completeTutorial4);
     }
 
     public void Close() {
@@ -239,7 +243,12 @@ public class SceneSelectMenu : MonoBehaviour {
         LoadSceneFromClick(sceneTutorial4);
     }
 
-    private void OnClickedLuthadel() {
+    private void OnClickedLuthadelDay() {
+        Environment_Luthadel.DayMode = true;
+        LoadSceneFromClick(sceneLuthadel);
+    }
+    private void OnClickedLuthadelNight() {
+        Environment_Luthadel.DayMode = false;
         LoadSceneFromClick(sceneLuthadel);
     }
     private void OnClickedShootingGrounds() {
