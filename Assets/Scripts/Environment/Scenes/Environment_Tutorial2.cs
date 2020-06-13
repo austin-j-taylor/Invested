@@ -41,6 +41,7 @@ public class Environment_Tutorial2 : EnvironmentCinematic {
     }
 
     private IEnumerator Procedure() {
+        backWall.SetActive(false);
         // Skip the intro cutscene if the player is starting elsewhere in the level
         if ((Player.PlayerInstance.transform.position - vcam.transform.position).magnitude < 30) {
             yield return null;
@@ -52,7 +53,6 @@ public class Environment_Tutorial2 : EnvironmentCinematic {
         Player.CanControlMovement = true;
         CameraController.Clear();
 
-        backWall.SetActive(false);
     }
 
     protected override IEnumerator Trigger0() {

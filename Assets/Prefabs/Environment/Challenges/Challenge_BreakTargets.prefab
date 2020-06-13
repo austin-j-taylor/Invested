@@ -12,15 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 865796033130aaf4191904a12d7cc578, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trialDataName: breakTargets_TestingGrounds
-  challengeName: Testing Grounds
-  challengeDescription: 'Activate all the targets by hitting them hard with objects.
+  trialDataName: breakTargets_
+  challengeName: Shooting Grounds
+  challengeDescription: 'Activate all the targets.
 
-    -
-    Push metals (e.g. coins) at targets to activate them.
-
-    - Push yourself into
-    targets to activate them.'
+    - Hit the targets with projectiles
+    (or yourself) to activate them.'
   failureObjects: []
 --- !u!1001 &6344095539882979094
 PrefabInstance:
@@ -145,6 +142,11 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.25
       objectReference: {fileID: 0}
+    - target: {fileID: 7988499861580894168, guid: 9991b54b5541cc041bf4183450d9567e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8262057227170433222, guid: 9991b54b5541cc041bf4183450d9567e,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -219,6 +221,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Challenge_BreakTargets
+      objectReference: {fileID: 0}
+    - target: {fileID: 8262057228264075525, guid: 9991b54b5541cc041bf4183450d9567e,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9074483761307004244, guid: 9991b54b5541cc041bf4183450d9567e,
         type: 3}

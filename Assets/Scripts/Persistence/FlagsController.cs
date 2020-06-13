@@ -59,7 +59,11 @@ public class FlagsController : MonoBehaviour {
 
     public static void SetFlag(string name) {
 
-        instance.GetType().GetField(name).SetValue(instance, true);
+        FieldInfo field = instance.GetType().GetField(name);
+        if (field == null) {
+            Debug.LogError("SetFlag with invalid name: " + name);
+        }
+        field.SetValue(instance, true);
 
         Debug.Log("Set flag: " + name);
         // When ability flags are set, the corresponding power should be immediately unlocked.
@@ -91,6 +95,10 @@ public class FlagsController : MonoBehaviour {
     }
 
     public static bool GetData(string name) {
-        return (bool)instance.GetType().GetField(name).GetValue(instance);
+        FieldInfo field = instance.GetType().GetField(name);
+        if (field == null) {
+            Debug.LogError("GetData with invalid name: " + name);
+        }
+        return (bool)field.GetValue(instance);
     }
 }

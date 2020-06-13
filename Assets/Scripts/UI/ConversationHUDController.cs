@@ -106,7 +106,7 @@ public class ConversationHUDController : MonoBehaviour {
                     switch (currentConversation.content[i]) {
                         case 'n': // the environment/neutral/none
                             headerText.text = "";
-                            currentSpeaker = Player.PlayerVoiceBeeper;
+                            currentSpeaker = null;
                             break;
                         case 's': // the Sphere/Prima
                             headerText.text = Color_Prima("Primer Sphere");
@@ -114,11 +114,11 @@ public class ConversationHUDController : MonoBehaviour {
                             break;
                         case 'k': // the KOLOSS
                             headerText.text = Color_Kog("Kog");
-                            currentSpeaker = Player.PlayerVoiceBeeper;
+                            currentSpeaker = null;
                             break;
                         case 'm': // other machines
                             headerText.text = Color_Machines("Machine");
-                            currentSpeaker = Player.PlayerVoiceBeeper;
+                            currentSpeaker = null;
                             break;
                         case '*': // Custom signifier. Need to parse up to the next backslash as the name to use.
                             StringBuilder name = new StringBuilder();
@@ -128,7 +128,7 @@ public class ConversationHUDController : MonoBehaviour {
                                 i++;
                             }
                             headerText.text = Color_Machines(name.ToString());
-                            currentSpeaker = Player.PlayerVoiceBeeper;
+                            currentSpeaker = null;
                             break;
                         case '?': // ???
                             headerText.text = Color_Prima("???");
@@ -304,7 +304,7 @@ public class ConversationHUDController : MonoBehaviour {
                     // and the speaker beeps, except for some punctuation-like characters
                     char character = currentConversation.content[i];
                     if (state == State.Writing && character != '(' && character != ')' && character != '.' && character != '\n' && character != '\r') {
-                        if(!Keybinds.AccelerateConversation())
+                        if(!Keybinds.AccelerateConversation() && currentSpeaker != null)
                             currentSpeaker.Beep();
                     }
                 }

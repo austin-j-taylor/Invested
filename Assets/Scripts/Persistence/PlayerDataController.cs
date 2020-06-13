@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.IO;
+using System.Reflection;
 
 // Handles saving certain data associated with the player, like time trial completions.
 [System.Serializable]
@@ -9,7 +10,7 @@ public class PlayerDataController : MonoBehaviour {
 
     // Data (must be public for JSON)
     [HideInInspector]
-    public double timeTrial_TestingGrounds, reachGoal_TestingGrounds, breakTargets_TestingGrounds, timeTrial1_Luthadel, timeTrial2_Luthadel, breakTargets_Luthadel;
+    public double timeTrial_TestingGrounds, reachGoal_TestingGrounds, breakTargets_TestingGrounds, timeTrial1_Luthadel, timeTrial2_Luthadel, breakTargets_Luthadel, breakTargets_ShootingGrounds;
     
     private static PlayerDataController instance;
 
@@ -51,72 +52,19 @@ public class PlayerDataController : MonoBehaviour {
     }
 
     public static void SetTimeTrial(string name, double time) {
-        switch (name) {
-            case "timeTrial_TestingGrounds":
-                instance.timeTrial_TestingGrounds = time;
-                break;
-            case "reachGoal_TestingGrounds":
-                instance.reachGoal_TestingGrounds = time;
-                break;
-            case "breakTargets_TestingGrounds":
-                instance.breakTargets_TestingGrounds = time;
-                break;
-            case "timeTrial1_Luthadel":
-                instance.timeTrial1_Luthadel = time;
-                break;
-            case "timeTrial2_Luthadel":
-                instance.timeTrial2_Luthadel = time;
-                break;
-            case "breakTargets_Luthadel":
-                instance.breakTargets_Luthadel = time;
-                break;
-            default:
-                Debug.LogError("SetTimeTrial with invalid ID: " + name);
-                break;
+        FieldInfo field = instance.GetType().GetField(name);
+        if (field == null) {
+            Debug.LogError("SetTimeTrial with invalid name: " + name);
         }
+        field.SetValue(instance, time);
         instance.Refresh();
     }
-    //public static void SetData(string name, int data) {
-    //    switch (name) {
-    //        case "pwr_steel":
-    //            instance.pwr_steel = data;
-    //            break;
-    //        case "pwr_controlWheel":
-    //            instance.pwr_controlWheel = data;
-    //            break;
-    //        case "pwr_pewter":
-    //            instance.pwr_pewter = data;
-    //            break;
-    //        case "pwr_zinc":
-    //            instance.pwr_zinc = data;
-    //            break;
-    //        case "pwr_coins":
-    //            instance.pwr_coins = data;
-    //            break;
-    //        default:
-    //            Debug.LogError("SetData with invalid ID: " + name);
-    //            break;
-    //    }
-    //    instance.Refresh();
-    //}
-
     public static double GetTime(string name) {
-        switch (name) {
-            case "timeTrial_TestingGrounds":
-                return instance.timeTrial_TestingGrounds;
-            case "reachGoal_TestingGrounds":
-                return instance.reachGoal_TestingGrounds;
-            case "breakTargets_TestingGrounds":
-                return instance.breakTargets_TestingGrounds;
-            case "timeTrial1_Luthadel":
-                return instance.timeTrial1_Luthadel;
-            case "timeTrial2_Luthadel":
-                return instance.timeTrial2_Luthadel;
-            case "breakTargets_Luthadel":
-                return instance.breakTargets_Luthadel;
-            default:
-                Debug.LogError("GetTime with invalid ID: " + name);
-                return -1;
+        FieldInfo field = instance.GetType().GetField(name);
+        if (field == null) {
+            Debug.LogError("GetTime with invalid name: " + name);
+            return -1;
         }
+        return (double)field.GetValue(instance);
     }
 }

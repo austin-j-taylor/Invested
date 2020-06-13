@@ -67,11 +67,13 @@ public class MessageOverlayCinematic : MonoBehaviour {
 
     // Fade out over 1-2 seconds
     public void FadeOut() {
+        StopAllCoroutines();
         anim.SetBool("IsVisible", false);
     }
 
     // Fades out, then fades into newText
     public void FadeOutInto(string newText) {
+        StopAllCoroutines();
         FadeOut();
         StartCoroutine(WaitThenFadeInto(newText));
     }

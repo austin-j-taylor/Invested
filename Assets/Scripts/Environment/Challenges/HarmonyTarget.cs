@@ -14,12 +14,11 @@ public class HarmonyTarget : MonoBehaviour {
     private const float timeToLerpBack = 2;
 
     [SerializeField]
-    private bool needsSpikes = true;
+    private int numSpikes = 3;
 
     private bool playerHasEntered;
     private bool controllingPlayer;
     private Quaternion zeroRotation;
-    private int numSpikes;
 
     private CinemachineVirtualCamera vcam;
     private Rigidbody rb;
@@ -56,14 +55,25 @@ public class HarmonyTarget : MonoBehaviour {
 
         playerHasEntered = false;
         controllingPlayer = false;
-        if(needsSpikes) {
-            numSpikes = 0;
-            spikeLeft.GetComponent<Renderer>().enabled = false;
-            spikeCenter.GetComponent<Renderer>().enabled = false;
-            spikeRight.GetComponent<Renderer>().enabled = false;
-        } else {
-            numSpikes = 3;
-            anim.SetInteger("SpikeCount", numSpikes);
+        switch (numSpikes) {
+            case 3:
+                spikeLeft.GetComponent<Renderer>().enabled = true;
+                spikeCenter.GetComponent<Renderer>().enabled = true;
+                spikeRight.GetComponent<Renderer>().enabled = true;
+                anim.SetInteger("SpikeCount", numSpikes);
+                break;
+            case 2:
+                spikeLeft.GetComponent<Renderer>().enabled = true;
+                spikeCenter.GetComponent<Renderer>().enabled = false;
+                spikeRight.GetComponent<Renderer>().enabled = true;
+                anim.SetInteger("SpikeCount", numSpikes);
+                break;
+            case 1:
+                spikeLeft.GetComponent<Renderer>().enabled = true;
+                spikeCenter.GetComponent<Renderer>().enabled = false;
+                spikeRight.GetComponent<Renderer>().enabled = false;
+                anim.SetInteger("SpikeCount", numSpikes);
+                break;
         }
         zeroRotation = transform.rotation;
     }
