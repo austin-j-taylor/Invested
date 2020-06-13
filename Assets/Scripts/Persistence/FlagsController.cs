@@ -61,6 +61,7 @@ public class FlagsController : MonoBehaviour {
 
         instance.GetType().GetField(name).SetValue(instance, true);
 
+        Debug.Log("Set flag: " + name);
         // When ability flags are set, the corresponding power should be immediately unlocked.
         switch (name) {
             case "pwr_steel":

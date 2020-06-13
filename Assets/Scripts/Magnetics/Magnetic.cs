@@ -369,9 +369,9 @@ public class Magnetic : MonoBehaviour {
     }
 
     // Brighten this particular metal's blue line
-    public void BrightenLine(float factor) {
+    public void BrightenLine() {
         //blueLine.LineColor = brightBlue;
-        blueLine.LineColor = blueLine.LineColor * factor;
+        blueLine.LineColor = blueLine.LineColor * 2;
     }
 
     public void DisableBlueLine() {

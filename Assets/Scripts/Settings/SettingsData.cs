@@ -81,10 +81,15 @@ public class SettingsData : MonoBehaviour {
     public float timeScale;
 
     private void Awake() {
-        LoadSettings();
+        LoadSettings(false);
     }
 
-    public void LoadSettings() {
+    private void Start() {
+        SetSettingsWhenChanged();
+    }
+
+    public void LoadSettings(bool setSettingsChanged = true) {
+        Debug.Log("Settings loaded");
         try {
             StreamReader reader = new StreamReader(configFileName, true);
 
@@ -93,12 +98,26 @@ public class SettingsData : MonoBehaviour {
 
             JsonUtility.FromJsonOverwrite(jSONText, this);
 
+            if(setSettingsChanged)
+                SetSettingsWhenChanged();
+
         } catch (DirectoryNotFoundException e) {
             Debug.LogError(e.Message);
         }
     }
+    // Manually apply certain setting effects when they are changed
+    private void SetSettingsWhenChanged() {
+        GameManager.AudioManager.SetAudioLevels(audioMaster, audioMusic, audioEffects, audioVoiceBeeps);
+        TimeController.CurrentTimeScale = timeScale;
+        //GraphicsController.SetAntialiasing(antialiasing == 1);
+        //GraphicsController.SetAmbientOcclusion(ambientOcclusion == 1);
+        //GraphicsController.SetMotionBlur(motionBlur == 1);
+        //GraphicsController.SetBloom(bloom == 1);
+        GraphicsController.SetFullscreenResolution(resolution, (FullScreenMode)fullscreen);
+    }
 
     public void SaveSettings() {
+        Debug.Log("Settings saved");
         try {
             string jSONText = JsonUtility.ToJson(this, true);
 
@@ -106,14 +125,7 @@ public class SettingsData : MonoBehaviour {
             writer.Write(jSONText);
             writer.Close();
 
-            // Manually apply certain setting effects
-            GameManager.AudioManager.SetAudioLevels(audioMaster, audioMusic, audioEffects, audioVoiceBeeps);
-            TimeController.CurrentTimeScale = timeScale;
-            //GraphicsController.SetAntialiasing(antialiasing == 1);
-            //GraphicsController.SetAmbientOcclusion(ambientOcclusion == 1);
-            //GraphicsController.SetMotionBlur(motionBlur == 1);
-            //GraphicsController.SetBloom(bloom == 1);
-            GraphicsController.SetFullscreenResolution(resolution, (FullScreenMode)fullscreen);
+            SetSettingsWhenChanged();
 
         } catch (DirectoryNotFoundException e) {
             Debug.LogError(e.Message);

@@ -103,8 +103,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2089367658}
-  m_LocalRotation: {x: 0.0000000074505797, y: 1, z: 0.0000005513429, w: 0}
-  m_LocalPosition: {x: 0.0000076293945, y: 1.3638713, z: 5.9999704}
+  m_LocalRotation: {x: -1.4210855e-14, y: -1, z: 3.9375905e-14, w: 0.000000004966992}
+  m_LocalPosition: {x: 0.000000059601916, y: 1.3638024, z: 5.999996}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1603387748}
@@ -301,6 +301,7 @@ GameObject:
   - component: {fileID: 135173279549497598}
   - component: {fileID: 108113844945015804}
   - component: {fileID: 114235657525651034}
+  - component: {fileID: 5094596189476014297}
   m_Layer: 11
   m_Name: HarmonySphere
   m_TagString: Untagged
@@ -427,6 +428,19 @@ MonoBehaviour:
   netMass: 0
   magneticMass: 1
   calculateCOMFromColliders: 0
+--- !u!114 &5094596189476014297
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1592751506933612}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13703930063244143b60a25b8271e6e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flag: 
 --- !u!1 &1797778727208666
 GameObject:
   m_ObjectHideFlags: 0
@@ -557,6 +571,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fe57380dd8cfe842aaacfb94d629e7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  needsSpikes: 1
   positionLeft: {x: 0, y: 0, z: 2.39419}
 --- !u!1 &1881854758097500
 GameObject:

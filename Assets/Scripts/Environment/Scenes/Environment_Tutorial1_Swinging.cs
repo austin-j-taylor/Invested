@@ -1,17 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Environment_Tutorial1_Swinging : Environment {
+public class Environment_Tutorial1_Swinging : EnvironmentCinematic {
 
-
-    [SerializeField]
-    private MessageTrigger trigger = null;
-
-    private void Start() {
-        trigger.routine = Trigger();
-    }
-
-    private IEnumerator Trigger() {
+    protected override IEnumerator Trigger0() {
         while (HUD.ConversationHUDController.IsOpen) {
             yield return null;
         }

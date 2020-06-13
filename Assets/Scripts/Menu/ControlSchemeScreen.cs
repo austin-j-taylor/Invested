@@ -35,11 +35,13 @@ public class ControlSchemeScreen : MonoBehaviour {
         gameObject.SetActive(true);
     }
 
-    public void Close() {
-        SettingsMenu.settingsData.SaveSettings();
-        Messages.Refresh();
-        HUD.UpdateText();
-        FlagsController.SetFlag("controlSchemeChosen");
+    public void Close(bool refreshing) {
+        if(refreshing) {
+            SettingsMenu.settingsData.SaveSettings();
+            Messages.Refresh();
+            HUD.UpdateText();
+            FlagsController.SetFlag("controlSchemeChosen");
+        }
         gameObject.SetActive(false);
         MainMenu.OpenTitleScreen();
     }
@@ -53,14 +55,14 @@ public class ControlSchemeScreen : MonoBehaviour {
     }
     public void OnClickedGamepad() {
         SettingsMenu.settingsData.controlScheme = SettingsData.Gamepad;
-        Close();
+        Close(true);
     }
     public void OnClickedMKEQ() {
         SettingsMenu.settingsData.controlScheme = SettingsData.MKEQ;
-        Close();
+        Close(true);
     }
     public void OnClickedMK54() {
         SettingsMenu.settingsData.controlScheme = SettingsData.MK54;
-        Close();
+        Close(true);
     }
 }

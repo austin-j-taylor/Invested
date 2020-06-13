@@ -797,10 +797,11 @@ public class TextCodes : MonoBehaviour {
     }
     public static string KeyMultiMark {
         get {
-            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-                return Y;
-            else
-                return Shift;
+            return KeyWalk;
+            //if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            //    return Y;
+            //else
+            //    return Shift;
         }
     }
     public static string KeyPushPullStrength {

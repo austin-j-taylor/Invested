@@ -6622,8 +6622,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 188685054}
-  m_LocalRotation: {x: 0.33556446, y: 0.16746731, z: -0.060750347, w: 0.92501926}
-  m_LocalPosition: {x: 90.64, y: 76.426895, z: -27.18768}
+  m_LocalRotation: {x: 0.26584297, y: 0.45131388, z: -0.14286898, w: 0.8397808}
+  m_LocalPosition: {x: -3.065, y: 0.58599997, z: 1.9719999}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 682333587}
@@ -6671,8 +6671,8 @@ MonoBehaviour:
   sourceCamera: {fileID: 188685060}
   outlineCamera: {fileID: 682333588}
   outlineShaderMaterial: {fileID: 0}
-  renderTexture: {fileID: 1094524661}
-  extraRenderTexture: {fileID: 418171295}
+  renderTexture: {fileID: 1399538572}
+  extraRenderTexture: {fileID: 1060923682}
 --- !u!81 &188685058
 AudioListener:
   m_ObjectHideFlags: 0
@@ -7034,7 +7034,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Highlighted
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 194085009}
   m_OnClick:
     m_PersistentCalls:
@@ -7375,7 +7375,7 @@ MonoBehaviour:
     m_LineSpacing: 0.75
   m_Text: 'Learn powers
 
-    and unlock Story/Sandbox levels.'
+    and unlock Sandboxes'
 --- !u!222 &217089695
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -11988,41 +11988,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 409897868}
   m_CullTransparentMesh: 0
---- !u!84 &418171295
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  serializedVersion: 3
-  m_Width: 1511
-  m_Height: 850
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthFormat: 1
-  m_ColorFormat: 4
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 1
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &418180797
 GameObject:
   m_ObjectHideFlags: 0
@@ -17913,7 +17878,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 0.75
-  m_Text: Tutorials
+  m_Text: Levels
 --- !u!222 &602645637
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -20016,7 +19981,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 0
   m_RenderingPath: 1
-  m_TargetTexture: {fileID: 1094524661}
+  m_TargetTexture: {fileID: 1399538572}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 0
@@ -21304,9 +21269,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 0.75
-  m_Text: 'Freely experiment
+  m_Text: 'Test your abilities
 
-    with Pushing and Pulling'
+    and complete Challenges'
 --- !u!222 &773302442
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -24769,7 +24734,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_Color: {r: 0.735849, g: 0.735849, b: 0.735849, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -24778,10 +24743,10 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 565e743353a5a8243ac835ae23dd0d26, type: 3}
-    m_FontSize: 35
+    m_FontSize: 24
     m_FontStyle: 0
     m_BestFit: 0
-    m_MinSize: 3
+    m_MinSize: 2
     m_MaxSize: 40
     m_Alignment: 8
     m_AlignByGeometry: 1
@@ -24811,7 +24776,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
-  m_EffectDistance: {x: 1, y: -1}
+  m_EffectDistance: {x: 0.5, y: -0.5}
   m_UseGraphicAlpha: 1
 --- !u!1 &933050125
 GameObject:
@@ -26426,7 +26391,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -239.63, y: 212.4}
+  m_AnchoredPosition: {x: 240.74, y: 212.4}
   m_SizeDelta: {x: -1440, y: -775}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &990713784
@@ -28443,6 +28408,41 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
+--- !u!84 &1060923682
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  serializedVersion: 3
+  m_Width: 1512
+  m_Height: 850
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthFormat: 1
+  m_ColorFormat: 4
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 1
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1001 &1069833321
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -30749,41 +30749,6 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 309406046}
   m_PrefabAsset: {fileID: 0}
---- !u!84 &1094524661
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  serializedVersion: 3
-  m_Width: 1511
-  m_Height: 850
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthFormat: 1
-  m_ColorFormat: 4
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 1
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &1101979453
 GameObject:
   m_ObjectHideFlags: 0
@@ -30855,7 +30820,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 0.75
-  m_Text: Story
+  m_Text: Chapters
 --- !u!222 &1101979456
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -31226,9 +31191,9 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 1
     m_LineSpacing: 0.75
-  m_Text: 'Test your Allomantic skills
+  m_Text: 'The story of the Metallic Arts Research Lab
 
-    in the Metallic Arts Research Lab'
+    (coming in v2.0)'
 --- !u!222 &1119572830
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -34322,7 +34287,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Highlighted
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1242509295}
   m_OnClick:
     m_PersistentCalls:
@@ -36363,7 +36328,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 240.74023, y: 212.3999}
+  m_AnchoredPosition: {x: -240.07, y: 212.4}
   m_SizeDelta: {x: -1440, y: -775}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &1352165140
@@ -37959,6 +37924,41 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!84 &1399538572
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  serializedVersion: 3
+  m_Width: 1512
+  m_Height: 850
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthFormat: 1
+  m_ColorFormat: 4
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 1
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1 &1402834075
 GameObject:
   m_ObjectHideFlags: 0
@@ -39321,7 +39321,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Highlighted
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1435769716}
   m_OnClick:
     m_PersistentCalls:
@@ -47018,7 +47018,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.13109715, b: 0.26415092, a: 0.7254902}
+  m_Color: {r: 0, g: 0.078431375, b: 0.16078432, a: 0.8235294}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -58118,7 +58118,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Highlighted
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 1983120219}
   m_OnClick:
     m_PersistentCalls:
@@ -62639,7 +62639,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.10166667, y: 0.56468815}
   m_AnchorMax: {x: 0.43833336, y: 0.9317798}
-  m_AnchoredPosition: {x: 8, y: 19}
+  m_AnchoredPosition: {x: 8, y: 18.999939}
   m_SizeDelta: {x: 16, y: -348}
   m_Pivot: {x: 0.5, y: 0.50000006}
 --- !u!114 &3625173049941493233

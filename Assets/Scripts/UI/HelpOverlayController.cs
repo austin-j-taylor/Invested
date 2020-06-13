@@ -96,7 +96,7 @@ public class HelpOverlayController : MonoBehaviour {
                     " • " + _KeySelectAbridged + ": " + Mark + " for " + Pulling
                 );
                 if (Verbose) {
-                    builder.AppendLine("• " + KeyMultiMark + " + " + _KeySelectAbridged + ": " + Mark + " on multiple targets");
+                    builder.AppendLine(" • " + KeyMultiMark + " + " + _KeySelectAbridged + ": " + Mark + " on multiple targets");
                 }
                 builder.AppendLine(
                     " • " + KeyPushPullStrength + ": " + Pull + " strength"

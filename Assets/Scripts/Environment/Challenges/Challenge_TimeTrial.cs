@@ -47,6 +47,7 @@ public class Challenge_TimeTrial : Challenge {
     protected IEnumerator Countdown() {
         CameraController.UsingCinemachine = true;
         Player.CanControl = false;
+        sources[1].Stop();
 
         double recordTime = PlayerDataController.GetTime(trialDataName);
         HUD.MessageOverlayCinematic.FadeIn("Record: " + HUD.TimeMMSSMS(recordTime));

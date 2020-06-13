@@ -129,14 +129,14 @@ public class SceneSelectMenu : MonoBehaviour {
         tooltip.text = "";
         MainMenu.FocusOnButton(highlitButton);
         // Lock levels when previous levels are not completed
-        levelMARL1Button.interactable = FlagsController.GetData("completeTutorial1");
-        levelMARL2Button.interactable = FlagsController.GetData("completeTutorial2");
-        levelMARL3Button.interactable = FlagsController.GetData("completeTutorial3");
-        levelMARL4Button.interactable = FlagsController.GetData("completeTutorial4");
+        //levelMARL1Button.interactable = FlagsController.GetData("completeTutorial1");
+        //levelMARL2Button.interactable = FlagsController.GetData("completeTutorial2");
+        //levelMARL3Button.interactable = FlagsController.GetData("completeTutorial3");
+        //levelMARL4Button.interactable = FlagsController.GetData("completeTutorial4");
         tutorial1Button.interactable = true;
-        tutorial2Button.interactable = FlagsController.GetData("completeMARL1");
-        tutorial3Button.interactable = FlagsController.GetData("completeMARL2");
-        tutorial4Button.interactable = FlagsController.GetData("completeMARL3");
+        tutorial2Button.interactable = FlagsController.GetData("completeTutorial1");
+        tutorial3Button.interactable = FlagsController.GetData("completeTutorial2");
+        tutorial4Button.interactable = FlagsController.GetData("completeTutorial3");
         sandboxButton.interactable = true;
         shootingGroundsButton.interactable = FlagsController.GetData("completeTutorial1");
         southernMountainsButton.interactable = FlagsController.GetData("completeTutorial2");

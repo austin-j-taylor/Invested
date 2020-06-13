@@ -282,10 +282,11 @@ public class Keybinds : MonoBehaviour {
     //        return Input.GetKey(KeyCode.R) || Input.GetKey(KeyCode.LeftAlt);
     //}
     public static bool MultipleMarks() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-            return Input.GetButton("GamepadY");
-        else
-            return Input.GetKey(KeyCode.LeftShift);
+        return Walk();
+        //if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+        //    return Input.GetButton("GamepadY");
+        //else
+        //    return Input.GetKey(KeyCode.LeftShift);
     }
 
     public static bool StopBurning() {

@@ -55,7 +55,7 @@ public class Messages : MonoBehaviour {
             s_Press_ + _KeySelect + " while looking at a metal to " + Mark_pulling + " it for " + Pulling + ".\n"
              + "You can " + Pull + " on a " + Marked_metal + " without looking at it.",
             s_Hold_ + KeyMultiMark + " to " + Mark_pulling + " multiple metals at once.",
-            "You can " + Pull + " on many metals simultaneously by " + Marking_pulling + " them.\n(again, " + s_Hold_ + KeyMultiMark + ")"
+            "You can " + Pull + " on many metals simultaneously by " + Marking_pulling + " them."
         };
         tutorial_controlwheel = new List<string> {
             s_Hold_ + KeyControlWheel + " to open the " + ControlWheel + " and choose " + AreaMode + "."

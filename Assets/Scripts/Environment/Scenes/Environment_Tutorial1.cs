@@ -39,6 +39,8 @@ public class Environment_Tutorial1 : EnvironmentCinematic {
             yield return null;
             vcam.enabled = false;
             yield return new WaitForSeconds(2);
+        } else {
+            Player.PlayerIronSteel.IronReserve.IsEnabled = true;
         }
         CameraController.DisableCinemachineCamera(vcam);
         Player.CanControl = true;

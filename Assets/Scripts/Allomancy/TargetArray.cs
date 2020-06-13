@@ -16,10 +16,10 @@ public class TargetArray {
     public const float lightSaberConstant = 1024;
     public const float firstPersonLSFactor = .1f;
     private const float blueLineTargetedWidthFactor = .06f;
-    public static readonly Color targetedRedLine = new Color(1f, 0, 1f) * 2;
-    private static readonly Color targetedGreenLine = new Color(0, 1f, 0) * 2;
-    private static readonly Color targetedBlueLine = new Color(0, 0, 1f) * 2;
-    private static readonly Color targetedLightBlueLine = new Color(0, .5f, 1f) * 2;
+    public static readonly Color targetedRedLine = new Color(1f, 0, 1f) * 1;
+    private static readonly Color targetedGreenLine = new Color(0, 1f, 0) * 1;
+    private static readonly Color targetedBlueLine = new Color(0, 0, 1f) * 1;
+    private static readonly Color targetedLightBlueLine = new Color(0, .5f, 1f) * 1;
 
     private Magnetic[] targets;
 

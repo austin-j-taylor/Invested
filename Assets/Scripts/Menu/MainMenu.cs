@@ -44,7 +44,7 @@ public class MainMenu : MonoBehaviour {
         
         Open();
         if (FlagsController.GetData("controlSchemeChosen")) {
-            controlSchemeScreen.Close();
+            controlSchemeScreen.Close(false);
             OpenTitleScreen();
         } else {
             titleScreen.Close();
@@ -80,10 +80,6 @@ public class MainMenu : MonoBehaviour {
         FocusOnButton(instance.controlSchemeScreen.transform);
     }
 
-    public static void CloseControlSchemeScreen() {
-        instance.controlSchemeScreen.Close();
-        OpenTitleScreen();
-    }
 
     public static void OpenTitleScreen() {
         instance.titleScreen.Open();
