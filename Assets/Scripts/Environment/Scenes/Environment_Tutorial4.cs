@@ -57,14 +57,14 @@ public class Environment_Tutorial4 : EnvironmentCinematic {
         while (HUD.ConversationHUDController.IsOpen)
             yield return null;
         if(Player.PlayerInstance.CoinHand.Pouch.Count == 0) {
-            HUD.MessageOverlayCinematic.FadeIn(KeyPull + " near " + O_Coins + " to pick them up.");
+            HUD.MessageOverlayCinematic.FadeIn(HowToPull + " near " + O_Coins + " to pick them up.");
             while (Player.PlayerInstance.CoinHand.Pouch.Count == 0)
                 yield return null;
 
             HUD.MessageOverlayCinematic.FadeOut();
             yield return new WaitForSecondsRealtime(1);
         }
-        HUD.MessageOverlayCinematic.FadeIn(KeyThrow + "  to throw and " + Push + " on a " + O_Coin + ".");
+        HUD.MessageOverlayCinematic.FadeIn(HowToThrow + "  to throw and " + Push + " on a " + O_Coin + ".");
         while(!doorNode1.On) {
             yield return null;
         }
@@ -72,7 +72,7 @@ public class Environment_Tutorial4 : EnvironmentCinematic {
         while (Player.PlayerIronSteel.Mode != PlayerPullPushController.ControlMode.Coinshot) {
             yield return null;
         }
-        HUD.MessageOverlayCinematic.FadeOutInto("In " + CoinshotMode + ", " + LeftClick + " to throw " + O_Coins);
+        HUD.MessageOverlayCinematic.FadeOutInto("In " + CoinshotMode + ", " + HowToPull + " to throw " + O_Coins);
         while (!doorNode2.On) {
             yield return null;
         }
@@ -88,7 +88,7 @@ public class Environment_Tutorial4 : EnvironmentCinematic {
         while (HUD.ConversationHUDController.IsOpen)
             yield return null;
         FlagsController.SetFlag("pwr_zinc");
-        HUD.MessageOverlayCinematic.FadeIn(KeyZincTime + " to tap " + Zinc + ".");
+        HUD.MessageOverlayCinematic.FadeIn(HowToZincTime + " to tap " + Zinc + ".");
         while (!Player.PlayerZinc.InZincTime) {
             yield return null;
         }

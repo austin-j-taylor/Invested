@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 using Cinemachine;
+using static TextCodes;
 
 public class Environment_Tutorial1 : EnvironmentCinematic {
 
@@ -50,7 +51,7 @@ public class Environment_Tutorial1 : EnvironmentCinematic {
         // Look
         yield return new WaitForSeconds(2);
         if (CameraController.HasNotMovedCamera) {
-            HUD.MessageOverlayCinematic.FadeIn(Messages.tutorial_look);
+            HUD.MessageOverlayCinematic.FadeIn(HowToLook + " to look around.");
             while (CameraController.HasNotMovedCamera)
                 yield return null;
 
@@ -60,7 +61,7 @@ public class Environment_Tutorial1 : EnvironmentCinematic {
 
         // Move
         if (Player.PlayerInstance.GetComponent<Rigidbody>().velocity.sqrMagnitude < .25f) {
-            HUD.MessageOverlayCinematic.FadeIn(Messages.tutorial_move);
+            HUD.MessageOverlayCinematic.FadeIn(HowToMove + " to move.");
 
             while (Player.PlayerInstance.GetComponent<Rigidbody>().velocity.sqrMagnitude < .25f)
                 yield return null;
@@ -78,12 +79,11 @@ public class Environment_Tutorial1 : EnvironmentCinematic {
         while (HUD.ConversationHUDController.IsOpen)
             yield return null;
         Player.PlayerIronSteel.IronReserve.IsEnabled = true;
-        HUD.MessageOverlayCinematic.FadeIn(Messages.tutorial_pull);
+        HUD.MessageOverlayCinematic.FadeIn(HowToStartBurningIron + " to start burning " + Iron + ".");
         while (!Player.PlayerIronSteel.IsBurning) {
             yield return null;
         }
-        HUD.MessageOverlayCinematic.Next();
-
+        HUD.MessageOverlayCinematic.FadeOutInto("Look at a " + LightBlue("blue line") + " and " + HowToPull + " to " + Pull + ".");
 
         while (!Player.PlayerIronSteel.HasPullTarget) {
             yield return null;

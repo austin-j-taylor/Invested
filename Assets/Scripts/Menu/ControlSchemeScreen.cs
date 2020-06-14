@@ -38,7 +38,7 @@ public class ControlSchemeScreen : MonoBehaviour {
     public void Close(bool refreshing) {
         if(refreshing) {
             SettingsMenu.settingsData.SaveSettings();
-            Messages.Refresh();
+            //Messages.Refresh();
             HUD.UpdateText();
             FlagsController.SetFlag("controlSchemeChosen");
         }

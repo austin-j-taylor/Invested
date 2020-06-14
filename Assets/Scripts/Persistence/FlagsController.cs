@@ -18,6 +18,9 @@ public class FlagsController : MonoBehaviour {
     public bool controlSchemeChosen;
     public bool pwr_steel, pwr_pewter, pwr_zinc, pwr_coins; // for unlocking abilities
     public bool wheel_area, wheel_bubble;
+    
+    // Be wary of adding any other fields, as DeleteAllData will reset them.
+
 
     private static FlagsController instance;
 
@@ -100,5 +103,13 @@ public class FlagsController : MonoBehaviour {
             Debug.LogError("GetData with invalid name: " + name);
         }
         return (bool)field.GetValue(instance);
+    }
+
+    // Clear all flags and abilities, except for the ControlSchemeSelected.
+    public static void DeleteAllData() {
+        foreach (FieldInfo field in instance.GetType().GetFields()) {
+            field.SetValue(instance, false);
+        }
+        instance.SaveJSON();
     }
 }

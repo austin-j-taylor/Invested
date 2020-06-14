@@ -345,7 +345,7 @@ public class ConversationHUDController : MonoBehaviour {
             // If the phrase just ended, wait until the user advances the text.
             if (state == State.Waiting) {
                 // Make the advance symbol appear
-                advanceText.text = KeyJumpAbridged;
+                advanceText.text = KeyJump;
                 advanceSymbol.SetActive(true);
                 while (state == State.Waiting) {
                     yield return null;

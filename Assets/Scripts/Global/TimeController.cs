@@ -6,6 +6,7 @@ using System.Collections;
  */
 public class TimeController : MonoBehaviour {
 
+    private const float fixedTimeRatio = 1 / 60.0f / 2.0f;
     private static float currentScale;
 
     public static float CurrentTimeScale {
@@ -14,7 +15,7 @@ public class TimeController : MonoBehaviour {
         }
         set {
             if (currentScale != value && value > 0) {
-                Time.fixedDeltaTime = value / 60;
+                Time.fixedDeltaTime = value * fixedTimeRatio;
             }
             currentScale = value;
             if(MainMenu.IsOpen || PauseMenu.IsPaused) {

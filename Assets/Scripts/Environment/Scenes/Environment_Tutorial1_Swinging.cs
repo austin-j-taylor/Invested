@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using static TextCodes;
 
 public class Environment_Tutorial1_Swinging : EnvironmentCinematic {
 
@@ -7,7 +8,7 @@ public class Environment_Tutorial1_Swinging : EnvironmentCinematic {
         while (HUD.ConversationHUDController.IsOpen) {
             yield return null;
         }
-        HUD.MessageOverlayCinematic.FadeIn(Messages.tutorial_controlwheel);
+        HUD.MessageOverlayCinematic.FadeIn(HowToControlWheel + " to open the " + ControlWheel + " and choose " + AreaMode + ".");
         FlagsController.SetFlag("wheel_area");
         while (!HUD.ControlWheelController.IsOpen)
             yield return null;

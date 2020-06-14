@@ -123,7 +123,8 @@ public class Player : PewterEntity {
         SceneManager.sceneLoaded += ClearPlayerAfterSceneChange;
         SceneManager.sceneUnloaded += ClearPlayerBeforeSceneChange;
     }
-
+    [SerializeField]
+    private Coin thrownCoin = null;
     void Update() {
         // Handle "Voiding out" if the player falls too far into the "void"
         if (transform.position.y < VoidHeight) {
@@ -160,11 +161,16 @@ public class Player : PewterEntity {
                             Coin[] coins = CoinHand.WithdrawCoinSprayToHand(!PlayerIronSteel.IsBurning);
                             if(!Keybinds.Walk())
                                 for (int i = 0; i < Hand.spraySize; i++)
-                                    PlayerIronSteel.AddPushTarget(coins[i], false, !Keybinds.MultipleMarks());
+                                    PlayerIronSteel.AddPushTarget(coins[i], false, true);
+                                    //PlayerIronSteel.AddPushTarget(coins[i], false, !Keybinds.MultipleMarks());
                         } else {
                             Coin coin = CoinHand.WithdrawCoinToHand(!PlayerIronSteel.IsBurning);
-                            if(!Keybinds.Walk())
-                                PlayerIronSteel.AddPushTarget(coin, false, !Keybinds.MultipleMarks());
+                            if (!Keybinds.Walk()) {
+                                PlayerIronSteel.RemovePushTarget(thrownCoin);
+                                PlayerIronSteel.AddPushTarget(coin, false, true);
+                            }
+                            thrownCoin = coin;
+                            //PlayerIronSteel.AddPushTarget(coin, false, !Keybinds.MultipleMarks());
                         }
                     }   
                 } else {
@@ -271,9 +277,11 @@ public class Player : PewterEntity {
     }
 
     public void Respawn() {
-        transform.position = RespawnPoint.position;
-        PlayerPewter.Clear();
-        CameraController.Clear();
-        CameraController.SetRotation(RespawnPoint.eulerAngles);
+        if (RespawnPoint) {
+            transform.position = RespawnPoint.position;
+            PlayerPewter.Clear();
+            CameraController.Clear();
+            CameraController.SetRotation(RespawnPoint.eulerAngles);
+        }
     }
 }

@@ -58,7 +58,7 @@ public class Environment_Tutorial2 : EnvironmentCinematic {
     protected override IEnumerator Trigger0() {
         backWall.SetActive(true);
         FlagsController.SetFlag("pwr_steel");
-        HUD.MessageOverlayCinematic.FadeIn(s_Hold_ + _KeyPush + " to " + Push + ".");
+        HUD.MessageOverlayCinematic.FadeIn(HowToPush + " to " + Push + ".");
 
         while (!Player.PlayerIronSteel.HasPushTarget) {
             yield return null;
@@ -72,7 +72,7 @@ public class Environment_Tutorial2 : EnvironmentCinematic {
     }
 
     protected override IEnumerator Trigger1() {
-        HUD.MessageOverlayCinematic.FadeIn("Like with " + Pulling + ", you can " + Mark_pushing + " metals for " + Pushing + " with " + _KeySelectAlternate + ".\n Mark multiple by holding " + KeyMultiMark + ".");
+        HUD.MessageOverlayCinematic.FadeIn("Like with " + Pulling + ", you can " + Mark_pushing + " metals for " + Pushing + " with " + KeyMark_Push + ".\n Mark multiple by holding " + KeyMultiMark + ".");
         while (!door.On)
             yield return null;
         HUD.MessageOverlayCinematic.FadeOut();

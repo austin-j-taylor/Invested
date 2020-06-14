@@ -283,11 +283,11 @@ public class ControlWheelController : MonoBehaviour {
     }
 
     public void UpdateText() {
-        textManual.text = _KeyPullAbridged + "/" + _KeyPushAbridged + ": " + Pull_Push + "\non a single target\n\n\n";
-        textArea.text = _KeyPullAbridged + "/" + _KeyPushAbridged + ": " + Pull_Push + "\nin a cone in front of you\n\n\n\n";
-        textBubble.text = _KeyPullAbridged + "/" + _KeyPushAbridged + ": " + Pull_Push + "\nin a bubble around you\n\n"
+        textManual.text = KeyPushPullAbridged + ": " + Pull_Push + "\non a single target\n\n\n";
+        textArea.text = KeyPushPullAbridged + ": " + Pull_Push + "\nin an area in front of you\n\n\n\n";
+        textBubble.text = KeyPushPullAbridged + ": " + Pull_Push + "\nin a bubble around you\n\n"
         + "The bubble can stay open\nin other modes.\n";
-        textCoinshot.text = _KeyPullAbridged + ": throw and " + Push + " " + O_Coin + "\n\n\n\n\n";
+        textCoinshot.text = KeyPullAbridged + ": throw and " + Push + " " + O_Coin + "\n\n\n\n\n";
         // The active mode gets the verbose text as well
         switch(Player.PlayerIronSteel.Mode) {
             case PlayerPullPushController.ControlMode.Coinshot: // fall through
@@ -299,35 +299,36 @@ public class ControlWheelController : MonoBehaviour {
                 UpdateManual();
                 break;
             case PlayerPullPushController.ControlMode.Area:
-                textCenter.text = KeyNumberOfTargetsAbridged + ":\n Area radius";
+                textCenter.text = KeyRadiusAbridged + ":\n Area radius";
                 UpdateArea();
                 break;
             case PlayerPullPushController.ControlMode.Bubble:
-                textCenter.text = KeyNumberOfTargetsAbridged + ":\nBubble radius";
+                textCenter.text = KeyRadiusAbridged + ":\nBubble radius";
                 UpdateBubble();
                 break;
         }
     }
     private void UpdateManual() {
-        textManual.text = _KeyPullAbridged + "/" + _KeyPushAbridged + ": " + Pull_Push + "\n"
-            + _KeySelectAbridged + "/" + _KeySelectAlternateAbridged + ": Mark target\n"
-            + s_Hold_ + KeyMultiMark + ": Mark multiple\n\n";
+        textManual.text = KeyPullPushAbridged + ": " + Pull_Push + "\n"
+                + KeyMark_PullPushAbridged + ": Mark target\n"
+                + HowToMultiMark + ": Mark multiple\n\n";
     }
     private void UpdateArea() {
-        textArea.text = _KeyPullAbridged + "/" + _KeyPushAbridged + ": " + Pull_Push + "\n"
-        + KeyNumberOfTargets + ":\nsize of cone"
-        + "\n\n(Mark like in Manual.)\n";
+        textArea.text = KeyPullPushAbridged + ": " + Pull_Push + "\n"
+                + KeyMark_PullPushAbridged + ": Mark targets\n"
+                + KeyRadiusAbridged + ":\nsize of area\n\n";
     }
     private void UpdateBubble() {
-        textBubble.text = _KeyPullAbridged + "/" + _KeyPushAbridged + ": " + Pull_Push + "\n"
-            + _KeySelectAbridged + "/" + _KeySelectAlternateAbridged + ": toggle bubble\n"
-        + KeyNumberOfTargets + ":\nsize of bubble\n\n";
+        textBubble.text = KeyPullPushAbridged + ": " + Pull_Push + "\n"
+                + KeyMark_PullPushAbridged + ": toggle bubble\n"
+                + KeyRadiusAbridged + ":\nsize of bubble\n\n";
     }
     private void UpdateCoinshot() {
-        textCoinshot.text = _KeyPullAbridged + ": throw and " + Push + " " + O_Coin + "\n"
-            +" when nothing is " + Marked_pulling + ".\n"
-            + s_Hold_ + KeyMultiMark + ": Mark when thrown\n\n\n";
-    }
+        textCoinshot.text = KeyPullAbridged + ": throw and " + Push + " " + O_Coin + "\n"
+                +" when nothing is " + Marked_pulling + ".\n"
+            + "\n\n\n";
+            //+ HowToMultiMark + ": " + Mark + " when thrown\n\n\n";
+    }   
 
     // Set the color of all spokes:
     // Selected spoke: dark gray

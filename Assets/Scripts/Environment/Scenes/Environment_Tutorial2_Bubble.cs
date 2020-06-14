@@ -4,22 +4,13 @@ using static TextCodes;
 
 public class Environment_Tutorial2_Bubble : EnvironmentWithTriggers {
 
-    private void Start() {
-        triggers[2].routine = ClearHUD();
-    }
-
     protected override IEnumerator Trigger0() {
         while (HUD.ConversationHUDController.IsOpen)
             yield return null;
         FlagsController.SetFlag("wheel_bubble");
-        HUD.MessageOverlayCinematic.FadeIn("Open the " + ControlWheel + " and choose " + Red("Bubble") + " to Push on all nearby metals.");
+        HUD.MessageOverlayCinematic.FadeIn("Open the " + ControlWheel + " and choose " + BubbleMode + " to Push on all nearby metals.");
         while (!HUD.ControlWheelController.IsOpen)
             yield return null;
         HUD.MessageOverlayCinematic.FadeOut();
-    }
-
-    protected override IEnumerator Trigger1() {
-        HUD.MessageOverlayCinematic.FadeInFor(KeyNumberOfTargets + " to increase the radius of the bubble.", 5);
-        yield break;
     }
 }

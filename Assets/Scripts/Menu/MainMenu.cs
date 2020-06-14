@@ -8,6 +8,7 @@ public class MainMenu : MonoBehaviour {
     private static Transform canvas;
 
     private ControlSchemeScreen controlSchemeScreen;
+    private DataManagementScreen dataManagementScreen;
     private TitleScreen titleScreen;
     private SettingsMenu settingsMenu;
     private SceneSelectMenu sceneSelectMenu;
@@ -23,11 +24,13 @@ public class MainMenu : MonoBehaviour {
         instance = this;
         canvas = GameObject.FindGameObjectWithTag("Canvas").transform;
 
+        dataManagementScreen = GetComponentInChildren<DataManagementScreen>();
         controlSchemeScreen = GetComponentInChildren<ControlSchemeScreen>();
         titleScreen = GetComponentInChildren<TitleScreen>();
         settingsMenu = transform.parent.GetComponentInChildren<SettingsMenu>();
         sceneSelectMenu = GetComponentInChildren<SceneSelectMenu>();
         articlesMenu = GetComponentInChildren<ArticlesMenu>();
+
 
         // Set up the Player, Canvas, and EventSystem to persist between scenes
         //DontDestroyOnLoad(Player.PlayerInstance);
@@ -35,32 +38,39 @@ public class MainMenu : MonoBehaviour {
         DontDestroyOnLoad(GameObject.FindGameObjectWithTag("GameController"));
     }
 
-    private void Start () {
-        Player.PlayerInstance.gameObject.SetActive(false);
-        settingsMenu.Close();
-        sceneSelectMenu.Close();
-        articlesMenu.Close();
+    private void Start() {
+        Reset();
+    }
+
+    // Effectively starts the game over
+    public static void Reset() {
+        instance.settingsMenu.Close();
+        instance.sceneSelectMenu.Close();
+        instance.articlesMenu.Close();
+        instance.dataManagementScreen.gameObject.SetActive(false);
         HUD.DisableHUD();
-        
+
         Open();
         if (FlagsController.GetData("controlSchemeChosen")) {
-            controlSchemeScreen.Close(false);
+            instance.controlSchemeScreen.Close(false);
             OpenTitleScreen();
         } else {
-            titleScreen.Close();
+            instance.titleScreen.Close();
             OpenControlSchemeScreen();
         }
     }
 
     private void Update() {
-        if(Keybinds.ExitMenu() && !controlSchemeScreen.IsOpen) {
+        if (Keybinds.ExitMenu() && !controlSchemeScreen.IsOpen) {
             if (sceneSelectMenu.IsOpen) {
                 CloseSceneSelectMenu();
             } else if (articlesMenu.IsOpen) {
                 CloseArticlesMenu();
-            } else if(settingsMenu.IsOpen) {
+            } else if (settingsMenu.IsOpen) {
                 if (settingsMenu.BackAndSaveSettings())
                     OpenTitleScreen();
+            } else if (dataManagementScreen.IsOpen) {
+                dataManagementScreen.Close();
             } else {
                 OpenSettingsMenu();
             }
@@ -80,6 +90,10 @@ public class MainMenu : MonoBehaviour {
         FocusOnButton(instance.controlSchemeScreen.transform);
     }
 
+    public static void OpenDataManagementScreen() {
+        instance.titleScreen.Close();
+        instance.dataManagementScreen.Open();
+    }
 
     public static void OpenTitleScreen() {
         instance.titleScreen.Open();
@@ -89,7 +103,6 @@ public class MainMenu : MonoBehaviour {
         instance.titleScreen.Close();
         instance.sceneSelectMenu.Open();
     }
-
     public static void CloseSceneSelectMenu() {
         instance.sceneSelectMenu.Close();
     }
@@ -98,7 +111,6 @@ public class MainMenu : MonoBehaviour {
         instance.titleScreen.Close();
         instance.articlesMenu.Open();
     }
-
     public static void CloseArticlesMenu() {
         instance.articlesMenu.Close();
     }
@@ -107,7 +119,6 @@ public class MainMenu : MonoBehaviour {
         instance.titleScreen.Close();
         instance.settingsMenu.Open();
     }
-
     public static void CloseSettingsMenu() {
         instance.settingsMenu.Close();
         instance.titleScreen.Open();
