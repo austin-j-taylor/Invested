@@ -80,7 +80,6 @@ public class FeruchemicalZinc : MonoBehaviour {
                     // in zinc time, proceed with zinc effect
                     Intensity = GameManager.GraphicsController.SetZincEffect(true, CalculateIntensity((float)Reserve));
                 }
-                HUD.ZincMeterController.ChangeSpikePosition((float)Reserve);
             } else {
                 // Not In Zinc Time
                 if (Reserve < 1) {
@@ -96,7 +95,6 @@ public class FeruchemicalZinc : MonoBehaviour {
                         Reserve = 1;
                         Rate = 0;
                     }
-                    HUD.ZincMeterController.ChangeSpikePosition((float)Reserve);
                 }
 
                 if ((Keybinds.ZincTimeDown() || Keybinds.ControlWheelDown()) && Reserve > 0 && Player.CanControl && Player.CanControlZinc) {

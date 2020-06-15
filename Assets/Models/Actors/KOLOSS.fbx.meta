@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: 1f032d533cf3b774a91f894149ec7f91
 ModelImporter:
-  serializedVersion: 20100
+  serializedVersion: 20101
   internalIDToNameTable:
   - first:
       74: -7356388272829099247
@@ -57,10 +57,7 @@ ModelImporter:
     rigImportErrors: 
     rigImportWarnings: 
     animationImportErrors: 
-    animationImportWarnings: "\nClip 'Armature|I-Pose' has import animation warnings
-      that might lower retargeting quality:\nNote: Activate translation DOF on avatar
-      to improve retargeting quality.\n\t'Thigh.R' has scale animation that will
-      be discarded.\n"
+    animationImportWarnings: 
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
@@ -288,6 +285,7 @@ ModelImporter:
     importBlendShapes: 1
     importCameras: 1
     importLights: 1
+    fileIdsGeneration: 1
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
@@ -320,143 +318,7 @@ ModelImporter:
   importAnimation: 1
   humanDescription:
     serializedVersion: 3
-    human:
-    - boneName: Waist
-      humanName: Hips
-      limit:
-        min: {x: 0, y: 0, z: 0}
-        max: {x: 0, y: 0, z: 0}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 0
-    - boneName: Thigh.L
-      humanName: LeftUpperLeg
-      limit:
-        min: {x: -60, y: -7.0588226, z: -58.235294}
-        max: {x: 60, y: 74.117645, z: 31.083988}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 1
-    - boneName: Thigh.R
-      humanName: RightUpperLeg
-      limit:
-        min: {x: -60, y: -7.058823, z: -90}
-        max: {x: 60, y: 74.11765, z: 124.1177}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 1
-    - boneName: Calf.L
-      humanName: LeftLowerLeg
-      limit:
-        min: {x: 0, y: 0, z: -3.5294118}
-        max: {x: 0, y: 0, z: 80}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 1
-    - boneName: Calf.R
-      humanName: RightLowerLeg
-      limit:
-        min: {x: 0, y: 0, z: -3.529412}
-        max: {x: 0, y: 0, z: 80}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 1
-    - boneName: Foot.L
-      humanName: LeftFoot
-      limit:
-        min: {x: 0, y: 0, z: -50}
-        max: {x: 0, y: 0, z: 50}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 1
-    - boneName: Foot.R
-      humanName: RightFoot
-      limit:
-        min: {x: 0, y: 0, z: -50}
-        max: {x: 0, y: 0, z: 50}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 1
-    - boneName: Torso 1
-      humanName: Spine
-      limit:
-        min: {x: 0, y: 0, z: 0}
-        max: {x: 0, y: 0, z: 0}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 0
-    - boneName: Head 1
-      humanName: Head
-      limit:
-        min: {x: 0, y: 0, z: 0}
-        max: {x: 0, y: 0, z: 0}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 0
-    - boneName: Shoulder.L
-      humanName: LeftShoulder
-      limit:
-        min: {x: 0, y: 0, z: 0}
-        max: {x: 0, y: 0, z: 0}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 0
-    - boneName: Shoulder.R
-      humanName: RightShoulder
-      limit:
-        min: {x: 0, y: 0, z: 0}
-        max: {x: 0, y: 0, z: 0}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 0
-    - boneName: UpperArm.L
-      humanName: LeftUpperArm
-      limit:
-        min: {x: -90, y: -23.146065, z: -39.77528}
-        max: {x: 90, y: 100, z: 116.17978}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 1
-    - boneName: UpperArm.R
-      humanName: RightUpperArm
-      limit:
-        min: {x: -90, y: -23.14606, z: -39.77528}
-        max: {x: 90, y: 100, z: 100}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 1
-    - boneName: ForeArm.L
-      humanName: LeftLowerArm
-      limit:
-        min: {x: 0, y: 0, z: -23.370785}
-        max: {x: 0, y: 0, z: 59.775288}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 1
-    - boneName: ForeArm.R
-      humanName: RightLowerArm
-      limit:
-        min: {x: 0, y: 0, z: -23.37078}
-        max: {x: 0, y: 0, z: 59.77529}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 1
-    - boneName: Hand.L
-      humanName: LeftHand
-      limit:
-        min: {x: 0, y: -40, z: 0}
-        max: {x: 0, y: 7.6404495, z: 0}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 1
-    - boneName: Hand.R
-      humanName: RightHand
-      limit:
-        min: {x: 0, y: -40, z: 0}
-        max: {x: 0, y: 7.64045, z: 0}
-        value: {x: 0, y: 0, z: 0}
-        length: 0
-        modified: 1
+    human: []
     skeleton:
     - name: KOLOSS(Clone)
       parentName: 

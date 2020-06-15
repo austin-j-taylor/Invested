@@ -250,7 +250,7 @@ public class TextCodes : MonoBehaviour {
     }
     public static string Zinc {
         get {
-            return ZincBlue("zinc");
+            return ZincBlue("Zinc");
         }
     }
     public static string ControlWheel {

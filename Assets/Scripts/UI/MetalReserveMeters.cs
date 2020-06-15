@@ -7,7 +7,7 @@ public class MetalReserveMeters : MonoBehaviour {
 
     private const float lowThreshold = .25f; // When reserve is < 20%
     private const float criticalMassThreshold = 0.1f; // When reserve is < 10%
-    private const float timeToFade = 5;
+    private const float timeToFade = 1;
 
     //private MetalReserveElement iron;
     //private MetalReserveElement steel;
