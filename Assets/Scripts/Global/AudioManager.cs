@@ -23,15 +23,19 @@ public class AudioManager : MonoBehaviour {
     AudioClip menu_select = null,
                 wind_loop = null, // always playing, but becomes louder/higher pitch when moving quickly, especially through the air
                 title_screen_loop = null;
+    public AudioClip prop_general_weak = null, prop_general_strong = null, prop_metalDark_weak = null, prop_metalDark_strong = null,
+                prop_metalLight_weak = null, prop_metalLight_strong = null, prop_Stone_weak = null, prop_Stone_strong = null,
+                prop_coin_weak = null, prop_coin_strong = null;
 
     AudioSource[] sources;
     
-    public AudioMixer Mixer {
-        get {
-            return mixer;
-        }
-    }
+    //public AudioMixer Mixer {
+    //    get {
+    //        return mixer;
+    //    }
+    //}
     public AudioMixerGroup MixerVoiceBeepsGroup { get; private set; }
+    public AudioMixerGroup MixerEffectsGroup { get; private set; }
 
     public bool SceneTransitionIsPlaying {
         get {
@@ -42,6 +46,7 @@ public class AudioManager : MonoBehaviour {
     private void Awake() {
         sources = GetComponents<AudioSource>();
         MixerVoiceBeepsGroup = mixer.FindMatchingGroups("VoiceBeeps")[0];
+        MixerEffectsGroup = mixer.FindMatchingGroups("Effects")[0];
 
         sources[index_wind].clip = wind_loop;
         sources[index_wind].loop = true;
@@ -65,6 +70,8 @@ public class AudioManager : MonoBehaviour {
                 sources[index_wind].pitch = Mathf.Lerp(sources[index_wind].pitch, 1, Time.deltaTime * windLerpFactor);
             }
         }
+        if (!sources[index_wind].isPlaying)
+            sources[index_wind].Play();
     }
 
     public void Clear() {

@@ -1,5 +1,17 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &884365369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3279814188630995316}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31fd54ea160deaf4ba5b00af911945d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!54 &884365365
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -41,7 +53,7 @@ HingeJoint:
   m_Anchor: {x: 0, y: 1.5000004, z: 2.5}
   m_Axis: {x: 0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -1.5000005, y: 18.5, z: 177}
+  m_ConnectedAnchor: {x: -1.5000005, y: 2.4999995, z: -0.000004172325}
   m_UseSpring: 1
   m_Spring:
     spring: 200
@@ -65,33 +77,19 @@ HingeJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
---- !u!114 &884365369
+--- !u!114 &6999272434101969184
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3279814188630995316}
+  m_GameObject: {fileID: 2082132077272885678}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31fd54ea160deaf4ba5b00af911945d8, type: 3}
+  m_Script: {fileID: 11500000, guid: d2cb110b98ed0dd4dbffd3458ddb30ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &884365358
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4156077169978298163}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b083df3923656e4b8dbd2801b9ba592, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  netMass: 0
-  magneticMass: 50
-  calculateCOMFromColliders: 0
+  soundMaterial: 3
 --- !u!114 &884365359
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -148,7 +146,7 @@ HingeJoint:
   m_Anchor: {x: 0, y: -1.5, z: 2.5}
   m_Axis: {x: 0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 1.4999996, y: 18.5, z: 177}
+  m_ConnectedAnchor: {x: 1.4999996, y: 2.5, z: 0.000004053116}
   m_UseSpring: 1
   m_Spring:
     spring: 200
@@ -172,6 +170,34 @@ HingeJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &1651907045057665322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6892195070984803732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2cb110b98ed0dd4dbffd3458ddb30ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundMaterial: 3
+--- !u!114 &884365358
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4156077169978298163}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1b083df3923656e4b8dbd2801b9ba592, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  netMass: 0
+  magneticMass: 50
+  calculateCOMFromColliders: 0
 --- !u!1001 &6820086694930131069
 PrefabInstance:
   m_ObjectHideFlags: 0

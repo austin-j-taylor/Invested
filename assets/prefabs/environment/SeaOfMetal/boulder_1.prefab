@@ -26,9 +26,9 @@ MeshCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  serializedVersion: 3
+  serializedVersion: 4
   m_Convex: 1
-  m_CookingOptions: 14
+  m_CookingOptions: 30
   m_Mesh: {fileID: 5689239496259190614, guid: f974cef8b96e0074790998b06a21af2f, type: 3}
 --- !u!114 &642140086742059547
 MonoBehaviour:
@@ -44,6 +44,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 0
   magneticMass: 1000
+  calculateCOMFromColliders: 0
+--- !u!114 &8507552047447936582
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8275736827575625638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2cb110b98ed0dd4dbffd3458ddb30ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundMaterial: 1
 --- !u!1001 &142074331962031791
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -121,16 +135,16 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 7
       objectReference: {fileID: 0}
-    - target: {fileID: -927199367670048503, guid: f974cef8b96e0074790998b06a21af2f,
-        type: 3}
-      propertyPath: m_Name
-      value: boulder_1 (216)
-      objectReference: {fileID: 0}
     - target: {fileID: -1504981713932161579, guid: f974cef8b96e0074790998b06a21af2f,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 05f3eb600c816a94a8c9ba769ca675f4, type: 2}
+    - target: {fileID: -927199367670048503, guid: f974cef8b96e0074790998b06a21af2f,
+        type: 3}
+      propertyPath: m_Name
+      value: boulder_1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f974cef8b96e0074790998b06a21af2f, type: 3}
 --- !u!1 &8275736827575625638 stripped

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6819196972760196225}
   - component: {fileID: 6819196972760196224}
   - component: {fileID: 6819196972760196227}
+  - component: {fileID: 3906072434062307670}
   m_Layer: 14
   m_Name: IngotIronLong
   m_TagString: Untagged
@@ -57,6 +58,8 @@ MeshRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 4294967295
   m_RendererPriority: 0
   m_Materials:
@@ -81,6 +84,7 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!65 &6819196972760196225
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -124,4 +128,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   netMass: 9.837499
   magneticMass: 9.464663
+  calculateCOMFromColliders: 0
   density: 7870
+--- !u!114 &3906072434062307670
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6819196972760196228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2cb110b98ed0dd4dbffd3458ddb30ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundMaterial: 1

@@ -111,6 +111,7 @@ GameObject:
   - component: {fileID: 4142846432606670532}
   - component: {fileID: 4142846432606670530}
   - component: {fileID: 4142846432606670531}
+  - component: {fileID: 6362275362994768266}
   m_Layer: 15
   m_Name: Right
   m_TagString: Untagged
@@ -247,6 +248,19 @@ HingeJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &6362275362994768266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4142846432606670533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2cb110b98ed0dd4dbffd3458ddb30ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundMaterial: 3
 --- !u!1 &5431230819284707877
 GameObject:
   m_ObjectHideFlags: 0
@@ -418,6 +432,7 @@ GameObject:
   - component: {fileID: 8808651714341597950}
   - component: {fileID: 8808651714341597949}
   - component: {fileID: 8808651714341597948}
+  - component: {fileID: 9070535951772379572}
   m_Layer: 15
   m_Name: Left
   m_TagString: Untagged
@@ -530,7 +545,7 @@ HingeJoint:
   m_Anchor: {x: 0, y: 1.5000004, z: 2.5}
   m_Axis: {x: 0, y: 0, z: 1}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 3.761077, y: 2.5000052, z: 17.641363}
+  m_ConnectedAnchor: {x: -9, y: 2.5, z: -1.500001}
   m_UseSpring: 1
   m_Spring:
     spring: 200
@@ -554,3 +569,16 @@ HingeJoint:
   m_EnablePreprocessing: 1
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!114 &9070535951772379572
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8808651714341597951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2cb110b98ed0dd4dbffd3458ddb30ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundMaterial: 3

@@ -1,5 +1,18 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &120235970729913851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5255297099625793703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2cb110b98ed0dd4dbffd3458ddb30ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundMaterial: 0
 --- !u!1001 &5859067482473165306
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -7,6 +20,31 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1740312866526720993, guid: 6eb0c07f5eedc1c4484be5d30688a308,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.8584906
+      objectReference: {fileID: 0}
+    - target: {fileID: 1740312866526720993, guid: 6eb0c07f5eedc1c4484be5d30688a308,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.062179968
+      objectReference: {fileID: 0}
+    - target: {fileID: 1740312866526720993, guid: 6eb0c07f5eedc1c4484be5d30688a308,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.052643314
+      objectReference: {fileID: 0}
+    - target: {fileID: 1740312866526720993, guid: 6eb0c07f5eedc1c4484be5d30688a308,
+        type: 3}
+      propertyPath: m_Intensity
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1740312866526720993, guid: 6eb0c07f5eedc1c4484be5d30688a308,
+        type: 3}
+      propertyPath: m_Range
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 1846763968317421917, guid: 6eb0c07f5eedc1c4484be5d30688a308,
         type: 3}
       propertyPath: m_Name
@@ -67,35 +105,21 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1740312866526720993, guid: 6eb0c07f5eedc1c4484be5d30688a308,
-        type: 3}
-      propertyPath: m_Color.r
-      value: 0.8584906
-      objectReference: {fileID: 0}
-    - target: {fileID: 1740312866526720993, guid: 6eb0c07f5eedc1c4484be5d30688a308,
-        type: 3}
-      propertyPath: m_Color.g
-      value: 0.062179968
-      objectReference: {fileID: 0}
-    - target: {fileID: 1740312866526720993, guid: 6eb0c07f5eedc1c4484be5d30688a308,
-        type: 3}
-      propertyPath: m_Color.b
-      value: 0.052643314
-      objectReference: {fileID: 0}
-    - target: {fileID: 1740312866526720993, guid: 6eb0c07f5eedc1c4484be5d30688a308,
-        type: 3}
-      propertyPath: m_Intensity
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1740312866526720993, guid: 6eb0c07f5eedc1c4484be5d30688a308,
-        type: 3}
-      propertyPath: m_Range
-      value: 20
-      objectReference: {fileID: 0}
     - target: {fileID: 1870165216785379569, guid: 6eb0c07f5eedc1c4484be5d30688a308,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
       objectReference: {fileID: 2100000, guid: 377d042f01fe47e4989b043f3919bd31, type: 2}
+    - target: {fileID: 7973890282199913639, guid: 6eb0c07f5eedc1c4484be5d30688a308,
+        type: 3}
+      propertyPath: soundMaterial
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6eb0c07f5eedc1c4484be5d30688a308, type: 3}
+--- !u!1 &5255297099625793703 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1846763968317421917, guid: 6eb0c07f5eedc1c4484be5d30688a308,
+    type: 3}
+  m_PrefabInstance: {fileID: 5859067482473165306}
+  m_PrefabAsset: {fileID: 0}
