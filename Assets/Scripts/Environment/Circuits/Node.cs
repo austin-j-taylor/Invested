@@ -7,6 +7,7 @@ using System.Collections.Generic;
 // If all elements in the system are off, the node is off.
 public class Node : Source {
 
+    [HideInInspector]
     public Source[] sources;
     private Powered[] receivers;
     [SerializeField]

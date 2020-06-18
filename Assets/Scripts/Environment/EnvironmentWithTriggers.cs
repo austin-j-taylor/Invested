@@ -6,7 +6,7 @@ using System.Collections;
 public class EnvironmentWithTriggers : Environment {
 
     [SerializeField]
-    protected MessageTrigger[] triggers = null;
+    protected TriggerMessage[] triggers = null;
 
     protected virtual void Awake() {
         if(triggers != null) {

@@ -50,12 +50,12 @@ public class EnvironmentalTransitionManager : MonoBehaviour {
         }
     }
 
-    public void EnterInterior(MusicTrigger trigger) {
+    public void EnterInterior(TriggerMusic trigger) {
         Transition(exteriors, interiors);
         CameraController.FadeCloudsOut(crossfadeTime);
     }
     
-    public void ExitInterior(MusicTrigger trigger) {
+    public void ExitInterior(TriggerMusic trigger) {
         Transition(interiors, exteriors);
         CameraController.FadeCloudsIn(crossfadeTime);
     }
