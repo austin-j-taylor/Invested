@@ -89,7 +89,7 @@ public class SettingsData : MonoBehaviour {
     }
 
     public void LoadSettings(bool setSettingsChanged = true) {
-        Debug.Log("Settings loaded");
+        //Debug.Log("Settings loaded");
         try {
             StreamReader reader = new StreamReader(configFileName, true);
 
@@ -117,7 +117,7 @@ public class SettingsData : MonoBehaviour {
     }
 
     public void SaveSettings() {
-        Debug.Log("Settings saved");
+        //Debug.Log("Settings saved");
         try {
             string jSONText = JsonUtility.ToJson(this, true);
 

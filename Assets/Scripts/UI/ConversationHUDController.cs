@@ -108,8 +108,8 @@ public class ConversationHUDController : MonoBehaviour {
                             headerText.text = "";
                             currentSpeaker = null;
                             break;
-                        case 's': // the Sphere/Prima
-                            headerText.text = Color_Prima("Primer Sphere");
+                        case 'p': // the Sphere/Prima
+                            headerText.text = Color_Prima("Prima");
                             currentSpeaker = Player.PlayerVoiceBeeper;
                             break;
                         case 'k': // the KOLOSS
@@ -239,7 +239,7 @@ public class ConversationHUDController : MonoBehaviour {
                             // Another name. The next character determines whose name.
                             i++;
                             switch (currentConversation.content[i]) {
-                                case 's': // the Sphere/Prima
+                                case 'p': // the Sphere/Prima
                                     parsed.Append(Color_Prima_Open());
                                     break;
                                 case 'k': // the KOLOSS
