@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-using System;
 
-/*
- * Controls the HUD element for the "Console" which the player uses to interact with Interfaceable circuit elements.
- */
+/// <summary>
+/// Controls the HUD element for the "Console" which the player uses to interact with Interfaceable circuit elements.
+/// </summary>
 public class ConsoleController : MonoBehaviour {
 
     private const float typingSpeed = .025f,
@@ -22,7 +21,6 @@ public class ConsoleController : MonoBehaviour {
 
     private int lineCount;
 
-    // Use this for initialization
     void Awake() {
         headerTextLeft = transform.Find("ConsoleHeader/HeaderTextLeft").GetComponent<Text>();
         consoleTextLeft = headerTextLeft.transform.Find("ConsoleTextLeft").GetComponentInChildren<Text>();
@@ -30,12 +28,6 @@ public class ConsoleController : MonoBehaviour {
         consoleTextRight = headerTextRight.transform.Find("ConsoleTextRight").GetComponentInChildren<Text>();
         anim = GetComponent<Animator>();
     }
-    //private void Update() {
-    //    if (Input.GetKey(KeyCode.R))
-    //        Open();
-    //    else
-    //        Close();
-    //}
     public void Clear() {
         Close();
         // immediately close
@@ -62,6 +54,7 @@ public class ConsoleController : MonoBehaviour {
         RefreshRightText();
     }
 
+    // Log text to the console
     public void Log(string text) {
         consoleTextLeft.text += text;
         if (text.Contains(System.Environment.NewLine))

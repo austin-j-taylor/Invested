@@ -2,11 +2,12 @@
 using UnityEngine.UI;
 using static TextCodes;
 
-/*
- * Controls the HUD element (and all logic) for the Control Wheel, which is used for various Push controls
- */
+/// <summary>
+/// Controls the HUD element (and all logic) for the Control Wheel, which is used for various control modes
+/// </summary>
 public class ControlWheelController : MonoBehaviour {
 
+    #region constants
     private const float cancelRadius = 0.34033203125f;
     private const float angleDeselectAll_StopBurning = 157.5f;
     private const float angleStopBurning_Manual = 112.5f;
@@ -21,6 +22,7 @@ public class ControlWheelController : MonoBehaviour {
     private readonly Color colorBlankSpoke = new Color(1, 1, 1, .1f);
     private readonly Color colorHighlitSpoke = new Color(1, 1, 1, .25f);
     private readonly Color colorSelectedSpoke = new Color(1, 1, 1, .5f);
+    #endregion
 
     enum Selection { Cancel, Manual, Area, Bubble, Coinshot, Coin_Spray, Coin_Full, Coin_Semi, DeselectAll, StopBurning };
     private enum LockedState { Unlocked, LockedFully, LockedToArea, LockedToBubble };
@@ -32,7 +34,6 @@ public class ControlWheelController : MonoBehaviour {
     private Text textArea;
     private Text textBubble;
     private Text textCoinshot;
-
 
     private Selection highlit; // the selection being hovered over
     private Selection selectedSpoke; // manual, area, etc.
@@ -47,63 +48,18 @@ public class ControlWheelController : MonoBehaviour {
         private set {
             if (isOpen != value) {
                 if (value) {
-                    if (SettingsMenu.settingsData.controlScheme != SettingsData.Gamepad)
-                        CameraController.UnlockCamera();
+                    // Opening the Control Wheel
                     HUD.ShowControlWheel();
                     circle.fillAmount = (float)Player.PlayerZinc.Reserve;
                 } else {
-                    if (SettingsMenu.settingsData.controlScheme != SettingsData.Gamepad)
-                        CameraController.LockCamera();
-                    HUD.HideControlWheel();
-
-                    // Execute selected
-                    switch (highlit) {
-                        case Selection.Cancel:
-                            break;
-                        case Selection.Manual:
-                            selectedSpoke = highlit;
-                            Player.PlayerIronSteel.SetControlModeManual();
-                            break;
-                        case Selection.Area:
-                            selectedSpoke = highlit;
-                            Player.PlayerIronSteel.SetControlModeArea();
-                            break;
-                        case Selection.Bubble:
-                            selectedSpoke = highlit;
-                            Player.PlayerIronSteel.SetControlModeBubble();
-                            break;
-                        case Selection.Coinshot:
-                            selectedSpoke = highlit;
-                            Player.PlayerIronSteel.SetControlModeCoinshot();
-                            break;
-                        case Selection.Coin_Spray:
-                            selectedCoin = highlit;
-                            Player.PlayerInstance.CoinThrowingMode = Player.CoinMode.Spray;
-                            HUD.ThrowingAmmoMeter.Alert(Player.CoinMode.Spray);
-                            break;
-                        case Selection.Coin_Full:
-                            selectedCoin = highlit;
-                            Player.PlayerInstance.CoinThrowingMode = Player.CoinMode.Full;
-                            HUD.ThrowingAmmoMeter.Alert(Player.CoinMode.Full);
-                            break;
-                        case Selection.Coin_Semi:
-                            selectedCoin = highlit;
-                            Player.PlayerInstance.CoinThrowingMode = Player.CoinMode.Semi;
-                            HUD.ThrowingAmmoMeter.Alert(Player.CoinMode.Semi);
-                            break;
-                        case Selection.DeselectAll:
-                            Player.PlayerIronSteel.RemoveAllTargets();
-                            break;
-                        case Selection.StopBurning:
-                            Player.PlayerIronSteel.StopBurning();
-                            break;
-                    }
-                    RefreshSpokes();
+                    // Close the control wheel and confirm that selection
+                    ConfirmSelection();
                 }
+                isOpen = value;
             }
-            isOpen = value;
         }
     }
+    public bool IsLocked() => lockedState == LockedState.LockedFully;
 
     void Awake() {
         selectedSpoke = Selection.Manual;
@@ -129,29 +85,28 @@ public class ControlWheelController : MonoBehaviour {
         RefreshSpokes();
     }
 
+    /// <summary>
+    /// Check for player keypresses for shortcuts to clicking spokes
+    /// </summary>
     private void LateUpdate() {
         if (!PauseMenu.IsPaused) {
 
             // If the player hits certain keys, consider that selecting a sector of the control wheel.
-            if(Player.CanControl) {
-                if(Keybinds.ControlWheelManual()) {
+            if (Player.CanControl) {
+                if (Keybinds.ControlWheelManual()) {
                     SectorManual();
-                    isOpen = true;
-                    IsOpen = false;
+                    ConfirmSelection();
                 } else if (Keybinds.ControlWheelArea() && lockedState != LockedState.LockedFully) {
                     SectorArea();
-                    isOpen = true;
-                    IsOpen = false;
+                    ConfirmSelection();
                 } else if (Keybinds.ControlWheelBubble() && (lockedState == LockedState.LockedToBubble || lockedState == LockedState.Unlocked)) { // bad logic
                     SectorBubble();
-                    isOpen = true;
-                    IsOpen = false;
+                    ConfirmSelection();
                 } else if (Keybinds.ControlWheelCoinshot() && lockedState == LockedState.Unlocked) {
                     SectorCoinshot();
-                    isOpen = true;
-                    IsOpen = false;
+                    ConfirmSelection();
                 } else if (Keybinds.ControlWheelThrowingMode() && lockedState == LockedState.Unlocked) {
-                    switch(Player.PlayerInstance.CoinThrowingMode) {
+                    switch (Player.PlayerInstance.CoinThrowingMode) {
                         case Player.CoinMode.Semi:
                             SectorCoinFull();
                             break;
@@ -162,12 +117,10 @@ public class ControlWheelController : MonoBehaviour {
                             SectorCoinSemi();
                             break;
                     }
-                    isOpen = true;
-                    IsOpen = false;
-                } else if(Keybinds.ControlWheelDeselectAll()) {
+                    ConfirmSelection();
+                } else if (Keybinds.ControlWheelDeselectAll()) {
                     SectorDeselectAll();
-                    isOpen = true;
-                    IsOpen = false;
+                    ConfirmSelection();
                 }
             }
 
@@ -202,7 +155,7 @@ public class ControlWheelController : MonoBehaviour {
                     // The selection depends on the radius and angle of input
                     if (radius < pixelRadius) {
                         highlit = Selection.Cancel;
-                        UpdateText();
+                        RefreshText();
                     } else { // outside Cancel circle: depending on the angle, choose a selection
                         if (angle > angleDeselectAll_StopBurning) {
                             SectorDeselectAll();
@@ -240,95 +193,148 @@ public class ControlWheelController : MonoBehaviour {
         }
     }
 
+    #region sectorManagement
+    /// <summary>
+    /// Confirm and execute the selected spoke.
+    /// </summary>
+    private void ConfirmSelection() {
+        HUD.HideControlWheel();
+
+        switch (highlit) {
+            case Selection.Cancel:
+                break;
+            case Selection.Manual:
+                selectedSpoke = highlit;
+                Player.PlayerIronSteel.SetControlModeManual();
+                break;
+            case Selection.Area:
+                selectedSpoke = highlit;
+                Player.PlayerIronSteel.SetControlModeArea();
+                break;
+            case Selection.Bubble:
+                selectedSpoke = highlit;
+                Player.PlayerIronSteel.SetControlModeBubble();
+                break;
+            case Selection.Coinshot:
+                selectedSpoke = highlit;
+                Player.PlayerIronSteel.SetControlModeCoinshot();
+                break;
+            case Selection.Coin_Spray:
+                selectedCoin = highlit;
+                Player.PlayerInstance.CoinThrowingMode = Player.CoinMode.Spray;
+                HUD.ThrowingAmmoMeter.Alert(Player.CoinMode.Spray);
+                break;
+            case Selection.Coin_Full:
+                selectedCoin = highlit;
+                Player.PlayerInstance.CoinThrowingMode = Player.CoinMode.Full;
+                HUD.ThrowingAmmoMeter.Alert(Player.CoinMode.Full);
+                break;
+            case Selection.Coin_Semi:
+                selectedCoin = highlit;
+                Player.PlayerInstance.CoinThrowingMode = Player.CoinMode.Semi;
+                HUD.ThrowingAmmoMeter.Alert(Player.CoinMode.Semi);
+                break;
+            case Selection.DeselectAll:
+                Player.PlayerIronSteel.RemoveAllTargets();
+                break;
+            case Selection.StopBurning:
+                Player.PlayerIronSteel.StopBurning();
+                break;
+        }
+        RefreshSpokes();
+    }
+
     // Sector commands
     private void SectorDeselectAll() {
-        UpdateText();
+        RefreshText();
         highlit = Selection.DeselectAll;
     }
     private void SectorStopBurning() {
-        UpdateText();
+        RefreshText();
         highlit = Selection.StopBurning;
     }
     private void SectorManual() {
-        UpdateText();
-        UpdateManual();
+        RefreshText();
+        RefreshManual();
         highlit = Selection.Manual;
     }
     private void SectorArea() {
-        UpdateText();
-        UpdateArea();
+        RefreshText();
+        RefreshArea();
         highlit = (lockedState != LockedState.LockedFully) ? Selection.Area : Selection.Cancel;
     }
     private void SectorBubble() {
-        UpdateText();
-        UpdateBubble();
+        RefreshText();
+        RefreshBubble();
         highlit = (lockedState == LockedState.LockedToBubble || lockedState == LockedState.Unlocked) ? Selection.Bubble : Selection.Cancel;
     }
     private void SectorCoinshot() {
-        UpdateText();
-        UpdateCoinshot();
+        RefreshText();
+        RefreshCoinshot();
         highlit = (lockedState == LockedState.Unlocked) ? Selection.Coinshot : Selection.Cancel;
     }
     private void SectorCoinSpray() {
-        UpdateText();
+        RefreshText();
         highlit = (lockedState == LockedState.Unlocked) ? Selection.Coin_Spray : Selection.Cancel;
     }
     private void SectorCoinFull() {
-        UpdateText();
+        RefreshText();
         highlit = (lockedState == LockedState.Unlocked) ? Selection.Coin_Full : Selection.Cancel;
     }
     private void SectorCoinSemi() {
-        UpdateText();
+        RefreshText();
         highlit = (lockedState == LockedState.Unlocked) ? Selection.Coin_Semi : Selection.Cancel;
     }
+    #endregion
 
-    public void UpdateText() {
+    #region refreshing
+    public void RefreshText() {
         textManual.text = KeyPushPullAbridged + ": " + Pull_Push + "\non a single target\n\n\n";
         textArea.text = KeyPushPullAbridged + ": " + Pull_Push + "\nin an area in front of you\n\n\n\n";
         textBubble.text = KeyPushPullAbridged + ": " + Pull_Push + "\nin a bubble around you\n\n"
         + "The bubble can stay open\nin other modes.\n";
         textCoinshot.text = KeyPullAbridged + ": throw and " + Push + " " + O_Coin + "\n\n\n\n\n";
         // The active mode gets the verbose text as well
-        switch(Player.PlayerIronSteel.Mode) {
+        switch (Player.PlayerIronSteel.Mode) {
             case PlayerPullPushController.ControlMode.Coinshot: // fall through
                 textCenter.text = "";
-                UpdateCoinshot();
+                RefreshCoinshot();
                 break;
             case PlayerPullPushController.ControlMode.Manual:
                 textCenter.text = "";
-                UpdateManual();
+                RefreshManual();
                 break;
             case PlayerPullPushController.ControlMode.Area:
                 textCenter.text = KeyRadiusAbridged + ":\n Area radius";
-                UpdateArea();
+                RefreshArea();
                 break;
             case PlayerPullPushController.ControlMode.Bubble:
                 textCenter.text = KeyRadiusAbridged + ":\nBubble radius";
-                UpdateBubble();
+                RefreshBubble();
                 break;
         }
     }
-    private void UpdateManual() {
+    private void RefreshManual() {
         textManual.text = KeyPullPushAbridged + ": " + Pull_Push + "\n"
                 + KeyMark_PullPushAbridged + ": Mark target\n"
                 + HowToMultiMark + ": Mark multiple\n\n";
     }
-    private void UpdateArea() {
+    private void RefreshArea() {
         textArea.text = KeyPullPushAbridged + ": " + Pull_Push + "\n"
                 + KeyMark_PullPushAbridged + ": Mark targets\n"
                 + KeyRadiusAbridged + ":\nsize of area\n\n";
     }
-    private void UpdateBubble() {
+    private void RefreshBubble() {
         textBubble.text = KeyPullPushAbridged + ": " + Pull_Push + "\n"
                 + KeyMark_PullPushAbridged + ": toggle bubble\n"
                 + KeyRadiusAbridged + ":\nsize of bubble\n\n";
     }
-    private void UpdateCoinshot() {
+    private void RefreshCoinshot() {
         textCoinshot.text = KeyPullAbridged + ": throw and " + Push + " " + O_Coin + "\n"
-                +" when nothing is " + Marked_pulling + ".\n"
+                + " when nothing is " + Marked_pulling + ".\n"
             + "\n\n\n";
-            //+ HowToMultiMark + ": " + Mark + " when thrown\n\n\n";
-    }   
+        //+ HowToMultiMark + ": " + Mark + " when thrown\n\n\n";
+    }
 
     // Set the color of all spokes:
     // Selected spoke: dark gray
@@ -346,12 +352,12 @@ public class ControlWheelController : MonoBehaviour {
 
     // Sets how many options are available on the control wheel, depending on what Flags are met
     public void RefreshLocked() {
-        if(FlagsController.GetData("pwr_coins")) {
+        if (FlagsController.GetData("pwr_coins")) {
             lockedState = LockedState.Unlocked;
             for (int i = 0; i < spokes.Length; i++) {
                 spokes[i].gameObject.SetActive(true);
             }
-        } else if(FlagsController.GetData("wheel_bubble")) {
+        } else if (FlagsController.GetData("wheel_bubble")) {
             lockedState = LockedState.LockedToBubble;
             for (int i = 0; i < 4; i++) {
                 spokes[i].gameObject.SetActive(true);
@@ -362,7 +368,7 @@ public class ControlWheelController : MonoBehaviour {
             for (int i = 8; i < spokes.Length; i++) {
                 spokes[i].gameObject.SetActive(true);
             }
-        } else if(FlagsController.GetData("wheel_area")) {
+        } else if (FlagsController.GetData("wheel_area")) {
             lockedState = LockedState.LockedToArea;
             for (int i = 0; i < 3; i++) {
                 spokes[i].gameObject.SetActive(true);
@@ -380,8 +386,5 @@ public class ControlWheelController : MonoBehaviour {
             }
         }
     }
-
-    public bool IsLocked() {
-        return lockedState == LockedState.LockedFully;
-    }
+    #endregion
 }

@@ -1,10 +1,10 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-/*
- * Controls the HUD elements that follow push- and pull-targets.
- *  These include elements for Mass, Net Force, Allomantic Force, and Anchored Push Boost Force.
- */
+/// <summary>
+/// Controls the HUD elements that appear over marked targets.
+/// These include elements for Mass, Net Force, Allomantic Force, and Anchored Push Boost Force.
+/// </summary>
 public class TargetOverlayController : MonoBehaviour {
 
     private const float pixelDelta = 20;
@@ -21,7 +21,6 @@ public class TargetOverlayController : MonoBehaviour {
     private Text[] pushTargetsActualForce;
     private Text highlightedTargetMass;
 
-    // Use this for initialization
     void Awake() {
         pullTargetsSumForce = new Text[TargetArray.largeArrayCapacity];
         pushTargetsSumForce = new Text[TargetArray.largeArrayCapacity];
@@ -54,7 +53,10 @@ public class TargetOverlayController : MonoBehaviour {
         SetPushTextColorWeak();
     }
 
-    // Update number of targets
+    #region overlayUpdating
+    /// <summary>
+    /// Called when the number of marked targets changes
+    /// </summary>
     public void HardRefresh() {
         SoftRefresh();
         for (int i = Player.PlayerIronSteel.PullTargets.Count; i < TargetArray.largeArrayCapacity; i++) {
@@ -68,7 +70,9 @@ public class TargetOverlayController : MonoBehaviour {
         }
     }
 
-    // Update forces, positions on screen
+    /// <summary>
+    /// Called when the position of targets or strength of forces changes
+    /// </summary>
     public void SoftRefresh() {
         if (HUD.IsOpen) {
             if (SettingsMenu.settingsData.hudForces == 1) {
@@ -90,7 +94,9 @@ public class TargetOverlayController : MonoBehaviour {
         }
     }
 
-    // Clear unwanted fields after changing settings
+    /// <summary>
+    /// Called when settings change, and the fundamental overlay might also have to change
+    /// </summary>
     public void InterfaceRefresh() {
         if (HUD.IsOpen) {
             if (SettingsMenu.settingsData.hudMasses == 0) {
@@ -118,6 +124,13 @@ public class TargetOverlayController : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Refreshes the labels for over the marked targets.
+    /// </summary>
+    /// <param name="targets">the array of marked targets</param>
+    /// <param name="actualForce">the array of Allomantic Forces acting on the targets</param>
+    /// <param name="sumForce">the array of net forces acting on them</param>
+    /// <param name="refreshSum">true if the net force needs to be updated (it might be invisible)</param>
     private void SoftRefreshTargets(TargetArray targets, Text[] actualForce, Text[] sumForce, bool refreshSum) {
         for (int i = 0; i < targets.Count; i++) {
             Magnetic target = targets[i];
@@ -138,6 +151,7 @@ public class TargetOverlayController : MonoBehaviour {
             }
         }
     }
+    #endregion
 
     public void SetPullTextColorStrong() {
         for (int i = 0; i < TargetArray.largeArrayCapacity; i++) {

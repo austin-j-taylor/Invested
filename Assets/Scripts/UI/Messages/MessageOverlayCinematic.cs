@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using static TextCodes;
 using System.Collections;
 
-/*
- * Displays a message about 1/3 from the top of the screen, in the center.
- * Displays information in a nice-looking way.
- * 
- */
+/// <summary>
+/// Cenimatically displays a message near the center of the screen.
+/// These messages may fade in, fade out, and fade into another.
+/// Also supports passing a List of strings to player sequentially with Next().
+/// </summary>
 public class MessageOverlayCinematic : MonoBehaviour {
 
     private const int transitionTime = 1;
@@ -43,15 +43,6 @@ public class MessageOverlayCinematic : MonoBehaviour {
         anim.SetBool("IsVisible", true);
         messageText.text = newText;
         StartCoroutine(WaitForThenFadeOut(time));
-    }
-    // Fades the first element of newTextList into messageText on the screen.
-    // Subsequent calls to Next() will display the next text element.
-    public void FadeIn(List<string> newTextList) {
-        textIndex = 0;
-        currentTextList = newTextList;
-        if(currentTextList.Count > 0) {
-            FadeIn(currentTextList[0]);
-        }
     }
     // Displays the next text element of the text list last passes to FadeIn.
     // If the text list runs out of elements, fade the message out.

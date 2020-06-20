@@ -1,9 +1,9 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-/*
- * Controls the circular Burn Percentage Meter.
- */
+/// <summary>
+/// Controls the HUD element that shows the player's burn percentage and force acting on them.
+/// </summary>
 public class BurnPercentageMeter : MonoBehaviour {
 
     // Constants for Burn Rate Meter
@@ -40,11 +40,15 @@ public class BurnPercentageMeter : MonoBehaviour {
         }
     }
 
-    /* 
-     * Set the meter using the Force Magnitude or Force Percentage display configuration, depending on the targetForce argument.
-     *  targetForce only appears in the playerInputText field.
-     *  The force calculated from rate as a % of the net force is used for the blue circle bar and the ActualForceText field.
-     */
+    #region textSetters
+    /// <summary>
+    /// Set the meter using the Force Magnitude for Force Percentage display configuration
+    /// </summary>
+    /// <param name="allomanticForce">the Allomantic Force component of the force</param>
+    /// <param name="normalForce">the Anchored Push Boost component of the forces</param>
+    /// <param name="rate">the percentage of the force for iron</param>
+    /// <param name="rateAlternate">the percentage of the force for steel</param>
+    /// <param name="targetForce">the desired force for Magnitude mode</param>
     public void SetBurnRateMeterForceMagnitude(Vector3 allomanticForce, Vector3 normalForce, float rate, float rateAlternate, float targetForce) {
         playerInputText.text = HUD.ForceString(targetForce, Player.PlayerIronSteel.Mass);
 
@@ -53,7 +57,14 @@ public class BurnPercentageMeter : MonoBehaviour {
         SetFillPercent(rate, rateAlternate);
     }
 
-    // Set the meter using the Percentage display configuration.
+    // 
+    /// <summary>
+    /// Set the meter using the Percentage display configuration.
+    /// </summary>
+    /// <param name="allomanticForce">the Allomantic Force component of the force</param>
+    /// <param name="normalForce">the Anchored Push Boost component of the forces</param>
+    /// <param name="rate">the percentage of the force for iron</param>
+    /// <param name="rateAlternate">the percentage of the force for steel</param>
     public void SetBurnRateMeterPercentage(Vector3 allomanticForce, Vector3 normalForce, float rate, float rateAlternate) {
         playerInputText.text = (int)Mathf.Round(Mathf.Max(rate, rateAlternate) * 100) + "%";
 
@@ -62,10 +73,19 @@ public class BurnPercentageMeter : MonoBehaviour {
         SetFillPercent(rate, rateAlternate);
     }
 
+    /// <summary>
+    /// Sets the force text string
+    /// </summary>
+    /// <param name="forceActual">the force to set it to</param>
     private void SetActualForceText(float forceActual) {
         actualForceText.text = HUD.ForceString(forceActual, Player.PlayerIronSteel.Mass);
     }
 
+    /// <summary>
+    /// Sets the sum text string
+    /// </summary>
+    /// <param name="allomanticForce">the Allomantic Force component of the force</param>
+    /// <param name="normalForce">the Anchored Push Boost component of the forces</param>
     private void SetSumForceText(Vector3 allomanticForce, Vector3 normalForce) {
         if (SettingsMenu.settingsData.forceComplexity == 1) {
             float allomanticMagnitude = allomanticForce.magnitude;
@@ -73,6 +93,7 @@ public class BurnPercentageMeter : MonoBehaviour {
             sumForceText.text = HUD.AllomanticSumString(allomanticForce, normalForce, Player.PlayerIronSteel.Mass);
         }
     }
+    #endregion
 
     private void SetFillPercent(float rate, float rateAlternate) {
         HUD.Crosshair.SetFillPercent(rate);
@@ -81,7 +102,6 @@ public class BurnPercentageMeter : MonoBehaviour {
     public void SetForceTextColorStrong() {
         actualForceText.color = HUD.strongBlue;
     }
-
     public void SetForceTextColorWeak() {
         actualForceText.color = HUD.weakBlue;
     }

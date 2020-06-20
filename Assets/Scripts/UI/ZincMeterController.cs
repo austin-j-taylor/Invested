@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Controls the HUD element for showing how much Zinc charge the player has.
+/// </summary>
 public class ZincMeterController : MonoBehaviour {
 
     private const float timeToFade = 1;
@@ -12,12 +15,8 @@ public class ZincMeterController : MonoBehaviour {
     private Image sideImage;
     private Animator animator;
 
-    private float position;
-    private bool direction;
     private float timeLastChanged = -100;
 
-
-    // Start is called before the first frame update
     void Awake() {
         side = HUD.Crosshair.transform.Find("ZincSideMeter/Zinc_spikeSide").GetComponent<CanvasGroup>();
         sideImage = side.transform.Find("fill").GetComponent<Image>();
@@ -25,7 +24,6 @@ public class ZincMeterController : MonoBehaviour {
         animator = side.GetComponent<Animator>();
     }
 
-    // Update is called once per frame
     void LateUpdate() {
         if (Player.PlayerZinc.Rate != 0)
             timeLastChanged = Time.time;

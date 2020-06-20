@@ -1,17 +1,16 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
-/*
- * Contains several static fields referenced in on-screen text.
- * For example, if a text field says "You can Pull metals", the word "Pull" should be in blue.
- *      -> "You can " + TextCodes.Pull + " metals."
- * 
- * Also contains strings that will return a certain controller button depending on the control scheme
- *      i.e. will return "Mouse Button 4" or "Q" or "Left Bumper" depending on the control scheme.
- */
+
+/// <summary>
+/// Contains several static properties that referenced by in-game text.
+/// For example, if a text field says "You can Pull metals with LMB", the words "Pull" and "LMB" would be in blue.
+/// Also handles control scheme-dependent messages, such as saying "Press Space to Jump" with Keyboard/Mouse and "Press A to Jump" with Gamepad.
+/// </summary>
 public class TextCodes : MonoBehaviour {
 
-    // String constants (prefixed with s_)
+    #region constants
+    // String constants (prefixed with s_) for inputs
     public const string s_Mouse_Button_3 = "Mouse Button 3";
     public const string s_Mouse_Button_4 = "Mouse Button 4";
     public const string s_Mouse_Button_5 = "Mouse Button 5";
@@ -30,7 +29,7 @@ public class TextCodes : MonoBehaviour {
     public const string s_Right_BumperAbridged = "RB";
     public const string s_Left_Click = "Left-click";
     public const string s_Right_Click = "Right-click";
-
+    // String constants (prefixed with s_) for commands
     public const string s_Press_ = "Press ";
     public const string s_Pressing_ = "Pressing ";
     public const string s_Hold_ = "Hold ";
@@ -38,448 +37,122 @@ public class TextCodes : MonoBehaviour {
     public const string s_Use_ = "Use ";
     public const string s_Tap_ = "Tap ";
     public const string s_Scroll_ = "Scroll ";
+    #endregion
 
+    #region colors
     // Opening tags for certain colors
-    public static string Blue_Open() {
-        return "<color=#0080ff>";
-    }
-    public static string MidBlue_Open() {
-        return "<color=#00bfff>";
-    }
-    public static string LightBlue_Open() {
-        return "<color=#7fdfff>";
-    }
-    public static string Gray_Open() {
-        return "<color=#bfbfbf>";
-    }
-    public static string OffWhite_Open() {
-        return "<color=#99B2FF>";
-    }
-    public static string Red_Open() {
-        return "<color=#ff8080>";
-    }
-    public static string ZincBlue_Open() {
-        return "<color=#c1dbff>";
-    }
-    public static string Gold_Open() {
-        return "<color=#fff080>";
-    }
+    public static string Blue_Open() => "<color=#0080ff>";
+    public static string MidBlue_Open() => "<color=#00bfff>";
+    public static string LightBlue_Open() => "<color=#7fdfff>";
+    public static string Gray_Open() => "<color=#bfbfbf>";
+    public static string OffWhite_Open() => "<color=#99B2FF>";
+    public static string Red_Open() => "<color=#ff8080>";
+    public static string ZincBlue_Open() => "<color=#c1dbff>";
+    public static string Gold_Open() => "<color=#fff080>";
     // Methods that accept strings as arguments and return strings colored in their respective color
-    public static string Blue(string s) {
-        return Blue_Open() + s + "</color>";
-    }
-    public static string MidBlue(string s) {
-        return MidBlue_Open() + s + "</color>";
-    }
-    public static string LightBlue(string s) {
-        return LightBlue_Open() + s + "</color>";
-    }
-    public static string ZincBlue(string s) {
-        return ZincBlue_Open() + s + "</color>";
-    }
-    public static string LightRed(string s) {
-        return "<color=#ffbfbf>" + s + "</color>";
-    }
-    public static string Red(string s) {
-        return Red_Open() + s + "</color>";
-    }
-    public static string Gray(string s) {
-        return Gray_Open() + s + "</color>";
-    }
-    public static string Gold(string s) {
-        return Gold_Open() + s + "</color>";
-    }
-    public static string Orange(string s) {
-        return "<color=#ff9d60>" + s + "</color>";
-    }
-    public static string OffWhite(string s) {
-        return "<color=#99B2FF>" + s + "</color>";
-    }
-    public static string Bronze(string s) {
-        return "<color=#ff9f00>" + s + "</color>";
-    }
+    public static string Blue(string s) => Blue_Open() + s + "</color>";
+    public static string MidBlue(string s) => MidBlue_Open() + s + "</color>";
+    public static string LightBlue(string s) => LightBlue_Open() + s + "</color>";
+    public static string ZincBlue(string s) => ZincBlue_Open() + s + "</color>";
+    public static string LightRed(string s) => "<color=#ffbfbf>" + s + "</color>";
+    public static string Red(string s) => Red_Open() + s + "</color>";
+    public static string Gray(string s) => Gray_Open() + s + "</color>";
+    public static string Gold(string s) => Gold_Open() + s + "</color>";
+    public static string Orange(string s) => "<color=#ff9d60>" + s + "</color>";
+    public static string OffWhite(string s) => "<color=#99B2FF>" + s + "</color>";
+    public static string Bronze(string s) => "<color=#ff9f00>" + s + "</color>";
     // Same as above, but for specific characters
-    public static string Color_Kog(string s) {
-        return LightBlue(s);
-    }
-    public static string Color_Prima(string s) {
-        return (s);
-    }
-    public static string Color_Machines(string s) {
-        return Gray(s);
-    }
-    public static string Color_Kog_Open() {
-        return LightBlue_Open();
-    }
-    public static string Color_Prima_Open() {
-        return ("");
-    }
-    public static string Color_Machines_Open() {
-        return Gray_Open();
-    }
-    // Same as above, but for other key words
-    public static string Color_Location_Open() {
-        return Blue_Open();
-    }
-    public static string Color_Pull_Open() {
-        return MidBlue_Open();
-    }
-    public static string Color_Push_Open() {
-        return Red_Open();
-    }
-    public static string Color_Pewter_Open() {
-        return OffWhite_Open();
-    }
-    public static string Color_Zinc_Open() {
-        return ZincBlue_Open();
-    }
-    public static string Color_Coin_Open() {
-        return Gold_Open();
-    }
+    public static string Color_Kog(string s) => LightBlue(s);
+    public static string Color_Prima(string s) => (s);
+    public static string Color_Machines(string s) => Gray(s);
+    public static string Color_Kog_Open() => LightBlue_Open();
+    public static string Color_Prima_Open() => ("");
+    public static string Color_Machines_Open() => Gray_Open();
+    // Open tags for specific actions or ideas
+    public static string Color_Location_Open() => Blue_Open();
+    public static string Color_Pull_Open() => MidBlue_Open();
+    public static string Color_Push_Open() => Red_Open();
+    public static string Color_Pewter_Open() => OffWhite_Open();
+    public static string Color_Zinc_Open() => ZincBlue_Open();
+    public static string Color_Coin_Open() => Gold_Open();
 
     // Known words that should always appear in a specific color
-    public static string Iron {
-        get {
-            return MidBlue("iron");
-        }
-    }
-    public static string Steel {
-        get {
-            return Red("steel");
-        }
-    }
-    public static string Pewter {
-        get {
-            return OffWhite("pewter");
-        }
-    }
-    public static string Pull {
-        get {
-            return MidBlue("Pull");
-        }
-    }
-    public static string Pulls {
-        get {
-            return MidBlue("Pulls");
-        }
-    }
-    public static string Pulling {
-        get {
-            return MidBlue("Pulling");
-        }
-    }
-    public static string Push {
-        get {
-            return Red("Push");
-        }
-    }
-    public static string Pushes {
-        get {
-            return Red("Pushes");
-        }
-    }
-    public static string Pushing {
-        get {
-            return Red("Pushing");
-        }
-    }
-    public static string Push_Pull {
-        get {
-            return Push + '/' + Pull;
-        }
-    }
-    public static string Pull_Push {
-        get {
-            return Pull + '/' + Push;
-        }
-    }
-    public static string PushesAndPulls {
-        get {
-            return Pushes + " and " + Pulls;
-        }
-    }
-    public static string Mark {
-        get {
-            return Gray("Mark");
-        }
-    }
-    public static string Mark_pulling {
-        get {
-            return LightBlue("Mark");
-        }
-    }
-    public static string Mark_pushing {
-        get {
-            return Red("Mark");
-        }
-    }
-    public static string Marking_pulling {
-        get {
-            return LightBlue("Marking");
-        }
-    }
-    public static string Marked_pulling {
-        get {
-            return LightBlue("Marked");
-        }
-    }
-    public static string MarkedMetal {
-        get {
-            return LightBlue("Marked metal");
-        }
-    }
-    public static string BubbleMode {
-        get {
-            return Red("Bubble Mode");
-        }
-    }
-    public static string AreaMode {
-        get {
-            return MidBlue("Area Mode");
-        }
-    }
-    public static string CoinshotMode {
-        get {
-            return Gold("Coinshot mode");
-        }
-    }
-    public static string ZincTime {
-        get {
-            return ZincBlue("Zinc Time");
-        }
-    }
-    public static string Zinc {
-        get {
-            return ZincBlue("Zinc");
-        }
-    }
-    public static string ControlWheel {
-        get {
-            return ZincBlue("Control Wheel");
-        }
-    }
-    public static string BurnPercentage {
-        get {
-            return Gray("Burn Percentage");
-        }
-    }
-    public static string Sprint {
-        get {
-            return OffWhite("Sprint");
-        }
-    }
-    public static string Sprinting {
-        get {
-            return OffWhite("sprinting");
-        }
-    }
-    public static string PewterJump {
-        get {
-            return OffWhite("Jump");
-        }
-    }
-    public static string PewterJumping {
-        get {
-            return OffWhite("Jumping");
-        }
-    }
-    public static string Anchor {
-        get {
-            return OffWhite("Anchor");
-        }
-    }
-    public static string HelpOverlay {
-        get {
-            return Gray("Help Overlay");
-        }
-    }
+    public static string Iron => MidBlue("iron");
+    public static string Steel => Red("steel");
+    public static string Pewter => OffWhite("pewter");
+    public static string Pull => MidBlue("Pull");
+    public static string Pulls => MidBlue("Pulls");
+    public static string Pulling => MidBlue("Pulling");
+    public static string Push => Red("Push");
+    public static string Pushes => Red("Pushes");
+    public static string Pushing => Red("Pushing");
+    public static string Push_Pull => Push + '/' + Pull;
+    public static string Pull_Push => Pull + '/' + Push;
+    public static string PushesAndPulls => Pushes + " and " + Pulls;
+    public static string Mark => Gray("Mark");
+    public static string Mark_pulling => LightBlue("Mark");
+    public static string Mark_pushing => Red("Mark");
+    public static string Marking_pulling => LightBlue("Marking");
+    public static string Marked_pulling => LightBlue("Marked");
+    public static string MarkedMetal => LightBlue("Marked metal");
+    public static string BubbleMode => Red("Bubble Mode");
+    public static string AreaMode => MidBlue("Area Mode");
+    public static string CoinshotMode => Gold("Coinshot mode");
+    public static string ZincTime => ZincBlue("Zinc Time");
+    public static string Zinc => ZincBlue("Zinc");
+    public static string ControlWheel => ZincBlue("Control Wheel");
+    public static string BurnPercentage => Gray("Burn Percentage");
+    public static string Sprint => OffWhite("Sprint");
+    public static string Sprinting => OffWhite("sprinting");
+    public static string PewterJump => OffWhite("Jump");
+    public static string PewterJumping => OffWhite("Jumping");
+    public static string Anchor => OffWhite("Anchor");
+    public static string HelpOverlay => Gray("Help Overlay");
     // Objects, prefixed with "O_"
-    public static string O_SeekerCube {
-        get {
-            return Bronze("Seeker Cube");
-        }
-    }
-    public static string O_Coin {
-        get {
-            return Gold("Coin");
-        }
-    }
-    public static string O_Coins {
-        get {
-            return Gold("Coins");
-        }
-    }
+    public static string O_SeekerCube => Bronze("Seeker Cube");
+    public static string O_Coin => Gold("Coin");
+    public static string O_Coins => Gold("Coins");
 
     // Known inputs that should always appear in a specific color
     // "<Input>" -> that input, in the correct color
     // "<Input>Abridged" -> a shortened version of that input for Help and Control Wheel
-    public static string LeftClick {
-        get {
-            return MidBlue(s_Left_Click);
-        }
-    }
-    public static string LeftClickAbridged {
-        get {
-            return MidBlue("LMB");
-        }
-    }
-    public static string RightClick {
-        get {
-            return Red(s_Right_Click);
-        }
-    }
-    public static string RightClickAbridged {
-        get {
-            return Red("RMB");
-        }
-    }
-    public static string RightTrigger {
-        get {
-            return MidBlue(s_Right_Trigger);
-        }
-    }
-    public static string RightTriggerAbridged {
-        get {
-            return MidBlue("RT");
-        }
-    }
-    public static string LeftTrigger {
-        get {
-            return Red(s_Left_Trigger);
-        }
-    }
-    public static string LeftTriggerAbridged {
-        get {
-            return Red("LT");
-        }
-    }
-    public static string MouseButton3 {
-        get {
-            return Gray(s_Mouse_Button_3);
-        }
-    }
-    public static string ScrollWheel {
-        get {
-            return Gray(s_Scroll_Wheel);
-        }
-    }
-    public static string LeftJoystick {
-        get {
-            return Gray(s_Left_Joystick);
-        }
-    }
-    public static string LeftJoystick_Zinc {
-        get {
-            return ZincBlue(s_Left_Joystick);
-        }
-    }
-    public static string RightJoystick {
-        get {
-            return Gray(s_Right_Joystick);
-        }
-    }
-    public static string Back {
-        get {
-            return Gold("Back");
-        }
-    }
-    public static string Start {
-        get {
-            return Gray("Start");
-        }
-    }
-    public static string A {
-        get {
-            return Gray("A");
-        }
-    }
-    public static string B {
-        get {
-            return Gray("B");
-        }
-    }
-    public static string X {
-        get {
-            return Gray("X");
-        }
-    }
-    public static string Y {
-        get {
-            return Gray("Y");
-        }
-    }
+    public static string LeftClick => MidBlue(s_Left_Click);
+    public static string LeftClickAbridged => MidBlue("LMB");
+    public static string RightClick => Red(s_Right_Click);
+    public static string RightClickAbridged => Red("RMB");
+    public static string RightTrigger => MidBlue(s_Right_Trigger);
+    public static string RightTriggerAbridged => MidBlue("RT");
+    public static string LeftTrigger => Red(s_Left_Trigger);
+    public static string LeftTriggerAbridged => Red("LT");
+    public static string MouseButton3 => Gray(s_Mouse_Button_3);
+    public static string ScrollWheel => Gray(s_Scroll_Wheel);
+    public static string LeftJoystick => Gray(s_Left_Joystick);
+    public static string LeftJoystick_Zinc => ZincBlue(s_Left_Joystick);
+    public static string RightJoystick => Gray(s_Right_Joystick);
+    public static string Back => Gold("Back");
+    public static string Start => Gray("Start");
+    public static string A => Gray("A");
+    public static string B => Gray("B");
+    public static string X => Gray("X");
+    public static string Y => Gray("Y");
     // Mouse/Keyboard
-    public static string Mouse {
-        get {
-            return Gray("Mouse");
-        }
-    }
-    public static string Shift {
-        get {
-            return Gray("Shift");
-        }
-    }
-    public static string Space {
-        get {
-            return Gray("Space");
-        }
-    }
-    public static string Ctrl {
-        get {
-            return Gray("Ctrl");
-        }
-    }
-    public static string LeftAlt {
-        get {
-            return Gray("Left Alt");
-        }
-    }
-    public static string Tab {
-        get {
-            return ZincBlue("Tab");
-        }
-    }
-    public static string R {
-        get {
-            return ZincBlue("R");
-        }
-    }
-    public static string F {
-        get {
-            return Gold("F");
-        }
-    }
-    public static string WASD {
-        get {
-            return Gray("W/A/S/D");
-        }
-    }
-    public static string Escape {
-        get {
-            return Gray("Escape");
-        }
-    }
-    public static string H {
-        get {
-            return Gray("H");
-        }
-    }
-    public static string C {
-        get {
-            return Gold("C");
-        }
-    }
-    public static string F1 {
-        get {
-            return Gray("F1");
-        }
-    }
-    public static string F5 {
-        get {
-            return Gray("F5");
-        }
-    }
+    public static string Mouse => Gray("Mouse");
+    public static string Shift => Gray("Shift");
+    public static string Space => Gray("Space");
+    public static string Ctrl => Gray("Ctrl");
+    public static string LeftAlt => Gray("Left Alt");
+    public static string Tab => ZincBlue("Tab");
+    public static string R => ZincBlue("R");
+    public static string F => Gold("F");
+    public static string WASD => Gray("W/A/S/D");
+    public static string Escape => Gray("Escape");
+    public static string H => Gray("H");
+    public static string C => Gold("C");
+    public static string F1 => Gray("F1");
+    public static string F5 => Gray("F5");
+    #endregion
 
+    #region keys
     // "Key<Action>" -> the key that performs that action, different for Mouse/Keyboard and Gamepad, like "Space" for jump
     // "Key<Action>Abridged" -> Abridged key, like "LMB" for left mouse button
     // "HowTo<Action>" -> the operation that does that action, like "Press Space" for jump
@@ -771,7 +444,7 @@ public class TextCodes : MonoBehaviour {
     public static string HowToRadius {
         get {
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-                return s_Press_ +  Gray("Up/Down") + " on the D-Pad";
+                return s_Press_ + Gray("Up/Down") + " on the D-Pad";
             else
                 return s_Hold_ + R + " + " + s_Scroll_ + "the " + ScrollWheel;
         }
@@ -809,4 +482,5 @@ public class TextCodes : MonoBehaviour {
                 return F5 + " or " + Escape + " > Settings > Gameplay";
         }
     }
+    #endregion
 }

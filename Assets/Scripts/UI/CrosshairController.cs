@@ -3,21 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-/**
- * Controls the crosshairs at the center of the screen
- */
-public class CrosshairController : MonoBehaviour
-{
+/// <summary>
+/// Controls the HUD element for the crosshairs at the center of the screen
+/// </summary>
+public class CrosshairController : MonoBehaviour {
+
     // positions in the hairs array
     private const int top = 0, left = 1, bottom = 2, right = 3, size = 4;
     private const float alphaHigh = .75f, alphaLow = .25f;
 
     private Image circle;
-    private Color blueColor, goldColor = new Color(1, 0.9411765f, .5f, alphaHigh);
+    private Color blueColor, goldColor = HUD.goldColor;
     private Image[] hairs;
     private Image[] fills;
     private Transform hairsHeader;
-    
 
     void Awake() {
         circle = transform.Find("Circle").GetComponent<Image>();
@@ -47,7 +46,7 @@ public class CrosshairController : MonoBehaviour
     }
 
     public void SetFillPercent(float rate) {
-        for(int i = 0; i < size; i++) {
+        for (int i = 0; i < size; i++) {
             fills[i].fillAmount = rate;
         }
         circle.material.SetFloat("_Fill", rate);
@@ -61,7 +60,8 @@ public class CrosshairController : MonoBehaviour
 
         circle.material.SetFloat("_Radius", radius);
     }
-    
+
+    #region crosshairModes
     // Sets the crosshairs for the "Manual" control mode
     public void SetManual() {
         StopAllCoroutines();
@@ -99,10 +99,11 @@ public class CrosshairController : MonoBehaviour
         }
         StartCoroutine(LerpToCircleRatio(1));
     }
+    #endregion
 
     private IEnumerator LerpToCircleRatio(float targetRatio) {
         float count = 0, ratio = circle.material.GetFloat("_RatioLow");
-        while(count < 1) {
+        while (count < 1) {
             count += Time.unscaledDeltaTime * 4;
             circle.material.SetFloat("_RatioLow", Mathf.Lerp(ratio, targetRatio, count));
             yield return null;

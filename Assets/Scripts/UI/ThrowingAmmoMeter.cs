@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-/*
- * HUD element that shows how many coins the player has.
- */
+/// <summary>
+/// Controls the HUD element showing the number of coins the player has.
+/// </summary>
 public class ThrowingAmmoMeter : MonoBehaviour {
 
     private const float timeToFade = 3;
@@ -24,7 +24,7 @@ public class ThrowingAmmoMeter : MonoBehaviour {
             timeLastChanged = Time.time;
         }
 
-        if(Player.PlayerIronSteel.Mode == PlayerPullPushController.ControlMode.Coinshot) {
+        if (Player.PlayerIronSteel.Mode == PlayerPullPushController.ControlMode.Coinshot) {
             anim.SetBool("IsVisible", true);
         } else {
             anim.SetBool("IsVisible", Time.time - timeLastChanged < timeToFade);
@@ -44,7 +44,7 @@ public class ThrowingAmmoMeter : MonoBehaviour {
 
     public void Alert(Player.CoinMode mode) {
         timeLastChanged = Time.time;
-        switch(mode) {
+        switch (mode) {
             case Player.CoinMode.Semi:
                 anim.Play("ThrowableAmmo_Semi", anim.GetLayerIndex("Image"));
                 break;

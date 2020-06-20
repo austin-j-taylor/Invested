@@ -7,10 +7,10 @@ using static ConversationManager;
 using System.Text;
 using TMPro;
 
-/*
- * Controls the HUD element for the dialogue window that appears for conversations.
- * Parses conversations for colors, italics, pauses, etc.
- */
+/// <summary>
+/// Controls the HUD element  for the dialogue window that appears for conversations.
+/// Parses conversations for colors, italics, pauses, etc.
+/// </summary>
 public class ConversationHUDController : MonoBehaviour {
 
     private const float delayPerCharacter = .02f, delayPerPause = .125f;
@@ -32,7 +32,6 @@ public class ConversationHUDController : MonoBehaviour {
     private Animator anim;
     private State state;
 
-    // Use this for initialization
     void Awake() {
         Transform conversationWindow = transform.Find("ConversationWindow");
         headerText = conversationWindow.Find("HeaderText").GetComponent<Text>();
@@ -85,8 +84,11 @@ public class ConversationHUDController : MonoBehaviour {
         StartCoroutine(SpeakPhraseHelper());
     }
 
+    /// <summary>
+    /// Parses the conversation, printing out to the HUD as it replaces signifiers (e.g. '\n' with newlines)
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator SpeakPhraseHelper() {
-        // if character == \Cs then text = MidBlue(text up to \c)
 
         StringBuilder parsed = new StringBuilder();
         StringBuilder currentLineParsed = new StringBuilder();
@@ -96,12 +98,11 @@ public class ConversationHUDController : MonoBehaviour {
         // For each character in the conversation:
         for (int i = 0; i < currentConversation.content.Length; i++) {
             // here: We are at the start of a character or signifier of a character
-
             if (currentConversation.content[i] == '\\') {
-                // a signifier
+                // This character is a signifier
                 i++;
                 if (currentConversation.content[i] == '/') {
-                    // a speaker
+                    // This signifier is for a speaker
                     i++;
                     switch (currentConversation.content[i]) {
                         case 'n': // the environment/neutral/none
@@ -265,6 +266,7 @@ public class ConversationHUDController : MonoBehaviour {
                     }
                 }
             } else {
+                // This is a non-signifier character.
                 if (currentConversation.content[i] == '\t') {
                     // discard tab characters
                     continue;
@@ -358,9 +360,6 @@ public class ConversationHUDController : MonoBehaviour {
             }
         }
         // Only reach here if the EOF was reached without an ending signifier. Act like there was an ending signifier.
-        EndConversation();
-    }
-    private void EndConversation() {
         Close();
     }
 }

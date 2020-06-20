@@ -4,63 +4,61 @@ using System.Text;
 using static TextCodes;
 using static PlayerPullPushController;
 
-/*
- * Displays a toggleable overlay for the HUD with several instructions for how to play.
- */
+/// <summary>
+/// Controls the HUD element that displays help information to the player in the top-left corner
+///     Simple: show the fundamental controls
+///     Verbose: show all controls
+///     Disabled: disabled
+/// </summary>
 public class HelpOverlayController : MonoBehaviour {
 
+    private enum State { Closed, Simple, Verbose }
+
+    public bool IsOpen => currentState != State.Closed;
+    private bool Verbose => currentState == State.Verbose;
+
+    private Text HelpTextLeft { get; set; }
     // Used to update the overlay when a change occurs
     private bool last_IronEnabled = false, last_SteelEnabled = false, last_ControlWheel = false, last_PewterEnabled = false, last_Zinc = false, last_Coins;
     private ControlMode last_Mode = ControlMode.Manual;
-
-    private Text HelpTextLeft { get; set; }
-
-    private enum State { Closed, Simple, Verbose}
     private State currentState;
-
-    public bool IsOpen {
-        get {
-            return currentState != State.Closed;
-        }
-    }
-    private bool Verbose => currentState == State.Verbose;
 
     void Awake() {
         HelpTextLeft = transform.Find("HelpTextLeft").GetComponent<Text>();
         currentState = State.Closed;
     }
 
-    public void Clear() {
+    public void Clear() { }
 
-    }
+    #region update
     private void Update() {
-        if(IsOpen) {
+        if (IsOpen) {
             // Update the text if a change in players' abilites has occured
-            if(last_SteelEnabled != Player.PlayerIronSteel.SteelReserve.IsEnabled) {
+            if (last_SteelEnabled != Player.PlayerIronSteel.SteelReserve.IsEnabled) {
                 last_SteelEnabled = Player.PlayerIronSteel.SteelReserve.IsEnabled;
                 UpdateText();
             }
-            if(last_IronEnabled != Player.PlayerIronSteel.IronReserve.IsEnabled) {
+            if (last_IronEnabled != Player.PlayerIronSteel.IronReserve.IsEnabled) {
                 last_IronEnabled = Player.PlayerIronSteel.IronReserve.IsEnabled;
                 UpdateText();
             }
-            if(last_ControlWheel != !HUD.ControlWheelController.IsLocked()) {
+            if (last_ControlWheel != !HUD.ControlWheelController.IsLocked()) {
                 last_ControlWheel = !HUD.ControlWheelController.IsLocked();
                 UpdateText();
             }
-            if(last_PewterEnabled != Player.PlayerPewter.PewterReserve.IsEnabled) {
+            if (last_PewterEnabled != Player.PlayerPewter.PewterReserve.IsEnabled) {
                 last_PewterEnabled = Player.PlayerPewter.PewterReserve.IsEnabled;
                 UpdateText();
             }
-            if(last_Zinc != Player.CanControlZinc) {
+            if (last_Zinc != Player.CanControlZinc) {
                 last_Zinc = Player.CanControlZinc;
                 UpdateText();
             }
-            if(last_Coins != Player.CanThrowCoins && Player.PlayerInstance.CoinHand.Pouch.Count > 0) {
+            if (last_Coins != Player.CanThrowCoins && Player.PlayerInstance.CoinHand.Pouch.Count > 0) {
                 last_Coins = Player.CanThrowCoins && Player.PlayerInstance.CoinHand.Pouch.Count > 0;
                 UpdateText();
             }
-            if(last_Mode != Player.PlayerIronSteel.Mode) {
+            if (last_Mode != Player.PlayerIronSteel.Mode) {
                 last_Mode = Player.PlayerIronSteel.Mode;
                 UpdateText();
             }
@@ -69,13 +67,13 @@ public class HelpOverlayController : MonoBehaviour {
 
     // Update the text in the help overlay to reflect verbosity, current abilities, and current mode (e.g. Bubble)
     public void UpdateText() {
-        if(currentState == State.Closed) {
+        if (currentState == State.Closed) {
             HelpTextLeft.gameObject.SetActive(false);
             return;
         }
         HelpTextLeft.gameObject.SetActive(true);
         StringBuilder builder = new StringBuilder();
-        if(Verbose) {
+        if (Verbose) {
             builder.AppendLine(HowToHelpAbridged + ": toggle this overlay (verbose)\n");
         } else {
             builder.AppendLine(HowToHelpAbridged + ": toggle this overlay (simple)\n");
@@ -117,7 +115,7 @@ public class HelpOverlayController : MonoBehaviour {
                 builder.AppendLine(
                     KeyPullAbridged + ": Throw and " + Push + " " + O_Coin
                 );
-                if(Verbose) {
+                if (Verbose) {
                     builder.AppendLine(" • " + s_Hold_ + KeyMultiMark + ": " + Mark + " when thrown");
                 }
                 builder.AppendLine(
@@ -141,7 +139,7 @@ public class HelpOverlayController : MonoBehaviour {
                         builder.AppendLine(" • " + KeyMultiMark + " + " + KeyMarkAbridged + ": " + Mark + " on multiple targets");
                     }
                     builder.AppendLine(
-                        " • " + KeyPushPullStrength + ": " + Push_Pull + " strength\n" + 
+                        " • " + KeyPushPullStrength + ": " + Push_Pull + " strength\n" +
                         " • " + KeyRadiusAbridged + ": size of area"
                     );
                 } else {
@@ -154,7 +152,7 @@ public class HelpOverlayController : MonoBehaviour {
                             builder.AppendLine(" • " + KeyMultiMark + " + " + KeyMark_PullAbridged + ": " + Mark + " on multiple targets");
                         }
                         builder.AppendLine(
-                            " • " + KeyPushPullStrength + ": " + Pull + " strength\n" + 
+                            " • " + KeyPushPullStrength + ": " + Pull + " strength\n" +
                             " • " + KeyRadiusAbridged + ": size of area"
                         );
                     }
@@ -167,7 +165,7 @@ public class HelpOverlayController : MonoBehaviour {
                         " • " + KeyMarkAbridged + ": Toggle bubble"
                     );
                     builder.AppendLine(
-                        " • " + KeyPushPullStrength + ": " + Push_Pull + " strength\n" + 
+                        " • " + KeyPushPullStrength + ": " + Push_Pull + " strength\n" +
                         " • " + KeyRadiusAbridged + ": size of bubble"
                     );
                 } else {
@@ -177,7 +175,7 @@ public class HelpOverlayController : MonoBehaviour {
                             " • " + KeyMarkAbridged + ": toggle bubble"
                         );
                         builder.AppendLine(
-                            " • " + KeyPushPullStrength + ": " + Pull + " strength\n" + 
+                            " • " + KeyPushPullStrength + ": " + Pull + " strength\n" +
                             " • " + KeyRadiusAbridged + ": size of bubble"
                         );
                     }
@@ -185,43 +183,46 @@ public class HelpOverlayController : MonoBehaviour {
                 break;
         }
 
-        if(last_ControlWheel) {
+        if (last_ControlWheel) {
             builder.AppendLine(
                 KeyControlWheel + ": " + ControlWheel
             );
-            if(Verbose && SettingsMenu.settingsData.controlScheme != SettingsData.Gamepad) {
+            if (Verbose && SettingsMenu.settingsData.controlScheme != SettingsData.Gamepad) {
                 builder.AppendLine(" • 1/2/3/4/C/X/Z: " + ControlWheel + " hotkeys");
             }
         }
 
-        if(last_PewterEnabled) {
+        if (last_PewterEnabled) {
             builder.AppendLine(
-                KeySprint + ": " + Sprint + '\n' + 
+                KeySprint + ": " + Sprint + '\n' +
                 KeyAnchor + ": " + Anchor
             );
         }
 
-        if(last_Zinc) {
+        if (last_Zinc) {
             builder.AppendLine(KeyZincTime + ": " + Zinc);
         }
 
-        if(last_Coins) {
+        if (last_Coins) {
             builder.AppendLine(KeyThrow + ": Throw " + O_Coin);
-            if(Verbose) {
+            if (Verbose) {
                 //if(!SettingsMenu.settingsData.UsingGamepad) {
                 //    builder.AppendLine(" • " + Shift + " + " + KeyThrowAbridged + ": Mark and Throw " + O_Coin);
                 //}
-                builder.AppendLine(" • " + KeyJump + " + " + KeyThrow + ": Throw " + O_Coin + " downwards, weighted by" + KeyMove + 
+                builder.AppendLine(" • " + KeyJump + " + " + KeyThrow + ": Throw " + O_Coin + " downwards, weighted by" + KeyMove +
                     "\n • " + KeyAnchor + " + " + KeyThrow + ": Toss without " + Pushing);
             }
         }
 
         HelpTextLeft.text = builder.ToString();
     }
+    #endregion
 
-    // Called by pressing the H or F1 key
+    /// <summary>
+    /// Toggles the help overlay between its simple, verbose, and disabled states
+    /// </summary>
     public void Toggle() {
-        switch(currentState) {
+        switch (currentState) {
             case State.Closed:
                 EnableSimple();
                 break;

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Controls the HUD elements showing the amount of metal in the player's reserves
+/// </summary>
 public class MetalReserveMeters : MonoBehaviour {
 
     private const float lowThreshold = .25f; // When reserve is < 20%
@@ -12,7 +15,7 @@ public class MetalReserveMeters : MonoBehaviour {
     //private MetalReserveElement iron;
     //private MetalReserveElement steel;
     private MetalReserveElement pewter;
-    
+
     private void Start() {
         //iron = transform.Find("Iron").gameObject.AddComponent<MetalReserveElement>();
         //iron.metalColor = new Color(0, .5f, 1);
@@ -36,7 +39,7 @@ public class MetalReserveMeters : MonoBehaviour {
     }
 
     private void UpdateReserve(MetalReserveElement element) {
-        if(element.reserve.IsChanging)
+        if (element.reserve.IsChanging)
             element.timeLastChanged = Time.time;
 
         //element.massText.text = HUD.RoundStringToSigFigs((float)element.reserve.Mass, 3) + "g";
@@ -75,6 +78,9 @@ public class MetalReserveMeters : MonoBehaviour {
         pewter.Alert();
     }
 
+    /// <summary>
+    /// Controls a single metal reserve's appearance on the HUD, such as iron or steel
+    /// </summary>
     private class MetalReserveElement : MonoBehaviour {
 
         public MetalReserve reserve;

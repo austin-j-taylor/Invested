@@ -2,20 +2,18 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-/*
- * Controls the heads-up display.
- * Has several fields that control UI elements that relate to the HUD.
- */
+/// <summary>
+/// Manages the heads-up display.
+/// Manages all the sub-controllers that manage elements on the HUD, like metal reserves and the crosshair.
+/// </summary>
 public class HUD : MonoBehaviour {
 
+    // Colors of HUD elements
     public static readonly Color weakBlue = new Color(0, .75f, 1, 1);
     public static readonly Color strongBlue = new Color(0, 1f, 1, 1);
+    public static readonly Color goldColor = new Color(1, 0.9411765f, .5f, .75f);
 
-    public static bool IsOpen {
-        get {
-            return hudGroup.alpha > 0;
-        }
-    }
+    public static bool IsOpen => hudGroup.alpha > 0;
 
     private static Text fPSText;
     private static CanvasGroup hudGroup;
@@ -24,6 +22,8 @@ public class HUD : MonoBehaviour {
 
     private float deltaTimeFPS = 0.0f;
 
+    // HUD elements
+    // Bad practice to give them the same names as their classes
     public static GameObject HudGameObject { get; private set; }
     public static CrosshairController Crosshair { get; private set; }
     public static BurnPercentageMeter BurnPercentageMeter { get; private set; }
@@ -59,7 +59,7 @@ public class HUD : MonoBehaviour {
         SceneManager.sceneUnloaded += ClearHUDBeforeSceneChange;
     }
 
-	void LateUpdate() {
+    void LateUpdate() {
         deltaTimeFPS += (Time.unscaledDeltaTime - deltaTimeFPS) * 0.1f;
         if (SettingsMenu.settingsData.fpsCounter == 1) {
             float fps = 1.0f / deltaTimeFPS;
@@ -110,25 +110,44 @@ public class HUD : MonoBehaviour {
 
     public static void UpdateText() {
         HelpOverlayController.UpdateText();
-        ControlWheelController.UpdateText();
+        ControlWheelController.RefreshText();
     }
 
-    // Returns a string reading a single Force in Newtons or G's
+    #region staticHelpers
+    /// <summary>
+    /// Converts a force into a string in Newtons or G's depending on the current Setting
+    /// </summary>
+    /// <param name="force">the force to convert</param>
+    /// <param name="mass">the mass of the object, used for G's</param>
+    /// <param name="sigFigs">the number of significant figures to write to the string</param>
+    /// <returns>the string representation of the force</returns>
     public static string ForceString(float force, float mass, int sigFigs = 2) {
-        if(SettingsMenu.settingsData.forceUnits == 1) {
+        if (SettingsMenu.settingsData.forceUnits == 1) {
             return RoundStringToSigFigs(force).ToString() + "N";
         } else {
             return RoundStringToSigFigs(force / mass / 9.81f, sigFigs) + "G's";
         }
     }
 
-    // Returns a string reading a single Mass in kilograms
+    /// <summary>
+    /// Converts a mass to a string in kilograms
+    /// </summary>
+    /// <param name="mass">the mass to convert</param>
+    /// <returns>the string representation of the mass</returns>
     public static string MassString(float mass) {
         return (mass).ToString() + "kg";
     }
 
-    // Returns a string reading the sum of an Allomantic Force and Allomantic Normal Force in Newtons or G's
-    // e.g. "650N + 250N"
+    /// <summary>
+    /// Converts an Allomantic Force to a string representation of its components
+    /// e.g. "650N + 250N"
+    /// </summary>
+    /// <param name="allomanticForce">the Allomantic Force component of the force</param>
+    /// <param name="normalForce">the Anchored Push Boost component of the forces</param>
+    /// <param name="mass">the mass of the object, used for G's</param>
+    /// <param name="sigFigs">the number of significant figures to write to the string</param>
+    /// <param name="invert">flip the positive/negative convention for the +/- sign and color</param>
+    /// <returns>the string representation of the force</returns>
     public static string AllomanticSumString(Vector3 allomanticForce, Vector3 normalForce, float mass, int sigFigs = 2, bool invert = false) {
         string plusSign;
         if (invert && Vector3.Dot(allomanticForce, normalForce) <= 0 || !invert && Vector3.Dot(allomanticForce, normalForce) >= 0) {
@@ -146,7 +165,12 @@ public class HUD : MonoBehaviour {
         }
     }
 
-    // Rounds a float to the given sig figs, returning a string
+    /// <summary>
+    /// Rounds a float to the given significant figures and converts it to a string
+    /// </summary>
+    /// <param name="num">the number to convert</param>
+    /// <param name="sigFigs">the number of significant figures to use</param>
+    /// <returns></returns>
     public static string RoundStringToSigFigs(float num, int sigFigs = 2) {
         float mag = num < 0 ? -num : num;
 
@@ -162,28 +186,41 @@ public class HUD : MonoBehaviour {
         return (low * tenPower).ToString();
     }
 
-    // Formats a time string, where input is a float in seconds and returns:
-    // MM:SS:ms
-    // minutes:seconds:milliseconds, where seconds and milliseconds are 2 digits long
+    /// <summary>
+    /// Formats a double as a time as "MM:SS:ms" and converts it into a string
+    /// </summary>
+    /// <param name="input">the time</param>
+    /// <returns>the time as a string</returns>
     public static string TimeMMSSMS(double input) {
         int minutes = (int)input / 60;
         int seconds = (int)input % 60;
         int milliseconds = (int)((input - (int)input) * 100);
         return (minutes < 10 ? "0" : "") + minutes + (seconds < 10 ? ":0" : ":") + seconds + (milliseconds < 10 ? ":0" : ":") + milliseconds;
     }
+    #endregion
 
-    // Fade HUD in/out with Control Wheel
+    /// <summary>
+    /// Fade HUD in/out with Control Wheel
+    /// </summary>
     public static void ShowControlWheel() {
+        if (SettingsMenu.settingsData.controlScheme != SettingsData.Gamepad)
+            CameraController.UnlockCamera();
+
         anim.SetBool("ControlWheelVisible", true);
     }
     public static void HideControlWheel(bool noTransition = false) {
+        if (SettingsMenu.settingsData.controlScheme != SettingsData.Gamepad)
+            CameraController.LockCamera();
+
         anim.SetBool("ControlWheelVisible", false);
-        if(noTransition) {
+        if (noTransition) {
             anim.Play("HUD_HideControlWheel", anim.GetLayerIndex("Visibility"));
         }
     }
 
-    // Clear unwanted fields after changing settings
+    /// <summary>
+    /// Clear unwanted fields after changing settings
+    /// </summary>
     public void InterfaceRefresh() {
         BurnPercentageMeter.InterfaceRefresh();
         TargetOverlayController.InterfaceRefresh();
