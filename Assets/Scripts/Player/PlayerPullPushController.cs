@@ -7,13 +7,14 @@ using System;
 using Unity.Jobs;
 using Unity.Collections;
 
-/*
- * The AllomanticIronSteel specific for the Player.
- * Controls the blue metal lines that point from the player to nearby metals.
- * Controls the means through which the player selects Pull/PushTargets.
- */
+/// <summary>
+/// The AllomanticIronSteel specific for the Player.
+/// Controls the blue metal lines that point from the player to nearby metals.
+/// Controls the means through which the player selects Pull/PushTargets.
+/// </summary>
 public class PlayerPullPushController : AllomanticIronSteel {
 
+    #region constants
     // Button-press time constants
     private const float timeToHoldDown = .5f;
     private const float timeDoubleTapWindow = .5f;
@@ -40,15 +41,10 @@ public class PlayerPullPushController : AllomanticIronSteel {
     private const int blueLineLayer = 10;
     private const float metalLinesLerpConstant = .30f;
     private const int defaultCharge = 1;
-
+    #endregion
     public enum ControlMode { Manual, Area, Bubble, Coinshot };
 
-    // Button held-down times
-    //private float timeToStopBurning = 0;
-    //private float timeToSwapBurning = 0;
-
     public ControlMode Mode { get; private set; }
-    //private bool removingTargets; // needed for knowing to not mark a recently unmarked target
     private Magnetic removedTarget; // When a target was just removed, keep track of it so we don't immediately select it again
     // radius for Area
     private float selectionAreaRadius = maxAreaRadius / 2;
@@ -63,6 +59,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
     // for Magnitude control style
     private float forceMagnitudeTarget = 600;
 
+    #region clearing
     public override void Clear() {
         StopBurning();
         Strength = 1;
@@ -90,440 +87,32 @@ public class PlayerPullPushController : AllomanticIronSteel {
         PullTargets = new TargetArray(TargetArray.largeArrayCapacity);
         PushTargets = new TargetArray(TargetArray.largeArrayCapacity);
     }
-    /*
-     * Read inputs for selecting targets.
-     * Update burn percentages.
-     * Update blue lines pointing from player to metal.
-     */
+    public void RemoveAllTargets() {
+        PullTargets.Clear();
+        PushTargets.Clear();
+
+        HUD.TargetOverlayController.Clear();
+    }
+    #endregion
+
+    #region updatePushingAndPulling
+    /// <summary>
+    /// Update Pushing/Pulling status and other control properties
+    /// Update blue lines pointing to nearby metals.
+    /// Read inputs for marking targets.
+    /// </summary>
     private void LateUpdate() {
         if (!PauseMenu.IsPaused) {
             if (IsBurning) {
                 if (!ExternalControl && Player.CanControl) {
-                    // Change Burn Percentage Targets
-                    // Check scrollwheel for changing the max number of targets and burn percentage, or DPad if using gamepad
-                    float scrollValue = 0;
-                    if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) { // Gamepad
-                        scrollValue = Keybinds.DPadYAxis();
-                        if (SettingsMenu.settingsData.pushControlStyle == 1) {
-                            ChangeTargetForceMagnitude(Keybinds.DPadXAxis());
-                        }
-                    } else { // Mouse and keyboard
-                        if (Keybinds.ControlWheel() && (Mode == ControlMode.Area || Mode == ControlMode.Bubble)) {
-                            scrollValue = Keybinds.ScrollWheelAxis();
-                        } else {
-                            if (SettingsMenu.settingsData.pushControlStyle == 0) {
-                                ChangeBurnPercentageTarget(Keybinds.ScrollWheelAxis(), Mode == ControlMode.Bubble);
-                            } else {
-                                ChangeTargetForceMagnitude(Keybinds.ScrollWheelAxis());
-                            }
-                        }
-                    }
-                    // Change number of targets
-                    if (scrollValue > 0) {
-                        IncrementTargets();
-                    }
-                    if (scrollValue < 0) {
-                        DecrementTargets();
-                    }
 
-                    // Assign Burn percentage targets based on the previously changed burn percentage/target magnitudes
-                    if (SettingsMenu.settingsData.pushControlStyle == 0) { // Percentage
-                        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) { // Gamepad
-                            SetPullPercentageTarget(Keybinds.RightBurnPercentage());
-                            SetPushPercentageTarget(Keybinds.LeftBurnPercentage());
-                        }
-                    } else { // Magnitude
-                        if (HasPullTarget || HasPushTarget) {
-
-                            float maxNetForce = (LastMaximumNetForce).magnitude;
-                            SetPullPercentageTarget(forceMagnitudeTarget / maxNetForce);
-                            SetPushPercentageTarget(forceMagnitudeTarget / maxNetForce);
-                        } else {
-                            SetPullPercentageTarget(0);
-                            SetPushPercentageTarget(0);
-                        }
-                    }
-
+                    UpdateBurnPercentagesAndRadius();
                     LerpToBurnPercentages();
                     LerpToBubbleSize();
                     UpdateBurnRateMeter();
-
                     // Could have stopped burning above. Check if the Allomancer is still burning.
                     if (IsBurning) {
-                        //// Swap pull- and push- targets
-                        //if (Keybinds.NegateDown() && timeToSwapBurning > Time.time) {
-                        //    // swap bubble, if in that mode
-                        //    if (Mode == ControlMode.Bubble && BubbleIsOpen) {
-                        //        BubbleOpen(!BubbleMetalStatus);
-                        //    }
-                        //    // Double-tapped, Swap targets
-                        //    PullTargets.SwapContents(PushTargets);
-                        //} else {
-                        //    if (Keybinds.NegateDown()) {
-                        //        timeToSwapBurning = Time.time + timeDoubleTapWindow;
-                        //    }
-                        //}
-
-                        // Changing status of Pushing and Pulling
-                        // Coinshot mode: 
-                        // If do not have pull-targets, pulling is also Pushing
-                        // Player.cs handles coin throwing
-                        bool pulling, pushing;
-                        bool keybindPulling = Keybinds.IronPulling();
-                        bool keybindPushing = Keybinds.SteelPushing() || Keybinds.WithdrawCoin(); // for Pushing on coins after tossing them
-                        bool keybindPullingDown = Keybinds.PullDown();
-                        bool keybindPushingDown = Keybinds.PushDown();
-                        if (Mode == ControlMode.Coinshot) {
-                            pulling = keybindPulling && HasIron && HasPullTarget;
-                            pushing = keybindPushing && HasSteel;
-                            // if LMB while has a push target, Push and don't Pull.
-                            if (keybindPulling && !HasPullTarget) {
-                                pushing = true;
-                                pulling = false;
-                                keybindPulling = false;
-                                keybindPushing = true;
-                                keybindPullingDown = false;
-                            }
-                        } else {
-                            pulling = keybindPulling && HasIron;
-                            pushing = keybindPushing && HasSteel;
-                        }
-
-                        // Cannot Push and Pull on the same targets
-                        if (!HasPushTarget && HasPullTarget) {
-                            if (pulling)
-                                pushing = false;
-                        } else
-                        if (!HasPullTarget && HasPushTarget) {
-                            if (pushing)
-                                pulling = false;
-                        }
-
-                        IronPulling = pulling;
-                        SteelPushing = pushing;
-
-                        // Check input for target selection
-                        bool markForPull = Keybinds.Select() && HasIron;
-                        bool markForPullDown = Keybinds.SelectDown() && HasIron;
-                        bool markForPush = Keybinds.SelectAlternate() && HasSteel;
-                        bool markForPushDown = Keybinds.SelectAlternateDown() && HasSteel;
-                        //bool removing = Keybinds.Negate();
-
-                        // Search for Metals
-                        Magnetic bullseyeTarget;
-                        List<Magnetic> newTargetsArea;
-                        List<Magnetic> newTargetsBubble;
-                        (bullseyeTarget, newTargetsArea, newTargetsBubble) = IronSteelSight();
-                        if (Keybinds.SelectUp() || Keybinds.SelectAlternateUp()) {
-                            // No longer need to worry about remarking what we just marked
-                            removedTarget = null;
-                        }
-                        // Assign targets depending on the control mode.
-                        switch (Mode) {
-                            case ControlMode.Manual:
-                            // fall through, same as coinshot
-                            case ControlMode.Coinshot:
-                                // set the bullseye target to be brighter
-                                if (bullseyeTarget)
-                                    bullseyeTarget.BrightenLine();
-                                if (markForPullDown) {
-                                    if (Keybinds.MultipleMarks()) {
-                                        if (bullseyeTarget != null) {
-                                            if (PullTargets.IsTarget(bullseyeTarget)) {
-                                                // If the bullseye target is already selected, we want to remove it instead.
-                                                RemovePullTarget(bullseyeTarget);
-                                                removedTarget = bullseyeTarget;
-                                            } else {
-                                                // It's not a target. Add new one.
-                                                AddPullTarget(bullseyeTarget);
-                                                removedTarget = null;
-                                            }
-                                        }
-                                    } else {
-                                        // If there is no bullseye target, deselect all targets.
-                                        if (bullseyeTarget == null) {
-                                            PullTargets.Clear();
-                                        } else if (PullTargets.IsTarget(bullseyeTarget)) {
-                                            // If the bullseye target is already selected, we want to remove it instead.
-                                            PullTargets.Clear();
-                                            removedTarget = bullseyeTarget;
-                                        } else {
-                                            // It's not a target. Remove old target and add new one.
-                                            PullTargets.Clear();
-                                            AddPullTarget(bullseyeTarget);
-                                            removedTarget = null;
-                                        }
-                                    }
-                                } else if (markForPull) {
-                                    if (bullseyeTarget != null) {
-                                        if (PullTargets.IsTarget(bullseyeTarget)) {
-                                            if (!Keybinds.MultipleMarks()) {
-                                                PullTargets.Clear();
-                                                if (removedTarget != bullseyeTarget) {
-                                                    AddPullTarget(bullseyeTarget);
-                                                    removedTarget = null;
-                                                }
-                                            }
-                                        } else {
-                                            if (removedTarget != bullseyeTarget) {
-                                                // It's not a target. Add it. If we're multitargeting, preserve the old target.
-                                                if (!Keybinds.MultipleMarks())
-                                                    PullTargets.Clear();
-                                                AddPullTarget(bullseyeTarget);
-                                                removedTarget = null;
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    // Not holding down Negate nor Select this round. Consider vacuous pulling.
-                                    if (keybindPullingDown) {
-                                        if (!HasMarkedPullTarget) {
-                                            AddPullTarget(bullseyeTarget, true, true);
-                                        }
-                                    } else {
-                                        if (!keybindPulling && PullTargets.VacuousCount > 0) {
-                                            // If we were vacuously pulling but we just released the Pull, remove those targets.
-                                            PullTargets.RemoveAllVacuousTargets();
-                                        }
-                                    }
-                                }
-
-                                if (markForPushDown) {
-                                    if (Keybinds.MultipleMarks()) {
-                                        if (bullseyeTarget != null) {
-                                            if (PushTargets.IsTarget(bullseyeTarget)) {
-                                                // If the bullseye target is already selected, we want to remove it instead.
-                                                RemovePushTarget(bullseyeTarget);
-                                                removedTarget = bullseyeTarget;
-                                            } else {
-                                                // It's not a target. Add new one.
-                                                AddPushTarget(bullseyeTarget);
-                                                removedTarget = null;
-                                            }
-                                        }
-                                    } else {
-                                        // If there is no bullseye target, deselect all targets.
-                                        if (bullseyeTarget == null) {
-                                            PushTargets.Clear();
-                                        } else if (PushTargets.IsTarget(bullseyeTarget)) {
-                                            // If the bullseye target is already selected, we want to remove it instead.
-                                            PushTargets.Clear();
-                                            removedTarget = bullseyeTarget;
-                                        } else {
-                                            // It's not a target. Remove old target and add new one.
-                                            PushTargets.Clear();
-                                            AddPushTarget(bullseyeTarget);
-                                            removedTarget = null;
-                                        }
-                                    }
-                                } else if (markForPush) {
-                                    if (bullseyeTarget != null) {
-                                        if (PushTargets.IsTarget(bullseyeTarget)) {
-                                            if (!Keybinds.MultipleMarks()) {
-                                                PushTargets.Clear();
-                                                if (removedTarget != bullseyeTarget) {
-                                                    AddPushTarget(bullseyeTarget);
-                                                    removedTarget = null;
-                                                }
-                                            }
-                                        } else {
-                                            if (removedTarget != bullseyeTarget) {
-                                                // It's not a target. Add it. If we're multitargeting, preserve the old target.
-                                                if (!Keybinds.MultipleMarks())
-                                                    PushTargets.Clear();
-                                                AddPushTarget(bullseyeTarget);
-                                                removedTarget = null;
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    // Not holding down Negate nor Select this round. Consider vacuous pulling.
-                                    if (keybindPushingDown) {
-                                        if (!HasMarkedPushTarget) {
-                                            AddPushTarget(bullseyeTarget, true, true);
-                                        }
-                                    } else {
-                                        if (!keybindPushing && PushTargets.VacuousCount > 0) {
-                                            // If we were vacuously Pushing but we just released the Push, remove those targets.
-                                            PushTargets.RemoveAllVacuousTargets();
-                                        }
-                                    }
-                                }
-                                break;
-                            case ControlMode.Area:
-                                // Crosshair: lerp to the correct size
-                                LerpToAreaSize(selectionAreaRadius);
-                                // set the targets in the area to be brighter
-                                for (int i = 0; i < newTargetsArea.Count; i++) {
-                                    newTargetsArea[i].BrightenLine();
-                                }
-                                if (HasIron) {
-                                    if (markForPullDown) {
-                                        if (Keybinds.MultipleMarks()) {
-                                            if (bullseyeTarget != null) {
-                                                //if (PullTargets.IsTarget(bullseyeTarget)) {
-                                                //    // If the bullseye target is already selected, we want to remove targets instead.
-                                                //    PullTargets.RemoveTargets(newTargetsArea);
-                                                //    //removingTargets = PullTargets.VacuousCount == 0;
-                                                //} else {
-                                                    // They're not targets. Add them.
-                                                    // O(n^2)ish
-                                                    for (int i = 0; i < newTargetsArea.Count; i++) {
-                                                        PullTargets.AddTarget(newTargetsArea[i], false);
-                                                    }
-                                                //}
-                                            }
-                                        } else {
-                                            //if (PullTargets.IsTarget(bullseyeTarget)) {
-                                            //    // If the bullseye target is already selected, we want to remove targets instead.
-                                            //    PullTargets.RemoveTargets(newTargetsArea);
-                                            //    removingTargets = PullTargets.VacuousCount == 0;
-                                            //} else {
-                                                // It's not a target. Remove old targets and add new one.
-                                                PullTargets.ReplaceContents(newTargetsArea, false);
-                                            //}
-                                        }
-                                    } else if (markForPull) {
-                                        if (Keybinds.MultipleMarks()) {
-                                            //if (removingTargets) {
-                                            //    PullTargets.RemoveTargets(newTargetsArea);
-                                            //} else {
-                                                for (int i = 0; i < newTargetsArea.Count; i++) {
-                                                    PullTargets.AddTarget(newTargetsArea[i], false);
-                                                }
-                                            //}
-                                        } else {
-                                            //if (removingTargets) {
-                                            //    PullTargets.RemoveTargets(newTargetsArea);
-                                            //} else {
-                                                PullTargets.ReplaceContents(newTargetsArea, false);
-                                            //}
-                                        }
-                                    } else {
-                                        // Not holding down Negate nor Select this round. Consider vacuous pulling.
-                                        if (!HasPullTarget) {
-                                            if (keybindPullingDown) {
-                                                PullTargets.ReplaceContents(newTargetsArea, true);
-                                            }
-                                        } else if (!keybindPulling && PullTargets.VacuousCount > 0) {
-                                            PullTargets.RemoveAllVacuousTargets();
-                                        }
-                                    }
-                                }
-                                if (HasSteel) {
-                                    if (markForPushDown) {
-                                        if (Keybinds.MultipleMarks()) {
-                                            if (bullseyeTarget != null) {
-                                                //if (PushTargets.IsTarget(bullseyeTarget)) {
-                                                //    // If the bullseye target is already selected, we want to remove targets instead.
-                                                //    PushTargets.RemoveTargets(newTargetsArea);
-                                                //    //removingTargets = PushTargets.VacuousCount == 0;
-                                                //} else {
-                                                    // They're not targets. Add them.
-                                                    // O(n^2)ish
-                                                    for (int i = 0; i < newTargetsArea.Count; i++) {
-                                                        PushTargets.AddTarget(newTargetsArea[i], false);
-                                                    }
-                                                //}
-                                            }
-                                        } else {
-                                            //if (PushTargets.IsTarget(bullseyeTarget)) {
-                                            //    // If the bullseye target is already selected, we want to remove targets instead.
-                                            //    PushTargets.RemoveTargets(newTargetsArea);
-                                            //    removingTargets = PushTargets.VacuousCount == 0;
-                                            //} else {
-                                                // It's not a target. Remove old targets and add new one.
-                                                PushTargets.ReplaceContents(newTargetsArea, false);
-                                            //}
-                                        }
-                                    } else if (markForPush) {
-                                        if (Keybinds.MultipleMarks()) {
-                                            //if (removingTargets) {
-                                            //    PushTargets.RemoveTargets(newTargetsArea);
-                                            //} else {
-                                                for (int i = 0; i < newTargetsArea.Count; i++) {
-                                                    PushTargets.AddTarget(newTargetsArea[i], false);
-                                                }
-                                            //}
-                                        } else {
-                                            //if (removingTargets) {
-                                            //    PushTargets.RemoveTargets(newTargetsArea);
-                                            //} else {
-                                                PushTargets.ReplaceContents(newTargetsArea, false);
-                                            //}
-                                        }
-                                    } else {
-                                        // Not holding down Negate nor Select this round. Consider vacuous Pushing.
-                                        if (!HasPushTarget) {
-                                            if (keybindPushingDown) {
-                                                PushTargets.ReplaceContents(newTargetsArea, true);
-                                            }
-                                        } else if (!keybindPushing && PushTargets.VacuousCount > 0) {
-                                            PushTargets.RemoveAllVacuousTargets();
-                                        }
-                                    }
-                                }
-                                break;
-                            case ControlMode.Bubble:
-                                // The Bubble crosshair also uses the area crosshair settings
-                                LerpToAreaSize(SelectionBubbleRadius / maxBubbleRadius * maxAreaRadius);
-                                // If in bubble mode, LMB and RMB will open/close the bubble and Q/E/MB4/MB5 toggle it
-                                if (BubbleIsOpen) {
-                                    // Toggle the bubble being persistently open
-                                    if (markForPullDown) {
-                                        if (bubbleKeepOpen) {
-                                            if (BubbleMetalStatus == iron) {
-                                                bubbleKeepOpen = false;
-                                            } else {
-                                                BubbleOpen(iron);
-                                            }
-                                        } else {
-                                            bubbleKeepOpen = true;
-                                            BubbleOpen(iron);
-                                        }
-                                    } else if (markForPushDown) {
-                                        if (bubbleKeepOpen) {
-                                            if (BubbleMetalStatus == steel) {
-                                                bubbleKeepOpen = false;
-                                            } else {
-                                                BubbleOpen(steel);
-                                            }
-                                        } else {
-                                            bubbleKeepOpen = true;
-                                            BubbleOpen(steel);
-                                        }
-                                    }
-                                } else {
-                                    if (markForPullDown) {
-                                        BubbleOpen(iron);
-                                        bubbleKeepOpen = true;
-                                    } else if (markForPushDown) {
-                                        BubbleOpen(steel);
-                                        bubbleKeepOpen = true;
-                                    }
-                                }
-
-                                if (keybindPulling) {
-                                    BubbleOpen(iron);
-                                } else if (keybindPushing) {
-                                    BubbleOpen(steel);
-                                } else if (!bubbleKeepOpen) {
-                                    BubbleClose();
-                                }
-                                break;
-                        }
-
-                        // Handle targets when bubble is open, regardless of mode
-                        if (BubbleIsOpen) {
-                            // remove out-of-range targets
-                            BubbleTargets.RemoveAllOutOfBubble(SelectionBubbleRadius, this);
-                            BubbleTargets.Size = newTargetsBubble.Count;
-                            // add new in-range targets
-                            for (int i = 0; i < newTargetsBubble.Count; i++) {
-                                BubbleTargets.AddTarget(newTargetsBubble[i], false);
-                            }
-                        }
-
+                        UpdatePushingPulling();
                         SetTargetedLineProperties();
                         RefreshHUD();
                     }
@@ -544,27 +133,12 @@ public class PlayerPullPushController : AllomanticIronSteel {
                     // Stop burning
                     if (Keybinds.StopBurning()) {
                         StopBurning();
-                        //timeToStopBurning = 0;
                     }
-                    //else
-                    //if (Keybinds.Negate()) {
-                    //    timeToStopBurning += Time.deltaTime;
-                    //    if (Keybinds.Select() && Keybinds.SelectAlternate() && timeToStopBurning > timeToHoldDown) {
-                    //        //if (Keybinds.IronPulling() && Keybinds.SteelPushing() && timeToStopBurning > timeToHoldDown) {
-                    //        StopBurning();
-                    //        timeToStopBurning = 0;
-                    //    }
-                    //} else {
-                    //    timeToStopBurning = 0;
-                    //}
                 } else {
-                    // Start burning (as long as the Control Wheel isn't open to interfere)
+                    // Start burning (as long as the Control Wheel isn't open to misinterprent your mouse clicks, etc)
                     if (Keybinds.StopBurning()) {
-                        // toggle back on
                         StartBurning();
-                    }
-                    //else if (!Keybinds.Negate() && !HUD.ControlWheelController.IsOpen) {
-                    else if (!HUD.ControlWheelController.IsOpen) {
+                    } else if (!HUD.ControlWheelController.IsOpen) {
                         if (Keybinds.SelectDown() || Keybinds.PullDown()) {
                             StartBurning(true);
                         } else if (Keybinds.SelectAlternateDown() || Keybinds.PushDown()) {
@@ -576,6 +150,436 @@ public class PlayerPullPushController : AllomanticIronSteel {
         }
     }
 
+    /// <summary>
+    /// Changes burn percentage targets and bubble/area radius depending on player input
+    /// </summary>
+    private void UpdateBurnPercentagesAndRadius() {
+
+        // Change Burn Percentage Targets
+        // Check scrollwheel for changing burn percentage and bubble/area radii, or DPad if using gamepad
+        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) { // Gamepad
+            // Bubble/area radii determined by the DPad axes
+            ChangeRadius(Keybinds.DPadYAxis());
+            if (SettingsMenu.settingsData.pushControlStyle == 1) {
+                ChangeTargetForceMagnitude(Keybinds.DPadXAxis());
+            }
+        } else { // Mouse and keyboard
+            // Burn percentages and radii are determined by scroll wheel and whether the Control Wheel is open
+            if (Keybinds.ControlWheel() && (Mode == ControlMode.Area || Mode == ControlMode.Bubble)) {
+                // Control Wheel open? Change the bubble/area radii.
+                ChangeRadius(Keybinds.ScrollWheelAxis());
+            } else {
+                if (SettingsMenu.settingsData.pushControlStyle == 0) {
+                    // Control Wheel closed, and we're in Percentage? Change that.
+                    if (Mode == ControlMode.Bubble)
+                        ChangeBurnPercentageTargetBubble(Keybinds.ScrollWheelAxis());
+                    else
+                        ChangeBurnPercentageTargetManual(Keybinds.ScrollWheelAxis());
+                } else {
+                    // In Magnitude? Change that.
+                    ChangeTargetForceMagnitude(Keybinds.ScrollWheelAxis());
+                }
+            }
+        }
+
+        // Assign Burn percentage targets based on the previously changed burn percentage/target magnitudes
+        if (SettingsMenu.settingsData.pushControlStyle == 0) { // Percentage
+            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) { // Gamepad
+                SetPullPercentageTarget(Keybinds.RightBurnPercentage());
+                SetPushPercentageTarget(Keybinds.LeftBurnPercentage());
+            }
+        } else { // Magnitude
+            if (HasPullTarget || HasPushTarget) {
+
+                float maxNetForce = (LastMaximumNetForce).magnitude;
+                SetPullPercentageTarget(forceMagnitudeTarget / maxNetForce);
+                SetPushPercentageTarget(forceMagnitudeTarget / maxNetForce);
+            } else {
+                SetPullPercentageTarget(0);
+                SetPushPercentageTarget(0);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Updates the status of Pushing and Pulling from player input.
+    /// </summary>
+    private void UpdatePushingPulling() {
+        bool pulling, pushing;
+        bool keybindPulling = Keybinds.IronPulling();
+        bool keybindPushing = Keybinds.SteelPushing() || Keybinds.WithdrawCoin(); // for Pushing on coins after tossing them
+        bool keybindPullingDown = Keybinds.PullDown();
+        bool keybindPushingDown = Keybinds.PushDown();
+
+        // Coinshot mode: 
+        // If do not have pull-targets, pulling is also Pushing
+        // If you were pressing the button to Pull, it's now to Push
+        if (Mode == ControlMode.Coinshot) {
+            pulling = keybindPulling && HasIron && HasPullTarget;
+            pushing = keybindPushing && HasSteel;
+            // if LMB while has a push target, Push and don't Pull.
+            if (keybindPulling && !HasPullTarget) {
+                pushing = true;
+                pulling = false;
+                keybindPulling = false;
+                keybindPushing = true;
+                keybindPullingDown = false;
+            }
+        } else {
+            pulling = keybindPulling && HasIron;
+            pushing = keybindPushing && HasSteel;
+        }
+
+        // Cannot Push and Pull on the same targets
+        if (!HasPushTarget && HasPullTarget) {
+            if (pulling)
+                pushing = false;
+        } else
+        if (!HasPullTarget && HasPushTarget) {
+            if (pushing)
+                pulling = false;
+        }
+
+        IronPulling = pulling;
+        SteelPushing = pushing;
+
+        UpdateTargetSelection(keybindPullingDown, keybindPulling, keybindPushingDown, keybindPushing);
+    }
+
+    /// <summary>
+    /// Searches for and Marks new targets depending on player input.
+    /// </summary>
+    private void UpdateTargetSelection(bool keybindPullingDown, bool keybindPulling, bool keybindPushingDown, bool keybindPushing) {
+
+        // Check input for target selection
+        bool markForPull = Keybinds.Select() && HasIron;
+        bool markForPullDown = Keybinds.SelectDown() && HasIron;
+        bool markForPush = Keybinds.SelectAlternate() && HasSteel;
+        bool markForPushDown = Keybinds.SelectAlternateDown() && HasSteel;
+
+        // Search for Metals
+        Magnetic bullseyeTarget;
+        List<Magnetic> newTargetsArea;
+        List<Magnetic> newTargetsBubble;
+        (bullseyeTarget, newTargetsArea, newTargetsBubble) = IronSteelSight();
+        if (Keybinds.SelectUp() || Keybinds.SelectAlternateUp()) {
+            // No longer need to worry about remarking what we just marked
+            removedTarget = null;
+        }
+        // Assign targets depending on the control mode.
+        switch (Mode) {
+            case ControlMode.Manual:
+            // fall through, same as coinshot
+            case ControlMode.Coinshot:
+                // set the bullseye target to be brighter
+                if (bullseyeTarget)
+                    bullseyeTarget.BrightenLine();
+                if (markForPullDown) {
+                    if (Keybinds.MultipleMarks()) {
+                        if (bullseyeTarget != null) {
+                            if (PullTargets.IsTarget(bullseyeTarget)) {
+                                // If the bullseye target is already selected, we want to remove it instead.
+                                RemovePullTarget(bullseyeTarget);
+                                removedTarget = bullseyeTarget;
+                            } else {
+                                // It's not a target. Add new one.
+                                AddPullTarget(bullseyeTarget);
+                                removedTarget = null;
+                            }
+                        }
+                    } else {
+                        // If there is no bullseye target, deselect all targets.
+                        if (bullseyeTarget == null) {
+                            PullTargets.Clear();
+                        } else if (PullTargets.IsTarget(bullseyeTarget)) {
+                            // If the bullseye target is already selected, we want to remove it instead.
+                            PullTargets.Clear();
+                            removedTarget = bullseyeTarget;
+                        } else {
+                            // It's not a target. Remove old target and add new one.
+                            PullTargets.Clear();
+                            AddPullTarget(bullseyeTarget);
+                            removedTarget = null;
+                        }
+                    }
+                } else if (markForPull) {
+                    if (bullseyeTarget != null) {
+                        if (PullTargets.IsTarget(bullseyeTarget)) {
+                            if (!Keybinds.MultipleMarks()) {
+                                PullTargets.Clear();
+                                if (removedTarget != bullseyeTarget) {
+                                    AddPullTarget(bullseyeTarget);
+                                    removedTarget = null;
+                                }
+                            }
+                        } else {
+                            if (removedTarget != bullseyeTarget) {
+                                // It's not a target. Add it. If we're multitargeting, preserve the old target.
+                                if (!Keybinds.MultipleMarks())
+                                    PullTargets.Clear();
+                                AddPullTarget(bullseyeTarget);
+                                removedTarget = null;
+                            }
+                        }
+                    }
+                } else {
+                    // Not holding down Negate nor Select this round. Consider vacuous pulling.
+                    if (keybindPullingDown) {
+                        if (!HasMarkedPullTarget) {
+                            AddPullTarget(bullseyeTarget, true, true);
+                        }
+                    } else {
+                        if (!keybindPulling && PullTargets.VacuousCount > 0) {
+                            // If we were vacuously pulling but we just released the Pull, remove those targets.
+                            PullTargets.RemoveAllVacuousTargets();
+                        }
+                    }
+                }
+
+                if (markForPushDown) {
+                    if (Keybinds.MultipleMarks()) {
+                        if (bullseyeTarget != null) {
+                            if (PushTargets.IsTarget(bullseyeTarget)) {
+                                // If the bullseye target is already selected, we want to remove it instead.
+                                RemovePushTarget(bullseyeTarget);
+                                removedTarget = bullseyeTarget;
+                            } else {
+                                // It's not a target. Add new one.
+                                AddPushTarget(bullseyeTarget);
+                                removedTarget = null;
+                            }
+                        }
+                    } else {
+                        // If there is no bullseye target, deselect all targets.
+                        if (bullseyeTarget == null) {
+                            PushTargets.Clear();
+                        } else if (PushTargets.IsTarget(bullseyeTarget)) {
+                            // If the bullseye target is already selected, we want to remove it instead.
+                            PushTargets.Clear();
+                            removedTarget = bullseyeTarget;
+                        } else {
+                            // It's not a target. Remove old target and add new one.
+                            PushTargets.Clear();
+                            AddPushTarget(bullseyeTarget);
+                            removedTarget = null;
+                        }
+                    }
+                } else if (markForPush) {
+                    if (bullseyeTarget != null) {
+                        if (PushTargets.IsTarget(bullseyeTarget)) {
+                            if (!Keybinds.MultipleMarks()) {
+                                PushTargets.Clear();
+                                if (removedTarget != bullseyeTarget) {
+                                    AddPushTarget(bullseyeTarget);
+                                    removedTarget = null;
+                                }
+                            }
+                        } else {
+                            if (removedTarget != bullseyeTarget) {
+                                // It's not a target. Add it. If we're multitargeting, preserve the old target.
+                                if (!Keybinds.MultipleMarks())
+                                    PushTargets.Clear();
+                                AddPushTarget(bullseyeTarget);
+                                removedTarget = null;
+                            }
+                        }
+                    }
+                } else {
+                    // Not holding down Negate nor Select this round. Consider vacuous pulling.
+                    if (keybindPushingDown) {
+                        if (!HasMarkedPushTarget) {
+                            AddPushTarget(bullseyeTarget, true, true);
+                        }
+                    } else {
+                        if (!keybindPushing && PushTargets.VacuousCount > 0) {
+                            // If we were vacuously Pushing but we just released the Push, remove those targets.
+                            PushTargets.RemoveAllVacuousTargets();
+                        }
+                    }
+                }
+                break;
+            case ControlMode.Area:
+                // Crosshair: lerp to the correct size
+                LerpToAreaSize(selectionAreaRadius);
+                // set the targets in the area to be brighter
+                for (int i = 0; i < newTargetsArea.Count; i++) {
+                    newTargetsArea[i].BrightenLine();
+                }
+                if (HasIron) {
+                    if (markForPullDown) {
+                        if (Keybinds.MultipleMarks()) {
+                            if (bullseyeTarget != null) {
+                                //if (PullTargets.IsTarget(bullseyeTarget)) {
+                                //    // If the bullseye target is already selected, we want to remove targets instead.
+                                //    PullTargets.RemoveTargets(newTargetsArea);
+                                //    //removingTargets = PullTargets.VacuousCount == 0;
+                                //} else {
+                                // They're not targets. Add them.
+                                // O(n^2)ish
+                                for (int i = 0; i < newTargetsArea.Count; i++) {
+                                    PullTargets.AddTarget(newTargetsArea[i], false);
+                                }
+                                //}
+                            }
+                        } else {
+                            //if (PullTargets.IsTarget(bullseyeTarget)) {
+                            //    // If the bullseye target is already selected, we want to remove targets instead.
+                            //    PullTargets.RemoveTargets(newTargetsArea);
+                            //    removingTargets = PullTargets.VacuousCount == 0;
+                            //} else {
+                            // It's not a target. Remove old targets and add new one.
+                            PullTargets.ReplaceContents(newTargetsArea, false);
+                            //}
+                        }
+                    } else if (markForPull) {
+                        if (Keybinds.MultipleMarks()) {
+                            //if (removingTargets) {
+                            //    PullTargets.RemoveTargets(newTargetsArea);
+                            //} else {
+                            for (int i = 0; i < newTargetsArea.Count; i++) {
+                                PullTargets.AddTarget(newTargetsArea[i], false);
+                            }
+                            //}
+                        } else {
+                            //if (removingTargets) {
+                            //    PullTargets.RemoveTargets(newTargetsArea);
+                            //} else {
+                            PullTargets.ReplaceContents(newTargetsArea, false);
+                            //}
+                        }
+                    } else {
+                        // Not holding down Negate nor Select this round. Consider vacuous pulling.
+                        if (!HasPullTarget) {
+                            if (keybindPullingDown) {
+                                PullTargets.ReplaceContents(newTargetsArea, true);
+                            }
+                        } else if (!keybindPulling && PullTargets.VacuousCount > 0) {
+                            PullTargets.RemoveAllVacuousTargets();
+                        }
+                    }
+                }
+                if (HasSteel) {
+                    if (markForPushDown) {
+                        if (Keybinds.MultipleMarks()) {
+                            if (bullseyeTarget != null) {
+                                //if (PushTargets.IsTarget(bullseyeTarget)) {
+                                //    // If the bullseye target is already selected, we want to remove targets instead.
+                                //    PushTargets.RemoveTargets(newTargetsArea);
+                                //    //removingTargets = PushTargets.VacuousCount == 0;
+                                //} else {
+                                // They're not targets. Add them.
+                                // O(n^2)ish
+                                for (int i = 0; i < newTargetsArea.Count; i++) {
+                                    PushTargets.AddTarget(newTargetsArea[i], false);
+                                }
+                                //}
+                            }
+                        } else {
+                            //if (PushTargets.IsTarget(bullseyeTarget)) {
+                            //    // If the bullseye target is already selected, we want to remove targets instead.
+                            //    PushTargets.RemoveTargets(newTargetsArea);
+                            //    removingTargets = PushTargets.VacuousCount == 0;
+                            //} else {
+                            // It's not a target. Remove old targets and add new one.
+                            PushTargets.ReplaceContents(newTargetsArea, false);
+                            //}
+                        }
+                    } else if (markForPush) {
+                        if (Keybinds.MultipleMarks()) {
+                            //if (removingTargets) {
+                            //    PushTargets.RemoveTargets(newTargetsArea);
+                            //} else {
+                            for (int i = 0; i < newTargetsArea.Count; i++) {
+                                PushTargets.AddTarget(newTargetsArea[i], false);
+                            }
+                            //}
+                        } else {
+                            //if (removingTargets) {
+                            //    PushTargets.RemoveTargets(newTargetsArea);
+                            //} else {
+                            PushTargets.ReplaceContents(newTargetsArea, false);
+                            //}
+                        }
+                    } else {
+                        // Not holding down Negate nor Select this round. Consider vacuous Pushing.
+                        if (!HasPushTarget) {
+                            if (keybindPushingDown) {
+                                PushTargets.ReplaceContents(newTargetsArea, true);
+                            }
+                        } else if (!keybindPushing && PushTargets.VacuousCount > 0) {
+                            PushTargets.RemoveAllVacuousTargets();
+                        }
+                    }
+                }
+                break;
+            case ControlMode.Bubble:
+                // The Bubble crosshair also uses the area crosshair settings
+                LerpToAreaSize(SelectionBubbleRadius / maxBubbleRadius * maxAreaRadius);
+                // If in bubble mode, LMB and RMB will open/close the bubble and Q/E/MB4/MB5 toggle it
+                if (BubbleIsOpen) {
+                    // Toggle the bubble being persistently open
+                    if (markForPullDown) {
+                        if (bubbleKeepOpen) {
+                            if (BubbleMetalStatus == iron) {
+                                bubbleKeepOpen = false;
+                            } else {
+                                BubbleOpen(iron);
+                            }
+                        } else {
+                            bubbleKeepOpen = true;
+                            BubbleOpen(iron);
+                        }
+                    } else if (markForPushDown) {
+                        if (bubbleKeepOpen) {
+                            if (BubbleMetalStatus == steel) {
+                                bubbleKeepOpen = false;
+                            } else {
+                                BubbleOpen(steel);
+                            }
+                        } else {
+                            bubbleKeepOpen = true;
+                            BubbleOpen(steel);
+                        }
+                    }
+                } else {
+                    if (markForPullDown) {
+                        BubbleOpen(iron);
+                        bubbleKeepOpen = true;
+                    } else if (markForPushDown) {
+                        BubbleOpen(steel);
+                        bubbleKeepOpen = true;
+                    }
+                }
+
+                if (keybindPulling) {
+                    BubbleOpen(iron);
+                } else if (keybindPushing) {
+                    BubbleOpen(steel);
+                } else if (!bubbleKeepOpen) {
+                    BubbleClose();
+                }
+                break;
+        }
+
+        // Handle targets when bubble is open, regardless of mode
+        if (BubbleIsOpen) {
+            // remove out-of-range targets
+            BubbleTargets.RemoveAllOutOfBubble(SelectionBubbleRadius, this);
+            BubbleTargets.Size = newTargetsBubble.Count;
+            // add new in-range targets
+            for (int i = 0; i < newTargetsBubble.Count; i++) {
+                BubbleTargets.AddTarget(newTargetsBubble[i], false);
+            }
+        }
+    }
+    #endregion
+
+    #region burningMetals
+    /// <summary>
+    /// Starts burning metals, turning on ironsight.
+    /// </summary>
+    /// <param name="startIron">Start passively burning iron (true) or steel (false)</param>
+    /// <returns></returns>
     public override bool StartBurning(bool startIron = true) {
         if (!base.StartBurning(startIron))
             return false;
@@ -586,8 +590,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
         if (bubbleBurnPercentageLerp < 0.001f)
             bubbleBurnPercentageLerp = 1;
 
-        //areaRadiusLerp = 0;
-        switch(Mode) {
+        switch (Mode) {
             case ControlMode.Manual:
                 HUD.Crosshair.SetManual();
                 break;
@@ -613,6 +616,10 @@ public class PlayerPullPushController : AllomanticIronSteel {
         return true;
     }
 
+    /// <summary>
+    /// Stops burning iron and steel.
+    /// </summary>
+    /// <param name="clearTargets">Also remove marked push/pull targets</param>
     public override void StopBurning(bool clearTargets = true) {
         base.StopBurning(clearTargets);
         steelBurnPercentageLerp = 0;
@@ -627,29 +634,34 @@ public class PlayerPullPushController : AllomanticIronSteel {
         HUD.Crosshair.SetManual();
         RefreshHUD();
     }
+    #endregion
+
+    #region metalLines
     /*
-     * STEEL/IRONSIGHT MANAGEMENT: blue lines pointing to nearby metals
+     * STEEL/IRONSIGHT MANAGEMENT: Render blue lines pointing to nearby metals
      * 
-     * Searches all Magnetics in the scene for those that are within detection range of the player.
-     * Shows metal lines drawing from them to the player.
-     * Outputs the Magnetics that should be selected. Depending on the Control Mode, this will be:
-     *  - Manual/Coinshot: the "closest" metal to the center of the screen
-     *  - Area: All metals in the circle close to the center of the screen
-     *  - Bubble: All metals in a sphere around the player
+     *  - Searches all Magnetics in the scene that are within a range of the player.
+     *  - Shows metal lines drawing from them to the player.
+     *  - Returns the Magnetics that might be selected, depending on the mode:
+     *      Manual/Coinshot: the closest metal to the center of the screen (the bullseye target)
+     *      Area: All metals in the circle close to the center of the screen
+     *      Bubble: All metals in a sphere around the player
      * 
      * Rules for the metal lines:
      *  - The WIDTH of the line is dependant on the MASS of the target
      *  - The BRIGHTNESS of the line is dependent on the FORCE that would result from the Push
-     *  - The "LIGHT SABER" FACTOR is dependent on the FORCE acting on the target. If the metal is not a target, it is 1 (no light saber factor).
+     *  - The "LIGHT SABER" FACTOR (the white core of the line) is dependent on the FORCE actually acting on the target.
      *  
-     *  This algorithm (specifically, setting the properties for the blue lines) gobbles up CPU usage. Once you have more than ~300 objects in range,
-     *      each of which performs an Allomantic Force calculation, you are guaranteed to lose frames.
+     *  This algorithm could be more efficient.
      */
+    /// <summary>
+    /// Find nearby metals for targeting and render blue lines pointing to them.
+    /// </summary>
+    /// <returns>The bullseye target, the list of targets in the area, the list of targets in the bubble</returns>
     private (Magnetic, List<Magnetic>, List<Magnetic>) IronSteelSight() {
         Magnetic targetBullseye = null;
         List<Magnetic> newTargetsArea = new List<Magnetic>();
         List<Magnetic> newTargetsBubble = new List<Magnetic>();
-
 
         // To determine the range of detection, find the force that would act on a supermassive metal.
         // That way, we can ignore metals out of that range for efficiency.
@@ -735,6 +747,13 @@ public class PlayerPullPushController : AllomanticIronSteel {
      * These factors are described in the above function.
      * Returns the "weight" of the target, which increases within closeness to the player and the center of the screen.
      */
+    /// <summary>
+    /// Calculates how good of a target a metal is and assigns its blue line properties.
+    /// </summary>
+    /// <param name="target">the metal in question</param>
+    /// <param name="radialDistance">the distance from the center of the screen to the target</param>
+    /// <param name="linearDistance">the distance from the player to the target</param>
+    /// <returns>the weight of the target (-1 if invalid, 1 for very valid)</returns>
     private float SetLineProperties(Magnetic target, out float radialDistance, out float linearDistance) {
         Vector3 allomanticForceVector = CalculateAllomanticForce(target);
         float allomanticForce = allomanticForceVector.magnitude;
@@ -795,11 +814,18 @@ public class PlayerPullPushController : AllomanticIronSteel {
 
         return weight;
     }
+
+    /// <summary>
+    /// Updates the blue lines pointed to metals without expecting
+    /// </summary>
     public void UpdateBlueLines() {
         IronSteelSight();
         SetTargetedLineProperties();
     }
 
+    /// <summary>
+    /// Makes the lines pointing to marked targets be brighter, special colors, etc.
+    /// </summary>
     private void SetTargetedLineProperties() {
         // Regardless of other factors, lines pointing to Push/Pull-targets have unique colors
         // Update metal lines for Pull/PushTargets
@@ -821,43 +847,47 @@ public class PlayerPullPushController : AllomanticIronSteel {
         BubbleTargets.UpdateBlueLines(BubbleMetalStatus, BubbleBurnPercentageTarget, CenterOfMass);
     }
 
-    public void RemoveAllTargets() {
-        PullTargets.Clear();
-        PushTargets.Clear();
-
-        HUD.TargetOverlayController.Clear();
+    public void EnableRenderingBlueLines() {
+        if (IsBurning)
+            CameraController.ActiveCamera.cullingMask = ~0;
     }
 
-    private void IncrementTargets() {
-        switch (Mode) {
-            case ControlMode.Area:
+    public void DisableRenderingBlueLines() {
+        CameraController.ActiveCamera.cullingMask = ~(1 << blueLineLayer);
+    }
+    #endregion
+
+    #region controlsManupulation
+    /// <summary>
+    /// Changes the radius for bubble/area mode.
+    /// </summary>
+    private void ChangeRadius(float change) {
+        if (change == 0)
+            return;
+        if (Mode == ControlMode.Area) {
+            if (change > 0) {
                 if (selectionAreaRadius < maxAreaRadius) {
                     selectionAreaRadius += areaRadiusIncrement;
                 }
-                break;
-            case ControlMode.Bubble:
+            } else if (selectionAreaRadius > minAreaRadius) {
+                selectionAreaRadius -= areaRadiusIncrement;
+            }
+
+        } else if (Mode == ControlMode.Bubble) {
+            if (change > 0) {
                 if (SelectionBubbleRadius < maxBubbleRadius) {
                     SelectionBubbleRadius += bubbleRadiusIncrement;
                 }
-                break;
+            } else if (SelectionBubbleRadius > minBubbleRadius) {
+                SelectionBubbleRadius -= bubbleRadiusIncrement;
+            }
         }
     }
 
-    private void DecrementTargets() {
-        switch (Mode) {
-            case ControlMode.Area:
-                if (selectionAreaRadius > minAreaRadius) {
-                    selectionAreaRadius -= areaRadiusIncrement;
-                }
-                break;
-            case ControlMode.Bubble:
-                if (SelectionBubbleRadius > minBubbleRadius) {
-                    SelectionBubbleRadius -= bubbleRadiusIncrement;
-                }
-                break;
-        }
-    }
-
+    /// <summary>
+    /// Sets the desired force magnitude for when the Push Control Mode is "Magnitude" 
+    /// </summary>
+    /// <param name="change">the delta by which the force should chagnge</param>
     private void ChangeTargetForceMagnitude(float change) {
         if (SettingsMenu.settingsData.forceUnits == 0) {
             if (change > 0) {
@@ -889,40 +919,48 @@ public class PlayerPullPushController : AllomanticIronSteel {
             StopBurning();
     }
 
-    // Increments or decrements the current burn percentage
-    private void ChangeBurnPercentageTarget(float change, bool percentageForBubble = false) {
-        if (percentageForBubble) {
-            if (change > 0) {
-                change = .10f;
-                if (bubbleBurnPercentageLerp < .09f) {
-                    change /= 10f;
-                }
-            } else if (change < 0) {
-                change = -.10f;
-                if (bubbleBurnPercentageLerp <= .10f) {
-                    change /= 10f;
-                }
+    /// <summary>
+    /// Changes the desired percentage for when the Push Control Mode is "Percent" and Control Mode is not Bubble
+    /// </summary>
+    /// <param name="change">the delta by which the percent should change</param>
+    private void ChangeBurnPercentageTargetManual(float change) {
+        if (change > 0) {
+            change = .10f;
+            if (ironBurnPercentageLerp < .09f || steelBurnPercentageLerp < .09f) {
+                change /= 10f;
             }
-            SetBubblePercentageTarget(Mathf.Clamp(bubbleBurnPercentageLerp + change, 0, 1));
-        } else {
-            if (change > 0) {
-                change = .10f;
-                if (ironBurnPercentageLerp < .09f || steelBurnPercentageLerp < .09f) {
-                    change /= 10f;
-                }
-            } else if (change < 0) {
-                change = -.10f;
-                if (ironBurnPercentageLerp <= .10f || steelBurnPercentageLerp <= .10f) {
-                    change /= 10f;
-                }
+        } else if (change < 0) {
+            change = -.10f;
+            if (ironBurnPercentageLerp <= .10f || steelBurnPercentageLerp <= .10f) {
+                change /= 10f;
             }
-            SetPullPercentageTarget(Mathf.Clamp(ironBurnPercentageLerp + change, 0, 1));
-            SetPushPercentageTarget(Mathf.Clamp(steelBurnPercentageLerp + change, 0, 1));
         }
-
+        SetPullPercentageTarget(Mathf.Clamp(ironBurnPercentageLerp + change, 0, 1));
+        SetPushPercentageTarget(Mathf.Clamp(steelBurnPercentageLerp + change, 0, 1));
+    }
+    /// <summary>
+    /// Changes the desired percentage for when the Push Control Mode is "Percent" and Control Mode is "Bubble"
+    /// </summary>
+    /// <param name="change">the delta by which the percent should change</param>
+    private void ChangeBurnPercentageTargetBubble(float change) {
+        if (change > 0) {
+            change = .10f;
+            if (bubbleBurnPercentageLerp < .09f) {
+                change /= 10f;
+            }
+        } else if (change < 0) {
+            change = -.10f;
+            if (bubbleBurnPercentageLerp <= .10f) {
+                change /= 10f;
+            }
+        }
+        SetBubblePercentageTarget(Mathf.Clamp(bubbleBurnPercentageLerp + change, 0, 1));
     }
 
-    // Sets the lerp goal for iron burn percentage
+    /// <summary>
+    /// Sets the percentage target for Pulling to lerp to
+    /// </summary>
+    /// <param name="percentage">the desired percent</param>
     private void SetPullPercentageTarget(float percentage) {
         if (percentage > .005f) {
             ironBurnPercentageLerp = Mathf.Min(1, percentage);
@@ -933,7 +971,10 @@ public class PlayerPullPushController : AllomanticIronSteel {
                 ironBurnPercentageLerp = 0;
         }
     }
-    // Sets the lerp goal for steel burn percentage
+    /// <summary>
+    /// Sets the percentage target for Pushing to lerp to
+    /// </summary>
+    /// <param name="percentage">the desired percent</param>
     private void SetPushPercentageTarget(float percentage) {
         if (percentage > .005f) {
             steelBurnPercentageLerp = Mathf.Min(1, percentage);
@@ -944,7 +985,10 @@ public class PlayerPullPushController : AllomanticIronSteel {
                 steelBurnPercentageLerp = 0;
         }
     }
-    // Sets the lerp goal for the bubble
+    /// <summary>
+    /// Sets the percentage target for the Bubble to lerp to
+    /// </summary>
+    /// <param name="percentage">the desired percent</param>
     private void SetBubblePercentageTarget(float percentage) {
         if (percentage > .005f) {
             bubbleBurnPercentageLerp = Mathf.Min(1, percentage);
@@ -956,11 +1000,9 @@ public class PlayerPullPushController : AllomanticIronSteel {
         }
     }
 
-    /*
-     * Lerps from the current burn percentage to the burn percentage target for both metals.
-     * If the player is not Pulling or Pushing, that burn percentage is instead set to 0.
-     *      Set, not lerped - there's more precision there.
-     */
+    /// <summary>
+    /// Lerps the current burn percentages to the desired target percentages.
+    /// </summary>
     private void LerpToBurnPercentages() {
         IronBurnPercentageTarget = Mathf.Lerp(IronBurnPercentageTarget, ironBurnPercentageLerp, burnPercentageLerpConstant);
         SteelBurnPercentageTarget = Mathf.Lerp(SteelBurnPercentageTarget, steelBurnPercentageLerp, burnPercentageLerpConstant);
@@ -995,7 +1037,9 @@ public class PlayerPullPushController : AllomanticIronSteel {
         }
     }
 
-    // Smoothly changes the bubble renderer's scale to fit the target radius
+    /// <summary>
+    /// Lerps the current Bubble burn percentage to the desired target percentage.
+    /// </summary>
     private void LerpToBubbleSize() {
         if (BubbleIsOpen) {
             float diff = SelectionBubbleRadius - bubbleRadiusLerp;
@@ -1008,7 +1052,11 @@ public class PlayerPullPushController : AllomanticIronSteel {
         }
     }
 
-    private void LerpToAreaSize(float targetRadius) { 
+    /// <summary>
+    /// Lerps the Area radius towards the desired radius
+    /// </summary>
+    /// <param name="targetRadius">the desired radius</param>
+    private void LerpToAreaSize(float targetRadius) {
         float diff = targetRadius - areaRadiusLerp;
         if (diff < 0)
             diff = -diff;
@@ -1018,8 +1066,9 @@ public class PlayerPullPushController : AllomanticIronSteel {
         }
     }
 
-    // Updates the burn rate meter with the current burn rates.
-    // Also updates the bubble's edge intensity wit the bubble burn rate.
+    /// <summary>
+    /// Updates the burn rate meter and Bubble edge glow to reflect the current burn percentage
+    /// </summary>
     private void UpdateBurnRateMeter() {
         if (IsBurning) {
             if (SettingsMenu.settingsData.pushControlStyle == 1) // Magnitude
@@ -1053,7 +1102,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
                 }
             }
 
-            // bubble
+            // Set bubble edge glow
             bubbleRenderer.material.SetFloat("_Intensity", bubbleIntensityMin + bubbleIntensityMax * BubbleBurnPercentageTarget);
         } else {
             HUD.BurnPercentageMeter.Clear();
@@ -1061,8 +1110,9 @@ public class PlayerPullPushController : AllomanticIronSteel {
         }
     }
 
-
-    // Refreshes all elements of the hud relevent to pushing and pulling
+    /// <summary>
+    /// Refreshes all elements of the hud relevent to pushing and pulling
+    /// </summary>
     private void RefreshHUD() {
         if (IsBurning) {
             RefreshHUDColorsOnly();
@@ -1082,7 +1132,9 @@ public class PlayerPullPushController : AllomanticIronSteel {
         }
     }
 
-    // Refreshes the colors of the text of target labels and the burn rate meter.
+    /// <summary>
+    /// Refreshes the colors of the text of target labels and the burn rate meter.
+    /// </summary>
     private void RefreshHUDColorsOnly() {
 
         if (PullingOnPullTargets || PushingOnPullTargets) {
@@ -1104,16 +1156,9 @@ public class PlayerPullPushController : AllomanticIronSteel {
             HUD.BurnPercentageMeter.SetForceTextColorWeak();
         }
     }
+    #endregion
 
-    public void EnableRenderingBlueLines() {
-        if (IsBurning)
-            CameraController.ActiveCamera.cullingMask = ~0;
-    }
-
-    public void DisableRenderingBlueLines() {
-        CameraController.ActiveCamera.cullingMask = ~(1 << blueLineLayer);
-    }
-
+    #region controlModes
     public void SetControlModeManual() {
         if (Mode == ControlMode.Manual) {
             StartBurning();
@@ -1161,4 +1206,6 @@ public class PlayerPullPushController : AllomanticIronSteel {
         HUD.BurnPercentageMeter.SetMetalLineCountTextManual();
         StartBurning();
     }
+    #endregion
+
 }

@@ -12,6 +12,7 @@ public class HarmonyTarget : MonoBehaviour {
     private const float forceConstantClose = 10000f;
     private const float lerpConstant = 7;
     private const float timeToLerpBack = 2;
+    private readonly Vector3 positionLeft = new Vector3(0, 0, 2.39419f);
 
     [SerializeField]
     private int numSpikes = 3;
@@ -191,9 +192,7 @@ public class HarmonyTarget : MonoBehaviour {
         numSpikes++;
         anim.SetInteger("SpikeCount", numSpikes);
     }
-
-    [SerializeField]
-    private Vector3 positionLeft = new Vector3(0, 0, 2.39419f);
+    
     public Vector3 GetNextSpikePosition() {
         if (numSpikes == 0) {
             return spikeLeft.TransformPoint(positionLeft);

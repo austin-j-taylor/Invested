@@ -274,7 +274,7 @@ public class Magnetic : MonoBehaviour {
         LastAnchoredPushBoostFromTarget = Vector3.zero;
     }
 
-    protected void Start() {
+    protected virtual void Start() {
         if(blueLine)
             blueLine.gameObject.SetActive(false);
     }

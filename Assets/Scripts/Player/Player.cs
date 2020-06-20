@@ -1,15 +1,18 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-/*
- * Controls all aspects of the Player not related to Allomancy.
- */
+/// <summary>
+/// Controls all general aspects of the Player not covered by the sub-Player______ scripts
+/// </summary>
 public class Player : PewterEntity {
 
+    #region constants
     private const float coinCooldownThreshold = 1f / 10;
     private const float zincTimeCoinThrowModifier = 2; // throw coins faster while in zinc time
     private const float defaultVoidHeight = -50; // Voiding out - if the player falls beneath voidHeight, respawn.
+    #endregion
 
+    #region properties
     public enum CoinMode { Semi, Full, Spray };
 
     //private Animator animator;
@@ -31,21 +34,6 @@ public class Player : PewterEntity {
     public CoinMode CoinThrowingMode { get; set; }
     public Transform RespawnPoint { get; set; }
 
-    //public static bool CanControlWheel { get; set; }
-    //public static bool CanControlZinc { get; set; }
-    //public static bool CanControlMovement { get; set; }
-    //private static bool canControlPushes = false;
-    //public static bool CanControlPushes {
-    //    get {
-    //        return canControlPushes && !PauseMenu.IsPaused;
-    //    }
-    //    set {
-    //        canControlPushes = value;
-    //        if (!value) {
-    //            PlayerIronSteel.SoftClear();
-    //        }
-    //    }
-    //}
     private static bool canControl;
     public static bool CanControl {
         get {
@@ -63,22 +51,6 @@ public class Player : PewterEntity {
     public static bool CanControlMovement { get; set; }
     public static bool CanThrowCoins { get; set; }
 
-    //private static bool godMode = false;
-    //public static bool GodMode { // Player does not run out of metals
-    //    get {
-    //        return godMode;
-    //    }
-    //    private set {
-    //        if (value) {
-    //            PlayerIronSteel.IronReserve.IsEndless = true;
-    //            PlayerIronSteel.SteelReserve.IsEndless = true;
-    //        } else {
-    //            PlayerIronSteel.IronReserve.IsEndless = false;
-    //            PlayerIronSteel.SteelReserve.IsEndless = false;
-    //        }
-    //        godMode = value;
-    //    }
-    //}
     // Some scenes (Storms, Sea of Metal) should feel larger than other scenes (Luthadel, MARL).
     // This is done by increasing camera distance and Allomantic strength.
     private static float feelingScale = 1;
@@ -93,7 +65,10 @@ public class Player : PewterEntity {
     }
     // Some scenes also set the void height
     public static float VoidHeight { get; set; }
+    #endregion
 
+    [SerializeField]
+    private Coin thrownCoin = null;
     private float coinCooldownTimer = 0;
 
     protected override void Awake() {
@@ -123,8 +98,8 @@ public class Player : PewterEntity {
         SceneManager.sceneLoaded += ClearPlayerAfterSceneChange;
         SceneManager.sceneUnloaded += ClearPlayerBeforeSceneChange;
     }
-    [SerializeField]
-    private Coin thrownCoin = null;
+
+    #region updates
     void Update() {
         // Handle "Voiding out" if the player falls too far into the "void"
         if (transform.position.y < VoidHeight) {
@@ -159,10 +134,10 @@ public class Player : PewterEntity {
                         // Holding MultiTarget will mark the coin, as well
                         if (CoinThrowingMode == CoinMode.Spray) {
                             Coin[] coins = CoinHand.WithdrawCoinSprayToHand(!PlayerIronSteel.IsBurning);
-                            if(!Keybinds.Walk())
+                            if (!Keybinds.Walk())
                                 for (int i = 0; i < Hand.spraySize; i++)
                                     PlayerIronSteel.AddPushTarget(coins[i], false, true);
-                                    //PlayerIronSteel.AddPushTarget(coins[i], false, !Keybinds.MultipleMarks());
+                            //PlayerIronSteel.AddPushTarget(coins[i], false, !Keybinds.MultipleMarks());
                         } else {
                             Coin coin = CoinHand.WithdrawCoinToHand(!PlayerIronSteel.IsBurning);
                             if (!Keybinds.Walk()) {
@@ -172,7 +147,7 @@ public class Player : PewterEntity {
                             thrownCoin = coin;
                             //PlayerIronSteel.AddPushTarget(coin, false, !Keybinds.MultipleMarks());
                         }
-                    }   
+                    }
                 } else {
                     coinCooldownTimer += Time.deltaTime * (PlayerZinc.InZincTime ? 2 : 1); // throw coins 
                 }
@@ -190,12 +165,17 @@ public class Player : PewterEntity {
             HUD.HelpOverlayController.Toggle();
         }
         // Changing perspective
-        if(Keybinds.TogglePerspective()) {
+        if (Keybinds.TogglePerspective()) {
             CameraController.TogglePerspective();
         }
     }
+    #endregion
 
-    // Reset certain values BEFORE the player enters a new scene
+    #region clearing
+    /// <summary>
+    /// Reset certain values BEFORE the player enters a new scene
+    /// </summary>
+    /// <param name="scene">the scene that will be entered</param>
     public void ClearPlayerBeforeSceneChange(Scene scene) {
         GetComponentInChildren<AllomechanicalGlower>().RemoveAllEmissions();
         PlayerFlywheelController.Clear();
@@ -211,8 +191,11 @@ public class Player : PewterEntity {
         CameraController.ActiveCamera.GetComponent<CloudMaster>().enabled = false;
     }
 
-    // Reset certain values AFTER the player enters a new scene
-    // TODO Clear flags upon entering first level
+    /// <summary>
+    /// Reset certain values AFTER the player enters a new scene
+    /// </summary>
+    /// <param name="scene">the scene that will be entered</param>
+    /// <param name="mode">the sceme loading mode</param>
     private void ClearPlayerAfterSceneChange(Scene scene, LoadSceneMode mode) {
         if (mode == LoadSceneMode.Single) { // Not loading all of the scenes, as it does at startup
             PlayerAudioController.Clear();
@@ -227,7 +210,7 @@ public class Player : PewterEntity {
             PlayerPewter.PewterReserve.IsEnabled = FlagsController.GetData("pwr_pewter");
             CanControlZinc = FlagsController.GetData("pwr_zinc");
             CanThrowCoins = FlagsController.GetData("pwr_coins");
-            if(FlagsController.GetData("pwr_coins")) {
+            if (FlagsController.GetData("pwr_coins")) {
                 CanThrowCoins = true;
                 CoinHand.Pouch.Fill();
             } else {
@@ -252,30 +235,23 @@ public class Player : PewterEntity {
         }
     }
 
-    // Special collisions for player
+    /// <summary>
+    /// Special collisions for player
+    /// </summary>
+    /// <param name="collision">the collision</param>
     protected override void OnCollisionEnter(Collision collision) {
         base.OnCollisionEnter(collision);
         // During challenges, check for The Floor Is Lava
-        if(GameManager.State == GameManager.GameState.Challenge) {
-            if(collision.transform.CompareTag("ChallengeFailure")) {
+        if (GameManager.State == GameManager.GameState.Challenge) {
+            if (collision.transform.CompareTag("ChallengeFailure")) {
                 ChallengesManager.FailCurrentChallenge();
             }
         }
     }
 
-    public void SetFrameMaterial(Material mat) {
-        playerFrame.GetComponent<Renderer>().material = mat;
-    }
-
-    public void SetSmokeMaterial(Material mat) {
-        GetComponentInChildren<ParticleSystemRenderer>().material = mat;
-    }
-
-    // Used by Triggers to check if they collided with the player
-    public static bool IsPlayerTrigger(Collider other) {
-        return other.CompareTag("Player") && !other.isTrigger;
-    }
-
+    /// <summary>
+    /// Resets the player and returns them to their respawn point
+    /// </summary>
     public void Respawn() {
         if (RespawnPoint) {
             transform.position = RespawnPoint.position;
@@ -283,5 +259,31 @@ public class Player : PewterEntity {
             CameraController.Clear();
             CameraController.SetRotation(RespawnPoint.eulerAngles);
         }
+    }
+    #endregion
+
+    /// <summary>
+    /// Sets the player body's outer frame material
+    /// </summary>
+    /// <param name="mat">the new material</param>
+    public void SetFrameMaterial(Material mat) {
+        playerFrame.GetComponent<Renderer>().material = mat;
+    }
+
+    /// <summary>
+    /// Sets the material of the smoke particles that appear during collisions
+    /// </summary>
+    /// <param name="mat">the new material</param>
+    public void SetSmokeMaterial(Material mat) {
+        GetComponentInChildren<ParticleSystemRenderer>().material = mat;
+    }
+
+    /// <summary>
+    /// Used by Triggers to check if they collided with the player
+    /// </summary>
+    /// <param name="other">the trigger to compare to</param>
+    /// <returns>true if other is the player's trigger</returns>
+    public static bool IsPlayerTrigger(Collider other) {
+        return other.CompareTag("Player") && !other.isTrigger;
     }
 }

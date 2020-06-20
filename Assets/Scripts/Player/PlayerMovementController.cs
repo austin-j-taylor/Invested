@@ -2,15 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/*
- * Controls player Movement, Jumping, Gravity, and Air resistance.
- * 
- * Inherits AllomanticPewter properties.
- * 
- */
-
+/// <summary>
+/// Controls player Pewter, movement, jumping, and gravity.
+/// </summary>
 public class PlayerMovementController : AllomanticPewter {
 
+    #region constants
     private const float shortHopThreshold = .075f;
     public const float radius = .26f; // radius of the player sphere collider
     // Rolling
@@ -29,7 +26,7 @@ public class PlayerMovementController : AllomanticPewter {
     private const float jumpHeight = 300;
     private const float jumpDirectionModifier = 400;
     private const float jumpPewterMagnitude = 350;
-     
+
     // Factors
     private const float walkingFactor = .15f;
     private const float airControlFactor = .3f;
@@ -71,6 +68,8 @@ public class PlayerMovementController : AllomanticPewter {
     // For "Spider-Man Swinging" effect
     [SerializeField]
     private float swinging_gain_P = 0.05f;
+    #endregion
+
     private Vector3 lastFrom = Vector3.zero;
     private float lastDeltaW = 0;
 
@@ -78,6 +77,7 @@ public class PlayerMovementController : AllomanticPewter {
     private PIDController_Vector3 pidSpeed;
     private PhysicMaterial physicsMaterial;
 
+    #region properties
     public bool IsGrounded {
         get => groundedChecker.IsGrounded;
     }
@@ -103,12 +103,14 @@ public class PlayerMovementController : AllomanticPewter {
             base.IsAnchoring = value;
         }
     }
+    #endregion
 
     private bool jumpQueued;
     private bool lastWasSprintingOnGround, lastWasRollingOnGround;
     private float lastJumpTime;
     private bool invertGravity = false;
 
+    #region clearing
     protected override void Awake() {
         base.Awake();
         groundedChecker = transform.GetComponentInChildren<PlayerGroundedChecker>();
@@ -119,8 +121,27 @@ public class PlayerMovementController : AllomanticPewter {
         physicsMaterial = GetComponent<Collider>().material;
     }
 
+    public override void Clear() {
+        jumpQueued = false;
+        lastJumpTime = -1;
+        lastWasSprintingOnGround = false;
+        lastWasRollingOnGround = false;
+        //rb.inertiaTensor = inertiaTensorRunning;
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        rb.useGravity = SettingsMenu.settingsData.playerGravity == 1;
+        rb.isKinematic = false;
+        rb.constraints = RigidbodyConstraints.None;
+        base.Clear();
+    }
+    #endregion
+
+    #region updates
+    /// <summary>
+    /// Check user input and change Sprinting, Anchoring, and jumping state.
+    /// </summary>
     private void Update() {
-        if(!PauseMenu.IsPaused) {
+        if (!PauseMenu.IsPaused) {
             if (Player.CanControl && Player.CanControlMovement) {
                 // walking/rolling/sprinting state machine
                 if (IsAnchoring) {
@@ -139,9 +160,9 @@ public class PlayerMovementController : AllomanticPewter {
                     } // continue walking
                 } else if (IsSprinting) {
                     // was sprinting
-                    if(!Keybinds.Sprint() || !PewterReserve.HasMass) {
+                    if (!Keybinds.Sprint() || !PewterReserve.HasMass) {
                         // stop sprinting
-                        if(Keybinds.Walk() && PewterReserve.HasMass) {
+                        if (Keybinds.Walk() && PewterReserve.HasMass) {
                             // start anchoring
                             IsAnchoring = true;
                             IsSprinting = false;
@@ -177,6 +198,7 @@ public class PlayerMovementController : AllomanticPewter {
             }
         }
     }
+
     protected override void FixedUpdate() {
         base.FixedUpdate();
 
@@ -195,7 +217,6 @@ public class PlayerMovementController : AllomanticPewter {
             } else {
                 from = lastFrom;
             }
-            //Debug.DrawRay(transform.position, from, Color.red);
 
             // Make the player rotate based on that angle
             float expectedDeltaW = Vector3.Angle(from, to);
@@ -216,6 +237,14 @@ public class PlayerMovementController : AllomanticPewter {
         if (invertGravity) {
             rb.AddForce(-Physics.gravity, ForceMode.Acceleration);
         }
+
+        UpdateMovement();
+    }
+
+    /// <summary>
+    /// Change player's movement and Pewter status based on player input.
+    /// </summary>
+    private void UpdateMovement() {
 
         // Handle all player movement control
         if (Player.CanControl && Player.CanControlMovement) {
@@ -295,8 +324,8 @@ public class PlayerMovementController : AllomanticPewter {
                 // "Short hopping": if you tap the jump button instead of holding it, do a short hop.
                 // Effectively, if you release the jump button within a short window of jumping,
                 //  apply a small negative impulse to reduce the jump height.
-                if(!Keybinds.Jump() && Time.unscaledTime - lastJumpTime < shortHopThreshold) {
-                    rb.AddForce(-groundedChecker.Normal * jumpHeight/2, ForceMode.Impulse);
+                if (!Keybinds.Jump() && Time.unscaledTime - lastJumpTime < shortHopThreshold) {
+                    rb.AddForce(-groundedChecker.Normal * jumpHeight / 2, ForceMode.Impulse);
                     lastJumpTime = -1;
                 }
 
@@ -358,7 +387,7 @@ public class PlayerMovementController : AllomanticPewter {
                 Player.PlayerFlywheelController.SpinToTorque(torque);
                 // Apply a small amount of the movement force to player for tighter controls & air movement
                 rb.AddForce((CameraController.UpsideDown ? -movement : movement) * airControlFactor * rollingAcceleration, ForceMode.Acceleration);
-                 
+
                 // Debug
                 //Debug.DrawRay(transform.position, rb.angularVelocity, Color.red);
                 //Debug.DrawRay(transform.position, torque, Color.white);
@@ -379,22 +408,8 @@ public class PlayerMovementController : AllomanticPewter {
                 lastWasRollingOnGround = false;
             }
         }
-
     }
-
-    public override void Clear() {
-        jumpQueued = false;
-        lastJumpTime = -1;
-        lastWasSprintingOnGround = false;
-        lastWasRollingOnGround = false;
-        //rb.inertiaTensor = inertiaTensorRunning;
-        rb.velocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
-        rb.useGravity = SettingsMenu.settingsData.playerGravity == 1;
-        rb.isKinematic = false;
-        rb.constraints = RigidbodyConstraints.None;
-        base.Clear();
-    }
+    #endregion
 
     public void EnableGravity() {
         rb.useGravity = true;

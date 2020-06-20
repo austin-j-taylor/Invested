@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/*
- * Controls how and where coins are thrown from the player.
- */
+/// <summary>
+/// Controls how and where coins are thrown from the player
+/// </summary>
 public class Hand : MonoBehaviour {
 
     private const float baseSteepAngle = 1f / 2f;
@@ -27,6 +27,7 @@ public class Hand : MonoBehaviour {
         distanceToHand = transform.localPosition.magnitude;
     }
 
+    #region coinThrowing
     public Coin WithdrawCoinToHand(bool addAllomancerVelocity) {
         if (Pouch.Count > 0) {
             Coin coin;
@@ -110,7 +111,7 @@ public class Hand : MonoBehaviour {
                 spawnPosition = transform.position;
             }
 
-            for(int i = 0; i < spraySize && Pouch.Count > 0; i++) {
+            for (int i = 0; i < spraySize && Pouch.Count > 0; i++) {
                 coins[i] = Pouch.RemoveCoin(spawnPosition + Random.insideUnitSphere * spreadSize);
                 // If the wielder of this pouch is not simultaneously Pushing on the coins, add their velocity to the coins
                 // The intent is that the coins would realisticially always start with the allomancer's velocity,
@@ -126,17 +127,10 @@ public class Hand : MonoBehaviour {
         }
         return null;
     }
-
-    //public Coin SpawnCoin(Vector3 position) {
-    //    if (Pouch.Count > 0) {
-    //        Coin coin = Pouch.RemoveCoin(position);
-    //        return coin;
-    //    }
-    //    return null;
-    //}
+    #endregion
 
     public void CatchCoin(Coin coin) {
-        if(!allomancer.RemovePushTarget(coin)) {
+        if (!allomancer.RemovePushTarget(coin)) {
             allomancer.RemovePullTarget(coin);
         }
         Pouch.AddCoin(coin);

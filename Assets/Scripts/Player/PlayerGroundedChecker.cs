@@ -3,21 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
- * Every frame, checks if the player is in contact with a collider (i.e. is able to jump, either from the ground or off of a wall).
- * "Pewter jumps:" While holding a movement key while jumping, you will jump further in that direction horizontally.
- *      If you are against a wall and try to move into the wall while jumping, you'll instead jump more vertically
+ * 
+ * 
+ *      
  */
+/// <summary>
+/// Every frame, checks if the player is touching a collider (i.e. is able to jump, either from the ground or off of a wall).
+/// </summary>
 public class PlayerGroundedChecker : MonoBehaviour {
 
     private const float feetRange = 0.10f;
     private readonly Vector3 feetOffset = new Vector3(0, -.25f, 0);
 
     public bool IsGrounded { get { return StandingOnCollider != null; } }
-    
+
     public Collider StandingOnCollider { get; private set; } = null;
     public Vector3 Point { get; private set; }
     public Vector3 Normal { get; private set; }
-    
+
     private void OnCollisionEnter(Collision collision) {
         if (!collision.collider.isTrigger) {
             OnCollisionStay(collision);
@@ -46,9 +49,11 @@ public class PlayerGroundedChecker : MonoBehaviour {
         StandingOnCollider = null;
     }
 
-    // Raycast downward; if there's a ground very close to your feet, always try to jump from that.
+    /// <summary>
+    /// Raycast downward; if there's a ground very close to your feet, always try to jump from that.
+    /// </summary>
     public void UpdateStanding() {
-        if(Physics.Raycast(transform.position + feetOffset, Vector3.down, out RaycastHit hit, feetRange, GameManager.Layer_IgnorePlayer)) {
+        if (Physics.Raycast(transform.position + feetOffset, Vector3.down, out RaycastHit hit, feetRange, GameManager.Layer_IgnorePlayer)) {
             if (StandingOnCollider != hit.collider) {
                 StandingOnCollider = hit.collider;
                 Normal = hit.normal;
@@ -56,5 +61,4 @@ public class PlayerGroundedChecker : MonoBehaviour {
             }
         }
     }
-
 }

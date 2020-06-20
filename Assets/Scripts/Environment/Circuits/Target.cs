@@ -64,7 +64,7 @@ public class Target : SourceBreakable {
     }
 
     protected virtual void OnCollisionEnter(Collision collision) {
-        if(collision.impulse.magnitude > thresholdForce) {
+        if(collision.relativeVelocity.magnitude > thresholdForce) {
             StartDestroying();
         }
     }

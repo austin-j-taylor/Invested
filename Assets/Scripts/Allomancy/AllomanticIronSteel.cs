@@ -1,11 +1,13 @@
 using UnityEngine;
-/*
- * Controls Ironpulling and Steelpushing.
- * Should be attached to any Allomancer using Iron or Steel.
- */
+
+/// <summary>
+/// Controls Ironpulling and Steelpushing.
+/// Should be attached to any Allomancer using Iron or Steel.
+/// </summary>
 [RequireComponent(typeof(Rigidbody))]
 public class AllomanticIronSteel : Allomancer {
 
+    #region constants
     // Force calculation constants
     public const float chargePower = 1f / 8f;
     public const float lineOfSightFactor = 3 / 4f; // If a target is blocked by a wall, pushes are at 75% strength
@@ -18,6 +20,7 @@ public class AllomanticIronSteel : Allomancer {
     // Simple metal boolean constants for passing to methods
     public const bool steel = false;
     public const bool iron = true;
+    #endregion
 
     [HideInInspector]
     public Rigidbody rb;
@@ -44,6 +47,7 @@ public class AllomanticIronSteel : Allomancer {
         }
     }
 
+    #region macroProperties
     public bool PullingOnPullTargets {
         get {
             return IronPulling && PullTargets.Count != 0;
@@ -85,7 +89,6 @@ public class AllomanticIronSteel : Allomancer {
             return HasPushTarget && PushTargets.VacuousCount != PushTargets.Count;
         }
     }
-
     public bool HasIron {
         get {
             return IronReserve.HasMass;
@@ -96,13 +99,14 @@ public class AllomanticIronSteel : Allomancer {
             return SteelReserve.HasMass;
         }
     }
-
     public bool UsingBubble {
         get {
             return BubbleTargets != null;
         }
     }
+    #endregion
 
+    #region properties
     // Used for calculating the acceleration over the last frame for pushing/pulling
     public Vector3 LastAllomancerVelocity { get; private set; } = Vector3.zero;
     //private Vector3 lastExpectedAllomancerVelocityChange = Vector3.zero;
@@ -145,7 +149,7 @@ public class AllomanticIronSteel : Allomancer {
     }
     // Bubble control
     public bool BubbleIsOpen { get; private set; } // true when the bubble is open at all
-    public bool BubbleMetalStatus { get; protected set;  } // true for iron, false for steel
+    public bool BubbleMetalStatus { get; protected set; } // true for iron, false for steel
     protected bool bubbleKeepOpen; // toggled by Q/E/MB4/MB5
 
     /*
@@ -175,8 +179,9 @@ public class AllomanticIronSteel : Allomancer {
             return rb.mass;
         }
     }
+    #endregion
 
-
+    #region clearing
     protected virtual void Awake() {
         rb = GetComponent<Rigidbody>();
         Charge = Mathf.Pow(Mass, chargePower);
@@ -206,11 +211,13 @@ public class AllomanticIronSteel : Allomancer {
         ExternalControl = false;
         ExternalCommand = 0;
     }
+    #endregion
 
-    /*
-     * Every frame: Calculate and apply forces to targets being pushed on.
-     *      Drain metal reserves.
-     */
+    #region allomancyPhysics
+    /// <summary>
+    /// Calculate and apply forces to targets being pushed on.
+    /// Drain metal reserves.
+    /// </summary>
     protected virtual void FixedUpdate() {
         if (!PauseMenu.IsPaused) {
             if (IsBurning) {
@@ -356,6 +363,13 @@ public class AllomanticIronSteel : Allomancer {
      *      raycastForLOS: Do a raycast towards the target to see if it is behind a wall (and reduce the force accordingly)
      *          
      */
+    /// <summary>
+    /// Calculates the maximum possible Allomantic Force between the allomancer and target.
+    /// </summary>
+    /// <param name="targetCenterOfMass">Center of mass for the target</param>
+    /// <param name="targetCharge">Allomantic Charge for the target</param>
+    /// <param name="raycastForLOS">whether the Allomantic Force should be lower if there is no line of sight</param>
+    /// <returns>The Allomantic Force calculated for the target</returns>
     private Vector3 CalculateAllomanticForce(Vector3 targetCenterOfMass, float targetCharge, bool raycastForLOS = true) {
         Vector3 distanceFactor;
         Vector3 positionDifference = targetCenterOfMass - CenterOfMass;
@@ -390,7 +404,7 @@ public class AllomanticIronSteel : Allomancer {
     }
 
     /* 
-     * Calculates the Net Force between the allomancer and target, if it were Pushed or Pulled.
+     * 
      * 
      * Formula:
      *      N = p * F + B
@@ -402,6 +416,14 @@ public class AllomanticIronSteel : Allomancer {
      *          Is the reason that anchored targets provide stronger Pushes than unanchored Pushes.
      *          
      * */
+    /// <summary>
+    /// Calculates the Net Force between the allomancer and target, if it were Pushed or Pulled.
+    /// </summary>
+    /// <param name="target">The metal to calculate the force for</param>
+    /// <param name="netMagneticCharge"></param>
+    /// <param name="sumOfCharges">The sum of the charges on all targets being affected</param>
+    /// <param name="pulling">true if Pulling. Flips the direction of the force.</param>
+    /// <param name="burnPercentage">The % of of the maximum force to use.</param>
     private void CalculateForce(Magnetic target, float netMagneticCharge, float sumOfCharges, bool pulling, float burnPercentage) {
         target.LastWasPulled = pulling;
         /*
@@ -627,10 +649,11 @@ public class AllomanticIronSteel : Allomancer {
         target.LastAnchoredPushBoostFromTarget = restitutionForceFromTarget;
     }
 
-    /*
-     * Applys the force that was calculated in CalculateForce to the target and player.
-     * This effectively executes the Push or Pull.
-     */
+    /// <summary>
+    /// Applys the force that was calculated in CalculateForce to the target and player.
+    /// This effectively executes the Push or Pull.
+    /// </summary>
+    /// <param name="target">The magnetic to add a force to</param>
     private void AddForce(Magnetic target) {
 
         target.AddForce(target.LastNetForceOnTarget, target.LastAllomanticForceOnTarget);
@@ -646,11 +669,15 @@ public class AllomanticIronSteel : Allomancer {
         //percentOfAllomancerForceReturned = resititutionFromPlayersForce.magnitude / allomanticsForce;
         //netTargetsForce = target.LastNetForceOnTarget.magnitude;
     }
+    #endregion
 
-    /*
-     * Start burning iron or steel. Passively burn iron or steel, depending on startIron.
-     * Return true if not already burning metals and successfully started burning, false otherwise
-     */
+    #region otherAllomancy
+    /// <summary>
+    /// Start burning iron or steel.
+    /// Passively burn iron or steel, depending on startIron.
+    /// </summary>
+    /// <param name="startIron"></param>
+    /// <returns>true if not already burning metals and successfully started burning, false otherwise</returns>
     public virtual bool StartBurning(bool startIron) {
         if (IsBurning || startIron && !HasIron || !startIron && !HasSteel)
             return false;
@@ -658,7 +685,7 @@ public class AllomanticIronSteel : Allomancer {
         // Set burn percentages to a low burn
         IronBurnPercentageTarget = .1f;
         SteelBurnPercentageTarget = .1f;
-        if(bubbleKeepOpen) {
+        if (bubbleKeepOpen) {
             BubbleOpen(BubbleMetalStatus);
         }
         if (startIron)
@@ -668,6 +695,10 @@ public class AllomanticIronSteel : Allomancer {
         return true;
     }
 
+    /// <summary>
+    /// Stops burning iron and steel.
+    /// </summary>
+    /// <param name="clearTargets">Also remove marked push/pull targets</param>
     public virtual void StopBurning(bool clearTargets = true) {
         if (IsBurning) {
             if (clearTargets) {
@@ -685,92 +716,31 @@ public class AllomanticIronSteel : Allomancer {
         }
     }
 
-
-    // Consume iron for pull
+    /// <summary>
+    /// Consume iron for a Pull
+    /// </summary>
+    /// <param name="force">the force to consume metal for</param>
     private void BurnIron(float force) {
         double burnedMass = gramsIronPerSecondPerNewton * force * Time.fixedDeltaTime;
         IronReserve.Mass -= burnedMass;
     }
 
-    // Consume steel for push
+    /// <summary>
+    /// Consume steel for a Push
+    /// </summary>
+    /// <param name="force">the force to consume metal for</param>
     private void BurnSteel(float force) {
         double burnedMass = gramsSteelPerSecondPerNewton * force * Time.fixedDeltaTime;
         SteelReserve.Mass -= burnedMass;
     }
 
-    /*
-     * Add a target
-     * If not allowInBothArrays and it's a pushTarget, remove it from pushTargets and move it to pullTargets
-     */
-    public void AddPullTarget(Magnetic target, bool allowInBothArrays = false, bool vacuous = false) {
-        StartBurning(true);
-        if (HasIron) {
-            if (!allowInBothArrays && PushTargets.IsTarget(target)) {
-                PushTargets.RemoveTarget(target, false);
-            }
-            if (target != null) {
-                if (PullTargets.AddTarget(target, vacuous))
-                    CalculateForce(target, PullTargets.NetCharge(), PullTargets.SumOfCharges(), iron, IronBurnPercentageTarget);
-            }
-        }
-    }
-
-    /*
-     * Add a target
-     * If allowInBothArrays and it's a pullTarget, remove it from pullTargets and move it to pushTargets
-     */
-    public void AddPushTarget(Magnetic target, bool allowInBothArrays = false, bool vacuous = false) {
-        StartBurning(false);
-        if (HasSteel) {
-            if (!allowInBothArrays && PullTargets.IsTarget(target)) {
-                PullTargets.RemoveTarget(target, false);
-            }
-            if (target != null) {
-                if (PushTargets.AddTarget(target, vacuous))
-                    CalculateForce(target, PushTargets.NetCharge(), PushTargets.SumOfCharges(), steel, SteelBurnPercentageTarget);
-            }
-        }
-    }
-
-    /*
-     * Remove a target, regardless of it being a pull or push target.
-     */
-    public bool RemoveTarget(Magnetic target, bool startWithPullTargets = false) {
-        // Try to remove target from both arrays, if necessary
-        if (startWithPullTargets) {
-            if (PullTargets.RemoveTarget(target)) {
-                return true;
-            } else return PushTargets.RemoveTarget(target);
-        } else {
-            if (PushTargets.RemoveTarget(target)) {
-                return true;
-            } else return PullTargets.RemoveTarget(target);
-        }
-    }
-
-    public bool RemovePullTarget(Magnetic target) {
-        return PullTargets.RemoveTarget(target);
-    }
-
-    public bool RemovePushTarget(Magnetic target) {
-        return PushTargets.RemoveTarget(target);
-    }
-
-    public void RemovePullTargetAt(int index) {
-        PullTargets.RemoveTargetAt(index);
-    }
-
-    public void RemovePushTargetAt(int index) {
-        PushTargets.RemoveTargetAt(index);
-    }
-    public void RemoveBubbleTarget(Magnetic target) {
-        BubbleTargets.RemoveTarget(target);
-    }
-
-    // Refreshes the Bubble that shows the range of selecting targets
+    /// <summary>
+    /// Refreshes the Bubble that shows the range of selecting targets
+    /// </summary>
+    /// <param name="metal">true to open the iron Buble, false for steel</param>
     protected void BubbleOpen(bool metal) {
         // if cannot open that bubble because we're out of metal, don't open it at all
-        if(metal == iron && !HasIron || metal == steel && !HasSteel) {
+        if (metal == iron && !HasIron || metal == steel && !HasSteel) {
             BubbleClose();
         } else {
             if (!BubbleIsOpen) {
@@ -791,6 +761,11 @@ public class AllomanticIronSteel : Allomancer {
             }
         }
     }
+
+    /// <summary>
+    /// Closes the Bubble.
+    /// </summary>
+    /// <param name="clearTargets">if true, will invoke each removed target's Clear()</param>
     protected void BubbleClose(bool clearTargets = true) {
         if (BubbleIsOpen) {
             BubbleIsOpen = false;
@@ -799,10 +774,117 @@ public class AllomanticIronSteel : Allomancer {
                 BubbleTargets.Clear();
         }
     }
-    // Sets the VISUAL size of the bubble. Does not actually affect the radius for target selection.
+
+    /// <summary>
+    /// Sets the VISUAL radius of the bubble.
+    /// </summary>
+    /// <param name="visualRadius">the radius of the bubble</param>
     protected void BubbleSetVisualSize(float visualRadius) {
         // set size
         float scale = visualRadius * 2;
         bubbleRenderer.transform.localScale = new Vector3(scale, scale, scale);
     }
+    #endregion
+
+    #region targetManipulation
+    /// <summary>
+    /// Add a target to the PullTargets.
+    /// </summary>
+    /// <param name="target">the metal to add</param>
+    /// <param name="allowInBothArrays">if it's a pushTarget, remove it from pushTargets and move it to pullTargets</param>
+    /// <param name="vacuous">vacuous adding: remove as soon as another target is added</param>
+    public void AddPullTarget(Magnetic target, bool allowInBothArrays = false, bool vacuous = false) {
+        StartBurning(true);
+        if (HasIron) {
+            if (!allowInBothArrays && PushTargets.IsTarget(target)) {
+                PushTargets.RemoveTarget(target, false);
+            }
+            if (target != null) {
+                if (PullTargets.AddTarget(target, vacuous))
+                    CalculateForce(target, PullTargets.NetCharge(), PullTargets.SumOfCharges(), iron, IronBurnPercentageTarget);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Add a target to the PushTargets.
+    /// </summary>
+    /// <param name="target">the metal to add</param>
+    /// <param name="allowInBothArrays">if it's a pullTarget, remove it from pullTargets and move it to pushTargets</param>
+    /// <param name="vacuous">vacuous adding: remove as soon as another target is added</param>
+    public void AddPushTarget(Magnetic target, bool allowInBothArrays = false, bool vacuous = false) {
+        StartBurning(false);
+        if (HasSteel) {
+            if (!allowInBothArrays && PullTargets.IsTarget(target)) {
+                PullTargets.RemoveTarget(target, false);
+            }
+            if (target != null) {
+                if (PushTargets.AddTarget(target, vacuous))
+                    CalculateForce(target, PushTargets.NetCharge(), PushTargets.SumOfCharges(), steel, SteelBurnPercentageTarget);
+            }
+        }
+    }
+
+    /// <summary>
+    /// Remove a target from Push or Pull targets.
+    /// </summary>
+    /// <param name="target">the Magnetic to remove</param>
+    /// <param name="startWithPullTargets">true to start searching for Pull targets, false for Push targets</param>
+    /// <returns></returns>
+    public bool RemoveTarget(Magnetic target, bool startWithPullTargets = false) {
+        // Try to remove target from both arrays, if necessary
+        if (startWithPullTargets) {
+            if (PullTargets.RemoveTarget(target)) {
+                return true;
+            } else return PushTargets.RemoveTarget(target);
+        } else {
+            if (PushTargets.RemoveTarget(target)) {
+                return true;
+            } else return PullTargets.RemoveTarget(target);
+        }
+    }
+
+    /// <summary>
+    /// Removes a Pull target.
+    /// </summary>
+    /// <param name="target">the metal to removed</param>
+    /// <returns>true if it was found and removed</returns>
+    public bool RemovePullTarget(Magnetic target) {
+        return PullTargets.RemoveTarget(target);
+    }
+
+    /// <summary>
+    /// Removes a Push target.
+    /// </summary>
+    /// <param name="target">the metal to removed</param>
+    /// <returns>true if it was found and removed</returns>
+    public bool RemovePushTarget(Magnetic target) {
+        return PushTargets.RemoveTarget(target);
+    }
+
+    /// <summary>
+    /// Removes the target at the given index
+    /// </summary>
+    /// <param name="index">the index to remove</param>
+    public void RemovePullTargetAt(int index) {
+        PullTargets.RemoveTargetAt(index);
+    }
+
+    /// <summary>
+    /// Removes the target at the given index
+    /// </summary>
+    /// <param name="index">the index to remove</param>
+    public void RemovePushTargetAt(int index) {
+        PushTargets.RemoveTargetAt(index);
+    }
+
+    /// <summary>
+    /// Removes the target from the Bubble selection
+    /// </summary>
+    /// <param name="target">the target to remove</param>
+    public void RemoveBubbleTarget(Magnetic target) {
+        BubbleTargets.RemoveTarget(target);
+    }
+    #endregion
+
 }

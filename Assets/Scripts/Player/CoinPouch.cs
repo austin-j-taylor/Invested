@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// Contains a number of coins that can be thrown from a Hand.
+/// </summary>
 public class CoinPouch : MonoBehaviour {
 
     public const int startingCoinCount = 50;
@@ -17,6 +20,12 @@ public class CoinPouch : MonoBehaviour {
     }
 
     // Removes a coin from the pouch, instantiating it
+    /// <summary>
+    /// Instantiates a new coin, removing it from the pouch.
+    /// Its rotation is this transform's rotation.
+    /// </summary>
+    /// <param name="spawnPosition">the position of the new coin</param>
+    /// <returns>the new coin object</returns>
     public Coin RemoveCoin(Vector3 spawnPosition) {
         if (Count > 0) {
             Count--;

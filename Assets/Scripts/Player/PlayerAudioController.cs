@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Handles sounds that the player creates.
+/// </summary>
 public class PlayerAudioController : MonoBehaviour {
 
     public AudioListener Listener { get; private set; }
@@ -12,6 +15,7 @@ public class PlayerAudioController : MonoBehaviour {
                 player_rolling_loop = null;
     private Coroutine coroutine_pewter, coroutine_rolling;
 
+    #region clearing
     void Start() {
         Listener = GetComponent<AudioListener>();
         AudioSource[] sources = GetComponents<AudioSource>();
@@ -28,8 +32,9 @@ public class PlayerAudioController : MonoBehaviour {
         player_pewter_end.Stop();
         player_rolling_loop.Stop();
     }
+    #endregion
 
-
+    #region soundMethods
     public void Play_pewter_burst() {
         player_pewter_burst.Play();
     }
@@ -58,7 +63,9 @@ public class PlayerAudioController : MonoBehaviour {
 
         coroutine_rolling = StartCoroutine(Playing_rolling_end());
     }
+    #endregion
 
+    #region soundRoutines
     private IEnumerator Playing_pewter_start_loop() {
 
         // start the starting sound effect
@@ -109,4 +116,5 @@ public class PlayerAudioController : MonoBehaviour {
         //sources[index_rolling].clip = rolling_end;
         //sources[index_rolling].Play();
     }
+    #endregion
 }
