@@ -4,53 +4,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-/*
- * Controls the first- and third-person cameras.
- * Also handles management of cloud shader data between scenes. Should change that.
- * Adapted from http://wiki.unity3d.com/index.php?title=SmoothFollowWithCameraBumper
- */
-
+/// <summary>
+/// Controls the first- and third-person cameras.
+/// </summary>
 public class CameraController : MonoBehaviour {
 
+    #region constants
     private const float CameraLookAtTargetFirstPersonHeight = 1;
     private const float rootConstantScaling = .5f;
     private const float stretchingVelocityFactor = -100;
     private const float cameraStretchingLerpFactor = 7;
     private static readonly Vector3 cameraControllerOffset = new Vector3(0, 0.25f - .06f, 0);
+    #endregion
 
+    #region properties
     public static Camera ActiveCamera { get; private set; }
-    private static CameraController instance;
-
-    private static Transform playerBody;
-    private static Transform playerCameraController;
     public static Transform CameraLookAtTarget { get; private set; }
     public static Transform CameraPositionTarget { get; private set; }
     public static bool UsingCinemachine { get; set; } // Set to true when using Cinemachine animation. Do pretty much nothing in our Update().
-    public static CinemachineBrain Cinemachine;
+    public static CinemachineBrain Cinemachine { get; set; }
 
-    private static float CameraLookAtTargetOffset = 1;// offset from player to lookat target
-    private static float currentX = 0;
-    private static float currentY = 0;
-    private static float startX = 0;
-    private static float startY = 0;
-    private static float lastCameraDistance = 0;
-    //private static float stretchedOut = 0; // if above 0, the camera will "stretch out" further backwards.
-    private static bool cameraIsLocked;
-
-    private static CloudMaster clouds; // perceives clouds on certain levels
-    private static float cloudsMaxDensity; // used for fading between densities
-    private static bool SceneUsesClouds;
-
-    public static bool HasNotMovedCamera {
-        get {
-            return currentX == startX && currentY == startY;
-        }
-    }
-    public static bool UpsideDown {
-        get {
-            return currentY < -89.99f || currentY > 89.99f;
-        }
-    }
+    public static bool HasNotMovedCamera => currentX == startX && currentY == startY;
+    public static bool UpsideDown => currentY < -89.99f || currentY > 89.99f;
 
     // Returns the horizontal direction the camera is facing (only in the x/z plane)
     public static Quaternion CameraDirection {
@@ -61,6 +36,21 @@ public class CameraController : MonoBehaviour {
             return Quaternion.Euler(eulers);
         }
     }
+    #endregion
+
+    #region fields
+    private static CameraController instance;
+    private static Transform playerBody;
+    private static Transform playerCameraController;
+    private static float CameraLookAtTargetOffset = 1;// offset from player to lookat target
+    private static float currentX = 0;
+    private static float currentY = 0;
+    private static float startX = 0;
+    private static float startY = 0;
+    private static float lastCameraDistance = 0;
+    //private static float stretchedOut = 0; // if above 0, the camera will "stretch out" further backwards.
+    private static bool cameraIsLocked;
+    #endregion
 
     void Awake() {
         instance = this;
@@ -70,20 +60,37 @@ public class CameraController : MonoBehaviour {
         CameraPositionTarget = CameraLookAtTarget.Find("CameraPositionTarget");
         ActiveCamera = CameraPositionTarget.Find("Camera").GetComponent<Camera>();
         ActiveCamera.depthTextureMode = DepthTextureMode.DepthNormals;
-        clouds = ActiveCamera.GetComponent<CloudMaster>();
         Cinemachine = ActiveCamera.GetComponent<CinemachineBrain>();
-        UnlockCamera();
-        SceneManager.sceneLoaded += LoadCloudDataFromScene;
+        SceneManager.sceneLoaded += ClearAfterSceneChange;
     }
 
+    public static void Clear() {
+        lastCameraDistance = 0;
+        ActiveCamera.transform.localPosition = Vector3.zero;
+        ActiveCamera.transform.localRotation = Quaternion.identity;
+        UsingCinemachine = false;
+        Player.PlayerTransparancy.SetOverrideHidden(SettingsMenu.settingsData.cameraFirstPerson == 1);
+
+        if (Player.PlayerIronSteel.IsBurning) // Update blue lines when the camera is reset
+            Player.PlayerIronSteel.UpdateBlueLines();
+        UpdateCamera();
+    }
+    private void ClearAfterSceneChange(Scene scene, LoadSceneMode mode) {
+        if (mode == LoadSceneMode.Single) {
+            if (scene.buildIndex == SceneSelectMenu.sceneTitleScreen) {
+                UnlockCamera();
+                ActiveCamera.clearFlags = CameraClearFlags.Skybox;
+                Cinemachine.m_IgnoreTimeScale = true;
+            } else {
+                UsingCinemachine = false;
+                Cinemachine.m_IgnoreTimeScale = false;
+                LockCamera();
+                ActiveCamera.clearFlags = CameraClearFlags.Skybox;
+            }
+        }
+    }
+    #region updatingCamera
     private void LateUpdate() {
-
-        //if (UsingCinemachine) {
-        //    return;
-        //}
-        //GetComponentInChildren<CinemachineVirtualCamera>().transform.localRotation = Quaternion.identity;
-        //GetComponentInChildren<CinemachineVirtualCamera>().transform.localPosition = Vector3.zero;
-
 
         if (cameraIsLocked && !UsingCinemachine) {
             float deltaX;
@@ -314,18 +321,17 @@ public class CameraController : MonoBehaviour {
         //    CameraPositionTarget.transform.localEulerAngles = angles;
         //}
     }
-
-    public static void Clear() {
-        lastCameraDistance = 0;
-        ActiveCamera.transform.localPosition = Vector3.zero;
-        ActiveCamera.transform.localRotation = Quaternion.identity;
-        UsingCinemachine = false;
-        Player.PlayerTransparancy.SetOverrideHidden(SettingsMenu.settingsData.cameraFirstPerson == 1);
-
-        if (Player.PlayerIronSteel.IsBurning) // Update blue lines when the camera is reset
-            Player.PlayerIronSteel.UpdateBlueLines();
-        UpdateCamera();
+    private void ClampY() {
+        currentY = Mathf.Clamp(currentY, -89.99f, 89.99f); // (controls top, controls bottom)
     }
+    private static void ModY() {
+        if (currentY >= 270)
+            currentY -= 360;
+        else if (currentY <= -270)
+            currentY += 360;
+    }
+    #endregion
+
     public static void SetRotation(Vector3 eulers) {
         //eulers.x = 0;
         //eulers.z = 0;
@@ -338,18 +344,7 @@ public class CameraController : MonoBehaviour {
         ModY();
     }
 
-    public static void LockCamera() {
-        Cursor.lockState = CursorLockMode.Locked;
-        cameraIsLocked = true;
-        Cursor.visible = false;
-    }
-
-    public static void UnlockCamera() {
-        Cursor.lockState = CursorLockMode.None;
-        cameraIsLocked = false;
-        Cursor.visible = true;
-    }
-
+    #region cameraControls
     public static void SetCinemachineCamera(CinemachineVirtualCamera vcam) {
         UsingCinemachine = true;
         vcam.enabled = true;
@@ -360,14 +355,15 @@ public class CameraController : MonoBehaviour {
         LockCamera();
     }
 
-    private void ClampY() {
-        currentY = Mathf.Clamp(currentY, -89.99f, 89.99f); // (controls top, controls bottom)
+    public static void LockCamera() {
+        Cursor.lockState = CursorLockMode.Locked;
+        cameraIsLocked = true;
+        Cursor.visible = false;
     }
-    private static void ModY() {
-        if (currentY >= 270)
-            currentY -= 360;
-        else if (currentY <= -270)
-            currentY += 360;
+    public static void UnlockCamera() {
+        Cursor.lockState = CursorLockMode.None;
+        cameraIsLocked = false;
+        Cursor.visible = true;
     }
 
     public void SetThirdPerson() {
@@ -392,134 +388,5 @@ public class CameraController : MonoBehaviour {
             SettingsMenu.RefreshSettingPerspective(0);
         }
     }
-
-    // On scene startup
-    // Copy parameters from this scene's cloud controller to the camera
-    private void LoadCloudDataFromScene(Scene scene, LoadSceneMode mode) {
-        // mode is Single when it's loading scenes on startup, so skip those
-        if (mode == LoadSceneMode.Single) {
-            GameObject otherObject = GameObject.Find("Clouds");
-            if (otherObject) {
-                //ActiveCamera.clearFlags = CameraClearFlags.SolidColor;
-                CloudMaster other = otherObject.GetComponent<CloudMaster>();
-
-                SetCloudData(other);
-            } else {
-                // No clouds for this scene
-                SceneUsesClouds = false;
-                clouds.enabled = false;
-                //ActiveCamera.clearFlags = CameraClearFlags.Skybox;
-            }
-        }
-    }
-
-    public static void SetClouds(bool enable) {
-        if (enable) {
-            if (SceneUsesClouds)
-                clouds.enabled = true;
-        } else {
-            clouds.enabled = false;
-        }
-    }
-    // Loads cloud settings from the passed CloudMaster.
-    public static void SetCloudData(CloudMaster other) {
-        clouds.shader = other.shader;
-        clouds.container = other.container;
-        clouds.weatherMapGen = other.weatherMapGen;
-        clouds.noise = other.noise;
-        clouds.sunLight = other.sunLight;
-        clouds.cloudTestParams = other.cloudTestParams;
-
-        clouds.numStepsLight = other.numStepsLight;
-        clouds.rayOffsetStrength = other.rayOffsetStrength;
-        clouds.especiallyNoisyRayOffsets = other.especiallyNoisyRayOffsets;
-        clouds.blueNoise = other.blueNoise;
-
-        clouds.cloudScale = other.cloudScale;
-        clouds.densityMultiplier = other.densityMultiplier;
-        clouds.densityOffset = other.densityOffset;
-        clouds.shapeOffset = other.shapeOffset;
-        clouds.heightOffset = other.heightOffset;
-        clouds.shapeNoiseWeights = other.shapeNoiseWeights;
-
-        clouds.detailNoiseScale = other.detailNoiseScale;
-        clouds.detailNoiseWeight = other.detailNoiseWeight;
-        clouds.detailNoiseWeights = other.detailNoiseWeights;
-        clouds.detailOffset = other.detailOffset;
-
-        clouds.lightAbsorptionThroughCloud = other.lightAbsorptionThroughCloud;
-        clouds.lightAbsorptionTowardSun = other.lightAbsorptionTowardSun;
-        clouds.darknessThreshold = other.darknessThreshold;
-        clouds.forwardScattering = other.forwardScattering;
-        clouds.backScattering = other.backScattering;
-        clouds.baseBrightness = other.baseBrightness;
-        clouds.phaseFactor = other.phaseFactor;
-
-        clouds.timeScale = other.timeScale;
-        clouds.baseSpeed = other.baseSpeed;
-        clouds.detailSpeed = other.detailSpeed;
-
-        clouds.colFog = other.colFog;
-        clouds.colClouds = other.colClouds;
-        clouds.colSun = other.colSun;
-        clouds.haveSunInSky = other.haveSunInSky;
-        clouds.fogDensity = other.fogDensity;
-
-        clouds.cloudsFollowPlayerXZ = other.cloudsFollowPlayerXZ;
-        clouds.cloudsFollowPlayerXYZ = other.cloudsFollowPlayerXYZ;
-
-        clouds.material = other.material;
-
-        SceneUsesClouds = true;
-        clouds.enabled = GraphicsController.CloudsEnabled;
-        clouds.Awake();
-
-        other.enabled = false;
-
-        cloudsMaxDensity = clouds.densityMultiplier;
-    }
-
-    public static void FadeCloudsIn(float time) {
-        instance.StartCoroutine(instance.CloudsIn(time));
-    }
-    public static void FadeCloudsOut(float time) {
-        instance.StartCoroutine(instance.CloudsOut(time));
-    }
-    public static void FadeCloudsOutImmediate() {
-        clouds.densityMultiplier = 0;
-    }
-    private IEnumerator CloudsIn(float fadeTime) {
-        float density = 0;
-        if (cloudsMaxDensity < 0) {
-            while (density > cloudsMaxDensity) {
-                density += Time.deltaTime / fadeTime * cloudsMaxDensity;
-                clouds.densityMultiplier = density;
-                yield return null;
-            }
-        } else {
-            while (density < cloudsMaxDensity) {
-                density += Time.deltaTime / fadeTime * cloudsMaxDensity;
-                clouds.densityMultiplier = density;
-                yield return null;
-            }
-        }
-        clouds.densityMultiplier = cloudsMaxDensity;
-    }
-    private IEnumerator CloudsOut(float fadeTime) {
-        float density = cloudsMaxDensity;
-        if (cloudsMaxDensity < 0) {
-            while (density < 0) {
-                density -= Time.deltaTime / fadeTime * cloudsMaxDensity;
-                clouds.densityMultiplier = density;
-                yield return null;
-            }
-        } else {
-            while (density > 0) {
-                density -= Time.deltaTime / fadeTime * cloudsMaxDensity;
-                clouds.densityMultiplier = density;
-                yield return null;
-            }
-        }
-        clouds.densityMultiplier = 0;
-    }
+    #endregion
 }

@@ -17,7 +17,7 @@ public class ArticlesMenu : MonoBehaviour {
     //private Button article2Button;
     private Button backButton;
 
-    void Start() {
+    void Awake() {
         tooltip = transform.Find("Articles/Tooltip").GetComponent<Text>();
         Button[] buttons = GetComponentsInChildren<Button>();
         zincButton = buttons[0];
@@ -26,6 +26,9 @@ public class ArticlesMenu : MonoBehaviour {
         
         backButton.onClick.AddListener(OnClickedBack);
         
+    }
+    void Start() {
+        Close();
     }
 
     public void Open() {

@@ -20,6 +20,9 @@ public class DataManagementScreen : MonoBehaviour {
         confirmButton.onClick.AddListener(OnClickConfirm);
         closeButton.onClick.AddListener(Close);
     }
+    void Start() {
+        gameObject.SetActive(false);
+    }
 
     public void Open() {
         gameObject.SetActive(true);

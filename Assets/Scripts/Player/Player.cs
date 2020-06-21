@@ -200,38 +200,44 @@ public class Player : PewterEntity {
         if (mode == LoadSceneMode.Single) { // Not loading all of the scenes, as it does at startup
             PlayerAudioController.Clear();
             PlayerIronSteel.Clear();
-            CanPause = true;
-            CanControl = true;
-            CanControlMovement = true;
-
-            // Set unlocked abilities
-            PlayerIronSteel.IronReserve.IsEnabled = true;
-            PlayerIronSteel.SteelReserve.IsEnabled = FlagsController.GetData("pwr_steel");
-            PlayerPewter.PewterReserve.IsEnabled = FlagsController.GetData("pwr_pewter");
-            CanControlZinc = FlagsController.GetData("pwr_zinc");
-            CanThrowCoins = FlagsController.GetData("pwr_coins");
-            if (FlagsController.GetData("pwr_coins")) {
-                CanThrowCoins = true;
-                CoinHand.Pouch.Fill();
-            } else {
-                CanThrowCoins = false;
-                CoinHand.Pouch.Clear();
-            }
-
 
             SetFrameMaterial(frameMaterial);
             SetSmokeMaterial(smokeMaterial);
 
-            GameObject spawn = GameObject.FindGameObjectWithTag("PlayerSpawn");
-            if (spawn && CameraController.ActiveCamera) { // if CameraController.Awake has been called
-                transform.position = spawn.transform.position;
-                //transform.rotation = spawn.transform.rotation;
-                if (scene.buildIndex != SceneSelectMenu.sceneMain) {
-                    CameraController.SetRotation(spawn.transform.eulerAngles);
-                    CameraController.Clear();
+            if (scene.buildIndex == SceneSelectMenu.sceneTitleScreen) {
+                CanControl = false;
+                CanPause = false;
+                transform.position = GameObject.FindGameObjectWithTag("PlayerSpawn").transform.position;
+            } else {
+                CanPause = true;
+                CanControl = true;
+                CanControlMovement = true;
+
+                // Set unlocked abilities
+                PlayerIronSteel.IronReserve.IsEnabled = true;
+                PlayerIronSteel.SteelReserve.IsEnabled = FlagsController.GetData("pwr_steel");
+                PlayerPewter.PewterReserve.IsEnabled = FlagsController.GetData("pwr_pewter");
+                CanControlZinc = FlagsController.GetData("pwr_zinc");
+                CanThrowCoins = FlagsController.GetData("pwr_coins");
+                if (FlagsController.GetData("pwr_coins")) {
+                    CanThrowCoins = true;
+                    CoinHand.Pouch.Fill();
+                } else {
+                    CanThrowCoins = false;
+                    CoinHand.Pouch.Clear();
                 }
+
+                GameObject spawn = GameObject.FindGameObjectWithTag("PlayerSpawn");
+                if (spawn && CameraController.ActiveCamera) { // if CameraController.Awake has been called
+                    transform.position = spawn.transform.position;
+                    //transform.rotation = spawn.transform.rotation;
+                    if (scene.buildIndex != SceneSelectMenu.sceneMain) {
+                        CameraController.SetRotation(spawn.transform.eulerAngles);
+                        CameraController.Clear();
+                    }
+                }
+                RespawnPoint = spawn.transform;
             }
-            RespawnPoint = spawn.transform;
         }
     }
 

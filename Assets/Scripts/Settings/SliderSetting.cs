@@ -1,12 +1,11 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-/*
- * Represents a setting that is controlled by a button.
- * In the inspector, assign the variables associated with the slider.
- * Unlike a ButtonSetting, the details text is written normally through the heirarchy
- *      since that doesn't need to change with different slider values, unlike the buttons.
- */
+/// <summary>
+/// Represents a setting that is controlled by a button.
+/// In the inspector, assign the variables associated with the slider.
+/// Unlike a ButtonSetting, the details text is written normally through the heirarchy since that doesn't need to change with different slider values, unlike the buttons.
+/// </summary>
 public class SliderSetting : Setting {
     private float data;
 
@@ -22,15 +21,14 @@ public class SliderSetting : Setting {
     public bool showDecimals;
 
     void Awake() {
-
         slider = GetComponentInChildren<Slider>();
         Text detailsText = transform.GetChild(0).GetChild(0).GetComponent<Text>();
         valueText = transform.GetChild(0).GetChild(1).GetComponent<Text>();
-        
+
         slider.minValue = min;
         slider.maxValue = max;
         slider.value = defaultValue;
-        
+
         // Assign font and button size
         RectTransform rectButton = slider.GetComponent<RectTransform>();
         RectTransform rectDetails = detailsText.GetComponent<RectTransform>();

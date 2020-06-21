@@ -312,8 +312,6 @@ namespace VolumetricLines
 				}
 			}
 		}
-        [SerializeField]
-        private bool ena = false;
 		/// <summary>
 		/// Sets the start and end points - updates the data of the Mesh.
 		/// </summary>
@@ -323,9 +321,6 @@ namespace VolumetricLines
             m_startPos = startPoint;
 			m_endPos = endPoint;
             // just skip changing it if the difference is small
-            if(ena) {
-                Debug.Log(width);
-            }
             if(width - m_lineWidth > 0.001f || width - m_lineWidth < -0.001f) {
                 m_lineWidth = width;
                 m_material.SetFloat("_LineWidth", m_lineWidth);

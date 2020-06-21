@@ -57,6 +57,10 @@ public class HUD : MonoBehaviour {
         ConsoleController = GetComponentInChildren<ConsoleController>();
         ConversationHUDController = GetComponentInChildren<ConversationHUDController>();
         SceneManager.sceneUnloaded += ClearHUDBeforeSceneChange;
+        SceneManager.sceneLoaded += ClearAfterSceneChange;
+    }
+    void Start() {
+        DisableHUD();
     }
 
     void LateUpdate() {
@@ -70,6 +74,12 @@ public class HUD : MonoBehaviour {
         }
         if (Player.PlayerIronSteel.IsBurning) {
             TargetOverlayController.SoftRefresh();
+        }
+    }
+    private void ClearAfterSceneChange(Scene scene, LoadSceneMode mode) {
+        if (scene.buildIndex != SceneSelectMenu.sceneTitleScreen) {
+            TimeController.CurrentTimeScale = SettingsMenu.settingsData.timeScale;
+            ResetHUD();
         }
     }
 

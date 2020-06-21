@@ -5,8 +5,12 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 
+/// <summary>
+/// Handles the menu for selecting levels, sandboxes, etc.
+/// </summary>
 public class SceneSelectMenu : MonoBehaviour {
 
+    #region buildIndices
     // Scene build indices
     public const int sceneMain = 0,
         sceneTitleScreen = 1,
@@ -24,6 +28,7 @@ public class SceneSelectMenu : MonoBehaviour {
         sceneTutorial2 = 13,
         sceneTutorial3 = 14,
         sceneTutorial4 = 15;
+    #endregion
 
     public static bool IsTutorial(int sceneIndex) {
         return sceneIndex == sceneTutorial1 ||
@@ -32,16 +37,11 @@ public class SceneSelectMenu : MonoBehaviour {
                 sceneIndex == sceneTutorial4;
     }
 
-    public bool IsOpen {
-        get {
-            return gameObject.activeSelf;
-        }
-    }
+    public bool IsOpen => gameObject.activeSelf;
 
-    public static bool NowLoadingScene { get; private set; } = true;
+    public Button HighlitButton { get; private set; }
 
-    private static Button highlitButton;
-
+    #region fields
     private Text tooltip;
     private Transform tutorialsHeader;
     private Transform levelsHeader;
@@ -66,9 +66,10 @@ public class SceneSelectMenu : MonoBehaviour {
     private Button simulationWallButton;
     private Button simulationGroundButton;
     private Button backButton;
+    #endregion
 
-
-    void Start() {
+    #region clearing
+    void Awake() {
         tooltip = transform.Find("Tooltip").GetComponent<Text>();
         tutorialsHeader = transform.Find("Tutorials").transform;
         levelsHeader = transform.Find("Levels").transform;
@@ -115,10 +116,11 @@ public class SceneSelectMenu : MonoBehaviour {
         simulationGroundButton.onClick.AddListener(OnClickedSimulationGround);
         backButton.onClick.AddListener(OnClickedBack);
 
-        highlitButton = tutorial1Button;
+        HighlitButton = tutorial1Button;
 
-        // Only close the main menu after the scene loads to prevent jarring camera transitions
-        SceneManager.sceneLoaded += ClearAfterSceneChange;
+    }
+
+    private void Start() {
         // Open and immediately close to quickly grab those Flags and read them behind the scenes
         Open();
         Close();
@@ -127,7 +129,7 @@ public class SceneSelectMenu : MonoBehaviour {
     public void Open() {
         gameObject.SetActive(true);
         tooltip.text = "";
-        MainMenu.FocusOnButton(highlitButton);
+        MainMenu.FocusOnButton(HighlitButton);
         // Lock levels when previous levels are not completed
         //levelMARL1Button.interactable = FlagsController.GetData("completeTutorial1");
         //levelMARL2Button.interactable = FlagsController.GetData("completeTutorial2");
@@ -161,45 +163,19 @@ public class SceneSelectMenu : MonoBehaviour {
     public static void ReloadScene() {
         LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
-
-    private void ClearAfterSceneChange(Scene scene, LoadSceneMode mode) {
-        if (mode == LoadSceneMode.Single) {
-            PauseMenu.UnPause();
-            LevelCompletedScreen.Close();
-
-            if (scene.buildIndex == sceneTitleScreen) {
-                MainMenu.Open();
-
-                Player.CanControl = false;
-                Player.CanPause = false;
-                Player.PlayerInstance.gameObject.SetActive(true);
-                CameraController.UnlockCamera();
-                CameraController.ActiveCamera.clearFlags = CameraClearFlags.Skybox;
-                CameraController.Cinemachine.m_IgnoreTimeScale = true;
-                if (isActiveAndEnabled)
-                    MainMenu.FocusOnButton(highlitButton);
-            } else {
-                MainMenu.Close();
-                TimeController.CurrentTimeScale = SettingsMenu.settingsData.timeScale;
-                Player.PlayerInstance.gameObject.SetActive(true);
-                CameraController.UsingCinemachine = false;
-                CameraController.Cinemachine.m_IgnoreTimeScale = false;
-                CameraController.LockCamera();
-                CameraController.ActiveCamera.clearFlags = CameraClearFlags.Skybox;
-                HUD.ResetHUD();
-
-            }
-        }
-        NowLoadingScene = false;
-    }
-
+    #endregion
 
     public void SetTooltip(string tip) {
         tooltip.text = tip;
     }
 
+    public bool SceneIsMainOrTitleScreen(Scene scene) {
+        return scene.buildIndex == sceneMain || scene.buildIndex == sceneTitleScreen;
+    }
+
+    #region OnClick
     private void LoadSceneFromClick(int scene) {
-        highlitButton = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
+        HighlitButton = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
         LoadScene(scene);
     }
     private void OnClickedlevelMARL1Button() {
@@ -226,7 +202,6 @@ public class SceneSelectMenu : MonoBehaviour {
     private void OnClickedTutorial4Button() {
         LoadSceneFromClick(sceneTutorial4);
     }
-
     private void OnClickedLuthadelDay() {
         Environment_Luthadel.DayMode = true;
         LoadSceneFromClick(sceneLuthadel);
@@ -259,12 +234,8 @@ public class SceneSelectMenu : MonoBehaviour {
     private void OnClickedSimulationGround() {
         LoadSceneFromClick(sceneSimulationGround);
     }
-
     private void OnClickedBack() {
         Close();
     }
-
-    public bool SceneIsMainOrTitleScreen(Scene scene) {
-        return scene.buildIndex == sceneMain || scene.buildIndex == sceneTitleScreen;
-    }
+    #endregion
 }

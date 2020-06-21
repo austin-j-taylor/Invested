@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Handles the Pause Menu
+/// </summary>
 public class PauseMenu : MonoBehaviour {
 
     public static bool IsPaused { get; private set; }
@@ -40,6 +43,7 @@ public class PauseMenu : MonoBehaviour {
         settingsButton.onClick.AddListener(ClickSettings);
         resetButton.onClick.AddListener(ClickReset);
         quitButton.onClick.AddListener(ClickQuit);
+        SceneManager.sceneLoaded += ClearAfterSceneChange;
 
         gameObject.SetActive(false);
         IsPaused = false;
@@ -55,6 +59,14 @@ public class PauseMenu : MonoBehaviour {
         }
     }
 
+    private void ClearAfterSceneChange(Scene scene, LoadSceneMode mode) {
+        if (mode == LoadSceneMode.Single) {
+            if (scene.buildIndex != SceneSelectMenu.sceneTitleScreen)
+                MainMenu.Close();
+            UnPause();
+        }
+    }
+
     public static void Open() {
         buttonsHeader.gameObject.SetActive(true);
         titleText.gameObject.SetActive(true);
@@ -67,58 +79,59 @@ public class PauseMenu : MonoBehaviour {
     }
 
     public static void Pause() {
-        CameraController.UnlockCamera();
-        Time.timeScale = 0f;
-        GameManager.AudioManager.SetMasterPitch(0);
-        HUD.DisableHUD();
+        if (!IsPaused) {
+            IsPaused = true;
+            CameraController.UnlockCamera();
+            Time.timeScale = 0f;
+            GameManager.AudioManager.SetMasterPitch(0);
+            HUD.DisableHUD();
 
-        // Update blue lines for this frame
-        Player.PlayerIronSteel.UpdateBlueLines();
+            // Update blue lines for this frame
+            Player.PlayerIronSteel.UpdateBlueLines();
 
-        instance.gameObject.SetActive(true);
-        Open();
-        IsPaused = true;
+            instance.gameObject.SetActive(true);
+            Open();
 
-        switch (GameManager.State) {
-            case GameManager.GameState.Standard:
-                instance.resetText.text = "Return to Checkpoint";
-                instance.quitText.text = "Quit Level";
-                instance.settingsButton.gameObject.SetActive(true);
-                instance.resetButton.gameObject.SetActive(true);
-                instance.quitButton.gameObject.SetActive(true);
-                break;
-            case GameManager.GameState.Challenge:
-                instance.resetText.text = "Restart Challenge";
-                instance.quitText.text = "Exit Challenge";
-                instance.settingsButton.gameObject.SetActive(false);
-                instance.resetButton.gameObject.SetActive(true);
-                instance.quitButton.gameObject.SetActive(true);
-                break;
-            case GameManager.GameState.Cutscene:
-                instance.settingsButton.gameObject.SetActive(false);
-                instance.resetButton.gameObject.SetActive(false);
-                instance.quitButton.gameObject.SetActive(false);
-                break;
+            switch (GameManager.State) {
+                case GameManager.GameState.Standard:
+                    instance.resetText.text = "Return to Checkpoint";
+                    instance.quitText.text = "Quit Level";
+                    instance.settingsButton.gameObject.SetActive(true);
+                    instance.resetButton.gameObject.SetActive(true);
+                    instance.quitButton.gameObject.SetActive(true);
+                    break;
+                case GameManager.GameState.Challenge:
+                    instance.resetText.text = "Restart Challenge";
+                    instance.quitText.text = "Exit Challenge";
+                    instance.settingsButton.gameObject.SetActive(false);
+                    instance.resetButton.gameObject.SetActive(true);
+                    instance.quitButton.gameObject.SetActive(true);
+                    break;
+                case GameManager.GameState.Cutscene:
+                    instance.settingsButton.gameObject.SetActive(false);
+                    instance.resetButton.gameObject.SetActive(false);
+                    instance.quitButton.gameObject.SetActive(false);
+                    break;
+            }
         }
     }
 
     public static void UnPause() {
         if (IsPaused) {
+            IsPaused = false;
             settingsMenu.Close();
 
-            if(!LevelCompletedScreen.IsOpen) {
+            if (!LevelCompletedScreen.IsOpen && !MainMenu.IsOpen) { // If there is another menu open. Change this if we rework menus.
                 CameraController.LockCamera();
             }
-            Time.timeScale = TimeController.CurrentTimeScale;
-            if(SettingsMenu.settingsData.hudEnabled == 1)
+            if (SettingsMenu.settingsData.hudEnabled == 1)
                 HUD.EnableHUD();
             GameManager.AudioManager.SetMasterPitch(1);
             Close();
             instance.gameObject.SetActive(false);
-            IsPaused = false;
         }
+        Time.timeScale = TimeController.CurrentTimeScale;
     }
-
 
     private void ClickUnpause() {
         UnPause();

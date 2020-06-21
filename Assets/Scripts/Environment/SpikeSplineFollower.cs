@@ -4,6 +4,7 @@ using VolumetricLines;
 
 public class SpikeSplineFollower : SpikeSpline {
 
+    private const float lineWidth = .1f;
     private const int stepsPerCurve = 30;
     private const float distanceThreshold = .01f;
     private const float forwardTimeOffset = .2f;
@@ -35,7 +36,7 @@ public class SpikeSplineFollower : SpikeSpline {
         volLines.UpdateLineVertices(points);
         volLines.LineColor = new Color(0, Magnetic.lowLineColor * luminosityFactor, Magnetic.highLineColor * luminosityFactor, 1);
         volLines.LightSaberFactor = 1;
-        volLines.LineWidth = PlayerPullPushController.blueLineWidthFactor;
+        volLines.LineWidth = lineWidth;
     }
 
     void Update() {

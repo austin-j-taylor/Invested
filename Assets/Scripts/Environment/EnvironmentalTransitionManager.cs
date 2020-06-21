@@ -13,7 +13,7 @@ public class EnvironmentalTransitionManager : MonoBehaviour {
     }
 
     public void StartInterior() {
-        CameraController.FadeCloudsOutImmediate();
+        GameManager.CloudsManager.FadeCloudsOutImmediate();
         foreach (AudioSource source in interiors) {
             source.Play();
             source.volume = 1;
@@ -52,12 +52,12 @@ public class EnvironmentalTransitionManager : MonoBehaviour {
 
     public void EnterInterior(TriggerMusic trigger) {
         Transition(exteriors, interiors);
-        CameraController.FadeCloudsOut(crossfadeTime);
+        GameManager.CloudsManager.FadeCloudsOut(crossfadeTime);
     }
     
     public void ExitInterior(TriggerMusic trigger) {
         Transition(interiors, exteriors);
-        CameraController.FadeCloudsIn(crossfadeTime);
+        GameManager.CloudsManager.FadeCloudsIn(crossfadeTime);
     }
 
     private IEnumerator Crossfade(AudioSource from, AudioSource to) {

@@ -2,11 +2,10 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-/*
- * Represents a setting that is controlled by a button.
- * In the inspector, assign the text that appears with each setting, both on the button and
- *      in the details field.
- */
+/// <summary>
+/// Represents a setting that is controlled by a button.
+/// In the inspector, assign the text that appears with each setting, both on the button and in the details field.
+/// </summary>
 public class ButtonSetting : Setting {
     private int data;
     public UnityEvent[] buttonCalls;
@@ -41,7 +40,6 @@ public class ButtonSetting : Setting {
      */
 
     void Awake() {
-
         button = GetComponentInChildren<Button>();
         buttonText = transform.GetChild(0).GetChild(1).GetComponent<Text>();
         detailsText = transform.GetChild(0).GetChild(0).GetComponent<Text>();
@@ -54,8 +52,6 @@ public class ButtonSetting : Setting {
         if (hasDetails) {
             if (detailStrings.Length != buttonStrings.Length)
                 Debug.LogError("buttonStrings and detailStrings do not match size.");
-        } else {
-
         }
 
         // Assign font and button size

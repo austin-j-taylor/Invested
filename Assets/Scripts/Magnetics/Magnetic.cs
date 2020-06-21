@@ -170,7 +170,7 @@ public class Magnetic : MonoBehaviour {
     private Vector3 centerOfMass;
     public Vector3 CenterOfMass {
         get {
-            if (transform.hasChanged) {
+            if (transform.hasChanged || (Rb != null && !Rb.IsSleeping())) {
                 UpdateCenterOfMass();
                 transform.hasChanged = false;
             }
@@ -220,6 +220,7 @@ public class Magnetic : MonoBehaviour {
         }
         if (GameManager.MetalLinesTransform != null) {
             blueLine = Instantiate(GameManager.MetalLineTemplate, GameManager.MetalLinesTransform);
+            blueLine.gameObject.SetActive(false);
         }
         colliders = GetComponentsInChildren<Collider>();
         lightSaberFactor = 1;

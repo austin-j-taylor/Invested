@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class LevelCompletedScreen : MonoBehaviour {
 
@@ -26,6 +27,13 @@ public class LevelCompletedScreen : MonoBehaviour {
 
         levelCompletedScreen = gameObject;
         gameObject.SetActive(false);
+        SceneManager.sceneLoaded += ClearAfterSceneChange;
+    }
+
+    private void ClearAfterSceneChange(Scene scene, LoadSceneMode mode) {
+        if (mode == LoadSceneMode.Single) {
+            Close();
+        }
     }
 
     private void ClickContinue() {

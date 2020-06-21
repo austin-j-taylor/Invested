@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour {
 
@@ -31,11 +32,11 @@ public class MainMenu : MonoBehaviour {
         sceneSelectMenu = GetComponentInChildren<SceneSelectMenu>();
         articlesMenu = GetComponentInChildren<ArticlesMenu>();
 
-
+        SceneManager.sceneLoaded += ClearAfterSceneChange;
         // Set up the Player, Canvas, and EventSystem to persist between scenes
         //DontDestroyOnLoad(Player.PlayerInstance);
         DontDestroyOnLoad(transform.parent.gameObject);
-        DontDestroyOnLoad(GameObject.FindGameObjectWithTag("GameController"));
+        DontDestroyOnLoad(EventSystem.current);
     }
 
     private void Start() {
@@ -44,12 +45,6 @@ public class MainMenu : MonoBehaviour {
 
     // Effectively starts the game over
     public static void Reset() {
-        instance.settingsMenu.Close();
-        instance.sceneSelectMenu.Close();
-        instance.articlesMenu.Close();
-        instance.dataManagementScreen.gameObject.SetActive(false);
-        HUD.DisableHUD();
-
         Open();
         if (FlagsController.GetData("controlSchemeChosen")) {
             instance.controlSchemeScreen.Close(false);
@@ -74,6 +69,15 @@ public class MainMenu : MonoBehaviour {
             } else {
                 OpenSettingsMenu();
             }
+        }
+    }
+    private void ClearAfterSceneChange(Scene scene, LoadSceneMode mode) {
+        if (scene.buildIndex == SceneSelectMenu.sceneTitleScreen) {
+            Open();
+            if (sceneSelectMenu.IsOpen)
+                titleScreen.Close();
+            if (sceneSelectMenu.isActiveAndEnabled)
+                FocusOnButton(sceneSelectMenu.HighlitButton);
         }
     }
 

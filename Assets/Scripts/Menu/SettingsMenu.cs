@@ -4,8 +4,12 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+/// <summary>
+/// Handles the Settings Menu, where changing settings are saved to disk.
+/// </summary>
 public class SettingsMenu : MonoBehaviour {
-    
+
+    #region constants
     // String constants
     private const string s_settings = "Settings";
     private const string s_glossary = "Glossary";
@@ -19,55 +23,23 @@ public class SettingsMenu : MonoBehaviour {
     private const string s_save = "Save & Back";
     private const string s_reset = "Reset to Defaults";
     private const string s_reset_confirmed = "Settings reset.";
-    
-    public bool IsOpen {
-        get {
-            return gameObject.activeSelf;
-        }
-    }
-    public bool AreHeadersClosed {
-        get {
-            return settingsHeader.gameObject.activeSelf;
-        }
-    }
-    public bool IsGlossaryOpen {
-        get {
-            return glossaryHeader.gameObject.activeSelf;
-        }
-    }
-    public bool IsGameplayOpen {
-        get {
-            return gameplayHeader.gameObject.activeSelf;
-        }
-    }
-    public bool IsInterfaceOpen {
-        get {
-            return interfaceHeader.gameObject.activeSelf;
-        }
-    }
-    public bool IsGraphicsOpen {
-        get {
-            return graphicsHeader.gameObject.activeSelf;
-        }
-    }
-    public bool IsAudioOpen {
-        get {
-            return audioHeader.gameObject.activeSelf;
-        }
-    }
-    public bool IsAllomancyOpen {
-        get {
-            return allomancyHeader.gameObject.activeSelf;
-        }
-    }
-    public bool IsWorldOpen {
-        get {
-            return worldHeader.gameObject.activeSelf;
-        }
-    }
+    #endregion
 
-    private Button highlitButton;
+    #region properties
+    public bool IsOpen => gameObject.activeSelf;
+    public bool AreHeadersClosed => settingsHeader.gameObject.activeSelf;
+    public bool IsGlossaryOpen => glossaryHeader.gameObject.activeSelf;
+    public bool IsGameplayOpen => gameplayHeader.gameObject.activeSelf;
+    public bool IsInterfaceOpen => interfaceHeader.gameObject.activeSelf;
+    public bool IsGraphicsOpen => graphicsHeader.gameObject.activeSelf;
+    public bool IsAudioOpen => audioHeader.gameObject.activeSelf;
+    public bool IsAllomancyOpen => allomancyHeader.gameObject.activeSelf;
+    public bool IsWorldOpen => worldHeader.gameObject.activeSelf;
+    #endregion
 
+    private Button highlitButton; // The currently selected button. Hitting space/enter/A etc. will submit it.
+
+    #region fields
     // Settings
     private Text titleText;
     private Text tooltipText;
@@ -91,11 +63,13 @@ public class SettingsMenu : MonoBehaviour {
     private Button discardButton;
     private Button resetToDefaultsButton;
     private Text resetToDefaultsText;
+    #endregion
 
-    private Setting[] settings;
+    private Setting[] settings; // All the settings in the menu
 
-    public static SettingsData settingsData;
+    public static SettingsData settingsData; // The values corresponding to each setting
 
+    #region clearing
     void Awake() {
         settings = GetComponentsInChildren<Setting>();
         settingsData = gameObject.AddComponent<SettingsData>();
@@ -104,29 +78,20 @@ public class SettingsMenu : MonoBehaviour {
         titleText = transform.Find("TitleText").GetComponent<Text>();
         settingsHeader = transform.Find("SettingsHeader");
         tooltipText = settingsHeader.Find("Tooltip").GetComponent<Text>();
-        Button[] settingsHeaderButtons = settingsHeader.GetComponentsInChildren<Button>();
-        glossaryButton = settingsHeaderButtons[0];
-        gameplayButton = settingsHeaderButtons[1];
-        interfaceButton = settingsHeaderButtons[2];
-        graphicsButton = settingsHeaderButtons[3];
-        audioButton = settingsHeaderButtons[4];
-        allomancyButton = settingsHeaderButtons[5];
-        worldButton = settingsHeaderButtons[6];
-        // Glossary
+        glossaryButton = settingsHeader.Find("GlossaryButton").GetComponent<Button>();
+        gameplayButton = settingsHeader.Find("GameplayButton").GetComponent<Button>();
+        interfaceButton = settingsHeader.Find("InterfaceButton").GetComponent<Button>();
+        graphicsButton = settingsHeader.Find("GraphicsButton").GetComponent<Button>();
+        audioButton = settingsHeader.Find("AudioButton").GetComponent<Button>();
+        allomancyButton = settingsHeader.Find("AllomancyButton").GetComponent<Button>();
+        worldButton = settingsHeader.Find("WorldButton").GetComponent<Button>();
         glossaryHeader = transform.Find("GlossaryHeader");
-        // Gameplay Header
         gameplayHeader = transform.Find("GameplayHeader");
-        // Interface Header
         interfaceHeader = transform.Find("InterfaceHeader");
-        // Graphics Header
         graphicsHeader = transform.Find("GraphicsHeader");
-        // Audio Header
         audioHeader = transform.Find("AudioHeader");
-        // Allomancy Header
         allomancyHeader = transform.Find("AllomancyHeader");
-        // World Header
         worldHeader = transform.Find("WorldHeader");
-        // Close Button
         closeButton = transform.Find("CloseButton").GetComponent<Button>();
 
         closeText = closeButton.GetComponentInChildren<Text>();
@@ -158,8 +123,40 @@ public class SettingsMenu : MonoBehaviour {
         discardButton.gameObject.SetActive(false);
         resetToDefaultsButton.gameObject.SetActive(false);
         highlitButton = gameplayButton;
+
+        Close();
+    }
+    public void Open() {
+        gameObject.SetActive(true);
+        resetToDefaultsButton.gameObject.SetActive(true);
+        tooltipText.text = "";
+        MainMenu.FocusOnButton(highlitButton);
     }
 
+    public void Close() {
+        if (IsOpen) {
+            if (EventSystem.current.currentSelectedGameObject != null)
+                highlitButton = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
+            resetToDefaultsText.text = s_reset;
+            resetToDefaultsButton.gameObject.SetActive(false);
+            CloseGlossary();
+            CloseInterface();
+            CloseGraphics();
+            CloseGameplay();
+            CloseAudio();
+            CloseAllomancy();
+            CloseWorld();
+            gameObject.SetActive(false);
+            if (!PauseMenu.IsPaused) {
+                MainMenu.OpenTitleScreen();
+            } else {
+                PauseMenu.Open();
+            }
+        }
+    }
+    #endregion
+
+    #region refreshing
     // Refresh Settings and Refresh Particular Settings to update button texts
     private void RefreshSettings() {
         foreach (Setting setting in settings) {
@@ -179,36 +176,9 @@ public class SettingsMenu : MonoBehaviour {
         perspective.RefreshData();
         perspective.RefreshText();
     }
+    #endregion
 
-    // Open, Close, and OnClicks
-
-    public void Open() {
-        gameObject.SetActive(true);
-        resetToDefaultsButton.gameObject.SetActive(true);
-        tooltipText.text = "";
-        MainMenu.FocusOnButton(highlitButton);
-    }
-
-    public void Close() {
-        if(EventSystem.current.currentSelectedGameObject != null)
-            highlitButton = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
-        resetToDefaultsText.text = s_reset;
-        resetToDefaultsButton.gameObject.SetActive(false);
-        CloseGlossary();
-        CloseInterface();
-        CloseGraphics();
-        CloseGameplay();
-        CloseAudio();
-        CloseAllomancy();
-        CloseWorld();
-        gameObject.SetActive(false);
-        if(!PauseMenu.IsPaused) {
-            MainMenu.OpenTitleScreen();
-        } else {
-            PauseMenu.Open();
-        }
-    }
-
+    #region headerClearing
     private void OpenHeader() {
         highlitButton = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
         resetToDefaultsText.text = s_reset;
@@ -218,7 +188,6 @@ public class SettingsMenu : MonoBehaviour {
         closeText.text = s_save;
         MainMenu.FocusOnButton(transform);
     }
-
     private void CloseHeader() {
         if (!settingsHeader.gameObject.activeSelf) {
             settingsHeader.gameObject.SetActive(true);
@@ -236,7 +205,6 @@ public class SettingsMenu : MonoBehaviour {
         resetToDefaultsButton.gameObject.SetActive(false);
         MainMenu.FocusOnButton(glossaryHeader);
     }
-
     private void CloseGlossary() {
         titleText.text = s_settings;
         glossaryHeader.gameObject.SetActive(false);
@@ -248,7 +216,6 @@ public class SettingsMenu : MonoBehaviour {
         gameplayHeader.gameObject.SetActive(true);
         OpenHeader();
     }
-
     private void CloseGameplay() {
         titleText.text = s_settings;
         gameplayHeader.gameObject.SetActive(false);
@@ -260,7 +227,6 @@ public class SettingsMenu : MonoBehaviour {
         interfaceHeader.gameObject.SetActive(true);
         OpenHeader();
     }
-
     private void CloseInterface() {
         titleText.text = s_settings;
         interfaceHeader.gameObject.SetActive(false);
@@ -272,7 +238,6 @@ public class SettingsMenu : MonoBehaviour {
         graphicsHeader.gameObject.SetActive(true);
         OpenHeader();
     }
-
     private void CloseGraphics() {
         titleText.text = s_settings;
         graphicsHeader.gameObject.SetActive(false);
@@ -284,7 +249,6 @@ public class SettingsMenu : MonoBehaviour {
         audioHeader.gameObject.SetActive(true);
         OpenHeader();
     }
-
     private void CloseAudio() {
         titleText.text = s_settings;
         audioHeader.gameObject.SetActive(false);
@@ -296,7 +260,6 @@ public class SettingsMenu : MonoBehaviour {
         allomancyHeader.gameObject.SetActive(true);
         OpenHeader();
     }
-
     private void CloseAllomancy() {
         titleText.text = s_settings;
         allomancyHeader.gameObject.SetActive(false);
@@ -308,13 +271,14 @@ public class SettingsMenu : MonoBehaviour {
         worldHeader.gameObject.SetActive(true);
         OpenHeader();
     }
-
     private void CloseWorld() {
         titleText.text = s_settings;
         worldHeader.gameObject.SetActive(false);
         CloseHeader();
     }
+    #endregion
 
+    #region OnClicks
     public void SetTooltip(string tip) {
         tooltipText.text = tip;
     }
@@ -365,4 +329,5 @@ public class SettingsMenu : MonoBehaviour {
         settingsData.ResetToDefaults();
         RefreshSettings();
     }
+    #endregion
 }

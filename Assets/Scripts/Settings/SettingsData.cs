@@ -1,14 +1,15 @@
 using UnityEngine;
 using System.IO;
 using System.Reflection;
-/*
- * Stores the variables determining each setting that are read from and written to the JSON configuration file.
- * Should not be modified outside of a Setting.
- * They are public because the JSON reader needs them to be. If I were in charge I would never let these kids be public.
- */
+
+/// <summary>
+/// Stores the variables determining each setting that are read from and written to the JSON configuration file.
+/// The fields are public because the JSON reader needs them to be. Do not directly modify them outside of the Set functions.
+/// </summary>
 [System.Serializable]
 public class SettingsData : MonoBehaviour {
 
+    #region constants
     private readonly string configFileName = Path.Combine(Application.streamingAssetsPath, "Data" + Path.DirectorySeparatorChar + "config.json");
     private readonly string defaultConfigFileName = Path.Combine(Application.streamingAssetsPath, "Data" + Path.DirectorySeparatorChar + "default_config.json");
 
@@ -19,8 +20,13 @@ public class SettingsData : MonoBehaviour {
     public const int MKQE = 3;
     public const int Gamepad = 4;
 
-    public bool UsingGamepad => controlScheme == Gamepad;
+    #endregion
 
+    #region properties
+    public bool UsingGamepad => controlScheme == Gamepad;
+    #endregion
+
+    #region settingFields
     // Gameplay
     public int controlScheme;
     public int gamepadRumble; // 0 for Disabled, 1 for Enabled
@@ -79,6 +85,7 @@ public class SettingsData : MonoBehaviour {
     public int playerGravity; // 0 for Disabled, 1 for Enabled, 2 for Inverted
     public int playerAirResistance; // 0 for Disabled, 1 for Enabled
     public float timeScale;
+    #endregion
 
     private void Awake() {
         LoadSettings(false);
@@ -88,6 +95,7 @@ public class SettingsData : MonoBehaviour {
         SetSettingsWhenChanged();
     }
 
+    #region JSON
     public void LoadSettings(bool setSettingsChanged = true) {
         //Debug.Log("Settings loaded");
         try {
@@ -98,14 +106,17 @@ public class SettingsData : MonoBehaviour {
 
             JsonUtility.FromJsonOverwrite(jSONText, this);
 
-            if(setSettingsChanged)
+            if (setSettingsChanged)
                 SetSettingsWhenChanged();
 
         } catch (DirectoryNotFoundException e) {
             Debug.LogError(e.Message);
         }
     }
-    // Manually apply certain setting effects when they are changed
+
+    /// <summary>
+    /// Manually apply certain setting effects when they are changed
+    /// </summary>
     private void SetSettingsWhenChanged() {
         GameManager.AudioManager.SetAudioLevels(audioMaster, audioMusic, audioEffects, audioVoiceBeeps);
         TimeController.CurrentTimeScale = timeScale;
@@ -117,7 +128,6 @@ public class SettingsData : MonoBehaviour {
     }
 
     public void SaveSettings() {
-        //Debug.Log("Settings saved");
         try {
             string jSONText = JsonUtility.ToJson(this, true);
 
@@ -132,6 +142,9 @@ public class SettingsData : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Reset all settings to their default values.
+    /// </summary>
     public void ResetToDefaults() {
         try {
             StreamReader reader = new StreamReader(defaultConfigFileName, true);
@@ -148,26 +161,30 @@ public class SettingsData : MonoBehaviour {
             Debug.LogError(e.Message);
         }
     }
+    #endregion
 
-    /*
-     * For the JsonUtility to work, all setting-holding variables must be stored in this class.
-     * SetData assigns data to the variable with the name name.
-     * 
-     * Unity is annoying and doesn't support C#7 features like ref functions,
-     * Nor pointers (without making me feel bad my calling my code "unsafe")
-     * so we're having to get the variables by their string names every time.
-     * 
-     * really liking that O(2*n) efficiency every time you click a button
-     */
+    #region settingAccessors
+    /// <summary>
+    /// Sets the setting with the given name.
+    /// </summary>
+    /// <param name="name">the name of the field for the setting</param>
+    /// <param name="data">the new value for that setting</param>
+    /// <returns></returns>
     public bool SetData(string name, int data) {
         FieldInfo field = GetType().GetField(name);
-        if(field == null) {
+        if (field == null) {
             Debug.LogError("SetData with invalid name: " + name);
             return false;
         }
         field.SetValue(this, data);
         return true;
     }
+    /// <summary>
+    /// Sets the setting with the given name.
+    /// </summary>
+    /// <param name="name">the name of the field for the setting</param>
+    /// <param name="data">the new value for that setting</param>
+    /// <returns></returns>
     public bool SetData(string name, float data) {
         FieldInfo field = GetType().GetField(name);
         if (field == null) {
@@ -177,7 +194,11 @@ public class SettingsData : MonoBehaviour {
         field.SetValue(this, data);
         return true;
     }
-
+    /// <summary>
+    /// Gets the value for the setting.
+    /// </summary>
+    /// <param name="name">the name of the setting to get</param>
+    /// <returns>the value for that setting</returns>
     public int GetDataInt(string name) {
         FieldInfo field = GetType().GetField(name);
         if (field == null) {
@@ -186,6 +207,11 @@ public class SettingsData : MonoBehaviour {
         }
         return (int)field.GetValue(this);
     }
+    /// <summary>
+    /// Gets the value for the setting.
+    /// </summary>
+    /// <param name="name">the name of the setting to get</param>
+    /// <returns>the value for that setting</returns>
     public float GetDataFloat(string name) {
         FieldInfo field = GetType().GetField(name);
         if (field == null) {
@@ -194,4 +220,5 @@ public class SettingsData : MonoBehaviour {
         }
         return (float)field.GetValue(this);
     }
+    #endregion
 }

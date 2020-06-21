@@ -4,23 +4,28 @@ using System.Collections.Generic;
 using System;
 using System.Reflection;
 
-// Triggers flags when certain conditions are met
-// Includes completed levels and unlocked abilities
-// These are all flags that can become true, but never return to false once unlocked.
+/// <summary>
+/// Handles setting and getting flags for when certain conditions are met.
+/// Includes completed levels and unlocked abilities.
+/// These are all flags that can become true, but never return to false once unlocked.
+/// (unless through Data Management)
+/// </summary>
 [System.Serializable]
 public class FlagsController : MonoBehaviour {
 
+    #region constants
     private readonly string flagsFileName = Path.Combine(Application.streamingAssetsPath, "Data" + Path.DirectorySeparatorChar + "flags.json");
+    #endregion
 
+    #region flagFields
     // Flags
     // can't make them private because json-parsing needs them to be public
     public bool completeTutorial1, completeTutorial2, completeTutorial3, completeTutorial4, completeMARL1, completeMARL2, completeMARL3, completeMARL4;
     public bool controlSchemeChosen;
     public bool pwr_steel, pwr_pewter, pwr_zinc, pwr_coins; // for unlocking abilities
     public bool wheel_area, wheel_bubble;
-    
-    // Be wary of adding any other fields, as DeleteAllData will reset them.
-
+    // Be wary of adding any other public fields, as DeleteAllData will reset them.
+    #endregion
 
     private static FlagsController instance;
 
@@ -33,7 +38,8 @@ public class FlagsController : MonoBehaviour {
         SaveJSON();
         HUD.UpdateText();
     }
-    
+
+    #region JSON
     public void LoadSettings() {
         try {
             StreamReader reader = new StreamReader(flagsFileName, true);
@@ -59,7 +65,9 @@ public class FlagsController : MonoBehaviour {
             Debug.LogError(e.Message);
         }
     }
+    #endregion
 
+    #region flagAccessors
     public static void SetFlag(string name) {
 
         FieldInfo field = instance.GetType().GetField(name);
@@ -112,4 +120,5 @@ public class FlagsController : MonoBehaviour {
         }
         instance.SaveJSON();
     }
+    #endregion
 }

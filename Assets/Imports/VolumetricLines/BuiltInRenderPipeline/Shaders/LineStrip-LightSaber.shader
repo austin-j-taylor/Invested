@@ -38,11 +38,11 @@ Shader "VolumetricLine/LineStrip-LightSaber" {
 		LOD 200
 		
 		Pass {
-			
+
 			Cull Off
 			ZWrite Off
-			ZTest LEqual
-			Blend One One
+			ZTest Off
+			Blend SrcAlpha One
 			Lighting Off
 			
 			CGPROGRAM

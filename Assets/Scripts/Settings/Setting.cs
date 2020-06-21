@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-/*
- * Represents a single setting, such as a button or slider.
- * Assign the font size and size of the setting in the inspector.
- * Bound the setting size at 160 units to prevent clipping.
- */
+/// <summary>
+/// Represents a single setting, such as a button or slider.
+/// Assign the font size and size of the setting in the inspector.
+/// </summary>
 public abstract class Setting : MonoBehaviour {
 
     // Assigned in inspector

@@ -2,18 +2,21 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+/// <summary>
+/// Handles the Title Screen for the game, which appears on startup.
+/// </summary>
 public class TitleScreen : MonoBehaviour {
 
-
+    #region fields
     private Button highlitButton;
     private Button playButton;
     private Button settingsButton;
     private Button articlesButton;
     private Button quitButton;
     private Button dataManagmentButton;
+    #endregion
 
     private void Awake() {
-
         Button[] buttons = GetComponentsInChildren<Button>();
         playButton = buttons[0];
         settingsButton = buttons[1];
@@ -29,9 +32,24 @@ public class TitleScreen : MonoBehaviour {
 
         highlitButton = playButton;
         EventSystem.current.SetSelectedGameObject(highlitButton.gameObject);
-
     }
 
+    public void Open() {
+        if (!gameObject.activeSelf) {
+            gameObject.SetActive(true);
+            MainMenu.FocusOnButton(highlitButton);
+        }
+    }
+
+    public void Close() {
+        if (gameObject.activeSelf) {
+            if (EventSystem.current.currentSelectedGameObject)
+                highlitButton = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
+            gameObject.SetActive(false);
+        }
+    }
+
+    #region OnClicks
     private void OnClickedPlay() {
         MainMenu.OpenSceneSelectMenu();
         Close();
@@ -51,19 +69,5 @@ public class TitleScreen : MonoBehaviour {
     private void OnClickedDataManagement() {
         MainMenu.OpenDataManagementScreen();
     }
-    
-    public void Open() {
-        if (!gameObject.activeSelf) {
-            gameObject.SetActive(true);
-            MainMenu.FocusOnButton(highlitButton);
-        }
-    }
-
-    public void Close() {
-        if(gameObject.activeSelf) {
-            if(EventSystem.current.currentSelectedGameObject)
-                highlitButton = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
-            gameObject.SetActive(false);
-        }
-    }
+    #endregion
 }

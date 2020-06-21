@@ -55,16 +55,16 @@ public class Prop : MonoBehaviour {
             // Strong impulse: strong sound effect
             sound.clip = strong;
             sound.volume = 1 - Mathf.Exp(-impulse / expFactor);
-            Debug.Log("strong volume set to " + sound.volume + " from " + impulse + " from " + name, gameObject);
+            //Debug.Log("strong volume set to " + sound.volume + " from " + impulse + " from " + name, gameObject);
             sound.Play();
         } else if (impulse > impulseWeak) {
             // Weak impulse: weak sound effect
             sound.clip = weak;
             sound.volume = 1 - Mathf.Exp(-impulse / expFactor);
-            Debug.Log("weak volume set to " + sound.volume + " from " + impulse + " from " + name, gameObject);
+            //Debug.Log("weak volume set to " + sound.volume + " from " + impulse + " from " + name, gameObject);
             sound.Play();
         } else {
-            Debug.Log("Collision too weak: " + impulse + " from " + name, gameObject);
+            //Debug.Log("Collision too weak: " + impulse + " from " + name, gameObject);
         }
     }
 

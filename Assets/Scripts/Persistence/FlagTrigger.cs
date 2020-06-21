@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-// When the trigger is entered, set the flag.
+/// <summary>
+/// When the trigger is entered, set the flag.
+/// </summary>
 public class FlagTrigger : MonoBehaviour {
 
     [SerializeField]
@@ -9,7 +11,7 @@ public class FlagTrigger : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Player") && !other.isTrigger) {
-            if(flag != "")
+            if (flag != "")
                 FlagsController.SetFlag(flag);
             enabled = false;
         }

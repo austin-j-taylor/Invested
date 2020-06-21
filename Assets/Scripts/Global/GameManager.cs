@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour {
     public static AudioManager AudioManager { get; private set; }
     public static ConversationManager ConversationManager { get; private set; }
     public static GraphicsController GraphicsController { get; private set; }
+    public static CloudsManager CloudsManager { get; private set; }
     public static Transform MetalLinesTransform { get; private set; }
 
     // Resurces
@@ -45,6 +46,7 @@ public class GameManager : MonoBehaviour {
         AudioManager = transform.Find("AudioManager").GetComponent<AudioManager>();
         ConversationManager = GetComponent<ConversationManager>();
         GraphicsController = GetComponent<GraphicsController>();
+        CloudsManager = GetComponent<CloudsManager>();
         MetalLinesTransform = transform.Find("MetalLines");
 
         Material_MARLmetal_unlit = Resources.Load<Material>("Materials/MARLmetal_unlit");
@@ -63,21 +65,24 @@ public class GameManager : MonoBehaviour {
 
         State = GameState.Standard;
 
-        SceneManager.sceneUnloaded += Clear;
+        SceneManager.sceneUnloaded += ClearBeforeSceneChange;
     }
 
     private void Start() {
         SceneManager.LoadScene(SceneSelectMenu.sceneTitleScreen);
     }
 
-    private void Clear(Scene scene) {
+    /// <summary>
+    /// Called when exiting a scene
+    /// </summary>
+    /// <param name="scene"></param>
+    private void ClearBeforeSceneChange(Scene scene) {
         MagneticsInScene = new List<Magnetic>();
         foreach (Transform child in MetalLinesTransform) {
             Destroy(child.gameObject);
         }
         AudioManager.Clear();
     }
-
     public static void AddAllomancer(Allomancer allomancer) {
         Allomancers.Add(allomancer);
     }

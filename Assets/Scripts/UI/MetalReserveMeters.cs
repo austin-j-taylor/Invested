@@ -16,7 +16,7 @@ public class MetalReserveMeters : MonoBehaviour {
     //private MetalReserveElement steel;
     private MetalReserveElement pewter;
 
-    private void Start() {
+    private void Awake() {
         //iron = transform.Find("Iron").gameObject.AddComponent<MetalReserveElement>();
         //iron.metalColor = new Color(0, .5f, 1);
         //iron.reserve = Player.PlayerIronSteel.IronReserve;

@@ -87,7 +87,7 @@ public class GraphicsController : MonoBehaviour {
     }
     public static void SetClouds(bool enable) {
         CloudsEnabled = enable;
-        CameraController.SetClouds(enable);
+        GameManager.CloudsManager.SetClouds(enable);
     }
 
     // The "resolution" is a value in [0.0, 0.9999] that corresponds to a resolution that the monitor can handle
