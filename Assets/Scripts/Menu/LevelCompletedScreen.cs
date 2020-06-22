@@ -2,6 +2,9 @@
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Handles the screen that appears when a Harmony Target is entered and the level is compelted.
+/// </summary>
 public class LevelCompletedScreen : MonoBehaviour {
 
     private Button continueButton;
@@ -16,7 +19,6 @@ public class LevelCompletedScreen : MonoBehaviour {
         }
     }
 
-    // Use this for initialization
     void Start() {
         Button[] buttons = GetComponentsInChildren<Button>();
         returnButton = buttons[0];

@@ -1,46 +1,37 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-/*
- * Controls all aspects of Allomantic Pewter.
- * Controls the particle system associated with using pewter.
- * 
- * Player-specific pewter management is in PlayerMovementController.
- */
-
+/// <summary>
+/// Controls all aspects of Allomantic Pewter.
+/// Controls the particle system associated with using pewter.
+/// Player-specific pewter management is in PlayerMovementController.
+/// Shielding from damage is controlled in PewterEntity.
+/// </summary>
 [RequireComponent(typeof(Rigidbody))]
 public class AllomanticPewter : Allomancer {
 
+    #region constants
     protected const double gramsPewterPerSecondSprint = .500f;
     protected const double gramsPewterPerSecondAnchor = .250f;
     protected const double gramsPewterPerSecondRefill = .250f;
     protected const double gramsPewterPerFall = .25f;
     protected const float timePewterPerFall = .75f;
+    #endregion
 
     public MetalReserve PewterReserve { get; private set; }
     private bool isSprinting = false;
     public virtual bool IsSprinting {
-        get {
-            return isSprinting;
-        }
-        protected set {
-            isSprinting = value;
-        }
+        get => isSprinting;
+        protected set => isSprinting = value;
     }
     private bool isAnchoring = false;
     public virtual bool IsAnchoring {
-        get {
-            return isAnchoring;
-        }
-        protected set {
-            isAnchoring = value;
-        }
+        get => isAnchoring;
+        protected set => isAnchoring = value;
     }
     public bool IsBursting { get; private set; } = false;
     public override bool IsBurning {
-        get {
-            return IsSprinting || IsAnchoring || IsBursting;
-        }
+        get => IsSprinting || IsAnchoring || IsBursting;
         protected set {
             IsSprinting = false;
             IsBursting = false;
@@ -123,6 +114,7 @@ public class AllomanticPewter : Allomancer {
      *  
      *  If the Allomancer does not have enough pewter, this returns false.
      */
+    ///
     public bool Drain(Vector3 sourceLocationLocal, double totalMass, float maxTime) {
         //if (PewterReserve.Mass < totalMass)
         //    return false; // if it can't drain that much, fail

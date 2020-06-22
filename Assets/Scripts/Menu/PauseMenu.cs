@@ -23,7 +23,7 @@ public class PauseMenu : MonoBehaviour {
 
     private static PauseMenu instance;
 
-    // Use this for initialization
+    #region clearing
     void Awake() {
         instance = this;
 
@@ -49,16 +49,6 @@ public class PauseMenu : MonoBehaviour {
         IsPaused = false;
     }
 
-    private void LateUpdate() {
-        if (Keybinds.ExitMenu()) {
-            if (settingsMenu.IsOpen) {
-                settingsMenu.BackAndSaveSettings();
-            } else {
-                UnPause();
-            }
-        }
-    }
-
     private void ClearAfterSceneChange(Scene scene, LoadSceneMode mode) {
         if (mode == LoadSceneMode.Single) {
             if (scene.buildIndex != SceneSelectMenu.sceneTitleScreen)
@@ -76,6 +66,17 @@ public class PauseMenu : MonoBehaviour {
     public static void Close() {
         buttonsHeader.gameObject.SetActive(false);
         titleText.gameObject.SetActive(false);
+    }
+    #endregion
+
+    private void LateUpdate() {
+        if (Keybinds.ExitMenu()) {
+            if (settingsMenu.IsOpen) {
+                settingsMenu.BackAndSaveSettings();
+            } else {
+                UnPause();
+            }
+        }
     }
 
     public static void Pause() {
@@ -133,6 +134,7 @@ public class PauseMenu : MonoBehaviour {
         Time.timeScale = TimeController.CurrentTimeScale;
     }
 
+    #region OnClick
     private void ClickUnpause() {
         UnPause();
     }
@@ -169,4 +171,5 @@ public class PauseMenu : MonoBehaviour {
                 break;
         }
     }
+    #endregion
 }

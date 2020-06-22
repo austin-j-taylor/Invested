@@ -18,6 +18,7 @@ public class CameraController : MonoBehaviour {
     #endregion
 
     #region properties
+    public static bool IsFirstPerson => SettingsMenu.settingsData.cameraFirstPerson == 1;
     public static Camera ActiveCamera { get; private set; }
     public static Transform CameraLookAtTarget { get; private set; }
     public static Transform CameraPositionTarget { get; private set; }
@@ -69,7 +70,7 @@ public class CameraController : MonoBehaviour {
         ActiveCamera.transform.localPosition = Vector3.zero;
         ActiveCamera.transform.localRotation = Quaternion.identity;
         UsingCinemachine = false;
-        Player.PlayerTransparancy.SetOverrideHidden(SettingsMenu.settingsData.cameraFirstPerson == 1);
+        Player.PlayerTransparancy.SetOverrideHidden(IsFirstPerson);
 
         if (Player.PlayerIronSteel.IsBurning) // Update blue lines when the camera is reset
             Player.PlayerIronSteel.UpdateBlueLines();
@@ -146,7 +147,11 @@ public class CameraController : MonoBehaviour {
         //    ActiveCamera.transform.localRotation = verticalRotation;
         //}
 
-        if (SettingsMenu.settingsData.cameraFirstPerson == 0) { // Third person
+        if (IsFirstPerson) {
+            Vector3 wantedPosition = playerCameraController.position;
+
+            CameraPositionTarget.transform.position = wantedPosition;
+        } else {
 
             // If the player is moving quickly, the camera stretches outwards.
             float cameraDistance = -SettingsMenu.settingsData.cameraDistance;
@@ -306,10 +311,6 @@ public class CameraController : MonoBehaviour {
                     playerCameraController.localScale = new Vector3(scale, scale, scale);
                 }
             }
-        } else { // first person
-            Vector3 wantedPosition = playerCameraController.position;
-
-            CameraPositionTarget.transform.position = wantedPosition;
         }
 
         //// If the camera's pitch is exactly 0, the nature of the VolumetricLines shader makes the blue lines to metals invisible.
@@ -346,13 +347,22 @@ public class CameraController : MonoBehaviour {
 
     #region cameraControls
     public static void SetCinemachineCamera(CinemachineVirtualCamera vcam) {
+        Player.PlayerTransparancy.SetOverrideHidden(false);
         UsingCinemachine = true;
         vcam.enabled = true;
+
     }
     public static void DisableCinemachineCamera(CinemachineVirtualCamera vcam) {
-        UsingCinemachine = false;
         vcam.enabled = false;
         LockCamera();
+        instance.StartCoroutine(instance.BlendOutOfCinemachineCamera());
+    }
+    private IEnumerator BlendOutOfCinemachineCamera() {
+        yield return null;
+        while (Cinemachine.IsBlending)
+            yield return null;
+        Player.PlayerTransparancy.SetOverrideHidden(IsFirstPerson);
+        UsingCinemachine = false;
     }
 
     public static void LockCamera() {
@@ -380,12 +390,12 @@ public class CameraController : MonoBehaviour {
     }
 
     public static void TogglePerspective() {
-        if (SettingsMenu.settingsData.cameraFirstPerson == 0) {
-            instance.SetFirstPerson();
-            SettingsMenu.RefreshSettingPerspective(1);
-        } else {
+        if (IsFirstPerson) {
             instance.SetThirdPerson();
             SettingsMenu.RefreshSettingPerspective(0);
+        } else {
+            instance.SetFirstPerson();
+            SettingsMenu.RefreshSettingPerspective(1);
         }
     }
     #endregion

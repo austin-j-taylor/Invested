@@ -13,7 +13,8 @@ public class Environment_Tutorial1 : EnvironmentCinematic {
 
         Player.CanControl = false;
         Player.CanControlMovement = false;
-        Player.PlayerIronSteel.IronReserve.IsEnabled = false;
+        if(!FlagsController.GetData("pwr_steel"))
+            Player.PlayerIronSteel.IronReserve.IsEnabled = false; // Skip restricting iron if they've already got steel
 
         // Set cinemachine virtual camera properties
         InitializeCinemachine();

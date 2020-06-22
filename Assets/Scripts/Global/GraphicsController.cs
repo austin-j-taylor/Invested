@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.PostProcessing;
 using UnityEngine.UI;
 
+/// <summary>
+/// Manages Graphics and Video settings.
+/// </summary>
 public class GraphicsController : MonoBehaviour {
 
     private static GraphicsController instance = null;
@@ -53,6 +56,7 @@ public class GraphicsController : MonoBehaviour {
         RefreshResolutionSlider(SettingsMenu.settingsData.resolution);
     }
 
+    #region accessorsGraphics
     public static void SetPostProcessing(bool enable) {
         postProcessingEnabled = enable;
         SetBloom(enable);
@@ -89,7 +93,32 @@ public class GraphicsController : MonoBehaviour {
         CloudsEnabled = enable;
         GameManager.CloudsManager.SetClouds(enable);
     }
+    /// <summary>
+    /// Sets the Zinc effect depending on the desired intensity
+    /// </summary>
+    /// <param name="enable">whether the Zinc effect should actually be enabled</param>
+    /// <param name="intensity">the intensity of the effect [0,1]</param>
+    /// <returns></returns>
+    public float SetZincEffect(bool enable, float intensity = 0) {
+        if (HUD.ControlWheelController.IsOpen) {
+            //enable = false; // If Control Wheel is open, don't show the effect
+            intensity = intensity / 3;
+        }
+        instance.profile.chromaticAberration.enabled = enable && Aberration;
+        instance.profile.vignette.enabled = enable && Vignette;
 
+        if (enable) {
+            aberrationSettings.intensity = intensity;
+            vignetteSettings.intensity = intensity / 3;
+            profile.chromaticAberration.settings = aberrationSettings;
+            profile.vignette.settings = vignetteSettings;
+            return intensity;
+        }
+        return 0;
+    }
+    #endregion
+
+    #region accessorsVideo
     // The "resolution" is a value in [0.0, 0.9999] that corresponds to a resolution that the monitor can handle
     public static void SetFullscreenResolution(float value, FullScreenMode mode) {
         Resolution[] resolutions = Screen.resolutions;
@@ -114,24 +143,6 @@ public class GraphicsController : MonoBehaviour {
             index = resolutions.Length - 1;
         instance.resolutionSlider.valueText.text = resolutions[index].width + " x " + resolutions[index].height;
     }
-
-    // returns intensity
-    public float SetZincEffect(bool enable, float intensity = 0) {
-        if (HUD.ControlWheelController.IsOpen) {
-            //enable = false; // If Control Wheel is open, don't show the effect
-            intensity = intensity / 3;
-        }
-        instance.profile.chromaticAberration.enabled = enable && Aberration;
-        instance.profile.vignette.enabled = enable && Vignette;
-
-        if (enable) {
-            aberrationSettings.intensity = intensity;
-            vignetteSettings.intensity = intensity / 3;
-            profile.chromaticAberration.settings = aberrationSettings;
-            profile.vignette.settings = vignetteSettings;
-            return intensity;
-        }
-        return 0;
-    }
+    #endregion
 
 }

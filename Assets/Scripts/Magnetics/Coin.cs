@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/*
- * Coins are metals with small enough masses to warrent special considerations for the physics engine.
- * Due to the shoddiness of Unity physics at high speeds, we need to override some things.
- */
+/// <summary>
+/// Coins are metals with small enough masses to warrent special considerations for the physics engine.
+/// In general, coins may get Stuck to other object when Pushed against them, as long as the simulated friction is strong enough.
+/// </summary>
 public class Coin : Magnetic {
 
+    #region constants
     private const float airResistanceFactor = .1f;
     private const float minSpeed = 5f;
     private const float maxSpeed = 120f;
@@ -16,6 +17,7 @@ public class Coin : Magnetic {
     private const float stuckThresholdSqr = 1000f; // Square magnitude of normal force necessary for friction
     private const float dotThreshold = -.3f; // friction threshold for dot product between force and normal vector
     private const float equalMagnitudeConstant = .01f;
+    #endregion
 
     // Used for pseudo-parenting Coin when stuck to object it collides with
     private FixedJoint collisionJoint;
@@ -24,11 +26,7 @@ public class Coin : Magnetic {
 
     private bool isStuck;
 
-    public override bool IsPerfectlyAnchored {
-        get {
-            return Mathf.Abs((LastPosition - transform.position).sqrMagnitude) < equalMagnitudeConstant;
-        }
-    }
+    public override bool IsPerfectlyAnchored => Mathf.Abs((LastPosition - transform.position).sqrMagnitude) < equalMagnitudeConstant;
 
     public override bool IsBeingPushPulled {
         protected set {
@@ -43,9 +41,11 @@ public class Coin : Magnetic {
         UnStick();
     }
 
-    /*
-     * When first colliding with a Wall at high speed,
-     */
+    #region collision
+    /// <summary>
+    /// When first colliding with a Wall at high speed, consider sticking to it.
+    /// </summary>
+    /// <param name="collision"></param>
     private void OnCollisionEnter(Collision collision) {
         Vector3 velocityThisFrame = LastVelocity * Time.fixedDeltaTime;
         //Debug.DrawLine(LastPosition, LastPosition + (LastVelocity * Time.fixedDeltaTime), Color.green);
@@ -68,22 +68,22 @@ public class Coin : Magnetic {
         OnCollisionStay(collision);
     }
 
-    /*
-     * Simulates friction and makes the target stuck to the colliding surface
-     * 
-     * If stuck, the coin is jointed to the object it collided with.
-     * collisionNormal needs to be constantly updated for each OnCollisionStay.
-     */
+    /// <summary>
+    /// Simulates friction and makes the target stuck to the colliding surface.
+    /// If stuck, the coin is jointed to the object it collided with.
+    /// collisionNormal needs to be constantly updated for each OnCollisionStay.
+    /// </summary>
+    /// <param name="collision"></param>
     private void OnCollisionStay(Collision collision) {
         if (!collision.collider.CompareTag("Player")) {
             // Could be colliding with multiple objects.
             // Only care about the oldest one, for now.
-            if(collisionCollider == null) {
+            if (collisionCollider == null) {
                 collisionCollider = collision.transform;
             }
             if (collisionCollider == collision.transform) {
                 collisionNormal = collision.contacts[0].normal;
-                if(IsBeingPushPulled) {
+                if (IsBeingPushPulled) {
                     if (!isStuck) { // Only updates on first frame of being stuck. Stops being stuck when force becomes weak or stops being pushed.
                         isStuck = IsStuckByFriction(collision.impulse / Time.deltaTime, LastNetForceOnTarget);
                         //Debug.Log("Now stuck");
@@ -105,21 +105,28 @@ public class Coin : Magnetic {
             // A different collision has ended. Disregard.
         }
     }
-    // Be caught by player if
-    // - colliding with player
-    // - player is pulling
-    //   or player has an iron bubble up
+
+    /// <summary>
+    /// This coin should be caught by the Player if they are Pulling close enough to it.
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerStay(Collider other) {
         if (other.CompareTag("PlayerBody") &&
                     //Keybinds.IronPulling() && (!Player.PlayerIronSteel.HasPullTarget || Player.PlayerIronSteel.PullTargets.IsTarget(this))) {
                     (Keybinds.IronPulling() || Player.PlayerIronSteel.BubbleIsOpen && Player.PlayerIronSteel.BubbleMetalStatus == AllomanticIronSteel.iron)) {
             // Make sure there's not a wall between the coin and the player
             Vector3 direction = other.transform.position - transform.position;
-            if(!Physics.Raycast(transform.position, direction, direction.magnitude, GameManager.Layer_IgnoreCamera))
+            if (!Physics.Raycast(transform.position, direction, direction.magnitude, GameManager.Layer_IgnoreCamera))
                 BeCaughtByAllomancer(other.transform.parent.GetComponent<Player>());
         }
     }
+    #endregion
 
+    /// <summary>
+    /// While something is Pushing on the coin, check if that Push provides enough friction to Stick it.
+    /// </summary>
+    /// <param name="netForce">the Net Allomantic Force</param>
+    /// <param name="allomanticForce">just the Allomantic Force component</param>
     public override void AddForce(Vector3 netForce, Vector3 allomanticForce) {
         //Debug.DrawLine(LastPosition, LastPosition + (LastVelocity * Time.fixedDeltaTime), Color.blue);
         // Calculate drag from its new velocity
@@ -150,9 +157,11 @@ public class Coin : Magnetic {
         //thisFrameIsBeingPushPulled = true;
     }
 
-    /*
-     * Creates a joint between the Coin and anchor.
-     */
+    #region joints
+    /// <summary>
+    /// Creates a joint between the Coin and another object.
+    /// </summary>
+    /// <param name="anchor">the object to Stick the coin to</param>
     private void CreateJoint(Rigidbody anchor) {
         if (anchor) { // collided-with object has a rigidbody
             collisionJoint = gameObject.AddComponent<FixedJoint>();
@@ -163,12 +172,18 @@ public class Coin : Magnetic {
         }
     }
 
-    /*
-     * Returns true if allomanticForce provides a strong enough friction against the collisionNormal
-     */
-    private bool IsStuckByFriction(Vector3 allomanticForce) {
-        return IsStuckByFriction(allomanticForce, allomanticForce);
-    }
+    /// <summary>
+    /// Check if if allomanticForce provides a strong enough friction against the collisionNormal
+    /// </summary>
+    /// <param name="allomanticForce">the acting force</param>
+    /// <returns>the friction is strong enough to keep the coin Stuck</returns>
+    private bool IsStuckByFriction(Vector3 allomanticForce) => IsStuckByFriction(allomanticForce, allomanticForce);
+    /// <summary>
+    /// Check if if allomanticForce provides a strong enough friction against the collisionNormal
+    /// </summary>
+    /// <param name="allomanticForce">the acting force</param>
+    /// <param name="direction">the direction of the acting force, different than the direction of the first parameter</param>
+    /// <returns></returns>
     private bool IsStuckByFriction(Vector3 allomanticForce, Vector3 direction) {
         // true if the coin "digs" into the ground enough to stick, determined by:
         // the ANGLE of the collision is tall enough (dot product < threshold)
@@ -183,6 +198,7 @@ public class Coin : Magnetic {
         collisionNormal = Vector3.zero;
         Rb.constraints = RigidbodyConstraints.None;
     }
+    #endregion
 
     private void BeCaughtByAllomancer(Player player) {
         player.CoinHand.CatchCoin(this);

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Handles the major deletion of game data.
+/// </summary>
 public class DataManagementScreen : MonoBehaviour {
     private Button saveButton, timeTrialsButton, confirmButton, closeButton;
     private bool deletingSaves = false;
@@ -43,6 +46,7 @@ public class DataManagementScreen : MonoBehaviour {
         transform.Find("Tooltip").GetComponent<Text>().text = tip;
     }
 
+    #region OnClicks
     private void OnClickSave() {
         saveButton.gameObject.SetActive(false);
         timeTrialsButton.gameObject.SetActive(false);
@@ -72,4 +76,5 @@ public class DataManagementScreen : MonoBehaviour {
             timeTrialsButton.GetComponentInChildren<Text>().text = "Time trial data deleted.";
         }
     }
+    #endregion
 }

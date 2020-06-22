@@ -2,11 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/*
- * A magnetic with a set density.
- */
-public class MagneticDense : Magnetic
-{
+/// <summary>
+/// A magnetic that calculates its mass from its volume and density.
+/// </summary>
+public class MagneticDense : Magnetic {
     [SerializeField]
     private float density = 0;
 
@@ -19,7 +18,7 @@ public class MagneticDense : Magnetic
                 Rb = gameObject.AddComponent<Rigidbody>();
                 Rb.SetDensity(density);
                 netMass = Rb.mass;
-                
+
                 DestroyImmediate(Rb);
                 IsStatic = true;
             } else {

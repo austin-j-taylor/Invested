@@ -1,10 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-/*
- * 
- * 
- */
 /// <summary>
 /// Subclass for all other allomancers (i.e. iron/steel, pewter)
 /// Eventually will be used by Seekers to know if someone is burning metals

@@ -4,17 +4,18 @@ using UnityEngine;
 #if UNITY_STANDALONE_WIN
 using XInputDotNetPure;
 #endif
-/*
- * GamepadController is a mostly static class used to set controller vibrations.
- * GamepadRumble actually sends the vibration values to the GamePad/deals with IEnumerators.
- */
+
+/// <summary>
+/// Manages controller vibrations.
+/// </summary>
 public class GamepadController : MonoBehaviour {
-    
+
+    public const float rumbleFactor = .3f;
+
     private static bool updateRumble = false;
     private static bool shaking = false;
     private static float leftRumble = 0;
     private static float rightRumble = 0;
-    public const float rumbleFactor = .3f;
 
     private static GamepadRumble rumble;
 
@@ -40,7 +41,7 @@ public class GamepadController : MonoBehaviour {
             updateRumble = true;
         }
     }
-    
+
     public static void SetRumble(float left, float right) {
         leftRumble = left;
         rightRumble = right;
@@ -62,22 +63,26 @@ public class GamepadController : MonoBehaviour {
             rumble.Shake(left, right, time);
     }
 
+    /// <summary>
+    /// Actually sends the vibration values to the GamePad/deals with IEnumerators.
+    /// bad coding smell, will be improved
+    /// </summary>
     private class GamepadRumble : MonoBehaviour {
 
 #if UNITY_STANDALONE_WIN
         // Update is called once per frame
         void Update() {
-            if(Time.timeScale == 0f) {
+            if (Time.timeScale == 0f) {
                 // Make sure we don't vibrate when paused
                 SetRumble(0, 0);
             }
             if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
-                if(SettingsMenu.settingsData.gamepadRumble == 1) {
-                    if(updateRumble && !shaking) {
+                if (SettingsMenu.settingsData.gamepadRumble == 1) {
+                    if (updateRumble && !shaking) {
                         GamePad.SetVibration(0, leftRumble, rightRumble);
                         updateRumble = false;
                     }
-                } else if(updateRumble) {
+                } else if (updateRumble) {
                     GamePad.SetVibration(0, 0, 0);
                 }
             }

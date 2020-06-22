@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 
-/*
- * Distinguishes an entity that uses Pewter shielding before it takes damage.
- */
+/// <summary>
+/// Distinguishes an entity that uses Pewter shielding before it takes damage.
+/// </summary>
 [RequireComponent(typeof(AllomanticPewter))]
 public class PewterEntity : Entity {
 
@@ -11,7 +11,6 @@ public class PewterEntity : Entity {
     protected virtual void Awake() {
         pewter = GetComponent<AllomanticPewter>();
     }
-
 
     /*
      * If the allomancer enters a collision with a high velocity,

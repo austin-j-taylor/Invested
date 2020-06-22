@@ -388,7 +388,7 @@ public class TargetArray {
         for (int i = 0; i < Count; i++) {
             targets[i].SetBlueLine(
                 startPos,
-                blueLineTargetedWidthFactor * targets[i].Charge,
+                targets[i].Charge * blueLineTargetedWidthFactor * (CameraController.IsFirstPerson ?  PlayerPullPushController.firstPersonWidthFactor : 1),
                 Mathf.Exp(-targets[i].LastMaxPossibleAllomanticForce.magnitude * burnRate * (SettingsMenu.settingsData.cameraFirstPerson == 1 ? firstPersonLSFactor : 1) / lightSaberConstant),
                 pullingColor ?
                     SettingsMenu.settingsData.pullTargetLineColor == 0 ? targetedBlueLine

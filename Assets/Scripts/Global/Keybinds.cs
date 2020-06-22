@@ -1,14 +1,16 @@
 using UnityEngine;
 
-/* 
- * Contains all keybinds. Allows for easy switching between keyboard and gamepad playing using the GamepadController.
- */
-
+/// <summary>
+/// Contains all keybinds. Allows for easy switching between keyboard and gamepad playing.
+/// </summary>
 public class Keybinds : MonoBehaviour {
 
+    #region constants
     private const float triggerDeadband = 0.01f;
     private const float doubleTapThreshold = 0.25f;
+    #endregion
 
+    #region fields
     private static float timeToHoldDPadY = 0f;
     private static float timeToHoldDPadX = 0f;
     //private static float doubleTapTimeWheel = float.NegativeInfinity;
@@ -16,31 +18,13 @@ public class Keybinds : MonoBehaviour {
     // Only used for convert Gamepad axes to binary buttons
     private static bool lastWasPulling = false;
     private static bool lastWasPushing = false;
+    #endregion
 
     // Mouse/Stick Axis names
-    public static string MouseX {
-        get {
-            return "Mouse X";
-        }
-    }
-    public static string MouseY {
-        get {
-            return "Mouse Y";
-        }
-    }
-    public static string JoystickRightHorizontal {
-        get {
-
-            return "HorizontalRight";
-        }
-    }
-    public static string JoystickRightVertical {
-        get {
-
-            return "VerticalRight";
-
-        }
-    }
+    public static string MouseX => "Mouse X";
+    public static string MouseY => "Mouse Y";
+    public static string JoystickRightHorizontal => "HorizontalRight";
+    public static string JoystickRightVertical => "VerticalRight";
 
     private void LateUpdate() {
         lastWasPulling = IronPulling();
@@ -68,13 +52,10 @@ public class Keybinds : MonoBehaviour {
         return false;
     }
 
-    public static bool IronPulling() {
-        return RightBurnPercentage() > triggerDeadband;
-    }
-    public static bool SteelPushing() {
-        return LeftBurnPercentage() > triggerDeadband;
-    }
+    public static bool IronPulling() => RightBurnPercentage() > triggerDeadband;
+    public static bool SteelPushing() => LeftBurnPercentage() > triggerDeadband;
 
+    #region selecting
     // Both Keyboard and Gamepad (Specifics for M45/KQE)
     public static bool SelectDown() {
         switch (SettingsMenu.settingsData.controlScheme) {
@@ -191,6 +172,7 @@ public class Keybinds : MonoBehaviour {
                 }
         }
     }
+    #endregion
 
     // Both Keyboard and Gamepad
     public static bool EscapeDown() {
@@ -259,35 +241,17 @@ public class Keybinds : MonoBehaviour {
             return Input.GetButtonDown("GamepadX");
         else
             return Input.GetKeyDown(KeyCode.F);
-            //return Input.GetKeyDown(KeyCode.Mouse2);
+        //return Input.GetKeyDown(KeyCode.Mouse2);
     }
     public static bool WithdrawCoin() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
             return Input.GetButton("GamepadX");
         else
             return Input.GetKey(KeyCode.F);
-            //return Input.GetKey(KeyCode.Mouse2);
+        //return Input.GetKey(KeyCode.Mouse2);
     }
 
-    //public static bool NegateDown() {
-    //    if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-    //        return Input.GetButtonDown("GamepadY");
-    //    else
-    //        return Input.GetKeyDown(KeyCode.R) || Input.GetKeyDown(KeyCode.LeftAlt);
-    //}
-    //public static bool Negate() {
-    //    if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-    //        return Input.GetButton("GamepadY");
-    //    else
-    //        return Input.GetKey(KeyCode.R) || Input.GetKey(KeyCode.LeftAlt);
-    //}
-    public static bool MultipleMarks() {
-        return Walk();
-        //if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-        //    return Input.GetButton("GamepadY");
-        //else
-        //    return Input.GetKey(KeyCode.LeftShift);
-    }
+    public static bool MultipleMarks() => Walk();
 
     public static bool StopBurning() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
@@ -318,7 +282,6 @@ public class Keybinds : MonoBehaviour {
         }
     }
 
-
     public static bool ZincTimeDown() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
             return Input.GetButtonDown("GamepadLeftJoystickClick");
@@ -334,11 +297,7 @@ public class Keybinds : MonoBehaviour {
         }
     }
 
-    //    if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
-    //        return Input.GetButtonDown("GamepadY");
-    //    else
-    //        return Input.GetKeyDown(KeyCode.R) || Input.GetKeyDown(KeyCode.LeftAlt);
-    // Control wheel
+    #region controlWheel
     public static bool ControlWheel() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
             return Input.GetButton("GamepadY");
@@ -352,14 +311,6 @@ public class Keybinds : MonoBehaviour {
         } else {
             return Input.GetKeyDown(KeyCode.R);
         }
-        //if (ZincTimeDown()) {
-        //    if (Time.unscaledTime < doubleTapTimeWheel) {
-        //        doubleTapTimeWheel = Time.unscaledTime + doubleTapThreshold;
-        //        return true;
-        //    }
-        //    doubleTapTimeWheel = Time.unscaledTime + doubleTapThreshold;
-        //}
-        //return false;
     }
     public static bool ControlWheelConfirm() {
         if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
@@ -410,9 +361,9 @@ public class Keybinds : MonoBehaviour {
             return Input.GetKeyDown(KeyCode.Z);
         }
     }
+    #endregion
 
     // Only Gamepad
-
     public static float LeftTrigger() {
         return Input.GetAxis("LeftTrigger");
     }
@@ -429,7 +380,6 @@ public class Keybinds : MonoBehaviour {
             return 0;
         }
     }
-
     public static float DPadXAxis() {
         if (timeToHoldDPadX < Time.time) {
             timeToHoldDPadX = Time.time + .1f * Time.timeScale;
@@ -450,5 +400,4 @@ public class Keybinds : MonoBehaviour {
     public static bool TogglePerspective() {
         return Input.GetKeyDown(KeyCode.F5);
     }
-
 }

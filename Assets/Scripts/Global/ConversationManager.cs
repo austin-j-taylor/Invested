@@ -5,9 +5,9 @@ using System.IO;
 using System.Text;
 using static TextCodes;
 
-/*
- * Manages conversations. Interacts with the console and reads/parses the txt files containing conversation data
- */
+/// <summary>
+/// Manages conversations. Interacts with the console and reads/parses the txt files containing conversation data
+/// </summary>
 public class ConversationManager : MonoBehaviour {
 
     private readonly string rootFilename = Path.Combine(Application.streamingAssetsPath, "Data" + Path.DirectorySeparatorChar + "Conversations" + Path.DirectorySeparatorChar);
@@ -22,16 +22,13 @@ public class ConversationManager : MonoBehaviour {
     }
     private List<Conversation> sceneConversations;
 
-
+    #region clearing
     void Start() {
         SceneManager.sceneLoaded += OnSceneLoaded;
         sceneConversations = new List<Conversation>();
     }
 
-    public void Clear() {
-
-    }
-
+    public void Clear() { }
 
     // When a scene is loaded, load the conversation data for that scene.
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
@@ -89,7 +86,7 @@ public class ConversationManager : MonoBehaviour {
                     // Remaining lines are put into the conversation's content, until you reach an ending signifier.
                     // Could be more efficient.
                     StringBuilder builder = new StringBuilder();
-                    while(i < allFileLines.Length && !allFileLines[i].Contains("\\%")) {
+                    while (i < allFileLines.Length && !allFileLines[i].Contains("\\%")) {
                         builder.Append(allFileLines[i] + System.Environment.NewLine);
                         i++;
                     }
@@ -110,6 +107,7 @@ public class ConversationManager : MonoBehaviour {
             //}
         }
     }
+    #endregion
 
     /*
      * Starts the conversation with the given key/title/header e.g. "CASUAL_CHAT"
@@ -120,7 +118,7 @@ public class ConversationManager : MonoBehaviour {
             return;
 
         int conversationIndex = GetIndexOfConversation(key);
-        if(conversationIndex == -1) {
+        if (conversationIndex == -1) {
             Debug.LogError("Could not find key " + key + " in sceneConversations.");
             return;
         }
@@ -149,12 +147,11 @@ public class ConversationManager : MonoBehaviour {
         // search through all conversations in this scene to start this one
         // Replace with a more efficient algorithm once we start having sufficiently large # of conversations in the scene
         // For now, just iterate through and look for the right name
-        for(int i = 0; i < sceneConversations.Count; i++) {
-            if(key.Equals(sceneConversations[i].key)) {
+        for (int i = 0; i < sceneConversations.Count; i++) {
+            if (key.Equals(sceneConversations[i].key)) {
                 return i;
             }
         }
         return -1;
     }
-    
 }

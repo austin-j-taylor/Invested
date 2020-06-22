@@ -169,12 +169,14 @@ public class SettingsMenu : MonoBehaviour {
         ButtonSetting helpOverlay = interfaceHeader.Find("HUDLabel/Children/HelpOverlayLabel").GetComponent<ButtonSetting>();
         helpOverlay.RefreshData();
         helpOverlay.RefreshText();
+        settingsData.SaveSettings();
     }
     public static void RefreshSettingPerspective(int newCameraFirstPerson) {
         settingsData.cameraFirstPerson = newCameraFirstPerson;
         ButtonSetting perspective = gameplayHeader.Find("PerspectiveLabel").GetComponent<ButtonSetting>();
         perspective.RefreshData();
         perspective.RefreshText();
+        settingsData.SaveSettings();
     }
     #endregion
 

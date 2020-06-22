@@ -21,7 +21,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
     // Blue Line constants
     private const float lineWeightThreshold = 1;
     private const float targetFocusOffScreenBound = .2f;      // Determines the luminosity of blue lines that are off-screen
-    private const float firstPersonWidthFactor = .25f;
+    public const float firstPersonWidthFactor = .1f;
     public const float blueLineWidthFactor = .02f;
     public const float blueLineChangeFactor = 1 / 4f;
     public const float blueLineBrightnessFactor = .15f;
@@ -806,7 +806,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
             }
             target.SetBlueLine(
                 CenterOfMass,
-                target.Charge * blueLineWidthFactor * (SettingsMenu.settingsData.cameraFirstPerson == 1 ? firstPersonWidthFactor : 1),
+                target.Charge * blueLineWidthFactor * (CameraController.IsFirstPerson ? firstPersonWidthFactor : 1),
                 1,
                 closeness
             );

@@ -39,7 +39,7 @@ public class HarmonyTarget : MonoBehaviour {
         vcam = GetComponentInChildren<CinemachineVirtualCamera>();
         vcam.enabled = false;
 
-        rb = GetComponentInChildren<Rigidbody>(); 
+        rb = GetComponentInChildren<Rigidbody>();
         anim = GetComponent<Animator>();
         harmonySphere = rb.GetComponent<Transform>();
         cameraPositionTarget = transform.Find("CameraPositionAnchor/CameraPositionTarget");
@@ -127,7 +127,7 @@ public class HarmonyTarget : MonoBehaviour {
         Player.PlayerIronSteel.StopBurning();
         harmonySphere.GetComponent<Collider>().enabled = false;
         anim.SetTrigger("PlayerHasEntered");
-        if(numSpikes >= 3)
+        if (numSpikes >= 3)
             HUD.DisableHUD();
 
         //Player.PlayerIronSteel.StopBurning();
@@ -192,7 +192,7 @@ public class HarmonyTarget : MonoBehaviour {
         numSpikes++;
         anim.SetInteger("SpikeCount", numSpikes);
     }
-    
+
     public Vector3 GetNextSpikePosition() {
         if (numSpikes == 0) {
             return spikeLeft.TransformPoint(positionLeft);

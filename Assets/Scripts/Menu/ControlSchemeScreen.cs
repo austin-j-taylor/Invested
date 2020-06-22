@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-/*
- * When the game is opened for the first time, this screen opens to ask the user for their control scheme.
- */
+/// <summary>
+/// When the game is opened for the first time, this screen opens to ask the user for their control scheme.
+/// </summary>
 public class ControlSchemeScreen : MonoBehaviour {
 
     private Button mouseKeyboardButton;
@@ -22,7 +22,7 @@ public class ControlSchemeScreen : MonoBehaviour {
         gamepadButton = buttons[1];
         mkEQButton = buttons[2];
         mk54Button = buttons[3];
-        
+
         mouseKeyboardButton.onClick.AddListener(OnClickedMouseKeyboard);
         gamepadButton.onClick.AddListener(OnClickedGamepad);
         mkEQButton.onClick.AddListener(OnClickedMKEQ);
@@ -36,7 +36,7 @@ public class ControlSchemeScreen : MonoBehaviour {
     }
 
     public void Close(bool refreshing) {
-        if(refreshing) {
+        if (refreshing) {
             SettingsMenu.settingsData.SaveSettings();
             //Messages.Refresh();
             HUD.UpdateText();
@@ -46,6 +46,7 @@ public class ControlSchemeScreen : MonoBehaviour {
         MainMenu.OpenTitleScreen();
     }
 
+    #region OnClicks
     public void OnClickedMouseKeyboard() {
         mouseKeyboardButton.gameObject.SetActive(false);
         gamepadButton.gameObject.SetActive(false);
@@ -65,4 +66,5 @@ public class ControlSchemeScreen : MonoBehaviour {
         SettingsMenu.settingsData.controlScheme = SettingsData.MK54;
         Close(true);
     }
+    #endregion
 }

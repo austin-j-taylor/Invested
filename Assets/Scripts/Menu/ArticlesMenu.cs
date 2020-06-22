@@ -1,20 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Handles the menu that displays in-world information from the title screen.
+/// </summary>
 public class ArticlesMenu : MonoBehaviour {
-    
-    public bool IsOpen {
-        get {
-            return gameObject.activeSelf;
-        }
-    }
+
+    public bool IsOpen => gameObject.activeSelf;
 
     private Text tooltip;
     private Button zincButton;
-    //private Button article2Button;
     private Button backButton;
 
     void Awake() {
@@ -23,9 +18,9 @@ public class ArticlesMenu : MonoBehaviour {
         zincButton = buttons[0];
         //article2Button = buttons[1];
         backButton = buttons[1];
-        
+
         backButton.onClick.AddListener(OnClickedBack);
-        
+
     }
     void Start() {
         Close();

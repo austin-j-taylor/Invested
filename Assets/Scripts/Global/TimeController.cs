@@ -2,14 +2,14 @@
 using System.Collections;
 using UnityEngine.SceneManagement;
 
-/*
- * Knows what time scale the game should be playing at when not paused.
- */
+/// <summary>
+/// Knows what time scale the game should be playing at when not paused.
+/// </summary>
 public class TimeController : MonoBehaviour {
 
     private const float fixedTimeRatio = 1 / 60.0f / 2.0f;
-    private static float currentScale;
 
+    private static float currentScale;
     public static float CurrentTimeScale {
         get {
             return currentScale;
@@ -28,7 +28,6 @@ public class TimeController : MonoBehaviour {
         }
     }
 
-    // Use this for initialization
     void Awake() {
         currentScale = -1;
         SceneManager.sceneLoaded += ClearAfterSceneChange;

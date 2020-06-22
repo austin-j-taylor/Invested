@@ -1,10 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-/**
- * These projectiles are destroyed some time after being created.
- * If it's being pushed or pulled, wait until it's not to destroy it.
- */
+/// <summary>
+/// Represents a projectile like a bullet that vanishes some time after being spawned.
+/// </summary>
 public class Projectile : Magnetic {
 
     private const float lifetime = 10;

@@ -1,13 +1,11 @@
 ﻿using UnityEngine;
 
-/*
- * Controls feruchemical zinc.
- * Controls "bullet time" effect.
- * 
- * Opening the Control Wheel also activates Zinc Time.
- */
+/// <summary>
+/// Manages Feruchemical Zinc, the bullet time effect.
+/// </summary>
 public class FeruchemicalZinc : MonoBehaviour {
 
+    #region constants
     // intensity formula constants
     private const float a = 2f, b = 42, c = 0.67f, d = 11f, f = 2.4f, g = 72f, h = 50;
     // The maximum time that zinc will slow down for
@@ -17,6 +15,7 @@ public class FeruchemicalZinc : MonoBehaviour {
     private const float slowPercent = 1 / 8f;
     // Pitch of all audio when in zinc time (%)
     private const float slowPitch = slowPercent * 2;
+    #endregion
 
     public bool InZincTime { get; private set; }
     private bool recovering;
@@ -30,11 +29,6 @@ public class FeruchemicalZinc : MonoBehaviour {
     private double lastReserve;
     public double Rate { get; private set; }
     public float Intensity { get; private set; }
-    
-    //// Use this for initialization
-    //void Start() {
-    //    Clear();
-    //}
 
     public void Clear() {
         InZincTime = false;
@@ -50,7 +44,6 @@ public class FeruchemicalZinc : MonoBehaviour {
         GameManager.GraphicsController.SetZincEffect(false);
     }
 
-    // Update is called once per frame
     void Update() {
         if (!PauseMenu.IsPaused) {
             if (InZincTime) {
@@ -62,7 +55,7 @@ public class FeruchemicalZinc : MonoBehaviour {
                     Rate = 0;
                 }
 
-                if (!(Keybinds.ZincTime() || Keybinds.ControlWheel())|| Reserve == 0 || !Player.CanControl || !Player.CanControlZinc) {
+                if (!(Keybinds.ZincTime() || Keybinds.ControlWheel()) || Reserve == 0 || !Player.CanControl || !Player.CanControlZinc) {
                     // Exit zinc time
                     InZincTime = false;
                     endReserve = Reserve;
@@ -117,7 +110,12 @@ public class FeruchemicalZinc : MonoBehaviour {
             }
         }
     }
-    
+
+    /// <summary>
+    /// Calculates the intensity for the zinc visual effect.
+    /// </summary>
+    /// <param name="x">the % of the reserve</param>
+    /// <returns>the intensity</returns>
     private float CalculateIntensity(float x) {
         float fStart = (float)startReserve;
         // hot formula that makes a nice curve
@@ -127,6 +125,10 @@ public class FeruchemicalZinc : MonoBehaviour {
         return intensity;
     }
 
+    /// <summary>
+    /// Calculates the intensity of the zinc visual effect right as it starts recovering
+    /// </summary>
+    /// <returns>the intensity</returns>
     private float CalculateRecovering() {
         float fReserve = (float)Reserve;
         float fEnd = (float)endReserve;
@@ -134,12 +136,11 @@ public class FeruchemicalZinc : MonoBehaviour {
         //float intensity = a * (-Mathf.Exp(-b * x) + Mathf.Exp(-d * x)) + c * (Mathf.Exp(f * (x - 1)) - Mathf.Exp(g * (x - 1)));
         float intensity = CalculateIntensity(fEnd) * (2 - Mathf.Exp(-h * (fEnd - fReserve)));
 
-        if(intensity < 0) {
+        if (intensity < 0) {
             recovering = false;
             return 0;
         }
 
         return intensity;
     }
-
 }

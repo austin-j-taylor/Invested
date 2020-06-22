@@ -3,6 +3,9 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Handles the main menu, which displays the Title Screen, Scene Select Menu, etc.
+/// </summary>
 public class MainMenu : MonoBehaviour {
 
     private static MainMenu instance;
@@ -15,12 +18,9 @@ public class MainMenu : MonoBehaviour {
     private SceneSelectMenu sceneSelectMenu;
     private ArticlesMenu articlesMenu;
 
-    public static bool IsOpen {
-        get {
-            return instance.gameObject.activeSelf;
-        }
-    }
+    public static bool IsOpen => instance.gameObject.activeSelf;
 
+    #region clearing
     private void Awake() {
         instance = this;
         canvas = GameObject.FindGameObjectWithTag("Canvas").transform;
@@ -42,6 +42,15 @@ public class MainMenu : MonoBehaviour {
     private void Start() {
         Reset();
     }
+    private void ClearAfterSceneChange(Scene scene, LoadSceneMode mode) {
+        if (scene.buildIndex == SceneSelectMenu.sceneTitleScreen) {
+            Open();
+            if (sceneSelectMenu.IsOpen)
+                titleScreen.Close();
+            if (sceneSelectMenu.isActiveAndEnabled)
+                FocusOnButton(sceneSelectMenu.HighlitButton);
+        }
+    }
 
     // Effectively starts the game over
     public static void Reset() {
@@ -54,6 +63,7 @@ public class MainMenu : MonoBehaviour {
             OpenControlSchemeScreen();
         }
     }
+    #endregion
 
     private void Update() {
         if (Keybinds.ExitMenu() && !controlSchemeScreen.IsOpen) {
@@ -71,16 +81,8 @@ public class MainMenu : MonoBehaviour {
             }
         }
     }
-    private void ClearAfterSceneChange(Scene scene, LoadSceneMode mode) {
-        if (scene.buildIndex == SceneSelectMenu.sceneTitleScreen) {
-            Open();
-            if (sceneSelectMenu.IsOpen)
-                titleScreen.Close();
-            if (sceneSelectMenu.isActiveAndEnabled)
-                FocusOnButton(sceneSelectMenu.HighlitButton);
-        }
-    }
 
+    #region opening
     public static void Open() {
         instance.gameObject.SetActive(true);
     }
@@ -127,6 +129,7 @@ public class MainMenu : MonoBehaviour {
         instance.settingsMenu.Close();
         instance.titleScreen.Open();
     }
+    #endregion
 
     // Finds the first button, slider, etc. in the newly opened menu for gamepad and keyboard control of the menu
     // Works for Title Screen and Scene Select Menu

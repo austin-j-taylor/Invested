@@ -2,6 +2,9 @@
 using System.Collections;
 using UnityEngine.UI;
 
+/// <summary>
+/// Handles the menu that appears when a Challenge is started, giving an overview for it.
+/// </summary>
 public class ChallengeMenu : MonoBehaviour {
 
     private Text challengeText, descriptionText, startText;
@@ -9,11 +12,7 @@ public class ChallengeMenu : MonoBehaviour {
 
     private static ChallengeMenu instance;
 
-    public static bool IsOpen {
-        get {
-            return instance.gameObject.activeSelf;
-        }
-    }
+    public static bool IsOpen => instance.gameObject.activeSelf;
 
     private void Start() {
         challengeText = transform.Find("ChallengeText").GetComponent<Text>();

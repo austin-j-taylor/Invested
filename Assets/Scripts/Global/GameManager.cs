@@ -3,20 +3,24 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using VolumetricLines;
-/*
- * At startup, loads the Title Screen scene
- * Stores all Resources.
- * Stores string fields used by TriggerBeadPopups.
- */
+/// <summary>
+/// At startup, loads the Title Screen scene.
+/// Stores all Resources.
+/// </summary>
 public class GameManager : MonoBehaviour {
 
+    public enum GameState { Standard, Challenge, Cutscene };
+
+    #region controllers
     // Sub-controllers, transforms
     public static AudioManager AudioManager { get; private set; }
     public static ConversationManager ConversationManager { get; private set; }
     public static GraphicsController GraphicsController { get; private set; }
     public static CloudsManager CloudsManager { get; private set; }
     public static Transform MetalLinesTransform { get; private set; }
+    #endregion
 
+    #region resources
     // Resurces
     public static Material Material_MARLmetal_unlit { get; private set; }
     public static Material Material_MARLmetal_lit { get; private set; }
@@ -27,21 +31,23 @@ public class GameManager : MonoBehaviour {
 
     // Objects
     public static Coin Prefab_Coin;
+    #endregion
 
     // Holds all Magnetics and Allomancers in scene
     public static List<Allomancer> Allomancers { get; private set; } = new List<Allomancer>();
     public static List<Magnetic> MagneticsInScene { get; private set; } = new List<Magnetic>();
 
+    #region layers
     // Masks that represent certain layers to ignore for Raycasting
     public static int Layer_IgnorePlayer { get; private set; }
     public static int Layer_IgnoreCamera { get; private set; }
     public static int Layer_BlueLines { get; private set; }
     public static int Layer_BlueLinesVisible { get; private set; }
+    #endregion
 
-    public enum GameState { Standard, Challenge, Cutscene};
     public static GameState State { get; private set; }
 
-
+    #region clearing
     void Awake() {
         AudioManager = transform.Find("AudioManager").GetComponent<AudioManager>();
         ConversationManager = GetComponent<ConversationManager>();
@@ -83,6 +89,9 @@ public class GameManager : MonoBehaviour {
         }
         AudioManager.Clear();
     }
+    #endregion
+
+    #region allomancy
     public static void AddAllomancer(Allomancer allomancer) {
         Allomancers.Add(allomancer);
     }
@@ -108,6 +117,7 @@ public class GameManager : MonoBehaviour {
         }
         MagneticsInScene.Remove(magnetic);
     }
+    #endregion
 
     // Changes the overall game state
     public static void SetState(GameState newState) {
