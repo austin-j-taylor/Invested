@@ -18,11 +18,11 @@ public class TitleScreen : MonoBehaviour {
 
     private void Awake() {
         Button[] buttons = GetComponentsInChildren<Button>();
-        playButton = buttons[0];
-        settingsButton = buttons[1];
-        articlesButton = buttons[2];
-        quitButton = buttons[3];
-        dataManagmentButton = buttons[4];
+        playButton = transform.Find("PlayButton").GetComponent<Button>();
+        settingsButton = transform.Find("SettingsButton").GetComponent<Button>();
+        articlesButton = transform.Find("ArticlesButton").GetComponent<Button>();
+        quitButton = transform.Find("QuitButton").GetComponent<Button>();
+        dataManagmentButton = transform.Find("DataManagementButton").GetComponent<Button>();
 
         playButton.onClick.AddListener(OnClickedPlay);
         settingsButton.onClick.AddListener(OnClickedSettings);
