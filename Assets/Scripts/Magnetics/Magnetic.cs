@@ -40,6 +40,7 @@ public class Magnetic : MonoBehaviour {
     protected Rigidbody Rb { get; set; }
     public bool IsStatic { get; protected set; }
     public bool HasColliders { get; private set; }
+    public bool HasRenderer { get; private set; }
     public virtual bool IsBeingPushPulled { get; protected set; } = false;
     public bool LastWasPulled { get; set; } = false;
     public Vector3 Velocity => IsStatic ? Vector3.zero : Rb.velocity;
@@ -56,7 +57,7 @@ public class Magnetic : MonoBehaviour {
     public Vector3 LastNetForceOnTarget => -LastAllomanticForce + LastAnchoredPushBoostFromAllomancer;
     public Vector3 LastAllomanticForceOnAllomancer => LastAllomanticForce;
     public Vector3 LastAllomanticForceOnTarget => -LastAllomanticForce;
-    public float ColliderBodyBoundsSizeY => HasColliders ? colliders[0].bounds.size.y : GetComponent<Renderer>().bounds.size.y;
+    public float ColliderBodyBoundsSizeY => HasColliders ? colliders[0].bounds.size.y : HasRenderer ? GetComponent<Renderer>().bounds.size.y : 0;
 
     public float Charge { get; private set; }
     // If this Magnetic is at the center of the screen, highlighted, ready to be targeted.
@@ -157,6 +158,7 @@ public class Magnetic : MonoBehaviour {
         lightSaberFactor = 1;
         isHighlighted = false;
         HasColliders = colliders.Length > 0;
+        HasRenderer = GetComponent<Renderer>() != null;
 
         if (IsStatic) { // No RigidBody attached
             if (netMass == 0) {

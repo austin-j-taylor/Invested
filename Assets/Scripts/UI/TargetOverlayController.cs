@@ -19,7 +19,7 @@ public class TargetOverlayController : MonoBehaviour {
     private Text[] pushTargetsSumForce;
     private Text[] pullTargetsActualForce;
     private Text[] pushTargetsActualForce;
-    private Text highlightedTargetMass;
+    //private Text highlightedTargetMass;
 
     void Awake() {
         pullTargetsSumForce = new Text[TargetArray.largeArrayCapacity];
@@ -27,8 +27,8 @@ public class TargetOverlayController : MonoBehaviour {
         pullTargetsActualForce = new Text[TargetArray.largeArrayCapacity];
         pushTargetsActualForce = new Text[TargetArray.largeArrayCapacity];
 
-        highlightedTargetMass = Instantiate(templateMass, transform, false);
-        highlightedTargetMass.text = "";
+        //highlightedTargetMass = Instantiate(templateMass, transform, false);
+        //highlightedTargetMass.text = "";
 
         for (int i = 0; i < TargetArray.largeArrayCapacity; i++) {
             pullTargetsActualForce[i] = Instantiate(templateActualForce, transform, false);
@@ -48,7 +48,7 @@ public class TargetOverlayController : MonoBehaviour {
 
     public void Clear() {
         HardRefresh();
-        highlightedTargetMass.text = "";
+        //highlightedTargetMass.text = "";
         SetPullTextColorWeak();
         SetPushTextColorWeak();
     }
@@ -99,9 +99,9 @@ public class TargetOverlayController : MonoBehaviour {
     /// </summary>
     public void InterfaceRefresh() {
         if (HUD.IsOpen) {
-            if (SettingsMenu.settingsData.hudMasses == 0) {
-                highlightedTargetMass.text = "";
-            }
+            //if (SettingsMenu.settingsData.hudMasses == 0) {
+            //    highlightedTargetMass.text = "";
+            //}
             if (SettingsMenu.settingsData.forceComplexity == 0 && SettingsMenu.settingsData.hudForces == 1) {
                 for (int i = 0; i < Player.PlayerIronSteel.PullTargets.Count; i++) {
                     pullTargetsSumForce[i].text = "";
@@ -178,6 +178,6 @@ public class TargetOverlayController : MonoBehaviour {
     }
 
     public void RemoveHighlightedTargetLabel() {
-        highlightedTargetMass.text = "";
+        //highlightedTargetMass.text = "";
     }
 }

@@ -43,7 +43,6 @@ public class Resettable : Node {
     }
 
     public void Activate() {
-        Debug.Log("Activating children.");
         for (int i = 0; i < childrenTransforms.Length; i++) {
             childrenTransforms[i].position = initialPositions[i];
             childrenTransforms[i].rotation = initialRotations[i];
