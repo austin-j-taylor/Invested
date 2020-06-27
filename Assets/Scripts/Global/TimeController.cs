@@ -9,27 +9,29 @@ public class TimeController : MonoBehaviour {
 
     private const float fixedTimeRatio = 1 / 60.0f / 2.0f;
 
-    private static float currentScale;
+    private static float desiredScale = 1, actualScale = 1;
     public static float CurrentTimeScale {
         get {
-            return currentScale;
+            return desiredScale;
         }
         set {
-            if (currentScale != value && value > 0) {
-                Time.fixedDeltaTime = value * fixedTimeRatio;
-            }
-            currentScale = value;
+            desiredScale = value;
+
             if (MainMenu.IsOpen || PauseMenu.IsPaused) {
-                // time scale stay at zero
-                Time.timeScale = 0;
+                // time scale should stay at zero
+                actualScale = 0;
             } else {
-                Time.timeScale = currentScale;
+                actualScale = value;
+            }
+
+            Time.timeScale = actualScale;
+            if (value > 0) {
+                Time.fixedDeltaTime = value * fixedTimeRatio;
             }
         }
     }
 
     void Awake() {
-        currentScale = -1;
         SceneManager.sceneLoaded += ClearAfterSceneChange;
     }
 

@@ -131,7 +131,7 @@ public class PauseMenu : MonoBehaviour {
             Close();
             instance.gameObject.SetActive(false);
         }
-        Time.timeScale = TimeController.CurrentTimeScale;
+        TimeController.CurrentTimeScale = TimeController.CurrentTimeScale;
     }
 
     #region OnClick

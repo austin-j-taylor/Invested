@@ -99,17 +99,17 @@ public class PlayerFlywheelController : MonoBehaviour {
     // Spins the wheels by the given angle
     private void AddAngleX(float angleX) {
         Vector3 eulers = wheelX.localEulerAngles;
-        eulers.y += angleX * TimeController.CurrentTimeScale;
+        eulers.y += angleX * Time.timeScale;
         wheelX.localEulerAngles = eulers;
     }
     private void AddAngleY(float angleY) {
         Vector3 eulers = wheelY.localEulerAngles;
-        eulers.z += angleY * TimeController.CurrentTimeScale;
+        eulers.z += angleY * Time.timeScale;
         wheelY.localEulerAngles = eulers;
     }
     private void AddAngleZ(float angleZ) {
         Vector3 eulers = wheelZ.localEulerAngles;
-        eulers.y += angleZ * TimeController.CurrentTimeScale;
+        eulers.y += angleZ * Time.timeScale;
         wheelZ.localEulerAngles = eulers;
     }
 

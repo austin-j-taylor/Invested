@@ -9,26 +9,11 @@ using UnityEngine.UI;
 /// </summary>
 public class SettingsMenu : MonoBehaviour {
 
-    #region constants
-    // String constants
-    private const string s_settings = "Settings";
-    private const string s_glossary = "Glossary";
-    private const string s_gameplay = "Gameplay";
-    private const string s_interface = "Interface";
-    private const string s_graphics = "Graphics";
-    private const string s_audio = "Audio";
-    private const string s_allomancy = "Allomancy Physics";
-    private const string s_world = "World Physics";
-    private const string s_back = "Back";
-    private const string s_save = "Save & Back";
-    private const string s_reset = "Reset to Defaults";
-    private const string s_reset_confirmed = "Settings reset.";
-    #endregion
-
     #region properties
     public bool IsOpen => gameObject.activeSelf;
     public bool AreHeadersClosed => settingsHeader.gameObject.activeSelf;
     public bool IsGlossaryOpen => glossaryHeader.gameObject.activeSelf;
+    public bool IsVideoOpen => videoHeader.gameObject.activeSelf;
     public bool IsGameplayOpen => gameplayHeader.gameObject.activeSelf;
     public bool IsInterfaceOpen => interfaceHeader.gameObject.activeSelf;
     public bool IsGraphicsOpen => graphicsHeader.gameObject.activeSelf;
@@ -44,20 +29,8 @@ public class SettingsMenu : MonoBehaviour {
     private Text titleText;
     private Text tooltipText;
     private Transform settingsHeader;
-    private Button glossaryButton;
-    private Button gameplayButton;
-    private Button interfaceButton;
-    private Button graphicsButton;
-    private Button audioButton;
-    private Button allomancyButton;
-    private Button worldButton;
-    private static Transform glossaryHeader;
-    private static Transform gameplayHeader;
-    private static Transform interfaceHeader;
-    private static Transform graphicsHeader;
-    private static Transform audioHeader;
-    private static Transform allomancyHeader;
-    private static Transform worldHeader;
+    private Button glossaryButton, videoButton, gameplayButton, interfaceButton, graphicsButton, audioButton, allomancyButton, worldButton;
+    private static Transform glossaryHeader, videoHeader, gameplayHeader, interfaceHeader, graphicsHeader, audioHeader, allomancyHeader,worldHeader;
     private Button closeButton;
     private Text closeText;
     private Button discardButton;
@@ -72,13 +45,14 @@ public class SettingsMenu : MonoBehaviour {
     #region clearing
     void Awake() {
         settings = GetComponentsInChildren<Setting>();
-        settingsData = gameObject.AddComponent<SettingsData>();
+        settingsData = EventSystem.current.GetComponent<SettingsData>();
 
         // Settings Header
         titleText = transform.Find("TitleText").GetComponent<Text>();
         settingsHeader = transform.Find("SettingsHeader");
         tooltipText = settingsHeader.Find("Tooltip").GetComponent<Text>();
         glossaryButton = settingsHeader.Find("GlossaryButton").GetComponent<Button>();
+        videoButton = settingsHeader.Find("VideoButton").GetComponent<Button>();
         gameplayButton = settingsHeader.Find("GameplayButton").GetComponent<Button>();
         interfaceButton = settingsHeader.Find("InterfaceButton").GetComponent<Button>();
         graphicsButton = settingsHeader.Find("GraphicsButton").GetComponent<Button>();
@@ -86,6 +60,7 @@ public class SettingsMenu : MonoBehaviour {
         allomancyButton = settingsHeader.Find("AllomancyButton").GetComponent<Button>();
         worldButton = settingsHeader.Find("WorldButton").GetComponent<Button>();
         glossaryHeader = transform.Find("GlossaryHeader");
+        videoHeader = transform.Find("VideoHeader");
         gameplayHeader = transform.Find("GameplayHeader");
         interfaceHeader = transform.Find("InterfaceHeader");
         graphicsHeader = transform.Find("GraphicsHeader");
@@ -101,6 +76,7 @@ public class SettingsMenu : MonoBehaviour {
 
         // Command listeners assignment
         glossaryButton.onClick.AddListener(OpenGlossary);
+        videoButton.onClick.AddListener(OpenVideo);
         gameplayButton.onClick.AddListener(OpenGameplay);
         interfaceButton.onClick.AddListener(OpenInterface);
         graphicsButton.onClick.AddListener(OpenGraphics);
@@ -111,9 +87,9 @@ public class SettingsMenu : MonoBehaviour {
         discardButton.onClick.AddListener(OnClickDiscard);
         resetToDefaultsButton.onClick.AddListener(OnClickResetToDefaults);
         // Initial field assignments
-        titleText.text = s_settings;
-        closeText.text = s_back;
-        resetToDefaultsText.text = s_reset;
+        titleText.text = "Settings";
+        closeText.text = "Back";
+        resetToDefaultsText.text = "Reset to Defaults";
     }
 
     private void Start() {
@@ -137,9 +113,10 @@ public class SettingsMenu : MonoBehaviour {
         if (IsOpen) {
             if (EventSystem.current.currentSelectedGameObject != null)
                 highlitButton = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
-            resetToDefaultsText.text = s_reset;
+            resetToDefaultsText.text = "Reset to Defaults";
             resetToDefaultsButton.gameObject.SetActive(false);
             CloseGlossary();
+            CloseVideo();
             CloseInterface();
             CloseGraphics();
             CloseGameplay();
@@ -183,11 +160,11 @@ public class SettingsMenu : MonoBehaviour {
     #region headerClearing
     private void OpenHeader() {
         highlitButton = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
-        resetToDefaultsText.text = s_reset;
+        resetToDefaultsText.text = "Reset to Defaults";
         settingsHeader.gameObject.SetActive(false);
         discardButton.gameObject.SetActive(true);
         resetToDefaultsButton.gameObject.SetActive(false);
-        closeText.text = s_save;
+        closeText.text = "Save & Back";
         MainMenu.FocusOnButton(transform);
     }
     private void CloseHeader() {
@@ -195,86 +172,97 @@ public class SettingsMenu : MonoBehaviour {
             settingsHeader.gameObject.SetActive(true);
             discardButton.gameObject.SetActive(false);
             resetToDefaultsButton.gameObject.SetActive(true);
-            closeText.text = s_back;
+            closeText.text = "Back";
             MainMenu.FocusOnButton(highlitButton);
         }
     }
 
     private void OpenGlossary() {
-        titleText.text = s_glossary;
+        titleText.text = "Glossary";
         glossaryHeader.gameObject.SetActive(true);
         settingsHeader.gameObject.SetActive(false);
         resetToDefaultsButton.gameObject.SetActive(false);
         MainMenu.FocusOnButton(glossaryHeader);
     }
     private void CloseGlossary() {
-        titleText.text = s_settings;
+        titleText.text = "Settings";
         glossaryHeader.gameObject.SetActive(false);
         CloseHeader();
     }
 
+    private void OpenVideo() {
+        titleText.text = "Video";
+        videoHeader.gameObject.SetActive(true);
+        OpenHeader();
+    }
+    private void CloseVideo() {
+        titleText.text = "Settings";
+        videoHeader.gameObject.SetActive(false);
+        CloseHeader();
+    }
+
     private void OpenGameplay() {
-        titleText.text = s_gameplay;
+        titleText.text = "Gameplay";
         gameplayHeader.gameObject.SetActive(true);
         OpenHeader();
     }
     private void CloseGameplay() {
-        titleText.text = s_settings;
+        titleText.text = "Settings";
         gameplayHeader.gameObject.SetActive(false);
         CloseHeader();
     }
 
     private void OpenInterface() {
-        titleText.text = s_interface;
+        titleText.text = "Interface";
         interfaceHeader.gameObject.SetActive(true);
         OpenHeader();
     }
     private void CloseInterface() {
-        titleText.text = s_settings;
+        titleText.text = "Settings";
         interfaceHeader.gameObject.SetActive(false);
         CloseHeader();
     }
 
     private void OpenGraphics() {
-        titleText.text = s_graphics;
+        titleText.text = "Graphics";
         graphicsHeader.gameObject.SetActive(true);
         OpenHeader();
     }
     private void CloseGraphics() {
-        titleText.text = s_settings;
+        titleText.text = "Settings";
         graphicsHeader.gameObject.SetActive(false);
         CloseHeader();
     }
 
     private void OpenAudio() {
-        titleText.text = s_audio;
+        titleText.text = "Audio";
         audioHeader.gameObject.SetActive(true);
         OpenHeader();
     }
     private void CloseAudio() {
-        titleText.text = s_settings;
+        titleText.text = "Settings";
         audioHeader.gameObject.SetActive(false);
         CloseHeader();
     }
 
     private void OpenAllomancy() {
-        titleText.text = s_allomancy;
+        titleText.text = "Allomancy Physics";
         allomancyHeader.gameObject.SetActive(true);
         OpenHeader();
     }
     private void CloseAllomancy() {
-        titleText.text = s_settings;
+        titleText.text = "Settings";
         allomancyHeader.gameObject.SetActive(false);
         CloseHeader();
     }
 
     private void OpenWorld() {
-        titleText.text = s_world;
+        titleText.text = "World Physics";
         worldHeader.gameObject.SetActive(true);
         OpenHeader();
     }
     private void CloseWorld() {
-        titleText.text = s_settings;
+        titleText.text = "Settings";
         worldHeader.gameObject.SetActive(false);
         CloseHeader();
     }
@@ -297,6 +285,8 @@ public class SettingsMenu : MonoBehaviour {
     private bool BackSettings() {
         if (IsGlossaryOpen)
             CloseGlossary();
+        else if (IsVideoOpen)
+            CloseVideo();
         else if (IsGameplayOpen)
             CloseGameplay();
         else if (IsInterfaceOpen)
@@ -327,7 +317,7 @@ public class SettingsMenu : MonoBehaviour {
     }
 
     private void OnClickResetToDefaults() {
-        resetToDefaultsText.text = s_reset_confirmed;
+        resetToDefaultsText.text = "Settings reset.";
         settingsData.ResetToDefaults();
         RefreshSettings();
     }

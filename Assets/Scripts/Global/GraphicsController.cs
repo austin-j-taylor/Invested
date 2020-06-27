@@ -9,7 +9,7 @@ using UnityEngine.UI;
 /// </summary>
 public class GraphicsController : MonoBehaviour {
 
-    private static GraphicsController instance = null;
+    public static GraphicsController instance = null;
 
     public static bool CloudsEnabled { get; private set; }
     private static bool postProcessingEnabled;
@@ -24,7 +24,7 @@ public class GraphicsController : MonoBehaviour {
     [SerializeField]
     private PostProcessingProfile profile = null;
     [SerializeField]
-    private SliderSetting resolutionSlider = null;
+    public SliderSetting resolutionSlider = null;
 
     ChromaticAberrationModel.Settings aberrationSettings;
     VignetteModel.Settings vignetteSettings;

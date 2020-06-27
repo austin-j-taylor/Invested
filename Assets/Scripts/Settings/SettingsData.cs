@@ -94,7 +94,6 @@ public class SettingsData : MonoBehaviour {
     private void Start() {
         SetSettingsWhenChanged();
     }
-
     #region JSON
     public void LoadSettings(bool setSettingsChanged = true) {
         //Debug.Log("Settings loaded");
