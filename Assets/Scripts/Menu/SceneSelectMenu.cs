@@ -66,6 +66,8 @@ public class SceneSelectMenu : MonoBehaviour {
     private Button simulationWallButton;
     private Button simulationGroundButton;
     private Button backButton;
+
+    private Button_SceneSelectMenu[] buttons;
     #endregion
 
     #region clearing
@@ -75,6 +77,8 @@ public class SceneSelectMenu : MonoBehaviour {
         levelsHeader = transform.Find("Levels").transform;
         sandboxesHeader = transform.Find("Sandboxes").transform;
         simulationsHeader = transform.Find("Simulations").transform;
+
+        buttons = GetComponentsInChildren<Button_SceneSelectMenu>();
 
         levelMARL1Button = levelsHeader.Find("MARL1").GetComponent<Button>();
         levelMARL2Button = levelsHeader.Find("MARL2").GetComponent<Button>();
@@ -117,7 +121,6 @@ public class SceneSelectMenu : MonoBehaviour {
         backButton.onClick.AddListener(OnClickedBack);
 
         HighlitButton = tutorial1Button;
-
     }
 
     private void Start() {
@@ -136,16 +139,20 @@ public class SceneSelectMenu : MonoBehaviour {
         //levelMARL3Button.interactable = FlagsController.GetData("completeTutorial3");
         //levelMARL4Button.interactable = FlagsController.GetData("completeTutorial4");
         tutorial1Button.interactable = true;
-        tutorial2Button.interactable = FlagsController.GetData("completeTutorial1");
-        tutorial3Button.interactable = FlagsController.GetData("completeTutorial2");
-        tutorial4Button.interactable = FlagsController.GetData("completeTutorial3");
+        tutorial2Button.interactable = FlagsController.instance.completeTutorial1;
+        tutorial3Button.interactable = FlagsController.instance.completeTutorial2;
+        tutorial4Button.interactable = FlagsController.instance.completeTutorial3;
         sandboxButton.interactable = true;
-        shootingGroundsButton.interactable = FlagsController.GetData("completeTutorial1");
-        southernMountainsButton.interactable = FlagsController.GetData("completeTutorial2");
-        seaOfMetalButton.interactable = FlagsController.GetData("completeTutorial3");
-        stormsButton.interactable = FlagsController.GetData("completeTutorial3");
-        luthadelButtonDay.interactable = FlagsController.GetData("completeTutorial4");
-        luthadelButtonNight.interactable = FlagsController.GetData("completeTutorial4");
+        shootingGroundsButton.interactable = FlagsController.instance.completeTutorial1;
+        southernMountainsButton.interactable = FlagsController.instance.completeTutorial2;
+        seaOfMetalButton.interactable = FlagsController.instance.completeTutorial3;
+        stormsButton.interactable = FlagsController.instance.completeTutorial3;
+        luthadelButtonDay.interactable = FlagsController.instance.completeTutorial4;
+        luthadelButtonNight.interactable = FlagsController.instance.completeTutorial4;
+        // Set the little "Completed" symbol next to each level to be enabled/disabled
+        for(int i = 0; i < buttons.Length; i++) {
+            buttons[i].CheckCompleted();
+        }
     }
 
     public void Close() {
@@ -234,8 +241,6 @@ public class SceneSelectMenu : MonoBehaviour {
     private void OnClickedSimulationGround() {
         LoadSceneFromClick(sceneSimulationGround);
     }
-    private void OnClickedBack() {
-        Close();
-    }
+    private void OnClickedBack() => Close();
     #endregion
 }

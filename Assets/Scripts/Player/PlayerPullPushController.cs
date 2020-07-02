@@ -1116,7 +1116,6 @@ public class PlayerPullPushController : AllomanticIronSteel {
     private void RefreshHUD() {
         if (IsBurning) {
             RefreshHUDColorsOnly();
-            HUD.TargetOverlayController.HardRefresh();
             // number of targets
             switch (Mode) {
                 case ControlMode.Area:
@@ -1130,6 +1129,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
             HUD.BurnPercentageMeter.Clear();
             HUD.Crosshair.Clear();
         }
+        HUD.TargetOverlayController.Clear();
     }
 
     /// <summary>

@@ -10,7 +10,7 @@ public class FlagTrigger : MonoBehaviour {
     private string flag = "";
 
     private void OnTriggerEnter(Collider other) {
-        if (other.CompareTag("Player") && !other.isTrigger) {
+        if (other.CompareTag("Player") && !other.isTrigger && GetComponentInParent<HarmonyTarget>().Unlocked) {
             if (flag != "")
                 FlagsController.SetFlag(flag);
             enabled = false;

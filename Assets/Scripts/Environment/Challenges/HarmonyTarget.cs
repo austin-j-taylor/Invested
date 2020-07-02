@@ -35,6 +35,8 @@ public class HarmonyTarget : MonoBehaviour {
     private Transform cameraPositionTarget;
     private Transform cameraLookAtTarget;
 
+    public bool Unlocked => numSpikes >= 3;
+
     private void Start() {
         vcam = GetComponentInChildren<CinemachineVirtualCamera>();
         vcam.enabled = false;
@@ -127,7 +129,7 @@ public class HarmonyTarget : MonoBehaviour {
         Player.PlayerIronSteel.StopBurning();
         harmonySphere.GetComponent<Collider>().enabled = false;
         anim.SetTrigger("PlayerHasEntered");
-        if (numSpikes >= 3)
+        if (Unlocked)
             HUD.DisableHUD();
 
         //Player.PlayerIronSteel.StopBurning();

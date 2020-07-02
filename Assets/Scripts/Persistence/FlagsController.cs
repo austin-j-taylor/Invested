@@ -20,14 +20,15 @@ public class FlagsController : MonoBehaviour {
     #region flagFields
     // Flags
     // can't make them private because json-parsing needs them to be public
-    public bool completeTutorial1, completeTutorial2, completeTutorial3, completeTutorial4, completeMARL1, completeMARL2, completeMARL3, completeMARL4;
+    public bool completeTutorial1, completeTutorial2, completeTutorial3, completeTutorial4, completeMARL1, completeMARL2, completeMARL3, completeMARL4,
+                completeTestingGrounds, completeShootingGrounds, completeSouthernMountains, completeSeaOfMetal, completeIlluminatingStorms, completeLuthadel;
     public bool controlSchemeChosen;
     public bool pwr_steel, pwr_pewter, pwr_zinc, pwr_coins; // for unlocking abilities
     public bool wheel_area, wheel_bubble;
     // Be wary of adding any other public fields, as DeleteAllData will reset them.
     #endregion
 
-    private static FlagsController instance;
+    public static FlagsController instance;
 
     private void Awake() {
         instance = this;
@@ -76,7 +77,7 @@ public class FlagsController : MonoBehaviour {
         }
         field.SetValue(instance, true);
 
-        Debug.Log("Set flag: " + name);
+        //Debug.Log("Set flag: " + name);
         // When ability flags are set, the corresponding power should be immediately unlocked.
         switch (name) {
             case "pwr_steel":
@@ -104,7 +105,12 @@ public class FlagsController : MonoBehaviour {
 
         instance.Refresh();
     }
-
+    /// <summary>
+    /// Gets the flag field with the given name.
+    /// Alternatively, just use FlagsController.instance.theName
+    /// </summary>
+    /// <param name="name">the name of the field</param>
+    /// <returns></returns>
     public static bool GetData(string name) {
         FieldInfo field = instance.GetType().GetField(name);
         if (field == null) {

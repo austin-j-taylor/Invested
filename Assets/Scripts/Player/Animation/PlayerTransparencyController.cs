@@ -60,6 +60,7 @@ public class PlayerTransparencyController : MonoBehaviour {
         }
 
     }
+
     public void Clear() {
         //if(SettingsMenu.settingsData.cameraFirstPerson == 0) {
         //    SetOverrideHidden(false);

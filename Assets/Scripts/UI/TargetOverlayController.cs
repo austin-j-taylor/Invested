@@ -10,8 +10,8 @@ public class TargetOverlayController : MonoBehaviour {
     private const float pixelDelta = 20;
     //private const float voxelDelta = .3f;
 
-    [SerializeField]
-    private Text templateMass = null;
+    //[SerializeField]
+    //private Text templateMass = null;
     [SerializeField]
     private Text templateActualForce = null;
 
