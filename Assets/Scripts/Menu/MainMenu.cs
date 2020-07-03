@@ -137,6 +137,6 @@ public class MainMenu : MonoBehaviour {
         EventSystem.current.SetSelectedGameObject(button.gameObject);
     }
     public static void FocusOnButton(Transform parent) {
-        EventSystem.current.SetSelectedGameObject(parent.GetComponentInChildren<Button>().gameObject);
+        EventSystem.current.SetSelectedGameObject(parent.GetComponentInChildren<Selectable>().gameObject);
     }
 }

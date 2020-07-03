@@ -124,6 +124,7 @@ public class SettingsData : MonoBehaviour {
         //GraphicsController.SetMotionBlur(motionBlur == 1);
         //GraphicsController.SetBloom(bloom == 1);
         GraphicsController.SetFullscreenResolution(resolution, (FullScreenMode)fullscreen);
+        HUD.HelpOverlayController.SetState(helpOverlay);
     }
 
     public void SaveSettings() {

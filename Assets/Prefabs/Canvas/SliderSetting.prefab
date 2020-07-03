@@ -383,6 +383,7 @@ GameObject:
   - component: {fileID: 224565570428648450}
   - component: {fileID: 222314450643395372}
   - component: {fileID: 114236686305861126}
+  - component: {fileID: 6735250932986323032}
   m_Layer: 5
   m_Name: Details
   m_TagString: Untagged
@@ -444,13 +445,28 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 1
     m_MaxSize: 50
-    m_Alignment: 4
+    m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 0.75
   m_Text: 
+--- !u!114 &6735250932986323032
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1583241393829494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
+  m_EffectDistance: {x: 1, y: -1}
+  m_UseGraphicAlpha: 1
 --- !u!1 &1695523629938076
 GameObject:
   m_ObjectHideFlags: 0
@@ -550,9 +566,12 @@ MonoBehaviour:
   id: velocityConstant
   settingSize: 240
   detailsFontSize: 25
+  slider: {fileID: 0}
+  valueText: {fileID: 0}
   min: 1
   max: 128
   defaultValue: 1
+  updateTextWhenChanged: 1
   showDecimals: 0
 --- !u!114 &114709635608938972
 MonoBehaviour:

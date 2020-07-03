@@ -235,6 +235,23 @@ public class HelpOverlayController : MonoBehaviour {
         }
         SettingsMenu.RefreshSettingHelpOverlay((int)currentState);
     }
+    
+    public void SetState(int intState) {
+        State newState = (State)intState;
+        if(newState != currentState) {
+            switch (newState) {
+                case State.Closed:
+                    Disable();
+                    break;
+                case State.Simple:
+                    EnableSimple();
+                    break;
+                case State.Verbose:
+                    EnableVerbose();
+                    break;
+            }
+        }
+    }
 
     public void EnableSimple() {
         currentState = State.Simple;

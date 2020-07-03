@@ -143,14 +143,14 @@ public class SettingsMenu : MonoBehaviour {
     }
     public static void RefreshSettingHelpOverlay(int newHelpOverlay) {
         settingsData.helpOverlay = newHelpOverlay;
-        ButtonSetting helpOverlay = interfaceHeader.Find("HUDLabel/Children/HelpOverlayLabel").GetComponent<ButtonSetting>();
+        Setting helpOverlay = interfaceHeader.Find("HUDLabel/Children/HelpOverlayLabel").GetComponent<Setting>();
         helpOverlay.RefreshData();
         helpOverlay.RefreshText();
         settingsData.SaveSettings();
     }
     public static void RefreshSettingPerspective(int newCameraFirstPerson) {
         settingsData.cameraFirstPerson = newCameraFirstPerson;
-        ButtonSetting perspective = gameplayHeader.Find("PerspectiveLabel").GetComponent<ButtonSetting>();
+        Setting perspective = gameplayHeader.Find("PerspectiveLabel").GetComponent<Setting>();
         perspective.RefreshData();
         perspective.RefreshText();
         settingsData.SaveSettings();
@@ -182,7 +182,7 @@ public class SettingsMenu : MonoBehaviour {
         glossaryHeader.gameObject.SetActive(true);
         settingsHeader.gameObject.SetActive(false);
         resetToDefaultsButton.gameObject.SetActive(false);
-        MainMenu.FocusOnButton(glossaryHeader);
+        MainMenu.FocusOnButton(closeButton);
     }
     private void CloseGlossary() {
         titleText.text = "Settings";
