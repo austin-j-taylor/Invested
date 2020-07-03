@@ -94,8 +94,10 @@ public class MetalReserve : MonoBehaviour {
     }
 
     // fully refills this reserve
-    public void Refill() {
+    public void Refill(bool silent = true) {
         Mass = capacity;
+        if(silent)
+            lastMass = capacity; // The Rate will appear as 0 the next frame
         IsBurnedOut = false;
     }
 }

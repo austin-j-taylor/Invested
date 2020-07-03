@@ -39,6 +39,22 @@ public class DropdownSetting : Setting {
             if (detailStrings.Length != optionsCount)
                 Debug.LogError("buttonStrings and detailStrings do not match size.");
         }
+
+        // Assign font and button size
+        RectTransform rectButton = dropdown.GetComponent<RectTransform>();
+        RectTransform rectDetails = detailsText.GetComponent<RectTransform>();
+        Vector2 buttonRightSide = rectButton.offsetMax;
+        Vector2 detailsRightSide = rectDetails.offsetMax;
+        Vector2 detailsLeftSide = rectDetails.offsetMin;
+        detailsRightSide.x = 840 + 240 - settingSize;
+        buttonRightSide.x = settingSize;
+        detailsLeftSide.x = 240 - settingSize + 30;
+        rectButton.offsetMax = buttonRightSide;
+        rectDetails.offsetMax = detailsRightSide;
+        rectDetails.offsetMin = detailsLeftSide;
+
+        detailsText.fontSize = detailsFontSize;
+
         dropdown.onValueChanged.AddListener(DropdownValueChanged);
     }
     

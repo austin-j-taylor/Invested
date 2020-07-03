@@ -61,6 +61,7 @@ public class AllomanticPewter : Allomancer {
                 shieldMaterial = shieldRenderer.materials[i];
             }
         }
+        PewterReserve.Refill();
     }
 
     public override void Clear() {

@@ -21,10 +21,10 @@ public class HUD : MonoBehaviour {
     private static Animator anim;
 
     private float deltaTimeFPS = 0.0f;
+    private static GameObject instance;
 
     // HUD elements
     // Bad practice to give them the same names as their classes
-    public static GameObject HudGameObject { get; private set; }
     public static CrosshairController Crosshair { get; private set; }
     public static BurnPercentageMeter BurnPercentageMeter { get; private set; }
     public static MetalReserveMeters MetalReserveMeters { get; private set; }
@@ -39,7 +39,7 @@ public class HUD : MonoBehaviour {
     public static ConversationHUDController ConversationHUDController { get; private set; }
 
     void Awake() {
-        HudGameObject = gameObject;
+        instance = gameObject;
         fPSText = GetComponentInChildren<Text>();
         hudGroup = GetComponent<CanvasGroup>();
         hudBehindWheelGroup = transform.Find("BehindControlWheel").GetComponent<CanvasGroup>();
@@ -59,9 +59,9 @@ public class HUD : MonoBehaviour {
         SceneManager.sceneUnloaded += ClearHUDBeforeSceneChange;
         SceneManager.sceneLoaded += ClearAfterSceneChange;
     }
-    void Start() {
-        DisableHUD();
-    }
+    //void Start() {
+    //    DisableHUD();
+    //}
 
     void LateUpdate() {
         deltaTimeFPS += (Time.unscaledDeltaTime - deltaTimeFPS) * 0.1f;
@@ -85,10 +85,12 @@ public class HUD : MonoBehaviour {
 
     // Ready HUD elements for a certain simulation
     public static void EnableHUD() {
+        //instance.SetActive(true);
         hudGroup.alpha = 1;
     }
 
     public static void DisableHUD() {
+        //instance.SetActive(false);
         hudGroup.alpha = 0;
     }
 
