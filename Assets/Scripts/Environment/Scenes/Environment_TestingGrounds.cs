@@ -3,7 +3,14 @@ using System.Collections;
 
 public class Environment_TestingGrounds : MonoBehaviour {
 
-    private bool done;
+    //private bool done;
+    [SerializeField]
+    private GameObject coinChest = null;
+
+    void Start() {
+        if (!Player.CanThrowCoins)
+            coinChest.SetActive(false);
+    }
 
     //void Start() {
     //    done = false;

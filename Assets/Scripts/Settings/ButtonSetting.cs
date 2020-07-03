@@ -67,12 +67,7 @@ public class ButtonSetting : Setting {
         rectDetails.offsetMax = detailsRightSide;
         rectDetails.offsetMin = detailsLeftSide;
 
-        buttonText.font = GameManager.Font_Heebo;
-        buttonText.fontStyle = FontStyle.Normal;
-
         detailsText.fontSize = detailsFontSize;
-        detailsText.font = GameManager.Font_Heebo;
-        detailsText.fontStyle = FontStyle.Normal;
 
         button.onClick.AddListener(OnClick);
     }

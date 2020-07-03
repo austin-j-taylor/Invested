@@ -123,12 +123,6 @@ public class SceneSelectMenu : MonoBehaviour {
         HighlitButton = tutorial1Button;
     }
 
-    private void Start() {
-        // Open and immediately close to quickly grab those Flags and read them behind the scenes
-        Open();
-        Close();
-    }
-
     public void Open() {
         gameObject.SetActive(true);
         tooltip.text = "";
@@ -153,6 +147,10 @@ public class SceneSelectMenu : MonoBehaviour {
         for(int i = 0; i < buttons.Length; i++) {
             buttons[i].CheckCompleted();
         }
+    }
+
+    private void Start() {
+        gameObject.SetActive(false);
     }
 
     public void Close() {

@@ -62,7 +62,7 @@ public class SettingsData : MonoBehaviour {
     public int vignetteZinc;
     public int clouds;
     public int fullscreen;
-    public float resolution;
+    public int resolution;
     // Audio
     public float audioMaster;
     public float audioMusic;

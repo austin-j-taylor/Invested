@@ -98,7 +98,7 @@ public class SettingsMenu : MonoBehaviour {
 
         discardButton.gameObject.SetActive(false);
         resetToDefaultsButton.gameObject.SetActive(false);
-        highlitButton = gameplayButton;
+        highlitButton = videoButton;
 
         Close();
     }
@@ -111,8 +111,8 @@ public class SettingsMenu : MonoBehaviour {
 
     public void Close() {
         if (IsOpen) {
-            if (EventSystem.current.currentSelectedGameObject != null)
-                highlitButton = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
+            //if (EventSystem.current.currentSelectedGameObject != null)
+            //    highlitButton = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
             resetToDefaultsText.text = "Reset to Defaults";
             resetToDefaultsButton.gameObject.SetActive(false);
             CloseGlossary();

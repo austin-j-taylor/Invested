@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 
 /// <summary>
-/// Represents a setting that is controlled by a button.
+/// Represents a setting that is controlled by a slider.
 /// In the inspector, assign the variables associated with the slider.
 /// Unlike a ButtonSetting, the details text is written normally through the heirarchy since that doesn't need to change with different slider values, unlike the buttons.
 /// </summary>
