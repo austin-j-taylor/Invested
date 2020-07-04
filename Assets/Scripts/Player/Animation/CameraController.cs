@@ -377,16 +377,18 @@ public class CameraController : MonoBehaviour {
     }
 
     public void SetThirdPerson() {
-        Player.PlayerTransparancy.SetOverrideHidden(false);
         CameraPositionTarget.transform.SetParent(CameraLookAtTarget);
-        if (!UsingCinemachine)
+        if (!UsingCinemachine) {
+            Player.PlayerTransparancy.SetOverrideHidden(false);
             Clear();
+        }
     }
     public void SetFirstPerson() {
-        Player.PlayerTransparancy.SetOverrideHidden(true);
         CameraPositionTarget.transform.SetParent(CameraLookAtTarget.Find("FirstPersonTarget"));
-        if (!UsingCinemachine)
+        if (!UsingCinemachine) {
+            Player.PlayerTransparancy.SetOverrideHidden(true);
             Clear();
+        }
     }
 
     public static void TogglePerspective() {

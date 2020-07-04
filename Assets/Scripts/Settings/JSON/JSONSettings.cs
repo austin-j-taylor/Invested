@@ -64,15 +64,14 @@ public abstract class JSONSettings : MonoBehaviour {
     public void ResetToDefaults() {
         try {
             StreamReader reader = new StreamReader(DefaultConfigFileName, true);
-            reader.ReadLine(); // get rid of comments in first line
-            reader.ReadLine();
+
             string jSONText = reader.ReadToEnd();
             reader.Close();
 
             JsonUtility.FromJsonOverwrite(jSONText, this);
 
             SaveSettings();
-
+            RefreshSettings();
         } catch (DirectoryNotFoundException e) {
             Debug.LogError(e.Message);
         }

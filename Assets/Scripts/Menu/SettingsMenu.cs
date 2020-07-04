@@ -102,7 +102,6 @@ public class SettingsMenu : MonoBehaviour {
         // Initial field assignments
         titleText.text = "Settings";
         closeText.text = "Back";
-        resetToDefaultsText.text = "Reset to Defaults";
     }
 
     private void Start() {
@@ -110,7 +109,6 @@ public class SettingsMenu : MonoBehaviour {
         RefreshSettings();
 
         discardButton.gameObject.SetActive(false);
-        resetToDefaultsButton.gameObject.SetActive(false);
         highlitButton = videoButton;
 
         foreach (JSONSettings setting in settings) {
@@ -129,8 +127,7 @@ public class SettingsMenu : MonoBehaviour {
         if (IsOpen) {
             //if (EventSystem.current.currentSelectedGameObject != null)
             //    highlitButton = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
-            resetToDefaultsText.text = "Reset to Defaults";
-            resetToDefaultsButton.gameObject.SetActive(false);
+            resetToDefaultsText.text = "Reset all to Defaults";
             CloseGlossary();
             CloseVideo();
             CloseInterface();
@@ -176,10 +173,9 @@ public class SettingsMenu : MonoBehaviour {
     #region headerClearing
     private void OpenHeader() {
         highlitButton = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
-        resetToDefaultsText.text = "Reset to Defaults";
+        resetToDefaultsText.text = "Reset page to Defaults";
         settingsHeader.gameObject.SetActive(false);
         discardButton.gameObject.SetActive(true);
-        resetToDefaultsButton.gameObject.SetActive(false);
         closeText.text = "Save & Back";
         MainMenu.FocusOnButton(transform);
     }
@@ -188,6 +184,7 @@ public class SettingsMenu : MonoBehaviour {
             settingsHeader.gameObject.SetActive(true);
             discardButton.gameObject.SetActive(false);
             resetToDefaultsButton.gameObject.SetActive(true);
+            resetToDefaultsText.text = "Reset all to Defaults";
             closeText.text = "Back";
             MainMenu.FocusOnButton(highlitButton);
         }
@@ -338,11 +335,27 @@ public class SettingsMenu : MonoBehaviour {
     }
 
     private void OnClickResetToDefaults() {
-        resetToDefaultsText.text = "Settings reset.";
-        foreach (JSONSettings setting in settings) {
-            setting.ResetToDefaults();
+        if (IsVideoOpen)
+            settingsVideo.ResetToDefaults();
+        else if (IsGameplayOpen)
+            settingsGameplay.ResetToDefaults();
+        else if (IsInterfaceOpen)
+            settingsInterface.ResetToDefaults();
+        else if (IsGraphicsOpen)
+            settingsGraphics.ResetToDefaults();
+        else if (IsAudioOpen)
+            settingsAudio.ResetToDefaults();
+        else if (IsAllomancyOpen)
+            settingsAllomancy.ResetToDefaults();
+        else if (IsWorldOpen)
+            settingsWorld.ResetToDefaults();
+        else {
+            foreach (JSONSettings setting in settings) {
+                setting.ResetToDefaults();
+            }
         }
-        RefreshSettings();
+
+        resetToDefaultsText.text = "Settings reset.";
     }
     #endregion
 }
