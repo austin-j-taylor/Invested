@@ -32,7 +32,7 @@ public class Keybinds : MonoBehaviour {
     }
 
     public static bool PullDown() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) {
             if (Input.GetAxis("RightTrigger") > triggerDeadband) {
                 return !lastWasPulling;
             }
@@ -42,7 +42,7 @@ public class Keybinds : MonoBehaviour {
         return false;
     }
     public static bool PushDown() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) {
             if (Input.GetAxis("LeftTrigger") > triggerDeadband) {
                 return !lastWasPushing;
             }
@@ -58,17 +58,17 @@ public class Keybinds : MonoBehaviour {
     #region selecting
     // Both Keyboard and Gamepad (Specifics for M45/KQE)
     public static bool SelectDown() {
-        switch (SettingsMenu.settingsData.controlScheme) {
-            case SettingsData.MK54: {
+        switch (SettingsMenu.settingsGameplay.controlScheme) {
+            case JSONSettings_Gameplay.MK54: {
                     return Input.GetKeyDown(KeyCode.Mouse4);
                 }
-            case SettingsData.MK45: {
+            case JSONSettings_Gameplay.MK45: {
                     return Input.GetKeyDown(KeyCode.Mouse3);
                 }
-            case SettingsData.MKEQ: {
+            case JSONSettings_Gameplay.MKEQ: {
                     return Input.GetKeyDown(KeyCode.E);
                 }
-            case SettingsData.MKQE: {
+            case JSONSettings_Gameplay.MKQE: {
                     return Input.GetKeyDown(KeyCode.Q);
                 }
             default: {
@@ -77,17 +77,17 @@ public class Keybinds : MonoBehaviour {
         }
     }
     public static bool Select() {
-        switch (SettingsMenu.settingsData.controlScheme) {
-            case SettingsData.MK54: {
+        switch (SettingsMenu.settingsGameplay.controlScheme) {
+            case JSONSettings_Gameplay.MK54: {
                     return Input.GetKey(KeyCode.Mouse4);
                 }
-            case SettingsData.MK45: {
+            case JSONSettings_Gameplay.MK45: {
                     return Input.GetKey(KeyCode.Mouse3);
                 }
-            case SettingsData.MKEQ: {
+            case JSONSettings_Gameplay.MKEQ: {
                     return Input.GetKey(KeyCode.E);
                 }
-            case SettingsData.MKQE: {
+            case JSONSettings_Gameplay.MKQE: {
                     return Input.GetKey(KeyCode.Q);
                 }
             default: {
@@ -96,17 +96,17 @@ public class Keybinds : MonoBehaviour {
         }
     }
     public static bool SelectUp() {
-        switch (SettingsMenu.settingsData.controlScheme) {
-            case SettingsData.MK54: {
+        switch (SettingsMenu.settingsGameplay.controlScheme) {
+            case JSONSettings_Gameplay.MK54: {
                     return Input.GetKeyUp(KeyCode.Mouse4);
                 }
-            case SettingsData.MK45: {
+            case JSONSettings_Gameplay.MK45: {
                     return Input.GetKeyUp(KeyCode.Mouse3);
                 }
-            case SettingsData.MKEQ: {
+            case JSONSettings_Gameplay.MKEQ: {
                     return Input.GetKeyUp(KeyCode.E);
                 }
-            case SettingsData.MKQE: {
+            case JSONSettings_Gameplay.MKQE: {
                     return Input.GetKeyUp(KeyCode.Q);
                 }
             default: {
@@ -116,17 +116,17 @@ public class Keybinds : MonoBehaviour {
     }
 
     public static bool SelectAlternateDown() {
-        switch (SettingsMenu.settingsData.controlScheme) {
-            case SettingsData.MK54: {
+        switch (SettingsMenu.settingsGameplay.controlScheme) {
+            case JSONSettings_Gameplay.MK54: {
                     return Input.GetKeyDown(KeyCode.Mouse3);
                 }
-            case SettingsData.MK45: {
+            case JSONSettings_Gameplay.MK45: {
                     return Input.GetKeyDown(KeyCode.Mouse4);
                 }
-            case SettingsData.MKEQ: {
+            case JSONSettings_Gameplay.MKEQ: {
                     return Input.GetKeyDown(KeyCode.Q);
                 }
-            case SettingsData.MKQE: {
+            case JSONSettings_Gameplay.MKQE: {
                     return Input.GetKeyDown(KeyCode.E);
                 }
             default: {
@@ -135,17 +135,17 @@ public class Keybinds : MonoBehaviour {
         }
     }
     public static bool SelectAlternate() {
-        switch (SettingsMenu.settingsData.controlScheme) {
-            case SettingsData.MK54: {
+        switch (SettingsMenu.settingsGameplay.controlScheme) {
+            case JSONSettings_Gameplay.MK54: {
                     return Input.GetKey(KeyCode.Mouse3);
                 }
-            case SettingsData.MK45: {
+            case JSONSettings_Gameplay.MK45: {
                     return Input.GetKey(KeyCode.Mouse4);
                 }
-            case SettingsData.MKEQ: {
+            case JSONSettings_Gameplay.MKEQ: {
                     return Input.GetKey(KeyCode.Q);
                 }
-            case SettingsData.MKQE: {
+            case JSONSettings_Gameplay.MKQE: {
                     return Input.GetKey(KeyCode.E);
                 }
             default: {
@@ -154,17 +154,17 @@ public class Keybinds : MonoBehaviour {
         }
     }
     public static bool SelectAlternateUp() {
-        switch (SettingsMenu.settingsData.controlScheme) {
-            case SettingsData.MK54: {
+        switch (SettingsMenu.settingsGameplay.controlScheme) {
+            case JSONSettings_Gameplay.MK54: {
                     return Input.GetKeyUp(KeyCode.Mouse3);
                 }
-            case SettingsData.MK45: {
+            case JSONSettings_Gameplay.MK45: {
                     return Input.GetKeyUp(KeyCode.Mouse4);
                 }
-            case SettingsData.MKEQ: {
+            case JSONSettings_Gameplay.MKEQ: {
                     return Input.GetKeyUp(KeyCode.Q);
                 }
-            case SettingsData.MKQE: {
+            case JSONSettings_Gameplay.MKQE: {
                     return Input.GetKeyUp(KeyCode.E);
                 }
             default: {
@@ -183,27 +183,27 @@ public class Keybinds : MonoBehaviour {
     }
 
     public static float Horizontal() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
             return Input.GetAxis("Horizontal");
         else
             return Input.GetAxisRaw("Horizontal");
     }
 
     public static float Vertical() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
             return Input.GetAxis("Vertical");
         else
             return Input.GetAxisRaw("Vertical");
     }
 
     public static bool Jump() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
             return Input.GetButton("GamepadA");
         else
             return Input.GetKey(KeyCode.Space);
     }
     public static bool JumpDown() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
             return Input.GetButtonDown("GamepadA");
         else
             return Input.GetKeyDown(KeyCode.Space);
@@ -216,20 +216,20 @@ public class Keybinds : MonoBehaviour {
     }
 
     public static bool Sprint() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
             return Input.GetButton("GamepadB");
         else
             return Input.GetKey(KeyCode.LeftShift);
     }
     public static bool SprintDown() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
             return Input.GetButtonDown("GamepadB");
         else
             return Input.GetKeyDown(KeyCode.LeftShift);
     }
 
     public static bool Walk() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) {
             return Input.GetButton("GamepadRightJoystickClick");
         } else {
             return Input.GetKey(KeyCode.LeftControl);
@@ -237,14 +237,14 @@ public class Keybinds : MonoBehaviour {
     }
 
     public static bool WithdrawCoinDown() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
             return Input.GetButtonDown("GamepadX");
         else
             return Input.GetKeyDown(KeyCode.F);
         //return Input.GetKeyDown(KeyCode.Mouse2);
     }
     public static bool WithdrawCoin() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
             return Input.GetButton("GamepadX");
         else
             return Input.GetKey(KeyCode.F);
@@ -254,28 +254,28 @@ public class Keybinds : MonoBehaviour {
     public static bool MultipleMarks() => Walk();
 
     public static bool StopBurning() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
             return false;
         else
             return Input.GetKeyDown(KeyCode.X);
     }
 
     public static float LeftBurnPercentage() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
             return Input.GetAxis("LeftTrigger");
         else
             return Input.GetKey(KeyCode.Mouse1) ? 1 : 0;
     }
 
     public static float RightBurnPercentage() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
             return Input.GetAxis("RightTrigger");
         else
             return Input.GetKey(KeyCode.Mouse0) ? 1 : 0;
     }
 
     public static bool ToggleHelpOverlay() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) {
             return false; //return Input.GetButtonDown("GamepadBack"); ;
         } else {
             return Input.GetKeyDown(KeyCode.H) || Input.GetKeyDown(KeyCode.F1);
@@ -283,14 +283,14 @@ public class Keybinds : MonoBehaviour {
     }
 
     public static bool ZincTimeDown() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) {
             return Input.GetButtonDown("GamepadLeftJoystickClick");
         } else {
             return Input.GetKeyDown(KeyCode.Tab);
         }
     }
     public static bool ZincTime() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) {
             return Input.GetButton("GamepadLeftJoystickClick");
         } else {
             return Input.GetKey(KeyCode.Tab);
@@ -299,63 +299,63 @@ public class Keybinds : MonoBehaviour {
 
     #region controlWheel
     public static bool ControlWheel() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) {
             return Input.GetButton("GamepadY");
         } else {
             return Input.GetKey(KeyCode.R);
         }
     }
     public static bool ControlWheelDown() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) {
             return Input.GetButtonDown("GamepadY");
         } else {
             return Input.GetKeyDown(KeyCode.R);
         }
     }
     public static bool ControlWheelConfirm() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) {
             return Input.GetButtonDown("GamepadA");
         } else {
             return Input.GetKeyDown(KeyCode.Mouse0);
         }
     }
     public static bool ControlWheelManual() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) {
             return false;
         } else {
             return Input.GetKeyDown(KeyCode.Alpha1);
         }
     }
     public static bool ControlWheelArea() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) {
             return false;
         } else {
             return Input.GetKeyDown(KeyCode.Alpha2);
         }
     }
     public static bool ControlWheelBubble() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) {
             return false;
         } else {
             return Input.GetKeyDown(KeyCode.Alpha3);
         }
     }
     public static bool ControlWheelCoinshot() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) {
             return false;
         } else {
             return Input.GetKeyDown(KeyCode.Alpha4);
         }
     }
     public static bool ControlWheelThrowingMode() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) {
             return false;
         } else {
             return Input.GetKeyDown(KeyCode.C);
         }
     }
     public static bool ControlWheelDeselectAll() {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) {
             return false;
         } else {
             return Input.GetKeyDown(KeyCode.Z);

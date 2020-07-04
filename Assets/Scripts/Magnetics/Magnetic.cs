@@ -270,7 +270,7 @@ public class Magnetic : MonoBehaviour {
     /// <param name="burnRate">the burn % of the Allomancer</param>
     /// <returns></returns>
     public bool IsInRange(AllomanticIronSteel allomancer, float burnRate) {
-        return allomancer.CalculateAllomanticForce(this).magnitude * burnRate > SettingsMenu.settingsData.metalDetectionThreshold;
+        return allomancer.CalculateAllomanticForce(this).magnitude * burnRate > SettingsMenu.settingsAllomancy.metalDetectionThreshold;
     }
 
     private void UpdateCenterOfMass() {

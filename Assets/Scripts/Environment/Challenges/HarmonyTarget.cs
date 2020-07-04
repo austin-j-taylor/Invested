@@ -154,7 +154,7 @@ public class HarmonyTarget : MonoBehaviour {
         controllingPlayer = false;
         Player.CanControl = true;
         HUD.EnableHUD();
-        Player.PlayerInstance.GetComponent<Rigidbody>().useGravity = SettingsMenu.settingsData.playerGravity == 1;
+        Player.PlayerInstance.GetComponent<Rigidbody>().useGravity = SettingsMenu.settingsWorld.playerGravity == 1;
         CameraController.DisableCinemachineCamera(vcam);
         HUD.MessageOverlayCinematic.FadeOut();
         StartCoroutine(EnableColliderAfterDelay());
@@ -177,7 +177,7 @@ public class HarmonyTarget : MonoBehaviour {
         anim.SetTrigger("PlayerExits");
         Player.CanControl = true;
         HUD.EnableHUD();
-        Player.PlayerInstance.GetComponent<Rigidbody>().useGravity = SettingsMenu.settingsData.playerGravity == 1;
+        Player.PlayerInstance.GetComponent<Rigidbody>().useGravity = SettingsMenu.settingsWorld.playerGravity == 1;
         CameraController.DisableCinemachineCamera(vcam);
 
         Destroy(harmonySphere.gameObject);

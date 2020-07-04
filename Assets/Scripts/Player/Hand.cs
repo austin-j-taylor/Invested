@@ -39,7 +39,7 @@ public class Hand : MonoBehaviour {
                 float vertical = -Keybinds.Vertical() * baseSteepAngle;
                 float horizontal = -Keybinds.Horizontal() * baseSteepAngle;
 
-                if (SettingsMenu.settingsData.controlScheme != SettingsData.Gamepad) {
+                if (SettingsMenu.settingsGameplay.controlScheme != JSONSettings_Gameplay.Gamepad) {
                     // If using keyboard, throw coins at a steeper angle
                     vertical *= keyboardSteepAngle;
                     horizontal *= keyboardSteepAngle;
@@ -86,7 +86,7 @@ public class Hand : MonoBehaviour {
                 float vertical = -Keybinds.Vertical() * baseSteepAngle;
                 float horizontal = -Keybinds.Horizontal() * baseSteepAngle;
 
-                if (SettingsMenu.settingsData.controlScheme != SettingsData.Gamepad) {
+                if (SettingsMenu.settingsGameplay.controlScheme != JSONSettings_Gameplay.Gamepad) {
                     // If using keyboard, throw coins at a steeper angle
                     vertical *= keyboardSteepAngle;
                     horizontal *= keyboardSteepAngle;

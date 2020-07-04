@@ -380,9 +380,9 @@ public class AllomanticIronSteel : Allomancer {
             positionDifference = new Vector3(0, -0.0001f, 0);
         }
 
-        switch (SettingsMenu.settingsData.forceDistanceRelationship) {
+        switch (SettingsMenu.settingsAllomancy.forceDistanceRelationship) {
             case 0: {
-                    distanceFactor = positionDifference.normalized * (1 - positionDifference.magnitude / SettingsMenu.settingsData.maxPushRange);
+                    distanceFactor = positionDifference.normalized * (1 - positionDifference.magnitude / SettingsMenu.settingsAllomancy.maxPushRange);
                     break;
                 }
             case 1: {
@@ -390,12 +390,12 @@ public class AllomanticIronSteel : Allomancer {
                     break;
                 }
             default: {
-                    distanceFactor = positionDifference.normalized * Mathf.Exp(-positionDifference.magnitude / SettingsMenu.settingsData.distanceConstant);
+                    distanceFactor = positionDifference.normalized * Mathf.Exp(-positionDifference.magnitude / SettingsMenu.settingsAllomancy.distanceConstant);
                     break;
                 }
         }
         // Do the final calculation
-        Vector3 force = SettingsMenu.settingsData.allomanticConstant * Strength * Charge * targetCharge * distanceFactor;
+        Vector3 force = SettingsMenu.settingsAllomancy.allomanticConstant * Strength * Charge * targetCharge * distanceFactor;
         // If there is something blocking line-of-sight, the force is reduced.
         //if (raycastForLOS && Physics.Raycast(targetCenterOfMass, -positionDifference, out RaycastHit hit, (targetCenterOfMass - CenterOfMass).magnitude, GameManager.Layer_IgnoreCamera) && hit.transform != transform) {
         //    force *= lineOfSightFactor;
@@ -444,7 +444,7 @@ public class AllomanticIronSteel : Allomancer {
         Vector3 restitutionForceFromTarget;
         Vector3 restitutionForceFromAllomancer;
 
-        if (SettingsMenu.settingsData.anchoredBoost != 3) {
+        if (SettingsMenu.settingsAllomancy.anchoredBoost != 3) {
             // APB: Disabled, Allomantic Normal Force, or Exponential with Velocity
             allomanticForce = CalculateAllomanticForce(target.CenterOfMass, effectiveCharge) * (pulling ? 1 : -1) /* / (usingIronTargets ? PullCount : PushCount) */;
             direction = allomanticForce.normalized;
@@ -467,7 +467,7 @@ public class AllomanticIronSteel : Allomancer {
             thisFrameMaximumNetForce += allomanticForce;
             target.LastMaxPossibleAllomanticForce = allomanticForce;
 
-            switch (SettingsMenu.settingsData.anchoredBoost) {
+            switch (SettingsMenu.settingsAllomancy.anchoredBoost) {
                 case 0: { // Disabled
                         restitutionForceFromTarget = Vector3.zero;
                         restitutionForceFromAllomancer = Vector3.zero;
@@ -492,13 +492,13 @@ public class AllomanticIronSteel : Allomancer {
                             Vector3 unaccountedForAllomancerAcceleration = lastAllomancerAcceleration - lastExpectedAllomancerAcceleration;
                             restitutionForceFromAllomancer = Vector3.Project(unaccountedForAllomancerAcceleration * rb.mass, direction);
                         }
-                        if (SettingsMenu.settingsData.normalForceMax == 1) {
+                        if (SettingsMenu.settingsAllomancy.normalForceMax == 1) {
                             restitutionForceFromTarget = Vector3.ClampMagnitude(restitutionForceFromTarget, allomanticForce.magnitude);
                             restitutionForceFromAllomancer = Vector3.ClampMagnitude(restitutionForceFromAllomancer, allomanticForce.magnitude);
                         }
 
                         // Prevents the ANF from being negative relative to the AF and prevents the ANF from ever decreasing the AF below its original value
-                        switch (SettingsMenu.settingsData.normalForceMin) {
+                        switch (SettingsMenu.settingsAllomancy.normalForceMin) {
                             case 0: {
                                     break;
                                 }
@@ -523,7 +523,7 @@ public class AllomanticIronSteel : Allomancer {
                         }
 
                         // Makes the ANF on the target and Allomancer equal
-                        if (SettingsMenu.settingsData.normalForceEquality == 1) {
+                        if (SettingsMenu.settingsAllomancy.normalForceEquality == 1) {
                             if (restitutionForceFromAllomancer.magnitude > restitutionForceFromTarget.magnitude) {
                                 restitutionForceFromTarget = -restitutionForceFromAllomancer;
                             } else {
@@ -536,8 +536,8 @@ public class AllomanticIronSteel : Allomancer {
                 default: { // EWV
                            // Sometimes, the restitutionForceFromTarget is actually negative, rather than positive, unlike with the ANF. It contains the percentage of the AF that is subtracted from the AF to get the net AF.
                         Vector3 relativeVelocity = Vector3.Project(target.Velocity - rb.velocity, direction);
-                        float velocityFactor = 1 - Mathf.Exp(-relativeVelocity.magnitude / SettingsMenu.settingsData.velocityConstant);
-                        switch (SettingsMenu.settingsData.exponentialWithVelocitySignage) {
+                        float velocityFactor = 1 - Mathf.Exp(-relativeVelocity.magnitude / SettingsMenu.settingsAllomancy.velocityConstant);
+                        switch (SettingsMenu.settingsAllomancy.exponentialWithVelocitySignage) {
                             case 0: {
                                     // Do nothing
                                     break;

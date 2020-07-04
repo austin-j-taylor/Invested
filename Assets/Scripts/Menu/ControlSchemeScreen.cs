@@ -37,7 +37,7 @@ public class ControlSchemeScreen : MonoBehaviour {
 
     public void Close(bool refreshing) {
         if (refreshing) {
-            SettingsMenu.settingsData.SaveSettings();
+            SettingsMenu.settingsGameplay.SaveSettings();
             //Messages.Refresh();
             HUD.UpdateText();
             FlagsController.SetFlag("controlSchemeChosen");
@@ -55,15 +55,15 @@ public class ControlSchemeScreen : MonoBehaviour {
         MainMenu.FocusOnButton(transform);
     }
     public void OnClickedGamepad() {
-        SettingsMenu.settingsData.controlScheme = SettingsData.Gamepad;
+        SettingsMenu.settingsGameplay.controlScheme = JSONSettings_Gameplay.Gamepad;
         Close(true);
     }
     public void OnClickedMKEQ() {
-        SettingsMenu.settingsData.controlScheme = SettingsData.MKEQ;
+        SettingsMenu.settingsGameplay.controlScheme = JSONSettings_Gameplay.MKEQ;
         Close(true);
     }
     public void OnClickedMK54() {
-        SettingsMenu.settingsData.controlScheme = SettingsData.MK54;
+        SettingsMenu.settingsGameplay.controlScheme = JSONSettings_Gameplay.MK54;
         Close(true);
     }
     #endregion

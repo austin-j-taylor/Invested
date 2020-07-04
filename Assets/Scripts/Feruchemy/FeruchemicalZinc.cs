@@ -40,7 +40,7 @@ public class FeruchemicalZinc : MonoBehaviour {
         Rate = 0;
         Intensity = 0;
         lastReserve = Reserve;
-        TimeController.CurrentTimeScale = SettingsMenu.settingsData.timeScale;
+        TimeController.CurrentTimeScale = SettingsMenu.settingsWorld.timeScale;
         GameManager.GraphicsController.SetZincEffect(false);
     }
 
@@ -60,7 +60,7 @@ public class FeruchemicalZinc : MonoBehaviour {
                     InZincTime = false;
                     endReserve = Reserve;
                     timeSpentRecovering = 0;
-                    TimeController.CurrentTimeScale = SettingsMenu.settingsData.timeScale;
+                    TimeController.CurrentTimeScale = SettingsMenu.settingsWorld.timeScale;
                     GameManager.AudioManager.SetMasterPitch(1);
                     if (Reserve == 0) {
                         Intensity = GameManager.GraphicsController.SetZincEffect(false);
@@ -95,7 +95,7 @@ public class FeruchemicalZinc : MonoBehaviour {
                     InZincTime = true;
                     recovering = false;
                     startReserve = Reserve;
-                    TimeController.CurrentTimeScale = slowPercent * SettingsMenu.settingsData.timeScale;
+                    TimeController.CurrentTimeScale = slowPercent * SettingsMenu.settingsWorld.timeScale;
                     GameManager.AudioManager.SetMasterPitch(slowPitch);
                     Intensity = GameManager.GraphicsController.SetZincEffect(true, CalculateIntensity((float)Reserve));
                 } else if (recovering) {

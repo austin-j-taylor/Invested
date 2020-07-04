@@ -36,6 +36,6 @@ public class TimeController : MonoBehaviour {
     }
 
     private void ClearAfterSceneChange(Scene scene, LoadSceneMode mode) {
-        CurrentTimeScale = SettingsMenu.settingsData.timeScale;
+        CurrentTimeScale = SettingsMenu.settingsWorld.timeScale;
     }
 }

@@ -35,7 +35,7 @@ public class BurnPercentageMeter : MonoBehaviour {
 
     // Hide unwanted fields after changing Settings
     public void InterfaceRefresh() {
-        if (SettingsMenu.settingsData.forceComplexity == 0) {
+        if (SettingsMenu.settingsInterface.forceComplexity == 0) {
             sumForceText.text = "";
         }
     }
@@ -87,7 +87,7 @@ public class BurnPercentageMeter : MonoBehaviour {
     /// <param name="allomanticForce">the Allomantic Force component of the force</param>
     /// <param name="normalForce">the Anchored Push Boost component of the forces</param>
     private void SetSumForceText(Vector3 allomanticForce, Vector3 normalForce) {
-        if (SettingsMenu.settingsData.forceComplexity == 1) {
+        if (SettingsMenu.settingsInterface.forceComplexity == 1) {
             float allomanticMagnitude = allomanticForce.magnitude;
             float normalMagnitude = normalForce.magnitude;
             sumForceText.text = HUD.AllomanticSumString(allomanticForce, normalForce, Player.PlayerIronSteel.Mass);

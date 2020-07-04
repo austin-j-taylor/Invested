@@ -65,7 +65,7 @@ public class HUD : MonoBehaviour {
 
     void LateUpdate() {
         deltaTimeFPS += (Time.unscaledDeltaTime - deltaTimeFPS) * 0.1f;
-        if (SettingsMenu.settingsData.fpsCounter == 1) {
+        if (SettingsMenu.settingsInterface.fpsCounter == 1) {
             float fps = 1.0f / deltaTimeFPS;
             string text = string.Format("{0:0.} fps", fps);
             fPSText.text = text;
@@ -78,7 +78,7 @@ public class HUD : MonoBehaviour {
     }
     private void ClearAfterSceneChange(Scene scene, LoadSceneMode mode) {
         if (scene.buildIndex != SceneSelectMenu.sceneTitleScreen) {
-            TimeController.CurrentTimeScale = SettingsMenu.settingsData.timeScale;
+            TimeController.CurrentTimeScale = SettingsMenu.settingsWorld.timeScale;
             ResetHUD();
         }
     }
@@ -100,7 +100,7 @@ public class HUD : MonoBehaviour {
     }
     // Clears the values currently on the HUD
     public static void ResetHUD() {
-        if (SettingsMenu.settingsData.hudEnabled == 1) {
+        if (SettingsMenu.settingsInterface.hudEnabled == 1) {
             EnableHUD();
             if (BurnPercentageMeter) {
                 BurnPercentageMeter.Clear();
@@ -134,7 +134,7 @@ public class HUD : MonoBehaviour {
     /// <param name="sigFigs">the number of significant figures to write to the string</param>
     /// <returns>the string representation of the force</returns>
     public static string ForceString(float force, float mass, int sigFigs = 2) {
-        if (SettingsMenu.settingsData.forceUnits == 1) {
+        if (SettingsMenu.settingsInterface.forceUnits == 1) {
             return RoundStringToSigFigs(force).ToString() + "N";
         } else {
             return RoundStringToSigFigs(force / mass / 9.81f, sigFigs) + "G's";
@@ -168,7 +168,7 @@ public class HUD : MonoBehaviour {
             plusSign = TextCodes.Red("-");
         }
 
-        if (SettingsMenu.settingsData.forceUnits == 1) {
+        if (SettingsMenu.settingsInterface.forceUnits == 1) {
             return RoundStringToSigFigs(allomanticForce.magnitude, sigFigs) + " " + plusSign + " " + RoundStringToSigFigs(normalForce.magnitude, sigFigs) + "N";
         } else {
             return RoundStringToSigFigs(allomanticForce.magnitude / mass / 9.81f, sigFigs)
@@ -215,13 +215,13 @@ public class HUD : MonoBehaviour {
     /// Fade HUD in/out with Control Wheel
     /// </summary>
     public static void ShowControlWheel() {
-        if (SettingsMenu.settingsData.controlScheme != SettingsData.Gamepad)
+        if (SettingsMenu.settingsGameplay.controlScheme != JSONSettings_Gameplay.Gamepad)
             CameraController.UnlockCamera();
 
         anim.SetBool("ControlWheelVisible", true);
     }
     public static void HideControlWheel(bool noTransition = false) {
-        if (SettingsMenu.settingsData.controlScheme != SettingsData.Gamepad)
+        if (SettingsMenu.settingsGameplay.controlScheme != JSONSettings_Gameplay.Gamepad)
             CameraController.LockCamera();
 
         anim.SetBool("ControlWheelVisible", false);

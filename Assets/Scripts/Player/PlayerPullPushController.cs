@@ -157,10 +157,10 @@ public class PlayerPullPushController : AllomanticIronSteel {
 
         // Change Burn Percentage Targets
         // Check scrollwheel for changing burn percentage and bubble/area radii, or DPad if using gamepad
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) { // Gamepad
+        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) { // Gamepad
             // Bubble/area radii determined by the DPad axes
             ChangeRadius(Keybinds.DPadYAxis());
-            if (SettingsMenu.settingsData.pushControlStyle == 1) {
+            if (SettingsMenu.settingsAllomancy.pushControlStyle == 1) {
                 ChangeTargetForceMagnitude(Keybinds.DPadXAxis());
             }
         } else { // Mouse and keyboard
@@ -169,7 +169,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
                 // Control Wheel open? Change the bubble/area radii.
                 ChangeRadius(Keybinds.ScrollWheelAxis());
             } else {
-                if (SettingsMenu.settingsData.pushControlStyle == 0) {
+                if (SettingsMenu.settingsAllomancy.pushControlStyle == 0) {
                     // Control Wheel closed, and we're in Percentage? Change that.
                     if (Mode == ControlMode.Bubble)
                         ChangeBurnPercentageTargetBubble(Keybinds.ScrollWheelAxis());
@@ -183,8 +183,8 @@ public class PlayerPullPushController : AllomanticIronSteel {
         }
 
         // Assign Burn percentage targets based on the previously changed burn percentage/target magnitudes
-        if (SettingsMenu.settingsData.pushControlStyle == 0) { // Percentage
-            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) { // Gamepad
+        if (SettingsMenu.settingsAllomancy.pushControlStyle == 0) { // Percentage
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) { // Gamepad
                 SetPullPercentageTarget(Keybinds.RightBurnPercentage());
                 SetPushPercentageTarget(Keybinds.LeftBurnPercentage());
             }
@@ -609,7 +609,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
                 break;
         }
         forceMagnitudeTarget = 600;
-        if (SettingsMenu.settingsData.renderblueLines == 1)
+        if (SettingsMenu.settingsGraphics.renderblueLines == 1)
             EnableRenderingBlueLines();
         UpdateBlueLines();
 
@@ -667,23 +667,23 @@ public class PlayerPullPushController : AllomanticIronSteel {
         // That way, we can ignore metals out of that range for efficiency.
         float bigCharge = 5;
         float distanceThresholdSqr;
-        switch (SettingsMenu.settingsData.forceDistanceRelationship) {
+        switch (SettingsMenu.settingsAllomancy.forceDistanceRelationship) {
             case 0: {
-                    distanceThresholdSqr = SettingsMenu.settingsData.maxPushRange;
+                    distanceThresholdSqr = SettingsMenu.settingsAllomancy.maxPushRange;
                     break;
                 }
             case 1: {
-                    float lhs = SettingsMenu.settingsData.metalDetectionThreshold / (SettingsMenu.settingsData.allomanticConstant * Strength * Charge * bigCharge);
-                    if (SettingsMenu.settingsData.pushControlStyle == 0)
+                    float lhs = SettingsMenu.settingsAllomancy.metalDetectionThreshold / (SettingsMenu.settingsAllomancy.allomanticConstant * Strength * Charge * bigCharge);
+                    if (SettingsMenu.settingsAllomancy.pushControlStyle == 0)
                         lhs /= GreaterPassiveBurn;
                     distanceThresholdSqr = 1 / lhs;
                     break;
                 }
             default: {
-                    float lhs = SettingsMenu.settingsData.metalDetectionThreshold / (SettingsMenu.settingsData.allomanticConstant * Strength * Charge * bigCharge);
-                    if (SettingsMenu.settingsData.pushControlStyle == 0)
+                    float lhs = SettingsMenu.settingsAllomancy.metalDetectionThreshold / (SettingsMenu.settingsAllomancy.allomanticConstant * Strength * Charge * bigCharge);
+                    if (SettingsMenu.settingsAllomancy.pushControlStyle == 0)
                         lhs /= GreaterPassiveBurn;
-                    distanceThresholdSqr = -(float)System.Math.Log(lhs) * SettingsMenu.settingsData.distanceConstant;
+                    distanceThresholdSqr = -(float)System.Math.Log(lhs) * SettingsMenu.settingsAllomancy.distanceConstant;
                     break;
                 }
         }
@@ -758,10 +758,10 @@ public class PlayerPullPushController : AllomanticIronSteel {
         Vector3 allomanticForceVector = CalculateAllomanticForce(target);
         float allomanticForce = allomanticForceVector.magnitude;
         // If using Percentage force mode, burn percentage affects your range for burning
-        if (SettingsMenu.settingsData.pushControlStyle == 0)
+        if (SettingsMenu.settingsAllomancy.pushControlStyle == 0)
             allomanticForce *= GreaterPassiveBurn;
 
-        allomanticForce -= SettingsMenu.settingsData.metalDetectionThreshold; // blue metal lines will fade to a luminocity of 0 when the force is on the edge of the threshold
+        allomanticForce -= SettingsMenu.settingsAllomancy.metalDetectionThreshold; // blue metal lines will fade to a luminocity of 0 when the force is on the edge of the threshold
 
         if (allomanticForce <= 0) {
             // Magnetic is out of range
@@ -794,7 +794,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
             weight = .1f / radialDistance - linearDistance / 500;
         }
 
-        if (SettingsMenu.settingsData.renderblueLines == 1) {
+        if (SettingsMenu.settingsGraphics.renderblueLines == 1) {
             float closeness = blueLineBrightnessFactor * Mathf.Pow(allomanticForce, blueLineChangeFactor);
             //if(SettingsMenu.settingsData.cameraFirstPerson == 1) {
             //    closeness *= perspectiveFactor;
@@ -889,7 +889,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
     /// </summary>
     /// <param name="change">the delta by which the force should chagnge</param>
     private void ChangeTargetForceMagnitude(float change) {
-        if (SettingsMenu.settingsData.forceUnits == 0) {
+        if (SettingsMenu.settingsInterface.forceUnits == 0) {
             if (change > 0) {
                 change = -Physics.gravity.y / 10 * Mass;
                 if (forceMagnitudeTarget < -Physics.gravity.y) {
@@ -965,7 +965,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
         if (percentage > .005f) {
             ironBurnPercentageLerp = Mathf.Min(1, percentage);
         } else {
-            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 ironBurnPercentageLerp = 1;
             else
                 ironBurnPercentageLerp = 0;
@@ -979,7 +979,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
         if (percentage > .005f) {
             steelBurnPercentageLerp = Mathf.Min(1, percentage);
         } else {
-            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 steelBurnPercentageLerp = 1;
             else
                 steelBurnPercentageLerp = 0;
@@ -993,7 +993,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
         if (percentage > .005f) {
             bubbleBurnPercentageLerp = Mathf.Min(1, percentage);
         } else {
-            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 bubbleBurnPercentageLerp = 1;
             else
                 bubbleBurnPercentageLerp = 0;
@@ -1007,7 +1007,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
         IronBurnPercentageTarget = Mathf.Lerp(IronBurnPercentageTarget, ironBurnPercentageLerp, burnPercentageLerpConstant);
         SteelBurnPercentageTarget = Mathf.Lerp(SteelBurnPercentageTarget, steelBurnPercentageLerp, burnPercentageLerpConstant);
         BubbleBurnPercentageTarget = Mathf.Lerp(BubbleBurnPercentageTarget, bubbleBurnPercentageLerp, burnPercentageLerpConstant);
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad || SettingsMenu.settingsData.pushControlStyle == 1) {
+        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad || SettingsMenu.settingsAllomancy.pushControlStyle == 1) {
             IronPassiveBurn = 1;
             SteelPassiveBurn = 1;
         } else {
@@ -1032,7 +1032,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
         }
         // If using the Percentage control scheme and the target burn percentage is 0 (and not using a gamepad, which will very often be 0)
         //      Then stop burning metals
-        if (SettingsMenu.settingsData.pushControlStyle == 0 && SettingsMenu.settingsData.controlScheme != SettingsData.Gamepad && (IronBurnPercentageTarget < .001f && SteelBurnPercentageTarget < .001f)) {
+        if (SettingsMenu.settingsAllomancy.pushControlStyle == 0 && SettingsMenu.settingsGameplay.controlScheme != JSONSettings_Gameplay.Gamepad && (IronBurnPercentageTarget < .001f && SteelBurnPercentageTarget < .001f)) {
             StopBurning();
         }
     }
@@ -1071,9 +1071,9 @@ public class PlayerPullPushController : AllomanticIronSteel {
     /// </summary>
     private void UpdateBurnRateMeter() {
         if (IsBurning) {
-            if (SettingsMenu.settingsData.pushControlStyle == 1) // Magnitude
+            if (SettingsMenu.settingsAllomancy.pushControlStyle == 1) // Magnitude
                 HUD.BurnPercentageMeter.SetBurnRateMeterForceMagnitude(LastAllomanticForce, LastAnchoredPushBoost, IronBurnPercentageTarget, SteelBurnPercentageTarget, forceMagnitudeTarget);
-            else if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+            else if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) {
                 if (SteelPushing) {
                     if (IronPulling) {
                         HUD.BurnPercentageMeter.SetBurnRateMeterPercentage(LastAllomanticForce, LastAnchoredPushBoost,

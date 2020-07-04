@@ -40,11 +40,11 @@ public class Simulation_coinWall : Simulation {
         texts[texts.Length - 5].text = "Wall: " + TextCodes.LightBlue("Anchored");
 
 
-        if (SettingsMenu.settingsData.forceDistanceRelationship == 0) {
+        if (SettingsMenu.settingsAllomancy.forceDistanceRelationship == 0) {
             texts[texts.Length - 9].text = "Linear Distance Relationship";
-        } else if(SettingsMenu.settingsData.forceDistanceRelationship == 1) {
+        } else if(SettingsMenu.settingsAllomancy.forceDistanceRelationship == 1) {
             texts[texts.Length - 9].text = "Inverse Square Distance Relationship";
-        } else if(SettingsMenu.settingsData.forceDistanceRelationship == 2) {
+        } else if(SettingsMenu.settingsAllomancy.forceDistanceRelationship == 2) {
             texts[texts.Length - 9].text = "Exponential w/ Distance Relationship";
         }
 
@@ -83,9 +83,9 @@ public class Simulation_coinWall : Simulation {
 
 
             float threshold = 0;
-            if (SettingsMenu.settingsData.anchoredBoost == 1) {
+            if (SettingsMenu.settingsAllomancy.anchoredBoost == 1) {
                 threshold = 300;
-            } else if (SettingsMenu.settingsData.anchoredBoost == 2) {
+            } else if (SettingsMenu.settingsAllomancy.anchoredBoost == 2) {
                 threshold = 50;
             } else {
                 threshold = 8000;
@@ -119,7 +119,7 @@ public class Simulation_coinWall : Simulation {
                 }
                 texts[5].text = HUD.RoundStringToSigFigs(coin.GetComponent<Rigidbody>().velocity.magnitude, 2);
             }
-            if(SettingsMenu.settingsData.anchoredBoost == 2) {
+            if(SettingsMenu.settingsAllomancy.anchoredBoost == 2) {
                 texts[10].text = "e^-v/V Factor:";
                 texts[11].text = "";
                 texts[12].text = "";
@@ -140,7 +140,7 @@ public class Simulation_coinWall : Simulation {
                 }
                 texts[13].text = percent;
 
-            } else if(SettingsMenu.settingsData.anchoredBoost == 3) {
+            } else if(SettingsMenu.settingsAllomancy.anchoredBoost == 3) {
                 texts[10].text = "Allomancer ΔKE:";
                 texts[11].text = "Coin ΔKE:";
                 texts[12].text = "Total ΔKE:";
@@ -181,10 +181,10 @@ public class Simulation_coinWall : Simulation {
         }
     }
     protected override void Update() {
-        if (SettingsMenu.settingsData.anchoredBoost == 1) {
+        if (SettingsMenu.settingsAllomancy.anchoredBoost == 1) {
             texts[texts.Length - 4].text = "Allomantic Normal Force";
             //desiredTimeScale = 1;
-        } else if (SettingsMenu.settingsData.anchoredBoost == 2) {
+        } else if (SettingsMenu.settingsAllomancy.anchoredBoost == 2) {
             texts[texts.Length - 4].text = "Exponential w/ Velocity factor";
             //desiredTimeScale = 1;
         } else {

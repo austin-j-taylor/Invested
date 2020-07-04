@@ -59,7 +59,7 @@ public class GamepadController : MonoBehaviour {
     }
 
     public static void Shake(float left, float right, float time = .1f) {
-        if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad && SettingsMenu.settingsData.gamepadRumble == 1)
+        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad && SettingsMenu.settingsGameplay.gamepadRumble == 1)
             rumble.Shake(left, right, time);
     }
 
@@ -76,8 +76,8 @@ public class GamepadController : MonoBehaviour {
                 // Make sure we don't vibrate when paused
                 SetRumble(0, 0);
             }
-            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
-                if (SettingsMenu.settingsData.gamepadRumble == 1) {
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) {
+                if (SettingsMenu.settingsGameplay.gamepadRumble == 1) {
                     if (updateRumble && !shaking) {
                         GamePad.SetVibration(0, leftRumble, rightRumble);
                         updateRumble = false;
@@ -96,7 +96,7 @@ public class GamepadController : MonoBehaviour {
         }
 
         public IEnumerator ShakeController(float left, float right, float time) {
-            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad && SettingsMenu.settingsData.gamepadRumble == 1) {
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad && SettingsMenu.settingsGameplay.gamepadRumble == 1) {
                 shaking = true;
                 GamePad.SetVibration(0, left, right);
                 yield return new WaitForSeconds(time);

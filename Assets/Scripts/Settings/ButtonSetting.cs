@@ -39,7 +39,8 @@ public class ButtonSetting : Setting {
      * 
      */
 
-    void Awake() {
+    protected override void Awake() {
+        base.Awake();
         button = GetComponentInChildren<Button>();
         buttonText = transform.GetChild(0).GetChild(1).GetComponent<Text>();
         detailsText = transform.GetChild(0).GetChild(0).GetComponent<Text>();
@@ -76,7 +77,7 @@ public class ButtonSetting : Setting {
      * Checks SettingsData for this button's data
      */
     public override void RefreshData() {
-        data = SettingsMenu.settingsData.GetDataInt(id);
+        data = parentSettings.GetDataInt(id);
         // Update other functions
         if (buttonCalls.Length > 0)
             if (buttonCalls[data] != null)
@@ -114,7 +115,7 @@ public class ButtonSetting : Setting {
             data = 0;
         }
 
-        SettingsMenu.settingsData.SetData(id, data);
+        parentSettings.SetData(id, data);
 
         // Update other functions
         if (buttonCalls.Length > 0)

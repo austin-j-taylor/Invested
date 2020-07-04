@@ -129,7 +129,7 @@ public class PlayerMovementController : AllomanticPewter {
         //rb.inertiaTensor = inertiaTensorRunning;
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
-        rb.useGravity = SettingsMenu.settingsData.playerGravity == 1;
+        rb.useGravity = SettingsMenu.settingsWorld.playerGravity == 1;
         rb.isKinematic = false;
         rb.constraints = RigidbodyConstraints.None;
         base.Clear();
@@ -253,7 +253,7 @@ public class PlayerMovementController : AllomanticPewter {
 
             // If is unclamped and upside-down, keep movement in an intuitive direction for the player
             // Rotate movement to be in direction of camera and clamp magnitude
-            if (SettingsMenu.settingsData.cameraClamping == 0 && CameraController.UpsideDown) {
+            if (SettingsMenu.settingsGameplay.cameraClamping == 0 && CameraController.UpsideDown) {
                 movement.x = -movement.x;
                 movement = CameraController.CameraDirection * Vector3.ClampMagnitude(movement, 1);
                 movement = -movement;
@@ -313,11 +313,11 @@ public class PlayerMovementController : AllomanticPewter {
                 if (movement.sqrMagnitude > 0 || Player.PlayerIronSteel.IronPulling || Player.PlayerIronSteel.SteelPushing) {
                     // You: "why use ints to represent binary values that should be represented by booleans"
                     // Me, an intellectual:
-                    rb.drag = SettingsMenu.settingsData.playerAirResistance * dragAirborneLinear;
+                    rb.drag = SettingsMenu.settingsWorld.playerAirResistance * dragAirborneLinear;
                     rb.angularDrag = dragAirborneAngular;
                 } else {
                     // If not moving and not pushing or pulling, apply stronger drag and pull player to a stop
-                    rb.drag = SettingsMenu.settingsData.playerAirResistance * dragGroundedLinear;
+                    rb.drag = SettingsMenu.settingsWorld.playerAirResistance * dragGroundedLinear;
                     rb.angularDrag = dragGroundedAngular;
                 }
             } else { // Not grounded
@@ -331,7 +331,7 @@ public class PlayerMovementController : AllomanticPewter {
 
 
                 // In the air, reduce movement magnitude
-                rb.drag = SettingsMenu.settingsData.playerAirResistance * dragAirborneLinear;
+                rb.drag = SettingsMenu.settingsWorld.playerAirResistance * dragAirborneLinear;
                 rb.angularDrag = dragAirborneAngular;
                 //movement *= airControlFactor;
             }
@@ -402,7 +402,7 @@ public class PlayerMovementController : AllomanticPewter {
                 lastWasRollingOnGround = false;
             }
         } else {
-            rb.drag = SettingsMenu.settingsData.playerAirResistance * dragNoControl;
+            rb.drag = SettingsMenu.settingsWorld.playerAirResistance * dragNoControl;
             if (lastWasRollingOnGround) {
                 Player.PlayerAudioController.Stop_rolling();
                 lastWasRollingOnGround = false;

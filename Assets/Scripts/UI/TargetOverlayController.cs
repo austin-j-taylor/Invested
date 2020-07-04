@@ -75,12 +75,12 @@ public class TargetOverlayController : MonoBehaviour {
     /// </summary>
     public void SoftRefresh() {
         if (HUD.IsOpen) {
-            if (SettingsMenu.settingsData.hudForces == 1) {
-                SoftRefreshTargets(Player.PlayerIronSteel.PullTargets, pullTargetsActualForce, pullTargetsSumForce, SettingsMenu.settingsData.forceComplexity == 1);
-                SoftRefreshTargets(Player.PlayerIronSteel.PushTargets, pushTargetsActualForce, pushTargetsSumForce, SettingsMenu.settingsData.forceComplexity == 1);
+            if (SettingsMenu.settingsInterface.hudForces == 1) {
+                SoftRefreshTargets(Player.PlayerIronSteel.PullTargets, pullTargetsActualForce, pullTargetsSumForce, SettingsMenu.settingsInterface.forceComplexity == 1);
+                SoftRefreshTargets(Player.PlayerIronSteel.PushTargets, pushTargetsActualForce, pushTargetsSumForce, SettingsMenu.settingsInterface.forceComplexity == 1);
             }
             // If the target is highlighted and on screen, display mass
-            if (SettingsMenu.settingsData.hudMasses == 1) {
+            if (SettingsMenu.settingsInterface.hudMasses == 1) {
                 //if (Player.PlayerIronSteel.HasHighlightedTarget) {
                 //    //Vector3 heightToTop = Vector3.zero;
                 //    //heightToTop.y = Player.PlayerIronSteel.HighlightedTarget.ColliderBodyBoundsSizeY / 2f;
@@ -99,10 +99,10 @@ public class TargetOverlayController : MonoBehaviour {
     /// </summary>
     public void InterfaceRefresh() {
         if (HUD.IsOpen) {
-            //if (SettingsMenu.settingsData.hudMasses == 0) {
+            //if (SettingsMenu.settingsInterface.hudMasses == 0) {
             //    highlightedTargetMass.text = "";
             //}
-            if (SettingsMenu.settingsData.forceComplexity == 0 && SettingsMenu.settingsData.hudForces == 1) {
+            if (SettingsMenu.settingsInterface.forceComplexity == 0 && SettingsMenu.settingsInterface.hudForces == 1) {
                 for (int i = 0; i < Player.PlayerIronSteel.PullTargets.Count; i++) {
                     pullTargetsSumForce[i].text = "";
                 }
@@ -110,7 +110,7 @@ public class TargetOverlayController : MonoBehaviour {
                     pushTargetsSumForce[i].text = "";
                 }
             } else {
-                if (SettingsMenu.settingsData.hudForces == 0) {
+                if (SettingsMenu.settingsInterface.hudForces == 0) {
                     for (int i = 0; i < Player.PlayerIronSteel.PullTargets.Count; i++) {
                         pullTargetsSumForce[i].text = "";
                         pullTargetsActualForce[i].text = "";

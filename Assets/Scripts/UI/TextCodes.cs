@@ -158,7 +158,7 @@ public class TextCodes : MonoBehaviour {
     // "HowTo<Action>" -> the operation that does that action, like "Press Space" for jump
     public static string KeyMove {
         get {
-            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 return "the " + LeftJoystick;
             else
                 return WASD;
@@ -167,7 +167,7 @@ public class TextCodes : MonoBehaviour {
     public static string HowToMove => s_Use_ + KeyMove;
     public static string KeyAnchor {
         get {
-            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 return RightJoystick;
             else
                 return Ctrl;
@@ -175,7 +175,7 @@ public class TextCodes : MonoBehaviour {
     }
     public static string HowToAnchor {
         get {
-            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 return s_Click_in_ + "the " + RightJoystick;
             else
                 return s_Hold_ + Ctrl;
@@ -183,7 +183,7 @@ public class TextCodes : MonoBehaviour {
     }
     public static string KeySprint {
         get {
-            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 return B;
             else
                 return Shift;
@@ -192,7 +192,7 @@ public class TextCodes : MonoBehaviour {
     public static string HowToSprint => s_Hold_ + KeySprint;
     public static string KeyLook {
         get {
-            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 return "the " + RightJoystick;
             else
                 return "the " + Mouse;
@@ -201,7 +201,7 @@ public class TextCodes : MonoBehaviour {
     public static string HowToLook => s_Use_ + KeyLook;
     public static string KeyJump {
         get {
-            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 return A;
             else
                 return Space;
@@ -210,7 +210,7 @@ public class TextCodes : MonoBehaviour {
     public static string HowToJump => s_Press_ + KeyJump;
     public static string KeyPull {
         get {
-            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 return RightTrigger;
             else
                 return LeftClick;
@@ -218,7 +218,7 @@ public class TextCodes : MonoBehaviour {
     }
     public static string KeyPullAbridged {
         get {
-            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 return RightTriggerAbridged;
             else
                 return LeftClickAbridged;
@@ -227,7 +227,7 @@ public class TextCodes : MonoBehaviour {
     public static string HowToPull => s_Press_ + KeyPull;
     public static string KeyPush {
         get {
-            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 return LeftTrigger;
             else
                 return RightClick;
@@ -235,7 +235,7 @@ public class TextCodes : MonoBehaviour {
     }
     public static string KeyPushAbridged {
         get {
-            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 return LeftTriggerAbridged;
             else
                 return RightClickAbridged;
@@ -244,7 +244,7 @@ public class TextCodes : MonoBehaviour {
     public static string HowToPush => s_Press_ + KeyPush;
     public static string KeyPushPullAbridged {
         get {
-            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 return RightTriggerAbridged + '/' + LeftTriggerAbridged;
             else
                 return LeftClickAbridged + '/' + RightClickAbridged;
@@ -252,7 +252,7 @@ public class TextCodes : MonoBehaviour {
     }
     public static string KeyPullPushAbridged {
         get {
-            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 return LeftTriggerAbridged + '/' + RightTriggerAbridged;
             else
                 return RightClickAbridged + '/' + LeftClickAbridged;
@@ -260,7 +260,7 @@ public class TextCodes : MonoBehaviour {
     }
     public static string KeyZincTime {
         get {
-            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 return s_Click_in_ + LeftJoystick_Zinc;
             else
                 return Tab;
@@ -268,7 +268,7 @@ public class TextCodes : MonoBehaviour {
     }
     public static string HowToZincTime {
         get {
-            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 return s_Click_in_ + "the " + LeftJoystick_Zinc;
             else
                 return s_Hold_ + Tab;
@@ -276,7 +276,7 @@ public class TextCodes : MonoBehaviour {
     }
     public static string KeyControlWheel {
         get {
-            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 return s_Click_in_ + LeftJoystick_Zinc;
             else
                 return R;
@@ -284,7 +284,7 @@ public class TextCodes : MonoBehaviour {
     }
     public static string HowToControlWheel {
         get {
-            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 return s_Click_in_ + "the " + LeftJoystick_Zinc;
             else
                 return s_Hold_ + R;
@@ -292,17 +292,17 @@ public class TextCodes : MonoBehaviour {
     }
     public static string KeyMark_Pull {
         get {
-            switch (SettingsMenu.settingsData.controlScheme) {
-                case SettingsData.MK54: {
+            switch (SettingsMenu.settingsGameplay.controlScheme) {
+                case JSONSettings_Gameplay.MK54: {
                         return LightBlue(s_Mouse_Button_5);
                     }
-                case SettingsData.MK45: {
+                case JSONSettings_Gameplay.MK45: {
                         return LightBlue(s_Mouse_Button_4);
                     }
-                case SettingsData.MKEQ: {
+                case JSONSettings_Gameplay.MKEQ: {
                         return LightBlue(s_E);
                     }
-                case SettingsData.MKQE: {
+                case JSONSettings_Gameplay.MKQE: {
                         return LightBlue(s_Q);
                     }
                 default: {
@@ -314,17 +314,17 @@ public class TextCodes : MonoBehaviour {
     public static string HowToMark_Pull => s_Press_ + KeyMark_Pull;
     public static string KeyMark_PullAbridged {
         get {
-            switch (SettingsMenu.settingsData.controlScheme) {
-                case SettingsData.MK54: {
+            switch (SettingsMenu.settingsGameplay.controlScheme) {
+                case JSONSettings_Gameplay.MK54: {
                         return LightBlue(s_Mouse_Button_5Abridged);
                     }
-                case SettingsData.MK45: {
+                case JSONSettings_Gameplay.MK45: {
                         return LightBlue(s_Mouse_Button_4Abridged);
                     }
-                case SettingsData.MKEQ: {
+                case JSONSettings_Gameplay.MKEQ: {
                         return LightBlue(s_E);
                     }
-                case SettingsData.MKQE: {
+                case JSONSettings_Gameplay.MKQE: {
                         return LightBlue(s_Q);
                     }
                 default: {
@@ -336,17 +336,17 @@ public class TextCodes : MonoBehaviour {
     public static string KeyMark_PullPushAbridged => KeyMark_PullAbridged + "/" + KeyMark_PushAbridged;
     public static string KeyMark_Push {
         get {
-            switch (SettingsMenu.settingsData.controlScheme) {
-                case SettingsData.MK54: {
+            switch (SettingsMenu.settingsGameplay.controlScheme) {
+                case JSONSettings_Gameplay.MK54: {
                         return LightRed(s_Mouse_Button_4);
                     }
-                case SettingsData.MK45: {
+                case JSONSettings_Gameplay.MK45: {
                         return LightRed(s_Mouse_Button_5);
                     }
-                case SettingsData.MKEQ: {
+                case JSONSettings_Gameplay.MKEQ: {
                         return LightRed(s_Q);
                     }
-                case SettingsData.MKQE: {
+                case JSONSettings_Gameplay.MKQE: {
                         return LightRed(s_E);
                     }
                 default: {
@@ -357,17 +357,17 @@ public class TextCodes : MonoBehaviour {
     }
     public static string KeyMark_PushAbridged {
         get {
-            switch (SettingsMenu.settingsData.controlScheme) {
-                case SettingsData.MK54: {
+            switch (SettingsMenu.settingsGameplay.controlScheme) {
+                case JSONSettings_Gameplay.MK54: {
                         return LightRed(s_Mouse_Button_4Abridged);
                     }
-                case SettingsData.MK45: {
+                case JSONSettings_Gameplay.MK45: {
                         return LightRed(s_Mouse_Button_5Abridged);
                     }
-                case SettingsData.MKEQ: {
+                case JSONSettings_Gameplay.MKEQ: {
                         return LightRed(s_Q);
                     }
-                case SettingsData.MKQE: {
+                case JSONSettings_Gameplay.MKQE: {
                         return LightRed(s_E);
                     }
                 default: {
@@ -378,17 +378,17 @@ public class TextCodes : MonoBehaviour {
     }
     public static string KeyMarkAbridged {
         get {
-            switch (SettingsMenu.settingsData.controlScheme) {
-                case SettingsData.MK54: {
+            switch (SettingsMenu.settingsGameplay.controlScheme) {
+                case JSONSettings_Gameplay.MK54: {
                         return LightBlue(s_Mouse_Button_5Abridged) + '/' + LightRed(s_Mouse_Button_4Abridged);
                     }
-                case SettingsData.MK45: {
+                case JSONSettings_Gameplay.MK45: {
                         return LightBlue(s_Mouse_Button_4Abridged) + '/' + LightRed(s_Mouse_Button_5Abridged);
                     }
-                case SettingsData.MKEQ: {
+                case JSONSettings_Gameplay.MKEQ: {
                         return LightBlue(s_E) + '/' + LightRed(s_Q);
                     }
-                case SettingsData.MKQE: {
+                case JSONSettings_Gameplay.MKQE: {
                         return LightBlue(s_Q) + '/' + LightRed(s_E);
                     }
                 default: {
@@ -399,7 +399,7 @@ public class TextCodes : MonoBehaviour {
     }
     public static string HowToStartBurningIron {
         get {
-            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 return s_Press_ + LightBlue(s_Right_Bumper);
             else
                 return LeftClick;
@@ -408,7 +408,7 @@ public class TextCodes : MonoBehaviour {
 
     public static string HowToStopBurning {
         get {
-            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 return s_Hold_ + Y + ", " + LightBlue(s_Right_Bumper) + ", and " + LightRed(s_Left_Bumper);
             else
                 return s_Press_ + Gray("X");
@@ -419,7 +419,7 @@ public class TextCodes : MonoBehaviour {
     public static string KeyMultiMark => KeyAnchor;
     public static string KeyPushPullStrength {
         get {
-            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 return LeftTrigger + "/" + RightTrigger + " pressure";
             else
                 return ScrollWheel;
@@ -427,7 +427,7 @@ public class TextCodes : MonoBehaviour {
     }
     public static string HowToPushPullStrength {
         get {
-            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 return "Change the pressure on " + LeftTrigger + " and " + RightTrigger;
             else
                 return s_Scroll_ + "the " + ScrollWheel;
@@ -435,7 +435,7 @@ public class TextCodes : MonoBehaviour {
     }
     public static string KeyRadiusAbridged {
         get {
-            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 return Gray("Up/Down") + " on the D-Pad";
             else
                 return R + " + " + ScrollWheel;
@@ -443,7 +443,7 @@ public class TextCodes : MonoBehaviour {
     }
     public static string HowToRadius {
         get {
-            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 return s_Press_ + Gray("Up/Down") + " on the D-Pad";
             else
                 return s_Hold_ + R + " + " + s_Scroll_ + "the " + ScrollWheel;
@@ -451,7 +451,7 @@ public class TextCodes : MonoBehaviour {
     }
     public static string KeyThrow {
         get {
-            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 return X;
             else
                 return F;
@@ -460,7 +460,7 @@ public class TextCodes : MonoBehaviour {
     public static string HowToThrow => s_Press_ + KeyThrow;
     public static string HowToHelp {
         get {
-            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 return s_Press_ + Start + " > Settings > Interface > Help Overlay";
             else
                 return s_Press_ + H + " or " + s_Press_ + F1;
@@ -468,7 +468,7 @@ public class TextCodes : MonoBehaviour {
     }
     public static string HowToHelpAbridged {
         get {
-            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 return Start + " > Settings > Interface";
             else
                 return H + " or " + F1;
@@ -476,7 +476,7 @@ public class TextCodes : MonoBehaviour {
     }
     public static string HowToPerspectiveAbridged {
         get {
-            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad)
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 return Start + " > Settings > Gameplay";
             else
                 return F5 + " or " + Escape + " > Settings > Gameplay";

@@ -187,7 +187,7 @@ public class HelpOverlayController : MonoBehaviour {
             builder.AppendLine(
                 KeyControlWheel + ": " + ControlWheel
             );
-            if (Verbose && SettingsMenu.settingsData.controlScheme != SettingsData.Gamepad) {
+            if (Verbose && SettingsMenu.settingsGameplay.controlScheme != JSONSettings_Gameplay.Gamepad) {
                 builder.AppendLine(" • 1/2/3/4/C/X/Z: " + ControlWheel + " hotkeys");
             }
         }

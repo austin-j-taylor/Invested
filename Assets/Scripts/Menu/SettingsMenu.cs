@@ -38,14 +38,17 @@ public class SettingsMenu : MonoBehaviour {
     private Text resetToDefaultsText;
     #endregion
 
-    private Setting[] settings; // All the settings in the menu
-
-    public static SettingsData settingsData; // The values corresponding to each setting
+    private JSONSettings[] settings; // All the settings in the menu
+    public static JSONSettings_Gameplay settingsGameplay;
+    public static JSONSettings_Interface settingsInterface;
+    public static JSONSettings_Video settingsVideo;
+    public static JSONSettings_Graphics settingsGraphics;
+    public static JSONSettings_Audio settingsAudio;
+    public static JSONSettings_Allomancy settingsAllomancy;
+    public static JSONSettings_World settingsWorld;
 
     #region clearing
     void Awake() {
-        settings = GetComponentsInChildren<Setting>();
-        settingsData = EventSystem.current.GetComponent<SettingsData>();
 
         // Settings Header
         titleText = transform.Find("TitleText").GetComponent<Text>();
@@ -74,6 +77,16 @@ public class SettingsMenu : MonoBehaviour {
         resetToDefaultsButton = transform.Find("ResetToDefaultsButton").GetComponent<Button>();
         resetToDefaultsText = resetToDefaultsButton.GetComponentInChildren<Text>();
 
+        settingsGameplay = gameplayHeader.GetComponent<JSONSettings_Gameplay>();
+        settingsVideo = videoHeader.GetComponent<JSONSettings_Video>();
+        settingsInterface = interfaceHeader.GetComponent<JSONSettings_Interface>();
+        settingsGraphics = graphicsHeader.GetComponent<JSONSettings_Graphics>();
+        settingsAudio = audioHeader.GetComponent<JSONSettings_Audio>();
+        settingsAllomancy = allomancyHeader.GetComponent<JSONSettings_Allomancy>();
+        settingsWorld = worldHeader.GetComponent<JSONSettings_World>();
+
+        settings = new JSONSettings[] { settingsGameplay, settingsVideo, settingsInterface, settingsGraphics, settingsAudio, settingsAllomancy, settingsWorld };
+
         // Command listeners assignment
         glossaryButton.onClick.AddListener(OpenGlossary);
         videoButton.onClick.AddListener(OpenVideo);
@@ -100,6 +113,9 @@ public class SettingsMenu : MonoBehaviour {
         resetToDefaultsButton.gameObject.SetActive(false);
         highlitButton = videoButton;
 
+        foreach (JSONSettings setting in settings) {
+            setting.SetSettingsWhenChanged();
+        }
         Close();
     }
     public void Open() {
@@ -136,24 +152,24 @@ public class SettingsMenu : MonoBehaviour {
     #region refreshing
     // Refresh Settings and Refresh Particular Settings to update button texts
     private void RefreshSettings() {
-        foreach (Setting setting in settings) {
-            setting.RefreshData();
-            setting.RefreshText();
+        foreach (JSONSettings setting in settings) {
+            setting.RefreshSettings();
         }
     }
+
     public static void RefreshSettingHelpOverlay(int newHelpOverlay) {
-        settingsData.helpOverlay = newHelpOverlay;
+        settingsInterface.helpOverlay = newHelpOverlay;
         Setting helpOverlay = interfaceHeader.Find("HUDLabel/Children/HelpOverlayLabel").GetComponent<Setting>();
         helpOverlay.RefreshData();
         helpOverlay.RefreshText();
-        settingsData.SaveSettings();
+        settingsInterface.SaveSettings();
     }
     public static void RefreshSettingPerspective(int newCameraFirstPerson) {
-        settingsData.cameraFirstPerson = newCameraFirstPerson;
+        settingsGameplay.cameraFirstPerson = newCameraFirstPerson;
         Setting perspective = gameplayHeader.Find("PerspectiveLabel").GetComponent<Setting>();
         perspective.RefreshData();
         perspective.RefreshText();
-        settingsData.SaveSettings();
+        settingsGameplay.SaveSettings();
     }
     #endregion
 
@@ -275,8 +291,11 @@ public class SettingsMenu : MonoBehaviour {
 
     // Returns true if calling this returns to the Title Screen
     public bool BackAndSaveSettings() {
-        if (!AreHeadersClosed)
-            settingsData.SaveSettings();
+        if (!AreHeadersClosed) {
+            foreach (JSONSettings setting in settings) {
+                setting.SaveSettings();
+            }
+        }
 
         return BackSettings();
     }
@@ -311,14 +330,18 @@ public class SettingsMenu : MonoBehaviour {
     }
 
     private void OnClickDiscard() {
-        settingsData.LoadSettings();
+        foreach (JSONSettings setting in settings) {
+            setting.LoadSettings();
+        }
         RefreshSettings();
         BackSettings();
     }
 
     private void OnClickResetToDefaults() {
         resetToDefaultsText.text = "Settings reset.";
-        settingsData.ResetToDefaults();
+        foreach (JSONSettings setting in settings) {
+            setting.ResetToDefaults();
+        }
         RefreshSettings();
     }
     #endregion

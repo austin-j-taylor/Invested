@@ -234,7 +234,7 @@ public class TargetArray {
     public void RemoveAllOutOfRange(float burnRate, AllomanticIronSteel allomancer) {
         if (MaxRange == 0) {
             for (int i = 0; i < Count; i++) {
-                if (SettingsMenu.settingsData.pushControlStyle == 0 && SettingsMenu.settingsData.controlScheme != SettingsData.Gamepad) {
+                if (SettingsMenu.settingsAllomancy.pushControlStyle == 0 && SettingsMenu.settingsGameplay.controlScheme != JSONSettings_Gameplay.Gamepad) {
                     if (!targets[i].IsInRange(allomancer, burnRate)) {
                         RemoveTargetAt(i);
                     }
@@ -389,15 +389,15 @@ public class TargetArray {
             targets[i].SetBlueLine(
                 startPos,
                 targets[i].Charge * blueLineTargetedWidthFactor * (CameraController.IsFirstPerson ?  PlayerPullPushController.firstPersonWidthFactor : 1),
-                Mathf.Exp(-targets[i].LastMaxPossibleAllomanticForce.magnitude * burnRate * (SettingsMenu.settingsData.cameraFirstPerson == 1 ? firstPersonLSFactor : 1) / lightSaberConstant),
+                Mathf.Exp(-targets[i].LastMaxPossibleAllomanticForce.magnitude * burnRate * (SettingsMenu.settingsGameplay.cameraFirstPerson == 1 ? firstPersonLSFactor : 1) / lightSaberConstant),
                 pullingColor ?
-                    SettingsMenu.settingsData.pullTargetLineColor == 0 ? targetedBlueLine
+                    SettingsMenu.settingsGraphics.pullTargetLineColor == 0 ? targetedBlueLine
                     :
-                        SettingsMenu.settingsData.pullTargetLineColor == 1 ? targetedLightBlueLine
+                        SettingsMenu.settingsGraphics.pullTargetLineColor == 1 ? targetedLightBlueLine
                         :
                         targetedGreenLine
                 :
-                    SettingsMenu.settingsData.pushTargetLineColor == 0 ? targetedBlueLine : targetedRedLine
+                    SettingsMenu.settingsGraphics.pushTargetLineColor == 0 ? targetedBlueLine : targetedRedLine
                 );
 
         }

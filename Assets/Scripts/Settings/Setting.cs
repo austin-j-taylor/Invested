@@ -11,9 +11,13 @@ public abstract class Setting : MonoBehaviour {
     public string id;
     public float settingSize = 130;
     public int detailsFontSize = 10;
+    protected JSONSettings parentSettings;
 
     public abstract void RefreshData();
 
+    protected virtual void Awake() {
+        parentSettings = GetComponentInParent<JSONSettings>();
+    }
     /*
      * Updates the text fields for this setting to reflect the setting's data
      */

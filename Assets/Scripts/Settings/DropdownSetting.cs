@@ -26,7 +26,8 @@ public class DropdownSetting : Setting {
     public string[] detailStrings;
     public Transform[] childrenHeaders;
 
-    void Awake() {
+    protected override void Awake() {
+        base.Awake();
         dropdown = GetComponentInChildren<Dropdown>();
         detailsText = transform.Find("Dropdown/Details").GetComponent<Text>();
         optionsCount = dropdown.options.Count;
@@ -63,7 +64,7 @@ public class DropdownSetting : Setting {
      * Checks SettingsData for this button's data
      */
     public override void RefreshData() {
-        data = SettingsMenu.settingsData.GetDataInt(id);
+        data = parentSettings.GetDataInt(id);
         // Update other functions
         if (data < buttonCalls.Length)
             if (buttonCalls[data] != null)
@@ -98,7 +99,7 @@ public class DropdownSetting : Setting {
 
     public void DropdownValueChanged(int arg0) {
         data = arg0;
-        SettingsMenu.settingsData.SetData(id, data);
+        parentSettings.SetData(id, data);
 
         // Update other functions
         if (data < buttonCalls.Length)

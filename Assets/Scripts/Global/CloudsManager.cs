@@ -12,7 +12,7 @@ public class CloudsManager : MonoBehaviour {
     private float cloudsMaxDensity; // used for fading between densities
     private bool SceneUsesClouds;
 
-    private void Start() {
+    private void Awake() {
         clouds = CameraController.ActiveCamera.GetComponent<CloudMaster>();
         SceneManager.sceneLoaded += LoadCloudDataFromScene;
     }

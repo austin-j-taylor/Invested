@@ -20,7 +20,8 @@ public class SliderSetting : Setting {
     public bool updateTextWhenChanged = true;
     public bool showDecimals;
 
-    void Awake() {
+    protected override void Awake() {
+        base.Awake();
         slider = GetComponentInChildren<Slider>();
         Text detailsText = transform.GetChild(0).GetChild(0).GetComponent<Text>();
         valueText = transform.GetChild(0).GetChild(1).GetComponent<Text>();
@@ -48,7 +49,7 @@ public class SliderSetting : Setting {
      * Checks SettingsData for this slider's data
      */
     public override void RefreshData() {
-        data = SettingsMenu.settingsData.GetDataFloat(id);
+        data = parentSettings.GetDataFloat(id);
         slider.value = data;
     }
 
@@ -67,7 +68,7 @@ public class SliderSetting : Setting {
 
     public void OnValueChanged(float value) {
         data = value;
-        SettingsMenu.settingsData.SetData(id, data);
+        parentSettings.SetData(id, data);
         RefreshText();
     }
 }

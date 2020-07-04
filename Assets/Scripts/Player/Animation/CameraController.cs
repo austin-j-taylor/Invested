@@ -18,7 +18,7 @@ public class CameraController : MonoBehaviour {
     #endregion
 
     #region properties
-    public static bool IsFirstPerson => SettingsMenu.settingsData.cameraFirstPerson == 1;
+    public static bool IsFirstPerson => SettingsMenu.settingsGameplay.cameraFirstPerson == 1;
     public static Camera ActiveCamera { get; private set; }
     public static Transform CameraLookAtTarget { get; private set; }
     public static Transform CameraPositionTarget { get; private set; }
@@ -96,19 +96,19 @@ public class CameraController : MonoBehaviour {
         if (cameraIsLocked && !UsingCinemachine) {
             float deltaX;
             float deltaY;
-            if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
-                deltaX = Input.GetAxis("HorizontalRight") * SettingsMenu.settingsData.gamepadSensitivityX;
-                deltaY = Input.GetAxis("VerticalRight") * SettingsMenu.settingsData.gamepadSensitivityY;
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) {
+                deltaX = Input.GetAxis("HorizontalRight") * SettingsMenu.settingsGameplay.gamepadSensitivityX;
+                deltaY = Input.GetAxis("VerticalRight") * SettingsMenu.settingsGameplay.gamepadSensitivityY;
             } else {
-                deltaX = Input.GetAxis("Mouse X") * SettingsMenu.settingsData.mouseSensitivityX;
-                deltaY = Input.GetAxis("Mouse Y") * SettingsMenu.settingsData.mouseSensitivityY;
+                deltaX = Input.GetAxis("Mouse X") * SettingsMenu.settingsGameplay.mouseSensitivityX;
+                deltaY = Input.GetAxis("Mouse Y") * SettingsMenu.settingsGameplay.mouseSensitivityY;
             }
             // deltaY is normally the negative of the above statements, so an uninverted camera should be negatative
-            if (SettingsMenu.settingsData.cameraInvertX == 1)
+            if (SettingsMenu.settingsGameplay.cameraInvertX == 1)
                 deltaX = -deltaX;
-            if (SettingsMenu.settingsData.cameraInvertY == 0)
+            if (SettingsMenu.settingsGameplay.cameraInvertY == 0)
                 deltaY = -deltaY;
-            if (SettingsMenu.settingsData.cameraClamping == 1) {
+            if (SettingsMenu.settingsGameplay.cameraClamping == 1) {
                 currentX += deltaX;
                 currentY += deltaY;
                 ClampY();
@@ -154,8 +154,8 @@ public class CameraController : MonoBehaviour {
         } else {
 
             // If the player is moving quickly, the camera stretches outwards.
-            float cameraDistance = -SettingsMenu.settingsData.cameraDistance;
-            if (SettingsMenu.settingsData.velocityZoom == 1) {
+            float cameraDistance = -SettingsMenu.settingsGameplay.cameraDistance;
+            if (SettingsMenu.settingsGraphics.velocityZoom == 1) {
                 cameraDistance = (2 - Mathf.Exp(Player.PlayerIronSteel.rb.velocity.sqrMagnitude / stretchingVelocityFactor)) * cameraDistance;
                 if (lastCameraDistance != 0)
                     cameraDistance = Mathf.Lerp(lastCameraDistance, cameraDistance, Time.deltaTime * cameraStretchingLerpFactor);
@@ -168,16 +168,16 @@ public class CameraController : MonoBehaviour {
             //// If an external target was recently used, the camera POSITION should lerp back
             //if (timeToLerp < maxTimeToLerp) {
             //    float distance = timeToLerp / maxTimeToLerp;
-            //    wantedPosition = Vector3.Slerp(ActiveCamera.transform.localPosition, verticalRotation * new Vector3(0, 0, -SettingsMenu.settingsData.cameraDistance), lerpConstantPosition * Time.unscaledDeltaTime);
+            //    wantedPosition = Vector3.Slerp(ActiveCamera.transform.localPosition, verticalRotation * new Vector3(0, 0, -SettingsMenu.settingsGameplay.cameraDistance), lerpConstantPosition * Time.unscaledDeltaTime);
             //    timeToLerp += Time.unscaledDeltaTime;
             //} else { // normal operation
-            //    wantedPosition = verticalRotation * new Vector3(0, 0, -SettingsMenu.settingsData.cameraDistance);
+            //    wantedPosition = verticalRotation * new Vector3(0, 0, -SettingsMenu.settingsGameplay.cameraDistance);
             //}
 
             CameraPositionTarget.transform.localPosition = wantedPosition;
             //    Vector3 pos = Vector3.zero;
             //    pos.y = CameraLookAtTargetHeight;
-            CameraLookAtTargetOffset = SettingsMenu.settingsData.cameraDistance / 5;
+            CameraLookAtTargetOffset = SettingsMenu.settingsGameplay.cameraDistance / 5;
             CameraLookAtTarget.transform.localPosition = new Vector3(0, CameraLookAtTargetOffset, 0);
             if (UpsideDown)
                 CameraLookAtTarget.transform.localPosition = -CameraLookAtTarget.transform.localPosition;

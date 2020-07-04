@@ -90,7 +90,7 @@
 //        advancedPushingAndPulling1 = new List<string> {
 //            "Advanced Pushing & Pulling",
 //            KeyStopBurning + " to stop burning " + Gray("Iron and Steel") +
-//                (SettingsMenu.settingsData.controlScheme == SettingsData.MKQE || SettingsMenu.settingsData.controlScheme == SettingsData.MKEQ?
+//                (SettingsMenu.settingsData.controlScheme == JSONSettings_Gameplay.MKQE || SettingsMenu.settingsData.controlScheme == JSONSettings_Gameplay.MKEQ?
 //                    ".\n\t(Your keyboard may not support that last option.)" :
 //                    "."
 //                )

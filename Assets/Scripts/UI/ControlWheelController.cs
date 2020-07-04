@@ -140,7 +140,7 @@ public class ControlWheelController : MonoBehaviour {
                     int radius;
                     float angle;
                     // Gamepad and mouse/keyboard select slightly differently. Gamepad uses left joystick, mouse uses mouse
-                    if (SettingsMenu.settingsData.controlScheme == SettingsData.Gamepad) {
+                    if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) {
                         int pixelsX = (int)(Keybinds.Horizontal() * squareSize);
                         int pixelsY = (int)(Keybinds.Vertical() * squareSize);
                         radius = (int)Mathf.Sqrt(pixelsX * pixelsX + pixelsY * pixelsY);

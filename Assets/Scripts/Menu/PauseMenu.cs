@@ -125,7 +125,7 @@ public class PauseMenu : MonoBehaviour {
             if (!LevelCompletedScreen.IsOpen && !MainMenu.IsOpen) { // If there is another menu open. Change this if we rework menus.
                 CameraController.LockCamera();
             }
-            if (SettingsMenu.settingsData.hudEnabled == 1)
+            if (SettingsMenu.settingsInterface.hudEnabled == 1)
                 HUD.EnableHUD();
             GameManager.AudioManager.SetMasterPitch(1);
             Close();

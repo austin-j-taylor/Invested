@@ -43,8 +43,8 @@ public class PlayerTransparencyController : MonoBehaviour {
                     SetAllFade(lookAtTransparency);
                 } else {
                     // If camera is physically near the player, fade slowly to transparent
-                    float realThreshold = distanceThreshold * SettingsMenu.settingsData.cameraDistance / 5;
-                    if (SettingsMenu.settingsData.cameraFirstPerson == 0 && distance < realThreshold) {
+                    float realThreshold = distanceThreshold * SettingsMenu.settingsGameplay.cameraDistance / 5;
+                    if (SettingsMenu.settingsGameplay.cameraFirstPerson == 0 && distance < realThreshold) {
                         float percent = ((distance * distance) / (realThreshold * realThreshold));
                         if (percent >= 0)
                             SetAllFade(percent);

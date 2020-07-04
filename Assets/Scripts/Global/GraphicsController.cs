@@ -16,12 +16,12 @@ public class GraphicsController : MonoBehaviour {
     public static bool CloudsEnabled { get; private set; }
     private static bool postProcessingEnabled;
     // Properties for whether each setting should be enabled
-    private static bool Bloom => postProcessingEnabled && SettingsMenu.settingsData.bloom == 1;
-    private static bool Antialiasing => postProcessingEnabled && SettingsMenu.settingsData.antialiasing == 1;
-    private static bool AmbientOcclusion => postProcessingEnabled && SettingsMenu.settingsData.ambientOcclusion == 1;
-    private static bool MotionBlur => postProcessingEnabled && SettingsMenu.settingsData.motionBlur == 1;
-    private static bool Aberration => postProcessingEnabled && SettingsMenu.settingsData.aberration == 1;
-    private static bool Vignette => postProcessingEnabled && SettingsMenu.settingsData.vignetteZinc == 1;
+    private static bool Bloom => postProcessingEnabled && SettingsMenu.settingsGraphics.bloom == 1;
+    private static bool Antialiasing => postProcessingEnabled && SettingsMenu.settingsGraphics.antialiasing == 1;
+    private static bool AmbientOcclusion => postProcessingEnabled && SettingsMenu.settingsGraphics.ambientOcclusion == 1;
+    private static bool MotionBlur => postProcessingEnabled && SettingsMenu.settingsGraphics.motionBlur == 1;
+    private static bool Aberration => postProcessingEnabled && SettingsMenu.settingsGraphics.aberration == 1;
+    private static bool Vignette => postProcessingEnabled && SettingsMenu.settingsGraphics.vignetteZinc == 1;
 
     [SerializeField]
     private PostProcessingProfile profile = null;
@@ -46,19 +46,19 @@ public class GraphicsController : MonoBehaviour {
         resolutionDropdown.dropdown.options = resOptions;
     }
     void Start() {
-        postProcessingEnabled = SettingsMenu.settingsData.postProcessingEnabled == 1;
+        postProcessingEnabled = SettingsMenu.settingsGraphics.postProcessingEnabled == 1;
         if (postProcessingEnabled) {
-            SetBloom(SettingsMenu.settingsData.bloom == 1);
-            SetAntialiasing(SettingsMenu.settingsData.antialiasing == 1);
-            SetAmbientOcclusion(SettingsMenu.settingsData.ambientOcclusion == 1);
-            SetMotionBlur(SettingsMenu.settingsData.motionBlur == 1);
+            SetBloom(SettingsMenu.settingsGraphics.bloom == 1);
+            SetAntialiasing(SettingsMenu.settingsGraphics.antialiasing == 1);
+            SetAmbientOcclusion(SettingsMenu.settingsGraphics.ambientOcclusion == 1);
+            SetMotionBlur(SettingsMenu.settingsGraphics.motionBlur == 1);
             SetAberration(false);
             SetVignette(false);
         } else {
             SetPostProcessing(false);
         }
 
-        CloudsEnabled = SettingsMenu.settingsData.clouds == 1;
+        CloudsEnabled = SettingsMenu.settingsGraphics.clouds == 1;
 
         aberrationSettings = profile.chromaticAberration.settings;
         vignetteSettings = profile.vignette.settings;

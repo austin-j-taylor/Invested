@@ -41,11 +41,11 @@ public class Simulation_coinGround : Simulation {
 
         texts = HUDSimulations.CoinGround.GetComponentsInChildren<Text>();
 
-        if (SettingsMenu.settingsData.anchoredBoost == 1) {
+        if (SettingsMenu.settingsAllomancy.anchoredBoost == 1) {
             texts[texts.Length - 6].text = "Allomantic Normal Force";
-        } else if (SettingsMenu.settingsData.anchoredBoost == 2) {
+        } else if (SettingsMenu.settingsAllomancy.anchoredBoost == 2) {
             texts[texts.Length - 6].text = "Exponential w/ Velocity factor";
-            switch (SettingsMenu.settingsData.exponentialWithVelocitySignage) {
+            switch (SettingsMenu.settingsAllomancy.exponentialWithVelocitySignage) {
                 case 0: {
                         texts[texts.Length - 5].text = "Relationship 1 (Both Directions Decrease)";
                         break;
@@ -63,17 +63,17 @@ public class Simulation_coinGround : Simulation {
                         break;
                     }
             }
-        } else if (SettingsMenu.settingsData.anchoredBoost == 3) {
+        } else if (SettingsMenu.settingsAllomancy.anchoredBoost == 3) {
             texts[texts.Length - 6].text = "Distributed Power";
         } else {
             texts[texts.Length - 6].text = "No Anchored Boost";
         }
 
-        if (SettingsMenu.settingsData.forceDistanceRelationship == 0) {
+        if (SettingsMenu.settingsAllomancy.forceDistanceRelationship == 0) {
             texts[texts.Length - 4].text = "Linear Distance";
-        } else if (SettingsMenu.settingsData.forceDistanceRelationship == 1) {
+        } else if (SettingsMenu.settingsAllomancy.forceDistanceRelationship == 1) {
             texts[texts.Length - 4].text = "Inverse Square Distance";
-        } else if (SettingsMenu.settingsData.forceDistanceRelationship == 2) {
+        } else if (SettingsMenu.settingsAllomancy.forceDistanceRelationship == 2) {
             texts[texts.Length - 4].text = "Exponential w/ Distance";
         }
 
@@ -87,7 +87,7 @@ public class Simulation_coinGround : Simulation {
         if (coinTop.transform.position.y - groundHeight - .125f > .01f) {
             desiredTimeScale = .05f;
         } else {
-            desiredTimeScale = SettingsMenu.settingsData.timeScale;
+            desiredTimeScale = SettingsMenu.settingsWorld.timeScale;
         }
 
         base.Update();
@@ -113,9 +113,9 @@ public class Simulation_coinGround : Simulation {
 
 
             float threshold = 0;
-            if (SettingsMenu.settingsData.anchoredBoost == 1) {
+            if (SettingsMenu.settingsAllomancy.anchoredBoost == 1) {
                 threshold = 300;
-            } else if (SettingsMenu.settingsData.anchoredBoost == 2) {
+            } else if (SettingsMenu.settingsAllomancy.anchoredBoost == 2) {
                 threshold = 50;
             } else {
                 threshold = 8000;
@@ -193,7 +193,7 @@ public class Simulation_coinGround : Simulation {
 
 
             // EwV factor
-            if (SettingsMenu.settingsData.anchoredBoost == 2) {
+            if (SettingsMenu.settingsAllomancy.anchoredBoost == 2) {
                 texts[18].text = "e^-v/V Factor:";
 
                 if (allomancerTop.LastAnchoredPushBoost.magnitude / allomancerTop.LastAllomanticForce.magnitude < .0001f) {
