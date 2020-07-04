@@ -25,6 +25,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
     public const float blueLineWidthFactor = .02f;
     public const float blueLineChangeFactor = 1 / 4f;
     public const float blueLineBrightnessFactor = .15f;
+    private readonly Vector3 firstPersonCenterOfMassOffset = new Vector3(0, -0.20f, 0);
 
     // Control Mode constants
     private const float minAreaRadius = .0251f;
@@ -45,6 +46,8 @@ public class PlayerPullPushController : AllomanticIronSteel {
     public enum ControlMode { Manual, Area, Bubble, Coinshot };
 
     public ControlMode Mode { get; private set; }
+    public Vector3 CenterOfBlueLines => CameraController.IsFirstPerson ? CenterOfMass + firstPersonCenterOfMassOffset : CenterOfMass; // The position (in world space) where the blue lines appear from
+
     private Magnetic removedTarget; // When a target was just removed, keep track of it so we don't immediately select it again
     // radius for Area
     private float selectionAreaRadius = maxAreaRadius / 2;
@@ -805,8 +808,8 @@ public class PlayerPullPushController : AllomanticIronSteel {
                 closeness *= targetFocusOffScreenBound;
             }
             target.SetBlueLine(
-                CenterOfMass,
-                target.Charge * blueLineWidthFactor * (CameraController.IsFirstPerson ? firstPersonWidthFactor : 1),
+                CenterOfBlueLines,
+                target.Charge * blueLineWidthFactor * (CameraController.IsFirstPerson && !CameraController.UsingCinemachine ? firstPersonWidthFactor : 1),
                 1,
                 closeness
             );
@@ -830,21 +833,21 @@ public class PlayerPullPushController : AllomanticIronSteel {
         // Regardless of other factors, lines pointing to Push/Pull-targets have unique colors
         // Update metal lines for Pull/PushTargets
         if (PullingOnPullTargets) {
-            PullTargets.UpdateBlueLines(iron, IronBurnPercentageTarget, CenterOfMass);
+            PullTargets.UpdateBlueLines(iron, IronBurnPercentageTarget, CenterOfBlueLines);
         } else if (PushingOnPullTargets) {
-            PullTargets.UpdateBlueLines(iron, SteelBurnPercentageTarget, CenterOfMass);
+            PullTargets.UpdateBlueLines(iron, SteelBurnPercentageTarget, CenterOfBlueLines);
         } else if (HasPullTarget) {
-            PullTargets.UpdateBlueLines(iron, 0, CenterOfMass);
+            PullTargets.UpdateBlueLines(iron, 0, CenterOfBlueLines);
         }
         if (PullingOnPushTargets) {
-            PushTargets.UpdateBlueLines(steel, IronBurnPercentageTarget, CenterOfMass);
+            PushTargets.UpdateBlueLines(steel, IronBurnPercentageTarget, CenterOfBlueLines);
         } else if (PushingOnPushTargets) {
-            PushTargets.UpdateBlueLines(steel, SteelBurnPercentageTarget, CenterOfMass);
+            PushTargets.UpdateBlueLines(steel, SteelBurnPercentageTarget, CenterOfBlueLines);
         } else if (HasPushTarget) {
-            PushTargets.UpdateBlueLines(steel, 0, CenterOfMass);
+            PushTargets.UpdateBlueLines(steel, 0, CenterOfBlueLines);
         }
 
-        BubbleTargets.UpdateBlueLines(BubbleMetalStatus, BubbleBurnPercentageTarget, CenterOfMass);
+        BubbleTargets.UpdateBlueLines(BubbleMetalStatus, BubbleBurnPercentageTarget, CenterOfBlueLines);
     }
 
     public void EnableRenderingBlueLines() {
