@@ -188,8 +188,14 @@ public class PlayerPullPushController : AllomanticIronSteel {
         // Assign Burn percentage targets based on the previously changed burn percentage/target magnitudes
         if (SettingsMenu.settingsAllomancy.pushControlStyle == 0) { // Percentage
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) { // Gamepad
+                // If throwing a coin, the Pushing burn target is 1.
+                if(Keybinds.WithdrawCoin()) {
+                    SteelBurnPercentageTarget = 1;
+                    steelBurnPercentageLerp = 1;
+                } else {
+                    SetPushPercentageTarget(Keybinds.LeftBurnPercentage());
+                }
                 SetPullPercentageTarget(Keybinds.RightBurnPercentage());
-                SetPushPercentageTarget(Keybinds.LeftBurnPercentage());
             }
         } else { // Magnitude
             if (HasPullTarget || HasPushTarget) {
@@ -1019,7 +1025,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
         }
 
         // Gamepad rumble
-        if (HasPullTarget || HasPushTarget) {
+        if (HasPullTarget || HasPushTarget && TimeController.CurrentTimeScale > 0) {
             if (IronPulling) {
                 GamepadController.SetRumbleRight(IronBurnPercentageTarget * GamepadController.rumbleFactor);
             } else {

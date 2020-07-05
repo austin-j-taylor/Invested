@@ -79,8 +79,9 @@ public class HelpOverlayController : MonoBehaviour {
             builder.AppendLine(HowToHelpAbridged + ": toggle this overlay (simple)\n");
         }
         builder.AppendLine(
-            WASD + ": Move\n" +
-            Mouse + ": Look"
+            KeyMoveAbridged + ": Move\n" +
+            KeyLookAbridged + ": Look\n" +
+            KeyJump + ": Jump"
         );
 
         switch (last_Mode) {
@@ -209,7 +210,7 @@ public class HelpOverlayController : MonoBehaviour {
                 //if(!SettingsMenu.settingsData.UsingGamepad) {
                 //    builder.AppendLine(" • " + Shift + " + " + KeyThrowAbridged + ": Mark and Throw " + O_Coin);
                 //}
-                builder.AppendLine(" • " + KeyJump + " + " + KeyThrow + ": Throw " + O_Coin + " downwards, weighted by" + KeyMove +
+                builder.AppendLine(" • " + KeyJump + " + " + KeyThrow + ": Throw " + O_Coin + " downwards, weighted by " + KeyMove +
                     "\n • " + KeyAnchor + " + " + KeyThrow + ": Toss without " + Pushing);
             }
         }

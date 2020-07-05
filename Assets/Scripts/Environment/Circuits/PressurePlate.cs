@@ -25,10 +25,11 @@ public class PressurePlate : Source {
         present = new List<Rigidbody>();
     }
     private void Update() {
-        if(present.Count > 0) {
+        if (present.Count > 0) {
             float mass = 0;
-            for(int i = 0; i < present.Count; i++) {
-                mass += present[i].mass;
+            for (int i = 0; i < present.Count; i++) {
+                if (present[i] != null)
+                    mass += present[i].mass;
             }
             On = mass >= massThreshold;
         }

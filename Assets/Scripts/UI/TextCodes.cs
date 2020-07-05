@@ -45,7 +45,7 @@ public class TextCodes : MonoBehaviour {
     public static string MidBlue_Open() => "<color=#00bfff>";
     public static string LightBlue_Open() => "<color=#7fdfff>";
     public static string Gray_Open() => "<color=#bfbfbf>";
-    public static string OffWhite_Open() => "<color=#99B2FF>";
+    public static string PewterWhite_Open() => "<color=#99B2FF>";
     public static string Red_Open() => "<color=#ff8080>";
     public static string ZincBlue_Open() => "<color=#c1dbff>";
     public static string Gold_Open() => "<color=#fff080>";
@@ -59,7 +59,7 @@ public class TextCodes : MonoBehaviour {
     public static string Gray(string s) => Gray_Open() + s + "</color>";
     public static string Gold(string s) => Gold_Open() + s + "</color>";
     public static string Orange(string s) => "<color=#ff9d60>" + s + "</color>";
-    public static string OffWhite(string s) => "<color=#99B2FF>" + s + "</color>";
+    public static string PewterWhite(string s) => "<color=#99B2FF>" + s + "</color>";
     public static string Bronze(string s) => "<color=#ff9f00>" + s + "</color>";
     // Same as above, but for specific characters
     public static string Color_Kog(string s) => LightBlue(s);
@@ -72,14 +72,14 @@ public class TextCodes : MonoBehaviour {
     public static string Color_Location_Open() => Blue_Open();
     public static string Color_Pull_Open() => MidBlue_Open();
     public static string Color_Push_Open() => Red_Open();
-    public static string Color_Pewter_Open() => OffWhite_Open();
+    public static string Color_Pewter_Open() => PewterWhite_Open();
     public static string Color_Zinc_Open() => ZincBlue_Open();
     public static string Color_Coin_Open() => Gold_Open();
 
     // Known words that should always appear in a specific color
     public static string Iron => MidBlue("iron");
     public static string Steel => Red("steel");
-    public static string Pewter => OffWhite("pewter");
+    public static string Pewter => PewterWhite("pewter");
     public static string Pull => MidBlue("Pull");
     public static string Pulls => MidBlue("Pulls");
     public static string Pulling => MidBlue("Pulling");
@@ -102,11 +102,11 @@ public class TextCodes : MonoBehaviour {
     public static string Zinc => ZincBlue("Zinc");
     public static string ControlWheel => ZincBlue("Control Wheel");
     public static string BurnPercentage => Gray("Burn Percentage");
-    public static string Sprint => OffWhite("Sprint");
-    public static string Sprinting => OffWhite("sprinting");
-    public static string PewterJump => OffWhite("Jump");
-    public static string PewterJumping => OffWhite("Jumping");
-    public static string Anchor => OffWhite("Anchor");
+    public static string Sprint => PewterWhite("Sprint");
+    public static string Sprinting => PewterWhite("sprinting");
+    public static string PewterJump => PewterWhite("Jump");
+    public static string PewterJumping => PewterWhite("Jumping");
+    public static string Anchor => PewterWhite("Anchor");
     public static string HelpOverlay => Gray("Help Overlay");
     // Objects, prefixed with "O_"
     public static string O_SeekerCube => Bronze("Seeker Cube");
@@ -132,9 +132,9 @@ public class TextCodes : MonoBehaviour {
     public static string Back => Gold("Back");
     public static string Start => Gray("Start");
     public static string A => Gray("A");
-    public static string B => Gray("B");
-    public static string X => Gray("X");
-    public static string Y => Gray("Y");
+    public static string B => PewterWhite("B");
+    public static string X => Gold("X");
+    public static string Y => ZincBlue("Y");
     // Mouse/Keyboard
     public static string Mouse => Gray("Mouse");
     public static string Shift => Gray("Shift");
@@ -164,11 +164,19 @@ public class TextCodes : MonoBehaviour {
                 return WASD;
         }
     }
+    public static string KeyMoveAbridged {
+        get {
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
+                return LeftJoystick;
+            else
+                return WASD;
+        }
+    }
     public static string HowToMove => s_Use_ + KeyMove;
     public static string KeyAnchor {
         get {
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
-                return RightJoystick;
+                return s_Click_in_ + RightJoystick;
             else
                 return Ctrl;
         }
@@ -196,6 +204,14 @@ public class TextCodes : MonoBehaviour {
                 return "the " + RightJoystick;
             else
                 return "the " + Mouse;
+        }
+    }
+    public static string KeyLookAbridged {
+        get {
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
+                return RightJoystick;
+            else
+                return Mouse;
         }
     }
     public static string HowToLook => s_Use_ + KeyLook;
@@ -277,7 +293,8 @@ public class TextCodes : MonoBehaviour {
     public static string KeyControlWheel {
         get {
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
-                return s_Click_in_ + LeftJoystick_Zinc;
+                return Y;
+                //return s_Click_in_ + LeftJoystick_Zinc;
             else
                 return R;
         }
@@ -392,7 +409,7 @@ public class TextCodes : MonoBehaviour {
                         return LightBlue(s_Q) + '/' + LightRed(s_E);
                     }
                 default: {
-                        return LightBlue(s_Right_Bumper) + '/' + LightRed(s_Left_BumperAbridged);
+                        return LightBlue(s_Right_BumperAbridged) + '/' + LightRed(s_Left_BumperAbridged);
                     }
             }
         }

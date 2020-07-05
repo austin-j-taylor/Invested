@@ -1192,41 +1192,6 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: d384f94ff36ed5947bc960a8fa285f91, type: 3}
---- !u!84 &19041646
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  serializedVersion: 3
-  m_Width: 1567
-  m_Height: 882
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthFormat: 1
-  m_ColorFormat: 4
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 1
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1001 &22932825
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6987,8 +6952,8 @@ MonoBehaviour:
   sourceCamera: {fileID: 188685060}
   outlineCamera: {fileID: 682333588}
   outlineShaderMaterial: {fileID: 0}
-  renderTexture: {fileID: 19041646}
-  extraRenderTexture: {fileID: 2026631034}
+  renderTexture: {fileID: 257727508}
+  extraRenderTexture: {fileID: 987303663}
 --- !u!81 &188685058
 AudioListener:
   m_ObjectHideFlags: 0
@@ -8825,6 +8790,41 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!84 &257727508
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  serializedVersion: 3
+  m_Width: 1565
+  m_Height: 881
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthFormat: 1
+  m_ColorFormat: 4
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 1
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1 &269546766
 GameObject:
   m_ObjectHideFlags: 0
@@ -8838,7 +8838,7 @@ GameObject:
   - component: {fileID: 269546769}
   - component: {fileID: 269546768}
   m_Layer: 5
-  m_Name: Description (1)
+  m_Name: Key
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11317,7 +11317,7 @@ PrefabInstance:
     - target: {fileID: 4848794662215284240, guid: c8d9153f3f1c1164fafde9855f2df490,
         type: 3}
       propertyPath: m_Options.m_Options.Array.data[4].m_Text
-      value: XBox 360 Gamepad
+      value: Xbox 360 Gamepad
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c8d9153f3f1c1164fafde9855f2df490, type: 3}
@@ -12671,7 +12671,7 @@ MonoBehaviour:
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
-            m_StringArgument: Change the control scheme and camera
+            m_StringArgument: Fullscreen mode & Resolution
             m_BoolArgument: 0
           m_CallState: 2
   - eventID: 9
@@ -12687,7 +12687,7 @@ MonoBehaviour:
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
-            m_StringArgument: Change the control scheme and camera
+            m_StringArgument: Fullscreen mode & Resolution
             m_BoolArgument: 0
           m_CallState: 2
         - m_Target: {fileID: 0}
@@ -17302,7 +17302,7 @@ MonoBehaviour:
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
-            m_StringArgument: Change the control scheme and camera
+            m_StringArgument: Control schemes, camera sensitivity
             m_BoolArgument: 0
           m_CallState: 2
   - eventID: 9
@@ -17318,7 +17318,7 @@ MonoBehaviour:
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
-            m_StringArgument: Change the control scheme and camera
+            m_StringArgument: Control schemes, camera sensitivity
             m_BoolArgument: 0
           m_CallState: 2
         - m_Target: {fileID: 0}
@@ -18818,7 +18818,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 0
   m_RenderingPath: 1
-  m_TargetTexture: {fileID: 19041646}
+  m_TargetTexture: {fileID: 257727508}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 0
@@ -25535,7 +25535,7 @@ MonoBehaviour:
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
-            m_StringArgument: Change general physics settings (gravity, air resistance)
+            m_StringArgument: Gravity, air resistance, time scale
             m_BoolArgument: 0
           m_CallState: 2
   - eventID: 9
@@ -25551,7 +25551,7 @@ MonoBehaviour:
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
-            m_StringArgument: Change general physics settings (gravity, air resistance)
+            m_StringArgument: Gravity, air resistance, time scale
             m_BoolArgument: 0
           m_CallState: 2
 --- !u!1 &981471358
@@ -25651,6 +25651,41 @@ RectTransform:
   m_AnchoredPosition: {x: 240.74, y: 212.4}
   m_SizeDelta: {x: -1440, y: -775}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!84 &987303663
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  serializedVersion: 3
+  m_Width: 1565
+  m_Height: 881
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthFormat: 1
+  m_ColorFormat: 4
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 1
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1 &990713784
 GameObject:
   m_ObjectHideFlags: 0
@@ -26914,8 +26949,7 @@ MonoBehaviour:
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
-            m_StringArgument: Change the graphical appearance of the game (bloom,
-              motion blur, etc.)
+            m_StringArgument: Volume control
             m_BoolArgument: 0
           m_CallState: 2
   - eventID: 9
@@ -26931,8 +26965,7 @@ MonoBehaviour:
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
-            m_StringArgument: Change the graphical appearance of the game (bloom,
-              motion blur, etc.)
+            m_StringArgument: Volume control
             m_BoolArgument: 0
           m_CallState: 2
 --- !u!114 &1054635057
@@ -37578,8 +37611,7 @@ MonoBehaviour:
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
-            m_StringArgument: Change the physics of Allomancy used to calculate Pushes
-              and Pulls
+            m_StringArgument: Physics of Allomancy used to calculate Pushes and Pulls
             m_BoolArgument: 0
           m_CallState: 2
   - eventID: 9
@@ -37595,8 +37627,7 @@ MonoBehaviour:
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
-            m_StringArgument: Change the physics of Allomancy used to calculate Pushes
-              and Pulls
+            m_StringArgument: Physics of Allomancy used to calculate Pushes and Pulls
             m_BoolArgument: 0
           m_CallState: 2
 --- !u!1001 &1404999318
@@ -55928,8 +55959,7 @@ MonoBehaviour:
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
-            m_StringArgument: Change the graphical appearance of the game (bloom,
-              motion blur, etc.)
+            m_StringArgument: Visuals and Post-processing effects
             m_BoolArgument: 0
           m_CallState: 2
   - eventID: 9
@@ -55945,8 +55975,7 @@ MonoBehaviour:
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
-            m_StringArgument: Change the graphical appearance of the game (bloom,
-              motion blur, etc.)
+            m_StringArgument: Visuals and Post-processing effects
             m_BoolArgument: 0
           m_CallState: 2
 --- !u!1 &1955026570
@@ -58547,41 +58576,6 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: d384f94ff36ed5947bc960a8fa285f91, type: 3}
---- !u!84 &2026631034
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  serializedVersion: 3
-  m_Width: 1567
-  m_Height: 882
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthFormat: 1
-  m_ColorFormat: 4
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 1
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &2028701808
 GameObject:
   m_ObjectHideFlags: 0
@@ -60400,7 +60394,7 @@ MonoBehaviour:
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
-            m_StringArgument: Change the UI appearance and elements of the HUD
+            m_StringArgument: UI appearance and elements of the HUD
             m_BoolArgument: 0
           m_CallState: 2
   - eventID: 9
@@ -60416,7 +60410,7 @@ MonoBehaviour:
             m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
             m_IntArgument: 0
             m_FloatArgument: 0
-            m_StringArgument: Change the UI appearance and elements of the HUD
+            m_StringArgument: UI appearance and elements of the HUD
             m_BoolArgument: 0
           m_CallState: 2
 --- !u!1 &2101012538

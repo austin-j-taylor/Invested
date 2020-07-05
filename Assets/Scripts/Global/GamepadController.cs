@@ -99,7 +99,7 @@ public class GamepadController : MonoBehaviour {
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad && SettingsMenu.settingsGameplay.gamepadRumble == 1) {
                 shaking = true;
                 GamePad.SetVibration(0, left, right);
-                yield return new WaitForSeconds(time);
+                yield return new WaitForSecondsRealtime(time);
                 GamePad.SetVibration(0, leftRumble, RightRumble);
                 shaking = false;
             }

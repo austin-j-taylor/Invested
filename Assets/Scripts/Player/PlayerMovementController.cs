@@ -105,6 +105,7 @@ public class PlayerMovementController : AllomanticPewter {
     }
     #endregion
 
+    Vector3 lastInput = Vector3.zero; // The last horizontal/vertical movement command sent to the player
     private bool jumpQueued;
     private bool lastWasSprintingOnGround, lastWasRollingOnGround;
     private float lastJumpTime;
@@ -248,8 +249,16 @@ public class PlayerMovementController : AllomanticPewter {
 
         // Handle all player movement control
         if (Player.CanControl && Player.CanControlMovement) {
+
             // Convert user input to movement vector
-            Vector3 movement = new Vector3(Keybinds.Horizontal(), 0f, Keybinds.Vertical());
+            // If the control wheel is open, use the last input for movement
+            Vector3 movement;
+            if(HUD.ControlWheelController.IsOpen) {
+                movement = lastInput;
+            } else {
+                movement = new Vector3(Keybinds.Horizontal(), 0f, Keybinds.Vertical());
+                lastInput = movement;
+            }
 
             // If is unclamped and upside-down, keep movement in an intuitive direction for the player
             // Rotate movement to be in direction of camera and clamp magnitude

@@ -398,6 +398,11 @@ public class Keybinds : MonoBehaviour {
         return Input.GetButton("Mouse2");
     }
     public static bool TogglePerspective() {
-        return Input.GetKeyDown(KeyCode.F5);
+        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) {
+            return Input.GetButtonDown("GamepadBack");
+        } else {
+            return Input.GetKeyDown(KeyCode.F5);
+
+        }
     }
 }

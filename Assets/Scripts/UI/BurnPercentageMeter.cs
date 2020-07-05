@@ -96,7 +96,7 @@ public class BurnPercentageMeter : MonoBehaviour {
     #endregion
 
     private void SetFillPercent(float rate, float rateAlternate) {
-        HUD.Crosshair.SetFillPercent(rate);
+        HUD.Crosshair.SetFillPercent(Mathf.Max(rate, rateAlternate));
     }
 
     public void SetForceTextColorStrong() {

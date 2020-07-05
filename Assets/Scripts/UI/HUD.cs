@@ -82,6 +82,10 @@ public class HUD : MonoBehaviour {
             ResetHUD();
         }
     }
+    // Reset the hud
+    public void ClearHUDBeforeSceneChange(Scene scene) {
+        ResetHUD();
+    }
 
     // Ready HUD elements for a certain simulation
     public static void EnableHUD() {
@@ -92,11 +96,6 @@ public class HUD : MonoBehaviour {
     public static void DisableHUD() {
         //instance.SetActive(false);
         hudGroup.alpha = 0;
-    }
-
-    // Reset the hud
-    public void ClearHUDBeforeSceneChange(Scene scene) {
-        ResetHUD();
     }
     // Clears the values currently on the HUD
     public static void ResetHUD() {
@@ -124,6 +123,7 @@ public class HUD : MonoBehaviour {
         HelpOverlayController.UpdateText();
         ControlWheelController.RefreshText();
     }
+
 
     #region staticHelpers
     /// <summary>

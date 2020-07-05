@@ -63,7 +63,7 @@ public class Environment_Tutorial3 : EnvironmentCinematic {
     protected override IEnumerator Trigger1() {
         while (HUD.ConversationHUDController.IsOpen)
             yield return null;
-        HUD.MessageOverlayCinematic.FadeIn(HowToAnchor + " to burn " + Pewter + " to " + OffWhite("anchor") + " yourself and carefully " + OffWhite("balance") + ".");
+        HUD.MessageOverlayCinematic.FadeIn(HowToAnchor + " to burn " + Pewter + " to " + PewterWhite("anchor") + " yourself and carefully " + PewterWhite("balance") + ".");
 
         while (!Player.PlayerPewter.IsAnchoring) {
             yield return null;

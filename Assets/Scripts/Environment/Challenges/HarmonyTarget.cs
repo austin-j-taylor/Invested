@@ -59,10 +59,15 @@ public class HarmonyTarget : MonoBehaviour {
         playerHasEntered = false;
         controllingPlayer = false;
         switch (numSpikes) {
-            case 3:
+            case 0:
+                spikeLeft.GetComponent<Renderer>().enabled = false;
+                spikeCenter.GetComponent<Renderer>().enabled = false;
+                spikeRight.GetComponent<Renderer>().enabled = false;
+                break;
+            case 1:
                 spikeLeft.GetComponent<Renderer>().enabled = true;
-                spikeCenter.GetComponent<Renderer>().enabled = true;
-                spikeRight.GetComponent<Renderer>().enabled = true;
+                spikeCenter.GetComponent<Renderer>().enabled = false;
+                spikeRight.GetComponent<Renderer>().enabled = false;
                 anim.SetInteger("SpikeCount", numSpikes);
                 break;
             case 2:
@@ -71,10 +76,10 @@ public class HarmonyTarget : MonoBehaviour {
                 spikeRight.GetComponent<Renderer>().enabled = true;
                 anim.SetInteger("SpikeCount", numSpikes);
                 break;
-            case 1:
+            default:
                 spikeLeft.GetComponent<Renderer>().enabled = true;
-                spikeCenter.GetComponent<Renderer>().enabled = false;
-                spikeRight.GetComponent<Renderer>().enabled = false;
+                spikeCenter.GetComponent<Renderer>().enabled = true;
+                spikeRight.GetComponent<Renderer>().enabled = true;
                 anim.SetInteger("SpikeCount", numSpikes);
                 break;
         }

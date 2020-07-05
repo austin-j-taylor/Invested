@@ -123,11 +123,24 @@ public class SceneSelectMenu : MonoBehaviour {
 
         HighlitButton = tutorial1Button;
     }
+    private void Start() {
+        Refresh();
+        gameObject.SetActive(false);
+    }
 
     public void Open() {
         gameObject.SetActive(true);
         tooltip.text = "";
         MainMenu.FocusOnButton(HighlitButton);
+        Refresh();
+    }
+
+    public void Close() {
+        gameObject.SetActive(false);
+        MainMenu.OpenTitleScreen();
+    }
+
+    private void Refresh() {
         // Lock levels when previous levels are not completed
         //levelMARL1Button.interactable = FlagsController.GetData("completeTutorial1");
         //levelMARL2Button.interactable = FlagsController.GetData("completeTutorial2");
@@ -145,18 +158,9 @@ public class SceneSelectMenu : MonoBehaviour {
         luthadelButtonDay.interactable = FlagsController.instance.completeTutorial4;
         luthadelButtonNight.interactable = FlagsController.instance.completeTutorial4;
         // Set the little "Completed" symbol next to each level to be enabled/disabled
-        for(int i = 0; i < buttons.Length; i++) {
+        for (int i = 0; i < buttons.Length; i++) {
             buttons[i].CheckCompleted();
         }
-    }
-
-    private void Start() {
-        gameObject.SetActive(false);
-    }
-
-    public void Close() {
-        gameObject.SetActive(false);
-        MainMenu.OpenTitleScreen();
     }
 
     public static void LoadScene(int scene) {

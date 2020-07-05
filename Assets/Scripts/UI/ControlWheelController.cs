@@ -29,6 +29,7 @@ public class ControlWheelController : MonoBehaviour {
 
     private Image circle;
     private Image[] spokes;
+    private GameObject[] keys;
     private Text textCenter;
     private Text textManual;
     private Text textArea;
@@ -71,6 +72,15 @@ public class ControlWheelController : MonoBehaviour {
         textArea = transform.Find("Selections/Spoke1/Text/Title/Description").GetComponent<Text>();
         textBubble = transform.Find("Selections/Spoke2/Text/Title/Description").GetComponent<Text>();
         textCoinshot = transform.Find("Selections/Spoke3/Text/Title/Description").GetComponent<Text>();
+        keys = new GameObject[] {
+            transform.Find("Selections/Spoke0/Text/Title/Key").gameObject,
+            transform.Find("Selections/Spoke1/Text/Title/Key").gameObject,
+            transform.Find("Selections/Spoke2/Text/Title/Key").gameObject,
+            transform.Find("Selections/Spoke3/Text/Title/Key").gameObject,
+            transform.Find("Selections/Spoke4b/Text/Key").gameObject,
+            transform.Find("Selections/Spoke5_6/Text/Title/Key").gameObject,
+            transform.Find("Selections/Spoke7/Text/Title/Key").gameObject,
+        };
     }
 
     void Start() {
@@ -317,7 +327,7 @@ public class ControlWheelController : MonoBehaviour {
     private void RefreshManual() {
         textManual.text = KeyPullPushAbridged + ": " + Pull_Push + "\n"
                 + KeyMark_PullPushAbridged + ": Mark target\n"
-                + HowToMultiMark + ": Mark multiple\n\n";
+                + HowToMultiMark + ":" + (SettingsMenu.settingsGameplay.UsingGamepad ? "\nMark multiple\n" : " Mark multiple\n\n");
     }
     private void RefreshArea() {
         textArea.text = KeyPullPushAbridged + ": " + Pull_Push + "\n"
@@ -385,6 +395,15 @@ public class ControlWheelController : MonoBehaviour {
                 spokes[i].gameObject.SetActive(false);
             }
         }
+    }
+
+    /// <summary>
+    /// Sets the visibility of the 1/2/3/4/C/X/Z hotkeys on the wheel.
+    /// </summary>
+    /// <param name="visible"></param>
+    public void SetHotkeysVisible(bool visible) {
+        for (int i = 0; i < keys.Length; i++)
+            keys[i].SetActive(visible);
     }
     #endregion
 }
