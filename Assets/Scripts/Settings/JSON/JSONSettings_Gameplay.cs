@@ -18,6 +18,7 @@ public class JSONSettings_Gameplay : JSONSettings {
 
     public int controlScheme;
     public int gamepadRumble; // 0 for Disabled, 1 for Enabled
+    public float gamepadRumbleIntensity;
     public int cameraFirstPerson; // 0 for third person, 1 for first person
     public float cameraDistance;
     public int cameraClamping; // 0 for Unclamped, 1 for Clamped

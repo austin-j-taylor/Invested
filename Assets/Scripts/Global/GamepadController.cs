@@ -79,7 +79,7 @@ public class GamepadController : MonoBehaviour {
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) {
                 if (SettingsMenu.settingsGameplay.gamepadRumble == 1) {
                     if (updateRumble && !shaking) {
-                        GamePad.SetVibration(0, leftRumble, rightRumble);
+                        GamePad.SetVibration(0, SettingsMenu.settingsGameplay.gamepadRumbleIntensity * leftRumble, SettingsMenu.settingsGameplay.gamepadRumbleIntensity * rightRumble);
                         updateRumble = false;
                     }
                 } else if (updateRumble) {
@@ -98,9 +98,9 @@ public class GamepadController : MonoBehaviour {
         public IEnumerator ShakeController(float left, float right, float time) {
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad && SettingsMenu.settingsGameplay.gamepadRumble == 1) {
                 shaking = true;
-                GamePad.SetVibration(0, left, right);
+                GamePad.SetVibration(0, SettingsMenu.settingsGameplay.gamepadRumbleIntensity * left, SettingsMenu.settingsGameplay.gamepadRumbleIntensity * right);
                 yield return new WaitForSecondsRealtime(time);
-                GamePad.SetVibration(0, leftRumble, RightRumble);
+                GamePad.SetVibration(0, SettingsMenu.settingsGameplay.gamepadRumbleIntensity * leftRumble, SettingsMenu.settingsGameplay.gamepadRumbleIntensity * RightRumble);
                 shaking = false;
             }
 #endif

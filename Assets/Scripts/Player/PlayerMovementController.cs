@@ -144,9 +144,10 @@ public class PlayerMovementController : AllomanticPewter {
     private void Update() {
         if (!PauseMenu.IsPaused) {
             if (Player.CanControl && Player.CanControlMovement) {
-                // walking/rolling/sprinting state machine
+                // anchoring/rolling/sprinting state machine
                 if (IsAnchoring) {
-                    // was walking
+                    // was anchoring
+                    GamepadController.SetRumbleLeft(.6f * GamepadController.rumbleFactor);
                     if (Keybinds.Sprint() && PewterReserve.HasMass) {
                         // start sprinting
                         IsSprinting = true;
@@ -154,13 +155,15 @@ public class PlayerMovementController : AllomanticPewter {
                         rb.inertiaTensor = new Vector3(momentOfInertiaMagnitude, momentOfInertiaMagnitude, momentOfInertiaMagnitude);
                         Player.PlayerFlywheelController.Retract();
                     } else if (!Keybinds.Walk() || !PewterReserve.HasMass) {
-                        // stop rolling
+                        // stop anchoring
+                        GamepadController.SetRumbleLeft(0);
                         IsAnchoring = false;
                         rb.inertiaTensor = new Vector3(momentOfInertiaMagnitude, momentOfInertiaMagnitude, momentOfInertiaMagnitude);
                         Player.PlayerFlywheelController.Retract();
                     } // continue walking
                 } else if (IsSprinting) {
                     // was sprinting
+                    GamepadController.SetRumbleLeft(.8f * GamepadController.rumbleFactor);
                     if (!Keybinds.Sprint() || !PewterReserve.HasMass) {
                         // stop sprinting
                         if (Keybinds.Walk() && PewterReserve.HasMass) {
@@ -169,6 +172,7 @@ public class PlayerMovementController : AllomanticPewter {
                             IsSprinting = false;
                         } else {
                             // start rolling;
+                            GamepadController.SetRumbleLeft(0);
                             IsSprinting = false;
                         }
                     }
@@ -253,7 +257,7 @@ public class PlayerMovementController : AllomanticPewter {
             // Convert user input to movement vector
             // If the control wheel is open, use the last input for movement
             Vector3 movement;
-            if(HUD.ControlWheelController.IsOpen) {
+            if (HUD.ControlWheelController.IsOpen) {
                 movement = lastInput;
             } else {
                 movement = new Vector3(Keybinds.Horizontal(), 0f, Keybinds.Vertical());
