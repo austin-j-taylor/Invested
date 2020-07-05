@@ -10,12 +10,12 @@ public class LevelCompletedScreen : MonoBehaviour {
     private Button continueButton;
     private Button returnButton;
 
-    private static GameObject levelCompletedScreen;
+    private static LevelCompletedScreen instance;
 
     public static HarmonyTarget InTarget { get; set; }
     public static bool IsOpen {
         get {
-            return levelCompletedScreen.activeSelf;
+            return instance.gameObject.activeSelf;
         }
     }
 
@@ -27,7 +27,7 @@ public class LevelCompletedScreen : MonoBehaviour {
         continueButton.onClick.AddListener(ClickContinue);
         returnButton.onClick.AddListener(ClickReturn);
 
-        levelCompletedScreen = gameObject;
+        instance = this;
         gameObject.SetActive(false);
         SceneManager.sceneLoaded += ClearAfterSceneChange;
     }
@@ -51,11 +51,12 @@ public class LevelCompletedScreen : MonoBehaviour {
 
     public static void OpenScreen(HarmonyTarget target) {
         InTarget = target;
-        levelCompletedScreen.SetActive(true);
+        instance.gameObject.SetActive(true);
+        instance.continueButton.gameObject.SetActive(!SceneSelectMenu.IsCurrentSceneTutorial);
         CameraController.UnlockCamera();
-        MainMenu.FocusOnButton(levelCompletedScreen.transform);
+        MainMenu.FocusOnButton(instance.transform);
     }
     public static void Close() {
-        levelCompletedScreen.SetActive(false);
+        instance.gameObject.SetActive(false);
     }
 }

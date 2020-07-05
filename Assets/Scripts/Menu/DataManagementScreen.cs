@@ -53,6 +53,7 @@ public class DataManagementScreen : MonoBehaviour {
         confirmButton.gameObject.SetActive(true);
         SetTooltip("Really delete all progression?");
         deletingSaves = true;
+        MainMenu.FocusOnButton(confirmButton);
     }
     private void OnClickTimeTrials() {
         saveButton.gameObject.SetActive(false);
@@ -60,17 +61,16 @@ public class DataManagementScreen : MonoBehaviour {
         confirmButton.gameObject.SetActive(true);
         SetTooltip("Really reset all time trial records?");
         deletingSaves = false;
+        MainMenu.FocusOnButton(confirmButton);
     }
     private void OnClickConfirm() {
         if (deletingSaves) {
             // DELETE SAVE DATA
-            Debug.Log("Deleting save data.");
             FlagsController.DeleteAllData();
             Open();
             saveButton.GetComponentInChildren<Text>().text = "Save data deleted.";
         } else {
             // DELETE TIME TRIAL DATA
-            Debug.Log("Deleting time trial data.");
             PlayerDataController.DeleteAllData();
             Open();
             timeTrialsButton.GetComponentInChildren<Text>().text = "Time trial data deleted.";

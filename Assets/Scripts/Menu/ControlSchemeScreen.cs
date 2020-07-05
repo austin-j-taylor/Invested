@@ -27,12 +27,14 @@ public class ControlSchemeScreen : MonoBehaviour {
         gamepadButton.onClick.AddListener(OnClickedGamepad);
         mkEQButton.onClick.AddListener(OnClickedMKEQ);
         mk54Button.onClick.AddListener(OnClickedMK54);
-        mkEQButton.gameObject.SetActive(false);
-        mk54Button.gameObject.SetActive(false);
     }
 
     public void Open() {
         gameObject.SetActive(true);
+        mouseKeyboardButton.gameObject.SetActive(true);
+        gamepadButton.gameObject.SetActive(true);
+        mkEQButton.gameObject.SetActive(false);
+        mk54Button.gameObject.SetActive(false);
     }
 
     public void Close(bool refreshing) {

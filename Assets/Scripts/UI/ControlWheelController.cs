@@ -299,10 +299,17 @@ public class ControlWheelController : MonoBehaviour {
 
     #region refreshing
     public void RefreshText() {
-        textManual.text = KeyPushPullAbridged + ": " + Pull_Push + "\non a single target\n\n\n";
-        textArea.text = KeyPushPullAbridged + ": " + Pull_Push + "\nin an area in front of you\n\n\n\n";
-        textBubble.text = KeyPushPullAbridged + ": " + Pull_Push + "\nin a bubble around you\n\n"
-        + "The bubble can stay open\nin other modes.\n";
+        if (Player.PlayerIronSteel.SteelReserve.IsEnabled) {
+            textManual.text = KeyPullPushAbridged + ": " + Pull_Push + "\non a single target\n\n\n";
+            textArea.text = KeyPullPushAbridged + ": " + Pull_Push + "\nin an area in front of you\n\n\n\n";
+            textBubble.text = KeyPullPushAbridged + ": " + Pull_Push + "\nin a bubble around you\n\n"
+            + "The bubble can stay open\nin other modes.\n";
+        } else {
+            textManual.text = KeyPullAbridged + ": " + Pull + "\non a single target\n\n\n";
+            textArea.text = KeyPullAbridged + ": " + Pull + "\nin an area in front of you\n\n\n\n";
+            textBubble.text = KeyPullAbridged + ": " + Pull + "\nin a bubble around you\n\n"
+            + "The bubble can stay open\nin other modes.\n";
+        }
         textCoinshot.text = KeyPullAbridged + ": throw and " + Push + " " + O_Coin + "\n\n\n\n\n";
         // The active mode gets the verbose text as well
         switch (Player.PlayerIronSteel.Mode) {
@@ -325,16 +332,29 @@ public class ControlWheelController : MonoBehaviour {
         }
     }
     private void RefreshManual() {
-        textManual.text = KeyPullPushAbridged + ": " + Pull_Push + "\n"
+        if (Player.PlayerIronSteel.SteelReserve.IsEnabled) {
+            textManual.text = KeyPullPushAbridged + ": " + Pull_Push + "\n"
                 + KeyMark_PullPushAbridged + ": Mark target\n"
                 + HowToMultiMark + ":" + (SettingsMenu.settingsGameplay.UsingGamepad ? "\nMark multiple\n" : " Mark multiple\n\n");
+        } else {
+            textManual.text = KeyPullAbridged + ": " + Pull + "\n"
+                + KeyMark_PullAbridged + ": Mark target\n"
+                + HowToMultiMark + ":" + (SettingsMenu.settingsGameplay.UsingGamepad ? "\nMark multiple\n" : " Mark multiple\n\n");
+        }
     }
     private void RefreshArea() {
-        textArea.text = KeyPullPushAbridged + ": " + Pull_Push + "\n"
-                + KeyMark_PullPushAbridged + ": Mark targets\n"
-                + KeyRadiusAbridged + ":\nsize of area\n\n";
+        if (Player.PlayerIronSteel.SteelReserve.IsEnabled) {
+            textArea.text = KeyPullPushAbridged + ": " + Pull_Push + "\n"
+                    + KeyMark_PullPushAbridged + ": Mark targets\n"
+                    + KeyRadiusAbridged + ":\nsize of area\n\n";
+        } else {
+            textArea.text = KeyPullAbridged + ": " + Pull + "\n"
+                    + KeyMark_PullAbridged + ": Mark targets\n"
+                    + KeyRadiusAbridged + ":\nsize of area\n\n";
+        }
     }
     private void RefreshBubble() {
+        // assume we'll never have bubble without Pushing
         textBubble.text = KeyPullPushAbridged + ": " + Pull_Push + "\n"
                 + KeyMark_PullPushAbridged + ": toggle bubble\n"
                 + KeyRadiusAbridged + ":\nsize of bubble\n\n";

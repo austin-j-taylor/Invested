@@ -75,6 +75,7 @@ public class HelpOverlayController : MonoBehaviour {
         StringBuilder builder = new StringBuilder();
         if (Verbose) {
             builder.AppendLine(HowToHelpAbridged + ": toggle this overlay (verbose)\n");
+            builder.AppendLine(HowToPerspectiveAbridged + ": change perspective");
         } else {
             builder.AppendLine(HowToHelpAbridged + ": toggle this overlay (simple)\n");
         }
@@ -107,7 +108,7 @@ public class HelpOverlayController : MonoBehaviour {
                             builder.AppendLine(" • " + KeyMultiMark + " + " + KeyMark_PullAbridged + ": " + Mark + " on multiple targets");
                         }
                         builder.AppendLine(
-                            " • " + KeyPushPullStrength + ": " + Pull + " strength"
+                            " • " + KeyPullStrength + ": " + Pull + " strength"
                         );
                     }
                 }
@@ -153,7 +154,7 @@ public class HelpOverlayController : MonoBehaviour {
                             builder.AppendLine(" • " + KeyMultiMark + " + " + KeyMark_PullAbridged + ": " + Mark + " on multiple targets");
                         }
                         builder.AppendLine(
-                            " • " + KeyPushPullStrength + ": " + Pull + " strength\n" +
+                            " • " + KeyPullStrength + ": " + Pull + " strength\n" +
                             " • " + KeyRadiusAbridged + ": size of area"
                         );
                     }
@@ -176,7 +177,7 @@ public class HelpOverlayController : MonoBehaviour {
                             " • " + KeyMarkAbridged + ": toggle bubble"
                         );
                         builder.AppendLine(
-                            " • " + KeyPushPullStrength + ": " + Pull + " strength\n" +
+                            " • " + KeyPullStrength + ": " + Pull + " strength\n" +
                             " • " + KeyRadiusAbridged + ": size of bubble"
                         );
                     }

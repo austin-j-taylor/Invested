@@ -129,7 +129,7 @@ public class TextCodes : MonoBehaviour {
     public static string LeftJoystick => Gray(s_Left_Joystick);
     public static string LeftJoystick_Zinc => ZincBlue(s_Left_Joystick);
     public static string RightJoystick => Gray(s_Right_Joystick);
-    public static string Back => Gold("Back");
+    public static string Back => Gray("Back");
     public static string Start => Gray("Start");
     public static string A => Gray("A");
     public static string B => PewterWhite("B");
@@ -258,14 +258,6 @@ public class TextCodes : MonoBehaviour {
         }
     }
     public static string HowToPush => s_Press_ + KeyPush;
-    public static string KeyPushPullAbridged {
-        get {
-            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
-                return RightTriggerAbridged + '/' + LeftTriggerAbridged;
-            else
-                return LeftClickAbridged + '/' + RightClickAbridged;
-        }
-    }
     public static string KeyPullPushAbridged {
         get {
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
@@ -302,7 +294,7 @@ public class TextCodes : MonoBehaviour {
     public static string HowToControlWheel {
         get {
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
-                return s_Click_in_ + "the " + LeftJoystick_Zinc;
+                return s_Hold_ + Y;
             else
                 return s_Hold_ + R;
         }
@@ -417,7 +409,7 @@ public class TextCodes : MonoBehaviour {
     public static string HowToStartBurningIron {
         get {
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
-                return s_Press_ + LightBlue(s_Right_Bumper);
+                return s_Press_ + RightTrigger;
             else
                 return LeftClick;
         }
@@ -442,14 +434,22 @@ public class TextCodes : MonoBehaviour {
                 return ScrollWheel;
         }
     }
-    public static string HowToPushPullStrength {
+    public static string KeyPullStrength {
         get {
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
-                return "Change the pressure on " + LeftTrigger + " and " + RightTrigger;
+                return RightTrigger + " pressure";
             else
-                return s_Scroll_ + "the " + ScrollWheel;
+                return ScrollWheel;
         }
     }
+    //public static string HowToPullStrength {
+    //    get {
+    //        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
+    //            return "Change the pressure on " + RightTrigger;
+    //        else
+    //            return s_Scroll_ + "the " + ScrollWheel;
+    //    }
+    //}
     public static string KeyRadiusAbridged {
         get {
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
@@ -494,7 +494,7 @@ public class TextCodes : MonoBehaviour {
     public static string HowToPerspectiveAbridged {
         get {
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
-                return Start + " > Settings > Gameplay";
+                return Back;
             else
                 return F5 + " or " + Escape + " > Settings > Gameplay";
         }

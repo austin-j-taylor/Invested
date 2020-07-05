@@ -25,7 +25,7 @@ public class FlagsController : MonoBehaviour {
     public bool controlSchemeChosen;
     public bool pwr_steel, pwr_pewter, pwr_zinc, pwr_coins; // for unlocking abilities
     public bool wheel_area, wheel_bubble;
-    // Be wary of adding any other public fields, as DeleteAllData will reset them.
+    // Be wary of adding any other public booleans, as DeleteAllData will reset them.
     #endregion
 
     public static FlagsController instance;
@@ -122,7 +122,8 @@ public class FlagsController : MonoBehaviour {
     // Clear all flags and abilities, except for the ControlSchemeSelected.
     public static void DeleteAllData() {
         foreach (FieldInfo field in instance.GetType().GetFields()) {
-            field.SetValue(instance, false);
+            if(field.FieldType == typeof(bool))
+                field.SetValue(instance, false);
         }
         instance.SaveJSON();
     }
