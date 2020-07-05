@@ -175,7 +175,7 @@ public class Player : PewterEntity {
     /// <summary>
     /// Reset certain values BEFORE the player enters a new scene
     /// </summary>
-    /// <param name="scene">the scene that will be entered</param>
+    /// <param name="scene">the scene that we are leaving</param>
     public void ClearPlayerBeforeSceneChange(Scene scene) {
         GetComponentInChildren<AllomechanicalGlower>().RemoveAllEmissions();
         PlayerFlywheelController.Clear();

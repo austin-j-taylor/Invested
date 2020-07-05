@@ -61,7 +61,8 @@ public abstract class JSONSettings : MonoBehaviour {
     /// <summary>
     /// Reset these settings to their default values.
     /// </summary>
-    public void ResetToDefaults() {
+    /// <param name="saveAfterResetting">If false, this will skip saving the newly reset settings after loading</param>
+    public void ResetToDefaults(bool saveAfterResetting = true) {
         try {
             StreamReader reader = new StreamReader(DefaultConfigFileName, true);
 
@@ -70,7 +71,8 @@ public abstract class JSONSettings : MonoBehaviour {
 
             JsonUtility.FromJsonOverwrite(jSONText, this);
 
-            SaveSettings();
+            if(saveAfterResetting)
+                SaveSettings();
             RefreshSettings();
         } catch (DirectoryNotFoundException e) {
             Debug.LogError(e.Message);

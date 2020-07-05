@@ -36,6 +36,7 @@ public class SceneSelectMenu : MonoBehaviour {
                 sceneIndex == sceneTutorial3 ||
                 sceneIndex == sceneTutorial4;
     }
+    public static bool IsCurrentSceneTutorial => IsTutorial(SceneManager.GetActiveScene().buildIndex);
 
     public bool IsOpen => gameObject.activeSelf;
 

@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 /// <summary>
@@ -102,6 +103,8 @@ public class SettingsMenu : MonoBehaviour {
         // Initial field assignments
         titleText.text = "Settings";
         closeText.text = "Back";
+
+        SceneManager.sceneLoaded += OnSceneLoad;
     }
 
     private void Start() {
@@ -144,11 +147,31 @@ public class SettingsMenu : MonoBehaviour {
             }
         }
     }
+    public void OnSceneLoad(Scene scene, LoadSceneMode mode) {
+        if (mode == LoadSceneMode.Single) { // Not loading all of the scenes, as it does at startup
+            if (SceneSelectMenu.IsTutorial(scene.buildIndex)) {
+                // If in a normal level, disable certain settings buttons
+                allomancyButton.interactable = false;
+                worldButton.interactable = false;
+                // Reset those settings to their defaults, but don't save them to the config files
+                settingsAllomancy.ResetToDefaults(false);
+                settingsWorld.ResetToDefaults(false);
+            } else {
+                allomancyButton.interactable = true;
+                worldButton.interactable = true;
+                // Load and refresh those settings from their possibly non-default values in their config files
+                settingsAllomancy.LoadSettings();
+                settingsAllomancy.RefreshSettings();
+                settingsWorld.LoadSettings();
+                settingsWorld.RefreshSettings();
+            }
+        }
+    }
     #endregion
 
-    #region refreshing
-    // Refresh Settings and Refresh Particular Settings to update button texts
-    private void RefreshSettings() {
+        #region refreshing
+        // Refresh Settings and Refresh Particular Settings to update button texts
+        private void RefreshSettings() {
         foreach (JSONSettings setting in settings) {
             setting.RefreshSettings();
         }
