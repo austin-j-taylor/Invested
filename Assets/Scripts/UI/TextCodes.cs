@@ -78,8 +78,11 @@ public class TextCodes : MonoBehaviour {
 
     // Known words that should always appear in a specific color
     public static string Iron => MidBlue("iron");
+    public static string Iron_proper => MidBlue("Iron");
     public static string Steel => Red("steel");
+    public static string Steel_proper => Red("Steel");
     public static string Pewter => PewterWhite("pewter");
+    public static string Pewter_proper => PewterWhite("Pewter");
     public static string Pull => MidBlue("Pull");
     public static string Pulls => MidBlue("Pulls");
     public static string Pulling => MidBlue("Pulling");

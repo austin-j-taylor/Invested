@@ -1,13 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.Text;
 
 /// <summary>
 /// Handles the menu that appears when a Challenge is started, giving an overview for it.
 /// </summary>
 public class ChallengeMenu : MonoBehaviour {
 
-    private Text challengeText, descriptionText, startText;
+    private Text challengeText, descriptionText, startText, recommendedText;
     private Button startButton, exitButton;
 
     private static ChallengeMenu instance;
@@ -17,6 +18,7 @@ public class ChallengeMenu : MonoBehaviour {
     private void Start() {
         challengeText = transform.Find("ChallengeText").GetComponent<Text>();
         descriptionText = challengeText.transform.Find("Description").GetComponent<Text>();
+        recommendedText = transform.Find("RecommendedText").GetComponent<Text>();
         startButton = transform.Find("Header/StartButton").GetComponent<Button>();
         startText = startButton.GetComponentInChildren<Text>();
         exitButton = transform.Find("Header/ExitButton").GetComponent<Button>();
@@ -38,7 +40,40 @@ public class ChallengeMenu : MonoBehaviour {
         MainMenu.FocusOnButton(instance.startButton);
         instance.challengeText.text = challenge.GetFullName();
         instance.descriptionText.text = challenge.challengeDescription;
-
+        // Set recommendations for challenge
+        StringBuilder builder = new StringBuilder();
+        builder.AppendLine("Recommended powers:");
+        if (challenge.recommendedIron) {
+            if (Player.PlayerIronSteel.IronReserve.IsEnabled)
+                builder.AppendLine(" • " + TextCodes.Iron_proper);
+            else
+                builder.AppendLine(" • " + TextCodes.MidBlue("<Not yet remembered>"));
+        }
+        if (challenge.recommendedSteel) {
+            if (Player.PlayerIronSteel.SteelReserve.IsEnabled)
+                builder.AppendLine(" • " + TextCodes.Steel_proper);
+            else
+                builder.AppendLine(" • " + TextCodes.Red("<Not yet remembered>"));
+        }
+        if (challenge.recommendedPewter) {
+            if (Player.PlayerPewter.PewterReserve.IsEnabled)
+                builder.AppendLine(" • " + TextCodes.Pewter_proper);
+            else
+                builder.AppendLine(" • " + TextCodes.PewterWhite("<Not yet remembered>"));
+        }
+        if (challenge.recommendedZinc) {
+            if (Player.CanControlZinc)
+                builder.AppendLine(" • " + TextCodes.Zinc);
+            else
+                builder.AppendLine(" • " + TextCodes.ZincBlue("<Not yet remembered>"));
+        }
+        if (challenge.recommendedCoins) {
+            if (Player.CanThrowCoins)
+                builder.AppendLine(" • " + TextCodes.O_Coins);
+            else
+                builder.AppendLine(" • " + TextCodes.Gold("<Not yet remembered>"));
+        }
+        instance.recommendedText.text = builder.ToString();
     }
     public static void OpenFailure() {
         HUD.DisableHUD();

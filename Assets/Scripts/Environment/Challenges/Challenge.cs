@@ -14,6 +14,8 @@ public class Challenge : MonoBehaviour {
     [TextArea]
     public string challengeDescription = "";
     [SerializeField]
+    public bool recommendedIron = true, recommendedSteel = true, recommendedPewter = false, recommendedZinc = false, recommendedCoins = false;
+    [SerializeField]
     protected GameObject[] failureObjects = null;
     private string[] failureObjectTags;
 
