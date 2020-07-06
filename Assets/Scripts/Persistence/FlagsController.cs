@@ -126,6 +126,7 @@ public class FlagsController : MonoBehaviour {
                 field.SetValue(instance, false);
         }
         instance.SaveJSON();
+        HUD.ControlWheelController.RefreshLocked();
     }
     #endregion
 }
