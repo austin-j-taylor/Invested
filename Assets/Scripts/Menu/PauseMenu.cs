@@ -93,22 +93,26 @@ public class PauseMenu : MonoBehaviour {
             instance.gameObject.SetActive(true);
             Open();
 
-            switch (GameManager.State) {
-                case GameManager.GameState.Standard:
-                    instance.resetText.text = "Return to Checkpoint";
-                    instance.quitText.text = "Quit Level";
-                    instance.settingsButton.gameObject.SetActive(true);
-                    instance.resetButton.gameObject.SetActive(true);
-                    instance.quitButton.gameObject.SetActive(true);
+            switch (GameManager.CameraState) {
+                case GameManager.GameCameraState.Standard:
+                    switch(GameManager.PlayState) {
+                        case GameManager.GamePlayState.Standard:
+                            instance.resetText.text = "Return to Checkpoint";
+                            instance.quitText.text = "Quit Level";
+                            instance.settingsButton.gameObject.SetActive(true);
+                            instance.resetButton.gameObject.SetActive(true);
+                            instance.quitButton.gameObject.SetActive(true);
+                            break;
+                        case GameManager.GamePlayState.Challenge:
+                            instance.resetText.text = "Restart Challenge";
+                            instance.quitText.text = "Exit Challenge";
+                            instance.settingsButton.gameObject.SetActive(false);
+                            instance.resetButton.gameObject.SetActive(true);
+                            instance.quitButton.gameObject.SetActive(true);
+                            break;
+                    }
                     break;
-                case GameManager.GameState.Challenge:
-                    instance.resetText.text = "Restart Challenge";
-                    instance.quitText.text = "Exit Challenge";
-                    instance.settingsButton.gameObject.SetActive(false);
-                    instance.resetButton.gameObject.SetActive(true);
-                    instance.quitButton.gameObject.SetActive(true);
-                    break;
-                case GameManager.GameState.Cutscene:
+                case GameManager.GameCameraState.Cutscene:
                     instance.settingsButton.gameObject.SetActive(false);
                     instance.resetButton.gameObject.SetActive(false);
                     instance.quitButton.gameObject.SetActive(false);
@@ -146,13 +150,13 @@ public class PauseMenu : MonoBehaviour {
 
     private void ClickReset() {
 
-        switch (GameManager.State) {
-            case GameManager.GameState.Standard:
+        switch (GameManager.PlayState) {
+            case GameManager.GamePlayState.Standard:
                 //SceneSelectMenu.ReloadScene();
                 Player.PlayerInstance.Respawn();
                 UnPause();
                 break;
-            case GameManager.GameState.Challenge:
+            case GameManager.GamePlayState.Challenge:
                 ChallengesManager.RestartCurrentChallenge();
                 UnPause();
                 break;
@@ -160,12 +164,12 @@ public class PauseMenu : MonoBehaviour {
     }
 
     private void ClickQuit() {
-        switch (GameManager.State) {
-            case GameManager.GameState.Standard:
+        switch (GameManager.PlayState) {
+            case GameManager.GamePlayState.Standard:
                 CameraController.UnlockCamera();
                 SceneSelectMenu.LoadScene(SceneSelectMenu.sceneTitleScreen);
                 break;
-            case GameManager.GameState.Challenge:
+            case GameManager.GamePlayState.Challenge:
                 ChallengesManager.LeaveCurrentChallenge();
                 UnPause();
                 break;

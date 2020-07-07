@@ -5,7 +5,7 @@ using Cinemachine;
 // Represents a challenge for the player to complete, like "go through these rings."
 public class Challenge : MonoBehaviour {
 
-    private CinemachineVirtualCamera vcam;
+    protected CinemachineVirtualCamera vcam;
 
     [SerializeField]
     protected string trialDataName = "";
@@ -48,8 +48,7 @@ public class Challenge : MonoBehaviour {
 
     protected virtual void IntroduceChallenge() {
         introduceTrigger.gameObject.SetActive(false);
-        CameraController.UsingCinemachine = true;
-        vcam.enabled = true;
+        CameraController.SetCinemachineCamera(vcam);
         manager.IntroduceChallenge(this);
 
         challengeObjects.gameObject.SetActive(true);
@@ -78,18 +77,17 @@ public class Challenge : MonoBehaviour {
 
         spike.transform.position = startPosition.transform.position + new Vector3(0, 2.5f, 0);
         spike.transform.rotation = spikeStartRotation;
-        GameManager.SetState(GameManager.GameState.Challenge);
+        GameManager.SetPlayState(GameManager.GamePlayState.Challenge);
         // Move player to start and set camera rotation
         Player.PlayerPewter.Clear();
         Player.PlayerInstance.transform.position = startPosition.position;
         CameraController.Clear();
         CameraController.SetRotation(startPosition.eulerAngles);
 
-        CameraController.UsingCinemachine = false;
-        vcam.enabled = false;
-
-
+        CameraController.DisableCinemachineCamera(vcam);
+        Debug.Log("vcam " + vcam.gameObject + " " + vcam + " " + vcam.enabled, vcam.gameObject);
     }
+    
     public virtual void FailChallenge() { }
     protected virtual void CompleteChallenge() {
         Completed = true;
@@ -110,10 +108,8 @@ public class Challenge : MonoBehaviour {
         StopAllCoroutines();
         HUD.MessageOverlayCinematic.Clear();
         Player.CanControl = true;
-        CameraController.UsingCinemachine = false;
-        vcam.enabled = false;
-        GameManager.SetState(GameManager.GameState.Standard);
-
+        CameraController.DisableCinemachineCamera(vcam);
+        GameManager.SetPlayState(GameManager.GamePlayState.Standard);
         challengeObjects.gameObject.SetActive(false);
         // Reset failure tags
         if (failureObjects != null) {

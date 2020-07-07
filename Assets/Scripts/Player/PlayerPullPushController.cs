@@ -815,7 +815,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
             }
             target.SetBlueLine(
                 CenterOfBlueLines,
-                target.Charge * blueLineWidthFactor * (CameraController.IsFirstPerson && !CameraController.UsingCinemachine ? firstPersonWidthFactor : 1),
+                target.Charge * blueLineWidthFactor * (CameraController.IsFirstPerson && GameManager.CameraState == GameManager.GameCameraState.Standard ? firstPersonWidthFactor : 1),
                 1,
                 closeness
             );

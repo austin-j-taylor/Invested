@@ -45,7 +45,6 @@ public class Challenge_TimeTrial : Challenge {
     }
 
     protected IEnumerator Countdown() {
-        CameraController.UsingCinemachine = true;
         Player.CanControl = false;
         sources[1].Stop();
 
@@ -63,7 +62,6 @@ public class Challenge_TimeTrial : Challenge {
         sources[1].Play();
 
         Player.CanControl = true;
-        CameraController.UsingCinemachine = false;
 
         StartCoroutine(TimeTrial(recordTime));
         StartCoroutine(SpikeTracer(recordTime));

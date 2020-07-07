@@ -30,7 +30,7 @@ public class PlayerTransparencyController : MonoBehaviour {
 
     void LateUpdate() {
         // Player is always visible if the Camera is doing something cinematic
-        if (!overrideHidden && !CameraController.UsingCinemachine && Player.CanControl) {
+        if (!overrideHidden && GameManager.CameraState == GameManager.GameCameraState.Standard && Player.CanControl) {
             float distance = (CameraController.ActiveCamera.transform.position - Player.PlayerInstance.transform.position).magnitude;
             // If the camera is SUPER close to the body, make it invisible
             if (distance < distanceThresholdInvisible) {

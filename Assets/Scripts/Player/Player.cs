@@ -248,7 +248,7 @@ public class Player : PewterEntity {
     protected override void OnCollisionEnter(Collision collision) {
         base.OnCollisionEnter(collision);
         // During challenges, check for The Floor Is Lava
-        if (GameManager.State == GameManager.GameState.Challenge) {
+        if (GameManager.PlayState == GameManager.GamePlayState.Challenge) {
             if (collision.transform.CompareTag("ChallengeFailure")) {
                 ChallengesManager.FailCurrentChallenge();
             }

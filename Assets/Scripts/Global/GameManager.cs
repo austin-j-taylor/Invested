@@ -10,7 +10,8 @@ using VolumetricLines;
 /// </summary>
 public class GameManager : MonoBehaviour {
 
-    public enum GameState { Standard, Challenge, Cutscene };
+    public enum GameCameraState { Standard, Cutscene };
+    public enum GamePlayState { Standard, Challenge};
 
     #region controllers
     // Sub-controllers, transforms
@@ -46,7 +47,8 @@ public class GameManager : MonoBehaviour {
     public static int Layer_BlueLinesVisible { get; private set; }
     #endregion
 
-    public static GameState State { get; private set; }
+    public static GameCameraState CameraState { get; private set; }
+    public static GamePlayState PlayState { get; private set; }
 
     #region clearing
     void Awake() {
@@ -70,7 +72,8 @@ public class GameManager : MonoBehaviour {
         Layer_BlueLines = LayerMask.NameToLayer("Blue Lines");
         Layer_BlueLinesVisible = LayerMask.NameToLayer("Blue Lines Visible");
 
-        State = GameState.Standard;
+        CameraState = GameCameraState.Standard;
+        PlayState = GamePlayState.Standard;
 
         SceneManager.sceneUnloaded += ClearBeforeSceneChange;
     }
@@ -121,17 +124,26 @@ public class GameManager : MonoBehaviour {
     #endregion
 
     // Changes the overall game state
-    public static void SetState(GameState newState) {
-        switch (State) {
-            case GameState.Standard:
+    public static void SetCameraState(GameCameraState newState) {
+        switch (CameraState) {
+            case GameCameraState.Standard:
 
-                State = newState;
                 break;
-            case GameState.Challenge:
+            case GameCameraState.Cutscene:
 
-                State = newState;
                 break;
-
         }
+        CameraState = newState;
+    }
+    public static void SetPlayState(GamePlayState newState) {
+        switch (PlayState) {
+            case GamePlayState.Standard:
+
+                break;
+            case GamePlayState.Challenge:
+
+                break;
+        }
+        PlayState = newState;
     }
 }

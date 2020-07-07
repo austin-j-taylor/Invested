@@ -22,7 +22,6 @@ public class CameraController : MonoBehaviour {
     public static Camera ActiveCamera { get; private set; }
     public static Transform CameraLookAtTarget { get; private set; }
     public static Transform CameraPositionTarget { get; private set; }
-    public static bool UsingCinemachine { get; set; } // Set to true when using Cinemachine animation. Do pretty much nothing in our Update().
     public static CinemachineBrain Cinemachine { get; set; }
 
     public static bool HasNotMovedCamera => currentX == startX && currentY == startY;
@@ -69,7 +68,6 @@ public class CameraController : MonoBehaviour {
         lastCameraDistance = 0;
         ActiveCamera.transform.localPosition = Vector3.zero;
         ActiveCamera.transform.localRotation = Quaternion.identity;
-        UsingCinemachine = false;
         Player.PlayerTransparancy.SetOverrideHidden(IsFirstPerson);
 
         if (Player.PlayerIronSteel.IsBurning) // Update blue lines when the camera is reset
@@ -83,7 +81,7 @@ public class CameraController : MonoBehaviour {
                 ActiveCamera.clearFlags = CameraClearFlags.Skybox;
                 Cinemachine.m_IgnoreTimeScale = true;
             } else {
-                UsingCinemachine = false;
+                GameManager.SetCameraState(GameManager.GameCameraState.Standard);
                 Cinemachine.m_IgnoreTimeScale = false;
                 LockCamera();
                 ActiveCamera.clearFlags = CameraClearFlags.Skybox;
@@ -92,8 +90,7 @@ public class CameraController : MonoBehaviour {
     }
     #region updatingCamera
     private void LateUpdate() {
-
-        if (cameraIsLocked && !UsingCinemachine) {
+        if (cameraIsLocked && GameManager.CameraState == GameManager.GameCameraState.Standard) {
             float deltaX;
             float deltaY;
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) {
@@ -348,7 +345,7 @@ public class CameraController : MonoBehaviour {
     #region cameraControls
     public static void SetCinemachineCamera(CinemachineVirtualCamera vcam) {
         Player.PlayerTransparancy.SetOverrideHidden(false);
-        UsingCinemachine = true;
+        GameManager.SetCameraState(GameManager.GameCameraState.Cutscene);
         vcam.enabled = true;
 
     }
@@ -362,7 +359,7 @@ public class CameraController : MonoBehaviour {
         while (Cinemachine.IsBlending)
             yield return null;
         Player.PlayerTransparancy.SetOverrideHidden(IsFirstPerson);
-        UsingCinemachine = false;
+        GameManager.SetCameraState(GameManager.GameCameraState.Standard);
     }
 
     public static void LockCamera() {
@@ -378,14 +375,14 @@ public class CameraController : MonoBehaviour {
 
     public void SetThirdPerson() {
         CameraPositionTarget.transform.SetParent(CameraLookAtTarget);
-        if (!UsingCinemachine) {
+        if (GameManager.CameraState == GameManager.GameCameraState.Standard) {
             Player.PlayerTransparancy.SetOverrideHidden(false);
             Clear();
         }
     }
     public void SetFirstPerson() {
         CameraPositionTarget.transform.SetParent(CameraLookAtTarget.Find("FirstPersonTarget"));
-        if (!UsingCinemachine) {
+        if (GameManager.CameraState == GameManager.GameCameraState.Standard) {
             Player.PlayerTransparancy.SetOverrideHidden(true);
             Clear();
         }
