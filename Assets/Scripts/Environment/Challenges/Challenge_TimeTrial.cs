@@ -27,7 +27,9 @@ public class Challenge_TimeTrial : Challenge {
     }
     public override void LeaveChallenge() {
         base.LeaveChallenge();
+        sources[0].Stop();
         sources[1].Stop();
+        GameManager.AudioManager.SetBGMVolume(1);
         HideAllRings();
     }
     public override void StartChallenge() {
@@ -41,12 +43,14 @@ public class Challenge_TimeTrial : Challenge {
     protected override void CompleteChallenge() {
         base.CompleteChallenge();
         sources[1].Stop();
+        GameManager.AudioManager.SetBGMVolume(1);
         sources[2].Play();
     }
 
     protected IEnumerator Countdown() {
         Player.CanControl = false;
         sources[1].Stop();
+        GameManager.AudioManager.SetBGMVolume(0);
 
         double recordTime = PlayerDataController.GetTime(trialDataName);
         HUD.MessageOverlayCinematic.FadeIn("Record: " + HUD.TimeMMSSMS(recordTime));

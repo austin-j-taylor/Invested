@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Environment_TestingGrounds : MonoBehaviour {
+public class Environment_TestingGrounds : Environment {
 
     //private bool done;
     [SerializeField]

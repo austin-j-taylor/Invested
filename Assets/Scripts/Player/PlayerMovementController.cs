@@ -407,10 +407,10 @@ public class PlayerMovementController : AllomanticPewter {
                 //Debug.DrawRay(transform.position, movement, Color.blue);
             }
             // Play rolling audio
-            if (!lastWasRollingOnGround && IsGrounded && movement.sqrMagnitude > 0) {
+            if (!lastWasRollingOnGround && IsGrounded/* && movement.sqrMagnitude > 0*/) {
                 Player.PlayerAudioController.Play_rolling();
                 lastWasRollingOnGround = true;
-            } else if (lastWasRollingOnGround && (!IsGrounded || movement.sqrMagnitude == 0)) {
+            } else if (lastWasRollingOnGround && (!IsGrounded/* || movement.sqrMagnitude == 0*/)) {
                 Player.PlayerAudioController.Stop_rolling();
                 lastWasRollingOnGround = false;
             }

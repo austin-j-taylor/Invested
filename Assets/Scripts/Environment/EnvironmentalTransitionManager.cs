@@ -10,6 +10,13 @@ public class EnvironmentalTransitionManager : MonoBehaviour {
     private void Awake() {
         interiors = transform.Find("Interiors").GetComponents<AudioSource>();
         exteriors = transform.Find("Exteriors").GetComponents<AudioSource>();
+
+        for (int i = 0; i < interiors.Length; i++) {
+            interiors[i].outputAudioMixerGroup = GameManager.AudioManager.MixerBGMGroup;
+        }
+        for (int i = 0; i < exteriors.Length; i++) {
+            exteriors[i].outputAudioMixerGroup = GameManager.AudioManager.MixerBGMGroup;
+        }
     }
 
     public void StartInterior() {

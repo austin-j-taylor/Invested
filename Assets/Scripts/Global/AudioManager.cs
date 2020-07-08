@@ -37,12 +37,14 @@ public class AudioManager : MonoBehaviour {
 
     public AudioMixerGroup MixerVoiceBeepsGroup { get; private set; }
     public AudioMixerGroup MixerEffectsGroup { get; private set; }
+    public AudioMixerGroup MixerBGMGroup { get; private set; }
     public bool SceneTransitionIsPlaying => sources[index_sceneTransition].isPlaying;
 
     private void Awake() {
         sources = GetComponents<AudioSource>();
         MixerVoiceBeepsGroup = mixer.FindMatchingGroups("VoiceBeeps")[0];
         MixerEffectsGroup = mixer.FindMatchingGroups("Effects")[0];
+        MixerBGMGroup = mixer.FindMatchingGroups("BGM")[0];
 
         sources[index_wind].clip = wind_loop;
         sources[index_wind].loop = true;
@@ -83,6 +85,7 @@ public class AudioManager : MonoBehaviour {
             sources[index_sceneTransition].Stop();
         }
         sources[index_sceneTransition].loop = false;
+        mixer.SetFloat("volumeBGM", 0);
     }
 
     #region accessors
@@ -94,6 +97,11 @@ public class AudioManager : MonoBehaviour {
     }
     public void SetMasterPitch(float pitch) {
         mixer.SetFloat("pitchMaster", pitch);
+    }
+    public void SetBGMVolume(float volume) {
+        if (volume == 0)
+            volume = 0.001f;
+        mixer.SetFloat("volumeBGM", Mathf.Log10(volume) * 20);
     }
     #endregion
 

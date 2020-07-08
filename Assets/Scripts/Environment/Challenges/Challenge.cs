@@ -85,7 +85,6 @@ public class Challenge : MonoBehaviour {
         CameraController.SetRotation(startPosition.eulerAngles);
 
         CameraController.DisableCinemachineCamera(vcam);
-        Debug.Log("vcam " + vcam.gameObject + " " + vcam + " " + vcam.enabled, vcam.gameObject);
     }
     
     public virtual void FailChallenge() { }

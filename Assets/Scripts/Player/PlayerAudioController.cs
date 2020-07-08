@@ -6,6 +6,8 @@ using System.Collections;
 /// </summary>
 public class PlayerAudioController : MonoBehaviour {
 
+    private const float windVelocityFactor = 10, windLerpFactor = 20, windVolumeVactor = 4;
+
     public AudioListener Listener { get; private set; }
 
     private AudioSource player_pewter_burst = null,
@@ -94,6 +96,7 @@ public class PlayerAudioController : MonoBehaviour {
         // wait until the last sound effect is done
         player_rolling_loop.loop = false;
         while (player_rolling_loop.isPlaying) {
+            ScaleRollToSpeed();
             yield return null;
         }
 
@@ -106,15 +109,33 @@ public class PlayerAudioController : MonoBehaviour {
         //}
         player_rolling_loop.loop = true;
         player_rolling_loop.Play();
+
+        while (player_rolling_loop.isPlaying) {
+            ScaleRollToSpeed();
+            yield return null;
+        }
     }
     private IEnumerator Playing_rolling_end() {
         // wait until the last sound effect is done
         player_rolling_loop.loop = false;
         while (player_rolling_loop.isPlaying) {
+            ScaleRollToSpeed();
             yield return null;
         }
         //sources[index_rolling].clip = rolling_end;
         //sources[index_rolling].Play();
     }
     #endregion
+    private void ScaleRollToSpeed() {
+        // Make pitch and volume of the rolling a function of the player's speed
+        if (Time.timeScale > 0 && Player.PlayerPewter.IsGrounded) {
+            float velocity = Player.PlayerIronSteel.rb.velocity.magnitude;
+            float factor = Mathf.Exp(-windVelocityFactor / velocity);
+            player_rolling_loop.volume = Mathf.Lerp(player_rolling_loop.volume, factor * windVolumeVactor, Time.deltaTime * windLerpFactor);
+            player_rolling_loop.pitch = Mathf.Lerp(player_rolling_loop.pitch, 1 + factor, Time.deltaTime * windLerpFactor);
+        } else {
+            player_rolling_loop.volume = Mathf.Lerp(player_rolling_loop.volume, 0, Time.deltaTime * windLerpFactor);
+            player_rolling_loop.pitch = Mathf.Lerp(player_rolling_loop.pitch, 1, Time.deltaTime * windLerpFactor);
+        }
+    }
 }
