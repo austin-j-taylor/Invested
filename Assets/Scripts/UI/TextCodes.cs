@@ -14,6 +14,7 @@ public class TextCodes : MonoBehaviour {
     public const string s_Mouse_Button_3 = "Mouse Button 3";
     public const string s_Mouse_Button_4 = "Mouse Button 4";
     public const string s_Mouse_Button_5 = "Mouse Button 5";
+    public const string s_Middle_Mouse_Button = "Middle Mouse Button";
     public const string s_Scroll_Wheel = "Scroll Wheel";
     public const string s_Mouse_Button_4Abridged = "MB4";
     public const string s_Mouse_Button_5Abridged = "MB5";
@@ -128,6 +129,7 @@ public class TextCodes : MonoBehaviour {
     public static string LeftTrigger => Red(s_Left_Trigger);
     public static string LeftTriggerAbridged => Red("LT");
     public static string MouseButton3 => Gray(s_Mouse_Button_3);
+    public static string MiddleMouseButton => Gold(s_Middle_Mouse_Button);
     public static string ScrollWheel => Gray(s_Scroll_Wheel);
     public static string LeftJoystick => Gray(s_Left_Joystick);
     public static string LeftJoystick_Zinc => ZincBlue(s_Left_Joystick);
@@ -474,7 +476,7 @@ public class TextCodes : MonoBehaviour {
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 return X;
             else
-                return F;
+                return F + " or " + MiddleMouseButton;
         }
     }
     public static string HowToThrow => s_Press_ + KeyThrow;

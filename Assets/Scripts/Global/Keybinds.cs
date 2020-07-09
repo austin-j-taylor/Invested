@@ -240,14 +240,14 @@ public class Keybinds : MonoBehaviour {
         if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
             return Input.GetButtonDown("GamepadX");
         else
-            return Input.GetKeyDown(KeyCode.F);
+            return Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.Mouse2);
         //return Input.GetKeyDown(KeyCode.Mouse2);
     }
     public static bool WithdrawCoin() {
         if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
             return Input.GetButton("GamepadX");
         else
-            return Input.GetKey(KeyCode.F);
+            return Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.Mouse2);
         //return Input.GetKey(KeyCode.Mouse2);
     }
 

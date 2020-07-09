@@ -9,7 +9,7 @@ public class Prop : MonoBehaviour {
 
     protected const float impulseWeak = 1; // any fall speed above this -> hard impact
     protected const float impulseStrong = 7; // any fall speed above this -> weak impact
-    protected const float expFactor = 40;
+    protected const float expFactorGeneral = 40, expFactorCoin = 1000;
 
     private enum SoundMaterial { General, MetalDark, MetalLight, Tile, Coin }
 
@@ -18,6 +18,7 @@ public class Prop : MonoBehaviour {
     private Rigidbody rb;
     private AudioSource sound;
     private AudioClip strong, weak;
+    private float expFactor = expFactorGeneral;
 
     private void Start() {
         rb = GetComponent<Rigidbody>();
@@ -46,6 +47,7 @@ public class Prop : MonoBehaviour {
             case SoundMaterial.Coin:
                 strong = GameManager.AudioManager.prop_coin_strong;
                 weak = GameManager.AudioManager.prop_coin_weak;
+                expFactor = expFactorCoin;
                 break;
         }
     }

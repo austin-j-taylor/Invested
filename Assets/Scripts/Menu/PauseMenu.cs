@@ -99,14 +99,12 @@ public class PauseMenu : MonoBehaviour {
                         case GameManager.GamePlayState.Standard:
                             instance.resetText.text = "Return to Checkpoint";
                             instance.quitText.text = "Quit Level";
-                            instance.settingsButton.gameObject.SetActive(true);
                             instance.resetButton.gameObject.SetActive(true);
                             instance.quitButton.gameObject.SetActive(true);
                             break;
                         case GameManager.GamePlayState.Challenge:
                             instance.resetText.text = "Restart Challenge";
                             instance.quitText.text = "Exit Challenge";
-                            instance.settingsButton.gameObject.SetActive(false);
                             instance.resetButton.gameObject.SetActive(true);
                             instance.quitButton.gameObject.SetActive(true);
                             break;

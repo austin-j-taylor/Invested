@@ -18,7 +18,7 @@ public class ChallengeMenu : MonoBehaviour {
     private void Start() {
         challengeText = transform.Find("ChallengeText").GetComponent<Text>();
         descriptionText = challengeText.transform.Find("Description").GetComponent<Text>();
-        recommendedText = transform.Find("RecommendedText").GetComponent<Text>();
+        recommendedText = transform.Find("RecommendedHeader/RecommendedText").GetComponent<Text>();
         startButton = transform.Find("Header/StartButton").GetComponent<Button>();
         startText = startButton.GetComponentInChildren<Text>();
         exitButton = transform.Find("Header/ExitButton").GetComponent<Button>();
@@ -73,6 +73,7 @@ public class ChallengeMenu : MonoBehaviour {
             else
                 builder.AppendLine(" • " + TextCodes.Gold("<Not yet remembered>"));
         }
+        builder.Remove(builder.Length - 1, 1); // remove trailing newline
         instance.recommendedText.text = builder.ToString();
     }
     public static void OpenFailure() {

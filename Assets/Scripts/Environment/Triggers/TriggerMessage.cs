@@ -3,7 +3,7 @@ using System.Collections;
 
 /*
  * When this is attached to a gameobject with a collider, it will play the Message with the given name.
- * Then, the object is destroyed.
+ * Then, the collider is disabeld.
  */
 
 [RequireComponent(typeof(Collider))]

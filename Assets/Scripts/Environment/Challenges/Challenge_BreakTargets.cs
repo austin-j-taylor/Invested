@@ -26,11 +26,12 @@ public class Challenge_BreakTargets : Challenge_TimeTrial {
                 done = done & targets[i].On;
             }
             raceTime += Time.deltaTime;
-            HUD.MessageOverlayCinematic.SetText(HUD.TimeMMSSMS(raceTime));
+            HUD.MessageOverlayDescriptive.SetHeader(HUD.TimeMMSSMS(raceTime));
             yield return null;
         }
+        HUD.MessageOverlayDescriptive.Clear();
         CompleteChallenge();
-        StartCoroutine(DisplayResults(raceTime, recordTime));
+        DisplayResults(raceTime, recordTime);
     }
 
     protected override IEnumerator SpikeTracer(double recordTime) {

@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-// Handles fading/transitioning of indoor vs. outdoor music and cloud effects.
+/// <summary>
+/// Automatically sets interior/exterior BGM to be in the BGM audio mixer group
+/// </summary>
 public class EnvironmentalTransitionManager : MonoBehaviour {
 
     private const float crossfadeTime = 3;

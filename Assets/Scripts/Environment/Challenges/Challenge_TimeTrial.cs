@@ -62,7 +62,7 @@ public class Challenge_TimeTrial : Challenge {
         yield return new WaitForSeconds(1);
         HUD.MessageOverlayCinematic.SetText("1");
         yield return new WaitForSeconds(1);
-        HUD.MessageOverlayCinematic.SetText("START");
+        HUD.MessageOverlayCinematic.FadeInFor("START", 2);
         sources[1].Play();
 
         Player.CanControl = true;
@@ -80,25 +80,24 @@ public class Challenge_TimeTrial : Challenge {
             rings[ringIndex].GetComponent<Collider>().enabled = true;
             while (!rings[ringIndex].Passed) {
                 raceTime += Time.deltaTime;
-                HUD.MessageOverlayCinematic.SetText(HUD.TimeMMSSMS(raceTime));
+                HUD.MessageOverlayDescriptive.SetHeader(HUD.TimeMMSSMS(raceTime));
                 yield return null;
             }
             ringIndex++;
         } while (ringIndex < rings.Length);
+        HUD.MessageOverlayDescriptive.Clear();
         CompleteChallenge();
-
+        DisplayResults(raceTime, recordTime);
     }
 
-    protected IEnumerator DisplayResults(double raceTime, double recordTime) {
+    protected void DisplayResults(double raceTime, double recordTime) {
         Debug.Log("Time: " + HUD.TimeMMSSMS(raceTime));
         if (raceTime < recordTime) {
-            HUD.MessageOverlayCinematic.FadeIn("Time: " + HUD.TimeMMSSMS(raceTime) + TextCodes.Blue(" (new record!)"));
+            HUD.MessageOverlayCinematic.FadeInFor("Time: " + HUD.TimeMMSSMS(raceTime) + TextCodes.Blue(" (new record!)"), 5);
             PlayerDataController.SetTimeTrial(trialDataName, raceTime);
         } else {
-            HUD.MessageOverlayCinematic.FadeIn("Time: " + HUD.TimeMMSSMS(raceTime));
+            HUD.MessageOverlayCinematic.FadeInFor("Time: " + HUD.TimeMMSSMS(raceTime), 5);
         }
-        yield return new WaitForSeconds(5);
-        HUD.MessageOverlayCinematic.FadeOut();
     }
 
     // Makes the spike follow the path of the rings
