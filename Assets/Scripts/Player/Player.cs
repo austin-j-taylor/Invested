@@ -164,6 +164,9 @@ public class Player : PewterEntity {
         if (Keybinds.ToggleHelpOverlay()) {
             HUD.HelpOverlayController.Toggle();
         }
+        if(!PauseMenu.IsPaused && Keybinds.ToggleTextLog()) {
+            HUD.TextLogController.Toggle();
+        }
         // Changing perspective
         if (Keybinds.TogglePerspective()) {
             CameraController.TogglePerspective();

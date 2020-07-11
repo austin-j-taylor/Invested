@@ -76,6 +76,7 @@ public class HelpOverlayController : MonoBehaviour {
         if (Verbose) {
             builder.AppendLine(HowToHelpAbridged + ": toggle this overlay (verbose)\n");
             builder.AppendLine(HowToPerspectiveAbridged + ": change perspective");
+            builder.AppendLine(HowToTextLog + ": view text log");
         } else {
             builder.AppendLine(HowToHelpAbridged + ": toggle this overlay (simple)\n");
         }
@@ -237,10 +238,10 @@ public class HelpOverlayController : MonoBehaviour {
         }
         SettingsMenu.RefreshSettingHelpOverlay((int)currentState);
     }
-    
+
     public void SetState(int intState) {
         State newState = (State)intState;
-        if(newState != currentState) {
+        if (newState != currentState) {
             switch (newState) {
                 case State.Closed:
                     Disable();

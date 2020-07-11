@@ -37,6 +37,7 @@ public class HUD : MonoBehaviour {
     public static HelpOverlayController HelpOverlayController { get; private set; }
     public static ConsoleController ConsoleController { get; private set; }
     public static ConversationHUDController ConversationHUDController { get; private set; }
+    public static TextLogController TextLogController { get; private set; }
 
     void Awake() {
         instance = gameObject;
@@ -56,6 +57,7 @@ public class HUD : MonoBehaviour {
         ControlWheelController = GetComponentInChildren<ControlWheelController>();
         ConsoleController = GetComponentInChildren<ConsoleController>();
         ConversationHUDController = GetComponentInChildren<ConversationHUDController>();
+        TextLogController = GetComponentInChildren<TextLogController>();
         SceneManager.sceneUnloaded += ClearHUDBeforeSceneChange;
         SceneManager.sceneLoaded += ClearAfterSceneChange;
     }
@@ -82,9 +84,11 @@ public class HUD : MonoBehaviour {
             ResetHUD();
         }
     }
-    // Reset the hud
+
+    // Reset the hud when the scene unloads.
     public void ClearHUDBeforeSceneChange(Scene scene) {
         ResetHUD();
+        TextLogController.LogPartition();
     }
 
     // Ready HUD elements for a certain simulation
@@ -113,6 +117,7 @@ public class HUD : MonoBehaviour {
                 ControlWheelController.Clear();
                 ConsoleController.Clear();
                 ConversationHUDController.Clear();
+                TextLogController.Clear();
                 Crosshair.Clear();
                 anim.SetBool("ControlWheelVisible", false);
             }

@@ -39,15 +39,15 @@ public class ConversationHUDController : MonoBehaviour {
         advanceSymbol = conversationWindow.Find("symbolAdvance").gameObject;
         advanceText = conversationWindow.Find("advanceText").GetComponent<Text>();
         advanceSymbol.SetActive(false);
-        advanceText.text = "";  
+        advanceText.text = "";
         anim = GetComponent<Animator>();
         state = State.Waiting;
     }
 
     private void Update() {
-        if(!PauseMenu.IsPaused && IsOpen && state == State.Waiting) {
+        if (!PauseMenu.IsPaused && IsOpen && state == State.Waiting) {
             // Advance the conversation
-            if(Keybinds.AdvanceConversation()) {
+            if (Keybinds.AdvanceConversation()) {
                 state = State.Writing; // Picks back up in the SpeakPhraseHelper coroutine
             }
         }
@@ -94,6 +94,7 @@ public class ConversationHUDController : MonoBehaviour {
         StringBuilder currentLineParsed = new StringBuilder();
         Style currentStyle = Style.Clear;
         VoiceBeeper currentSpeaker = Player.PlayerVoiceBeeper;
+        string currentSpeakerString = "";
 
         // For each character in the conversation:
         for (int i = 0; i < currentConversation.content.Length; i++) {
@@ -124,7 +125,7 @@ public class ConversationHUDController : MonoBehaviour {
                         case '*': // Custom signifier. Need to parse up to the next backslash as the name to use.
                             StringBuilder name = new StringBuilder();
                             i++;
-                            while(currentConversation.content[i] != '\\') {
+                            while (currentConversation.content[i] != '\\') {
                                 name.Append(currentConversation.content[i]);
                                 i++;
                             }
@@ -139,6 +140,7 @@ public class ConversationHUDController : MonoBehaviour {
                             Debug.LogError("Failed to parse convesation text in " + currentConversation.key + ": " + currentConversation.content + ": invalid speaker");
                             break;
                     }
+                    currentSpeakerString = headerText.text;
                 } else {
                     // a non-speaker signifier
                     switch (currentConversation.content[i]) {
@@ -177,7 +179,7 @@ public class ConversationHUDController : MonoBehaviour {
                             break;
                         case 'f':
                             // other font, based on next character
-                            switch(currentConversation.content[++i]) {
+                            switch (currentConversation.content[++i]) {
                                 case 'S': // steel alphabet
                                     parsed.Append("<font=\"steelAlphabetTMP\">");
                                     break;
@@ -306,7 +308,7 @@ public class ConversationHUDController : MonoBehaviour {
                     // and the speaker beeps, except for some punctuation-like characters
                     char character = currentConversation.content[i];
                     if (state == State.Writing && character != '(' && character != ')' && character != '.' && character != '\n' && character != '\r') {
-                        if(!Keybinds.AccelerateConversation() && currentSpeaker != null)
+                        if (!Keybinds.AccelerateConversation() && currentSpeaker != null)
                             currentSpeaker.Beep();
                     }
                 }
@@ -332,12 +334,12 @@ public class ConversationHUDController : MonoBehaviour {
                     break;
             }
             // Pause. Some characters wait longer.
-            if(state == State.Writing) {
+            if (state == State.Writing) {
                 char character = currentConversation.content[i];
                 // Don't pause if we're at punctuation, unless we're right before the end of the message
                 // (a close parenthesis also indicates the end of a thought, so skip if that's up next)
                 if ((character == '.' || character == '?' || character == '!')
-                        && !(i+1 < currentConversation.content.Length && (currentConversation.content[i+1] == '(') || currentConversation.content[i+1] == ')')) {
+                        && !(i + 1 < currentConversation.content.Length && (currentConversation.content[i + 1] == '(') || currentConversation.content[i + 1] == ')')) {
                     yield return Keybinds.AccelerateConversation() ? null : new WaitForSeconds(delayPerPause * 3);
                 } else {
                     yield return Keybinds.AccelerateConversation() ? null : new WaitForSeconds(delayPerCharacter);
@@ -352,14 +354,16 @@ public class ConversationHUDController : MonoBehaviour {
                 while (state == State.Waiting) {
                     yield return null;
                 }
+                // wipe the text on the screen and send it to the Text Log
+                HUD.TextLogController.LogLine(currentSpeakerString, conversationText.text);
                 advanceSymbol.SetActive(false);
                 advanceText.text = "";
-                // wipe the text on the screen
                 parsed.Clear();
                 currentLineParsed.Clear();
             }
         }
-        // Only reach here if the EOF was reached without an ending signifier. Act like there was an ending signifier.
+        // This conversation is over.
+        HUD.TextLogController.LogPartition();
         Close();
     }
 }

@@ -153,6 +153,7 @@ public class TextCodes : MonoBehaviour {
     public static string Escape => Gray("Escape");
     public static string H => Gray("H");
     public static string C => Gold("C");
+    public static string L => Gray("L");
     public static string F1 => Gray("F1");
     public static string F5 => Gray("F5");
     #endregion
@@ -291,7 +292,7 @@ public class TextCodes : MonoBehaviour {
         get {
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 return Y;
-                //return s_Click_in_ + LeftJoystick_Zinc;
+            //return s_Click_in_ + LeftJoystick_Zinc;
             else
                 return R;
         }
@@ -496,12 +497,20 @@ public class TextCodes : MonoBehaviour {
                 return H + " or " + F1;
         }
     }
-    public static string HowToPerspectiveAbridged {
+    public static string HowToTextLog {
         get {
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 return Back;
             else
-                return F5 + " or " + Escape + " > Settings > Gameplay";
+                return L;
+        }
+    }
+    public static string HowToPerspectiveAbridged {
+        get {
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
+                return Escape + " > Settings > Controls";
+            else
+                return F5 + " or " + Escape + " > Settings > Controls";
         }
     }
     #endregion

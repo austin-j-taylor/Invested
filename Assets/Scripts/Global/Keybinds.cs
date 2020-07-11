@@ -282,6 +282,13 @@ public class Keybinds : MonoBehaviour {
         }
     }
 
+    public static bool ToggleTextLog() {
+        if (SettingsMenu.settingsGameplay.UsingGamepad)
+            return Input.GetButtonDown("GamepadBack");
+        else
+            return Input.GetKeyDown(KeyCode.L);
+    }
+
     public static bool ZincTimeDown() {
         if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) {
             return Input.GetButtonDown("GamepadLeftJoystickClick");
@@ -399,10 +406,10 @@ public class Keybinds : MonoBehaviour {
     }
     public static bool TogglePerspective() {
         if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) {
-            return Input.GetButtonDown("GamepadBack");
+            return false;
+            //return Input.GetButtonDown("GamepadBack");
         } else {
             return Input.GetKeyDown(KeyCode.F5);
-
         }
     }
 }

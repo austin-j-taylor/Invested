@@ -71,6 +71,7 @@ public class PauseMenu : MonoBehaviour {
 
     private void LateUpdate() {
         if (Keybinds.ExitMenu()) {
+            // This should not control other menus closing, but it's convenient. I should change this later.
             if (settingsMenu.IsOpen) {
                 settingsMenu.BackAndSaveSettings();
             } else {
@@ -85,6 +86,7 @@ public class PauseMenu : MonoBehaviour {
             CameraController.UnlockCamera();
             Time.timeScale = 0f;
             GameManager.AudioManager.SetMasterPitch(0);
+            HUD.TextLogController.Close();
             HUD.DisableHUD();
 
             // Update blue lines for this frame
@@ -95,7 +97,8 @@ public class PauseMenu : MonoBehaviour {
 
             switch (GameManager.CameraState) {
                 case GameManager.GameCameraState.Standard:
-                    switch(GameManager.PlayState) {
+                    instance.settingsButton.gameObject.SetActive(true);
+                    switch (GameManager.PlayState) {
                         case GameManager.GamePlayState.Standard:
                             instance.resetText.text = "Return to Checkpoint";
                             instance.quitText.text = "Quit Level";

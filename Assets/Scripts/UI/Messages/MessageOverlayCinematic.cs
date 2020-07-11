@@ -29,19 +29,20 @@ public class MessageOverlayCinematic : MonoBehaviour {
 
     public void SetText(string text) {
         messageText.text = text;
+        HUD.TextLogController.LogLine("", text);
     }
 
     // Fades newText into messageText on the screen.
     public void FadeIn(string newText) {
         StopAllCoroutines();
         anim.SetBool("IsVisible", true);
-        messageText.text = newText;
+        SetText(newText);
     }
     // Fades newText into messageText on the screen, waits time seconds, then fades out
     public void FadeInFor(string newText, int time) {
         StopAllCoroutines();
         anim.SetBool("IsVisible", true);
-        messageText.text = newText;
+        SetText(newText);
         StartCoroutine(WaitForThenFadeOut(time));
     }
     // Displays the next text element of the text list last passes to FadeIn.
