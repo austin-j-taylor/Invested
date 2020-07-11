@@ -18,8 +18,6 @@ public class TextCodes : MonoBehaviour {
     public const string s_Scroll_Wheel = "Scroll Wheel";
     public const string s_Mouse_Button_4Abridged = "MB4";
     public const string s_Mouse_Button_5Abridged = "MB5";
-    public const string s_E = "E";
-    public const string s_Q = "Q";
     public const string s_Left_Trigger = "Left Trigger";
     public const string s_Right_Trigger = "Right Trigger";
     public const string s_Left_Bumper = "Left Bumper";
@@ -136,26 +134,28 @@ public class TextCodes : MonoBehaviour {
     public static string RightJoystick => Gray(s_Right_Joystick);
     public static string Back => Gray("Back");
     public static string Start => Gray("Start");
-    public static string A => Gray("A");
-    public static string B => PewterWhite("B");
-    public static string X => Gold("X");
-    public static string Y => ZincBlue("Y");
+    public static string A => "<sprite name=a>";
+    public static string B => "<sprite name=b>";
+    public static string X => "<sprite name=x>";
+    public static string Y => "<sprite name=y>";
     // Mouse/Keyboard
     public static string Mouse => Gray("Mouse");
-    public static string Shift => Gray("Shift");
-    public static string Space => Gray("Space");
-    public static string Ctrl => Gray("Ctrl");
-    public static string LeftAlt => Gray("Left Alt");
-    public static string Tab => ZincBlue("Tab");
-    public static string R => ZincBlue("R");
-    public static string F => Gold("F");
-    public static string WASD => Gray("W/A/S/D");
-    public static string Escape => Gray("Escape");
-    public static string H => Gray("H");
-    public static string C => Gold("C");
-    public static string L => Gray("L");
-    public static string F1 => Gray("F1");
-    public static string F5 => Gray("F5");
+    public static string Shift => "<sprite name=shift>";
+    public static string Space => "<sprite name=space>";
+    public static string Ctrl => "<sprite name=ctrl>";
+    public static string LeftAlt => "<sprite name=alt>";
+    public static string Tab => "<sprite name=tab>";
+    public static string E => "<sprite name=e>";
+    public static string Q => "<sprite name=q>";
+    public static string R => "<sprite name=r>";
+    public static string F => "<sprite name=f>";
+    public static string WASD => "<sprite name=w><sprite name=a><sprite name=s><sprite name=d>";
+    public static string Escape => "<sprite name=esc>";
+    public static string H => "<sprite name=h>";
+    public static string C => "<sprite name=c>";
+    public static string L => "<sprite name=l>";
+    public static string F1 => "<sprite name=f1>";
+    public static string F5 => "<sprite name=f5>";
     #endregion
 
     #region keys
@@ -315,10 +315,10 @@ public class TextCodes : MonoBehaviour {
                         return LightBlue(s_Mouse_Button_4);
                     }
                 case JSONSettings_Gameplay.MKEQ: {
-                        return LightBlue(s_E);
+                        return E;
                     }
                 case JSONSettings_Gameplay.MKQE: {
-                        return LightBlue(s_Q);
+                        return Q;
                     }
                 default: {
                         return LightBlue(s_Right_Bumper);
@@ -337,10 +337,10 @@ public class TextCodes : MonoBehaviour {
                         return LightBlue(s_Mouse_Button_4Abridged);
                     }
                 case JSONSettings_Gameplay.MKEQ: {
-                        return LightBlue(s_E);
+                        return E;
                     }
                 case JSONSettings_Gameplay.MKQE: {
-                        return LightBlue(s_Q);
+                        return Q;
                     }
                 default: {
                         return LightBlue(s_Right_BumperAbridged);
@@ -359,10 +359,10 @@ public class TextCodes : MonoBehaviour {
                         return LightRed(s_Mouse_Button_5);
                     }
                 case JSONSettings_Gameplay.MKEQ: {
-                        return LightRed(s_Q);
+                        return Q;
                     }
                 case JSONSettings_Gameplay.MKQE: {
-                        return LightRed(s_E);
+                        return E;
                     }
                 default: {
                         return LightRed(s_Left_Bumper);
@@ -380,10 +380,10 @@ public class TextCodes : MonoBehaviour {
                         return LightRed(s_Mouse_Button_5Abridged);
                     }
                 case JSONSettings_Gameplay.MKEQ: {
-                        return LightRed(s_Q);
+                        return Q;
                     }
                 case JSONSettings_Gameplay.MKQE: {
-                        return LightRed(s_E);
+                        return E;
                     }
                 default: {
                         return LightRed(s_Left_BumperAbridged);
@@ -401,10 +401,10 @@ public class TextCodes : MonoBehaviour {
                         return LightBlue(s_Mouse_Button_4Abridged) + '/' + LightRed(s_Mouse_Button_5Abridged);
                     }
                 case JSONSettings_Gameplay.MKEQ: {
-                        return LightBlue(s_E) + '/' + LightRed(s_Q);
+                        return E + '/' + Q;
                     }
                 case JSONSettings_Gameplay.MKQE: {
-                        return LightBlue(s_Q) + '/' + LightRed(s_E);
+                        return Q + '/' + E;
                     }
                 default: {
                         return LightBlue(s_Right_BumperAbridged) + '/' + LightRed(s_Left_BumperAbridged);
@@ -426,7 +426,7 @@ public class TextCodes : MonoBehaviour {
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 return s_Hold_ + Y + ", " + LightBlue(s_Right_Bumper) + ", and " + LightRed(s_Left_Bumper);
             else
-                return s_Press_ + Gray("X");
+                return s_Press_ + X;
         }
     }
 

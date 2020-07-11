@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections.Generic;
-using static TextCodes;
 using System.Collections;
+using TMPro;
 
 /// <summary>
 /// Cenimatically displays a message near the center of the screen.
@@ -14,13 +14,13 @@ public class MessageOverlayCinematic : MonoBehaviour {
     private const int transitionTime = 1;
 
     private Animator anim;
-    private Text messageText;
+    private TextMeshProUGUI messageText;
     private List<string> currentTextList = null;
     private int textIndex = 0;
 
     void Awake() {
         anim = GetComponent<Animator>();
-        messageText = transform.Find("Message").GetComponent<Text>();
+        messageText = transform.Find("Message").GetComponent<TextMeshProUGUI>();
     }
 
     public void Clear() {

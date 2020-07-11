@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Text;
 using static TextCodes;
 using static PlayerPullPushController;
+using TMPro;
 
 /// <summary>
 /// Controls the HUD element that displays help information to the player in the top-left corner
@@ -17,14 +18,14 @@ public class HelpOverlayController : MonoBehaviour {
     public bool IsOpen => currentState != State.Closed;
     private bool Verbose => currentState == State.Verbose;
 
-    private Text HelpTextLeft { get; set; }
+    private TextMeshProUGUI HelpTextLeft { get; set; }
     // Used to update the overlay when a change occurs
     private bool last_IronEnabled = false, last_SteelEnabled = false, last_ControlWheel = false, last_PewterEnabled = false, last_Zinc = false, last_Coins;
     private ControlMode last_Mode = ControlMode.Manual;
     private State currentState;
 
     void Awake() {
-        HelpTextLeft = transform.Find("HelpTextLeft").GetComponent<Text>();
+        HelpTextLeft = transform.Find("HelpTextLeft").GetComponent<TextMeshProUGUI>();
         currentState = State.Closed;
     }
 
