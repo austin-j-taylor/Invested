@@ -7,6 +7,7 @@ public class Keybinds : MonoBehaviour {
 
     #region constants
     private const float triggerDeadband = 0.01f;
+    private const float dpadDeadband = 0.01f;
     private const float doubleTapThreshold = 0.25f;
     #endregion
 
@@ -18,6 +19,7 @@ public class Keybinds : MonoBehaviour {
     // Only used for convert Gamepad axes to binary buttons
     private static bool lastWasPulling = false;
     private static bool lastWasPushing = false;
+    private static bool lastWasDPadRight = false;
     #endregion
 
     // Mouse/Stick Axis names
@@ -29,6 +31,7 @@ public class Keybinds : MonoBehaviour {
     private void LateUpdate() {
         lastWasPulling = IronPulling();
         lastWasPushing = SteelPushing();
+        lastWasDPadRight = Input.GetAxis("GamepadDPadX") > dpadDeadband;
     }
 
     public static bool PullDown() {
@@ -241,14 +244,24 @@ public class Keybinds : MonoBehaviour {
             return Input.GetButtonDown("GamepadX");
         else
             return Input.GetKeyDown(KeyCode.F) || Input.GetKeyDown(KeyCode.Mouse2);
-        //return Input.GetKeyDown(KeyCode.Mouse2);
     }
     public static bool WithdrawCoin() {
         if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
             return Input.GetButton("GamepadX");
         else
             return Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.Mouse2);
-        //return Input.GetKey(KeyCode.Mouse2);
+    }
+    public static bool TossCoinDown() {
+        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
+            return !lastWasDPadRight && Input.GetAxis("GamepadDPadX") > dpadDeadband;
+        else
+            return false;
+    }
+    public static bool TossCoinCondition() {
+        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
+            return Input.GetAxis("GamepadDPadX") > dpadDeadband;
+        else
+            return Walk();
     }
 
     public static bool MultipleMarks() => Walk();

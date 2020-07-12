@@ -113,6 +113,7 @@ public class TextCodes : MonoBehaviour {
     public static string RightJoystickClick => "<sprite name=gamepad_click_r>";
     public static string DPadUpDown => "<sprite name=gamepad_dpad_ud>";
     public static string DPadLeftRight => "<sprite name=gamepad_dpad_lr>";
+    public static string DPadRight => "<sprite name=gamepad_dpad_r>";
     public static string Back => "<sprite name=gamepad_back>";
     public static string Start => "<sprite name=gamepad_start>";
     public static string A => "<sprite name=gamepad_a>";
@@ -143,9 +144,20 @@ public class TextCodes : MonoBehaviour {
     public static string Escape => "<sprite name=esc>";
     public static string H => "<sprite name=h>";
     public static string C => "<sprite name=c>";
+    public static string Z => "<sprite name=z>";
     public static string L => "<sprite name=l>";
     public static string F1 => "<sprite name=f1>";
     public static string F5 => "<sprite name=f5>";
+    public static string Numeric1 => "<sprite name=key1>";
+    public static string Numeric2 => "<sprite name=key2>";
+    public static string Numeric3 => "<sprite name=key3>";
+    public static string Numeric4 => "<sprite name=key4>";
+    public static string Numeric5 => "<sprite name=key5>";
+    public static string Numeric6 => "<sprite name=key6>";
+    public static string Numeric7 => "<sprite name=key7>";
+    public static string Numeric8 => "<sprite name=key8>";
+    public static string Numeric9 => "<sprite name=key9>";
+    public static string Numeric0 => "<sprite name=key0>";
     #endregion
 
     #region keys
@@ -182,7 +194,7 @@ public class TextCodes : MonoBehaviour {
         get {
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 return RightJoystickClick;
-                //return s_Click_in_ + "the " + RightJoystick;
+            //return s_Click_in_ + "the " + RightJoystick;
             else
                 return s_Hold_ + Ctrl;
         }
@@ -268,7 +280,7 @@ public class TextCodes : MonoBehaviour {
         get {
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 return LeftJoystickClick;
-                //return s_Click_in_ + LeftJoystick_Zinc;
+            //return s_Click_in_ + LeftJoystick_Zinc;
             else
                 return Tab;
         }
@@ -277,7 +289,7 @@ public class TextCodes : MonoBehaviour {
         get {
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
                 return LeftJoystickClick;
-                //return s_Click_in_ + "the " + LeftJoystick_Zinc;
+            //return s_Click_in_ + "the " + LeftJoystick_Zinc;
             else
                 return s_Hold_ + Tab;
         }
@@ -299,6 +311,13 @@ public class TextCodes : MonoBehaviour {
                 return s_Hold_ + R;
         }
     }
+    public static string KeyManual => SettingsMenu.settingsGameplay.UsingGamepad ? "" : Numeric1;
+    public static string KeyArea => SettingsMenu.settingsGameplay.UsingGamepad ? "" : Numeric2;
+    public static string KeyBubble => SettingsMenu.settingsGameplay.UsingGamepad ? "" : Numeric3;
+    public static string KeyCoinshot => SettingsMenu.settingsGameplay.UsingGamepad ? "" : Numeric4;
+    public static string KeyThrowingMode => SettingsMenu.settingsGameplay.UsingGamepad ? "" : C;
+    public static string KeyDeselectAll => SettingsMenu.settingsGameplay.UsingGamepad ? "" : Z;
+    public static string KeyStopBurning => SettingsMenu.settingsGameplay.UsingGamepad ? "" : X;
     public static string KeyMark_Pull {
         get {
             switch (SettingsMenu.settingsGameplay.controlScheme) {
@@ -415,17 +434,9 @@ public class TextCodes : MonoBehaviour {
         }
     }
 
-    public static string HowToStopBurning {
-        get {
-            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
-                return s_Hold_ + Y + ", " + RightBumper + ", and " + LeftBumper;
-            else
-                return s_Press_ + X;
-        }
-    }
 
-    public static string HowToMultiMark => HowToAnchor;
-    public static string KeyMultiMark => KeyAnchor;
+    public static string HowToMultiMark => HowToAnchor + " + " + KeyMarkAbridged;
+    public static string KeyMultiMark => KeyAnchor + " + " + KeyMarkAbridged;
     public static string KeyPushPullStrength {
         get {
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
@@ -475,6 +486,14 @@ public class TextCodes : MonoBehaviour {
         }
     }
     public static string HowToThrow => s_Press_ + KeyThrow;
+    public static string KeyToss {
+        get {
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
+                return DPadRight;
+            else
+                return KeyAnchor + " + " + F + " or " + MiddleMouseButton;
+        }
+    }
     public static string HowToHelp {
         get {
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)

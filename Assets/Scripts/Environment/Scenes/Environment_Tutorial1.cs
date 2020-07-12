@@ -72,7 +72,7 @@ public class Environment_Tutorial1 : EnvironmentCinematic {
 
     }
     protected override IEnumerator Trigger0() {
-        HUD.HelpOverlayController.EnableSimple();
+        HUD.HelpOverlayController.SetState(1);
         yield break;
     }
     protected override IEnumerator Trigger1() {

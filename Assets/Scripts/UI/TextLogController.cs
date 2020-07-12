@@ -30,7 +30,8 @@ public class TextLogController : MonoBehaviour {
 
     public void Open() {
         gameObject.SetActive(true);
-        CameraController.UnlockCamera();
+        if (SettingsMenu.settingsGameplay.controlScheme != JSONSettings_Gameplay.Gamepad)
+            CameraController.UnlockCamera();
     }
     public void Close() {
         gameObject.SetActive(false);

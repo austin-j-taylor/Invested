@@ -95,7 +95,7 @@ public class HelpOverlayController : MonoBehaviour {
                         " • " + KeyMarkAbridged + " " + Mark + " for " + Pulling + '/' + Pushing
                     );
                     if (Verbose) {
-                        builder.AppendLine(" • " + KeyMultiMark + " + " + KeyMarkAbridged + " " + Mark + " on multiple targets");
+                        builder.AppendLine(" • " + KeyMultiMark + Mark + " on multiple targets");
                     }
                     builder.AppendLine(
                         " • " + KeyPushPullStrength + ": " + Push_Pull + " strength"
@@ -107,7 +107,7 @@ public class HelpOverlayController : MonoBehaviour {
                             " • " + KeyMark_PullAbridged + " " + Mark + " for " + Pulling
                         );
                         if (Verbose) {
-                            builder.AppendLine(" • " + KeyMultiMark + " + " + KeyMark_PullAbridged + " " + Mark + " on multiple targets");
+                            builder.AppendLine(" • " + KeyMultiMark + Mark + " on multiple targets");
                         }
                         builder.AppendLine(
                             " • " + KeyPullStrength + ": " + Pull + " strength"
@@ -127,7 +127,7 @@ public class HelpOverlayController : MonoBehaviour {
                     " • " + KeyMarkAbridged + " " + Mark + " for " + Pulling + '/' + Pushing
                 );
                 if (Verbose) {
-                    builder.AppendLine(" • " + KeyMultiMark + " + " + KeyMarkAbridged + " " + Mark + " on multiple targets");
+                    builder.AppendLine(" • " + KeyMultiMark + Mark + " on multiple targets");
                 }
                 builder.AppendLine(
                     " • " + KeyPushPullStrength + ": " + Push_Pull + " strength"
@@ -140,7 +140,7 @@ public class HelpOverlayController : MonoBehaviour {
                         " • " + KeyMarkAbridged + " " + Mark + " for " + Pulling + '/' + Pushing
                     );
                     if (Verbose) {
-                        builder.AppendLine(" • " + KeyMultiMark + " + " + KeyMarkAbridged + " " + Mark + " on multiple targets");
+                        builder.AppendLine(" • " + KeyMultiMark + Mark + " on multiple targets");
                     }
                     builder.AppendLine(
                         " • " + KeyPushPullStrength + ": " + Push_Pull + " strength\n" +
@@ -153,7 +153,7 @@ public class HelpOverlayController : MonoBehaviour {
                             " • " + KeyMark_PullAbridged + " " + Mark + " for " + Pulling
                         );
                         if (Verbose) {
-                            builder.AppendLine(" • " + KeyMultiMark + " + " + KeyMark_PullAbridged + " " + Mark + " on multiple targets");
+                            builder.AppendLine(" • " + KeyMultiMark + Mark + " on multiple targets");
                         }
                         builder.AppendLine(
                             " • " + KeyPullStrength + ": " + Pull + " strength\n" +
@@ -192,7 +192,7 @@ public class HelpOverlayController : MonoBehaviour {
                 KeyControlWheel + " " + ControlWheel
             );
             if (Verbose && SettingsMenu.settingsGameplay.controlScheme != JSONSettings_Gameplay.Gamepad) {
-                builder.AppendLine(" • 1/2/3/4/C/X/Z: " + ControlWheel + " hotkeys");
+                builder.AppendLine(" • " + KeyManual + KeyArea + KeyBubble + KeyCoinshot + KeyThrowingMode + KeyDeselectAll + KeyStopBurning + ": " + ControlWheel + " hotkeys");
             }
         }
 
@@ -214,7 +214,7 @@ public class HelpOverlayController : MonoBehaviour {
                 //    builder.AppendLine(" • " + Shift + " + " + KeyThrowAbridged + " Mark and Throw " + O_Coin);
                 //}
                 builder.AppendLine(" • " + KeyJump + " + " + KeyThrow + " Throw " + O_Coin + " downwards, weighted by " + KeyMove +
-                    "\n • " + KeyAnchor + " + " + KeyThrow + " Toss without " + Pushing);
+                    "\n • " + KeyToss + " Toss without " + Pushing);
             }
         }
 
@@ -237,36 +237,42 @@ public class HelpOverlayController : MonoBehaviour {
                 Disable();
                 break;
         }
-        SettingsMenu.RefreshSettingHelpOverlay((int)currentState);
     }
 
+    /// <summary>
+    /// Sets the state to the state corresponding to intState. Should only be used by JSONSettings_Interface.
+    /// </summary>
+    /// <param name="intState">the State as an integer</param>
     public void SetState(int intState) {
         State newState = (State)intState;
         if (newState != currentState) {
             switch (newState) {
                 case State.Closed:
-                    Disable();
+                    Disable(false);
                     break;
                 case State.Simple:
-                    EnableSimple();
+                    EnableSimple(false);
                     break;
                 case State.Verbose:
-                    EnableVerbose();
+                    EnableVerbose(false);
                     break;
             }
         }
     }
 
-    public void EnableSimple() {
+    public void EnableSimple(bool refreshSetting = true) {
         currentState = State.Simple;
         UpdateText();
+        SettingsMenu.RefreshSettingHelpOverlay((int)currentState);
     }
-    public void EnableVerbose() {
+    public void EnableVerbose(bool refreshSetting = true) {
         currentState = State.Verbose;
         UpdateText();
+        SettingsMenu.RefreshSettingHelpOverlay((int)currentState);
     }
-    public void Disable() {
+    public void Disable(bool refreshSetting = true) {
         currentState = State.Closed;
         UpdateText();
+        SettingsMenu.RefreshSettingHelpOverlay((int)currentState);
     }
 }

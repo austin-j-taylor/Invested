@@ -188,14 +188,22 @@ public class PlayerPullPushController : AllomanticIronSteel {
         // Assign Burn percentage targets based on the previously changed burn percentage/target magnitudes
         if (SettingsMenu.settingsAllomancy.pushControlStyle == 0) { // Percentage
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) { // Gamepad
-                // If throwing a coin, the Pushing burn target is 1.
-                if(Keybinds.WithdrawCoin()) {
-                    SteelBurnPercentageTarget = 1;
-                    steelBurnPercentageLerp = 1;
+                                                                                                // If throwing a coin, the Pushing burn target is 1.
+                if (Mode == ControlMode.Bubble) {
+                    if (Keybinds.WithdrawCoin()) {
+                        SteelBurnPercentageTarget = 1;
+                        steelBurnPercentageLerp = 1;
+                    }
+                    SetBubblePercentageTarget(Mathf.Max(Keybinds.LeftBurnPercentage(), Keybinds.RightBurnPercentage()));
                 } else {
-                    SetPushPercentageTarget(Keybinds.LeftBurnPercentage());
+                    if (Keybinds.WithdrawCoin()) {
+                        SteelBurnPercentageTarget = 1;
+                        steelBurnPercentageLerp = 1;
+                    } else {
+                        SetPushPercentageTarget(Keybinds.LeftBurnPercentage());
+                    }
+                    SetPullPercentageTarget(Keybinds.RightBurnPercentage());
                 }
-                SetPullPercentageTarget(Keybinds.RightBurnPercentage());
             }
         } else { // Magnitude
             if (HasPullTarget || HasPushTarget) {
@@ -1083,21 +1091,26 @@ public class PlayerPullPushController : AllomanticIronSteel {
             if (SettingsMenu.settingsAllomancy.pushControlStyle == 1) // Magnitude
                 HUD.BurnPercentageMeter.SetBurnRateMeterForceMagnitude(LastAllomanticForce, LastAnchoredPushBoost, IronBurnPercentageTarget, SteelBurnPercentageTarget, forceMagnitudeTarget);
             else if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) {
-                if (SteelPushing) {
-                    if (IronPulling) {
-                        HUD.BurnPercentageMeter.SetBurnRateMeterPercentage(LastAllomanticForce, LastAnchoredPushBoost,
-                            IronBurnPercentageTarget, SteelBurnPercentageTarget);
-                    } else {
-                        HUD.BurnPercentageMeter.SetBurnRateMeterPercentage(LastAllomanticForce, LastAnchoredPushBoost,
-                            0, SteelBurnPercentageTarget);
-                    }
+                if (Mode == ControlMode.Bubble) {
+                    HUD.BurnPercentageMeter.SetBurnRateMeterPercentage(LastAllomanticForce, LastAnchoredPushBoost,
+                        BubbleBurnPercentageTarget, BubbleBurnPercentageTarget);
                 } else {
-                    if (IronPulling) {
-                        HUD.BurnPercentageMeter.SetBurnRateMeterPercentage(LastAllomanticForce, LastAnchoredPushBoost,
-                            IronBurnPercentageTarget, 0);
+                    if (SteelPushing) {
+                        if (IronPulling) {
+                            HUD.BurnPercentageMeter.SetBurnRateMeterPercentage(LastAllomanticForce, LastAnchoredPushBoost,
+                                IronBurnPercentageTarget, SteelBurnPercentageTarget);
+                        } else {
+                            HUD.BurnPercentageMeter.SetBurnRateMeterPercentage(LastAllomanticForce, LastAnchoredPushBoost,
+                                0, SteelBurnPercentageTarget);
+                        }
                     } else {
-                        HUD.BurnPercentageMeter.SetBurnRateMeterPercentage(LastAllomanticForce, LastAnchoredPushBoost,
-                            IronBurnPercentageTarget, SteelBurnPercentageTarget);
+                        if (IronPulling) {
+                            HUD.BurnPercentageMeter.SetBurnRateMeterPercentage(LastAllomanticForce, LastAnchoredPushBoost,
+                                IronBurnPercentageTarget, 0);
+                        } else {
+                            HUD.BurnPercentageMeter.SetBurnRateMeterPercentage(LastAllomanticForce, LastAnchoredPushBoost,
+                                IronBurnPercentageTarget, SteelBurnPercentageTarget);
+                        }
                     }
                 }
             } else {

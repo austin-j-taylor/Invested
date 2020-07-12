@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using static TextCodes;
+using TMPro;
 
 /// <summary>
 /// Controls the HUD element (and all logic) for the Control Wheel, which is used for various control modes
@@ -29,12 +30,12 @@ public class ControlWheelController : MonoBehaviour {
 
     private Image circle;
     private Image[] spokes;
-    private GameObject[] keys;
-    private Text textCenter;
-    private Text textManual;
-    private Text textArea;
-    private Text textBubble;
-    private Text textCoinshot;
+    private TextMeshProUGUI[] keys;
+    private TextMeshProUGUI textCenter;
+    private TextMeshProUGUI textManual;
+    private TextMeshProUGUI textArea;
+    private TextMeshProUGUI textBubble;
+    private TextMeshProUGUI textCoinshot;
 
     private Selection highlit; // the selection being hovered over
     private Selection selectedSpoke; // manual, area, etc.
@@ -66,20 +67,20 @@ public class ControlWheelController : MonoBehaviour {
         selectedSpoke = Selection.Manual;
         selectedCoin = Selection.Coin_Semi;
         circle = transform.Find("Selections/Circle").GetComponent<Image>();
-        spokes = transform.Find("Selections").GetComponentsInChildren<Image>();
-        textCenter = transform.Find("Selections/SpokeCircle/Text/Title").GetComponent<Text>();
-        textManual = transform.Find("Selections/Spoke0/Text/Title/Description").GetComponent<Text>();
-        textArea = transform.Find("Selections/Spoke1/Text/Title/Description").GetComponent<Text>();
-        textBubble = transform.Find("Selections/Spoke2/Text/Title/Description").GetComponent<Text>();
-        textCoinshot = transform.Find("Selections/Spoke3/Text/Title/Description").GetComponent<Text>();
-        keys = new GameObject[] {
-            transform.Find("Selections/Spoke0/Text/Title/Key").gameObject,
-            transform.Find("Selections/Spoke1/Text/Title/Key").gameObject,
-            transform.Find("Selections/Spoke2/Text/Title/Key").gameObject,
-            transform.Find("Selections/Spoke3/Text/Title/Key").gameObject,
-            transform.Find("Selections/Spoke4b/Text/Key").gameObject,
-            transform.Find("Selections/Spoke5_6/Text/Title/Key").gameObject,
-            transform.Find("Selections/Spoke7/Text/Title/Key").gameObject,
+        spokes = transform.Find("Selections/Spokes").GetComponentsInChildren<Image>();
+        textCenter = transform.Find("Selections/Spokes/SpokeCircle/Text/Title").GetComponent<TextMeshProUGUI>();
+        textManual = transform.Find("Selections/Spokes/Spoke0/Text/Title/Description").GetComponent<TextMeshProUGUI>();
+        textArea = transform.Find("Selections/Spokes/Spoke1/Text/Title/Description").GetComponent<TextMeshProUGUI>();
+        textBubble = transform.Find("Selections/Spokes/Spoke2/Text/Title/Description").GetComponent<TextMeshProUGUI>();
+        textCoinshot = transform.Find("Selections/Spokes/Spoke3/Text/Title/Description").GetComponent<TextMeshProUGUI>();
+        keys = new TextMeshProUGUI[] {
+            transform.Find("Selections/Spokes/Spoke0/Text/Title/Key").GetComponent<TextMeshProUGUI>(),
+            transform.Find("Selections/Spokes/Spoke1/Text/Title/Key").GetComponent<TextMeshProUGUI>(),
+            transform.Find("Selections/Spokes/Spoke2/Text/Title/Key").GetComponent<TextMeshProUGUI>(),
+            transform.Find("Selections/Spokes/Spoke3/Text/Title/Key").GetComponent<TextMeshProUGUI>(),
+            transform.Find("Selections/Spokes/Spoke4b/Text/Key").GetComponent<TextMeshProUGUI>(),
+            transform.Find("Selections/Spokes/Spoke5_6/Text/Title/Key").GetComponent<TextMeshProUGUI>(),
+            transform.Find("Selections/Spokes/Spoke7/Text/Title/Key").GetComponent<TextMeshProUGUI>(),
         };
     }
 
@@ -301,12 +302,12 @@ public class ControlWheelController : MonoBehaviour {
     public void RefreshText() {
         if (Player.PlayerIronSteel.SteelReserve.IsEnabled) {
             textManual.text = KeyPullPushAbridged + ": " + Pull_Push + "\non a single target\n\n\n";
-            textArea.text = KeyPullPushAbridged + ": " + Pull_Push + "\nin an area in front of you\n\n\n\n";
+            textArea.text = KeyPullPushAbridged + ": " + Pull_Push + "\nin an area in front of you\n\n\n";
             textBubble.text = KeyPullPushAbridged + ": " + Pull_Push + "\nin a bubble around you\n\n"
             + "The bubble can stay open\nin other modes.\n";
         } else {
             textManual.text = KeyPullAbridged + ": " + Pull + "\non a single target\n\n\n";
-            textArea.text = KeyPullAbridged + ": " + Pull + "\nin an area in front of you\n\n\n\n";
+            textArea.text = KeyPullAbridged + ": " + Pull + "\nin an area in front of you\n\n\n";
             textBubble.text = KeyPullAbridged + ": " + Pull + "\nin a bubble around you\n\n"
             + "The bubble can stay open\nin other modes.\n";
         }
@@ -335,29 +336,29 @@ public class ControlWheelController : MonoBehaviour {
         if (Player.PlayerIronSteel.SteelReserve.IsEnabled) {
             textManual.text = KeyPullPushAbridged + ": " + Pull_Push + "\n"
                 + KeyMark_PullPushAbridged + ": Mark target\n"
-                + HowToMultiMark + ":" + (SettingsMenu.settingsGameplay.UsingGamepad ? "\nMark multiple\n" : " Mark multiple\n\n");
+                + HowToMultiMark + ":" + "\nMark multiple\n";
         } else {
             textManual.text = KeyPullAbridged + ": " + Pull + "\n"
                 + KeyMark_PullAbridged + ": Mark target\n"
-                + HowToMultiMark + ":" + (SettingsMenu.settingsGameplay.UsingGamepad ? "\nMark multiple\n" : " Mark multiple\n\n");
+                + HowToMultiMark + ":" +  "\nMark multiple\n";
         }
     }
     private void RefreshArea() {
         if (Player.PlayerIronSteel.SteelReserve.IsEnabled) {
             textArea.text = KeyPullPushAbridged + ": " + Pull_Push + "\n"
                     + KeyMark_PullPushAbridged + ": Mark targets\n"
-                    + KeyRadiusAbridged + ":\nsize of area\n\n";
+                    + KeyRadiusAbridged + ": size of area\n\n\n";
         } else {
             textArea.text = KeyPullAbridged + ": " + Pull + "\n"
                     + KeyMark_PullAbridged + ": Mark targets\n"
-                    + KeyRadiusAbridged + ":\nsize of area\n\n";
+                    + KeyRadiusAbridged + ": size of area\n\n\n";
         }
     }
     private void RefreshBubble() {
         // assume we'll never have bubble without Pushing
         textBubble.text = KeyPullPushAbridged + ": " + Pull_Push + "\n"
                 + KeyMark_PullPushAbridged + ": toggle bubble\n"
-                + KeyRadiusAbridged + ":\nsize of bubble\n\n";
+                + KeyRadiusAbridged + ":size of bubble\n\n\n";
     }
     private void RefreshCoinshot() {
         textCoinshot.text = KeyPullAbridged + ": throw and " + Push + " " + O_Coin + "\n"
@@ -416,14 +417,17 @@ public class ControlWheelController : MonoBehaviour {
             }
         }
     }
-
     /// <summary>
     /// Sets the visibility of the 1/2/3/4/C/X/Z hotkeys on the wheel.
     /// </summary>
-    /// <param name="visible"></param>
-    public void SetHotkeysVisible(bool visible) {
-        for (int i = 0; i < keys.Length; i++)
-            keys[i].SetActive(visible);
+    public void RefreshHotkeys() {
+        keys[0].SetText(KeyManual);
+        keys[1].SetText(KeyArea);
+        keys[2].SetText(KeyBubble);
+        keys[3].SetText(KeyCoinshot);
+        keys[4].SetText(KeyThrowingMode);
+        keys[5].SetText(KeyDeselectAll);
+        keys[6].SetText(KeyStopBurning);
     }
     #endregion
 }

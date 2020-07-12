@@ -113,11 +113,11 @@ public class Player : PewterEntity {
                 if (coinCooldownTimer > coinCooldownThreshold) {
                     // TODO: simplify logic. just like this for thinking
                     bool firing = false;
-                    if (Keybinds.WithdrawCoinDown())
+                    if (Keybinds.WithdrawCoinDown() || Keybinds.TossCoinDown())
                         firing = true;
                     if (PlayerIronSteel.Mode == PlayerPullPushController.ControlMode.Coinshot) {
                         if (!PlayerIronSteel.HasPullTarget) {
-                            if (Keybinds.PullDown() || CoinThrowingMode == CoinMode.Full && Keybinds.IronPulling()) {
+                            if (Keybinds.PullDown() || (CoinThrowingMode == CoinMode.Full && Keybinds.IronPulling())) {
                                 firing = true;
                             }
                         }
@@ -125,7 +125,7 @@ public class Player : PewterEntity {
                         if (CoinThrowingMode == CoinMode.Full && Keybinds.WithdrawCoin()) {
                             firing = true;
                         }
-                    }
+                    } 
 
                     if (firing) {
                         coinCooldownTimer = 0;
@@ -134,13 +134,13 @@ public class Player : PewterEntity {
                         // Holding MultiTarget will mark the coin, as well
                         if (CoinThrowingMode == CoinMode.Spray) {
                             Coin[] coins = CoinHand.WithdrawCoinSprayToHand(!PlayerIronSteel.IsBurning);
-                            if (!Keybinds.Walk())
+                            if (!Keybinds.TossCoinCondition())
                                 for (int i = 0; i < Hand.spraySize; i++)
                                     PlayerIronSteel.AddPushTarget(coins[i], false, true);
                             //PlayerIronSteel.AddPushTarget(coins[i], false, !Keybinds.MultipleMarks());
                         } else {
                             Coin coin = CoinHand.WithdrawCoinToHand(!PlayerIronSteel.IsBurning);
-                            if (!Keybinds.Walk()) {
+                            if (!Keybinds.TossCoinCondition()) {
                                 PlayerIronSteel.RemovePushTarget(thrownCoin);
                                 PlayerIronSteel.AddPushTarget(coin, false, true);
                             }

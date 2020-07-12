@@ -6,8 +6,6 @@ public class Environment_TestingGrounds : EnvironmentCinematic {
     //private bool done;
     [SerializeField]
     private GameObject coinChest = null;
-    [SerializeField]
-    private Challenge_TimeTrial challengeToQuit = null;
 
     private bool triggered = false;
 

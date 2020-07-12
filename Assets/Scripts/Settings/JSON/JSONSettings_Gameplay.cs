@@ -33,7 +33,7 @@ public class JSONSettings_Gameplay : JSONSettings {
     /// Manually apply certain setting effects when they are changed
     /// </summary>
     public override void SetSettingsWhenChanged() {
-        HUD.ControlWheelController.SetHotkeysVisible(!UsingGamepad);
+        HUD.ControlWheelController.RefreshHotkeys();
         HUD.HelpOverlayController.UpdateText();
     }
 }
