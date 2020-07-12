@@ -10,24 +10,6 @@ using System.Collections;
 public class TextCodes : MonoBehaviour {
 
     #region constants
-    // String constants (prefixed with s_) for inputs
-    public const string s_Mouse_Button_3 = "Mouse Button 3";
-    public const string s_Mouse_Button_4 = "Mouse Button 4";
-    public const string s_Mouse_Button_5 = "Mouse Button 5";
-    public const string s_Middle_Mouse_Button = "Middle Mouse Button";
-    public const string s_Scroll_Wheel = "Scroll Wheel";
-    public const string s_Mouse_Button_4Abridged = "MB4";
-    public const string s_Mouse_Button_5Abridged = "MB5";
-    public const string s_Left_Trigger = "Left Trigger";
-    public const string s_Right_Trigger = "Right Trigger";
-    public const string s_Left_Bumper = "Left Bumper";
-    public const string s_Right_Bumper = "Right Bumper";
-    public const string s_Left_Joystick = "Left Joystick";
-    public const string s_Right_Joystick = "Right Joystick";
-    public const string s_Left_BumperAbridged = "LB";
-    public const string s_Right_BumperAbridged = "RB";
-    public const string s_Left_Click = "Left-click";
-    public const string s_Right_Click = "Right-click";
     // String constants (prefixed with s_) for commands
     public const string s_Press_ = "Press ";
     public const string s_Pressing_ = "Pressing ";
@@ -118,28 +100,36 @@ public class TextCodes : MonoBehaviour {
     // Known inputs that should always appear in a specific color
     // "<Input>" -> that input, in the correct color
     // "<Input>Abridged" -> a shortened version of that input for Help and Control Wheel
-    public static string LeftClick => MidBlue(s_Left_Click);
-    public static string LeftClickAbridged => MidBlue("LMB");
-    public static string RightClick => Red(s_Right_Click);
-    public static string RightClickAbridged => Red("RMB");
-    public static string RightTrigger => MidBlue(s_Right_Trigger);
-    public static string RightTriggerAbridged => MidBlue("RT");
-    public static string LeftTrigger => Red(s_Left_Trigger);
-    public static string LeftTriggerAbridged => Red("LT");
-    public static string MouseButton3 => Gray(s_Mouse_Button_3);
-    public static string MiddleMouseButton => Gold(s_Middle_Mouse_Button);
-    public static string ScrollWheel => Gray(s_Scroll_Wheel);
-    public static string LeftJoystick => Gray(s_Left_Joystick);
-    public static string LeftJoystick_Zinc => ZincBlue(s_Left_Joystick);
-    public static string RightJoystick => Gray(s_Right_Joystick);
-    public static string Back => Gray("Back");
-    public static string Start => Gray("Start");
-    public static string A => "<sprite name=a>";
-    public static string B => "<sprite name=b>";
-    public static string X => "<sprite name=x>";
-    public static string Y => "<sprite name=y>";
+    public static string RightTrigger => "<sprite name=gamepad_rt>";
+    public static string RightTriggerAbridged => "<sprite name=gamepad_rt>";
+    public static string LeftTrigger => "<sprite name=gamepad_lt>";
+    public static string LeftTriggerAbridged => "<sprite name=gamepad_lt>";
+    public static string RightBumper => "<sprite name=gamepad_rb>";
+    public static string LeftBumper => "<sprite name=gamepad_lb>";
+    public static string LeftJoystick => "<sprite name=gamepad_joystick_l>";
+    public static string LeftJoystick_Zinc => "<sprite name=gamepad_joystick_l>";
+    public static string LeftJoystickClick => "<sprite name=gamepad_click_l>";
+    public static string RightJoystick => "<sprite name=gamepad_joystick_r>";
+    public static string RightJoystickClick => "<sprite name=gamepad_click_r>";
+    public static string DPadUpDown => "<sprite name=gamepad_dpad_ud>";
+    public static string DPadLeftRight => "<sprite name=gamepad_dpad_lr>";
+    public static string Back => "<sprite name=gamepad_back>";
+    public static string Start => "<sprite name=gamepad_start>";
+    public static string A => "<sprite name=gamepad_a>";
+    public static string B => "<sprite name=gamepad_b>";
+    public static string X => "<sprite name=gamepad_x>";
+    public static string Y => "<sprite name=gamepad_y>";
     // Mouse/Keyboard
-    public static string Mouse => Gray("Mouse");
+    public static string Mouse => "<sprite name=mouse>";
+    public static string LeftClick => "<sprite name=lmb>";
+    public static string LeftClickAbridged => "<sprite name=lmb>";
+    public static string RightClick => "<sprite name=rmb>";
+    public static string RightClickAbridged => "<sprite name=rmb>";
+    public static string MouseButton3 => "<sprite name=mb3>";
+    public static string MiddleMouseButton => "<sprite name=mb3>";
+    public static string ScrollWheel => "<sprite name=scroll>";
+    public static string MouseButton4 => "<sprite name=mb4>";
+    public static string MouseButton5 => "<sprite name=mb5>";
     public static string Shift => "<sprite name=shift>";
     public static string Space => "<sprite name=space>";
     public static string Ctrl => "<sprite name=ctrl>";
@@ -165,7 +155,7 @@ public class TextCodes : MonoBehaviour {
     public static string KeyMove {
         get {
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
-                return "the " + LeftJoystick;
+                return LeftJoystick;
             else
                 return WASD;
         }
@@ -182,7 +172,8 @@ public class TextCodes : MonoBehaviour {
     public static string KeyAnchor {
         get {
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
-                return s_Click_in_ + RightJoystick;
+                //return s_Click_in_ + RightJoystick;
+                return RightJoystickClick;
             else
                 return Ctrl;
         }
@@ -190,7 +181,8 @@ public class TextCodes : MonoBehaviour {
     public static string HowToAnchor {
         get {
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
-                return s_Click_in_ + "the " + RightJoystick;
+                return RightJoystickClick;
+                //return s_Click_in_ + "the " + RightJoystick;
             else
                 return s_Hold_ + Ctrl;
         }
@@ -207,9 +199,9 @@ public class TextCodes : MonoBehaviour {
     public static string KeyLook {
         get {
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
-                return "the " + RightJoystick;
+                return RightJoystick;
             else
-                return "the " + Mouse;
+                return Mouse;
         }
     }
     public static string KeyLookAbridged {
@@ -275,7 +267,8 @@ public class TextCodes : MonoBehaviour {
     public static string KeyZincTime {
         get {
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
-                return s_Click_in_ + LeftJoystick_Zinc;
+                return LeftJoystickClick;
+                //return s_Click_in_ + LeftJoystick_Zinc;
             else
                 return Tab;
         }
@@ -283,7 +276,8 @@ public class TextCodes : MonoBehaviour {
     public static string HowToZincTime {
         get {
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
-                return s_Click_in_ + "the " + LeftJoystick_Zinc;
+                return LeftJoystickClick;
+                //return s_Click_in_ + "the " + LeftJoystick_Zinc;
             else
                 return s_Hold_ + Tab;
         }
@@ -309,10 +303,10 @@ public class TextCodes : MonoBehaviour {
         get {
             switch (SettingsMenu.settingsGameplay.controlScheme) {
                 case JSONSettings_Gameplay.MK54: {
-                        return LightBlue(s_Mouse_Button_5);
+                        return MouseButton3;
                     }
                 case JSONSettings_Gameplay.MK45: {
-                        return LightBlue(s_Mouse_Button_4);
+                        return MouseButton4;
                     }
                 case JSONSettings_Gameplay.MKEQ: {
                         return E;
@@ -321,7 +315,7 @@ public class TextCodes : MonoBehaviour {
                         return Q;
                     }
                 default: {
-                        return LightBlue(s_Right_Bumper);
+                        return RightBumper;
                     }
             }
         }
@@ -331,10 +325,10 @@ public class TextCodes : MonoBehaviour {
         get {
             switch (SettingsMenu.settingsGameplay.controlScheme) {
                 case JSONSettings_Gameplay.MK54: {
-                        return LightBlue(s_Mouse_Button_5Abridged);
+                        return MouseButton5;
                     }
                 case JSONSettings_Gameplay.MK45: {
-                        return LightBlue(s_Mouse_Button_4Abridged);
+                        return MouseButton4;
                     }
                 case JSONSettings_Gameplay.MKEQ: {
                         return E;
@@ -343,7 +337,7 @@ public class TextCodes : MonoBehaviour {
                         return Q;
                     }
                 default: {
-                        return LightBlue(s_Right_BumperAbridged);
+                        return RightBumper;
                     }
             }
         }
@@ -353,10 +347,10 @@ public class TextCodes : MonoBehaviour {
         get {
             switch (SettingsMenu.settingsGameplay.controlScheme) {
                 case JSONSettings_Gameplay.MK54: {
-                        return LightRed(s_Mouse_Button_4);
+                        return MouseButton4;
                     }
                 case JSONSettings_Gameplay.MK45: {
-                        return LightRed(s_Mouse_Button_5);
+                        return MouseButton5;
                     }
                 case JSONSettings_Gameplay.MKEQ: {
                         return Q;
@@ -365,7 +359,7 @@ public class TextCodes : MonoBehaviour {
                         return E;
                     }
                 default: {
-                        return LightRed(s_Left_Bumper);
+                        return LeftBumper;
                     }
             }
         }
@@ -374,10 +368,10 @@ public class TextCodes : MonoBehaviour {
         get {
             switch (SettingsMenu.settingsGameplay.controlScheme) {
                 case JSONSettings_Gameplay.MK54: {
-                        return LightRed(s_Mouse_Button_4Abridged);
+                        return MouseButton4;
                     }
                 case JSONSettings_Gameplay.MK45: {
-                        return LightRed(s_Mouse_Button_5Abridged);
+                        return MouseButton5;
                     }
                 case JSONSettings_Gameplay.MKEQ: {
                         return Q;
@@ -386,7 +380,7 @@ public class TextCodes : MonoBehaviour {
                         return E;
                     }
                 default: {
-                        return LightRed(s_Left_BumperAbridged);
+                        return LeftBumper;
                     }
             }
         }
@@ -395,10 +389,10 @@ public class TextCodes : MonoBehaviour {
         get {
             switch (SettingsMenu.settingsGameplay.controlScheme) {
                 case JSONSettings_Gameplay.MK54: {
-                        return LightBlue(s_Mouse_Button_5Abridged) + '/' + LightRed(s_Mouse_Button_4Abridged);
+                        return MouseButton5 + '/' + MouseButton4;
                     }
                 case JSONSettings_Gameplay.MK45: {
-                        return LightBlue(s_Mouse_Button_4Abridged) + '/' + LightRed(s_Mouse_Button_5Abridged);
+                        return MouseButton4 + '/' + MouseButton5;
                     }
                 case JSONSettings_Gameplay.MKEQ: {
                         return E + '/' + Q;
@@ -407,7 +401,7 @@ public class TextCodes : MonoBehaviour {
                         return Q + '/' + E;
                     }
                 default: {
-                        return LightBlue(s_Right_BumperAbridged) + '/' + LightRed(s_Left_BumperAbridged);
+                        return RightBumper + '/' + LeftBumper;
                     }
             }
         }
@@ -424,7 +418,7 @@ public class TextCodes : MonoBehaviour {
     public static string HowToStopBurning {
         get {
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
-                return s_Hold_ + Y + ", " + LightBlue(s_Right_Bumper) + ", and " + LightRed(s_Left_Bumper);
+                return s_Hold_ + Y + ", " + RightBumper + ", and " + LeftBumper;
             else
                 return s_Press_ + X;
         }
@@ -459,7 +453,7 @@ public class TextCodes : MonoBehaviour {
     public static string KeyRadiusAbridged {
         get {
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
-                return Gray("Up/Down") + " on the D-Pad";
+                return DPadUpDown;
             else
                 return R + " + " + ScrollWheel;
         }
@@ -467,9 +461,9 @@ public class TextCodes : MonoBehaviour {
     public static string HowToRadius {
         get {
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
-                return s_Press_ + Gray("Up/Down") + " on the D-Pad";
+                return s_Press_ + DPadUpDown;
             else
-                return s_Hold_ + R + " + " + s_Scroll_ + "the " + ScrollWheel;
+                return s_Hold_ + R + " + " + s_Scroll_ + ScrollWheel;
         }
     }
     public static string KeyThrow {
@@ -500,7 +494,7 @@ public class TextCodes : MonoBehaviour {
     public static string HowToTextLog {
         get {
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
-                return Back;
+                return Escape + " > Text Log";
             else
                 return L;
         }
@@ -508,9 +502,9 @@ public class TextCodes : MonoBehaviour {
     public static string HowToPerspectiveAbridged {
         get {
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
-                return Escape + " > Settings > Controls";
+                return Back;
             else
-                return F5 + " or " + Escape + " > Settings > Controls";
+                return F5;
         }
     }
     #endregion

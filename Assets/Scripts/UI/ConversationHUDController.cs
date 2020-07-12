@@ -25,7 +25,8 @@ public class ConversationHUDController : MonoBehaviour {
     public bool IsOpen { get; private set; }
 
     private Conversation currentConversation;
-    private Text headerText, advanceText; // contains the speaker's name
+    private Text headerText; // contains the speaker's name
+    private TextMeshProUGUI advanceText;
     private TextMeshProUGUI conversationText;
     private GameObject advanceSymbol;
 
@@ -37,7 +38,7 @@ public class ConversationHUDController : MonoBehaviour {
         headerText = conversationWindow.Find("HeaderText").GetComponent<Text>();
         conversationText = conversationWindow.Find("ConversationText").GetComponentInChildren<TextMeshProUGUI>();
         advanceSymbol = conversationWindow.Find("symbolAdvance").gameObject;
-        advanceText = conversationWindow.Find("advanceText").GetComponent<Text>();
+        advanceText = conversationWindow.Find("advanceText").GetComponent<TextMeshProUGUI>();
         advanceSymbol.SetActive(false);
         advanceText.text = "";
         anim = GetComponent<Animator>();

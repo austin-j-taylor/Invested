@@ -76,26 +76,26 @@ public class HelpOverlayController : MonoBehaviour {
         StringBuilder builder = new StringBuilder();
         if (Verbose) {
             builder.AppendLine(HowToHelpAbridged + ": toggle this overlay (verbose)\n");
-            builder.AppendLine(HowToPerspectiveAbridged + ": change perspective");
-            builder.AppendLine(HowToTextLog + ": view text log");
+            builder.AppendLine(HowToPerspectiveAbridged + " change perspective");
+            builder.AppendLine(HowToTextLog + " view text log");
         } else {
-            builder.AppendLine(HowToHelpAbridged + ": toggle this overlay (simple)\n");
+            builder.AppendLine(HowToHelpAbridged + " toggle this overlay (simple)\n");
         }
         builder.AppendLine(
-            KeyMoveAbridged + ": Move\n" +
-            KeyLookAbridged + ": Look\n" +
-            KeyJump + ": Jump"
+            KeyMoveAbridged + " Move\n" +
+            KeyLookAbridged + " Look\n" +
+            KeyJump + " Jump"
         );
 
         switch (last_Mode) {
             case ControlMode.Manual:
                 if (last_SteelEnabled) {
                     builder.AppendLine(
-                        KeyPullPushAbridged + ": " + Pull_Push + '\n' +
-                        " • " + KeyMarkAbridged + ": " + Mark + " for " + Pulling + '/' + Pushing
+                        KeyPullPushAbridged + " " + Pull_Push + '\n' +
+                        " • " + KeyMarkAbridged + " " + Mark + " for " + Pulling + '/' + Pushing
                     );
                     if (Verbose) {
-                        builder.AppendLine(" • " + KeyMultiMark + " + " + KeyMarkAbridged + ": " + Mark + " on multiple targets");
+                        builder.AppendLine(" • " + KeyMultiMark + " + " + KeyMarkAbridged + " " + Mark + " on multiple targets");
                     }
                     builder.AppendLine(
                         " • " + KeyPushPullStrength + ": " + Push_Pull + " strength"
@@ -103,11 +103,11 @@ public class HelpOverlayController : MonoBehaviour {
                 } else {
                     if (last_IronEnabled) {
                         builder.AppendLine(
-                            KeyPullAbridged + ": " + Pull + '\n' +
-                            " • " + KeyMark_PullAbridged + ": " + Mark + " for " + Pulling
+                            KeyPullAbridged + " " + Pull + '\n' +
+                            " • " + KeyMark_PullAbridged + " " + Mark + " for " + Pulling
                         );
                         if (Verbose) {
-                            builder.AppendLine(" • " + KeyMultiMark + " + " + KeyMark_PullAbridged + ": " + Mark + " on multiple targets");
+                            builder.AppendLine(" • " + KeyMultiMark + " + " + KeyMark_PullAbridged + " " + Mark + " on multiple targets");
                         }
                         builder.AppendLine(
                             " • " + KeyPullStrength + ": " + Pull + " strength"
@@ -117,17 +117,17 @@ public class HelpOverlayController : MonoBehaviour {
                 break;
             case ControlMode.Coinshot: // Ignore SteelEnabled and IronEnabled because you should never be in Coinshot without Steel
                 builder.AppendLine(
-                    KeyPullAbridged + ": Throw and " + Push + " " + O_Coin
+                    KeyPullAbridged + " Throw and " + Push + " " + O_Coin
                 );
                 if (Verbose) {
-                    builder.AppendLine(" • " + s_Hold_ + KeyMultiMark + ": " + Mark + " when thrown");
+                    builder.AppendLine(" • " + s_Hold_ + KeyMultiMark + " " + Mark + " when thrown");
                 }
                 builder.AppendLine(
-                    KeyPushAbridged + ": " + Push + '\n' +
-                    " • " + KeyMarkAbridged + ": " + Mark + " for " + Pulling + '/' + Pushing
+                    KeyPushAbridged + " " + Push + '\n' +
+                    " • " + KeyMarkAbridged + " " + Mark + " for " + Pulling + '/' + Pushing
                 );
                 if (Verbose) {
-                    builder.AppendLine(" • " + KeyMultiMark + " + " + KeyMarkAbridged + ": " + Mark + " on multiple targets");
+                    builder.AppendLine(" • " + KeyMultiMark + " + " + KeyMarkAbridged + " " + Mark + " on multiple targets");
                 }
                 builder.AppendLine(
                     " • " + KeyPushPullStrength + ": " + Push_Pull + " strength"
@@ -136,28 +136,28 @@ public class HelpOverlayController : MonoBehaviour {
             case ControlMode.Area:
                 if (last_SteelEnabled) {
                     builder.AppendLine(
-                        KeyPullPushAbridged + ": " + Pull_Push + '\n' +
-                        " • " + KeyMarkAbridged + ": " + Mark + " for " + Pulling + '/' + Pushing
+                        KeyPullPushAbridged + " " + Pull_Push + '\n' +
+                        " • " + KeyMarkAbridged + " " + Mark + " for " + Pulling + '/' + Pushing
                     );
                     if (Verbose) {
-                        builder.AppendLine(" • " + KeyMultiMark + " + " + KeyMarkAbridged + ": " + Mark + " on multiple targets");
+                        builder.AppendLine(" • " + KeyMultiMark + " + " + KeyMarkAbridged + " " + Mark + " on multiple targets");
                     }
                     builder.AppendLine(
                         " • " + KeyPushPullStrength + ": " + Push_Pull + " strength\n" +
-                        " • " + KeyRadiusAbridged + ": size of area"
+                        " • " + KeyRadiusAbridged + " size of area"
                     );
                 } else {
                     if (last_IronEnabled) {
                         builder.AppendLine(
-                            KeyPullAbridged + ": " + Pull + '\n' +
-                            " • " + KeyMark_PullAbridged + ": " + Mark + " for " + Pulling
+                            KeyPullAbridged + " " + Pull + '\n' +
+                            " • " + KeyMark_PullAbridged + " " + Mark + " for " + Pulling
                         );
                         if (Verbose) {
-                            builder.AppendLine(" • " + KeyMultiMark + " + " + KeyMark_PullAbridged + ": " + Mark + " on multiple targets");
+                            builder.AppendLine(" • " + KeyMultiMark + " + " + KeyMark_PullAbridged + " " + Mark + " on multiple targets");
                         }
                         builder.AppendLine(
                             " • " + KeyPullStrength + ": " + Pull + " strength\n" +
-                            " • " + KeyRadiusAbridged + ": size of area"
+                            " • " + KeyRadiusAbridged + " size of area"
                         );
                     }
                 }
@@ -165,22 +165,22 @@ public class HelpOverlayController : MonoBehaviour {
             case ControlMode.Bubble:
                 if (last_SteelEnabled) {
                     builder.AppendLine(
-                        KeyPullPushAbridged + ": " + Pull_Push + '\n' +
-                        " • " + KeyMarkAbridged + ": Toggle bubble"
+                        KeyPullPushAbridged + " " + Pull_Push + '\n' +
+                        " • " + KeyMarkAbridged + " Toggle bubble"
                     );
                     builder.AppendLine(
                         " • " + KeyPushPullStrength + ": " + Push_Pull + " strength\n" +
-                        " • " + KeyRadiusAbridged + ": size of bubble"
+                        " • " + KeyRadiusAbridged + " size of bubble"
                     );
                 } else {
                     if (last_IronEnabled) {
                         builder.AppendLine(
-                            KeyPullAbridged + ": " + Pull + '\n' +
-                            " • " + KeyMarkAbridged + ": toggle bubble"
+                            KeyPullAbridged + " " + Pull + '\n' +
+                            " • " + KeyMarkAbridged + " toggle bubble"
                         );
                         builder.AppendLine(
                             " • " + KeyPullStrength + ": " + Pull + " strength\n" +
-                            " • " + KeyRadiusAbridged + ": size of bubble"
+                            " • " + KeyRadiusAbridged + " size of bubble"
                         );
                     }
                 }
@@ -189,7 +189,7 @@ public class HelpOverlayController : MonoBehaviour {
 
         if (last_ControlWheel) {
             builder.AppendLine(
-                KeyControlWheel + ": " + ControlWheel
+                KeyControlWheel + " " + ControlWheel
             );
             if (Verbose && SettingsMenu.settingsGameplay.controlScheme != JSONSettings_Gameplay.Gamepad) {
                 builder.AppendLine(" • 1/2/3/4/C/X/Z: " + ControlWheel + " hotkeys");
@@ -198,23 +198,23 @@ public class HelpOverlayController : MonoBehaviour {
 
         if (last_PewterEnabled) {
             builder.AppendLine(
-                KeySprint + ": " + Sprint + '\n' +
-                KeyAnchor + ": " + Anchor
+                KeySprint + " " + Sprint + '\n' +
+                KeyAnchor + " " + Anchor
             );
         }
 
         if (last_Zinc) {
-            builder.AppendLine(KeyZincTime + ": " + Zinc);
+            builder.AppendLine(KeyZincTime + " " + Zinc);
         }
 
         if (last_Coins) {
-            builder.AppendLine(KeyThrow + ": Throw " + O_Coin);
+            builder.AppendLine(KeyThrow + " Throw " + O_Coin);
             if (Verbose) {
                 //if(!SettingsMenu.settingsData.UsingGamepad) {
-                //    builder.AppendLine(" • " + Shift + " + " + KeyThrowAbridged + ": Mark and Throw " + O_Coin);
+                //    builder.AppendLine(" • " + Shift + " + " + KeyThrowAbridged + " Mark and Throw " + O_Coin);
                 //}
-                builder.AppendLine(" • " + KeyJump + " + " + KeyThrow + ": Throw " + O_Coin + " downwards, weighted by " + KeyMove +
-                    "\n • " + KeyAnchor + " + " + KeyThrow + ": Toss without " + Pushing);
+                builder.AppendLine(" • " + KeyJump + " + " + KeyThrow + " Throw " + O_Coin + " downwards, weighted by " + KeyMove +
+                    "\n • " + KeyAnchor + " + " + KeyThrow + " Toss without " + Pushing);
             }
         }
 

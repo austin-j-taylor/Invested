@@ -17,6 +17,7 @@ public class PauseMenu : MonoBehaviour {
     private static Transform titleText;
     private Button unpauseButton;
     private Button settingsButton;
+    private Button textLogButton;
     private Button resetButton;
     private Button quitButton;
     private Text resetText, quitText;
@@ -34,13 +35,15 @@ public class PauseMenu : MonoBehaviour {
         Button[] buttons = buttonsHeader.GetComponentsInChildren<Button>();
         unpauseButton = buttons[0];
         settingsButton = buttons[1];
-        resetButton = buttons[2];
-        quitButton = buttons[3];
+        textLogButton = buttons[2];
+        resetButton = buttons[3];
+        quitButton = buttons[4];
         resetText = resetButton.GetComponentInChildren<Text>();
         quitText = quitButton.GetComponentInChildren<Text>();
 
         unpauseButton.onClick.AddListener(ClickUnpause);
         settingsButton.onClick.AddListener(ClickSettings);
+        textLogButton.onClick.AddListener(ClickTextLog);
         resetButton.onClick.AddListener(ClickReset);
         quitButton.onClick.AddListener(ClickQuit);
         SceneManager.sceneLoaded += ClearAfterSceneChange;
@@ -147,6 +150,11 @@ public class PauseMenu : MonoBehaviour {
     private void ClickSettings() {
         Close();
         settingsMenu.Open();
+    }
+
+    private void ClickTextLog() {
+        UnPause();
+        HUD.TextLogController.Open();
     }
 
     private void ClickReset() {

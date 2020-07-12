@@ -284,7 +284,8 @@ public class Keybinds : MonoBehaviour {
 
     public static bool ToggleTextLog() {
         if (SettingsMenu.settingsGameplay.UsingGamepad)
-            return Input.GetButtonDown("GamepadBack");
+            //return Input.GetButtonDown("GamepadBack");
+            return false;
         else
             return Input.GetKeyDown(KeyCode.L);
     }
@@ -406,8 +407,7 @@ public class Keybinds : MonoBehaviour {
     }
     public static bool TogglePerspective() {
         if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) {
-            return false;
-            //return Input.GetButtonDown("GamepadBack");
+            return Input.GetButtonDown("GamepadBack");
         } else {
             return Input.GetKeyDown(KeyCode.F5);
         }
