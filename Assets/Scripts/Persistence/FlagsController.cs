@@ -28,6 +28,8 @@ public class FlagsController : MonoBehaviour {
     // Be wary of adding any other public booleans, as DeleteAllData will reset them.
     #endregion
 
+    public static bool CompletedAllLevels => instance.completeLuthadel;
+
     public static FlagsController instance;
 
     private void Awake() {

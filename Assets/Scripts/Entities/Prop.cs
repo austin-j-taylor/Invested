@@ -7,8 +7,8 @@ using System.Collections;
  */
 public class Prop : MonoBehaviour {
 
-    protected const float impulseWeak = 1; // any fall speed above this -> hard impact
-    protected const float impulseStrong = 7; // any fall speed above this -> weak impact
+    protected const float impulseWeak = 1; // any fall speed above this -> weak impact
+    protected const float impulseStrong = 10; // any fall speed above this -> strong impact
     protected const float expFactorGeneral = 40, expFactorCoin = 1000;
 
     private enum SoundMaterial { General, MetalDark, MetalLight, Tile, Coin }

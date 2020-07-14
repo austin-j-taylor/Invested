@@ -29,6 +29,7 @@ public class Player : PewterEntity {
     public static FeruchemicalZinc PlayerZinc { get; set; }
     public static PlayerTransparencyController PlayerTransparancy { get; set; }
     public static VoiceBeeper PlayerVoiceBeeper { get; set; }
+    public static AllomechanicalGlower PlayerGlower { get; set; }
 
     public Hand CoinHand { get; private set; }
     public CoinMode CoinThrowingMode { get; set; }
@@ -92,6 +93,7 @@ public class Player : PewterEntity {
         PlayerZinc = GetComponent<FeruchemicalZinc>();
         PlayerTransparancy = GetComponentInChildren<PlayerTransparencyController>();
         PlayerVoiceBeeper = GetComponentInChildren<VoiceBeeper>();
+        PlayerGlower = GetComponentInChildren<AllomechanicalGlower>();
         Health = 100;
         CoinThrowingMode = CoinMode.Semi;
         CoinHand = GetComponentInChildren<Hand>();
@@ -180,7 +182,7 @@ public class Player : PewterEntity {
     /// </summary>
     /// <param name="scene">the scene that we are leaving</param>
     public void ClearPlayerBeforeSceneChange(Scene scene) {
-        GetComponentInChildren<AllomechanicalGlower>().RemoveAllEmissions();
+        PlayerGlower.Clear();
         PlayerFlywheelController.Clear();
         PlayerIronSteel.StopBurning(false);
         PlayerIronSteel.Clear();
@@ -204,7 +206,7 @@ public class Player : PewterEntity {
             PlayerAudioController.Clear();
             PlayerIronSteel.Clear();
 
-            SetFrameMaterial(frameMaterial);
+            ResetFrameMaterial();
             SetSmokeMaterial(smokeMaterial);
 
             if (scene.buildIndex == SceneSelectMenu.sceneTitleScreen) {
@@ -277,6 +279,9 @@ public class Player : PewterEntity {
     /// <param name="mat">the new material</param>
     public void SetFrameMaterial(Material mat) {
         playerFrame.GetComponent<Renderer>().material = mat;
+    }
+    public void ResetFrameMaterial() {
+        playerFrame.GetComponent<Renderer>().material = frameMaterial;
     }
 
     /// <summary>

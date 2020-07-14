@@ -67,6 +67,7 @@ public class DataManagementScreen : MonoBehaviour {
         if (deletingSaves) {
             // DELETE SAVE DATA
             FlagsController.DeleteAllData();
+            Environment_TitleScreen.Clear();
             Open();
             saveButton.GetComponentInChildren<Text>().text = "Save data deleted.";
         } else {

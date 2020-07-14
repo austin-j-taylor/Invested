@@ -18,6 +18,7 @@ public class AllomechanicalGlower : MonoBehaviour {
     private Renderer[] steels;
     private Renderer[] pewters;
     private Renderer[] zincs;
+    private bool isOverridden = false;
 
     private void Awake() {
 
@@ -37,7 +38,7 @@ public class AllomechanicalGlower : MonoBehaviour {
     }
 
     void LateUpdate() {
-        if (!PauseMenu.IsPaused) {
+        if (!PauseMenu.IsPaused && !isOverridden) {
             if (Player.PlayerIronSteel.IsBurning) {
                 if (Player.PlayerIronSteel.IronPulling) {
                     foreach (Renderer rend in irons) {
@@ -67,7 +68,7 @@ public class AllomechanicalGlower : MonoBehaviour {
                     DisableEmission(rend.material);
                 }
             }
-            if(Player.PlayerZinc.InZincTime) {
+            if (Player.PlayerZinc.InZincTime) {
                 foreach (Renderer rend in zincs) {
                     EnableEmission(rend.material, ZincMeterController.ColorZinc, 1 + 2 * Player.PlayerZinc.Intensity);
                 }
@@ -79,6 +80,50 @@ public class AllomechanicalGlower : MonoBehaviour {
         }
     }
 
+    public void Clear() {
+        isOverridden = false;
+        foreach (Renderer rend in irons) {
+            DisableEmission(rend.material);
+        }
+        foreach (Renderer rend in steels) {
+            DisableEmission(rend.material);
+        }
+        foreach (Renderer rend in pewters) {
+            DisableEmission(rend.material);
+        }
+        foreach (Renderer rend in zincs) {
+            DisableEmission(rend.material);
+        }
+    }
+
+    public void SetOverrideGlows(bool iron, bool steel, bool pewter, bool zinc) {
+        isOverridden = true;
+        if (iron)
+            foreach (Renderer rend in irons)
+                EnableEmission(rend.material, ColorIron, 3);
+        else
+            foreach (Renderer rend in irons)
+                DisableEmission(rend.material);
+        if (steel)
+            foreach (Renderer rend in steels)
+                EnableEmission(rend.material, ColorSteel, 3);
+        else
+            foreach (Renderer rend in steels)
+                DisableEmission(rend.material);
+        if (pewter)
+            foreach (Renderer rend in pewters)
+                EnableEmission(rend.material, ColorPewter, 3);
+        else
+            foreach (Renderer rend in pewters)
+                DisableEmission(rend.material);
+        if (zinc)
+            foreach (Renderer rend in zincs)
+                EnableEmission(rend.material, ZincMeterController.ColorZinc, 3);
+        else
+            foreach (Renderer rend in zincs)
+                DisableEmission(rend.material);
+    }
+
     // Enables the emissions of the material specified by mat.
     private void EnableEmission(Material mat, Color glow, float rate) {
         mat.SetColor("_EmissionColor", glow * Mathf.LinearToGammaSpace(intensity * rate));
@@ -87,14 +132,5 @@ public class AllomechanicalGlower : MonoBehaviour {
 
     private void DisableEmission(Material mat) {
         mat.DisableKeyword("_EMISSION");
-    }
-
-    public void RemoveAllEmissions() {
-        foreach (Renderer rend in irons) {
-            DisableEmission(rend.material);
-        }
-        foreach (Renderer rend in steels) {
-            DisableEmission(rend.material);
-        }
     }
 }

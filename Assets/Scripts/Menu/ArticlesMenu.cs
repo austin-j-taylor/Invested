@@ -6,38 +6,51 @@ using UnityEngine.UI;
 /// </summary>
 public class ArticlesMenu : MonoBehaviour {
 
+    private const int index_532 = 0, index_612 = 1;
+    [SerializeField]
+    private Sprite zincImage = null;
+
     public bool IsOpen => gameObject.activeSelf;
 
     private Text tooltip;
-    private Button zincButton;
+    private Text[] articleTexts;
+    private Image textBackground;
+    private Image articleImage;
     private Button backButton;
 
     void Awake() {
-        tooltip = transform.Find("Articles/Tooltip").GetComponent<Text>();
-        Button[] buttons = GetComponentsInChildren<Button>();
-        zincButton = buttons[0];
-        //article2Button = buttons[1];
-        backButton = buttons[1];
+        Transform articles = transform.Find("Articles");
+        tooltip = articles.Find("Tooltip").GetComponent<Text>();
+        articleImage = transform.Find("Content/Image").GetComponent<Image>();
+        backButton = transform.Find("Back").GetComponent<Button>();
+        textBackground = transform.Find("Content/Text").GetComponent<Image>();
+        articleTexts = transform.Find("Content/Text").GetComponentsInChildren<Text>();
+        for (int i = 0; i < articleTexts.Length; i++)
+            articleTexts[i].enabled = false;
 
         backButton.onClick.AddListener(OnClickedBack);
-
     }
     void Start() {
         Close();
     }
-
     public void Open() {
         gameObject.SetActive(true);
         tooltip.text = "";
         MainMenu.FocusOnButton(transform);
     }
-
     public void Close() {
         gameObject.SetActive(false);
         MainMenu.OpenTitleScreen();
     }
 
+    private void OnClickedBack() {
+        Close();
+    }
+
     public void OnEnteredZinc() {
+        articleImage.sprite = zincImage;
+        articleImage.gameObject.SetActive(true);
+        textBackground.gameObject.SetActive(false);
         tooltip.text = "FROM: elar.tarc@marl.sil\n" +
             "TO: shen.khol@marl.sil\n" +
             "SUBJECT: Zinc peripheral info leak to coppernet resolved\n\n" +
@@ -54,12 +67,18 @@ public class ArticlesMenu : MonoBehaviour {
             "copper: xFC64:40AA\n" +
             "spirit: ORCHARD-MAGNESIUM-REED";
     }
-
-    public void OnEnteredArticle2() {
-        tooltip.text = "test";
+    public void OnEnteredDirectives532() {
+        articleImage.gameObject.SetActive(false);
+        tooltip.text = "";
+        textBackground.gameObject.SetActive(true);
+        for (int i = 0; i < articleTexts.Length; i++)
+            articleTexts[i].enabled = i == index_532;
     }
-
-    private void OnClickedBack() {
-        Close();
+    public void OnEnteredDirectives612() {
+        articleImage.gameObject.SetActive(false);
+        tooltip.text = "";
+        textBackground.gameObject.SetActive(true);
+        for (int i = 0; i < articleTexts.Length; i++)
+            articleTexts[i].enabled = i == index_612;
     }
 }

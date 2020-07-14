@@ -39,6 +39,7 @@ public class Entity_TurretAnchored : NonPlayerPushPullController {
         tubesRenderer = transform.Find("Rifle/Tubes/Tube").GetComponent<Renderer>();
         fillBlock = new MaterialPropertyBlock();
         sources = GetComponents<AudioSource>();
+        sources[0].volume = 0;
         fillBlock.SetFloat("_Fill", 0);
         tubesRenderer.SetPropertyBlock(fillBlock);
 

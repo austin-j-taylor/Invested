@@ -17,18 +17,21 @@ public class Environment_TitleScreen : EnvironmentCinematic {
         Magnetic[] pulls = transform.Find("Magnetics").GetComponentsInChildren<Magnetic>();
         Magnetic[] pushes = transform.Find("MagneticsPush").GetComponentsInChildren<Magnetic>();
         Player.PlayerIronSteel.StartBurning();
-        //Player.PlayerIronSteel.SizeOfTargetArrays = 5;
-        //foreach (Magnetic m in pulls) {
-        //    Player.PlayerIronSteel.AddPullTarget(m);
-        //}
-        //foreach (Magnetic m in pushes) {
-        //    Player.PlayerIronSteel.AddPullTarget(m);
-        //}
 
         TimeController.CurrentTimeScale = 0;
+        Clear();
 
         // Handle music
         StartCoroutine(Play_title_screen_music());
+    }
+
+    // Called by DataManagement when flags are reset and player data is erased.
+    public static void Clear() {
+        Player.PlayerGlower.SetOverrideGlows(FlagsController.GetData("completeTutorial1"), FlagsController.GetData("pwr_steel"), FlagsController.GetData("pwr_pewter"), FlagsController.GetData("pwr_zinc"));
+        if (FlagsController.CompletedAllLevels)
+            Player.PlayerInstance.SetFrameMaterial(GameManager.Material_MARLmetal_lit);
+        else
+            Player.PlayerInstance.ResetFrameMaterial();
     }
 
     void Update() {
