@@ -112,7 +112,7 @@ public class SettingsMenu : MonoBehaviour {
         RefreshSettings();
 
         discardButton.gameObject.SetActive(false);
-        highlitButton = videoButton;
+        highlitButton = gameplayButton;
 
         foreach (JSONSettings setting in settings) {
             setting.SetSettingsWhenChanged();
