@@ -37,11 +37,15 @@ public class TargetOverlayController : MonoBehaviour {
             pushTargetsActualForce[i].text = "";
             pullTargetsActualForce[i].color = HUD.weakBlue;
             pushTargetsActualForce[i].color = HUD.weakBlue;
+            pullTargetsActualForce[i].gameObject.SetActive(false);
+            pushTargetsActualForce[i].gameObject.SetActive(false);
 
             pullTargetsSumForce[i] = pullTargetsActualForce[i].GetComponentsInChildren<Text>()[1];
             pushTargetsSumForce[i] = pushTargetsActualForce[i].GetComponentsInChildren<Text>()[1];
             pullTargetsSumForce[i].text = "";
             pushTargetsSumForce[i].text = "";
+            pullTargetsSumForce[i].gameObject.SetActive(false);
+            pushTargetsSumForce[i].gameObject.SetActive(false);
         }
     }
 
@@ -60,13 +64,13 @@ public class TargetOverlayController : MonoBehaviour {
     public void HardRefresh() {
         SoftRefresh();
         for (int i = Player.PlayerIronSteel.PullTargets.Count; i < TargetArray.largeArrayCapacity; i++) {
-            pullTargetsSumForce[i].text = "";
-            pullTargetsActualForce[i].text = "";
+            pullTargetsSumForce[i].gameObject.SetActive(false);
+            pullTargetsActualForce[i].gameObject.SetActive(false);
         }
 
         for (int i = Player.PlayerIronSteel.PushTargets.Count; i < TargetArray.largeArrayCapacity; i++) {
-            pushTargetsSumForce[i].text = "";
-            pushTargetsActualForce[i].text = "";
+            pushTargetsSumForce[i].gameObject.SetActive(false);
+            pushTargetsActualForce[i].gameObject.SetActive(false);
         }
     }
 
@@ -104,20 +108,20 @@ public class TargetOverlayController : MonoBehaviour {
             //}
             if (SettingsMenu.settingsInterface.forceComplexity == 0 && SettingsMenu.settingsInterface.hudForces == 1) {
                 for (int i = 0; i < Player.PlayerIronSteel.PullTargets.Count; i++) {
-                    pullTargetsSumForce[i].text = "";
+                    pullTargetsSumForce[i].gameObject.SetActive(false);
                 }
                 for (int i = 0; i < Player.PlayerIronSteel.PushTargets.Count; i++) {
-                    pushTargetsSumForce[i].text = "";
+                    pushTargetsSumForce[i].gameObject.SetActive(false);
                 }
             } else {
                 if (SettingsMenu.settingsInterface.hudForces == 0) {
                     for (int i = 0; i < Player.PlayerIronSteel.PullTargets.Count; i++) {
-                        pullTargetsSumForce[i].text = "";
-                        pullTargetsActualForce[i].text = "";
+                        pullTargetsSumForce[i].gameObject.SetActive(false);
+                        pullTargetsActualForce[i].gameObject.SetActive(false);
                     }
                     for (int i = 0; i < Player.PlayerIronSteel.PushTargets.Count; i++) {
-                        pushTargetsSumForce[i].text = "";
-                        pushTargetsActualForce[i].text = "";
+                        pushTargetsSumForce[i].gameObject.SetActive(false);
+                        pushTargetsActualForce[i].gameObject.SetActive(false);
                     }
                 }
             }
@@ -141,13 +145,16 @@ public class TargetOverlayController : MonoBehaviour {
             Vector3 positionActualForce = CameraController.ActiveCamera.WorldToScreenPoint(target.transform.position - heightToTop) + new Vector3(0, -pixelDelta);
 
             if (positionActualForce.z > 0) {
+                actualForce[i].gameObject.SetActive(true);
                 actualForce[i].transform.position = positionActualForce;
                 actualForce[i].text = HUD.ForceString(target.LastNetForceOnTarget.magnitude, target.NetMass);
-                if (refreshSum)
+                if (refreshSum) {
+                    sumForce[i].gameObject.SetActive(true);
                     sumForce[i].text = HUD.AllomanticSumString(target.LastAllomanticForce, target.LastAnchoredPushBoostFromAllomancer, target.NetMass, 2, true);
+                }
             } else { // Target is not on screen
-                sumForce[i].text = "";
-                actualForce[i].text = "";
+                sumForce[i].gameObject.SetActive(false);
+                actualForce[i].gameObject.SetActive(false);
             }
         }
     }

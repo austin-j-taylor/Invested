@@ -80,6 +80,9 @@ public class Environment_Tutorial4 : EnvironmentCinematic {
     }
 
     protected override IEnumerator Trigger1() {
+        //  Give them coins if they sequence broke
+        Player.CanThrowCoins = true;
+        FlagsController.SetFlag("pwr_coins");
         while (HUD.ConversationHUDController.IsOpen)
             yield return null;
         yield return new WaitForSeconds(10);
