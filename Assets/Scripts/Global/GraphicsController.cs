@@ -134,7 +134,8 @@ public class GraphicsController : MonoBehaviour {
     /// <param name="mode">the fullscreen/windowed mode</param>
     public static void SetFullscreenResolution(int index, FullScreenMode mode) {
         Resolution[] resolutions = Screen.resolutions;
-        if (index >= resolutions.Length)
+        // Interpret an index of -1 to be the max possible resolution
+        if (index == -1 || index >= resolutions.Length)
             index = resolutions.Length - 1;
         // Check if a change has occurred
         if (Screen.currentResolution.width != resolutions[index].width ||
@@ -145,17 +146,5 @@ public class GraphicsController : MonoBehaviour {
             Screen.SetResolution(resolutions[index].width, resolutions[index].height, mode, resolutions[index].refreshRate);
         }
     }
-
-    //public static void RefreshResolutionDropdown(int index) {
-    //    Resolution[] resolutions = Screen.resolutions;
-    //    if (index >= resolutions.Length)
-    //        index = resolutions.Length - 1;
-
-    //    //instance.resolutionDropdown.valueText.text = resolutions[index].width + " x " + resolutions[index].height;
-    //    //value = value + (Keybinds.Horizontal() > 0 ? 1f : -1f) / resolutions.Length;
-    //    //Debug.Log("Setting "+ instance.resolutionDropdown.slider.value+" to " + value + ", diff " + (Keybinds.Horizontal() > 0 ? 1f : -1f) / resolutions.Length + " where movement is " + Keybinds.Horizontal());
-    //    ////instance.resolutionDropdown.slider.value = value;
-    //}
     #endregion
-
 }

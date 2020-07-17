@@ -65,10 +65,14 @@ public class DropdownSetting : Setting {
      */
     public override void RefreshData() {
         data = parentSettings.GetDataInt(id);
+        // interpret -1 as the maximum possible value
+        if (data == -1)
+            data = dropdown.options.Count - 1;
         // Update other functions
-        if (data < buttonCalls.Length)
+        if (data < buttonCalls.Length) {
             if (buttonCalls[data] != null)
                 buttonCalls[data].Invoke();
+        }
     }
 
     /*

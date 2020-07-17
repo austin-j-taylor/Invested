@@ -15,6 +15,5 @@ public class JSONSettings_Video : JSONSettings {
     /// </summary>
     public override void SetSettingsWhenChanged() {
         GraphicsController.SetFullscreenResolution(resolution, (FullScreenMode)fullscreen);
-
     }
 }
