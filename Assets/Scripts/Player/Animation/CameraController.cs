@@ -23,6 +23,7 @@ public class CameraController : MonoBehaviour {
     public static Transform CameraLookAtTarget { get; private set; }
     public static Transform CameraPositionTarget { get; private set; }
     public static CinemachineBrain Cinemachine { get; set; }
+    public static CinemachineVirtualCamera CinemachineThirdPersonCamera { get; set; }
 
     public static bool HasNotMovedCamera => currentX == startX && currentY == startY;
     public static bool UpsideDown => currentY < -89.99f || currentY > 89.99f;
@@ -61,6 +62,7 @@ public class CameraController : MonoBehaviour {
         ActiveCamera = CameraPositionTarget.Find("Camera").GetComponent<Camera>();
         ActiveCamera.depthTextureMode = DepthTextureMode.DepthNormals;
         Cinemachine = ActiveCamera.GetComponent<CinemachineBrain>();
+        CinemachineThirdPersonCamera = CameraPositionTarget.GetComponentInChildren<CinemachineVirtualCamera>();
         SceneManager.sceneLoaded += ClearAfterSceneChange;
     }
 
@@ -128,6 +130,8 @@ public class CameraController : MonoBehaviour {
     public static void UpdateCamera() {
         instance.transform.position = playerBody.position + cameraControllerOffset;
         CameraLookAtTarget.rotation = Quaternion.Euler(0, currentX, 0);
+        if (GameManager.CameraState == GameManager.GameCameraState.Standard)
+            CinemachineThirdPersonCamera.transform.localPosition = Vector3.zero;
 
         /* Reset camera properties for this frame */
         float lastScale = playerCameraController.localScale.x;
@@ -247,7 +251,6 @@ public class CameraController : MonoBehaviour {
                         }
                     }
                 }
-
 
 
                 float scale = 1;
