@@ -5,6 +5,8 @@ using Cinemachine;
 // Represents a challenge for the player to complete, like "go through these rings."
 public class Challenge : MonoBehaviour {
 
+    private const int delayForTriggerToReactivate = 3;
+
     protected CinemachineVirtualCamera vcam;
 
     [SerializeField]
@@ -95,7 +97,7 @@ public class Challenge : MonoBehaviour {
     }
 
     private IEnumerator EnableColliderAfterDelay() {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(delayForTriggerToReactivate);
         introduceTrigger.gameObject.SetActive(true);
     }
 

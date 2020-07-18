@@ -5,8 +5,8 @@ using UnityEngine.SceneManagement;
 public class Environment_TitleScreen : EnvironmentCinematic {
 
     public const float speed = .05f;
-    public const float speedVert = -.1f;
-    public const float speedAmp = -2;
+    public const float speedVert = .1f;
+    public const float speedAmp = 2;
 
 
     void Start() {

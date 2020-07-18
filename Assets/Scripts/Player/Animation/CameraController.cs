@@ -183,132 +183,134 @@ public class CameraController : MonoBehaviour {
             if (UpsideDown)
                 CameraLookAtTarget.transform.localPosition = -CameraLookAtTarget.transform.localPosition;
 
-            // Checking for camera collision with walls
-            // If in Cinemachine and we're a sufficiently far distance away, 
-            // Raycast from player to camera and from camera to player.
-            // In the event of a collision, scale THIS in all dimensions by (length from player to hit / length of camera distance)
+            if (GameManager.CameraState == GameManager.GameCameraState.Standard) {
+                // Checking for camera collision with walls
+                // If in Cinemachine and we're a sufficiently far distance away, 
+                // Raycast from player to camera and from camera to player.
+                // In the event of a collision, scale THIS in all dimensions by (length from player to hit / length of camera distance)
 
-            // The destinationsCamera[] are at the 9 corners of the camera in world space (top-left to center-center bottom-right)
-            Vector3[] destinationsCamera = new Vector3[9];
-            destinationsCamera[0] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, 0, ActiveCamera.nearClipPlane));
-            destinationsCamera[1] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, .5f, ActiveCamera.nearClipPlane));
-            destinationsCamera[2] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, 1, ActiveCamera.nearClipPlane));
-            destinationsCamera[3] = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, 0, ActiveCamera.nearClipPlane));
-            destinationsCamera[4] = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, .5f, ActiveCamera.nearClipPlane));
-            destinationsCamera[5] = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, 1, ActiveCamera.nearClipPlane));
-            destinationsCamera[6] = ActiveCamera.ViewportToWorldPoint(new Vector3(1, 0, ActiveCamera.nearClipPlane));
-            destinationsCamera[7] = ActiveCamera.ViewportToWorldPoint(new Vector3(1, .5f, ActiveCamera.nearClipPlane));
-            destinationsCamera[8] = ActiveCamera.ViewportToWorldPoint(new Vector3(1, 1, ActiveCamera.nearClipPlane));
+                // The destinationsCamera[] are at the 9 corners of the camera in world space (top-left to center-center bottom-right)
+                Vector3[] destinationsCamera = new Vector3[9];
+                destinationsCamera[0] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, 0, ActiveCamera.nearClipPlane));
+                destinationsCamera[1] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, .5f, ActiveCamera.nearClipPlane));
+                destinationsCamera[2] = ActiveCamera.ViewportToWorldPoint(new Vector3(0, 1, ActiveCamera.nearClipPlane));
+                destinationsCamera[3] = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, 0, ActiveCamera.nearClipPlane));
+                destinationsCamera[4] = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, .5f, ActiveCamera.nearClipPlane));
+                destinationsCamera[5] = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, 1, ActiveCamera.nearClipPlane));
+                destinationsCamera[6] = ActiveCamera.ViewportToWorldPoint(new Vector3(1, 0, ActiveCamera.nearClipPlane));
+                destinationsCamera[7] = ActiveCamera.ViewportToWorldPoint(new Vector3(1, .5f, ActiveCamera.nearClipPlane));
+                destinationsCamera[8] = ActiveCamera.ViewportToWorldPoint(new Vector3(1, 1, ActiveCamera.nearClipPlane));
 
-            // used for later
-            Vector3 halfCameraHeight = destinationsCamera[0] - destinationsCamera[3];
-
-
-            Vector3 originPlayer = playerBody.position + cameraControllerOffset;
-            Vector3 destinationCamera = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, .5f, ActiveCamera.nearClipPlane));
-            float length = Vector3.Distance(originPlayer, destinationCamera);
-
-            Vector3 fromCameraToPlayer = originPlayer - destinationsCamera[4]; // center
-            float distanceFromCameraToPlayer = Vector3.Distance(originPlayer, destinationsCamera[4]);
-
-            if (distanceFromCameraToPlayer < -cameraDistance + 1) {
-                Vector3[] originsPlayer = new Vector3[9];
-                for (int i = 0; i < 9; i++) {
-                    originsPlayer[i] = destinationsCamera[i] + fromCameraToPlayer;
-                    Debug.DrawLine(originsPlayer[i], destinationsCamera[i], Color.gray);
-                }
+                // used for later
+                Vector3 halfCameraHeight = destinationsCamera[0] - destinationsCamera[3];
 
 
-                //RaycastHit hit;
-                //if(Physics.Raycast(originPlayer, destinationCamera - originPlayer, out hit, length, GameManager.Layer_IgnoreCamera)) {
-                //    Debug.DrawLine(originPlayer, hit.point, Color.blue);
-                //    float scale = (hit.point - originPlayer).magnitude / length;
-                //    playerCameraController.localScale = new Vector3(scale, scale, scale);
+                Vector3 originPlayer = playerBody.position + cameraControllerOffset;
+                Vector3 destinationCamera = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, .5f, ActiveCamera.nearClipPlane));
+                float length = Vector3.Distance(originPlayer, destinationCamera);
 
-                //} else if (Physics.Raycast(destinationCamera, originPlayer - destinationCamera, out hit, length, GameManager.Layer_IgnoreCamera)) {
-                //    Debug.DrawLine(originPlayer, hit.point, Color.red);
-                //    float scale = (hit.point - originPlayer).magnitude / length;
-                //    playerCameraController.localScale = new Vector3(scale, scale, scale);
+                Vector3 fromCameraToPlayer = originPlayer - destinationsCamera[4]; // center
+                float distanceFromCameraToPlayer = Vector3.Distance(originPlayer, destinationsCamera[4]);
 
-                //} else {
-                //     If we were Colliding, LERP back to wanted position
-                //     If we weren't Colliding, just move camera instantly
-                //}
-
-                int smallestIndex = -1;
-                RaycastHit smallestHit = new RaycastHit();
-                float smallestDistance = Mathf.Infinity;
-
-                // check if the camera is angled such that it would clip into the ceiling
-                for (int i = 0; i < 9; i++) {
-                    if (Physics.Raycast(originsPlayer[i], -fromCameraToPlayer, out RaycastHit hit, distanceFromCameraToPlayer, GameManager.Layer_IgnoreCamera)) {
-                        float thisDistance = (hit.point - originsPlayer[i]).magnitude;
-                        Debug.DrawLine(originsPlayer[i], hit.point, Color.yellow);
-                        if (thisDistance < smallestDistance) {
-                            smallestIndex = i;
-                            smallestHit = hit;
-                            smallestDistance = thisDistance;
-                        }
+                if (distanceFromCameraToPlayer < -cameraDistance + 1) {
+                    Vector3[] originsPlayer = new Vector3[9];
+                    for (int i = 0; i < 9; i++) {
+                        originsPlayer[i] = destinationsCamera[i] + fromCameraToPlayer;
+                        Debug.DrawLine(originsPlayer[i], destinationsCamera[i], Color.gray);
                     }
-                }
 
 
-                float scale = 1;
-                if (smallestIndex > -1) { // A collision has occured
-                    scale = (smallestHit.point - originsPlayer[smallestIndex]).magnitude / length;
+                    //RaycastHit hit;
+                    //if(Physics.Raycast(originPlayer, destinationCamera - originPlayer, out hit, length, GameManager.Layer_IgnoreCamera)) {
+                    //    Debug.DrawLine(originPlayer, hit.point, Color.blue);
+                    //    float scale = (hit.point - originPlayer).magnitude / length;
+                    //    playerCameraController.localScale = new Vector3(scale, scale, scale);
 
-                    if (scale > lastScale) {
-                        // Before we were colliding with a closer wall, so "lerp" the scale to the further back one to be kind.
-                        float newScale = Mathf.Pow(lastScale, rootConstantScaling);
-                        if (newScale < scale) {
-                            scale = newScale;
-                        } else {
-                            // shorten smallestHit.point to bring it closer to the player?
+                    //} else if (Physics.Raycast(destinationCamera, originPlayer - destinationCamera, out hit, length, GameManager.Layer_IgnoreCamera)) {
+                    //    Debug.DrawLine(originPlayer, hit.point, Color.red);
+                    //    float scale = (hit.point - originPlayer).magnitude / length;
+                    //    playerCameraController.localScale = new Vector3(scale, scale, scale);
+
+                    //} else {
+                    //     If we were Colliding, LERP back to wanted position
+                    //     If we weren't Colliding, just move camera instantly
+                    //}
+
+                    int smallestIndex = -1;
+                    RaycastHit smallestHit = new RaycastHit();
+                    float smallestDistance = Mathf.Infinity;
+
+                    // check if the camera is angled such that it would clip into the ceiling
+                    for (int i = 0; i < 9; i++) {
+                        if (Physics.Raycast(originsPlayer[i], -fromCameraToPlayer, out RaycastHit hit, distanceFromCameraToPlayer, GameManager.Layer_IgnoreCamera)) {
+                            float thisDistance = (hit.point - originsPlayer[i]).magnitude;
+                            Debug.DrawLine(originsPlayer[i], hit.point, Color.yellow);
+                            if (thisDistance < smallestDistance) {
+                                smallestIndex = i;
+                                smallestHit = hit;
+                                smallestDistance = thisDistance;
+                            }
                         }
                     }
 
-                    playerCameraController.localScale = new Vector3(scale, scale, scale);
-                    Debug.DrawLine(originsPlayer[smallestIndex], smallestHit.point, Color.red);
 
-                    // There is a small offset due to rescaling/rotation being relative to the CameraLookAtTarget, but the raycasts are to .25 above the player
-                    // This brings the camera to be perfectly touching the smallest hit point
-                    Vector3 offset;
-                    switch (smallestIndex) {
-                        case 0:
-                            offset = ActiveCamera.ViewportToWorldPoint(new Vector3(0, 0, ActiveCamera.nearClipPlane));
-                            break;
-                        case 1:
-                            offset = ActiveCamera.ViewportToWorldPoint(new Vector3(0, 0.5f, ActiveCamera.nearClipPlane));
-                            break;
-                        case 2:
-                            offset = ActiveCamera.ViewportToWorldPoint(new Vector3(0, 1, ActiveCamera.nearClipPlane));
-                            break;
-                        case 3:
-                            offset = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, 0, ActiveCamera.nearClipPlane));
-                            break;
-                        case 4:
-                            offset = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, .5f, ActiveCamera.nearClipPlane));
-                            break;
-                        case 5:
-                            offset = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, 1, ActiveCamera.nearClipPlane));
-                            break;
-                        case 6:
-                            offset = ActiveCamera.ViewportToWorldPoint(new Vector3(1, 0, ActiveCamera.nearClipPlane));
-                            break;
-                        case 7:
-                            offset = ActiveCamera.ViewportToWorldPoint(new Vector3(1, .5f, ActiveCamera.nearClipPlane));
-                            break;
-                        default:
-                            offset = ActiveCamera.ViewportToWorldPoint(new Vector3(1, 1, ActiveCamera.nearClipPlane));
-                            break;
+                    float scale = 1;
+                    if (smallestIndex > -1) { // A collision has occured
+                        scale = (smallestHit.point - originsPlayer[smallestIndex]).magnitude / length;
+
+                        if (scale > lastScale) {
+                            // Before we were colliding with a closer wall, so "lerp" the scale to the further back one to be kind.
+                            float newScale = Mathf.Pow(lastScale, rootConstantScaling);
+                            if (newScale < scale) {
+                                scale = newScale;
+                            } else {
+                                // shorten smallestHit.point to bring it closer to the player?
+                            }
+                        }
+
+                        playerCameraController.localScale = new Vector3(scale, scale, scale);
+                        Debug.DrawLine(originsPlayer[smallestIndex], smallestHit.point, Color.red);
+
+                        // There is a small offset due to rescaling/rotation being relative to the CameraLookAtTarget, but the raycasts are to .25 above the player
+                        // This brings the camera to be perfectly touching the smallest hit point
+                        Vector3 offset;
+                        switch (smallestIndex) {
+                            case 0:
+                                offset = ActiveCamera.ViewportToWorldPoint(new Vector3(0, 0, ActiveCamera.nearClipPlane));
+                                break;
+                            case 1:
+                                offset = ActiveCamera.ViewportToWorldPoint(new Vector3(0, 0.5f, ActiveCamera.nearClipPlane));
+                                break;
+                            case 2:
+                                offset = ActiveCamera.ViewportToWorldPoint(new Vector3(0, 1, ActiveCamera.nearClipPlane));
+                                break;
+                            case 3:
+                                offset = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, 0, ActiveCamera.nearClipPlane));
+                                break;
+                            case 4:
+                                offset = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, .5f, ActiveCamera.nearClipPlane));
+                                break;
+                            case 5:
+                                offset = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, 1, ActiveCamera.nearClipPlane));
+                                break;
+                            case 6:
+                                offset = ActiveCamera.ViewportToWorldPoint(new Vector3(1, 0, ActiveCamera.nearClipPlane));
+                                break;
+                            case 7:
+                                offset = ActiveCamera.ViewportToWorldPoint(new Vector3(1, .5f, ActiveCamera.nearClipPlane));
+                                break;
+                            default:
+                                offset = ActiveCamera.ViewportToWorldPoint(new Vector3(1, 1, ActiveCamera.nearClipPlane));
+                                break;
+                        }
+                        playerCameraController.localPosition += (smallestHit.point - offset);
+
+                    } else if (lastScale < .98f) { // fuzzy == 1
+                                                   // No collision.
+                                                   // The camera is "recovering" back to a farther position. LERP to it instead.
+                        scale = Mathf.Pow(lastScale, rootConstantScaling);
+                        playerCameraController.localScale = new Vector3(scale, scale, scale);
                     }
-                    playerCameraController.localPosition += (smallestHit.point - offset);
-
-                } else if (lastScale < .98f) { // fuzzy == 1
-                                               // No collision.
-                                               // The camera is "recovering" back to a farther position. LERP to it instead.
-                    scale = Mathf.Pow(lastScale, rootConstantScaling);
-                    playerCameraController.localScale = new Vector3(scale, scale, scale);
                 }
             }
         }
