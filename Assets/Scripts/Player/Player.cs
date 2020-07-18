@@ -158,15 +158,11 @@ public class Player : PewterEntity {
     }
 
     protected override void LateUpdate() {
-        // Pausing
-        if (Keybinds.EscapeDown() && !PauseMenu.IsPaused && CanPause) {
-            PauseMenu.Pause();
-        }
         // Displaying Help Overlay
         if (Keybinds.ToggleHelpOverlay()) {
             HUD.HelpOverlayController.Toggle();
         }
-        if(!PauseMenu.IsPaused && Keybinds.ToggleTextLog()) {
+        if(!GameManager.MenusController.pauseMenu.IsOpen && Keybinds.ToggleTextLog()) {
             HUD.TextLogController.Toggle();
         }
         // Changing perspective

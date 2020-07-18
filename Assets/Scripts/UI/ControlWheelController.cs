@@ -100,7 +100,7 @@ public class ControlWheelController : MonoBehaviour {
     /// Check for player keypresses for shortcuts to clicking spokes
     /// </summary>
     private void LateUpdate() {
-        if (!PauseMenu.IsPaused) {
+        if (!GameManager.MenusController.pauseMenu.IsOpen) {
 
             // If the player hits certain keys, consider that selecting a sector of the control wheel.
             if (Player.CanControl) {

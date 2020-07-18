@@ -38,7 +38,7 @@ public class AllomechanicalGlower : MonoBehaviour {
     }
 
     void LateUpdate() {
-        if (!PauseMenu.IsPaused && !isOverridden) {
+        if (!GameManager.MenusController.pauseMenu.IsOpen && !isOverridden) {
             if (Player.PlayerIronSteel.IsBurning) {
                 if (Player.PlayerIronSteel.IronPulling) {
                     foreach (Renderer rend in irons) {

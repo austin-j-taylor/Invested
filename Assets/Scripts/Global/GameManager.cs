@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour {
     public static AudioManager AudioManager { get; private set; }
     public static ConversationManager ConversationManager { get; private set; }
     public static GraphicsController GraphicsController { get; private set; }
+    public static MenusController MenusController { get; private set; }
     public static CloudsManager CloudsManager { get; private set; }
     public static Transform MetalLinesTransform { get; private set; }
     #endregion
@@ -55,6 +56,7 @@ public class GameManager : MonoBehaviour {
         AudioManager = transform.Find("AudioManager").GetComponent<AudioManager>();
         ConversationManager = GetComponent<ConversationManager>();
         GraphicsController = GetComponent<GraphicsController>();
+        MenusController = GetComponent<MenusController>();
         CloudsManager = GetComponent<CloudsManager>();
         MetalLinesTransform = transform.Find("MetalLines");
 

@@ -31,7 +31,7 @@ public class MetalReserveMeters : MonoBehaviour {
     }
 
     private void LateUpdate() {
-        if (!PauseMenu.IsPaused) {
+        if (!GameManager.MenusController.pauseMenu.IsOpen) {
             //UpdateReserve(iron);
             //UpdateReserve(steel);
             UpdateReserve(pewter);

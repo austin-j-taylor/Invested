@@ -152,7 +152,7 @@ public class HarmonyTarget : MonoBehaviour {
             renderer.material = GameManager.Material_MARLmetal_lit;
 
         // Open menus
-        LevelCompletedScreen.OpenScreen(this);
+        GameManager.MenusController.levelCompletedMenu.OpenScreen(this);
     }
     private void EndAnimationInsufficient() {
         playerHasEntered = false;

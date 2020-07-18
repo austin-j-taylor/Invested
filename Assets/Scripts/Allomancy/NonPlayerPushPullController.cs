@@ -50,7 +50,7 @@ public class NonPlayerPushPullController : AllomanticIronSteel {
     }
 
     private void LateUpdate() {
-        if (!PauseMenu.IsPaused) {
+        if (!GameManager.MenusController.pauseMenu.IsOpen) {
             for (int i = 0; i < TargetArray.smallArrayCapacity; i++) {
                 // Non-existent target, disable blue line
                 //if (PullTargets[i] != Player.PlayerMagnetic || !IronPulling) {

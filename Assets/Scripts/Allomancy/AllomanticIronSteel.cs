@@ -219,7 +219,7 @@ public class AllomanticIronSteel : Allomancer {
     /// Drain metal reserves.
     /// </summary>
     protected virtual void FixedUpdate() {
-        if (!PauseMenu.IsPaused) {
+        if (!GameManager.MenusController.pauseMenu.IsOpen) {
             if (IsBurning) {
                 // Remove all targets that are out of pushing range
                 // For Mouse/Keyboard, Iron and Steel burn percentages are equal, so it's somewhat redundant to specify

@@ -142,7 +142,7 @@ public class PlayerMovementController : AllomanticPewter {
     /// Check user input and change Sprinting, Anchoring, and jumping state.
     /// </summary>
     private void Update() {
-        if (!PauseMenu.IsPaused) {
+        if (!GameManager.MenusController.pauseMenu.IsOpen) {
             if (Player.CanControl && Player.CanControlMovement) {
                 // anchoring/rolling/sprinting state machine
                 if (IsAnchoring) {

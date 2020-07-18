@@ -8,10 +8,9 @@ using UnityEngine.UI;
 /// <summary>
 /// Handles the Settings Menu, where changing settings are saved to disk.
 /// </summary>
-public class SettingsMenu : MonoBehaviour {
+public class SettingsMenu : Menu {
 
     #region properties
-    public bool IsOpen => gameObject.activeSelf;
     public bool AreHeadersClosed => settingsHeader.gameObject.activeSelf;
     public bool IsGlossaryOpen => glossaryHeader.gameObject.activeSelf;
     public bool IsVideoOpen => videoHeader.gameObject.activeSelf;
@@ -31,7 +30,7 @@ public class SettingsMenu : MonoBehaviour {
     private Text tooltipText;
     private Transform settingsHeader;
     private Button glossaryButton, videoButton, gameplayButton, interfaceButton, graphicsButton, audioButton, allomancyButton, worldButton;
-    private static Transform glossaryHeader, videoHeader, gameplayHeader, interfaceHeader, graphicsHeader, audioHeader, allomancyHeader,worldHeader;
+    private static Transform glossaryHeader, videoHeader, gameplayHeader, interfaceHeader, graphicsHeader, audioHeader, allomancyHeader, worldHeader;
     private Button closeButton;
     private Text closeText;
     private Button discardButton;
@@ -119,14 +118,18 @@ public class SettingsMenu : MonoBehaviour {
         }
         Close();
     }
-    public void Open() {
-        gameObject.SetActive(true);
+    public override void Open() {
+        base.Open();
+        // If opened from the pause menu, hide parts of the pause menu.
+        if (GameManager.MenusController.pauseMenu.IsOpen) {
+            GameManager.MenusController.pauseMenu.HideContents();
+        }
         resetToDefaultsButton.gameObject.SetActive(true);
         tooltipText.text = "";
         MainMenu.FocusOnButton(highlitButton);
     }
 
-    public void Close() {
+    public override void Close() {
         if (IsOpen) {
             //if (EventSystem.current.currentSelectedGameObject != null)
             //    highlitButton = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
@@ -139,12 +142,7 @@ public class SettingsMenu : MonoBehaviour {
             CloseAudio();
             CloseAllomancy();
             CloseWorld();
-            gameObject.SetActive(false);
-            if (!PauseMenu.IsPaused) {
-                MainMenu.OpenTitleScreen();
-            } else {
-                PauseMenu.Open();
-            }
+            base.Close();
         }
     }
     public void OnSceneLoad(Scene scene, LoadSceneMode mode) {
@@ -169,9 +167,9 @@ public class SettingsMenu : MonoBehaviour {
     }
     #endregion
 
-        #region refreshing
-        // Refresh Settings and Refresh Particular Settings to update button texts
-        private void RefreshSettings() {
+    #region refreshing
+    // Refresh Settings and Refresh Particular Settings to update button texts
+    private void RefreshSettings() {
         foreach (JSONSettings setting in settings) {
             setting.RefreshSettings();
         }
@@ -309,14 +307,13 @@ public class SettingsMenu : MonoBehaviour {
         tooltipText.text = tip;
     }
 
-    // Returns true if calling this returns to the Title Screen
+    // Returns true if calling this closes the menu
     public bool BackAndSaveSettings() {
         if (!AreHeadersClosed) {
             foreach (JSONSettings setting in settings) {
                 setting.SaveSettings();
             }
         }
-
         return BackSettings();
     }
 

@@ -5,7 +5,7 @@ using UnityEngine.UI;
 /// <summary>
 /// Handles the Title Screen for the game, which appears on startup.
 /// </summary>
-public class TitleScreen : MonoBehaviour {
+public class TitleScreen : Menu {
 
     #region fields
     private Button highlitButton;
@@ -34,40 +34,41 @@ public class TitleScreen : MonoBehaviour {
         EventSystem.current.SetSelectedGameObject(highlitButton.gameObject);
     }
 
-    public void Open() {
-        if (!gameObject.activeSelf) {
-            gameObject.SetActive(true);
+    public override void Open() {
+        if (!IsOpen) {
+            base.Open();
             MainMenu.FocusOnButton(highlitButton);
         }
     }
 
-    public void Close() {
-        if (gameObject.activeSelf) {
+    public override void Close() {
+        if (IsOpen) {
             if (EventSystem.current.currentSelectedGameObject)
                 highlitButton = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
-            gameObject.SetActive(false);
+            base.Close();
         }
     }
 
     #region OnClicks
     private void OnClickedPlay() {
-        MainMenu.OpenSceneSelectMenu();
         Close();
+        GameManager.MenusController.mainMenu.sceneSelectMenu.Open();
     }
-
     private void OnClickedSettings() {
-        MainMenu.OpenSettingsMenu();
+        Close();
+        GameManager.MenusController.settingsMenu.Open();
     }
-
     private void OnClickedArticles() {
-        MainMenu.OpenArticlesMenu();
+        Close();
+        GameManager.MenusController.mainMenu.articlesMenu.Open();
+    }
+    private void OnClickedDataManagement() {
+        Close();
+        GameManager.MenusController.mainMenu.dataManagementMenu.Open();
     }
 
     private void OnClickedQuit() {
         Application.Quit();
-    }
-    private void OnClickedDataManagement() {
-        MainMenu.OpenDataManagementScreen();
     }
     #endregion
 }

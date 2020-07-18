@@ -35,7 +35,7 @@ public class TextLogController : MonoBehaviour {
     }
     public void Close() {
         gameObject.SetActive(false);
-        if(!PauseMenu.IsPaused)
+        if(!GameManager.MenusController.pauseMenu.IsOpen)
             CameraController.LockCamera();
     }
     public void Toggle() {

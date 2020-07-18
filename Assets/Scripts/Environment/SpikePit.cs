@@ -65,7 +65,7 @@ public class SpikePit : MonoBehaviour {
     }
 
     private void Update() {
-        if (!PauseMenu.IsPaused) {
+        if (!GameManager.MenusController.pauseMenu.IsOpen) {
             //Debug.Log(facingPlayer + " . " + tracingPlayer + " > " + chasingPlayer + " > " + tracingPath + " > " + releasingPlayer);
 
             // Executes during Rising. Face the Spike towards the player, vertically.

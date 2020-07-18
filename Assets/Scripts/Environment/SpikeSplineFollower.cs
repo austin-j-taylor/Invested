@@ -40,7 +40,7 @@ public class SpikeSplineFollower : SpikeSpline {
     }
 
     void Update() {
-        if (!PauseMenu.IsPaused) {
+        if (!GameManager.MenusController.pauseMenu.IsOpen) {
             progress += Time.deltaTime / AnimationTime;
             if (progress > 1f) {
                 progress = progress % 1;

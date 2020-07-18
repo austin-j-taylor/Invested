@@ -24,7 +24,7 @@ public abstract class Simulation : MonoBehaviour {
 
     protected virtual void Update() {
 
-        if (!PauseMenu.IsPaused) {
+        if (!GameManager.MenusController.pauseMenu.IsOpen) {
             if (InZincTime) {
                 if (Keybinds.ZincTime()) {
                     TimeController.CurrentTimeScale = slowPercent * desiredTimeScale;

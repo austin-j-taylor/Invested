@@ -54,7 +54,7 @@ public class Simulation_coinWall : Simulation {
     }
 
     private void FixedUpdate() {
-        if (allomancer && allomancer.HasPushTarget && !PauseMenu.IsPaused) {
+        if (allomancer && allomancer.HasPushTarget && !GameManager.MenusController.pauseMenu.IsOpen) {
             counter += Time.deltaTime;
             if (counter > .5f) {
                 allomancer.SteelPushing = true;

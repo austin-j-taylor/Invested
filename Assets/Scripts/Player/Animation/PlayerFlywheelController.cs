@@ -44,7 +44,7 @@ public class PlayerFlywheelController : MonoBehaviour {
     }
 
     private void FixedUpdate() {
-        if (!PauseMenu.IsPaused) {
+        if (!GameManager.MenusController.pauseMenu.IsOpen) {
             if (Player.PlayerPewter.IsBurning) {
                 AddAngleX(pewterSpinFactor * -(float)Player.PlayerPewter.PewterReserve.Rate);
                 AddAngleY(pewterSpinFactor * -(float)Player.PlayerPewter.PewterReserve.Rate);
@@ -54,7 +54,7 @@ public class PlayerFlywheelController : MonoBehaviour {
     }
 
     private void Update() {
-        if (!PauseMenu.IsPaused) {
+        if (!GameManager.MenusController.pauseMenu.IsOpen) {
             AddAngleX(passiveSpin);
             AddAngleY(passiveSpin);
             AddAngleZ(passiveSpin);

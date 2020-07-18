@@ -105,7 +105,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
     /// Read inputs for marking targets.
     /// </summary>
     private void LateUpdate() {
-        if (!PauseMenu.IsPaused) {
+        if (!GameManager.MenusController.pauseMenu.IsOpen) {
             if (IsBurning) {
                 if (!ExternalControl && Player.CanControl) {
 

@@ -3,18 +3,12 @@ using UnityEngine.UI;
 /// <summary>
 /// When the game is opened for the first time, this screen opens to ask the user for their control scheme.
 /// </summary>
-public class ControlSchemeScreen : MonoBehaviour {
+public class ControlSchemeMenu : Menu {
 
     private Button mouseKeyboardButton;
     private Button gamepadButton;
     private Button mkEQButton;
     private Button mk54Button;
-
-    public bool IsOpen {
-        get {
-            return gameObject.activeSelf;
-        }
-    }
 
     private void Awake() {
         Button[] buttons = GetComponentsInChildren<Button>();
@@ -29,12 +23,13 @@ public class ControlSchemeScreen : MonoBehaviour {
         mk54Button.onClick.AddListener(OnClickedMK54);
     }
 
-    public void Open() {
-        gameObject.SetActive(true);
+    public override void Open() {
+        base.Open();
         mouseKeyboardButton.gameObject.SetActive(true);
         gamepadButton.gameObject.SetActive(true);
         mkEQButton.gameObject.SetActive(false);
         mk54Button.gameObject.SetActive(false);
+        MainMenu.FocusOnButton(transform);
     }
 
     public void Close(bool refreshing) {
@@ -44,8 +39,8 @@ public class ControlSchemeScreen : MonoBehaviour {
             HUD.UpdateText();
             FlagsController.SetFlag("controlSchemeChosen");
         }
-        gameObject.SetActive(false);
-        MainMenu.OpenTitleScreen();
+        base.Close();
+        GameManager.MenusController.mainMenu.titleScreen.Open();
     }
 
     #region OnClicks

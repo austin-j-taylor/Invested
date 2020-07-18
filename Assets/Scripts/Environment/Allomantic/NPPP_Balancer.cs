@@ -24,7 +24,7 @@ public class NPPP_Balancer : MonoBehaviour {
     }
 
     private void Update() {
-        if (!PauseMenu.IsPaused) {
+        if (!GameManager.MenusController.pauseMenu.IsOpen) {
             cubeAnchor.position = target.transform.position;
             if (target.Velocity.sqrMagnitude > 0.01f)
                 cubeAnchor.transform.rotation = Quaternion.Slerp(cubeAnchor.transform.rotation, Quaternion.LookRotation(target.Velocity), 12 * Time.deltaTime);

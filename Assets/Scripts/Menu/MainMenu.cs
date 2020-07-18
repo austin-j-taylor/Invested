@@ -6,29 +6,19 @@ using UnityEngine.SceneManagement;
 /// <summary>
 /// Handles the main menu, which displays the Title Screen, Scene Select Menu, etc.
 /// </summary>
-public class MainMenu : MonoBehaviour {
+public class MainMenu : Menu {
 
-    private static MainMenu instance;
-    private static Transform canvas;
-
-    private ControlSchemeScreen controlSchemeScreen;
-    private DataManagementScreen dataManagementScreen;
-    private TitleScreen titleScreen;
-    private SettingsMenu settingsMenu;
-    private SceneSelectMenu sceneSelectMenu;
-    private ArticlesMenu articlesMenu;
-
-    public static bool IsOpen => instance.gameObject.activeSelf;
+    public TitleScreen titleScreen;
+    public ControlSchemeMenu controlSchemeMenu;
+    public DataManagementMenu dataManagementMenu;
+    public SceneSelectMenu sceneSelectMenu;
+    public ArticlesMenu articlesMenu;
 
     #region clearing
     private void Awake() {
-        instance = this;
-        canvas = GameObject.FindGameObjectWithTag("Canvas").transform;
-
-        dataManagementScreen = GetComponentInChildren<DataManagementScreen>();
-        controlSchemeScreen = GetComponentInChildren<ControlSchemeScreen>();
+        controlSchemeMenu = GetComponentInChildren<ControlSchemeMenu>();
+        dataManagementMenu = GetComponentInChildren<DataManagementMenu>();
         titleScreen = GetComponentInChildren<TitleScreen>();
-        settingsMenu = transform.parent.GetComponentInChildren<SettingsMenu>();
         sceneSelectMenu = GetComponentInChildren<SceneSelectMenu>();
         articlesMenu = GetComponentInChildren<ArticlesMenu>();
 
@@ -49,87 +39,40 @@ public class MainMenu : MonoBehaviour {
                 titleScreen.Close();
             if (sceneSelectMenu.isActiveAndEnabled)
                 FocusOnButton(sceneSelectMenu.HighlitButton);
+        } else {
+            Close();
         }
     }
 
     // Effectively starts the game over
-    public static void Reset() {
+    public void Reset() {
         Open();
         if (FlagsController.GetData("controlSchemeChosen")) {
-            instance.controlSchemeScreen.Close(false);
-            OpenTitleScreen();
+            controlSchemeMenu.Close(false);
         } else {
-            instance.titleScreen.Close();
-            OpenControlSchemeScreen();
+            controlSchemeMenu.Open();
         }
     }
     #endregion
 
     private void Update() {
-        if (Keybinds.ExitMenu() && !controlSchemeScreen.IsOpen) {
+        if (Keybinds.ExitMenu() && !controlSchemeMenu.IsOpen) {
             if (sceneSelectMenu.IsOpen) {
-                CloseSceneSelectMenu();
+                sceneSelectMenu.Close();
             } else if (articlesMenu.IsOpen) {
-                CloseArticlesMenu();
-            } else if (settingsMenu.IsOpen) {
-                if (settingsMenu.BackAndSaveSettings())
-                    OpenTitleScreen();
-            } else if (dataManagementScreen.IsOpen) {
-                dataManagementScreen.Close();
+                articlesMenu.Close();
+            } else if (dataManagementMenu.IsOpen) {
+                dataManagementMenu.Close();
+            } else if(GameManager.MenusController.settingsMenu.IsOpen) {
+                if (GameManager.MenusController.settingsMenu.BackAndSaveSettings())
+                    titleScreen.Open();
             } else {
-                OpenSettingsMenu();
+                GameManager.MenusController.settingsMenu.Open();
+                titleScreen.Close();
             }
         }
     }
 
-    #region opening
-    public static void Open() {
-        instance.gameObject.SetActive(true);
-    }
-
-    public static void Close() {
-        instance.gameObject.SetActive(false);
-    }
-
-    public static void OpenControlSchemeScreen() {
-        instance.controlSchemeScreen.Open();
-        FocusOnButton(instance.controlSchemeScreen.transform);
-    }
-
-    public static void OpenDataManagementScreen() {
-        instance.titleScreen.Close();
-        instance.dataManagementScreen.Open();
-    }
-
-    public static void OpenTitleScreen() {
-        instance.titleScreen.Open();
-    }
-
-    public static void OpenSceneSelectMenu() {
-        instance.titleScreen.Close();
-        instance.sceneSelectMenu.Open();
-    }
-    public static void CloseSceneSelectMenu() {
-        instance.sceneSelectMenu.Close();
-    }
-
-    public static void OpenArticlesMenu() {
-        instance.titleScreen.Close();
-        instance.articlesMenu.Open();
-    }
-    public static void CloseArticlesMenu() {
-        instance.articlesMenu.Close();
-    }
-
-    public static void OpenSettingsMenu() {
-        instance.titleScreen.Close();
-        instance.settingsMenu.Open();
-    }
-    public static void CloseSettingsMenu() {
-        instance.settingsMenu.Close();
-        instance.titleScreen.Open();
-    }
-    #endregion
 
     // Finds the first button, slider, etc. in the newly opened menu for gamepad and keyboard control of the menu
     // Works for Title Screen and Scene Select Menu

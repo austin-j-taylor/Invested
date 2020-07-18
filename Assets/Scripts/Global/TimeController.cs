@@ -17,7 +17,7 @@ public class TimeController : MonoBehaviour {
         set {
             desiredScale = value;
 
-            if (MainMenu.IsOpen || PauseMenu.IsPaused) {
+            if (GameManager.MenusController.mainMenu.IsOpen || GameManager.MenusController.pauseMenu.IsOpen) {
                 // time scale should stay at zero
                 actualScale = 0;
             } else {

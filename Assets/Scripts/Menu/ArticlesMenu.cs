@@ -4,13 +4,11 @@ using UnityEngine.UI;
 /// <summary>
 /// Handles the menu that displays in-world information from the title screen.
 /// </summary>
-public class ArticlesMenu : MonoBehaviour {
+public class ArticlesMenu : Menu {
 
     private const int index_532 = 0, index_612 = 1;
     [SerializeField]
     private Sprite zincImage = null;
-
-    public bool IsOpen => gameObject.activeSelf;
 
     private Text tooltip;
     private Text[] articleTexts;
@@ -33,14 +31,15 @@ public class ArticlesMenu : MonoBehaviour {
     void Start() {
         Close();
     }
-    public void Open() {
-        gameObject.SetActive(true);
+
+    public override void Open() {
+        base.Open();
         tooltip.text = "";
         MainMenu.FocusOnButton(transform);
     }
-    public void Close() {
-        gameObject.SetActive(false);
-        MainMenu.OpenTitleScreen();
+    public override void Close() {
+        base.Close();
+        GameManager.MenusController.mainMenu.titleScreen.Open();
     }
 
     private void OnClickedBack() {

@@ -45,7 +45,7 @@ public class FeruchemicalZinc : MonoBehaviour {
     }
 
     void Update() {
-        if (!PauseMenu.IsPaused) {
+        if (!GameManager.MenusController.pauseMenu.IsOpen) {
             if (InZincTime) {
                 // In Zinc Time
                 Rate = -Time.deltaTime / slowPercent / maxTime;

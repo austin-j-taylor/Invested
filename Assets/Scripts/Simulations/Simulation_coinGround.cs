@@ -96,7 +96,7 @@ public class Simulation_coinGround : Simulation {
     }
 
     private void FixedUpdate() {
-        if (allomancerTop && !PauseMenu.IsPaused) {
+        if (allomancerTop && !GameManager.MenusController.pauseMenu.IsOpen) {
 
             if (counter > 2) {
                 Rigidbody[] rbs = GetComponentsInChildren<Rigidbody>();

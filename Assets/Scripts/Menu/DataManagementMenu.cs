@@ -6,11 +6,10 @@ using UnityEngine.UI;
 /// <summary>
 /// Handles the major deletion of game data.
 /// </summary>
-public class DataManagementScreen : MonoBehaviour {
+public class DataManagementMenu : Menu {
+
     private Button saveButton, timeTrialsButton, confirmButton, closeButton;
     private bool deletingSaves = false;
-
-    public bool IsOpen => gameObject.activeSelf;
 
     void Awake() {
         saveButton = transform.Find("Tooltip/DeleteSaves").GetComponent<Button>();
@@ -23,12 +22,13 @@ public class DataManagementScreen : MonoBehaviour {
         confirmButton.onClick.AddListener(OnClickConfirm);
         closeButton.onClick.AddListener(Close);
     }
+    
     void Start() {
-        gameObject.SetActive(false);
+        base.Close();
     }
 
-    public void Open() {
-        gameObject.SetActive(true);
+    public override void Open() {
+        base.Open();
         saveButton.gameObject.SetActive(true);
         timeTrialsButton.gameObject.SetActive(true);
         confirmButton.gameObject.SetActive(false);
@@ -37,9 +37,9 @@ public class DataManagementScreen : MonoBehaviour {
         SetTooltip("");
         MainMenu.FocusOnButton(closeButton);
     }
-    public void Close() {
-        gameObject.SetActive(false);
-        MainMenu.Reset();
+    public override void Close() {
+        base.Close();
+        GameManager.MenusController.mainMenu.Reset();
     }
 
     public void SetTooltip(string tip) {

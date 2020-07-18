@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 /// <summary>
 /// Handles the menu for selecting levels, sandboxes, etc.
 /// </summary>
-public class SceneSelectMenu : MonoBehaviour {
+public class SceneSelectMenu : Menu {
 
     #region buildIndices
     // Scene build indices
@@ -38,8 +38,8 @@ public class SceneSelectMenu : MonoBehaviour {
     }
     public static bool IsCurrentSceneTutorial => IsTutorial(SceneManager.GetActiveScene().buildIndex);
 
-    public bool IsOpen => gameObject.activeSelf;
-
+    // Preserves the selected button to enter before entering that scene
+    // so we have the same button selected when we leave the level
     public Button HighlitButton { get; private set; }
 
     #region fields
@@ -128,16 +128,17 @@ public class SceneSelectMenu : MonoBehaviour {
         gameObject.SetActive(false);
     }
 
-    public void Open() {
-        gameObject.SetActive(true);
+    public override void Open() {
+        GameManager.MenusController.mainMenu.titleScreen.Close();
+        base.Open();
         tooltip.text = "";
         MainMenu.FocusOnButton(HighlitButton);
         Refresh();
     }
 
-    public void Close() {
-        gameObject.SetActive(false);
-        MainMenu.OpenTitleScreen();
+    public override void Close() {
+        base.Close();
+        GameManager.MenusController.mainMenu.titleScreen.Open();
     }
 
     private void Refresh() {

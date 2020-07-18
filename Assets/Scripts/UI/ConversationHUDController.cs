@@ -46,7 +46,7 @@ public class ConversationHUDController : MonoBehaviour {
     }
 
     private void Update() {
-        if (!PauseMenu.IsPaused && IsOpen && state == State.Waiting) {
+        if (!GameManager.MenusController.pauseMenu.IsOpen && IsOpen && state == State.Waiting) {
             // Advance the conversation
             if (Keybinds.AdvanceConversation()) {
                 state = State.Writing; // Picks back up in the SpeakPhraseHelper coroutine
