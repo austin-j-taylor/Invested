@@ -5,7 +5,7 @@ using UnityEngine;
 public class KogActor : MonoBehaviour {
 
     // State machine for Kog
-    public enum State { Resting, Reaching, Throwing };
+    public enum State { Resting, Reaching, Throwing, Meditating };
 
     private KogAnimation kogAnimation;
 

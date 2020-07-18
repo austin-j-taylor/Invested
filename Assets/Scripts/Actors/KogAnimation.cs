@@ -22,6 +22,12 @@ public class KogAnimation : MonoBehaviour {
         anim = GetComponentInChildren<Animator>();
         target = Player.PlayerInstance.transform;
         //state = State.Resting;
+
+        switch(state) {
+            case State.Meditating:
+                anim.Play("Armature|Meditating");
+                break;
+        }
     }
 
     void Update() {
