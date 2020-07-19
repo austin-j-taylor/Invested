@@ -127,17 +127,18 @@ public class GameManager : MonoBehaviour {
 
     // Changes the overall game state
     public static void SetCameraState(GameCameraState newState) {
+        CameraState = newState;
         switch (CameraState) {
             case GameCameraState.Standard:
-
+                HUD.EnableHUD();
                 break;
             case GameCameraState.Cutscene:
-
+                HUD.DisableHUD();
                 break;
         }
-        CameraState = newState;
     }
     public static void SetPlayState(GamePlayState newState) {
+        PlayState = newState;
         switch (PlayState) {
             case GamePlayState.Standard:
 
@@ -146,6 +147,5 @@ public class GameManager : MonoBehaviour {
 
                 break;
         }
-        PlayState = newState;
     }
 }

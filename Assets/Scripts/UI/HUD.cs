@@ -91,10 +91,10 @@ public class HUD : MonoBehaviour {
         TextLogController.LogPartition();
     }
 
-    // Ready HUD elements for a certain simulation
+    // Make HUD elements visible
     public static void EnableHUD() {
-        //instance.SetActive(true);
-        hudGroup.alpha = 1;
+        if (SettingsMenu.settingsInterface.hudEnabled == 1)
+            hudGroup.alpha = 1;
     }
 
     public static void DisableHUD() {

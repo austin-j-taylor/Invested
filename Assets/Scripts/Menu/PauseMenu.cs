@@ -45,7 +45,8 @@ public class PauseMenu : Menu {
 
     private void ClearAfterSceneChange(Scene scene, LoadSceneMode mode) {
         if (mode == LoadSceneMode.Single) {
-            Close();
+            if(IsOpen)
+                Close();
         }
     }
 
@@ -96,8 +97,7 @@ public class PauseMenu : Menu {
         if (!GameManager.MenusController.levelCompletedMenu.IsOpen && !GameManager.MenusController.mainMenu.IsOpen) { // If there is another menu open. Change this if we rework menus.
             CameraController.LockCamera();
         }
-        if (SettingsMenu.settingsInterface.hudEnabled == 1)
-            HUD.EnableHUD();
+        HUD.EnableHUD();
         GameManager.AudioManager.SetMasterPitch(1);
 
         TimeController.CurrentTimeScale = TimeController.CurrentTimeScale;

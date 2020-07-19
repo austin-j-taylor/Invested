@@ -10,11 +10,11 @@ using UnityEngine.SceneManagement;
 public class CameraController : MonoBehaviour {
 
     #region constants
-    private const float CameraLookAtTargetFirstPersonHeight = 1;
     private const float rootConstantScaling = .5f;
     private const float stretchingVelocityFactor = -100;
     private const float cameraStretchingLerpFactor = 7;
-    private static readonly Vector3 cameraControllerOffset = new Vector3(0, 0.25f - .06f, 0);
+    private static readonly Vector3 cameraControllerOffsetThirdPerson = new Vector3(0, 0.25f - .07f, 0);
+    private static readonly Vector3 cameraControllerOffsetFirstPerson = new Vector3(0, .13f, 0);
     #endregion
 
     #region properties
@@ -128,7 +128,6 @@ public class CameraController : MonoBehaviour {
 
     // Set camera position and rotation to follow the player for this frame.
     public static void UpdateCamera() {
-        instance.transform.position = playerBody.position + cameraControllerOffset;
         CameraLookAtTarget.rotation = Quaternion.Euler(0, currentX, 0);
         if (GameManager.CameraState == GameManager.GameCameraState.Standard)
             CinemachineThirdPersonCamera.transform.localPosition = Vector3.zero;
@@ -149,10 +148,12 @@ public class CameraController : MonoBehaviour {
         //}
 
         if (IsFirstPerson) {
+            playerCameraController.position = playerBody.position + cameraControllerOffsetFirstPerson;
             Vector3 wantedPosition = playerCameraController.position;
 
             CameraPositionTarget.transform.position = wantedPosition;
         } else {
+            playerCameraController.position = playerBody.position + cameraControllerOffsetThirdPerson;
 
             // If the player is moving quickly, the camera stretches outwards.
             float cameraDistance = -SettingsMenu.settingsGameplay.cameraDistance;
@@ -205,7 +206,7 @@ public class CameraController : MonoBehaviour {
                 Vector3 halfCameraHeight = destinationsCamera[0] - destinationsCamera[3];
 
 
-                Vector3 originPlayer = playerBody.position + cameraControllerOffset;
+                Vector3 originPlayer = playerCameraController.position;
                 Vector3 destinationCamera = ActiveCamera.ViewportToWorldPoint(new Vector3(.5f, .5f, ActiveCamera.nearClipPlane));
                 float length = Vector3.Distance(originPlayer, destinationCamera);
 
