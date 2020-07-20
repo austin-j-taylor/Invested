@@ -16,6 +16,8 @@ public class HarmonyTarget : MonoBehaviour {
 
     [SerializeField]
     private int numSpikes = 3;
+    [SerializeField]
+    private string completionFlag = "";
 
     private bool playerHasEntered;
     private bool controllingPlayer;
@@ -149,6 +151,10 @@ public class HarmonyTarget : MonoBehaviour {
         //Player.PlayerInstance.GetComponentInChildren<MeshRenderer>().material = harmonySphere.GetComponent<Renderer>().material;
         foreach (Renderer renderer in symbolRenderers)
             renderer.material = GameManager.Material_MARLmetal_lit;
+
+        // Register this level as completed
+        if (completionFlag != "")
+            FlagsController.SetFlag(completionFlag);
 
         // Open menus
         GameManager.MenusController.levelCompletedMenu.OpenScreen(this);
