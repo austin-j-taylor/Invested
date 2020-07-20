@@ -14,7 +14,7 @@ using TMPro;
 public class ConversationHUDController : MonoBehaviour {
 
     private const float delayPerCharacter = .02f, delayPerPause = .125f;
-    private const int charsPerLine = 53;
+    private const int charsPerLine = 52;
 
     // The style of text as it's being parsed
     private enum Style { Clear, Italic, Bold, Colored, OtherFont };

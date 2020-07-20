@@ -39,24 +39,22 @@ public class AllomechanicalGlower : MonoBehaviour {
 
     void LateUpdate() {
         if (!GameManager.MenusController.pauseMenu.IsOpen && !isOverridden) {
-            if (Player.PlayerIronSteel.IsBurning) {
-                if (Player.PlayerIronSteel.IronPulling) {
-                    foreach (Renderer rend in irons) {
-                        EnableEmission(rend.material, ColorIron, 1 + 2 * Player.PlayerIronSteel.IronBurnPercentageTarget);
-                    }
-                } else {
-                    foreach (Renderer rend in irons) {
-                        DisableEmission(rend.material);
-                    }
+            if (Player.PlayerIronSteel.IronPulling) {
+                foreach (Renderer rend in irons) {
+                    EnableEmission(rend.material, ColorIron, 1 + 2 * Player.PlayerIronSteel.IronBurnPercentageTarget);
                 }
-                if (Player.PlayerIronSteel.SteelPushing) {
-                    foreach (Renderer rend in steels) {
-                        EnableEmission(rend.material, ColorSteel, 1 + 2 * Player.PlayerIronSteel.SteelBurnPercentageTarget);
-                    }
-                } else {
-                    foreach (Renderer rend in steels) {
-                        DisableEmission(rend.material);
-                    }
+            } else {
+                foreach (Renderer rend in irons) {
+                    DisableEmission(rend.material);
+                }
+            }
+            if (Player.PlayerIronSteel.SteelPushing) {
+                foreach (Renderer rend in steels) {
+                    EnableEmission(rend.material, ColorSteel, 1 + 2 * Player.PlayerIronSteel.SteelBurnPercentageTarget);
+                }
+            } else {
+                foreach (Renderer rend in steels) {
+                    DisableEmission(rend.material);
                 }
             }
             if (Player.PlayerPewter.IsBurning) {

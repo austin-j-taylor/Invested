@@ -5,9 +5,13 @@ using static TextCodes;
 
 public class Environment_Tutorial4 : EnvironmentCinematic {
 
+    private const int distanceFromEndToThrumming = 335;
+
     EnvironmentalTransitionManager musicManager;
     [SerializeField]
     private Node doorNode1 = null, doorNode2 = null;
+    [SerializeField]
+    private HarmonyTarget harmonyTarget = null;
 
     void Start() {
         Player.VoidHeight = -200;
@@ -105,5 +109,31 @@ public class Environment_Tutorial4 : EnvironmentCinematic {
             yield return null;
         }
         HUD.MessageOverlayCinematic.FadeOut();
+    }
+    protected override IEnumerator Trigger3() {
+        // Fade in the Thrumming
+        AudioSource source = GetComponent<AudioSource>();
+        source.volume = 0;
+        source.Play();
+
+        while(true) {
+            float distance = (Player.PlayerInstance.transform.position - harmonyTarget.transform.position).magnitude;
+            // Reset if player respawns
+            if(distance > 5 + distanceFromEndToThrumming) {
+                source.Stop();
+                musicManager.SetExteriorVolume(1);
+                while (distance > distanceFromEndToThrumming) {
+                    distance = (Player.PlayerInstance.transform.position - harmonyTarget.transform.position).magnitude;
+                    yield return null;
+                }
+                source.Play();
+            }
+            // Fade in as it gets closer
+            float vol = distance / distanceFromEndToThrumming;
+            musicManager.SetExteriorVolume(vol);
+            source.volume = 1 - vol;
+
+            yield return null;
+        }
     }
 }

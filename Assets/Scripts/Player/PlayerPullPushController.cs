@@ -639,6 +639,8 @@ public class PlayerPullPushController : AllomanticIronSteel {
     /// <param name="clearTargets">Also remove marked push/pull targets</param>
     public override void StopBurning(bool clearTargets = true) {
         base.StopBurning(clearTargets);
+        IronPulling = false;
+        SteelPushing = false;
         steelBurnPercentageLerp = 0;
         ironBurnPercentageLerp = 0;
         IronPassiveBurn = 0;

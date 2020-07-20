@@ -10,7 +10,7 @@ public class HarmonyTarget : MonoBehaviour {
     private const float distanceThresholdPulling = 10f;
     private const float forceConstantFar = 40f;
     private const float forceConstantClose = 10000f;
-    private const float lerpConstant = 7;
+    private float lerpConstant = 3;
     private const float timeToLerpBack = 2;
     private readonly Vector3 positionLeft = new Vector3(0, 0, 2.39419f);
 
@@ -87,22 +87,21 @@ public class HarmonyTarget : MonoBehaviour {
     }
 
     private void LateUpdate() {
-        if (!playerHasEntered) {
-            // Rotate Target towards Player
-            Vector3 distancetoPlayer = harmonySphere.position - CameraController.ActiveCamera.transform.position;// player.transform.position;
-            float angle = 180 + Mathf.Atan2(distancetoPlayer.x, distancetoPlayer.z) * Mathf.Rad2Deg;
-            Vector3 newRotation = Vector3.zero;
-            ////angle = Mathf.LerpAngle(inner.eulerAngles.y, angle, Time.deltaTime * 10f);
+        if (playerHasEntered) {
+            transform.rotation = Quaternion.Slerp(transform.rotation, zeroRotation, Time.deltaTime * lerpConstant);
+        } else {
+            //// Rotate Target towards Player
+            //Vector3 distancetoPlayer = harmonySphere.position - CameraController.ActiveCamera.transform.position;// player.transform.position;
+            //float angle = 180 + Mathf.Atan2(distancetoPlayer.x, distancetoPlayer.z) * Mathf.Rad2Deg;
+            //Vector3 newRotation = Vector3.zero;
+            //////angle = Mathf.LerpAngle(inner.eulerAngles.y, angle, Time.deltaTime * 10f);
 
-            newRotation.y = angle;
-            //transform.localEulerAngles = newRotation;
-            outerLeft.localEulerAngles -= newRotation;
-            outerRight.localEulerAngles -= newRotation;
+            //newRotation.y = angle;
+            ////transform.localEulerAngles = newRotation;
+            ////outerLeft.localEulerAngles -= newRotation;
+            ////outerRight.localEulerAngles -= newRotation;
 
             transform.LookAt(CameraController.ActiveCamera.transform.position);
-
-        } else {
-            transform.rotation = Quaternion.Slerp(transform.rotation, zeroRotation, Time.deltaTime * lerpConstant);
         }
     }
 
@@ -143,7 +142,7 @@ public class HarmonyTarget : MonoBehaviour {
     }
     private void InsufficentSpikesMessage() {
         int spikesLeft = 3 - numSpikes;
-        HUD.MessageOverlayCinematic.FadeIn(spikesLeft + " Spike" + (spikesLeft == 1 ? " remains" : "s remain"));
+        HUD.MessageOverlayCinematic.FadeInFor(spikesLeft + " Spike" + (spikesLeft == 1 ? " remains" : "s remain"), 3);
     }
     private void EndAnimation() {
         Player.PlayerInstance.SetFrameMaterial(GameManager.Material_MARLmetal_lit);
@@ -161,7 +160,6 @@ public class HarmonyTarget : MonoBehaviour {
         HUD.EnableHUD();
         Player.PlayerInstance.GetComponent<Rigidbody>().useGravity = SettingsMenu.settingsWorld.playerGravity == 1;
         CameraController.DisableCinemachineCamera(vcam);
-        HUD.MessageOverlayCinematic.FadeOut();
         StartCoroutine(EnableColliderAfterDelay());
     }
     private IEnumerator EnableColliderAfterDelay() {

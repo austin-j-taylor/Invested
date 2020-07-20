@@ -15,12 +15,13 @@ public class EnvironmentalTransitionManager : MonoBehaviour {
 
         for (int i = 0; i < interiors.Length; i++) {
             interiors[i].outputAudioMixerGroup = GameManager.AudioManager.MixerBGMGroup;
+            interiors[i].loop = true;
         }
         for (int i = 0; i < exteriors.Length; i++) {
             exteriors[i].outputAudioMixerGroup = GameManager.AudioManager.MixerBGMGroup;
+            exteriors[i].loop = true;
         }
     }
-
     public void StartInterior() {
         GameManager.CloudsManager.FadeCloudsOutImmediate();
         foreach (AudioSource source in interiors) {
@@ -43,6 +44,11 @@ public class EnvironmentalTransitionManager : MonoBehaviour {
         }
     }
 
+    public void SetExteriorVolume(float vol) {
+        for (int i = 0; i < exteriors.Length; i++) {
+            exteriors[i].volume = vol;
+        }
+    }
 
     private void Transition(AudioSource[] froms, AudioSource[] tos) {
         int i;
