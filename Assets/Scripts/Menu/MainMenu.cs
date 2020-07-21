@@ -64,8 +64,9 @@ public class MainMenu : Menu {
             } else if (dataManagementMenu.IsOpen) {
                 dataManagementMenu.Close();
             } else if(GameManager.MenusController.settingsMenu.IsOpen) {
-                if (GameManager.MenusController.settingsMenu.BackAndSaveSettings())
-                    titleScreen.Open();
+                GameManager.MenusController.settingsMenu.BackAndSaveSettings();
+                //if (GameManager.MenusController.settingsMenu.BackAndSaveSettings())
+                //    titleScreen.Open();
             } else {
                 GameManager.MenusController.settingsMenu.Open();
                 titleScreen.Close();

@@ -141,7 +141,7 @@ public class SceneSelectMenu : Menu {
         GameManager.MenusController.mainMenu.titleScreen.Open();
     }
 
-    private void Refresh() {
+    public void Refresh() {
         // Lock levels when previous levels are not completed
         //levelMARL1Button.interactable = FlagsController.GetData("completeTutorial1");
         //levelMARL2Button.interactable = FlagsController.GetData("completeTutorial2");

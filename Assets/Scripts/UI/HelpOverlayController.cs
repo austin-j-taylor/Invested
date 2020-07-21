@@ -20,7 +20,7 @@ public class HelpOverlayController : MonoBehaviour {
 
     private TextMeshProUGUI HelpTextLeft { get; set; }
     // Used to update the overlay when a change occurs
-    private bool last_IronEnabled = false, last_SteelEnabled = false, last_ControlWheel = false, last_PewterEnabled = false, last_Zinc = false, last_Coins;
+    private bool last_IronEnabled = false, last_SteelEnabled = false, last_ControlWheel = false, last_PewterEnabled = false, last_Zinc = false, last_Coins = false;
     private ControlMode last_Mode = ControlMode.Manual;
     private State currentState;
 
@@ -29,7 +29,9 @@ public class HelpOverlayController : MonoBehaviour {
         currentState = State.Closed;
     }
 
-    public void Clear() { }
+    public void Clear() {
+        UpdateText();
+    }
 
     #region update
     private void Update() {
@@ -55,7 +57,7 @@ public class HelpOverlayController : MonoBehaviour {
                 last_Zinc = Player.CanControlZinc;
                 UpdateText();
             }
-            if (last_Coins != Player.CanThrowCoins && Player.PlayerInstance.CoinHand.Pouch.Count > 0) {
+            if (last_Coins != (Player.CanThrowCoins && Player.PlayerInstance.CoinHand.Pouch.Count > 0)) {
                 last_Coins = Player.CanThrowCoins && Player.PlayerInstance.CoinHand.Pouch.Count > 0;
                 UpdateText();
             }

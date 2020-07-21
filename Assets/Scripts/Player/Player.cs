@@ -220,11 +220,9 @@ public class Player : PewterEntity {
                 PlayerPewter.PewterReserve.IsEnabled = FlagsController.GetData("pwr_pewter");
                 CanControlZinc = FlagsController.GetData("pwr_zinc");
                 CanThrowCoins = FlagsController.GetData("pwr_coins");
-                if (FlagsController.GetData("pwr_coins")) {
-                    CanThrowCoins = true;
+                if (CanThrowCoins) {
                     CoinHand.Pouch.Fill();
                 } else {
-                    CanThrowCoins = false;
                     CoinHand.Pouch.Clear();
                 }
 

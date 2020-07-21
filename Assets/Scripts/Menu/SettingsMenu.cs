@@ -143,6 +143,13 @@ public class SettingsMenu : Menu {
             CloseAllomancy();
             CloseWorld();
             base.Close();
+
+            // Open the title screen or pause menu
+            if(GameManager.MenusController.mainMenu.IsOpen) {
+                GameManager.MenusController.mainMenu.titleScreen.Open();
+            } else if(GameManager.MenusController.pauseMenu.IsOpen) {
+                GameManager.MenusController.pauseMenu.Open();
+            }
         }
     }
     public void OnSceneLoad(Scene scene, LoadSceneMode mode) {

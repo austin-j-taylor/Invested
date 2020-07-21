@@ -6,7 +6,7 @@ using System.Collections;
 /// </summary>
 public class PlayerAudioController : MonoBehaviour {
 
-    private const float windVelocityFactor = 10, windLerpFactor = 20, windVolumeVactor = 4;
+    private const float rollVelocityFactor = 10, rollLerpFactor = 20, rollVolumeVactor = 4;
 
     public AudioListener Listener { get; private set; }
 
@@ -130,12 +130,12 @@ public class PlayerAudioController : MonoBehaviour {
         // Make pitch and volume of the rolling a function of the player's speed
         if (Time.timeScale > 0 && Player.PlayerPewter.IsGrounded) {
             float velocity = Player.PlayerIronSteel.rb.velocity.magnitude;
-            float factor = Mathf.Exp(-windVelocityFactor / velocity);
-            player_rolling_loop.volume = Mathf.Lerp(player_rolling_loop.volume, factor * windVolumeVactor, Time.deltaTime * windLerpFactor);
-            player_rolling_loop.pitch = Mathf.Lerp(player_rolling_loop.pitch, 1 + factor, Time.deltaTime * windLerpFactor);
+            float factor = Mathf.Exp(-rollVelocityFactor / velocity);
+            player_rolling_loop.volume = Mathf.Lerp(player_rolling_loop.volume, factor * rollVolumeVactor, Time.deltaTime * rollLerpFactor);
+            player_rolling_loop.pitch = Mathf.Lerp(player_rolling_loop.pitch, 1 + factor, Time.deltaTime * rollLerpFactor);
         } else {
-            player_rolling_loop.volume = Mathf.Lerp(player_rolling_loop.volume, 0, Time.deltaTime * windLerpFactor);
-            player_rolling_loop.pitch = Mathf.Lerp(player_rolling_loop.pitch, 1, Time.deltaTime * windLerpFactor);
+            player_rolling_loop.volume = Mathf.Lerp(player_rolling_loop.volume, 0, Time.deltaTime * rollLerpFactor);
+            player_rolling_loop.pitch = Mathf.Lerp(player_rolling_loop.pitch, 1, Time.deltaTime * rollLerpFactor);
         }
     }
 }

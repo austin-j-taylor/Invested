@@ -27,15 +27,16 @@ public class MenusController : MonoBehaviour {
 
     // Close certain menus when they're open and the player hits Escape
     private void LateUpdate() {
-        if (Keybinds.ExitMenu()) {
+        if (Keybinds.ExitMenu()) { // B or Escape
             if(pauseMenu.IsOpen) {
                 if (settingsMenu.IsOpen) {
-                    if (settingsMenu.BackAndSaveSettings())
-                        pauseMenu.Open();
+                    settingsMenu.BackAndSaveSettings();
+                    //if (settingsMenu.BackAndSaveSettings())
+                    //    pauseMenu.Open();
                 } else {
                     pauseMenu.Close();
                 }
-            } else if(Player.CanPause) {
+            } else if(Player.CanPause && Keybinds.EscapeDown()) {
                 pauseMenu.Open();
             }
         }

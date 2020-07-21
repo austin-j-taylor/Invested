@@ -29,6 +29,7 @@ public class ControlSchemeMenu : Menu {
         gamepadButton.gameObject.SetActive(true);
         mkEQButton.gameObject.SetActive(false);
         mk54Button.gameObject.SetActive(false);
+        GameManager.MenusController.mainMenu.titleScreen.Close();
         MainMenu.FocusOnButton(transform);
     }
 
