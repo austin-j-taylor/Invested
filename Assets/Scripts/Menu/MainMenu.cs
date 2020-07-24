@@ -50,6 +50,7 @@ public class MainMenu : Menu {
         if (FlagsController.GetData("controlSchemeChosen")) {
             controlSchemeMenu.Close(false);
         } else {
+            titleScreen.Close();
             controlSchemeMenu.Open();
         }
     }
@@ -63,7 +64,7 @@ public class MainMenu : Menu {
                 articlesMenu.Close();
             } else if (dataManagementMenu.IsOpen) {
                 dataManagementMenu.Close();
-            } else if(GameManager.MenusController.settingsMenu.IsOpen) {
+            } else if (GameManager.MenusController.settingsMenu.IsOpen) {
                 GameManager.MenusController.settingsMenu.BackAndSaveSettings();
                 //if (GameManager.MenusController.settingsMenu.BackAndSaveSettings())
                 //    titleScreen.Open();

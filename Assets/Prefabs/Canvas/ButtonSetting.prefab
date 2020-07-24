@@ -191,7 +191,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 2
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.8639311, g: 0.9245283, b: 0.9622641, a: 1}
@@ -201,9 +201,10 @@ MonoBehaviour:
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
+    m_HighlightedSprite: {fileID: 21300000, guid: c90b118bd071f0d46b3dfe0f62f80cd8,
+      type: 3}
+    m_PressedSprite: {fileID: 21300000, guid: 7f0276a0a7ae79a4b9d84a9ac93fd1cc, type: 3}
+    m_SelectedSprite: {fileID: 21300000, guid: c90b118bd071f0d46b3dfe0f62f80cd8, type: 3}
     m_DisabledSprite: {fileID: 0}
   m_AnimationTriggers:
     m_NormalTrigger: Normal
@@ -227,6 +228,7 @@ GameObject:
   - component: {fileID: 224100268062443654}
   - component: {fileID: 222805491742394856}
   - component: {fileID: 114008144310392452}
+  - component: {fileID: 5709181450028438296}
   m_Layer: 5
   m_Name: ButtonText
   m_TagString: Untagged
@@ -295,6 +297,21 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: 
+--- !u!114 &5709181450028438296
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1103927087777622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
+  m_EffectDistance: {x: 1, y: -1}
+  m_UseGraphicAlpha: 1
 --- !u!1 &1172624969598372
 GameObject:
   m_ObjectHideFlags: 0

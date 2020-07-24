@@ -77,7 +77,7 @@ public class HelpOverlayController : MonoBehaviour {
         HelpTextLeft.gameObject.SetActive(true);
         StringBuilder builder = new StringBuilder();
         if (Verbose) {
-            builder.AppendLine(HowToHelpAbridged + ": toggle this overlay (verbose)\n");
+            builder.AppendLine(HowToHelpAbridged + " toggle this overlay (verbose)\n");
             builder.AppendLine(HowToPerspectiveAbridged + " change perspective");
             builder.AppendLine(HowToTextLog + " view text log");
         } else {
@@ -97,10 +97,10 @@ public class HelpOverlayController : MonoBehaviour {
                         " • " + KeyMarkAbridged + " " + Mark + " for " + Pulling + '/' + Pushing
                     );
                     if (Verbose) {
-                        builder.AppendLine(" • " + KeyMultiMark + Mark + " on multiple targets");
+                        builder.AppendLine(" • " + KeyMultiMark + " " + Mark + " on multiple targets");
                     }
                     builder.AppendLine(
-                        " • " + KeyPushPullStrength + ": " + Push_Pull + " strength"
+                        " • " + KeyPushPullStrength + " " + Push_Pull + " strength"
                     );
                 } else {
                     if (last_IronEnabled) {
@@ -109,10 +109,10 @@ public class HelpOverlayController : MonoBehaviour {
                             " • " + KeyMark_PullAbridged + " " + Mark + " for " + Pulling
                         );
                         if (Verbose) {
-                            builder.AppendLine(" • " + KeyMultiMark + Mark + " on multiple targets");
+                            builder.AppendLine(" • " + KeyMultiMark + " " + Mark + " on multiple targets");
                         }
                         builder.AppendLine(
-                            " • " + KeyPullStrength + ": " + Pull + " strength"
+                            " • " + KeyPullStrength + " " + Pull + " strength"
                         );
                     }
                 }
@@ -129,10 +129,10 @@ public class HelpOverlayController : MonoBehaviour {
                     " • " + KeyMarkAbridged + " " + Mark + " for " + Pulling + '/' + Pushing
                 );
                 if (Verbose) {
-                    builder.AppendLine(" • " + KeyMultiMark + Mark + " on multiple targets");
+                    builder.AppendLine(" • " + KeyMultiMark + " " + Mark + " on multiple targets");
                 }
                 builder.AppendLine(
-                    " • " + KeyPushPullStrength + ": " + Push_Pull + " strength"
+                    " • " + KeyPushPullStrength + " " + Push_Pull + " strength"
                 );
                 break;
             case ControlMode.Area:
@@ -142,10 +142,10 @@ public class HelpOverlayController : MonoBehaviour {
                         " • " + KeyMarkAbridged + " " + Mark + " for " + Pulling + '/' + Pushing
                     );
                     if (Verbose) {
-                        builder.AppendLine(" • " + KeyMultiMark + Mark + " on multiple targets");
+                        builder.AppendLine(" • " + KeyMultiMark + " " + Mark + " on multiple targets");
                     }
                     builder.AppendLine(
-                        " • " + KeyPushPullStrength + ": " + Push_Pull + " strength\n" +
+                        " • " + KeyPushPullStrength  + " " + Push_Pull + " strength\n" +
                         " • " + KeyRadiusAbridged + " size of area"
                     );
                 } else {
@@ -155,10 +155,10 @@ public class HelpOverlayController : MonoBehaviour {
                             " • " + KeyMark_PullAbridged + " " + Mark + " for " + Pulling
                         );
                         if (Verbose) {
-                            builder.AppendLine(" • " + KeyMultiMark + Mark + " on multiple targets");
+                            builder.AppendLine(" • " + KeyMultiMark + " " + Mark + " on multiple targets");
                         }
                         builder.AppendLine(
-                            " • " + KeyPullStrength + ": " + Pull + " strength\n" +
+                            " • " + KeyPullStrength + " " + Pull + " strength\n" +
                             " • " + KeyRadiusAbridged + " size of area"
                         );
                     }
@@ -171,7 +171,7 @@ public class HelpOverlayController : MonoBehaviour {
                         " • " + KeyMarkAbridged + " Toggle bubble"
                     );
                     builder.AppendLine(
-                        " • " + KeyPushPullStrength + ": " + Push_Pull + " strength\n" +
+                        " • " + KeyPushPullStrength  + " " + Push_Pull + " strength\n" +
                         " • " + KeyRadiusAbridged + " size of bubble"
                     );
                 } else {
@@ -181,7 +181,7 @@ public class HelpOverlayController : MonoBehaviour {
                             " • " + KeyMarkAbridged + " toggle bubble"
                         );
                         builder.AppendLine(
-                            " • " + KeyPullStrength + ": " + Pull + " strength\n" +
+                            " • " + KeyPullStrength + " " + Pull + " strength\n" +
                             " • " + KeyRadiusAbridged + " size of bubble"
                         );
                     }

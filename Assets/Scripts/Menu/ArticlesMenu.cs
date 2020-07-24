@@ -29,6 +29,7 @@ public class ArticlesMenu : Menu {
         backButton.onClick.AddListener(OnClickedBack);
     }
     void Start() {
+
         Close();
     }
 
@@ -38,8 +39,10 @@ public class ArticlesMenu : Menu {
         MainMenu.FocusOnButton(transform);
     }
     public override void Close() {
-        base.Close();
-        GameManager.MenusController.mainMenu.titleScreen.Open();
+        if (IsOpen) {
+            base.Close();
+            GameManager.MenusController.mainMenu.titleScreen.Open();
+        }
     }
 
     private void OnClickedBack() {
