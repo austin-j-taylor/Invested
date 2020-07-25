@@ -15,7 +15,7 @@ public class AudioManager : MonoBehaviour {
                         index_wind = 1,
                         index_sceneTransition = 2; // used for music that needs to persist between scenes, e.g. the looping sound from the Title Screen to the Tutorial
 
-    public const float windVelocityFactor = 15, windLerpFactor = 3, windVolumeVactor = 2, velocityThreshold = 5;
+    public const float windVelocityFactor = 15, windLerpFactor = 3, windVolumeVactor = 0.5f, velocityThreshold = 5;
     #endregion
 
     [SerializeField]

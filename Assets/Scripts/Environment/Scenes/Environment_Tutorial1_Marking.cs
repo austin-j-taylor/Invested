@@ -20,17 +20,18 @@ public class Environment_Tutorial1_Marking : EnvironmentCinematic {
         HUD.MessageOverlayCinematic.FadeOut();
     }
     protected override IEnumerator Trigger1() {
-        HUD.MessageOverlayCinematic.FadeOutInto(HowToMultiMark + " to " + Mark_pulling + " multiple metals at once.");
+        HUD.MessageOverlayCinematic.FadeOutInto(HowToMultiMark_Pull + " to " + Mark_pulling + " multiple metals at once.");
         while (door1.On) {
             yield return null;
         }
         HUD.MessageOverlayCinematic.FadeOut();
     }
     protected override IEnumerator Trigger2() {
-        HUD.MessageOverlayCinematic.FadeOutInto("You can " + Pull + " on many metals simultaneously by " + Marking_pulling + " them.");
-        while (door2.On) {
-            yield return null;
-        }
-        HUD.MessageOverlayCinematic.FadeOut();
+        //HUD.MessageOverlayCinematic.FadeOutInto("You can " + Pull + " on many metals simultaneously by " + Marking_pulling + " them.");
+        //while (door2.On) {
+        //    yield return null;
+        //}
+        //HUD.MessageOverlayCinematic.FadeOut();
+        yield break;
     }
 }

@@ -335,29 +335,29 @@ public class ControlWheelController : MonoBehaviour {
     private void RefreshManual() {
         if (Player.PlayerIronSteel.SteelReserve.IsEnabled) {
             textManual.text = KeyPullPushAbridged + ": " + Pull_Push + "\n"
-                + KeyMark_PullPushAbridged + ": Mark target\n"
+                + KeyMark + ": Mark target\n"
                 + HowToMultiMark + ":" + "\nMark multiple\n";
         } else {
             textManual.text = KeyPullAbridged + ": " + Pull + "\n"
-                + KeyMark_PullAbridged + ": Mark target\n"
-                + HowToMultiMark + ":" +  "\nMark multiple\n";
+                + KeyMark_Pull + ": Mark target\n"
+                + HowToMultiMark_Pull + ":" +  "\nMark multiple\n";
         }
     }
     private void RefreshArea() {
         if (Player.PlayerIronSteel.SteelReserve.IsEnabled) {
             textArea.text = KeyPullPushAbridged + ": " + Pull_Push + "\n"
-                    + KeyMark_PullPushAbridged + ": Mark targets\n"
+                    + KeyMark + ": Mark targets\n"
                     + KeyRadiusAbridged + ": size of area\n\n\n";
         } else {
             textArea.text = KeyPullAbridged + ": " + Pull + "\n"
-                    + KeyMark_PullAbridged + ": Mark targets\n"
+                    + KeyMark_Pull + ": Mark targets\n"
                     + KeyRadiusAbridged + ": size of area\n\n\n";
         }
     }
     private void RefreshBubble() {
         // assume we'll never have bubble without Pushing
         textBubble.text = KeyPullPushAbridged + ": " + Pull_Push + "\n"
-                + KeyMark_PullPushAbridged + ": toggle bubble\n"
+                + KeyMark + ": toggle bubble\n"
                 + KeyRadiusAbridged + ":size of bubble\n\n\n";
     }
     private void RefreshCoinshot() {

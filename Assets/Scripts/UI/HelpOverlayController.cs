@@ -94,7 +94,7 @@ public class HelpOverlayController : MonoBehaviour {
                 if (last_SteelEnabled) {
                     builder.AppendLine(
                         KeyPullPushAbridged + " " + Pull_Push + '\n' +
-                        " • " + KeyMarkAbridged + " " + Mark + " for " + Pulling + '/' + Pushing
+                        " • " + KeyMark + " " + Mark + " for " + Pulling + '/' + Pushing
                     );
                     if (Verbose) {
                         builder.AppendLine(" • " + KeyMultiMark + " " + Mark + " on multiple targets");
@@ -106,7 +106,7 @@ public class HelpOverlayController : MonoBehaviour {
                     if (last_IronEnabled) {
                         builder.AppendLine(
                             KeyPullAbridged + " " + Pull + '\n' +
-                            " • " + KeyMark_PullAbridged + " " + Mark + " for " + Pulling
+                            " • " + KeyMark_Pull + " " + Mark + " for " + Pulling
                         );
                         if (Verbose) {
                             builder.AppendLine(" • " + KeyMultiMark + " " + Mark + " on multiple targets");
@@ -126,7 +126,7 @@ public class HelpOverlayController : MonoBehaviour {
                 }
                 builder.AppendLine(
                     KeyPushAbridged + " " + Push + '\n' +
-                    " • " + KeyMarkAbridged + " " + Mark + " for " + Pulling + '/' + Pushing
+                    " • " + KeyMark + " " + Mark + " for " + Pulling + '/' + Pushing
                 );
                 if (Verbose) {
                     builder.AppendLine(" • " + KeyMultiMark + " " + Mark + " on multiple targets");
@@ -139,7 +139,7 @@ public class HelpOverlayController : MonoBehaviour {
                 if (last_SteelEnabled) {
                     builder.AppendLine(
                         KeyPullPushAbridged + " " + Pull_Push + '\n' +
-                        " • " + KeyMarkAbridged + " " + Mark + " for " + Pulling + '/' + Pushing
+                        " • " + KeyMark + " " + Mark + " for " + Pulling + '/' + Pushing
                     );
                     if (Verbose) {
                         builder.AppendLine(" • " + KeyMultiMark + " " + Mark + " on multiple targets");
@@ -152,7 +152,7 @@ public class HelpOverlayController : MonoBehaviour {
                     if (last_IronEnabled) {
                         builder.AppendLine(
                             KeyPullAbridged + " " + Pull + '\n' +
-                            " • " + KeyMark_PullAbridged + " " + Mark + " for " + Pulling
+                            " • " + KeyMark_Pull + " " + Mark + " for " + Pulling
                         );
                         if (Verbose) {
                             builder.AppendLine(" • " + KeyMultiMark + " " + Mark + " on multiple targets");
@@ -168,7 +168,7 @@ public class HelpOverlayController : MonoBehaviour {
                 if (last_SteelEnabled) {
                     builder.AppendLine(
                         KeyPullPushAbridged + " " + Pull_Push + '\n' +
-                        " • " + KeyMarkAbridged + " Toggle bubble"
+                        " • " + KeyMark + " Toggle bubble"
                     );
                     builder.AppendLine(
                         " • " + KeyPushPullStrength  + " " + Push_Pull + " strength\n" +
@@ -178,7 +178,7 @@ public class HelpOverlayController : MonoBehaviour {
                     if (last_IronEnabled) {
                         builder.AppendLine(
                             KeyPullAbridged + " " + Pull + '\n' +
-                            " • " + KeyMarkAbridged + " toggle bubble"
+                            " • " + KeyMark + " toggle bubble"
                         );
                         builder.AppendLine(
                             " • " + KeyPullStrength + " " + Pull + " strength\n" +
@@ -194,7 +194,7 @@ public class HelpOverlayController : MonoBehaviour {
                 KeyControlWheel + " " + ControlWheel
             );
             if (Verbose && SettingsMenu.settingsGameplay.controlScheme != JSONSettings_Gameplay.Gamepad) {
-                builder.AppendLine(" • " + KeyManual + KeyArea + KeyBubble + KeyCoinshot + KeyThrowingMode + KeyDeselectAll + KeyStopBurning + ": " + ControlWheel + " hotkeys");
+                builder.AppendLine(" • " + KeyManual + KeyArea + KeyBubble + KeyCoinshot + KeyThrowingMode + KeyDeselectAll + KeyStopBurning + " " + ControlWheel + " hotkeys");
             }
         }
 

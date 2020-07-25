@@ -212,10 +212,10 @@ public class Keybinds : MonoBehaviour {
             return Input.GetKeyDown(KeyCode.Space);
     }
     public static bool AdvanceConversation() {
-        return JumpDown();
-    }
-    public static bool AccelerateConversation() {
         return Jump();
+    }
+    public static bool AdvanceConversationDown() {
+        return JumpDown();
     }
 
     public static bool Sprint() {

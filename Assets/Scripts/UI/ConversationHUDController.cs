@@ -20,7 +20,7 @@ public class ConversationHUDController : MonoBehaviour {
     private enum Style { Clear, Italic, Bold, Colored, OtherFont };
     // Waiting: the element is idle, waiting for the user to advance text
     // Writing: the element is printing out text. The Speaker is speaking.
-    private enum State { Waiting, Writing };
+    private enum State { Waiting, Writing, WritingAccelerated };
 
     public bool IsOpen { get; private set; }
 
@@ -32,6 +32,7 @@ public class ConversationHUDController : MonoBehaviour {
 
     private Animator anim;
     private State state;
+    private bool allowedToAdvanceQuickly = false, endedLastPhraseAccelerated = false;
 
     void Awake() {
         Transform conversationWindow = transform.Find("ConversationWindow");
@@ -43,15 +44,6 @@ public class ConversationHUDController : MonoBehaviour {
         advanceText.text = "";
         anim = GetComponent<Animator>();
         state = State.Waiting;
-    }
-
-    private void Update() {
-        if (!GameManager.MenusController.pauseMenu.IsOpen && IsOpen && state == State.Waiting) {
-            // Advance the conversation
-            if (Keybinds.AdvanceConversation()) {
-                state = State.Writing; // Picks back up in the SpeakPhraseHelper coroutine
-            }
-        }
     }
 
     public void Clear() {
@@ -77,6 +69,33 @@ public class ConversationHUDController : MonoBehaviour {
         anim.SetBool("IsOpen", false);
         IsOpen = false;
         state = State.Waiting;
+    }
+
+    void Update() {
+
+        // Check if we should start/stop writing quickly.
+        switch (state) {
+            case State.Writing:
+                if (Keybinds.AdvanceConversation()) {
+                    if (allowedToAdvanceQuickly) {
+                        state = State.WritingAccelerated;
+                    }
+                } else {
+                    allowedToAdvanceQuickly = true;
+                }
+                endedLastPhraseAccelerated = false;
+                break;
+            case State.WritingAccelerated:
+                if (!Keybinds.AdvanceConversation())
+                    state = State.Writing;
+                endedLastPhraseAccelerated = true;
+                break;
+            case State.Waiting:
+                allowedToAdvanceQuickly = endedLastPhraseAccelerated;
+
+                break;
+
+        }
     }
 
     // Parses and speaks the next phrase, replacing formatted data in the input with the correct Rich Text color tags and returning it
@@ -207,7 +226,7 @@ public class ConversationHUDController : MonoBehaviour {
                             } else if (time < 0 || time > 9) {
                                 Debug.LogError("Invalid pause time in " + currentConversation.key + ": " + currentConversation.content + ": " + time);
                             }
-                            yield return Keybinds.AccelerateConversation() ? null : new WaitForSeconds(delayPerPause * time);
+                            yield return state == State.WritingAccelerated ? null : new WaitForSeconds(delayPerPause * time);
                             break;
                         case 'L':
                             // color for LOCATIONS
@@ -308,9 +327,8 @@ public class ConversationHUDController : MonoBehaviour {
 
                     // and the speaker beeps, except for some punctuation-like characters
                     char character = currentConversation.content[i];
-                    if (state == State.Writing && character != '(' && character != ')' && character != '.' && character != '\n' && character != '\r') {
-                        if (!Keybinds.AccelerateConversation() && currentSpeaker != null)
-                            currentSpeaker.Beep();
+                    if (state == State.Writing && currentSpeaker != null && character != '(' && character != ')' && character != '.' && character != '\n' && character != '\r') {
+                        currentSpeaker.Beep();
                     }
                 }
             }
@@ -334,33 +352,40 @@ public class ConversationHUDController : MonoBehaviour {
                     conversationText.text = parsed.ToString() + "</font>";
                     break;
             }
-            // Pause. Some characters wait longer.
-            if (state == State.Writing) {
-                char character = currentConversation.content[i];
-                // Don't pause if we're at punctuation, unless we're right before the end of the message
-                // (a close parenthesis also indicates the end of a thought, so skip if that's up next)
-                if ((character == '.' || character == '?' || character == '!')
-                        && !(i + 1 < currentConversation.content.Length && (currentConversation.content[i + 1] == '(') || currentConversation.content[i + 1] == ')')) {
-                    yield return Keybinds.AccelerateConversation() ? null : new WaitForSeconds(delayPerPause * 3);
-                } else {
-                    yield return Keybinds.AccelerateConversation() ? null : new WaitForSeconds(delayPerCharacter);
-                }
-            }
 
-            // If the phrase just ended, wait until the user advances the text.
-            if (state == State.Waiting) {
-                // Make the advance symbol appear
-                advanceText.text = KeyJump;
-                advanceSymbol.SetActive(true);
-                while (state == State.Waiting) {
+            // Pause briefly, depending on the character.
+            switch (state) {
+                case State.Writing:
+                    // Pause. Some characters wait longer.
+                    char character = currentConversation.content[i];
+                    // Don't pause if we're at punctuation, unless we're right before the end of the message
+                    // (a close parenthesis also indicates the end of a thought, so skip if that's up next)
+                    if ((character == '.' || character == '?' || character == '!')
+                            && !(i + 1 < currentConversation.content.Length && (currentConversation.content[i + 1] == '(') || currentConversation.content[i + 1] == ')')) {
+                        yield return new WaitForSeconds(delayPerPause * 3);
+                    } else {
+                        yield return new WaitForSeconds(delayPerCharacter);
+                    }
+                    break;
+                case State.WritingAccelerated:
                     yield return null;
-                }
-                // wipe the text on the screen and send it to the Text Log
-                HUD.TextLogController.LogLine(currentSpeakerString, conversationText.text);
-                advanceSymbol.SetActive(false);
-                advanceText.text = "";
-                parsed.Clear();
-                currentLineParsed.Clear();
+                    break;
+                case State.Waiting:
+                    // If the phrase just ended, wait until the user advances the text.
+                    // Make the advance symbol appear
+                    advanceText.text = KeyJump;
+                    advanceSymbol.SetActive(true);
+                    while (!Keybinds.AdvanceConversationDown()) {
+                        yield return null;
+                    }
+                    // wipe the text on the screen and send it to the Text Log
+                    HUD.TextLogController.LogLine(currentSpeakerString, conversationText.text);
+                    advanceSymbol.SetActive(false);
+                    advanceText.text = "";
+                    parsed.Clear();
+                    currentLineParsed.Clear();
+                    state = State.Writing;
+                    break;
             }
         }
         // This conversation is over.

@@ -322,28 +322,6 @@ public class TextCodes : MonoBehaviour {
         get {
             switch (SettingsMenu.settingsGameplay.controlScheme) {
                 case JSONSettings_Gameplay.MK54: {
-                        return MouseButton3;
-                    }
-                case JSONSettings_Gameplay.MK45: {
-                        return MouseButton4;
-                    }
-                case JSONSettings_Gameplay.MKEQ: {
-                        return E;
-                    }
-                case JSONSettings_Gameplay.MKQE: {
-                        return Q;
-                    }
-                default: {
-                        return RightBumper;
-                    }
-            }
-        }
-    }
-    public static string HowToMark_Pull => s_Press_ + KeyMark_Pull;
-    public static string KeyMark_PullAbridged {
-        get {
-            switch (SettingsMenu.settingsGameplay.controlScheme) {
-                case JSONSettings_Gameplay.MK54: {
                         return MouseButton5;
                     }
                 case JSONSettings_Gameplay.MK45: {
@@ -361,7 +339,6 @@ public class TextCodes : MonoBehaviour {
             }
         }
     }
-    public static string KeyMark_PullPushAbridged => KeyMark_PullAbridged + "/" + KeyMark_PushAbridged;
     public static string KeyMark_Push {
         get {
             switch (SettingsMenu.settingsGameplay.controlScheme) {
@@ -383,48 +360,8 @@ public class TextCodes : MonoBehaviour {
             }
         }
     }
-    public static string KeyMark_PushAbridged {
-        get {
-            switch (SettingsMenu.settingsGameplay.controlScheme) {
-                case JSONSettings_Gameplay.MK54: {
-                        return MouseButton4;
-                    }
-                case JSONSettings_Gameplay.MK45: {
-                        return MouseButton5;
-                    }
-                case JSONSettings_Gameplay.MKEQ: {
-                        return Q;
-                    }
-                case JSONSettings_Gameplay.MKQE: {
-                        return E;
-                    }
-                default: {
-                        return LeftBumper;
-                    }
-            }
-        }
-    }
-    public static string KeyMarkAbridged {
-        get {
-            switch (SettingsMenu.settingsGameplay.controlScheme) {
-                case JSONSettings_Gameplay.MK54: {
-                        return MouseButton5 + '/' + MouseButton4;
-                    }
-                case JSONSettings_Gameplay.MK45: {
-                        return MouseButton4 + '/' + MouseButton5;
-                    }
-                case JSONSettings_Gameplay.MKEQ: {
-                        return E + '/' + Q;
-                    }
-                case JSONSettings_Gameplay.MKQE: {
-                        return Q + '/' + E;
-                    }
-                default: {
-                        return RightBumper + '/' + LeftBumper;
-                    }
-            }
-        }
-    }
+    public static string HowToMark_Pull => s_Press_ + KeyMark_Pull;
+    public static string KeyMark => KeyMark_Pull + "/" + KeyMark_Push;
     public static string HowToStartBurningIron {
         get {
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
@@ -435,8 +372,9 @@ public class TextCodes : MonoBehaviour {
     }
 
 
-    public static string HowToMultiMark => HowToAnchor + " + " + KeyMarkAbridged;
-    public static string KeyMultiMark => KeyAnchor + " + " + KeyMarkAbridged;
+    public static string HowToMultiMark_Pull => HowToAnchor + " + " + KeyMark_Pull;
+    public static string HowToMultiMark => HowToAnchor + " + " + KeyMark;
+    public static string KeyMultiMark => KeyAnchor + " + " + KeyMark;
     public static string KeyPushPullStrength {
         get {
             if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
