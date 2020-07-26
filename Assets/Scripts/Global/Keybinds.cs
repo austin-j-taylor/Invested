@@ -251,6 +251,12 @@ public class Keybinds : MonoBehaviour {
         else
             return Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.Mouse2);
     }
+    public static bool WithdrawCoinUp() {
+        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
+            return Input.GetButtonUp("GamepadX");
+        else
+            return Input.GetKeyUp(KeyCode.F) || Input.GetKeyUp(KeyCode.Mouse2);
+    }
     public static bool TossCoinDown() {
         if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad)
             return !lastWasDPadRight && Input.GetAxis("GamepadDPadX") > dpadDeadband;

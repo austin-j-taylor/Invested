@@ -96,6 +96,12 @@ public class PlayerPullPushController : AllomanticIronSteel {
 
         HUD.TargetOverlayController.Clear();
     }
+    /// <summary>
+    /// Removes all Push targets that are coins, unless they are marked.
+    /// </summary>
+    public void RemoveAllCoins() {
+        PushTargets.RemoveAllVacuousTargetsOfType(typeof(Coin));
+    }
     #endregion
 
     #region updatePushingAndPulling

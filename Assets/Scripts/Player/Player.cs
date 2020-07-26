@@ -68,8 +68,6 @@ public class Player : PewterEntity {
     public static float VoidHeight { get; set; }
     #endregion
 
-    [SerializeField]
-    private Coin thrownCoin = null;
     private float coinCooldownTimer = 0;
 
     protected override void Awake() {
@@ -109,49 +107,54 @@ public class Player : PewterEntity {
         }
 
         if (CanControl) {
-            // On throwing a coin
-            if (CanThrowCoins && !CoinHand.Pouch.IsEmpty) {
-
-                if (coinCooldownTimer > coinCooldownThreshold) {
-                    // TODO: simplify logic. just like this for thinking
-                    bool firing = false;
-                    if (Keybinds.WithdrawCoinDown() || Keybinds.TossCoinDown())
-                        firing = true;
-                    if (PlayerIronSteel.Mode == PlayerPullPushController.ControlMode.Coinshot) {
-                        if (!PlayerIronSteel.HasPullTarget) {
-                            if (Keybinds.PullDown() || (CoinThrowingMode == CoinMode.Full && Keybinds.IronPulling())) {
+            // Coin management
+            if (CanThrowCoins) {
+                // If releasing the "throw coin" button, remove all vacuous coin targets
+                if (Keybinds.WithdrawCoinUp()) {
+                    PlayerIronSteel.RemoveAllCoins();
+                } else if (!CoinHand.Pouch.IsEmpty) {
+                    // For throwing coins
+                    if (coinCooldownTimer > coinCooldownThreshold) {
+                        // TODO: simplify logic. just like this for thinking
+                        bool firing = false;
+                        if (Keybinds.WithdrawCoinDown() || Keybinds.TossCoinDown())
+                            firing = true;
+                        if (PlayerIronSteel.Mode == PlayerPullPushController.ControlMode.Coinshot) {
+                            if (!PlayerIronSteel.HasPullTarget) {
+                                if (Keybinds.PullDown() || (CoinThrowingMode == CoinMode.Full && Keybinds.IronPulling())) {
+                                    firing = true;
+                                }
+                            }
+                        } else {
+                            if (CoinThrowingMode == CoinMode.Full && Keybinds.WithdrawCoin()) {
                                 firing = true;
                             }
                         }
-                    } else {
-                        if (CoinThrowingMode == CoinMode.Full && Keybinds.WithdrawCoin()) {
-                            firing = true;
-                        }
-                    } 
 
-                    if (firing) {
-                        coinCooldownTimer = 0;
-                        // Anchoring: pressing key will toss coin
-                        // Not anchoring: pressing key will add coin as Vacuous Push Target and Push on it
-                        // Holding MultiTarget will mark the coin, as well
-                        if (CoinThrowingMode == CoinMode.Spray) {
-                            Coin[] coins = CoinHand.WithdrawCoinSprayToHand(!PlayerIronSteel.IsBurning);
-                            if (!Keybinds.TossCoinCondition())
-                                for (int i = 0; i < Hand.spraySize; i++)
-                                    PlayerIronSteel.AddPushTarget(coins[i], false, true);
-                            //PlayerIronSteel.AddPushTarget(coins[i], false, !Keybinds.MultipleMarks());
-                        } else {
-                            Coin coin = CoinHand.WithdrawCoinToHand(!PlayerIronSteel.IsBurning);
-                            if (!Keybinds.TossCoinCondition()) {
-                                PlayerIronSteel.RemovePushTarget(thrownCoin);
-                                PlayerIronSteel.AddPushTarget(coin, false, true);
+                        if (firing) {
+                            coinCooldownTimer = 0;
+                            // Anchoring: pressing key will toss coin
+                            // Not anchoring: pressing key will add coin as Vacuous Push Target and Push on it
+                            if (CoinThrowingMode == CoinMode.Spray) {
+                                Coin[] coins = CoinHand.WithdrawCoinSprayToHand(false);
+                                if (!Keybinds.TossCoinCondition()) {
+                                    PlayerIronSteel.RemoveAllCoins();
+                                    for (int i = 0; i < Hand.spraySize; i++)
+                                        PlayerIronSteel.AddPushTarget(coins[i], false, true);
+                                }
+                                //PlayerIronSteel.AddPushTarget(coins[i], false, !Keybinds.MultipleMarks());
+                            } else {
+                                Coin coin = CoinHand.WithdrawCoinToHand(false);
+                                if (!Keybinds.TossCoinCondition()) {
+                                    PlayerIronSteel.RemoveAllCoins();
+                                    PlayerIronSteel.AddPushTarget(coin, false, true);
+                                }
+                                //PlayerIronSteel.AddPushTarget(coin, false, !Keybinds.MultipleMarks());
                             }
-                            thrownCoin = coin;
-                            //PlayerIronSteel.AddPushTarget(coin, false, !Keybinds.MultipleMarks());
                         }
+                    } else {
+                        coinCooldownTimer += Time.deltaTime * (PlayerZinc.InZincTime ? 2 : 1); // throw coins 
                     }
-                } else {
-                    coinCooldownTimer += Time.deltaTime * (PlayerZinc.InZincTime ? 2 : 1); // throw coins 
                 }
             }
         }
@@ -162,7 +165,7 @@ public class Player : PewterEntity {
         if (Keybinds.ToggleHelpOverlay()) {
             HUD.HelpOverlayController.Toggle();
         }
-        if(!GameManager.MenusController.pauseMenu.IsOpen && Keybinds.ToggleTextLog()) {
+        if (!GameManager.MenusController.pauseMenu.IsOpen && Keybinds.ToggleTextLog()) {
             HUD.TextLogController.Toggle();
         }
         // Changing perspective

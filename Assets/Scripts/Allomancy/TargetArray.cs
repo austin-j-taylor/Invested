@@ -120,7 +120,7 @@ public class TargetArray {
      * return true if it was successfully removed, false if target was not found
      */
     public bool RemoveTarget(Magnetic target, bool clear = true) {
-        for (int i = 0; i < Count; i++) {
+        for (int i = Count - 1; i >= 0; i--) {
             if (targets[i] == target) { // Magnetic was found, move targets along
                 MoveDown(i, clear);
                 // if that was a vacuous target, decrease that count
@@ -233,7 +233,7 @@ public class TargetArray {
      */
     public void RemoveAllOutOfRange(float burnRate, AllomanticIronSteel allomancer) {
         if (MaxRange == 0) {
-            for (int i = 0; i < Count; i++) {
+            for (int i = Count - 1; i >= 0; i--) {
                 if (SettingsMenu.settingsAllomancy.pushControlStyle == 0 && SettingsMenu.settingsGameplay.controlScheme != JSONSettings_Gameplay.Gamepad) {
                     if (!targets[i].IsInRange(allomancer, burnRate)) {
                         RemoveTargetAt(i);
@@ -245,7 +245,7 @@ public class TargetArray {
                 }
             }
         } else if (MaxRange > 0) {
-            for (int i = 0; i < Count; i++) {
+            for (int i = Count - 1; i >= 0; i--) {
                 if ((targets[i].CenterOfMass - allomancer.CenterOfMass).sqrMagnitude > MaxRange * MaxRange) {
                     RemoveTargetAt(i);
                 }
@@ -259,7 +259,7 @@ public class TargetArray {
      */
     public void RemoveAllOutOfBubble(float radius, AllomanticIronSteel allomancer) {
         float sqrRadius = radius * radius;
-        for (int i = 0; i < Count; i++) {
+        for (int i = Count - 1; i >= 0; i--) {
             if ((targets[i].CenterOfMass - allomancer.CenterOfMass).sqrMagnitude > sqrRadius) {
                 RemoveTargetAt(i);
             }
@@ -272,6 +272,16 @@ public class TargetArray {
     public void RemoveAllVacuousTargets() {
         if (VacuousCount > 0) {
             Clear();
+        }
+    }
+    /// <summary>
+    /// Removes all vacuous targets that have the given type
+    /// </summary>
+    /// <param name="type">the type of target to remove</param>
+    public void RemoveAllVacuousTargetsOfType(System.Type type) {
+        for (int i = VacuousCount - 1; i >= 0; i--) {
+            if (targets[i].GetType() == type)
+                RemoveTargetAt(i);
         }
     }
 
@@ -353,7 +363,7 @@ public class TargetArray {
         }
 
         // 1) remove and clear all targets from last frame that are no longer in the array this frame
-        for (int i = 0; i < Count; i++) {
+        for (int i = Count - 1; i >= 0; i--) {
             if (!newTargets.Contains(targets[i])) {
                 MoveDown(i);
             }
@@ -371,9 +381,9 @@ public class TargetArray {
      * Removes all targets that are in newTargets from the array.
      */
     public void RemoveTargets(List<Magnetic> newTargets) {
-        for (int i = 0; i < Count; i++) {
-            for(int j = 0; j < newTargets.Count; j++) {
-                if(targets[i] == newTargets[j]) {
+        for (int i = Count - 1; i >= 0; i--) {
+            for (int j = newTargets.Count - 1; j >= 0; j--) {
+                if (targets[i] == newTargets[j]) {
                     MoveDown(i);
                 }
             }
@@ -388,7 +398,7 @@ public class TargetArray {
         for (int i = 0; i < Count; i++) {
             targets[i].SetBlueLine(
                 startPos,
-                targets[i].Charge * blueLineTargetedWidthFactor * (CameraController.IsFirstPerson ?  PlayerPullPushController.firstPersonWidthFactor : 1),
+                targets[i].Charge * blueLineTargetedWidthFactor * (CameraController.IsFirstPerson ? PlayerPullPushController.firstPersonWidthFactor : 1),
                 Mathf.Exp(-targets[i].LastMaxPossibleAllomanticForce.magnitude * burnRate * (SettingsMenu.settingsGameplay.cameraFirstPerson == 1 ? firstPersonLSFactor : 1) / lightSaberConstant),
                 pullingColor ?
                     SettingsMenu.settingsGraphics.pullTargetLineColor == 0 ? targetedBlueLine
