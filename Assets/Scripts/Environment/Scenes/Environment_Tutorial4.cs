@@ -77,7 +77,7 @@ public class Environment_Tutorial4 : EnvironmentCinematic {
             yield return null;
         }
         HUD.MessageOverlayCinematic.FadeOutInto("In " + CoinshotMode + ", " + HowToPull + " to throw " + O_Coins);
-        while (!doorNode2.On) {
+        while (!doorNode2.On || Player.CanControlZinc) {
             yield return null;
         }
         HUD.MessageOverlayCinematic.FadeOut();
