@@ -53,14 +53,17 @@ public class ControlSchemeMenu : Menu {
     }
     public void OnClickedGamepad() {
         SettingsMenu.settingsGameplay.controlScheme = JSONSettings_Gameplay.Gamepad;
+        SettingsMenu.settingsGameplay.RefreshSettings();
         Close(true);
     }
     public void OnClickedMKEQ() {
         SettingsMenu.settingsGameplay.controlScheme = JSONSettings_Gameplay.MKEQ;
+        SettingsMenu.settingsGameplay.RefreshSettings();
         Close(true);
     }
     public void OnClickedMK54() {
         SettingsMenu.settingsGameplay.controlScheme = JSONSettings_Gameplay.MK54;
+        SettingsMenu.settingsGameplay.RefreshSettings();
         Close(true);
     }
     #endregion

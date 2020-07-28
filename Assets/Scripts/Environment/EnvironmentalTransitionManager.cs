@@ -5,7 +5,7 @@ using System.Collections;
 /// Automatically sets interior/exterior BGM to be in the BGM audio mixer group
 /// </summary>
 public class EnvironmentalTransitionManager : MonoBehaviour {
-
+    
     private const float crossfadeTime = 3;
     private AudioSource[] interiors, exteriors;
 

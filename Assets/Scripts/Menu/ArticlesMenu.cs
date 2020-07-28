@@ -27,10 +27,11 @@ public class ArticlesMenu : Menu {
             articleTexts[i].enabled = false;
 
         backButton.onClick.AddListener(OnClickedBack);
-    }
-    void Start() {
 
-        Close();
+    }
+
+    private void Start() {
+        gameObject.SetActive(false);
     }
 
     public override void Open() {
