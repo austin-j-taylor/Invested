@@ -206,7 +206,10 @@ public class HelpOverlayController : MonoBehaviour {
         }
 
         if (last_Zinc) {
-            builder.AppendLine(KeyZincTime + " " + Zinc);
+            if(SettingsMenu.settingsGameplay.UsingGamepad)
+                builder.AppendLine(KeyZincTime + " Toggle " + Zinc);
+            else
+                builder.AppendLine(KeyZincTime + " " + Zinc);
         }
 
         if (last_Coins) {

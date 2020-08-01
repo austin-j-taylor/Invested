@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Contains all keybinds. Allows for easy switching between keyboard and gamepad playing.
@@ -20,6 +21,12 @@ public class Keybinds : MonoBehaviour {
     private static bool lastWasPulling = false;
     private static bool lastWasPushing = false;
     private static bool lastWasDPadRight = false;
+
+    // These will eventually be accessability settings
+    private static bool setting_toggle_ZincTime => SettingsMenu.settingsGameplay.UsingGamepad;
+    // Modified by FeruchemicalZinc when running out of zinc
+    public static bool toggled_Zinctime = false;
+    //private static bool toggle_ZincTime = false;
     #endregion
 
     // Mouse/Stick Axis names
@@ -28,10 +35,17 @@ public class Keybinds : MonoBehaviour {
     public static string JoystickRightHorizontal => "HorizontalRight";
     public static string JoystickRightVertical => "VerticalRight";
 
+    private void Awake() {
+        SceneManager.sceneUnloaded += ClearBeforeSceneChange;
+
+    }
     private void LateUpdate() {
         lastWasPulling = IronPulling();
         lastWasPushing = SteelPushing();
         lastWasDPadRight = Input.GetAxis("GamepadDPadX") > dpadDeadband;
+    }
+    public void ClearBeforeSceneChange(Scene scene) {
+        toggled_Zinctime = false;
     }
 
     public static bool PullDown() {
@@ -310,13 +324,33 @@ public class Keybinds : MonoBehaviour {
     }
 
     public static bool ZincTimeDown() {
-        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) {
-            return Input.GetButtonDown("GamepadLeftJoystickClick");
+        if(setting_toggle_ZincTime) {
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) {
+                if(Input.GetButtonDown("GamepadLeftJoystickClick")) {
+                    toggled_Zinctime = !toggled_Zinctime;
+                    return true;
+                }
+            } else {
+                if(Input.GetKeyDown(KeyCode.Tab)) {
+                    toggled_Zinctime = !toggled_Zinctime;
+                    return true;
+                }
+            }
+            return false;
         } else {
-            return Input.GetKeyDown(KeyCode.Tab);
+            if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) {
+                return Input.GetButtonDown("GamepadLeftJoystickClick");
+            } else {
+                return Input.GetKeyDown(KeyCode.Tab);
+            }
         }
     }
     public static bool ZincTime() {
+        if (setting_toggle_ZincTime) {
+            // Check
+            ZincTimeDown();
+            return toggled_Zinctime;
+        }
         if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) {
             return Input.GetButton("GamepadLeftJoystickClick");
         } else {

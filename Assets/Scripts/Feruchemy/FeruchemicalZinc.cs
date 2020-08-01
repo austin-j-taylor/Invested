@@ -58,6 +58,7 @@ public class FeruchemicalZinc : MonoBehaviour {
                 if (!(Keybinds.ZincTime() || Keybinds.ControlWheel()) || Reserve == 0 || !Player.CanControl || !Player.CanControlZinc) {
                     // Exit zinc time
                     InZincTime = false;
+                    Keybinds.toggled_Zinctime = false;
                     endReserve = Reserve;
                     timeSpentRecovering = 0;
                     TimeController.CurrentTimeScale = SettingsMenu.settingsWorld.timeScale;
