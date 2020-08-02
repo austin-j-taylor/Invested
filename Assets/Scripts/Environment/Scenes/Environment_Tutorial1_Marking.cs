@@ -8,8 +8,8 @@ public class Environment_Tutorial1_Marking : EnvironmentCinematic {
     FacilityDoor door0 = null;
     [SerializeField]
     FacilityDoor door1 = null;
-    [SerializeField]
-    FacilityDoor door2 = null;
+    //[SerializeField]
+    //FacilityDoor door2 = null;
 
 
     protected override IEnumerator Trigger0() {
