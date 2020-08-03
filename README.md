@@ -11,7 +11,6 @@ Here are some videos of the game. Many more can by found [here.](https://gfycat.
 
 ## Downloads
 - [Windows](https://www.dropbox.com/s/6o152qparaoede7/Invested.zip?dl=1)
-- [Mac](https://www.dropbox.com/s/94brafk3ew55tdb/Invested%20for%20Mac.zip?dl=1) - Highly experimental. I don't have a Mac, so let me know if you're available for testing.
 
 ### Recent changes
 
