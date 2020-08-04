@@ -4,7 +4,6 @@ using System.IO;
 
 public class JSONSettings_Graphics : JSONSettings {
 
-    protected override string ConfigFileName => Path.Combine(Application.streamingAssetsPath, "Data", "Config", "config_Graphics.json");
     protected override string DefaultConfigFileName => Path.Combine(Application.streamingAssetsPath, "Data", "Config", "config_Graphics_default.json");
 
     public int highlightedTargetOutline; // 0 for Disabled, 1 for Enabled
@@ -20,4 +19,9 @@ public class JSONSettings_Graphics : JSONSettings {
     public int aberration;
     public int vignetteZinc;
     public int clouds;
+
+    protected override void Awake() {
+        ConfigFileName = Path.Combine(Application.persistentDataPath, "Data", "Config", "config_Graphics.json");
+        base.Awake();
+    }
 }

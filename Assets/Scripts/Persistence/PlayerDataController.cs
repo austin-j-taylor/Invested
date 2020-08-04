@@ -9,7 +9,7 @@ using System.Reflection;
 public class PlayerDataController : MonoBehaviour {
 
     #region constants
-    private static readonly string fileName = Path.Combine(Application.streamingAssetsPath, "Data" + Path.DirectorySeparatorChar + "playerData.json");
+    private static string fileName;
     private static readonly string defaultFileName = Path.Combine(Application.streamingAssetsPath, "Data" + Path.DirectorySeparatorChar + "default_playerData.json");
     #endregion
 
@@ -23,6 +23,7 @@ public class PlayerDataController : MonoBehaviour {
 
     private void Awake() {
         instance = this;
+        fileName = Path.Combine(Application.persistentDataPath, "Data" + Path.DirectorySeparatorChar + "playerData.json");
         LoadData();
     }
 
@@ -40,8 +41,21 @@ public class PlayerDataController : MonoBehaviour {
 
             JsonUtility.FromJsonOverwrite(jSONText, this);
 
-        } catch (DirectoryNotFoundException e) {
-            Debug.LogError(e.Message);
+        } catch (IOException e) {
+            // If the file was empty, load the default settings instead.
+            // Create the Persistent Data directory
+            string dir = Path.Combine(Application.persistentDataPath, "Data");
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+            // Read defaults into this object
+            StreamReader reader = new StreamReader(defaultFileName, true);
+            string jSONText = reader.ReadToEnd();
+            JsonUtility.FromJsonOverwrite(jSONText, this);
+            reader.Close();
+            // Save those defaults to file
+            StreamWriter writer = File.AppendText(fileName);
+            writer.Write(jSONText);
+            writer.Close();
         }
     }
 

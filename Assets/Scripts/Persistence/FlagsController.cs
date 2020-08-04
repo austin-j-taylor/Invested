@@ -14,7 +14,7 @@ using System.Reflection;
 public class FlagsController : MonoBehaviour {
 
     #region constants
-    private readonly string flagsFileName = Path.Combine(Application.streamingAssetsPath, "Data" + Path.DirectorySeparatorChar + "flags.json");
+    private string flagsFileName;
     #endregion
 
     #region flagFields
@@ -34,6 +34,7 @@ public class FlagsController : MonoBehaviour {
 
     private void Awake() {
         instance = this;
+        flagsFileName = Path.Combine(Application.persistentDataPath, "Data" + Path.DirectorySeparatorChar + "flags.json");
         LoadSettings();
     }
 
@@ -51,8 +52,16 @@ public class FlagsController : MonoBehaviour {
 
             JsonUtility.FromJsonOverwrite(jSONText, this);
 
-        } catch (DirectoryNotFoundException e) {
-            Debug.LogError(e.Message);
+        } catch (IOException e) {
+            // If the file was empty, load the default settings instead.
+            // Create the Persistent Data directory
+            string dir = Path.Combine(Application.persistentDataPath, "Data");
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+            StreamWriter writer = File.AppendText(flagsFileName);
+            string jSONText = JsonUtility.ToJson(this, true);
+            writer.Write(jSONText);
+            writer.Close();
         }
     }
 

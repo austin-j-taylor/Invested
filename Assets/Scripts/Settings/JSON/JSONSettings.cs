@@ -9,12 +9,12 @@ using System.Reflection;
 /// </summary>
 public abstract class JSONSettings : MonoBehaviour {
 
-    protected virtual string ConfigFileName => "";
+    protected string ConfigFileName = ""; // assigned in overriden Awake
     protected virtual string DefaultConfigFileName => "";
 
     Setting[] settings;
 
-    private void Awake() {
+    protected virtual void Awake() {
         settings = GetComponentsInChildren<Setting>();
         LoadSettings(false);
     }
@@ -39,8 +39,21 @@ public abstract class JSONSettings : MonoBehaviour {
             if (setSettingsChanged)
                 SetSettingsWhenChanged();
 
-        } catch (DirectoryNotFoundException e) {
-            Debug.LogError(e.Message);
+        } catch (IOException e) {
+            // If the file was empty, load the default settings instead.
+            // Create the Persistent Data directory
+            string dir = Path.Combine(Application.persistentDataPath, "Data", "Config");
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+            // Read defaults into this object
+            StreamReader reader = new StreamReader(DefaultConfigFileName, true);
+            string jSONText = reader.ReadToEnd();
+            JsonUtility.FromJsonOverwrite(jSONText, this);
+            reader.Close();
+            // Save those defaults to file
+            StreamWriter writer = File.AppendText(ConfigFileName);
+            writer.Write(jSONText);
+            writer.Close();
         }
     }
 

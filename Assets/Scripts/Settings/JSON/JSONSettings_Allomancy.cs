@@ -4,7 +4,6 @@ using System.IO;
 
 public class JSONSettings_Allomancy : JSONSettings {
 
-    protected override string ConfigFileName => Path.Combine(Application.streamingAssetsPath, "Data", "Config", "config_Allomancy.json");
     protected override string DefaultConfigFileName => Path.Combine(Application.streamingAssetsPath, "Data", "Config", "config_Allomancy_default.json");
 
     public int pushControlStyle; // 0 for percentage, 1 for magnitude
@@ -19,4 +18,9 @@ public class JSONSettings_Allomancy : JSONSettings {
     public float allomanticConstant;
     public float maxPushRange;
     public float metalDetectionThreshold;
+
+    protected override void Awake() {
+        ConfigFileName = Path.Combine(Application.persistentDataPath, "Data", "Config", "config_Allomancy.json");
+        base.Awake();
+    }
 }

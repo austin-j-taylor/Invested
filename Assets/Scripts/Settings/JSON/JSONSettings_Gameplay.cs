@@ -11,7 +11,6 @@ public class JSONSettings_Gameplay : JSONSettings {
     public const int MKQE = 3;
     public const int Gamepad = 4;
 
-    protected override string ConfigFileName => Path.Combine(Application.streamingAssetsPath, "Data", "Config", "config_Gameplay.json");
     protected override string DefaultConfigFileName => Path.Combine(Application.streamingAssetsPath, "Data", "Config", "config_Gameplay_default.json");
 
     public bool UsingGamepad => controlScheme == Gamepad;
@@ -29,6 +28,10 @@ public class JSONSettings_Gameplay : JSONSettings {
     public float gamepadSensitivityX;
     public float gamepadSensitivityY;
 
+    protected override void Awake() {
+        ConfigFileName = Path.Combine(Application.persistentDataPath, "Data", "Config", "config_Gameplay.json");
+        base.Awake();
+    }
     /// <summary>
     /// Manually apply certain setting effects when they are changed
     /// </summary>

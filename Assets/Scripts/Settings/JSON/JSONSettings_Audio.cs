@@ -4,7 +4,6 @@ using System.IO;
 
 public class JSONSettings_Audio : JSONSettings {
 
-    protected override string ConfigFileName => Path.Combine(Application.streamingAssetsPath, "Data", "Config", "config_Audio.json");
     protected override string DefaultConfigFileName => Path.Combine(Application.streamingAssetsPath, "Data", "Config", "config_Audio_default.json");
 
     public float audioMaster;
@@ -12,6 +11,10 @@ public class JSONSettings_Audio : JSONSettings {
     public float audioEffects;
     public float audioVoiceBeeps;
 
+    protected override void Awake() {
+        ConfigFileName = Path.Combine(Application.persistentDataPath, "Data", "Config", "config_Audio.json");
+        base.Awake();
+    }
     /// <summary>
     /// Manually apply certain setting effects when they are changed
     /// </summary>
