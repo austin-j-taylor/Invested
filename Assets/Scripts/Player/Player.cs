@@ -192,7 +192,7 @@ public class Player : PewterEntity {
         VoidHeight = defaultVoidHeight;
 
         // Disable the cloud controller
-        CameraController.ActiveCamera.GetComponent<CloudMaster>().enabled = false;
+        //CameraController.ActiveCamera.GetComponent<CloudMaster>().enabled = false;
     }
 
     /// <summary>

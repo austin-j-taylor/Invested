@@ -42,11 +42,11 @@ public class Environment_Luthadel : Environment {
         if (DayMode) {
             RenderSettings.skybox = daySkyBox;
             RenderSettings.sun = dayDirectionalLight;
-            GameManager.CloudsManager.SetCloudData(dayClouds);
+            //GameManager.CloudsManager.SetCloudData(dayClouds);
         } else {
             RenderSettings.skybox = nightSkyBox;
             RenderSettings.sun = nightDirectionalLight;
-            GameManager.CloudsManager.SetCloudData(nightClouds);
+            //GameManager.CloudsManager.SetCloudData(nightClouds);
         }
     }
 }
