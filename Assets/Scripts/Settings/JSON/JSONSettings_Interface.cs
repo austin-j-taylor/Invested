@@ -20,6 +20,5 @@ public class JSONSettings_Interface : JSONSettings {
     /// </summary>
     public override void SetSettingsWhenChanged() {
         HUD.HelpOverlayController.SetState(helpOverlay);
-        Debug.Log(Application.persistentDataPath);
     }
 }

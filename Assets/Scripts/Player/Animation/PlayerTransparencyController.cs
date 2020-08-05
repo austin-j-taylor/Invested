@@ -9,29 +9,27 @@ public class PlayerTransparencyController : MonoBehaviour {
 
     private const float distanceThreshold = 2;
     private const float distanceThresholdInvisible = 0;//.5f;
-    private const float lookAtTransparency = .15f;
+    private const float lookAtTransparency = 0;
+    //private const float lookAtTransparency = .15f;
 
     // Transparent materials
+    private Renderer[] rends;
     [SerializeField]
-    private Material fadeIron = null, fadeSteel = null, fadePewter = null, fadeGlass = null, fadeFrame = null;
-    [SerializeField]
-    private Renderer[] rendIron = null, rendSteel = null, rendPewter = null;
-    [SerializeField]
-    private Renderer rendGlass = null, rendFrame = null;
-    private Material opaqIron = null, opaqSteel = null, opaqPewter = null, opaqGlass = null, opaqFrame = null;
+    private Renderer transluscentPlayerCase = null;
+    //[SerializeField]
+    //private Renderer[] rendIron = null, rendSteel = null, rendPewter = null;
+    //[SerializeField]
+    //private Renderer rendGlass = null, rendFrame = null;
 
     private bool isOpaque, overrideHidden = false, isHidden = false;
 
     private float playerCaseMaxTransluscency;
 
     void Awake() {
-        opaqIron = rendIron[0].material;
-        opaqSteel = rendSteel[0].material;
-        opaqPewter = rendPewter[0].material;
-        opaqGlass = rendGlass.material;
-        opaqFrame = rendFrame.material;
+        rends = GetComponentsInChildren<MeshRenderer>();
+        playerCaseMaxTransluscency = transluscentPlayerCase.material.GetColor("_BaseColor").a;
 
-        playerCaseMaxTransluscency = opaqFrame.color.a;
+        //playerCaseMaxTransluscency = rendGlass.material.GetFloat("_Opacity");
         SetAllOpaque();
     }
 
@@ -79,35 +77,9 @@ public class PlayerTransparencyController : MonoBehaviour {
 
     // Set the rendering mode to Fade, and set the transparency to percent
     private void SetAllFade(float percent) {
-        Color tempColor;
+        //Color tempColor;
         if (isOpaque) {
-            foreach (Renderer rend in rendIron) {
-                rend.material = fadeIron;
-                tempColor = rend.material.GetColor("_Color");
-                tempColor.a = percent;
-                rend.material.SetColor("_BaseColor", tempColor);
-            }
-            foreach(Renderer rend in rendSteel) {
-                rend.material = fadeSteel;
-                tempColor = rend.material.GetColor("_Color");
-                tempColor.a = percent;
-                rend.material.SetColor("_BaseColor", tempColor);
-            }
-            foreach (Renderer rend in rendPewter) {
-                rend.material = fadePewter;
-                tempColor = rend.material.GetColor("_Color");
-                tempColor.a = percent;
-                rend.material.SetColor("_BaseColor", tempColor);
-            }
-            rendGlass.material = fadeGlass;
-            tempColor = rendGlass.material.GetColor("_Color");
-            tempColor.a = percent;
-            rendGlass.material.SetColor("_BaseColor", tempColor);
 
-            rendFrame.material = fadeFrame;
-            tempColor = rendFrame.material.GetColor("_Color");
-            tempColor.a = percent;
-            rendFrame.material.SetColor("_BaseColor", tempColor);
             //foreach (Renderer rend in rends) {
             //    foreach (Material mat in rend.materials) {
             //        mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
@@ -132,23 +104,55 @@ public class PlayerTransparencyController : MonoBehaviour {
         //        }
         //    }
         //}
+        foreach (Renderer rend in rends) {
+            if (rend == transluscentPlayerCase) {
+                //rend.material.SetFloat("_Opacity", percent * playerCaseMaxTransluscency);
+                Color temp = rend.material.GetColor("_BaseColor");
+                temp.a = percent * playerCaseMaxTransluscency;
+                rend.material.SetColor("_BaseColor", temp);
+            } else {
+                foreach (Material mat in rend.materials) {
+                    mat.SetFloat("_Opacity", percent);
+                }
+            }
+        }
+        //foreach(Renderer rend in rendSteel) {
+        //    rend.material.SetFloat("_Opacity", percent);
+        //}
+        //foreach (Renderer rend in rendPewter) {
+        //    rend.material.SetFloat("_Opacity", percent);
+        //}
+        //rendGlass.material.SetFloat("_Opacity", percent);
+
+        //rendFrame.material.SetFloat("_Opacity", percent);
     }
 
     // Set the rendering mode to Opaque
     private void SetAllOpaque() {
         if (!isOpaque) {
-            foreach (Renderer rend in rendIron) {
-                rend.material = opaqIron;
+            foreach (Renderer rend in rends) {
+                if (rend == transluscentPlayerCase) {
+                    Color temp = rend.material.GetColor("_BaseColor");
+                    temp.a = playerCaseMaxTransluscency;
+                    rend.material.SetColor("_BaseColor", temp);
+                } else {
+                    foreach (Material mat in rend.materials) {
+                        rend.material.SetFloat("_Opacity", 1);
+                    }
+                }
             }
-            foreach (Renderer rend in rendSteel) {
-                rend.material = opaqSteel;
-            }
-            foreach (Renderer rend in rendPewter) {
-                rend.material = opaqPewter;
-            }
-            rendGlass.material = opaqGlass;
+            //foreach (Renderer rend in rendIron) {
+            //    rend.material.SetFloat("_Opacity", 1);
+            //}
+            //foreach (Renderer rend in rendSteel) {
+            //    rend.material.SetFloat("_Opacity", 1);
+            //}
+            //foreach (Renderer rend in rendPewter) {
+            //    rend.material.SetFloat("_Opacity", 1);
+            //}
+            //rendGlass.material.SetFloat("_Opacity", 1);
+            //rendFrame.material.SetFloat("_Opacity", 1);
 
-            rendFrame.material = opaqFrame;
             //Color tempColor;
             //foreach (Renderer rend in rends) {
             //    if (rend == transluscentPlayerCase) {
@@ -156,17 +160,17 @@ public class PlayerTransparencyController : MonoBehaviour {
             //        transluscentPlayerCase.material.DisableKeyword("_ALPHABLEND_ON");
             //        transluscentPlayerCase.material.DisableKeyword("_SPECULARHIGHLIGHTS_OFF");
 
-            //        tempColor = transluscentPlayerCase.material.color;
+            //        tempColor = transluscentPlayerCase.material.GetColor("_BaseColor");
             //        tempColor.a = playerCaseMaxTransluscency;
-            //        transluscentPlayerCase.material.color = tempColor;
+            //        transluscentPlayerCase.material.GetColor("_BaseColor") = tempColor;
             //    } else {
             //        foreach (Material mat in rend.materials) {
             //            if (mat.mainTexture) {
             //                tempColor = mat.GetColor("_Color");
-            //                //tempColor = mat.color;
+            //                //tempColor = mat.GetColor("_BaseColor");
             //                tempColor.a = 1;
             //                mat.SetColor("_BaseColor", tempColor);
-            //                //mat.color = tempColor;
+            //                //mat.GetColor("_BaseColor") = tempColor;
             //            } else {
             //                mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.One);
             //                mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.Zero);
@@ -186,24 +190,24 @@ public class PlayerTransparencyController : MonoBehaviour {
         if (hidden != overrideHidden) {
             overrideHidden = hidden;
             isHidden = hidden;
-            //foreach (Renderer rend in rends) {
-            //    if (rend) {
+            foreach (Renderer rend in rends) {
+                if (rend) {
+                    rend.enabled = !hidden;
+                }
+            }
+            //foreach (Renderer rend in rendIron)
+            //    if (rend)
             //        rend.enabled = !hidden;
-            //    }
-            //}
-            foreach (Renderer rend in rendIron)
-                if (rend)
-                    rend.enabled = !hidden;
-            foreach (Renderer rend in rendSteel)
-                if (rend)
-                    rend.enabled = !hidden;
-            foreach (Renderer rend in rendPewter)
-                if (rend)
-                    rend.enabled = !hidden;
-            if (rendGlass)
-                rendGlass.enabled = !hidden;
-            if (rendFrame)
-                rendFrame.enabled = !hidden;
+            //foreach (Renderer rend in rendSteel)
+            //    if (rend)
+            //        rend.enabled = !hidden;
+            //foreach (Renderer rend in rendPewter)
+            //    if (rend)
+            //        rend.enabled = !hidden;
+            //if (rendGlass)
+            //    rendGlass.enabled = !hidden;
+            //if (rendFrame)
+            //    rendFrame.enabled = !hidden;
         }
     }
 
@@ -211,24 +215,24 @@ public class PlayerTransparencyController : MonoBehaviour {
         if (!overrideHidden) { // do nothing if we should always be hidden
             if (hidden != isHidden) {
                 isHidden = hidden;
-                //foreach (Renderer rend in rends) {
-                //    if (rend) {
+                foreach (Renderer rend in rends) {
+                    if (rend) {
+                        rend.enabled = !hidden;
+                    }
+                }
+                //foreach (Renderer rend in rendIron)
+                //    if (rend)
                 //        rend.enabled = !hidden;
-                //    }
-                //}
-                foreach (Renderer rend in rendIron)
-                    if (rend)
-                        rend.enabled = !hidden;
-                foreach (Renderer rend in rendSteel)
-                    if (rend)
-                        rend.enabled = !hidden;
-                foreach (Renderer rend in rendPewter)
-                    if (rend)
-                        rend.enabled = !hidden;
-                if (rendGlass)
-                    rendGlass.enabled = !hidden;
-                if (rendFrame)
-                    rendFrame.enabled = !hidden;
+                //foreach (Renderer rend in rendSteel)
+                //    if (rend)
+                //        rend.enabled = !hidden;
+                //foreach (Renderer rend in rendPewter)
+                //    if (rend)
+                //        rend.enabled = !hidden;
+                //if (rendGlass)
+                //    rendGlass.enabled = !hidden;
+                //if (rendFrame)
+                //    rendFrame.enabled = !hidden;
             }
         }
     }

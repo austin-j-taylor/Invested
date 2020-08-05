@@ -41,6 +41,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _AlbedoTexture:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     m_Floats:
     - _AlphaCutoffEnable: 1
     - _AlphaDstBlend: 0
@@ -48,7 +52,7 @@ Material:
     - _BlendMode: 0
     - _CullMode: 2
     - _CullModeForward: 2
-    - _DitherSize: 0
+    - _DitherSize: 1
     - _DoubleSidedEnable: 0
     - _DoubleSidedNormalMode: 2
     - _DstBlend: 0
@@ -82,6 +86,7 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 1
     m_Colors:
+    - _AlbedoColor: {r: 0, g: 0, b: 0, a: 1}
     - _AlbedoTexture: {r: 0.07450981, g: 0.07450981, b: 0.07450981, a: 1}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EMISSION: {r: 0, g: 0, b: 0, a: 0}

@@ -124,11 +124,13 @@ public class AllomechanicalGlower : MonoBehaviour {
 
     // Enables the emissions of the material specified by mat.
     private void EnableEmission(Material mat, Color glow, float rate) {
-        mat.SetColor("_EmissionColor", glow * Mathf.LinearToGammaSpace(intensity * rate));
-        mat.EnableKeyword("_EMISSION");
+        mat.SetColor("_EMISSION", glow);
+        mat.SetFloat("_Intensity", Mathf.LinearToGammaSpace(intensity * rate));
+        //mat.EnableKeyword("_EMISSION");
     }
 
     private void DisableEmission(Material mat) {
-        mat.DisableKeyword("_EMISSION");
+        mat.SetFloat("_Intensity", 0);
+        //mat.DisableKeyword("_EMISSION");
     }
 }
