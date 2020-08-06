@@ -108,6 +108,7 @@ MonoBehaviour:
   components:
   - {fileID: -4748410502491038358}
   - {fileID: -6721993698504282155}
+  - {fileID: 7682423423728629422}
 --- !u!114 &7682423423728629422
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -122,8 +123,124 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   active: 1
   m_AdvancedMode: 0
-  intensity:
+  sunLight:
+    m_OverrideState: 1
+    m_Value: {fileID: 0}
+  container:
+    m_OverrideState: 1
+    m_Value: {fileID: 0}
+  numStepsLight:
+    m_OverrideState: 0
+    m_Value: 8
+    min: 1
+  rayOffsetStrength:
+    m_OverrideState: 0
+    m_Value: 0
+  especiallyNoisyRayOffsets:
+    m_OverrideState: 0
+    m_Value: 0
+  blueNoise:
+    m_OverrideState: 0
+    m_Value: {fileID: 0}
+  cloudScale:
+    m_OverrideState: 0
+    m_Value: 1
+  densityMultiplier:
+    m_OverrideState: 0
+    m_Value: 1
+  densityOffset:
+    m_OverrideState: 0
+    m_Value: 0
+  shapeOffset:
+    m_OverrideState: 0
+    m_Value: {x: 0, y: 0, z: 0}
+  heightOffset:
+    m_OverrideState: 0
+    m_Value: {x: 0, y: 0}
+  shapeNoiseWeights:
+    m_OverrideState: 0
+    m_Value: {x: 0, y: 0, z: 0, w: 0}
+  detailNoiseScale:
+    m_OverrideState: 0
+    m_Value: 10
+  detailNoiseWeight:
+    m_OverrideState: 0
+    m_Value: 0.1
+  detailNoiseWeights:
+    m_OverrideState: 0
+    m_Value: {x: 0, y: 0, z: 0}
+  detailOffset:
+    m_OverrideState: 0
+    m_Value: {x: 0, y: 0, z: 0}
+  lightAbsorptionThroughCloud:
+    m_OverrideState: 0
+    m_Value: 1
+  lightAbsorptionTowardSun:
+    m_OverrideState: 0
+    m_Value: 1
+  darknessThreshold:
+    m_OverrideState: 0
+    m_Value: 0.2
+    min: 0
+    max: 1
+  forwardScattering:
+    m_OverrideState: 0
+    m_Value: 0.83
+    min: 0
+    max: 1
+  backScattering:
+    m_OverrideState: 0
+    m_Value: 0.3
+    min: 0
+    max: 1
+  baseBrightness:
+    m_OverrideState: 0
+    m_Value: 0.8
+    min: 0
+    max: 1
+  phaseFactor:
+    m_OverrideState: 0
+    m_Value: 0.15
+    min: 0
+    max: 1
+  timeScale:
+    m_OverrideState: 0
+    m_Value: 1
+  baseSpeed:
+    m_OverrideState: 0
+    m_Value: 1
+  detailSpeed:
+    m_OverrideState: 0
+    m_Value: 3
+  colFog:
+    m_OverrideState: 1
+    m_Value: {r: 0.9811321, g: 0.9811321, b: 0.9811321, a: 0}
+    hdr: 0
+    showAlpha: 0
+    showEyeDropper: 0
+  colClouds:
+    m_OverrideState: 1
+    m_Value: {r: 0.5764706, g: 0.6439248, b: 0.8666667, a: 0}
+    hdr: 0
+    showAlpha: 0
+    showEyeDropper: 0
+  colSun:
+    m_OverrideState: 1
+    m_Value: {r: 0.39813223, g: 0.34766823, b: 0.7169812, a: 0}
+    hdr: 0
+    showAlpha: 0
+    showEyeDropper: 0
+  haveSunInSky:
+    m_OverrideState: 0
+    m_Value: 1
+  fogDensity:
     m_OverrideState: 0
     m_Value: 0
     min: 0
-    max: 1
+    max: 0.1
+  cloudsFollowPlayerXZ:
+    m_OverrideState: 0
+    m_Value: 0
+  cloudsFollowPlayerXYZ:
+    m_OverrideState: 0
+    m_Value: 1

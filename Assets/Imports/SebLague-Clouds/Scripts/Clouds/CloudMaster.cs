@@ -65,7 +65,7 @@ public class CloudMaster : MonoBehaviour {
 
     // Internal
     [HideInInspector]
-    public Material material;
+    public Material m_Material;
 
     public WeatherMap weatherMapGen;
     public NoiseGenerator noise;
@@ -106,30 +106,30 @@ public class CloudMaster : MonoBehaviour {
         // Noise
         noise.UpdateNoise();
 
-        material.SetTexture("NoiseTex", noise.shapeTexture);
-        material.SetTexture("DetailNoiseTex", noise.detailTexture);
-        material.SetTexture("BlueNoise", blueNoise);
+        m_Material.SetTexture("NoiseTex", noise.shapeTexture);
+        m_Material.SetTexture("DetailNoiseTex", noise.detailTexture);
+        m_Material.SetTexture("BlueNoise", blueNoise);
 
         // Weathermap
         if (!Application.isPlaying && weatherMapGen.gameObject != null) {
             weatherMapGen.UpdateMap();
         }
-        material.SetTexture("WeatherMap", weatherMapGen.weatherMap);
+        m_Material.SetTexture("WeatherMap", weatherMapGen.weatherMap);
 
         // Bit does the following:
-        // - sets _MainTex property on material to the source texture
+        // - sets _MainTex property on m_Material to the source texture
         // - sets the render target to the destination texture
         // - draws a full-screen quad
         // This copies the src texture to the dest texture, with whatever modifications the shader makes
-        Graphics.Blit(src, dest, material);
+        Graphics.Blit(src, dest, m_Material);
     }
 
     private void SetCloudParams(RenderTexture src, RenderTexture dest) {
         paramsSet = false; // false for debugging
 
         // Validate inputs
-        if (material == null || material.shader != shader) {
-            material = new Material(shader);
+        if (m_Material == null || m_Material.shader != shader) {
+            m_Material = new Material(shader);
         }
         numStepsLight = Mathf.Max(1, numStepsLight);
 
@@ -139,44 +139,44 @@ public class CloudMaster : MonoBehaviour {
         int height = Mathf.CeilToInt(size.y);
         int depth = Mathf.CeilToInt(size.z);
 
-        material.SetFloat("scale", cloudScale);
-        material.SetFloat("densityMultiplier", densityMultiplier);
-        material.SetFloat("densityOffset", densityOffset);
-        material.SetFloat("lightAbsorptionThroughCloud", lightAbsorptionThroughCloud);
-        material.SetFloat("lightAbsorptionTowardSun", lightAbsorptionTowardSun);
-        material.SetFloat("darknessThreshold", darknessThreshold);
-        material.SetVector("sunLightDirection", sunLight.transform.rotation * Vector3.back);
-        material.SetVector("params", cloudTestParams);
-        material.SetFloat("rayOffsetStrength", rayOffsetStrength);
-        material.SetFloat("especiallyNoisyRayOffsets", especiallyNoisyRayOffsets ? 1 : 0);
+        m_Material.SetFloat("scale", cloudScale);
+        m_Material.SetFloat("densityMultiplier", densityMultiplier);
+        m_Material.SetFloat("densityOffset", densityOffset);
+        m_Material.SetFloat("lightAbsorptionThroughCloud", lightAbsorptionThroughCloud);
+        m_Material.SetFloat("lightAbsorptionTowardSun", lightAbsorptionTowardSun);
+        m_Material.SetFloat("darknessThreshold", darknessThreshold);
+        m_Material.SetVector("sunLightDirection", sunLight.transform.rotation * Vector3.back);
+        m_Material.SetVector("params", cloudTestParams);
+        m_Material.SetFloat("rayOffsetStrength", rayOffsetStrength);
+        m_Material.SetFloat("especiallyNoisyRayOffsets", especiallyNoisyRayOffsets ? 1 : 0);
 
-        material.SetFloat("detailNoiseScale", detailNoiseScale);
-        material.SetFloat("detailNoiseWeight", detailNoiseWeight);
-        material.SetVector("shapeOffset", shapeOffset);
-        material.SetVector("detailOffset", detailOffset);
-        material.SetVector("detailWeights", detailNoiseWeights);
-        material.SetVector("shapeNoiseWeights", shapeNoiseWeights);
-        material.SetVector("phaseParams", new Vector4(forwardScattering, backScattering, baseBrightness, phaseFactor));
+        m_Material.SetFloat("detailNoiseScale", detailNoiseScale);
+        m_Material.SetFloat("detailNoiseWeight", detailNoiseWeight);
+        m_Material.SetVector("shapeOffset", shapeOffset);
+        m_Material.SetVector("detailOffset", detailOffset);
+        m_Material.SetVector("detailWeights", detailNoiseWeights);
+        m_Material.SetVector("shapeNoiseWeights", shapeNoiseWeights);
+        m_Material.SetVector("phaseParams", new Vector4(forwardScattering, backScattering, baseBrightness, phaseFactor));
 
-        material.SetVector("boundsMin", container.position - container.localScale / 2);
-        material.SetVector("boundsMax", container.position + container.localScale / 2);
+        m_Material.SetVector("boundsMin", container.position - container.localScale / 2);
+        m_Material.SetVector("boundsMax", container.position + container.localScale / 2);
 
-        material.SetInt("numStepsLight", numStepsLight);
+        m_Material.SetInt("numStepsLight", numStepsLight);
 
-        material.SetVector("mapSize", new Vector4(width, height, depth, 0));
+        m_Material.SetVector("mapSize", new Vector4(width, height, depth, 0));
 
-        material.SetFloat("timeScale", (Application.isPlaying) ? timeScale : 0);
-        material.SetFloat("baseSpeed", baseSpeed);
-        material.SetFloat("detailSpeed", detailSpeed);
+        m_Material.SetFloat("timeScale", (Application.isPlaying) ? timeScale : 0);
+        m_Material.SetFloat("baseSpeed", baseSpeed);
+        m_Material.SetFloat("detailSpeed", detailSpeed);
 
         // Set debug params
         SetDebugParams();
 
-        material.SetColor("colFog", colFog);
-        material.SetColor("colClouds", colClouds);
-        material.SetColor("colSun", colSun);
-        material.SetFloat("haveSunInSky", haveSunInSky ? 1 : 0); // blame unity for not having a setBool
-        material.SetFloat("fogDensity", fogDensity);
+        m_Material.SetColor("colFog", colFog);
+        m_Material.SetColor("colClouds", colClouds);
+        m_Material.SetColor("colSun", colSun);
+        m_Material.SetFloat("haveSunInSky", haveSunInSky ? 1 : 0); // blame unity for not having a setBool
+        m_Material.SetFloat("fogDensity", fogDensity);
 
     }
 
@@ -189,13 +189,13 @@ public class CloudMaster : MonoBehaviour {
             debugModeIndex = 3;
         }
 
-        material.SetInt("debugViewMode", debugModeIndex);
-        material.SetFloat("debugNoiseSliceDepth", noise.viewerSliceDepth);
-        material.SetFloat("debugTileAmount", noise.viewerTileAmount);
-        material.SetFloat("viewerSize", noise.viewerSize);
-        material.SetVector("debugChannelWeight", noise.ChannelMask);
-        material.SetInt("debugGreyscale", (noise.viewerGreyscale) ? 1 : 0);
-        material.SetInt("debugShowAllChannels", (noise.viewerShowAllChannels) ? 1 : 0);
+        m_Material.SetInt("debugViewMode", debugModeIndex);
+        m_Material.SetFloat("debugNoiseSliceDepth", noise.viewerSliceDepth);
+        m_Material.SetFloat("debugTileAmount", noise.viewerTileAmount);
+        m_Material.SetFloat("viewerSize", noise.viewerSize);
+        m_Material.SetVector("debugChannelWeight", noise.ChannelMask);
+        m_Material.SetInt("debugGreyscale", (noise.viewerGreyscale) ? 1 : 0);
+        m_Material.SetInt("debugShowAllChannels", (noise.viewerShowAllChannels) ? 1 : 0);
     }
 
 }

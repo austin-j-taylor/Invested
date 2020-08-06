@@ -34,8 +34,69 @@
         return output;
     }
 
-    // List of properties to control your post process effect
-    float _Intensity;
+    // List of properties to control post process effect
+	// Textures
+	Texture3D<float4> NoiseTex;
+	Texture3D<float4> DetailNoiseTex;
+	Texture2D<float4> WeatherMap;
+	Texture2D<float4> BlueNoise;
+
+	SamplerState samplerNoiseTex;
+	SamplerState samplerDetailNoiseTex;
+	SamplerState samplerWeatherMap;
+	SamplerState samplerBlueNoise;
+
+	sampler2D _MainTex;
+	//sampler2D _CameraDepthTexture;
+
+	// Shape settings
+	float4 params;
+	int3 mapSize;
+	float densityMultiplier;
+	float densityOffset;
+	float scale;
+	float detailNoiseScale;
+	float detailNoiseWeight;
+	float3 detailWeights;
+	float4 shapeNoiseWeights;
+	float4 phaseParams;
+
+	// March settings
+	int numStepsLight;
+	float rayOffsetStrength;
+	float especiallyNoisyRayOffsets; // blame unity for not having a setBool
+
+	float3 boundsMin;
+	float3 boundsMax;
+
+	float3 shapeOffset;
+	float3 detailOffset;
+
+	// Light settings
+	float lightAbsorptionTowardSun;
+	float lightAbsorptionThroughCloud;
+	float darknessThreshold;
+	float4 sunLightDirection;
+	float4 colFog; // color of fog in far-distant objects
+	float4 colClouds; // color of the clouds in the sky
+	float4 colSun; // color of the sun/directional light
+	float haveSunInSky; // blame unity for not having a setBool
+	float fogDensity;
+
+	// Animation settings
+	float timeScale;
+	float baseSpeed;
+	float detailSpeed;
+
+	// Debug settings:
+	int debugViewMode; // 0 = off; 1 = shape tex; 2 = detail tex; 3 = weathermap
+	int debugGreyscale;
+	int debugShowAllChannels;
+	float debugNoiseSliceDepth;
+	float4 debugChannelWeight;
+	float debugTileAmount;
+	float viewerSize;
+
     TEXTURE2D_X(_InputTexture);
 
     float4 CustomPostProcess(Varyings input) : SV_Target
@@ -46,7 +107,7 @@
         float3 outColor = LOAD_TEXTURE2D_X(_InputTexture, positionSS).xyz;
 
         //return float4(outColor, 1);
-		return float4(lerp(outColor, Luminance(outColor).xxx, _Intensity), 1);
+		return float4(lerp(outColor, Luminance(outColor).xxx, 1), 1);
     }
 
     ENDHLSL
