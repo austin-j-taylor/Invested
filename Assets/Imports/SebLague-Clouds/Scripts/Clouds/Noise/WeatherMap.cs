@@ -10,7 +10,8 @@ public class WeatherMap : MonoBehaviour {
     public int resolution = 512;
     public RenderTexture weatherMap;
     public Vector4 testParams;
-    public Transform container;
+    public Vector3 containerPosition;
+    public Vector2 heightOffset;
 
     public bool viewerEnabled;
     [HideInInspector]
@@ -34,12 +35,12 @@ public class WeatherMap : MonoBehaviour {
         var offsets = new Vector4[noiseSettings.numLayers];
         for (int i = 0; i < offsets.Length; i++) {
             var o = new Vector4 ((float) prng.NextDouble (), (float) prng.NextDouble (), (float) prng.NextDouble (), (float) prng.NextDouble ());
-            offsets[i] = (o * 2 - Vector4.one) * 1000 + (Vector4)container.position;
+            offsets[i] = (o * 2 - Vector4.one) * 1000 + (Vector4)containerPosition;
         }
         CreateBuffer (offsets, sizeof (float) * 4, "offsets");
 
         var settings = (SimplexNoiseSettings.DataStruct) noiseSettings.GetDataArray ().GetValue (0);
-        settings.offset += FindObjectOfType<CloudMaster> ().heightOffset;
+        settings.offset += heightOffset;
         CreateBuffer (new SimplexNoiseSettings.DataStruct[] { settings }, noiseSettings.Stride, "noiseSettings", 0);
         noiseCompute.SetTexture (0, "Result", weatherMap);
         noiseCompute.SetInt ("resolution", resolution);

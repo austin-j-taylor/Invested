@@ -249,6 +249,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 797553381}
+  - {fileID: 2044844518}
+  - {fileID: 742066502}
+  - {fileID: 718037123}
+  - {fileID: 205531382}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -464,12 +468,9 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 100, y: 100, z: 100}
-  m_Children:
-  - {fileID: 2044844518}
-  - {fileID: 742066502}
-  - {fileID: 718037123}
-  m_Father: {fileID: 1764456380}
-  m_RootOrder: 0
+  m_Children: []
+  m_Father: {fileID: 30828805}
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &205531383
 MonoBehaviour:
@@ -512,8 +513,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sunLight: {fileID: 0}
   container: {fileID: 0}
-  weatherMapGen: {fileID: 0}
-  noise: {fileID: 0}
+  weatherMapGen: {fileID: 2044844519}
+  noise: {fileID: 742066503}
   paramsSet: 0
 --- !u!1001 &233089105
 PrefabInstance:
@@ -1264,10 +1265,10 @@ Transform:
   m_GameObject: {fileID: 718037122}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 205531382}
-  m_RootOrder: 2
+  m_Father: {fileID: 30828805}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &718037124
 MonoBehaviour:
@@ -1340,10 +1341,10 @@ Transform:
   m_GameObject: {fileID: 742066501}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 205531382}
-  m_RootOrder: 1
+  m_Father: {fileID: 30828805}
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &742066503
 MonoBehaviour:
@@ -1434,7 +1435,7 @@ PrefabInstance:
     - target: {fileID: 9133886722623172235, guid: 334fc2d1db79fc64aa99c73dd3555609,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9133886722623172235, guid: 334fc2d1db79fc64aa99c73dd3555609,
         type: 3}
@@ -2009,8 +2010,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 205531382}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2602,10 +2602,10 @@ Transform:
   m_GameObject: {fileID: 2044844517}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 205531382}
-  m_RootOrder: 0
+  m_Father: {fileID: 30828805}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2044844519
 MonoBehaviour:
@@ -2625,7 +2625,7 @@ MonoBehaviour:
   resolution: 512
   weatherMap: {fileID: 1560803467}
   testParams: {x: 0, y: 1, z: 1, w: 0}
-  container: {fileID: 205531382}
+  containerPosition: {x: 0, y: 0, z: 0}
   viewerEnabled: 0
   showSettingsEditor: 1
   minMax: {x: -0.01, y: 0.47}

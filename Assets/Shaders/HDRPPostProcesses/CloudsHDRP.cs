@@ -8,9 +8,16 @@ public sealed class CloudsHDRP : CustomPostProcessVolumeComponent, IPostProcessC
 
     const string headerDecoration = " --- ";
 
-    //[Header(headerDecoration + "Main" + headerDecoration)]
+    [Header(headerDecoration + "Main" + headerDecoration)]
+    public Vector3Parameter sunLightEulers = new Vector3Parameter(new Vector3());
+    public WeatherMapParameter weatherMapGen = new WeatherMapParameter(null);
+    public NoiseGeneratorParameter noise = new NoiseGeneratorParameter(null);
     //public LightParameter sunLight = new LightParameter(null);
     //public TransformParameter container = new TransformParameter(null);
+
+    [Header(headerDecoration + "Container" + headerDecoration)]
+    public Vector3Parameter containerPosition = new Vector3Parameter(new Vector3(100, 100, 100));
+    public Vector3Parameter containerScale = new Vector3Parameter(new Vector3(100, 100, 100));
 
     [Header("March settings" + headerDecoration)]
     public MinIntParameter numStepsLight = new MinIntParameter(8, 1);
@@ -59,12 +66,11 @@ public sealed class CloudsHDRP : CustomPostProcessVolumeComponent, IPostProcessC
 
     // Internal
     private Material m_Material;
-    private WeatherMap weatherMapGen;
-    private NoiseGenerator noise;
 
     bool paramsSet = false;
 
-    public bool IsActive() => m_Material != null;
+    public bool IsActive() => m_Material != null && weatherMapGen.value != null && noise.value != null && blueNoise.value != null;
+    //public bool IsActive() => m_Material != null;
     //public bool IsActive() => m_Material != null && container.value != null && sunLight.value != null;
 
     public override CustomPostProcessInjectionPoint injectionPoint => CustomPostProcessInjectionPoint.AfterPostProcess;
@@ -77,16 +83,17 @@ public sealed class CloudsHDRP : CustomPostProcessVolumeComponent, IPostProcessC
         else
             Debug.LogError($"Unable to find shader '{kShaderName}'. Post Process Volume CloudsHDRP is unable to load.");
 
-        
 
-        //if (weatherMapGen == null && container.value != null)
+
+        //if (weatherMapGen == null)
         //    weatherMapGen = container.value.gameObject.GetComponentInChildren<WeatherMap>();
-        //if (noise == null && container.value != null)
+        //if (noise == null)
         //    noise = container.value.gameObject.GetComponentInChildren<NoiseGenerator>();
-        //if (Application.isPlaying && weatherMapGen) {
-        //    weatherMapGen.container = container.value;
-        //    weatherMapGen.UpdateMap();
-        //}
+        if (Application.isPlaying && weatherMapGen.value != null) {
+            weatherMapGen.value.containerPosition = containerPosition.value;
+            weatherMapGen.value.heightOffset = heightOffset.value;
+            weatherMapGen.value.UpdateMap();
+        }
         paramsSet = false;
     }
 
@@ -95,15 +102,15 @@ public sealed class CloudsHDRP : CustomPostProcessVolumeComponent, IPostProcessC
         if (m_Material == null)
             return;
 
-        //// Keep the cloud container.value centered on the player to provide the illusion that the clouds are infinite
-        //if (container.value != null && Player.PlayerInstance && (cloudsFollowPlayerXZ.value || cloudsFollowPlayerXYZ.value)) {
-        //    Vector3 position = Player.PlayerInstance.transform.position;
+        // Keep the cloud container.value centered on the player to provide the illusion that the clouds are infinite
+        if (Player.PlayerInstance && (cloudsFollowPlayerXZ.value || cloudsFollowPlayerXYZ.value)) {
+            Vector3 position = Player.PlayerInstance.transform.position;
 
-        //    if (!cloudsFollowPlayerXYZ.value) {
-        //        position.y = container.value.position.y;
-        //    }
-        //    container.value.position = position;
-        //}
+            if (!cloudsFollowPlayerXYZ.value) {
+                position.y = containerPosition.value.y;
+            }
+            containerPosition.value = position;
+        }
 
         RenderTexture src = source.rt, dest = destination.rt;
         if (!paramsSet) {
@@ -111,24 +118,17 @@ public sealed class CloudsHDRP : CustomPostProcessVolumeComponent, IPostProcessC
         }
 
         // Noise
-        //noise.UpdateNoise();
+        noise.value.UpdateNoise();
 
-        //m_Material.SetTexture("NoiseTex", noise.shapeTexture);
-        //m_Material.SetTexture("DetailNoiseTex", noise.detailTexture);
-        //m_Material.SetTexture("BlueNoise", blueNoise.value);
+        m_Material.SetTexture("NoiseTex", noise.value.shapeTexture);
+        m_Material.SetTexture("DetailNoiseTex", noise.value.detailTexture);
+        m_Material.SetTexture("BlueNoise", blueNoise.value);
 
-        //// Weathermap
-        //if (!Application.isPlaying && weatherMapGen.gameObject != null) {
-        //    weatherMapGen.UpdateMap();
-        //}
-        //m_Material.SetTexture("WeatherMap", weatherMapGen.weatherMap);
-
-        //// Bit does the following:
-        //// - sets _MainTex property on m_Material to the source texture
-        //// - sets the render target to the destination texture
-        //// - draws a full-screen quad
-        //// This copies the src texture to the dest texture, with whatever modifications the shader makes
-        //Graphics.Blit(src, dest, m_Material);
+        // Weathermap
+        if (!Application.isPlaying) {
+            weatherMapGen.value.UpdateMap();
+        }
+        m_Material.SetTexture("WeatherMap", weatherMapGen.value.weatherMap);
 
         // Set shader properties
         m_Material.SetTexture("_InputTexture", source);
@@ -138,9 +138,9 @@ public sealed class CloudsHDRP : CustomPostProcessVolumeComponent, IPostProcessC
         paramsSet = false; // false for debugging
 
         //Vector3 size = container.value.localScale;
-        //int height = Mathf.CeilToInt(size.y);
-        //int width = Mathf.CeilToInt(size.x);
-        //int depth = Mathf.CeilToInt(size.z);
+        int height = Mathf.CeilToInt(containerScale.value.y);
+        int width = Mathf.CeilToInt(containerScale.value.x);
+        int depth = Mathf.CeilToInt(containerScale.value.z);
 
         m_Material.SetFloat("scale", cloudScale.value);
         m_Material.SetFloat("densityMultiplier", densityMultiplier.value);
@@ -149,6 +149,7 @@ public sealed class CloudsHDRP : CustomPostProcessVolumeComponent, IPostProcessC
         m_Material.SetFloat("lightAbsorptionTowardSun", lightAbsorptionTowardSun.value);
         m_Material.SetFloat("darknessThreshold", darknessThreshold.value);
         //m_Material.SetVector("sunLightDirection", sunLight.value.transform.rotation * Vector3.back);
+        m_Material.SetVector("sunLightDirection", Quaternion.Euler(sunLightEulers.value) * Vector3.back);
         m_Material.SetFloat("rayOffsetStrength", rayOffsetStrength.value);
         m_Material.SetFloat("especiallyNoisyRayOffsets", especiallyNoisyRayOffsets.value ? 1 : 0);
 
@@ -160,12 +161,12 @@ public sealed class CloudsHDRP : CustomPostProcessVolumeComponent, IPostProcessC
         m_Material.SetVector("shapeNoiseWeights", shapeNoiseWeights.value);
         m_Material.SetVector("phaseParams", new Vector4(forwardScattering.value, backScattering.value, baseBrightness.value, phaseFactor.value));
 
-        //m_Material.SetVector("boundsMin", container.value.position - container.value.localScale / 2);
-        //m_Material.SetVector("boundsMax", container.value.position + container.value.localScale / 2);
+        m_Material.SetVector("boundsMin", containerPosition.value - containerScale.value / 2);
+        m_Material.SetVector("boundsMax", containerPosition.value + containerScale.value / 2);
 
         m_Material.SetInt("numStepsLight", numStepsLight.value);
 
-        //m_Material.SetVector("mapSize", new Vector4(width, height, depth, 0));
+        m_Material.SetVector("mapSize", new Vector4(width, height, depth, 0));
 
         m_Material.SetFloat("timeScale", (Application.isPlaying) ? timeScale.value : 0);
         m_Material.SetFloat("baseSpeed", baseSpeed.value);
@@ -182,15 +183,24 @@ public sealed class CloudsHDRP : CustomPostProcessVolumeComponent, IPostProcessC
         CoreUtils.Destroy(m_Material);
     }
 
+    //[Serializable]
+    //public sealed class LightParameter : VolumeParameter<Light> {
+    //    public LightParameter(Light value, bool overrideState = false)
+    //        : base(value, overrideState) { }
+    //}
+    //[Serializable]
+    //public sealed class TransformParameter : VolumeParameter<Transform> {
+    //    public TransformParameter(Transform value, bool overrideState = false)
+    //        : base(value, overrideState) { }
+    //}
     [Serializable]
-    public sealed class LightParameter : VolumeParameter<Light> {
-        public LightParameter(Light value, bool overrideState = false)
+    public sealed class WeatherMapParameter : VolumeParameter<WeatherMap> {
+        public WeatherMapParameter(WeatherMap value, bool overrideState = false)
             : base(value, overrideState) { }
     }
     [Serializable]
-    public sealed class TransformParameter : VolumeParameter<Transform> {
-        public TransformParameter(Transform value, bool overrideState = false)
+    public sealed class NoiseGeneratorParameter : VolumeParameter<NoiseGenerator> {
+        public NoiseGeneratorParameter(NoiseGenerator value, bool overrideState = false)
             : base(value, overrideState) { }
     }
-
 }

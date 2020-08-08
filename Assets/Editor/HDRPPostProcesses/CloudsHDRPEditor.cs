@@ -10,6 +10,13 @@ sealed class GrayScaleEditor : VolumeComponentEditor {
     //SerializedDataParameter m_sunLight;
     //SerializedDataParameter m_container;
 
+    SerializedDataParameter m_sunLightEulers;
+    SerializedDataParameter m_weatherMapGen;
+    SerializedDataParameter m_noise;
+
+    SerializedDataParameter m_containerPosition;
+    SerializedDataParameter m_containerScale;
+
     SerializedDataParameter m_numStepsLight;
     SerializedDataParameter m_rayOffsetStrength;
     SerializedDataParameter m_especiallyNoisyRayOffsets;
@@ -58,6 +65,13 @@ sealed class GrayScaleEditor : VolumeComponentEditor {
         //m_sunLight = Unpack(o.Find(x => x.sunLight));
         //m_container = Unpack(o.Find(x => x.container));
 
+        m_sunLightEulers = Unpack(o.Find(x => x.sunLightEulers));
+        m_weatherMapGen = Unpack(o.Find(x => x.weatherMapGen));
+        m_noise = Unpack(o.Find(x => x.noise));
+
+        m_containerPosition = Unpack(o.Find(x => x.containerPosition));
+        m_containerScale = Unpack(o.Find(x => x.containerScale));
+
         m_numStepsLight = Unpack(o.Find(x => x.numStepsLight));
         m_rayOffsetStrength = Unpack(o.Find(x => x.rayOffsetStrength));
         m_especiallyNoisyRayOffsets = Unpack(o.Find(x => x.especiallyNoisyRayOffsets));
@@ -102,6 +116,13 @@ sealed class GrayScaleEditor : VolumeComponentEditor {
         CloudsHDRP clouds = target as CloudsHDRP;
         //PropertyField(m_sunLight);
         //PropertyField(m_container);
+
+        PropertyField(m_sunLightEulers);
+        PropertyField(m_weatherMapGen);
+        PropertyField(m_noise);
+
+        PropertyField(m_containerPosition);
+        PropertyField(m_containerScale);
 
         PropertyField(m_numStepsLight);
         PropertyField(m_rayOffsetStrength);

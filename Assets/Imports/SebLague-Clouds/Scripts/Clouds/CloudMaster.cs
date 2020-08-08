@@ -78,7 +78,7 @@ public class CloudMaster : MonoBehaviour {
         if (noise == null)
             noise = gameObject.GetComponentInChildren<NoiseGenerator>();
         if (Application.isPlaying && weatherMapGen) {
-            weatherMapGen.container = container;
+            weatherMapGen.containerPosition = container.position;
             weatherMapGen.UpdateMap();
         }
         paramsSet = false;
@@ -92,7 +92,6 @@ public class CloudMaster : MonoBehaviour {
                 position.y = container.position.y;
             }
             container.position = position;
-
         }
     }
 
