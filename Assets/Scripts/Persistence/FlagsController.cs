@@ -52,7 +52,7 @@ public class FlagsController : MonoBehaviour {
 
             JsonUtility.FromJsonOverwrite(jSONText, this);
 
-        } catch (IOException e) {
+        } catch (IOException) {
             // If the file was empty, load the default settings instead.
             // Create the Persistent Data directory
             string dir = Path.Combine(Application.persistentDataPath, "Data");
