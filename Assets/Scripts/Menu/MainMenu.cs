@@ -23,10 +23,6 @@ public class MainMenu : Menu {
         articlesMenu = GetComponentInChildren<ArticlesMenu>();
 
         SceneManager.sceneLoaded += ClearAfterSceneChange;
-        // Set up the Player, Canvas, and EventSystem to persist between scenes
-        //DontDestroyOnLoad(Player.PlayerInstance);
-        DontDestroyOnLoad(transform.parent.gameObject);
-        DontDestroyOnLoad(EventSystem.current);
     }
 
     private void Start() {

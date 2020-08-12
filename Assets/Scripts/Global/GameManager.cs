@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using VolumetricLines;
+using UnityEngine.EventSystems;
 /// <summary>
 /// At startup, loads the Title Screen scene.
 /// Stores all Resources.
@@ -50,6 +51,7 @@ public class GameManager : MonoBehaviour {
 
     public static GameCameraState CameraState { get; private set; }
     public static GamePlayState PlayState { get; private set; }
+    public static Transform Canvas { get; private set; }
 
     #region clearing
     void Awake() {
@@ -59,6 +61,7 @@ public class GameManager : MonoBehaviour {
         MenusController = GetComponent<MenusController>();
         CloudsManager = GetComponent<CloudsManager>();
         MetalLinesTransform = transform.Find("MetalLines");
+        Canvas = GameObject.FindGameObjectWithTag("Canvas").transform;
 
         Material_MARLmetal_unlit = Resources.Load<Material>("Materials/MARLmetal_unlit");
         Material_MARLmetal_lit = Resources.Load<Material>("Materials/MARLmetal_lit");
@@ -77,6 +80,8 @@ public class GameManager : MonoBehaviour {
         CameraState = GameCameraState.Standard;
         PlayState = GamePlayState.Standard;
 
+        DontDestroyOnLoad(Canvas);
+        DontDestroyOnLoad(EventSystem.current);
         SceneManager.sceneUnloaded += ClearBeforeSceneChange;
     }
 

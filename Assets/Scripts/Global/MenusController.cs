@@ -12,17 +12,14 @@ public class MenusController : MonoBehaviour {
     public SettingsMenu settingsMenu;
     public MainMenu mainMenu;
 
-    private Transform canvas;
-
     public bool IsAnyMenuOpen => levelCompletedMenu.IsOpen || false;
 
     private void Awake() {
-        canvas = GameObject.FindGameObjectWithTag("Canvas").transform;
 
-        levelCompletedMenu = canvas.GetComponentInChildren<LevelCompletedMenu>();
-        pauseMenu = canvas.GetComponentInChildren<PauseMenu>();
-        settingsMenu = canvas.GetComponentInChildren<SettingsMenu>();
-        mainMenu = canvas.GetComponentInChildren<MainMenu>();
+        levelCompletedMenu = GameManager.Canvas.GetComponentInChildren<LevelCompletedMenu>();
+        pauseMenu = GameManager.Canvas.GetComponentInChildren<PauseMenu>();
+        settingsMenu = GameManager.Canvas.GetComponentInChildren<SettingsMenu>();
+        mainMenu = GameManager.Canvas.GetComponentInChildren<MainMenu>();
     }
 
     // Close certain menus when they're open and the player hits Escape
