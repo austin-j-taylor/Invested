@@ -51,12 +51,12 @@ public sealed class CloudsHDRP : CustomPostProcessVolumeComponent, IPostProcessC
     [Header(headerDecoration + "Animation" + headerDecoration)]
     public FloatParameter timeScale = new FloatParameter(1);
     public FloatParameter baseSpeed = new FloatParameter(1);
-    public FloatParameter detailSpeed = new FloatParameter(3);
+    public FloatParameter detailSpeed = new FloatParameter(2);
 
     [Header(headerDecoration + "Sky and Fog" + headerDecoration)]
-    public ColorParameter colFog = new ColorParameter(Color.black);
-    public ColorParameter colClouds = new ColorParameter(Color.black);
-    public ColorParameter colSun = new ColorParameter(Color.black);
+    public ColorParameter colFog = new ColorParameter(Color.white);
+    public ColorParameter colClouds = new ColorParameter(Color.white);
+    public ColorParameter colSun = new ColorParameter(Color.yellow);
     public BoolParameter haveSunInSky = new BoolParameter(true);
     public ClampedFloatParameter fogDensity = new ClampedFloatParameter(0, 0, .1f);
 

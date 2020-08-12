@@ -22,15 +22,15 @@ public class TimeTrialRing : MonoBehaviour
     }
 
     public void Hide() {
-        Color color = rend.material.color;
+        Color color = rend.material.GetColor("_BaseColor");
         color.a = 0;
-        rend.material.color = color;
+        rend.material.SetColor("_BaseColor", color);
         col.enabled = false;
     }
     public void Show() {
-        Color color = rend.material.color;
+        Color color = rend.material.GetColor("_BaseColor");
         color.a = 1;
-        rend.material.color = color;
+        rend.material.SetColor("_BaseColor", color);
     }
 
     private void OnTriggerEnter(Collider other) {
