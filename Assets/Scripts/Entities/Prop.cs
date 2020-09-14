@@ -52,6 +52,10 @@ public class Prop : MonoBehaviour {
         }
     }
 
+    /// <summary>
+    /// Plays this prop's sound effect of colliding with its current strong/weak sound effect.
+    /// </summary>
+    /// <param name="impulse">The strength of the sound effect.</param>
     public void PlayCollisionEffect(float impulse) {
         if (impulse > impulseStrong) {
             // Strong impulse: strong sound effect
@@ -75,7 +79,7 @@ public class Prop : MonoBehaviour {
         //if(rb)
         //    PlayCollisionEffect(collision.impulse.magnitude / rb.mass);
         //else
-            PlayCollisionEffect(collision.relativeVelocity.magnitude);
+        PlayCollisionEffect(Vector3.Dot(collision.relativeVelocity, collision.GetContact(0).normal));
         //if (collision.impulse.magnitude > impulseWeak)
         //    Debug.Log("soft volume set to " + sound.volume + " from " + collision.impulse.magnitude + " from " + name + " against " + collision.gameObject.name, gameObject);
     }
