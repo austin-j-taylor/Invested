@@ -27,7 +27,8 @@ public class Environment_TitleScreen : EnvironmentCinematic {
 
     // Called by DataManagement when flags are reset and player data is erased.
     public static void Clear() {
-        Player.PlayerGlower.SetOverrideGlows(FlagsController.GetData("completeTutorial1"), FlagsController.GetData("pwr_steel"), FlagsController.GetData("pwr_pewter"), FlagsController.GetData("pwr_zinc"));
+        //Player.PlayerGlower.SetOverrideGlows(FlagsController.GetData("completeTutorial1"), FlagsController.GetData("pwr_steel"), FlagsController.GetData("pwr_pewter"), FlagsController.GetData("pwr_zinc"));
+        Player.PlayerGlower.Clear();
         if (FlagsController.CompletedAllLevels)
             Player.PlayerInstance.SetFrameMaterial(GameManager.Material_MARLmetal_lit);
         else
