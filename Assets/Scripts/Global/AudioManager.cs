@@ -9,6 +9,8 @@ using UnityEngine.SceneManagement;
 public class AudioManager : MonoBehaviour {
 
     #region constants
+    // "Default" audio levels for each volume mix
+    private const float default_master = 2, default_music = 0.3f, default_effects = 0.75f, default_voice = 0.5f;
     // Indexes for the audisources attached to the audimanager
     // Each audiosource may be hot-swapped to different tracks on the fly that are mutually exclusive
     private const int index_shared = 0, // shared by all one-shot sound effects that are short enough to not worry about stacking
@@ -90,10 +92,10 @@ public class AudioManager : MonoBehaviour {
 
     #region accessors
     public void SetAudioLevels(float master, float music, float effects, float voiceBeeps) {
-        mixer.SetFloat("volumeMaster", Mathf.Log10(master) * 20); // logarithmic volume slider
-        mixer.SetFloat("volumeMusic", Mathf.Log10(music) * 20);
-        mixer.SetFloat("volumeEffects", Mathf.Log10(effects) * 20);
-        mixer.SetFloat("volumeVoiceBeeps", Mathf.Log10(voiceBeeps) * 20);
+        mixer.SetFloat("volumeMaster", Mathf.Log10(master * default_master) * 20); // logarithmic volume slider
+        mixer.SetFloat("volumeMusic", Mathf.Log10(music * default_music) * 20);
+        mixer.SetFloat("volumeEffects", Mathf.Log10(effects * default_effects) * 20);
+        mixer.SetFloat("volumeVoiceBeeps", Mathf.Log10(voiceBeeps * default_voice) * 20);
     }
     public void SetMasterPitch(float pitch) {
         mixer.SetFloat("pitchMaster", pitch);
@@ -101,7 +103,7 @@ public class AudioManager : MonoBehaviour {
     public void SetBGMVolume(float volume) {
         if (volume == 0)
             volume = 0.001f;
-        mixer.SetFloat("volumeBGM", Mathf.Log10(volume) * 20);
+        mixer.SetFloat("volumeBGM", Mathf.Log10(volume * default_music) * 20);
     }
     #endregion
 
