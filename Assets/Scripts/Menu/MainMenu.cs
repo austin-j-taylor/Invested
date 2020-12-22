@@ -8,11 +8,19 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class MainMenu : Menu {
 
+    [HideInInspector]
     public TitleScreen titleScreen;
+    [HideInInspector]
     public ControlSchemeMenu controlSchemeMenu;
+    [HideInInspector]
     public DataManagementMenu dataManagementMenu;
+    [HideInInspector]
     public SceneSelectMenu sceneSelectMenu;
+    [HideInInspector]
     public ArticlesMenu articlesMenu;
+
+    [SerializeField]
+    public GameObject splashScreen = null;
 
     #region clearing
     private void Awake() {
@@ -22,10 +30,15 @@ public class MainMenu : Menu {
         sceneSelectMenu = GetComponentInChildren<SceneSelectMenu>();
         articlesMenu = GetComponentInChildren<ArticlesMenu>();
 
+        // Show the spash screen
+        splashScreen.GetComponent<Image>().enabled = true;
+
         SceneManager.sceneLoaded += ClearAfterSceneChange;
     }
 
     private void Start() {
+        // Hide the spash screen
+        splashScreen.GetComponent<Image>().enabled = false;
         Reset();
     }
     private void ClearAfterSceneChange(Scene scene, LoadSceneMode mode) {
