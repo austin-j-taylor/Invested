@@ -10,14 +10,14 @@ public class AudioManager : MonoBehaviour {
 
     #region constants
     // "Default" audio levels for each volume mix
-    private const float default_master = 2, default_music = 0.3f, default_effects = 0.75f, default_voice = 0.5f;
+    private const float default_master = 2, default_music = 0.2f, default_effects = 0.75f, default_voice = 0.1f;
     // Indexes for the audisources attached to the audimanager
     // Each audiosource may be hot-swapped to different tracks on the fly that are mutually exclusive
     private const int index_shared = 0, // shared by all one-shot sound effects that are short enough to not worry about stacking
                         index_wind = 1,
                         index_sceneTransition = 2; // used for music that needs to persist between scenes, e.g. the looping sound from the Title Screen to the Tutorial
 
-    public const float windVelocityFactor = 15, windLerpFactor = 3, windVolumeVactor = 0.5f, velocityThreshold = 5;
+    public const float windVelocityFactor = 15, windLerpFactor = 3, windVolumeVactor = 0.3f, velocityThreshold = 5;
     #endregion
 
     [SerializeField]
