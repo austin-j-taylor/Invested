@@ -10,9 +10,10 @@ public class CloudsManager : MonoBehaviour {
 
     private CloudMaster cloudsVolumetric; // perceives cloudsVolumetric on certain levels
     private ParticleSystem cloudsSimple; // the simple clouds built from particles
-    private float cloudsMaxDensity; // used for fading between densities
+    private float volumetricMaxDensity; // used for fading between densities
     private float currentDensity = 1;
-    private bool SceneUsesClouds;
+    private float simpleMaxDensity = 1;
+    private bool sceneUsesClouds, simpleUsesFog; // simpleUsesFog is true if the simple clouds use fog. It's ignored by volumetric clouds, which have their own fog options.
 
     private void Awake() {
         cloudsVolumetric = CameraController.ActiveCamera.GetComponent<CloudMaster>();
@@ -26,15 +27,16 @@ public class CloudsManager : MonoBehaviour {
     private void LoadCloudDataFromScene(Scene scene, LoadSceneMode mode) {
         // mode is Single when it's loading scenes on startup, so skip those
         if (mode == LoadSceneMode.Single) {
-            Transform clouds = GameObject.Find("Clouds").transform;
-            Transform otherVolumetric = clouds.Find("Volumetric");
-            ParticleSystem otherSimple = clouds.Find("Simple").GetComponent<ParticleSystem>();
+            GameObject clouds = GameObject.Find("Clouds");
             if (clouds) {
+                Transform otherVolumetric = clouds.transform.Find("Volumetric");
+                ParticleSystem otherSimple = clouds.transform.Find("Simple").GetComponent<ParticleSystem>();
                 //ActiveCamera.clearFlags = CameraClearFlags.SolidColor;
-                SetCloudData(otherVolumetric.GetComponent<CloudMaster>(), otherSimple);
+                SetCloudData(otherVolumetric.GetComponent<CloudMaster>(), otherSimple, RenderSettings.fog);
             } else {
                 // No cloudsVolumetric for this scene
-                SceneUsesClouds = false;
+                sceneUsesClouds = false;
+                simpleUsesFog = RenderSettings.fog;
                 cloudsVolumetric.enabled = false;
                 //ActiveCamera.clearFlags = CameraClearFlags.Skybox;
             }
@@ -42,20 +44,22 @@ public class CloudsManager : MonoBehaviour {
     }
 
     public void SetClouds(bool enable) {
-        if (SceneUsesClouds) {
-            if (enable) {
-                if (SceneUsesClouds) {
+        if (sceneUsesClouds) {
+            if (enable) { // volumetric
+                if (sceneUsesClouds) {
                     cloudsVolumetric.enabled = true;
                     cloudsSimple.gameObject.SetActive(false);
+                    RenderSettings.fog = false;
                 }
-            } else {
+            } else { // simple
                 cloudsVolumetric.enabled = false;
                 cloudsSimple.gameObject.SetActive(true);
+                RenderSettings.fog = simpleUsesFog;
             }
         }
     }
     // Loads cloud settings from the passed CloudMaster.
-    public void SetCloudData(CloudMaster otherVolumetric, ParticleSystem otherSimple) {
+    public void SetCloudData(CloudMaster otherVolumetric, ParticleSystem otherSimple, bool usingFog) {
         // Set params for volumetric clouds on player camera
         cloudsVolumetric.shader = otherVolumetric.shader;
         cloudsVolumetric.container = otherVolumetric.container;
@@ -104,16 +108,20 @@ public class CloudsManager : MonoBehaviour {
 
         cloudsVolumetric.material = otherVolumetric.material;
 
-        SceneUsesClouds = true;
+        sceneUsesClouds = true;
+        simpleUsesFog = usingFog;
+        RenderSettings.fog = !GraphicsController.CloudsEnabled && usingFog;
         cloudsVolumetric.enabled = GraphicsController.CloudsEnabled;
         cloudsVolumetric.Awake();
 
         otherVolumetric.enabled = false;
 
-        cloudsMaxDensity = cloudsVolumetric.densityMultiplier;
+        volumetricMaxDensity = cloudsVolumetric.densityMultiplier;
 
         // Set params for simple clouds in scene
         cloudsSimple = otherSimple;
+        ParticleSystemRenderer rend = cloudsSimple.GetComponent<ParticleSystemRenderer>();
+        simpleMaxDensity = rend.material.color.a;
         cloudsSimple.gameObject.SetActive(!GraphicsController.CloudsEnabled);
     }
     #endregion
@@ -140,13 +148,13 @@ public class CloudsManager : MonoBehaviour {
         Color col = rend.material.color;
         while (currentDensity < 1) {
             currentDensity += Time.deltaTime / fadeTime;
-            cloudsVolumetric.densityMultiplier = currentDensity * cloudsMaxDensity;
-            col.a = currentDensity;
+            cloudsVolumetric.densityMultiplier = currentDensity * volumetricMaxDensity;
+            col.a = currentDensity * simpleMaxDensity;
             rend.material.color = col;
             yield return null;
         }
-        cloudsVolumetric.densityMultiplier = cloudsMaxDensity;
-        col.a = 1;
+        cloudsVolumetric.densityMultiplier = volumetricMaxDensity;
+        col.a = simpleMaxDensity;
         rend.material.color = col;
     }
     private IEnumerator CloudsOut(float fadeTime) {
@@ -154,8 +162,8 @@ public class CloudsManager : MonoBehaviour {
         Color col = rend.material.color;
         while (currentDensity > 0) {
             currentDensity -= Time.deltaTime / fadeTime;
-            cloudsVolumetric.densityMultiplier = currentDensity * cloudsMaxDensity;
-            col.a = currentDensity;
+            cloudsVolumetric.densityMultiplier = currentDensity * volumetricMaxDensity;
+            col.a = currentDensity * simpleMaxDensity;
             rend.material.color = col;
             yield return null;
         }

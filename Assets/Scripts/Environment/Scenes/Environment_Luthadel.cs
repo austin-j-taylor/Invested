@@ -46,11 +46,17 @@ public class Environment_Luthadel : Environment {
         if (DayMode) {
             RenderSettings.skybox = daySkyBox;
             RenderSettings.sun = dayDirectionalLight;
-            GameManager.CloudsManager.SetCloudData(dayCloudsVolumetric, nightCloudsSimple);
+            //RenderSettings.fog = false;
+            //RenderSettings.fogColor = Color.black;
+            //RenderSettings.fogDensity = 0.002f;
+            GameManager.CloudsManager.SetCloudData(dayCloudsVolumetric, dayCloudsSimple, false);
         } else {
             RenderSettings.skybox = nightSkyBox;
             RenderSettings.sun = nightDirectionalLight;
-            GameManager.CloudsManager.SetCloudData(nightCloudsVolumetric, nightCloudsSimple);
+            //RenderSettings.fog = true;
+            RenderSettings.fogColor = new Color(0.6140263f, 0.7088344f, 0.8301887f);
+            RenderSettings.fogDensity = 0.01f;
+            GameManager.CloudsManager.SetCloudData(nightCloudsVolumetric, nightCloudsSimple, true);
         }
     }
 }
