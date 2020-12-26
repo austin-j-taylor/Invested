@@ -3,17 +3,20 @@ using System.Collections;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// Manages the clouds/mist effects in the scene.
+/// Manages the cloudsVolumetric/mist effects in the scene.
 /// Sets parameters for the CloudsMaster script attached to the player's camera.
 /// </summary>
 public class CloudsManager : MonoBehaviour {
 
-    private CloudMaster clouds; // perceives clouds on certain levels
+    private CloudMaster cloudsVolumetric; // perceives cloudsVolumetric on certain levels
+    private ParticleSystem cloudsSimple; // the simple clouds built from particles
     private float cloudsMaxDensity; // used for fading between densities
+    private float currentDensity = 1;
     private bool SceneUsesClouds;
 
     private void Awake() {
-        clouds = CameraController.ActiveCamera.GetComponent<CloudMaster>();
+        cloudsVolumetric = CameraController.ActiveCamera.GetComponent<CloudMaster>();
+        cloudsSimple = null; // loaded from each scene
         SceneManager.sceneLoaded += LoadCloudDataFromScene;
     }
 
@@ -23,131 +26,142 @@ public class CloudsManager : MonoBehaviour {
     private void LoadCloudDataFromScene(Scene scene, LoadSceneMode mode) {
         // mode is Single when it's loading scenes on startup, so skip those
         if (mode == LoadSceneMode.Single) {
-            GameObject otherObject = GameObject.Find("Clouds");
-            if (otherObject) {
+            Transform clouds = GameObject.Find("Clouds").transform;
+            Transform otherVolumetric = clouds.Find("Volumetric");
+            ParticleSystem otherSimple = clouds.Find("Simple").GetComponent<ParticleSystem>();
+            if (clouds) {
                 //ActiveCamera.clearFlags = CameraClearFlags.SolidColor;
-                CloudMaster other = otherObject.GetComponent<CloudMaster>();
-
-                SetCloudData(other);
+                SetCloudData(otherVolumetric.GetComponent<CloudMaster>(), otherSimple);
             } else {
-                // No clouds for this scene
+                // No cloudsVolumetric for this scene
                 SceneUsesClouds = false;
-                clouds.enabled = false;
+                cloudsVolumetric.enabled = false;
                 //ActiveCamera.clearFlags = CameraClearFlags.Skybox;
             }
         }
     }
 
     public void SetClouds(bool enable) {
-        if (enable) {
-            if (SceneUsesClouds)
-                clouds.enabled = true;
-        } else {
-            clouds.enabled = false;
+        if (SceneUsesClouds) {
+            if (enable) {
+                if (SceneUsesClouds) {
+                    cloudsVolumetric.enabled = true;
+                    cloudsSimple.gameObject.SetActive(false);
+                }
+            } else {
+                cloudsVolumetric.enabled = false;
+                cloudsSimple.gameObject.SetActive(true);
+            }
         }
     }
     // Loads cloud settings from the passed CloudMaster.
-    public void SetCloudData(CloudMaster other) {
-        clouds.shader = other.shader;
-        clouds.container = other.container;
-        clouds.weatherMapGen = other.weatherMapGen;
-        clouds.noise = other.noise;
-        clouds.sunLight = other.sunLight;
-        clouds.cloudTestParams = other.cloudTestParams;
+    public void SetCloudData(CloudMaster otherVolumetric, ParticleSystem otherSimple) {
+        // Set params for volumetric clouds on player camera
+        cloudsVolumetric.shader = otherVolumetric.shader;
+        cloudsVolumetric.container = otherVolumetric.container;
+        cloudsVolumetric.weatherMapGen = otherVolumetric.weatherMapGen;
+        cloudsVolumetric.noise = otherVolumetric.noise;
+        cloudsVolumetric.sunLight = otherVolumetric.sunLight;
+        cloudsVolumetric.cloudTestParams = otherVolumetric.cloudTestParams;
 
-        clouds.numStepsLight = other.numStepsLight;
-        clouds.rayOffsetStrength = other.rayOffsetStrength;
-        clouds.especiallyNoisyRayOffsets = other.especiallyNoisyRayOffsets;
-        clouds.blueNoise = other.blueNoise;
+        cloudsVolumetric.numStepsLight = otherVolumetric.numStepsLight;
+        cloudsVolumetric.rayOffsetStrength = otherVolumetric.rayOffsetStrength;
+        cloudsVolumetric.especiallyNoisyRayOffsets = otherVolumetric.especiallyNoisyRayOffsets;
+        cloudsVolumetric.blueNoise = otherVolumetric.blueNoise;
 
-        clouds.cloudScale = other.cloudScale;
-        clouds.densityMultiplier = other.densityMultiplier;
-        clouds.densityOffset = other.densityOffset;
-        clouds.shapeOffset = other.shapeOffset;
-        clouds.heightOffset = other.heightOffset;
-        clouds.shapeNoiseWeights = other.shapeNoiseWeights;
+        cloudsVolumetric.cloudScale = otherVolumetric.cloudScale;
+        cloudsVolumetric.densityMultiplier = otherVolumetric.densityMultiplier;
+        cloudsVolumetric.densityOffset = otherVolumetric.densityOffset;
+        cloudsVolumetric.shapeOffset = otherVolumetric.shapeOffset;
+        cloudsVolumetric.heightOffset = otherVolumetric.heightOffset;
+        cloudsVolumetric.shapeNoiseWeights = otherVolumetric.shapeNoiseWeights;
 
-        clouds.detailNoiseScale = other.detailNoiseScale;
-        clouds.detailNoiseWeight = other.detailNoiseWeight;
-        clouds.detailNoiseWeights = other.detailNoiseWeights;
-        clouds.detailOffset = other.detailOffset;
+        cloudsVolumetric.detailNoiseScale = otherVolumetric.detailNoiseScale;
+        cloudsVolumetric.detailNoiseWeight = otherVolumetric.detailNoiseWeight;
+        cloudsVolumetric.detailNoiseWeights = otherVolumetric.detailNoiseWeights;
+        cloudsVolumetric.detailOffset = otherVolumetric.detailOffset;
 
-        clouds.lightAbsorptionThroughCloud = other.lightAbsorptionThroughCloud;
-        clouds.lightAbsorptionTowardSun = other.lightAbsorptionTowardSun;
-        clouds.darknessThreshold = other.darknessThreshold;
-        clouds.forwardScattering = other.forwardScattering;
-        clouds.backScattering = other.backScattering;
-        clouds.baseBrightness = other.baseBrightness;
-        clouds.phaseFactor = other.phaseFactor;
+        cloudsVolumetric.lightAbsorptionThroughCloud = otherVolumetric.lightAbsorptionThroughCloud;
+        cloudsVolumetric.lightAbsorptionTowardSun = otherVolumetric.lightAbsorptionTowardSun;
+        cloudsVolumetric.darknessThreshold = otherVolumetric.darknessThreshold;
+        cloudsVolumetric.forwardScattering = otherVolumetric.forwardScattering;
+        cloudsVolumetric.backScattering = otherVolumetric.backScattering;
+        cloudsVolumetric.baseBrightness = otherVolumetric.baseBrightness;
+        cloudsVolumetric.phaseFactor = otherVolumetric.phaseFactor;
 
-        clouds.timeScale = other.timeScale;
-        clouds.baseSpeed = other.baseSpeed;
-        clouds.detailSpeed = other.detailSpeed;
+        cloudsVolumetric.timeScale = otherVolumetric.timeScale;
+        cloudsVolumetric.baseSpeed = otherVolumetric.baseSpeed;
+        cloudsVolumetric.detailSpeed = otherVolumetric.detailSpeed;
 
-        clouds.colFog = other.colFog;
-        clouds.colClouds = other.colClouds;
-        clouds.colSun = other.colSun;
-        clouds.haveSunInSky = other.haveSunInSky;
-        clouds.fogDensity = other.fogDensity;
+        cloudsVolumetric.colFog = otherVolumetric.colFog;
+        cloudsVolumetric.colClouds = otherVolumetric.colClouds;
+        cloudsVolumetric.colSun = otherVolumetric.colSun;
+        cloudsVolumetric.haveSunInSky = otherVolumetric.haveSunInSky;
+        cloudsVolumetric.fogDensity = otherVolumetric.fogDensity;
 
-        clouds.cloudsFollowPlayerXZ = other.cloudsFollowPlayerXZ;
-        clouds.cloudsFollowPlayerXYZ = other.cloudsFollowPlayerXYZ;
+        cloudsVolumetric.cloudsFollowPlayerXZ = otherVolumetric.cloudsFollowPlayerXZ;
+        cloudsVolumetric.cloudsFollowPlayerXYZ = otherVolumetric.cloudsFollowPlayerXYZ;
 
-        clouds.material = other.material;
+        cloudsVolumetric.material = otherVolumetric.material;
 
         SceneUsesClouds = true;
-        clouds.enabled = GraphicsController.CloudsEnabled;
-        clouds.Awake();
+        cloudsVolumetric.enabled = GraphicsController.CloudsEnabled;
+        cloudsVolumetric.Awake();
 
-        other.enabled = false;
+        otherVolumetric.enabled = false;
 
-        cloudsMaxDensity = clouds.densityMultiplier;
+        cloudsMaxDensity = cloudsVolumetric.densityMultiplier;
+
+        // Set params for simple clouds in scene
+        cloudsSimple = otherSimple;
+        cloudsSimple.gameObject.SetActive(!GraphicsController.CloudsEnabled);
     }
     #endregion
 
     #region cloudFading
     public void FadeCloudsIn(float time) {
+        StopAllCoroutines();
         StartCoroutine(CloudsIn(time));
     }
     public void FadeCloudsOut(float time) {
+        StopAllCoroutines();
         StartCoroutine(CloudsOut(time));
     }
     public void FadeCloudsOutImmediate() {
-        clouds.densityMultiplier = 0;
+        StopAllCoroutines();
+        cloudsVolumetric.densityMultiplier = 0;
+        ParticleSystemRenderer rend = cloudsSimple.GetComponent<ParticleSystemRenderer>();
+        Color col = rend.material.color;
+        col.a = 0;
+        rend.material.color = col;
     }
     private IEnumerator CloudsIn(float fadeTime) {
-        float density = 0;
-        if (cloudsMaxDensity < 0) {
-            while (density > cloudsMaxDensity) {
-                density += Time.deltaTime / fadeTime * cloudsMaxDensity;
-                clouds.densityMultiplier = density;
-                yield return null;
-            }
-        } else {
-            while (density < cloudsMaxDensity) {
-                density += Time.deltaTime / fadeTime * cloudsMaxDensity;
-                clouds.densityMultiplier = density;
-                yield return null;
-            }
+        ParticleSystemRenderer rend = cloudsSimple.GetComponent<ParticleSystemRenderer>();
+        Color col = rend.material.color;
+        while (currentDensity < 1) {
+            currentDensity += Time.deltaTime / fadeTime;
+            cloudsVolumetric.densityMultiplier = currentDensity * cloudsMaxDensity;
+            col.a = currentDensity;
+            rend.material.color = col;
+            yield return null;
         }
-        clouds.densityMultiplier = cloudsMaxDensity;
+        cloudsVolumetric.densityMultiplier = cloudsMaxDensity;
+        col.a = 1;
+        rend.material.color = col;
     }
     private IEnumerator CloudsOut(float fadeTime) {
-        float density = cloudsMaxDensity;
-        if (cloudsMaxDensity < 0) {
-            while (density < 0) {
-                density -= Time.deltaTime / fadeTime * cloudsMaxDensity;
-                clouds.densityMultiplier = density;
-                yield return null;
-            }
-        } else {
-            while (density > 0) {
-                density -= Time.deltaTime / fadeTime * cloudsMaxDensity;
-                clouds.densityMultiplier = density;
-                yield return null;
-            }
+        ParticleSystemRenderer rend = cloudsSimple.GetComponent<ParticleSystemRenderer>();
+        Color col = rend.material.color;
+        while (currentDensity > 0) {
+            currentDensity -= Time.deltaTime / fadeTime;
+            cloudsVolumetric.densityMultiplier = currentDensity * cloudsMaxDensity;
+            col.a = currentDensity;
+            rend.material.color = col;
+            yield return null;
         }
-        clouds.densityMultiplier = 0;
+        cloudsVolumetric.densityMultiplier = 0;
+        col.a = 0;
+        rend.material.color = col;
     }
     #endregion
 }
