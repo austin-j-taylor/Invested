@@ -26,7 +26,7 @@ public class GraphicsController : MonoBehaviour {
     [SerializeField]
     private PostProcessingProfile profile = null;
     [SerializeField]
-    public DropdownSetting resolutionDropdown = null;
+    public DropdownSetting resolutionDropdown = null, qualityDropdown = null;
 
     ChromaticAberrationModel.Settings aberrationSettings;
     VignetteModel.Settings vignetteSettings;
@@ -44,6 +44,17 @@ public class GraphicsController : MonoBehaviour {
             });
         }
         resolutionDropdown.dropdown.options = resOptions;
+
+        // Need to set the Quality Setting dropdown with the valid resolutions for this monitor
+        string[] names = QualitySettings.names;
+        List<OptionData> qualityOptions = new List<OptionData>();
+        for (int i = 0; i < names.Length; i++) {
+            qualityOptions.Add(new OptionData() {
+                text = names[i],
+                image = null
+            });
+        }
+        qualityDropdown.dropdown.options = qualityOptions;
     }
     void Start() {
         postProcessingEnabled = SettingsMenu.settingsGraphics.postProcessingEnabled == 1;
@@ -145,6 +156,20 @@ public class GraphicsController : MonoBehaviour {
             //Debug.Log("Set resolution: " + resolutions[index].width + " " + resolutions[index].height + " " + mode);
             Screen.SetResolution(resolutions[index].width, resolutions[index].height, mode, resolutions[index].refreshRate);
         }
+    }
+
+    /// <summary>
+    /// Change the quality level of the application's grpahics
+    /// </summary>
+    /// <param name="quality">the new quality level</param>
+    public static void SetQualityLevel(int quality) {
+        string[] names = QualitySettings.names;
+        // Interpret an index of -1 to be the max possible quality
+        if (quality == -1 || quality >= names.Length)
+            quality = names.Length - 1;
+        // If a change has occurred
+        if (quality != QualitySettings.GetQualityLevel())
+            QualitySettings.SetQualityLevel(quality, true);
     }
     #endregion
 }

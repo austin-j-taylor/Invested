@@ -83,7 +83,6 @@ public abstract class JSONSettings : MonoBehaviour {
             reader.Close();
 
             JsonUtility.FromJsonOverwrite(jSONText, this);
-
             if(saveAfterResetting)
                 SaveSettings();
             RefreshSettings();
