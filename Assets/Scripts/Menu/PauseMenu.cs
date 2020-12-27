@@ -82,7 +82,7 @@ public class PauseMenu : Menu {
             case GameManager.GameCameraState.Cutscene:
                 settingsButton.gameObject.SetActive(false);
                 resetButton.gameObject.SetActive(false);
-                quitButton.gameObject.SetActive(false);
+                //quitButton.gameObject.SetActive(false);
                 break;
         }
 
