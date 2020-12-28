@@ -15,6 +15,7 @@ public class CoinPouch : MonoBehaviour {
     }
 
     public void AddCoin(Coin coin) {
+        coin.gameObject.SetActive(false);
         Destroy(coin.gameObject);
         Count++;
     }

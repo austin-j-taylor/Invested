@@ -57,20 +57,22 @@ public class Prop : MonoBehaviour {
     /// </summary>
     /// <param name="impulse">The strength of the sound effect.</param>
     public void PlayCollisionEffect(float impulse) {
-        if (impulse > impulseStrong) {
-            // Strong impulse: strong sound effect
-            sound.clip = strong;
-            sound.volume = 1 - Mathf.Exp(-impulse / expFactor);
-            //Debug.Log("strong volume set to " + sound.volume + " from " + impulse + " from " + name, gameObject);
-            sound.Play();
-        } else if (impulse > impulseWeak) {
-            // Weak impulse: weak sound effect
-            sound.clip = weak;
-            sound.volume = 1 - Mathf.Exp(-impulse / expFactor);
-            //Debug.Log("weak volume set to " + sound.volume + " from " + impulse + " from " + name, gameObject);
-            sound.Play();
-        } else {
-            //Debug.Log("Collision too weak: " + impulse + " from " + name, gameObject);
+        if (sound.isActiveAndEnabled) {
+            if (impulse > impulseStrong) {
+                // Strong impulse: strong sound effect
+                sound.clip = strong;
+                sound.volume = 1 - Mathf.Exp(-impulse / expFactor);
+                //Debug.Log("strong volume set to " + sound.volume + " from " + impulse + " from " + name, gameObject);
+                sound.Play();
+            } else if (impulse > impulseWeak) {
+                // Weak impulse: weak sound effect
+                sound.clip = weak;
+                sound.volume = 1 - Mathf.Exp(-impulse / expFactor);
+                //Debug.Log("weak volume set to " + sound.volume + " from " + impulse + " from " + name, gameObject);
+                sound.Play();
+            } else {
+                //Debug.Log("Collision too weak: " + impulse + " from " + name, gameObject);
+            }
         }
     }
 
@@ -79,7 +81,8 @@ public class Prop : MonoBehaviour {
         //if(rb)
         //    PlayCollisionEffect(collision.impulse.magnitude / rb.mass);
         //else
-        PlayCollisionEffect(Vector3.Dot(collision.relativeVelocity, collision.GetContact(0).normal));
+        if(collision.transform.gameObject.activeSelf)
+            PlayCollisionEffect(Vector3.Dot(collision.relativeVelocity, collision.GetContact(0).normal));
         //if (collision.impulse.magnitude > impulseWeak)
         //    Debug.Log("soft volume set to " + sound.volume + " from " + collision.impulse.magnitude + " from " + name + " against " + collision.gameObject.name, gameObject);
     }
