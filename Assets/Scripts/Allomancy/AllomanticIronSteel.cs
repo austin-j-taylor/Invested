@@ -738,7 +738,8 @@ public class AllomanticIronSteel : Allomancer {
     /// Refreshes the Bubble that shows the range of selecting targets
     /// </summary>
     /// <param name="metal">true to open the iron Buble, false for steel</param>
-    protected void BubbleOpen(bool metal) {
+    public void BubbleOpen(bool metal) {
+        StartBurning(metal);
         // if cannot open that bubble because we're out of metal, don't open it at all
         if (metal == iron && !HasIron || metal == steel && !HasSteel) {
             BubbleClose();
@@ -766,7 +767,7 @@ public class AllomanticIronSteel : Allomancer {
     /// Closes the Bubble.
     /// </summary>
     /// <param name="clearTargets">if true, will invoke each removed target's Clear()</param>
-    protected void BubbleClose(bool clearTargets = true) {
+    public void BubbleClose(bool clearTargets = true) {
         if (BubbleIsOpen) {
             BubbleIsOpen = false;
             bubbleRenderer.enabled = false;

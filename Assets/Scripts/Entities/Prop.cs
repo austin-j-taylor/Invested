@@ -20,7 +20,7 @@ public class Prop : MonoBehaviour {
     private AudioClip strong, weak;
     private float expFactor = expFactorGeneral;
 
-    private void Start() {
+    private void Awake() {
         rb = GetComponent<Rigidbody>();
         sound = gameObject.AddComponent<AudioSource>();
         sound.outputAudioMixerGroup = GameManager.AudioManager.MixerEffectsGroup;
@@ -57,7 +57,7 @@ public class Prop : MonoBehaviour {
     /// </summary>
     /// <param name="impulse">The strength of the sound effect.</param>
     public void PlayCollisionEffect(float impulse) {
-        if (sound.isActiveAndEnabled) {
+        if (sound != null && sound.isActiveAndEnabled) {
             if (impulse > impulseStrong) {
                 // Strong impulse: strong sound effect
                 sound.clip = strong;

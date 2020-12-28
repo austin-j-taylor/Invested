@@ -223,8 +223,12 @@ public class ControlWheelController : MonoBehaviour {
                 Player.PlayerIronSteel.SetControlModeArea();
                 break;
             case Selection.Bubble:
-                selectedSpoke = highlit;
-                Player.PlayerIronSteel.SetControlModeBubble();
+                //selectedSpoke = highlit;
+                //Player.PlayerIronSteel.SetControlModeBubble();
+                if (Player.PlayerIronSteel.BubbleIsOpen)
+                    Player.PlayerIronSteel.BubbleClose();
+                else
+                    Player.PlayerIronSteel.BubbleOpen(false);
                 break;
             case Selection.Coinshot:
                 selectedSpoke = highlit;
@@ -303,13 +307,15 @@ public class ControlWheelController : MonoBehaviour {
         if (Player.PlayerIronSteel.SteelReserve.IsEnabled) {
             textManual.text = KeyPullPushAbridged + ": " + Pull_Push + "\non a single target\n\n\n";
             textArea.text = KeyPullPushAbridged + ": " + Pull_Push + "\nin an area in front of you\n\n\n";
-            textBubble.text = KeyPullPushAbridged + ": " + Pull_Push + "\nin a bubble around you\n\n"
-            + "The bubble can stay open\nin other modes.\n";
+            //textBubble.text = KeyPullPushAbridged + ": " + Pull_Push + "\nin a bubble around you\n\n"
+            //+ "The bubble can stay open\nin other modes.\n";
+            textBubble.text = "Toggle a bubble to Push around you\n\n\n";
         } else {
             textManual.text = KeyPullAbridged + ": " + Pull + "\non a single target\n\n\n";
             textArea.text = KeyPullAbridged + ": " + Pull + "\nin an area in front of you\n\n\n";
-            textBubble.text = KeyPullAbridged + ": " + Pull + "\nin a bubble around you\n\n"
-            + "The bubble can stay open\nin other modes.\n";
+            //textBubble.text = KeyPullAbridged + ": " + Pull + "\nin a bubble around you\n\n"
+            //+ "The bubble can stay open\nin other modes.\n";
+            textBubble.text = "";
         }
         textCoinshot.text = KeyPullAbridged + ": throw and " + Push + " " + O_Coin + "\n\n\n\n\n";
         // The active mode gets the verbose text as well
@@ -355,10 +361,10 @@ public class ControlWheelController : MonoBehaviour {
         }
     }
     private void RefreshBubble() {
-        // assume we'll never have bubble without Pushing
-        textBubble.text = KeyPullPushAbridged + ": " + Pull_Push + "\n"
-                + KeyMark + ": toggle bubble\n"
-                + KeyRadiusAbridged + ":size of bubble\n\n\n";
+        //// assume we'll never have bubble without Pushing
+        //textBubble.text = KeyPullPushAbridged + ": " + Pull_Push + "\n"
+        //        + KeyMark + ": toggle bubble\n"
+        //        + KeyRadiusAbridged + ":size of bubble\n\n\n";
     }
     private void RefreshCoinshot() {
         textCoinshot.text = KeyPullAbridged + ": throw and " + Push + " " + O_Coin + "\n"
