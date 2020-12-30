@@ -135,12 +135,12 @@ public class HarmonyTarget : MonoBehaviour {
         Player.PlayerIronSteel.StopBurning();
         harmonySphere.GetComponent<Collider>().enabled = false;
         anim.SetTrigger("PlayerHasEntered");
-        if (Unlocked)
-            HUD.DisableHUD();
 
         //Player.PlayerIronSteel.StopBurning();
         Player.PlayerInstance.GetComponent<Rigidbody>().useGravity = false;
         CameraController.SetCinemachineCamera(vcam);
+        if (!Unlocked)
+            HUD.EnableHUD(true); // If the player isn't finished yet, keep the HUD visible to display the "Spikes needed" message
     }
     private void InsufficentSpikesMessage() {
         int spikesLeft = 3 - numSpikes;

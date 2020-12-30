@@ -92,12 +92,13 @@ public class HUD : MonoBehaviour {
     }
 
     // Make HUD elements visible
-    public static void EnableHUD() {
-        if (SettingsMenu.settingsInterface.hudEnabled == 1 && GameManager.CameraState != GameManager.GameCameraState.Cutscene)
+    public static void EnableHUD(bool overrideCameraState = false) {
+        if (SettingsMenu.settingsInterface.hudEnabled == 1 && (GameManager.CameraState != GameManager.GameCameraState.Cutscene || overrideCameraState))
             hudGroup.alpha = 1;
     }
 
     public static void DisableHUD() {
+        Debug.Log("Disabled");
         //instance.SetActive(false);
         hudGroup.alpha = 0;
     }
