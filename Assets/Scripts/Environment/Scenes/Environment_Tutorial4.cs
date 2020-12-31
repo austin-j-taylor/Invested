@@ -9,7 +9,7 @@ public class Environment_Tutorial4 : EnvironmentCinematic {
 
     EnvironmentalTransitionManager musicManager;
     [SerializeField]
-    private Node doorNode1 = null, doorNode2 = null;
+    private GateRising door1 = null, door2 = null, door3 = null;
     [SerializeField]
     private HarmonyTarget harmonyTarget = null;
 
@@ -69,7 +69,7 @@ public class Environment_Tutorial4 : EnvironmentCinematic {
             yield return new WaitForSecondsRealtime(1);
         }
         HUD.MessageOverlayCinematic.FadeIn(HowToThrow + "  to throw and " + Push + " on a " + O_Coin + ".");
-        while(!doorNode1.On) {
+        while(!door1.Unlocked) {
             yield return null;
         }
         HUD.MessageOverlayCinematic.FadeOutInto("Open the " + ControlWheel + " and choose " + CoinshotMode + ".");
@@ -77,7 +77,7 @@ public class Environment_Tutorial4 : EnvironmentCinematic {
             yield return null;
         }
         HUD.MessageOverlayCinematic.FadeOutInto("In " + CoinshotMode + ", " + HowToPull + " to throw " + O_Coins);
-        while (!doorNode2.On || Player.CanControlZinc) {
+        while (!door2.Unlocked) {
             yield return null;
         }
         HUD.MessageOverlayCinematic.FadeOut();
@@ -89,28 +89,11 @@ public class Environment_Tutorial4 : EnvironmentCinematic {
         FlagsController.SetFlag("pwr_coins");
         while (HUD.ConversationHUDController.IsOpen)
             yield return null;
-        yield return new WaitForSeconds(10);
-        GameManager.ConversationManager.StartConversation("THINK2");
-
-        while (HUD.ConversationHUDController.IsOpen)
-            yield return null;
-        FlagsController.SetFlag("pwr_zinc");
-        HUD.MessageOverlayCinematic.FadeIn(HowToZincTime + " to tap " + Zinc + ".");
-        while (!Player.PlayerZinc.InZincTime) {
-            yield return null;
-        }
-        HUD.MessageOverlayCinematic.FadeOutInto("The " + ZincBlue("zinc bank") + " slows time when tapped, and recharges when not in use.");
-        yield return new WaitForSecondsRealtime(5);
-        HUD.MessageOverlayCinematic.FadeOut();
+        yield return new WaitForSeconds(20);
+        if(!door3.Unlocked)
+            GameManager.ConversationManager.StartConversation("THINK2");
     }
     protected override IEnumerator Trigger2() {
-        HUD.MessageOverlayCinematic.FadeIn("Opening the " + ControlWheel + " also taps " + Zinc + ".");
-        while (!Player.PlayerZinc.InZincTime) {
-            yield return null;
-        }
-        HUD.MessageOverlayCinematic.FadeOut();
-    }
-    protected override IEnumerator Trigger3() {
         // Fade in the Thrumming
         AudioSource source = GetComponent<AudioSource>();
         source.volume = 0;

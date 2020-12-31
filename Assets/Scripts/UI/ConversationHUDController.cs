@@ -327,7 +327,7 @@ public class ConversationHUDController : MonoBehaviour {
 
                     // and the speaker beeps, except for some punctuation-like characters
                     char character = currentConversation.content[i];
-                    if (state == State.Writing && currentSpeaker != null && character != '(' && character != ')' && character != '.' && character != '\n' && character != '\r') {
+                    if (state == State.Writing && currentSpeaker != null && !(IsPunctuation(character) || IsQuotationMark(character) || IsParenthesis(character)) && character != '\n' && character != '\r') {
                         currentSpeaker.Beep();
                     }
                 }
@@ -360,8 +360,17 @@ public class ConversationHUDController : MonoBehaviour {
                     char character = currentConversation.content[i];
                     // Don't pause if we're at punctuation, unless we're right before the end of the message
                     // (a close parenthesis also indicates the end of a thought, so skip if that's up next)
-                    if ((character == '.' || character == '?' || character == '!')
-                            && !(i + 1 < currentConversation.content.Length && (currentConversation.content[i + 1] == '(') || currentConversation.content[i + 1] == ')')) {
+                    // If there's punctuation followed by a quotation mark, wait until the quotation mark is printed to pause.
+                    bool isFollowedByQuotationMark = false, isFollowedByParenthesis = false, isPrecededByQuotationMark = false, isPrecededByPuncuation = false;
+                    if(i + 1 < currentConversation.content.Length) {
+                        isFollowedByParenthesis = IsParenthesis(currentConversation.content[i + 1]);
+                        isFollowedByQuotationMark = IsQuotationMark(currentConversation.content[i + 1]);
+                    } else if(i - 1 > 0) {
+                        isPrecededByPuncuation = IsPunctuation(currentConversation.content[i - 1]);
+                        isPrecededByQuotationMark = IsQuotationMark(currentConversation.content[i - 1]);
+                    }
+
+                    if (IsPunctuation(character) && !(isFollowedByParenthesis || isFollowedByQuotationMark) || IsQuotationMark(character) && isPrecededByPuncuation) {
                         yield return new WaitForSeconds(delayPerPause * 3);
                     } else {
                         yield return new WaitForSeconds(delayPerCharacter);
@@ -391,5 +400,15 @@ public class ConversationHUDController : MonoBehaviour {
         // This conversation is over.
         HUD.TextLogController.LogPartition();
         Close();
+    }
+
+    private bool IsPunctuation(char character) {
+        return character == ',' || character == '.' || character == '?' || character == '!';
+    }
+    private bool IsQuotationMark(char character) {
+        return character == '\"' || character == '\'';
+    }
+    private bool IsParenthesis(char character) {
+        return character == '(' || character == ')';
     }
 }

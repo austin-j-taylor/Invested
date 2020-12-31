@@ -8,6 +8,8 @@ public class Environment_Tutorial1 : EnvironmentCinematic {
 
     EnvironmentalTransitionManager musicManager;
 
+    private bool chattering = true;
+
     void Start() {
         musicManager = GetComponentInChildren<EnvironmentalTransitionManager>();
 
@@ -90,5 +92,22 @@ public class Environment_Tutorial1 : EnvironmentCinematic {
             yield return null;
         }
         HUD.MessageOverlayCinematic.FadeOut();
+        yield return new WaitForSeconds(10);
+        FlagsController.SetFlag("pwr_zinc");
+        HUD.MessageOverlayCinematic.FadeIn(HowToZincTime + " to tap " + Zinc + ".");
+        while (!Player.PlayerZinc.InZincTime) {
+            yield return null;
+        }
+        HUD.MessageOverlayCinematic.FadeOutInto("The " + ZincBlue("zinc bank") + " slows time when tapped, and recharges when not in use.");
+        yield return new WaitForSecondsRealtime(8);
+        HUD.MessageOverlayCinematic.FadeOut();
+
+        yield return new WaitForSeconds(10);
+        if(chattering)
+            GameManager.ConversationManager.StartConversation("CHATTER");
+    }
+    protected override IEnumerator Trigger2() {
+        chattering = false;
+        yield break;
     }
 }

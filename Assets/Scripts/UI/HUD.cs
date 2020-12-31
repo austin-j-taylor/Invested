@@ -98,7 +98,6 @@ public class HUD : MonoBehaviour {
     }
 
     public static void DisableHUD() {
-        Debug.Log("Disabled");
         //instance.SetActive(false);
         hudGroup.alpha = 0;
     }

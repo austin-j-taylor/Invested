@@ -13,7 +13,9 @@ public class GateRising : Powered {
             base.On = value;
         }
     }
+    public bool Unlocked = false;
     private IEnumerator Unlock() {
+        Unlocked = true;
         GetComponent<AudioSource>().Play();
         Rigidbody rb = GetComponentInChildren<Rigidbody>();
         rb.isKinematic = false;
