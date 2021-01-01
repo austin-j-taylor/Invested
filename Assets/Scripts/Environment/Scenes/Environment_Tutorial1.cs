@@ -74,7 +74,8 @@ public class Environment_Tutorial1 : EnvironmentCinematic {
 
     }
     protected override IEnumerator Trigger0() {
-        HUD.HelpOverlayController.SetState(1);
+        if(!HUD.HelpOverlayController.IsOpen)
+            HUD.HelpOverlayController.Toggle();
         yield break;
     }
     protected override IEnumerator Trigger1() {
@@ -98,7 +99,7 @@ public class Environment_Tutorial1 : EnvironmentCinematic {
         while (!Player.PlayerZinc.InZincTime) {
             yield return null;
         }
-        HUD.MessageOverlayCinematic.FadeOutInto("The " + ZincBlue("zinc bank") + " slows time when tapped, and recharges when not in use.");
+        HUD.MessageOverlayCinematic.FadeOutInto("The " + ZincBlue("zinc bank") + " slows time and brightens " + LightBlue("blue lines") + ".");
         yield return new WaitForSecondsRealtime(8);
         HUD.MessageOverlayCinematic.FadeOut();
 

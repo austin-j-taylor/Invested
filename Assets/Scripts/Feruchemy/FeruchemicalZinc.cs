@@ -15,8 +15,8 @@ public class FeruchemicalZinc : MonoBehaviour {
     private const float slowPercent = 1 / 8f;
     // Pitch of all audio when in zinc time (%)
     private const float slowPitch = slowPercent * 2;
-    private const float blueLinesMaxBrightness = 4;
-    private const float blueLinesBrightnessLerp = 4;
+    private const float blueLinesMaxBrightness = 5;
+    private const float blueLinesBrightnessLerp = 5;
     #endregion
 
     public bool InZincTime { get; private set; }

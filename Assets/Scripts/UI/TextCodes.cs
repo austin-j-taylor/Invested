@@ -374,6 +374,7 @@ public class TextCodes : MonoBehaviour {
 
     public static string HowToMultiMark_Pull => HowToAnchor + " + " + KeyMark_Pull;
     public static string HowToMultiMark => HowToAnchor + " + " + KeyMark;
+    public static string KeyMultiMark_Pull => KeyAnchor + " + " + KeyMark_Pull;
     public static string KeyMultiMark => KeyAnchor + " + " + KeyMark;
     public static string KeyPushPullStrength {
         get {

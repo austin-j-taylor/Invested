@@ -109,7 +109,7 @@ public class HelpOverlayController : MonoBehaviour {
                             " • " + KeyMark_Pull + " " + Mark + " for " + Pulling
                         );
                         if (Verbose) {
-                            builder.AppendLine(" • " + KeyMultiMark + " " + Mark + " on multiple targets");
+                            builder.AppendLine(" • " + KeyMultiMark_Pull + " " + Mark + " on multiple targets");
                         }
                         builder.AppendLine(
                             " • " + KeyPullStrength + " " + Pull + " strength"
@@ -155,7 +155,7 @@ public class HelpOverlayController : MonoBehaviour {
                             " • " + KeyMark_Pull + " " + Mark + " for " + Pulling
                         );
                         if (Verbose) {
-                            builder.AppendLine(" • " + KeyMultiMark + " " + Mark + " on multiple targets");
+                            builder.AppendLine(" • " + KeyMultiMark_Pull + " " + Mark + " on multiple targets");
                         }
                         builder.AppendLine(
                             " • " + KeyPullStrength + " " + Pull + " strength\n" +
@@ -265,19 +265,22 @@ public class HelpOverlayController : MonoBehaviour {
         }
     }
 
-    public void EnableSimple(bool refreshSetting = true) {
+    private void EnableSimple(bool refreshSetting = true) {
         currentState = State.Simple;
         UpdateText();
-        SettingsMenu.RefreshSettingHelpOverlay((int)currentState);
+        if(refreshSetting)
+            SettingsMenu.RefreshSettingHelpOverlay((int)currentState);
     }
-    public void EnableVerbose(bool refreshSetting = true) {
+    private void EnableVerbose(bool refreshSetting = true) {
         currentState = State.Verbose;
         UpdateText();
-        SettingsMenu.RefreshSettingHelpOverlay((int)currentState);
+        if (refreshSetting)
+            SettingsMenu.RefreshSettingHelpOverlay((int)currentState);
     }
-    public void Disable(bool refreshSetting = true) {
+    private void Disable(bool refreshSetting = true) {
         currentState = State.Closed;
         UpdateText();
-        SettingsMenu.RefreshSettingHelpOverlay((int)currentState);
+        if (refreshSetting)
+            SettingsMenu.RefreshSettingHelpOverlay((int)currentState);
     }
 }
