@@ -27,6 +27,7 @@ public class CameraController : MonoBehaviour {
 
     public static bool HasNotMovedCamera => currentX == startX && currentY == startY;
     public static bool UpsideDown => currentY < -89.99f || currentY > 89.99f;
+    public static float Pitch => currentY;
 
     // Returns the horizontal direction the camera is facing (only in the x/z plane)
     public static Quaternion CameraDirection {

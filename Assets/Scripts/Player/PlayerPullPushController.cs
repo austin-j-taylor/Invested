@@ -25,6 +25,13 @@ public class PlayerPullPushController : AllomanticIronSteel {
     public const float blueLineWidthFactor = .02f;
     public const float blueLineChangeFactor = 1 / 4f;
     public const float blueLineBrightnessFactor = .15f;
+    public const float lightSaberConstant = 1024;
+    public const float firstPersonLSFactor = .1f;
+    private const float blueLineTargetedWidthFactor = .06f;
+    public static readonly Color targetedRedLine = new Color(1f, 0, 1f) * 1.5f;
+    private static readonly Color targetedGreenLine = new Color(0, 1f, 0) * 1.5f;
+    private static readonly Color targetedBlueLine = new Color(0, 0, 1f) * 1.5f;
+    private static readonly Color targetedLightBlueLine = new Color(0, .5f, 1f) * 1.5f;
     private readonly Vector3 firstPersonCenterOfMassOffset = new Vector3(0, -0.20f, 0);
 
     // Control Mode constants
@@ -46,7 +53,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
     public enum ControlMode { Manual, Area, Bubble, Coinshot };
 
     public ControlMode Mode { get; private set; }
-    public Vector3 CenterOfBlueLines => CameraController.IsFirstPerson ? CenterOfMass + firstPersonCenterOfMassOffset : CenterOfMass; // The position (in world space) where the blue lines appear from
+    public float BlueLinesBrightnessModifier { get; set; }
 
     private Magnetic removedTarget; // When a target was just removed, keep track of it so we don't immediately select it again
     // radius for Area
@@ -66,6 +73,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
     public override void Clear() {
         StopBurning();
         Strength = 1;
+        BlueLinesBrightnessModifier = 1;
         removedTarget = null;
         base.Clear();
     }
@@ -769,7 +777,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
     /*
      * Checks several factors and sets the properties of the blue line pointing to target.
      * These factors are described in the above function.
-     * Returns the "weight" of the target, which increases within closeness to the player and the center of the screen.
+     * Returns the "weight" of the target, which increases within brightness to the player and the center of the screen.
      */
     /// <summary>
     /// Calculates how good of a target a metal is and assigns its blue line properties.
@@ -819,26 +827,42 @@ public class PlayerPullPushController : AllomanticIronSteel {
         }
 
         if (SettingsMenu.settingsGraphics.renderblueLines == 1) {
-            float closeness = blueLineBrightnessFactor * Mathf.Pow(allomanticForce, blueLineChangeFactor);
+            float brightness = blueLineBrightnessFactor * BlueLinesBrightnessModifier * Mathf.Pow(allomanticForce, blueLineChangeFactor);
             //if(SettingsMenu.settingsData.cameraFirstPerson == 1) {
-            //    closeness *= perspectiveFactor;
+            //    brightness *= perspectiveFactor;
             //}
 
             // If nearly off - screen, make lines dimmer
             if (screenPosition.z < 0) {
-                closeness *= targetFocusOffScreenBound;
+                brightness *= targetFocusOffScreenBound;
             }
             target.SetBlueLine(
-                CenterOfBlueLines,
+                CenterOfBlueLine(allomanticForceVector),
                 target.Charge * blueLineWidthFactor * (CameraController.IsFirstPerson && GameManager.CameraState == GameManager.GameCameraState.Standard ? firstPersonWidthFactor : 1),
                 1,
-                closeness
+                brightness
             );
         }
 
         return weight;
     }
 
+    private Vector3 CenterOfBlueLine(Vector3 direction) {
+        // If the player is in first person view and looking up, move the endpoint of the blue lines so they don't clip into the camera.
+        Vector3 offset = Vector3.zero;
+        if (CameraController.Pitch < 60 && CameraController.IsFirstPerson) {
+            offset = direction;
+            offset.y = 0;
+            offset = offset.normalized;
+            if (CameraController.Pitch > 0) {
+                offset *= (-1 / 60f * CameraController.Pitch + 1) / 6;
+            } else {
+                offset *= 1 / 6f;
+            }
+            offset += firstPersonCenterOfMassOffset; 
+        }
+        return CenterOfMass + offset;
+    }
     /// <summary>
     /// Updates the blue lines pointed to metals without expecting
     /// </summary>
@@ -847,6 +871,25 @@ public class PlayerPullPushController : AllomanticIronSteel {
         SetTargetedLineProperties();
     }
 
+    public void UpdateBlueLines(TargetArray targetArray, bool pullingColor, float burnRate) {
+        // Go through targets and update their metal lines
+        for (int i = 0; i < targetArray.Count; i++) {
+            targetArray[i].SetBlueLine(
+                CenterOfBlueLine(targetArray[i].LastAllomanticForce),
+                targetArray[i].Charge * blueLineTargetedWidthFactor * (CameraController.IsFirstPerson ? firstPersonWidthFactor : 1),
+                Mathf.Exp(-targetArray[i].LastMaxPossibleAllomanticForce.magnitude * burnRate * (CameraController.IsFirstPerson ? firstPersonLSFactor : 1) / lightSaberConstant),
+                pullingColor ?
+                    SettingsMenu.settingsGraphics.pullTargetLineColor == 0 ? targetedBlueLine
+                    :
+                        SettingsMenu.settingsGraphics.pullTargetLineColor == 1 ? targetedLightBlueLine
+                        :
+                        targetedGreenLine
+                :
+                    SettingsMenu.settingsGraphics.pushTargetLineColor == 0 ? targetedBlueLine : targetedRedLine
+                );
+
+        }
+    }
     /// <summary>
     /// Makes the lines pointing to marked targets be brighter, special colors, etc.
     /// </summary>
@@ -854,21 +897,21 @@ public class PlayerPullPushController : AllomanticIronSteel {
         // Regardless of other factors, lines pointing to Push/Pull-targets have unique colors
         // Update metal lines for Pull/PushTargets
         if (PullingOnPullTargets) {
-            PullTargets.UpdateBlueLines(iron, IronBurnPercentageTarget, CenterOfBlueLines);
+            UpdateBlueLines(PullTargets, iron, IronBurnPercentageTarget);
         } else if (PushingOnPullTargets) {
-            PullTargets.UpdateBlueLines(iron, SteelBurnPercentageTarget, CenterOfBlueLines);
+            UpdateBlueLines(PullTargets, iron, SteelBurnPercentageTarget);
         } else if (HasPullTarget) {
-            PullTargets.UpdateBlueLines(iron, 0, CenterOfBlueLines);
+            UpdateBlueLines(PullTargets, iron, 0);
         }
         if (PullingOnPushTargets) {
-            PushTargets.UpdateBlueLines(steel, IronBurnPercentageTarget, CenterOfBlueLines);
+            UpdateBlueLines(PushTargets, steel, IronBurnPercentageTarget);
         } else if (PushingOnPushTargets) {
-            PushTargets.UpdateBlueLines(steel, SteelBurnPercentageTarget, CenterOfBlueLines);
+            UpdateBlueLines(PushTargets, steel, SteelBurnPercentageTarget);
         } else if (HasPushTarget) {
-            PushTargets.UpdateBlueLines(steel, 0, CenterOfBlueLines);
+            UpdateBlueLines(PushTargets, steel, 0);
         }
 
-        BubbleTargets.UpdateBlueLines(BubbleMetalStatus, BubbleBurnPercentageTarget, CenterOfBlueLines);
+        UpdateBlueLines(BubbleTargets, BubbleMetalStatus, BubbleBurnPercentageTarget);
     }
 
     public void EnableRenderingBlueLines() {

@@ -321,8 +321,8 @@ public class Magnetic : MonoBehaviour {
         }
     }
 
-    public void SetBlueLine(Vector3 endPos, float width, float lsf, float closeness) {
-        SetBlueLine(endPos, width, lsf, new Color(0, closeness * lowLineColor, closeness * highLineColor, 1));
+    public void SetBlueLine(Vector3 endPos, float width, float lsf, float brightness) {
+        SetBlueLine(endPos, width, lsf, new Color(0, brightness * lowLineColor, brightness * highLineColor, 1));
     }
 
     // Brighten this particular metal's blue line

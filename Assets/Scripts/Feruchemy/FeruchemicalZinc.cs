@@ -15,6 +15,8 @@ public class FeruchemicalZinc : MonoBehaviour {
     private const float slowPercent = 1 / 8f;
     // Pitch of all audio when in zinc time (%)
     private const float slowPitch = slowPercent * 2;
+    private const float blueLinesMaxBrightness = 4;
+    private const float blueLinesBrightnessLerp = 4;
     #endregion
 
     public bool InZincTime { get; private set; }
@@ -48,6 +50,7 @@ public class FeruchemicalZinc : MonoBehaviour {
         if (!GameManager.MenusController.pauseMenu.IsOpen) {
             if (InZincTime) {
                 // In Zinc Time
+                Player.PlayerIronSteel.BlueLinesBrightnessModifier = Mathf.Lerp(Player.PlayerIronSteel.BlueLinesBrightnessModifier, blueLinesMaxBrightness, blueLinesBrightnessLerp * Time.deltaTime);
                 Rate = -Time.deltaTime / slowPercent / maxTime;
                 Reserve += Rate;
                 if (Reserve < 0) {
@@ -90,6 +93,7 @@ public class FeruchemicalZinc : MonoBehaviour {
                         Rate = 0;
                     }
                 }
+                Player.PlayerIronSteel.BlueLinesBrightnessModifier = Mathf.Lerp(Player.PlayerIronSteel.BlueLinesBrightnessModifier, 1, blueLinesBrightnessLerp * Time.deltaTime);
 
                 if ((Keybinds.ZincTimeDown() || Keybinds.ControlWheelDown()) && Reserve > 0 && Player.CanControl && Player.CanControlZinc) {
                     // Enter zinc time

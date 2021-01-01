@@ -13,14 +13,6 @@ public class TargetArray {
     public const int largeArrayCapacity = 300; // Area, Bubble Control Mode
     public const int smallArrayCapacity = 30; // Manual, and for Non-player allomancers
 
-    public const float lightSaberConstant = 1024;
-    public const float firstPersonLSFactor = .1f;
-    private const float blueLineTargetedWidthFactor = .06f;
-    public static readonly Color targetedRedLine = new Color(1f, 0, 1f) * 1.5f;
-    private static readonly Color targetedGreenLine = new Color(0, 1f, 0) * 1.5f;
-    private static readonly Color targetedBlueLine = new Color(0, 0, 1f) * 1.5f;
-    private static readonly Color targetedLightBlueLine = new Color(0, .5f, 1f) * 1.5f;
-
     private Magnetic[] targets;
 
     private int size = 1;
@@ -387,29 +379,6 @@ public class TargetArray {
                     MoveDown(i);
                 }
             }
-        }
-    }
-
-    /*
-     * Refreshes the blue metal lies that point to each target.
-     */
-    public void UpdateBlueLines(bool pullingColor, float burnRate, Vector3 startPos) {
-        // Go through targets and update their metal lines
-        for (int i = 0; i < Count; i++) {
-            targets[i].SetBlueLine(
-                startPos,
-                targets[i].Charge * blueLineTargetedWidthFactor * (CameraController.IsFirstPerson ? PlayerPullPushController.firstPersonWidthFactor : 1),
-                Mathf.Exp(-targets[i].LastMaxPossibleAllomanticForce.magnitude * burnRate * (SettingsMenu.settingsGameplay.cameraFirstPerson == 1 ? firstPersonLSFactor : 1) / lightSaberConstant),
-                pullingColor ?
-                    SettingsMenu.settingsGraphics.pullTargetLineColor == 0 ? targetedBlueLine
-                    :
-                        SettingsMenu.settingsGraphics.pullTargetLineColor == 1 ? targetedLightBlueLine
-                        :
-                        targetedGreenLine
-                :
-                    SettingsMenu.settingsGraphics.pushTargetLineColor == 0 ? targetedBlueLine : targetedRedLine
-                );
-
         }
     }
 }

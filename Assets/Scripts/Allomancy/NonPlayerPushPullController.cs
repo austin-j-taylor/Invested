@@ -91,8 +91,8 @@ public class NonPlayerPushPullController : AllomanticIronSteel {
         float closeness = Mathf.Exp(-PlayerPullPushController.blueLineChangeFactor * Mathf.Pow(1 / allomanticForce, PlayerPullPushController.blueLineBrightnessFactor));
 
         line.gameObject.SetActive(true);
-        line.LightSaberFactor = Mathf.Exp(-target.LastMaxPossibleAllomanticForce.magnitude * percentage / TargetArray.lightSaberConstant);
-        line.LineColor = pulling ? new Color(0, closeness * Magnetic.lowLineColor, closeness * Magnetic.highLineColor, 1) : TargetArray.targetedRedLine * closeness;
+        line.LightSaberFactor = Mathf.Exp(-target.LastMaxPossibleAllomanticForce.magnitude * percentage / PlayerPullPushController.lightSaberConstant);
+        line.LineColor = pulling ? new Color(0, closeness * Magnetic.lowLineColor, closeness * Magnetic.highLineColor, 1) : PlayerPullPushController.targetedRedLine * closeness;
         line.SetStartAndEndAndWidth(target.CenterOfMass, CenterOfMass, target.Charge * PlayerPullPushController.blueLineWidthFactor);
     }
 }
