@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,13 +7,15 @@ using UnityEngine.UI;
 /// </summary>
 public class ArticlesMenu : Menu {
 
-    private const int index_532 = 0, index_612 = 1;
+    private const int index_532 = 0, index_614 = 1;
     [SerializeField]
     private Sprite zincImage = null;
+    [SerializeField]
+    private Text[] articleTexts = null;
 
     private Text tooltip;
-    private Text[] articleTexts;
-    private Image textBackground;
+    private TextMeshProUGUI articleText;
+    private GameObject textBackground;
     private Image articleImage;
     private Button backButton;
 
@@ -21,13 +24,13 @@ public class ArticlesMenu : Menu {
         tooltip = articles.Find("Tooltip").GetComponent<Text>();
         articleImage = transform.Find("Content/Image").GetComponent<Image>();
         backButton = transform.Find("Back").GetComponent<Button>();
-        textBackground = transform.Find("Content/Text").GetComponent<Image>();
-        articleTexts = transform.Find("Content/Text").GetComponentsInChildren<Text>();
+        textBackground = transform.Find("TextWindow").gameObject;
+        articleText = transform.Find("TextWindow/Template/Viewport/Text").GetComponent<TextMeshProUGUI>();
         for (int i = 0; i < articleTexts.Length; i++)
             articleTexts[i].enabled = false;
 
         backButton.onClick.AddListener(OnClickedBack);
-
+        textBackground.SetActive(false);
     }
 
     private void Start() {
@@ -53,7 +56,7 @@ public class ArticlesMenu : Menu {
     public void OnEnteredZinc() {
         articleImage.sprite = zincImage;
         articleImage.gameObject.SetActive(true);
-        textBackground.gameObject.SetActive(false);
+        textBackground.SetActive(false);
         tooltip.text = "FROM: elar.tarc@marl.sil\n" +
             "TO: shen.khol@marl.sil\n" +
             "SUBJECT: Zinc peripheral info leak to coppernet resolved\n\n" +
@@ -73,15 +76,15 @@ public class ArticlesMenu : Menu {
     public void OnEnteredDirectives532() {
         articleImage.gameObject.SetActive(false);
         tooltip.text = "";
-        textBackground.gameObject.SetActive(true);
-        for (int i = 0; i < articleTexts.Length; i++)
-            articleTexts[i].enabled = i == index_532;
+        textBackground.SetActive(true);
+
+        articleText.text = articleTexts[index_532].text;
     }
     public void OnEnteredDirectives612() {
         articleImage.gameObject.SetActive(false);
         tooltip.text = "";
-        textBackground.gameObject.SetActive(true);
-        for (int i = 0; i < articleTexts.Length; i++)
-            articleTexts[i].enabled = i == index_612;
+        textBackground.SetActive(true);
+
+        articleText.text = articleTexts[index_614].text;
     }
 }
