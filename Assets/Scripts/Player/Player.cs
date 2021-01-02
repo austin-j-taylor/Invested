@@ -212,6 +212,7 @@ public class Player : PewterEntity {
                 CanControl = false;
                 CanPause = false;
                 transform.position = GameObject.FindGameObjectWithTag("PlayerSpawn").transform.position;
+                PlayerIronSteel.IronReserve.IsEnabled = true;
             } else {
                 CanPause = true;
                 CanControl = true;

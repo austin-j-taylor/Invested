@@ -914,12 +914,11 @@ public class PlayerPullPushController : AllomanticIronSteel {
         UpdateBlueLines(BubbleTargets, BubbleMetalStatus, BubbleBurnPercentageTarget);
     }
 
-    public void EnableRenderingBlueLines() {
-        if (IsBurning)
-            CameraController.ActiveCamera.cullingMask = ~0;
+    private void EnableRenderingBlueLines() {
+        CameraController.ActiveCamera.cullingMask = ~0;
     }
 
-    public void DisableRenderingBlueLines() {
+    private void DisableRenderingBlueLines() {
         CameraController.ActiveCamera.cullingMask = ~(1 << blueLineLayer);
     }
     #endregion

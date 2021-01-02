@@ -29,8 +29,8 @@ Shader "VolumetricLine/SingleLine-LightSaber" {
 		// batching is forcefully disabled here because the shader simply won't work with it:
 		Tags {
 			"DisableBatching"="True"
-			"RenderType"="Transparent"
-			"Queue"="Transparent"
+			"RenderType"="Overlay"
+			"Queue"="Overlay"
 			"IgnoreProjector"="True"
 			"ForceNoShadowCasting"="True"
 			"PreviewType"="Plane"

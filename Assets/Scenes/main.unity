@@ -4804,7 +4804,7 @@ GameObject:
   - component: {fileID: 136052439}
   - component: {fileID: 136052438}
   m_Layer: 5
-  m_Name: Directive612
+  m_Name: Directive614
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7125,8 +7125,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 188685054}
-  m_LocalRotation: {x: -0.13895984, y: 0.6933182, z: 0.13895984, w: 0.69331825}
-  m_LocalPosition: {x: 25.085854, y: 164.17314, z: -12.799999}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 682333587}
@@ -7174,8 +7174,8 @@ MonoBehaviour:
   sourceCamera: {fileID: 188685060}
   outlineCamera: {fileID: 682333588}
   outlineShaderMaterial: {fileID: 0}
-  renderTexture: {fileID: 1672587393}
-  extraRenderTexture: {fileID: 1797040821}
+  renderTexture: {fileID: 1480496029}
+  extraRenderTexture: {fileID: 403258928}
 --- !u!81 &188685058
 AudioListener:
   m_ObjectHideFlags: 0
@@ -9240,7 +9240,7 @@ GameObject:
   - component: {fileID: 281925480}
   - component: {fileID: 281925479}
   m_Layer: 5
-  m_Name: Directive612
+  m_Name: Directive614
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -9298,19 +9298,19 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Directive SIL-MARL-612.0\r\n\tWorking with Awakened Computers\r\n\t\r\n\tPlease
-    understand this new field of research warrants greater caution than usual. Project
-    managers must receive approval from your code head as well as the Non-Metallic
-    Arts Research Superintendent (3410) before requesting materials for the project.\r\n\t<snip>\n\t\r\nDirective
-    SIL-MARL-612.1\r\n\tAll team members actively working on a 3400 project must
-    complete training \"Communication with Types 1-5 BioChromatic Entities\" (ENW-51231)
-    within 30 days of starting work on the project and annually thereafter.\r\n\t<snip>\n\t\r\nDirective
-    SIL-MARL-612.7\r\n\tVerify there are no materials with chroma > 2 are within
-    3 meters of your computer when leaving your workstation to prevent bleeding.
-    Contact division Supplies (3432) for a color temperature meter.\r\n\t<snip>\n\t\r\nDirective
-    SIL-MARL-612.9\n\tIf you suspect your computer is starting to become self-aware,
-    immediately disconnect it from all networks, remove all peripherals, and notify
-    division IT (3413).\r\n"
+  m_Text: "\nDirective SIL-MARL-614.0\r\nWorking with Awakened Computers\r\n\r<indent=10%>\nThis
+    new field of research warrants immense caution. Project managers must receive
+    approval from your code head as well as the Non-Metallic Arts Research Superintendent
+    (3410) before requesting materials for any projects that include awakened computers.\r\n<snip>\n\nDirective
+    SIL-MARL-614.1\r<indent=20%>\nAll personnel actively working on a 3440 project
+    must complete training \"Communication with Type 4-5 BioChromatic Entities\"
+    (ENW-51231) within 30 days of starting work on the project and annually thereafter.\r\n<snip>\n</indent>\r\nDirective
+    SIL-MARL-614.7\r<indent=20%>\nVerify there are no materials with chroma > 2 are
+    within 3 meters of your computer when leaving your workstation to prevent bleeding.
+    Contact subdivision Supplies (3443) for a color temperature meter.\r\n<snip>\n</indent>\r\nDirective
+    SIL-MARL-614.9<indent=20%>\nIf you suspect your computer is starting to become
+    self-aware, immediately disconnect it from all networks, remove all peripherals,
+    and notify division IT (3412).\r\n<snip>\n</indent>\n</indent>"
 --- !u!222 &281925480
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -12407,6 +12407,41 @@ MonoBehaviour:
   m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
   m_EffectDistance: {x: 1, y: -1}
   m_UseGraphicAlpha: 1
+--- !u!84 &403258928
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  serializedVersion: 3
+  m_Width: 1698
+  m_Height: 829
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthFormat: 1
+  m_ColorFormat: 4
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 1
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1 &409813274
 GameObject:
   m_ObjectHideFlags: 0
@@ -13079,7 +13114,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 1
     m_LineSpacing: 0.75
-  m_Text: '[Fragment] Directive SIL-MARL-612:
+  m_Text: '[Fragment] Directive SIL-MARL-614:
 
     Working with Awakened Computers'
 --- !u!222 &436081960
@@ -19604,7 +19639,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0.1
-  far clip plane: 2000
+  far clip plane: 10000
   field of view: 60
   orthographic: 0
   orthographic size: 5
@@ -19613,7 +19648,7 @@ Camera:
     serializedVersion: 2
     m_Bits: 0
   m_RenderingPath: 1
-  m_TargetTexture: {fileID: 1672587393}
+  m_TargetTexture: {fileID: 1480496029}
   m_TargetDisplay: 0
   m_TargetEye: 3
   m_HDR: 0
@@ -40086,7 +40121,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 10, y: 0}
-  m_SizeDelta: {x: -20, y: 0}
+  m_SizeDelta: {x: -170, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1432002251
 MonoBehaviour:
@@ -40122,11 +40157,28 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 
+  m_text: "\rDirective SIL-MARL-532.0\r\nWorking with Artificial Identities (AIs)\r\n<indent=10%>\nAIs
+    are extremely useful tools, but pose a great risk to public and private Information
+    Systems (IS). \r\n\r\nDirective SIL-MARL-532.2\r<indent=20%>\nOnly certified
+    curators may design, program, debug, or communicate with an AI unless the AI
+    has met the Raymond Criteria for Public Distribution.\r\n<snip>\n\r</indent>\nDirective
+    SIL-MARL-532.3\r<indent=20%>\nAll curators working on a project using an AI must
+    complete the following trainings:\r\n* \"Communicating with Artificial Identities\"
+    (ART-41233) prior to starting work on the project\r\n* \"Preventing and Identifying
+    Self-Awareness in AIs\" (ART-41234) within 30 days of starting work on the project
+    and annually thereafter\r\n\n</indent>\nDirective SIL-MARL-532.5\r<indent=20%>\nCurators
+    may connect an AI to the SpiritNet if and only if the connection is through the
+    Silver VPN. Under no circumstances may anyone connect an unsupervised AI to an
+    IS.\r\n<snip>\n</indent>\n\t\r\nDirective SIL-MARL-532.15\r<indent=20%>\nEnsure
+    your Spiritual licenses are up-to-date. Contact division IT for renewing or purchasing
+    licenses for remote access to Investiture or the SpiritNet.\r\n<snip>\n</indent>\n\t\r\nDirective
+    SIL-MARL-532.17\r<indent=20%>\nCurators must annually test their AIs against
+    the Raymond Awareness Test. If an AI scores a 60 or higher, it must be decommissioned.
+    Immediately disconnect it from all networks, remove all peripherals, and notify
+    division IT (3413).\r\n</indent>\n</indent>"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 026a230027bdccb4ab84df838e82cc25, type: 2}
-  m_sharedMaterial: {fileID: 5986917607759539711, guid: 026a230027bdccb4ab84df838e82cc25,
-    type: 2}
+  m_sharedMaterial: {fileID: 2100000, guid: bc2b579790dac1c44a61149322def669, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -40150,8 +40202,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 24
+  m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -40535,7 +40587,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: f1f4d4b86d951b24a895c53cf3a4b2f7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1c7dd182fdcf934428ec6cd5d85fc90b, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -41258,7 +41310,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -41380,6 +41432,41 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1477551887}
   m_CullTransparentMesh: 0
+--- !u!84 &1480496029
+RenderTexture:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 00000000000000000000000000000000
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  serializedVersion: 3
+  m_Width: 1698
+  m_Height: 829
+  m_AntiAliasing: 1
+  m_MipCount: -1
+  m_DepthFormat: 1
+  m_ColorFormat: 4
+  m_MipMap: 0
+  m_GenerateMips: 1
+  m_SRGB: 1
+  m_UseDynamicScale: 0
+  m_BindMS: 0
+  m_EnableCompatibleFormat: 1
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 1
+    m_WrapV: 1
+    m_WrapW: 1
+  m_Dimension: 2
+  m_VolumeDepth: 1
 --- !u!1001 &1481110815
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -47110,41 +47197,6 @@ RectTransform:
   m_AnchoredPosition: {x: -960.50195, y: -540.00006}
   m_SizeDelta: {x: 1919.7126, y: 1080.7241}
   m_Pivot: {x: 0.5, y: 0.49999997}
---- !u!84 &1672587393
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  serializedVersion: 3
-  m_Width: 1697
-  m_Height: 828
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthFormat: 1
-  m_ColorFormat: 4
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 1
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &1674211580
 GameObject:
   m_ObjectHideFlags: 0
@@ -49283,41 +49335,6 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 148867602}
   m_PrefabAsset: {fileID: 0}
---- !u!84 &1797040821
-RenderTexture:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: 
-  m_ImageContentsHash:
-    serializedVersion: 2
-    Hash: 00000000000000000000000000000000
-  m_ForcedFallbackFormat: 4
-  m_DownscaleFallback: 0
-  serializedVersion: 3
-  m_Width: 1697
-  m_Height: 828
-  m_AntiAliasing: 1
-  m_MipCount: -1
-  m_DepthFormat: 1
-  m_ColorFormat: 4
-  m_MipMap: 0
-  m_GenerateMips: 1
-  m_SRGB: 1
-  m_UseDynamicScale: 0
-  m_BindMS: 0
-  m_EnableCompatibleFormat: 1
-  m_TextureSettings:
-    serializedVersion: 2
-    m_FilterMode: 1
-    m_Aniso: 1
-    m_MipBias: 0
-    m_WrapU: 1
-    m_WrapV: 1
-    m_WrapW: 1
-  m_Dimension: 2
-  m_VolumeDepth: 1
 --- !u!1 &1814139886
 GameObject:
   m_ObjectHideFlags: 0
@@ -56243,8 +56260,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -20, y: -10}
+  m_AnchoredPosition: {x: -75, y: 0}
+  m_SizeDelta: {x: -170, y: -10}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1899267084
 MonoBehaviour:
@@ -56259,7 +56276,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -56279,24 +56296,25 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\rDirective SIL-MARL-532.0\r\n\tWorking with Artificial Identities (AIs)\r\n\t\r<snip>\n\tAIs
+  m_Text: "\n\rDirective SIL-MARL-532.0\r\nWorking with Artificial Identities (AIs)\r\n<indent=10%>\nAIs
     are extremely useful tools, but pose a great risk to public and private Information
-    Systems (IS). \r\n\t<snip>\n\r\nDirective SIL-MARL-532.2\r\n\tOnly certified
+    Systems (IS). \n<snip>\n\r\nDirective SIL-MARL-532.2\r<indent=20%>\nOnly certified
     curators may design, program, debug, or communicate with an AI unless the AI
-    has met the Raymond Criteria for Public Distribution.\r\n\t<snip>\n\r\nDirective
-    SIL-MARL-532.3\r\n\tAll curators working on a project using an AI must complete
-    the following trainings:\r\n\t\t\u25CB \"Communicating with Artificial Identities\"
-    (ART-41233) prior to starting work on the project\r\n\t\t\u25CB \"Preventing
-    and Identifying Self-Awareness in AIs\" (ART-41234) within 30 days of starting
-    work on the project and annually thereafter\r\n\t\r\nDirective SIL-MARL-532.5\r\n\tCurators
+    has met the Raymond Criteria for Public Distribution.\r\n<snip>\n\r</indent>\nDirective
+    SIL-MARL-532.3\r<indent=20%>\nAll curators working on a project using an AI must
+    complete the following trainings:\r\n* \"Communicating with Artificial Identities\"
+    (ART-41233) prior to starting work on the project\r\n* \"Preventing and Identifying
+    Self-Awareness in AIs\" (ART-41234) within 30 days of starting work on the project
+    and annually thereafter\r\n<snip>\n</indent>\nDirective SIL-MARL-532.5\r<indent=20%>\nCurators
     may connect an AI to the SpiritNet if and only if the connection is through the
     Silver VPN. Under no circumstances may anyone connect an unsupervised AI to an
-    IS.\r\n\t<snip>\n\t\r\nDirective SIL-MARL-532.15\r\n\tEnsure your Spiritual licenses
-    are up-to-date. Contact division IT for renewing or purchasing licenses for remote
-    access to Investiture or the SpiritNet.\r\n\t<snip>\n\t\r\nDirective SIL-MARL-532.17\r\n\tCurators
-    must annually test their AIs against the Raymond Awareness Test. If an AI scores
-    a 60 or higher, it must be decommissioned. Immediately disconnect it from all
-    networks, remove all peripherals, and notify division IT (3413).\r\n"
+    IS.\r\n<snip>\n</indent>\nDirective SIL-MARL-532.15\r<indent=20%>\nEnsure your
+    Spiritual licenses are up-to-date. Contact division IT for renewing or purchasing
+    licenses for remote access to Investiture or the SpiritNet.\r\n<snip>\n</indent>\nDirective
+    SIL-MARL-532.17\r<indent=20%>\nCurators must annually test their AIs against
+    the Raymond Awareness Test. If an AI scores a 60 or higher, it must be decommissioned.
+    Immediately disconnect it from all networks, remove all peripherals, and notify
+    division IT (3412).\r\n</indent>\n</indent>"
 --- !u!222 &1899267085
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -61841,8 +61859,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1467272612}
   m_HandleRect: {fileID: 1467272611}
   m_Direction: 2
-  m_Value: 0
-  m_Size: 1
+  m_Value: 0.99999994
+  m_Size: 0.5962754
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -61867,7 +61885,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 2d2c1575627b4584b8b0b567d6eb6fa3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 1c7dd182fdcf934428ec6cd5d85fc90b, type: 3}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
