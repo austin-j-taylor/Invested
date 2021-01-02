@@ -5,7 +5,7 @@ using UnityEngine;
 public class Entity_TurretAnchored : NonPlayerPushPullController {
 
     [SerializeField]
-    private Magnetic projectile = null;
+    private Projectile projectile = null;
     [SerializeField]
     private Transform projectileSpawnLocation = null;
     [SerializeField]
@@ -18,6 +18,8 @@ public class Entity_TurretAnchored : NonPlayerPushPullController {
     private int maxPushRange = 5;
     [SerializeField]
     private float strength = 2;
+    [SerializeField]
+    private float kindOfLikeProportionalGain = 2;
 
     private enum State { Sleeping, Discharching, Tracking }
     private State currentState;
@@ -132,7 +134,7 @@ public class Entity_TurretAnchored : NonPlayerPushPullController {
         // Swivel rotation (horizontal)
         // Neck rotation (vertical)
         Vector3 relativeTargetPosition = new Vector3(target.position.x - swivel.position.x, target.position.y - neckEnd.position.y, target.position.z - swivel.position.z);
-        relativeTargetPosition += targetRb.velocity * lastTimeToReachTarget;
+        relativeTargetPosition += targetRb.velocity * lastTimeToReachTarget * kindOfLikeProportionalGain;
         float angleDesiredX = Mathf.Atan2(relativeTargetPosition.x, relativeTargetPosition.z) * Mathf.Rad2Deg;
         float angleDesiredY = -Mathf.Atan2(relativeTargetPosition.y, Mathf.Sqrt(relativeTargetPosition.x * relativeTargetPosition.x + relativeTargetPosition.z * relativeTargetPosition.z)) * Mathf.Rad2Deg;
 

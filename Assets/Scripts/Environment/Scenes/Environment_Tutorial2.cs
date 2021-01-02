@@ -6,8 +6,6 @@ using static TextCodes;
 public class Environment_Tutorial2 : EnvironmentCinematic {
 
     [SerializeField]
-    private Node doorNode = null;
-    [SerializeField]
     private GameObject backWall = null;
     [SerializeField]
     private FacilityDoor_Red door = null;
@@ -61,11 +59,6 @@ public class Environment_Tutorial2 : EnvironmentCinematic {
         HUD.MessageOverlayCinematic.FadeIn(HowToPush + " to " + Push + ".");
 
         while (!Player.PlayerIronSteel.HasPushTarget) {
-            yield return null;
-        }
-
-        HUD.MessageOverlayCinematic.FadeOutInto("Hit the target on the ceiling.");
-        while (!doorNode.On) {
             yield return null;
         }
         HUD.MessageOverlayCinematic.FadeOut();

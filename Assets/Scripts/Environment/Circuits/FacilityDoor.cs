@@ -79,6 +79,7 @@ public class FacilityDoor : Powered {
     }
     protected virtual void Unlock() {
         StopAllCoroutines();
+        GetComponent<AudioSource>().Play();
         jointLeft.spring = lowSpring;
         jointRight.spring = lowSpring;
         jointLeft.useLimits = false;

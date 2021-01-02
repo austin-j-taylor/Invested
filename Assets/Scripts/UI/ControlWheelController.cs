@@ -309,7 +309,7 @@ public class ControlWheelController : MonoBehaviour {
             textArea.text = KeyPullPushAbridged + ": " + Pull_Push + "\nin an area in front of you\n\n\n";
             //textBubble.text = KeyPullPushAbridged + ": " + Pull_Push + "\nin a bubble around you\n\n"
             //+ "The bubble can stay open\nin other modes.\n";
-            textBubble.text = "Toggle a bubble to Push around you\n\n\n";
+            textBubble.text = "Toggle a bubble\nto Push around you\n\n";
         } else {
             textManual.text = KeyPullAbridged + ": " + Pull + "\non a single target\n\n\n";
             textArea.text = KeyPullAbridged + ": " + Pull + "\nin an area in front of you\n\n\n";

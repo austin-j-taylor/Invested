@@ -74,6 +74,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
         StopBurning();
         Strength = 1;
         BlueLinesBrightnessModifier = 1;
+        Mode = ControlMode.Manual;
         removedTarget = null;
         base.Clear();
     }
@@ -88,7 +89,6 @@ public class PlayerPullPushController : AllomanticIronSteel {
         base.Awake();
 
         BubbleMetalStatus = iron;
-        Mode = ControlMode.Manual;
         PullTargets.Size = TargetArray.smallArrayCapacity;
         PushTargets.Size = TargetArray.smallArrayCapacity;
         bubbleRenderer = transform.Find("BubbleRange").GetComponent<Renderer>();

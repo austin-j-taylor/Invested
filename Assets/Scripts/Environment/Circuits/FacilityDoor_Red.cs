@@ -63,6 +63,7 @@ public class FacilityDoor_Red : Powered {
     }
     protected virtual void Unlock() {
         StopAllCoroutines();
+        GetComponent<AudioSource>().Play();
         lowSpring.targetPosition = unlockAngle;
         jointLeft.spring = lowSpring;
         lowSpring.targetPosition = -unlockAngle;
