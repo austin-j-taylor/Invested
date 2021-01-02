@@ -143,7 +143,8 @@ public class PauseMenu : Menu {
         switch (GameManager.PlayState) {
             case GameManager.GamePlayState.Standard:
                 CameraController.UnlockCamera();
-                SceneSelectMenu.LoadScene(SceneSelectMenu.sceneTitleScreen);
+                Close();
+                GameManager.SceneTransitionManager.LoadScene(SceneSelectMenu.sceneTitleScreen);
                 break;
             case GameManager.GamePlayState.Challenge:
                 ChallengesManager.LeaveCurrentChallenge();

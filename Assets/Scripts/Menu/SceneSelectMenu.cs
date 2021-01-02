@@ -43,6 +43,8 @@ public class SceneSelectMenu : Menu {
     public Button HighlitButton { get; private set; }
 
     #region fields
+    private static SceneSelectMenu instance;
+
     private Text tooltip;
     private Transform tutorialsHeader;
     private Transform levelsHeader;
@@ -73,6 +75,8 @@ public class SceneSelectMenu : Menu {
 
     #region clearing
     void Awake() {
+        instance = this;
+
         tooltip = transform.Find("Tooltip").GetComponent<Text>();
         tutorialsHeader = transform.Find("Tutorials").transform;
         levelsHeader = transform.Find("Levels").transform;
@@ -163,17 +167,6 @@ public class SceneSelectMenu : Menu {
             buttons[i].CheckCompleted();
         }
     }
-
-    public static void LoadScene(int scene) {
-        //CameraController.SetExternalSource(null, null);
-        Player.PlayerInstance.transform.parent = EventSystem.current.transform;
-
-        SceneManager.LoadScene(scene);
-    }
-
-    public static void ReloadScene() {
-        LoadScene(SceneManager.GetActiveScene().buildIndex);
-    }
     #endregion
 
     public void SetTooltip(string tip) {
@@ -187,7 +180,7 @@ public class SceneSelectMenu : Menu {
     #region OnClick
     private void LoadSceneFromClick(int scene) {
         HighlitButton = EventSystem.current.currentSelectedGameObject.GetComponent<Button>();
-        LoadScene(scene);
+        GameManager.SceneTransitionManager.LoadScene(scene);
     }
     private void OnClickedlevelMARL1Button() {
         LoadSceneFromClick(sceneMARL1);

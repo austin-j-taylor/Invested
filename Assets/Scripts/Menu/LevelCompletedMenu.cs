@@ -36,7 +36,7 @@ public class LevelCompletedMenu : Menu {
     }
 
     private void ClickReturn() {
-        SceneSelectMenu.LoadScene(SceneSelectMenu.sceneTitleScreen);
+        GameManager.SceneTransitionManager.LoadScene(SceneSelectMenu.sceneTitleScreen);
         gameObject.SetActive(false);
         GameManager.MenusController.mainMenu.sceneSelectMenu.Open();
     }

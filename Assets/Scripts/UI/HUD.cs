@@ -38,6 +38,7 @@ public class HUD : MonoBehaviour {
     public static ConsoleController ConsoleController { get; private set; }
     public static ConversationHUDController ConversationHUDController { get; private set; }
     public static TextLogController TextLogController { get; private set; }
+    public static LoadingFadeController LoadingFadeController { get; private set; }
 
     void Awake() {
         instance = gameObject;
@@ -58,6 +59,7 @@ public class HUD : MonoBehaviour {
         ConsoleController = GetComponentInChildren<ConsoleController>();
         ConversationHUDController = GetComponentInChildren<ConversationHUDController>();
         TextLogController = GetComponentInChildren<TextLogController>();
+        LoadingFadeController = GetComponentInChildren<LoadingFadeController>();
         SceneManager.sceneUnloaded += ClearHUDBeforeSceneChange;
         SceneManager.sceneLoaded += ClearAfterSceneChange;
     }
@@ -118,6 +120,7 @@ public class HUD : MonoBehaviour {
                 ConsoleController.Clear();
                 ConversationHUDController.Clear();
                 TextLogController.Clear();
+                LoadingFadeController.Clear();
                 Crosshair.Clear();
                 anim.SetBool("ControlWheelVisible", false);
             }

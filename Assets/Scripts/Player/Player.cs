@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -10,10 +11,12 @@ public class Player : PewterEntity {
     private const float coinCooldownThreshold = 1f / 10;
     private const float zincTimeCoinThrowModifier = 2; // throw coins faster while in zinc time
     private const float defaultVoidHeight = -50; // Voiding out - if the player falls beneath voidHeight, respawn.
+    public const float respawnTime = 1.25f; // Time between reaching the void and teleporting back to the respawn point
     #endregion
 
     #region properties
     public enum CoinMode { Semi, Full, Spray };
+    public enum PlayerState { Normal, Respawning };
 
     //private Animator animator;
     private Material frameMaterial, smokeMaterial;
@@ -33,6 +36,7 @@ public class Player : PewterEntity {
 
     public Hand CoinHand { get; private set; }
     public CoinMode CoinThrowingMode { get; set; }
+    public PlayerState playerState { get; set; }
     public Transform RespawnPoint { get; set; }
 
     private static bool canControl;
@@ -202,6 +206,7 @@ public class Player : PewterEntity {
     /// <param name="mode">the sceme loading mode</param>
     private void ClearPlayerAfterSceneChange(Scene scene, LoadSceneMode mode) {
         if (mode == LoadSceneMode.Single) { // Not loading all of the scenes, as it does at startup
+            playerState = PlayerState.Normal;
             PlayerAudioController.Clear();
             PlayerIronSteel.Clear();
 
@@ -262,12 +267,23 @@ public class Player : PewterEntity {
     /// Resets the player and returns them to their respawn point
     /// </summary>
     public void Respawn() {
-        if (RespawnPoint) {
-            transform.position = RespawnPoint.position;
-            PlayerPewter.Clear();
-            CameraController.Clear();
-            CameraController.SetRotation(RespawnPoint.eulerAngles);
+        if (RespawnPoint && playerState == PlayerState.Normal) {
+            playerState = PlayerState.Respawning;
+            StartCoroutine(RespawnRoutine());
         }
+    }
+    private IEnumerator RespawnRoutine() {
+        HUD.LoadingFadeController.Enshroud();
+        CanControlMovement = false;
+        CanPause = false;
+        yield return new WaitForSecondsRealtime(respawnTime);
+        transform.position = RespawnPoint.position;
+        PlayerPewter.Clear();
+        CameraController.Clear();
+        CameraController.SetRotation(RespawnPoint.eulerAngles);
+        CanControlMovement = true;
+        CanPause = true;
+        playerState = PlayerState.Normal;
     }
     #endregion
 

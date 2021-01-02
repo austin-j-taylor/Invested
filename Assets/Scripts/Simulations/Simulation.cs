@@ -19,7 +19,7 @@ public abstract class Simulation : MonoBehaviour {
 
     private IEnumerator ResetSim() {
         yield return new WaitForSeconds(ResetTime);
-        SceneSelectMenu.ReloadScene();
+        GameManager.SceneTransitionManager.ReloadScene();
     }
 
     protected virtual void Update() {
