@@ -48,19 +48,18 @@ public class Environment_Tutorial2 : EnvironmentCinematic {
     private IEnumerator Cenimatic() {
         CameraController.ActiveCamera.GetComponent<AudioListener>().enabled = false;
         HUD.DisableHUD();
-        Player.PlayerInstance.transform.position = new Vector3(0, 16.26f, 205);
+        HUD.ConversationHUDController.gameObject.SetActive(false);
+        Player.PlayerInstance.transform.position = new Vector3(0, 16.26f, 230);
         Player.PlayerPewter.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX;
         Player.PlayerIronSteel.SteelReserve.enabled = true;
         Player.PlayerIronSteel.BubbleOpen(false);
         Player.PlayerPewter.ExternalMovementCommand = new Vector3(0, 0, 1);
 
-        yield return new WaitForSeconds(10);
+        yield return new WaitForSeconds(15);
+        HUD.ConversationHUDController.gameObject.SetActive(true);
 
-        CameraController.ActiveCamera.GetComponent<AudioListener>().enabled = true;
-        Player.PlayerPewter.ExternalMovementCommand = Vector3.zero;
-        Player.PlayerPewter.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-        runCenimatic = false;
-        Start();
+        //GameManager.SceneTransitionManager.LoadScene(SceneSelectMenu.sceneSandbox, false);
+        GameManager.SceneTransitionManager.LoadScene(SceneSelectMenu.sceneTutorial1, false);
     }
 
     private IEnumerator Play_music() {

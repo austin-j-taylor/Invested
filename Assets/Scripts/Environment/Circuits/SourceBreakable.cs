@@ -17,7 +17,17 @@ public class SourceBreakable : Source {
 
     private Animator anim;
     private AudioSource audioDestroying, audioDestroyed, audioRepairing;
-    
+
+    public override bool On {
+        set {
+            if (value == OnByDefault && On != OnByDefault) {
+                base.On = value;
+                Repair();
+            }  else
+                base.On = value;
+        }
+    }
+
 
     protected override void Awake() {
         base.Awake();

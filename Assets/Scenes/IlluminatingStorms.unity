@@ -130,7 +130,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh122936
+  m_Name: pb_Mesh1250126
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -503,7 +503,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh122768
+  m_Name: pb_Mesh1249958
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -6598,8 +6598,13 @@ PrefabInstance:
     - target: {fileID: 6469675622019554813, guid: e50b6003d341a3043b25fdb2e6ee37d5,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 300
+      value: 500
       objectReference: {fileID: 0}
+    - target: {fileID: 6469675622019554814, guid: e50b6003d341a3043b25fdb2e6ee37d5,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 6bd672cd86b9c2345839c39660a9a2e6, type: 2}
     - target: {fileID: 6469675622019554815, guid: e50b6003d341a3043b25fdb2e6ee37d5,
         type: 3}
       propertyPath: ShapeModule.type
@@ -6618,7 +6623,7 @@ PrefabInstance:
     - target: {fileID: 6469675622019554815, guid: e50b6003d341a3043b25fdb2e6ee37d5,
         type: 3}
       propertyPath: ShapeModule.m_Scale.y
-      value: 200
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6469675622019554815, guid: e50b6003d341a3043b25fdb2e6ee37d5,
         type: 3}
@@ -6643,22 +6648,22 @@ PrefabInstance:
     - target: {fileID: 6469675622019554815, guid: e50b6003d341a3043b25fdb2e6ee37d5,
         type: 3}
       propertyPath: InitialModule.startLifetime.minScalar
-      value: 10
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 6469675622019554815, guid: e50b6003d341a3043b25fdb2e6ee37d5,
         type: 3}
       propertyPath: InitialModule.startLifetime.scalar
-      value: 15
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 6469675622019554815, guid: e50b6003d341a3043b25fdb2e6ee37d5,
         type: 3}
       propertyPath: InitialModule.startSize.minScalar
-      value: 200
+      value: 2000
       objectReference: {fileID: 0}
     - target: {fileID: 6469675622019554815, guid: e50b6003d341a3043b25fdb2e6ee37d5,
         type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 250
+      value: 3000
       objectReference: {fileID: 0}
     - target: {fileID: 6469675622019554815, guid: e50b6003d341a3043b25fdb2e6ee37d5,
         type: 3}
@@ -6683,7 +6688,27 @@ PrefabInstance:
     - target: {fileID: 6469675622019554815, guid: e50b6003d341a3043b25fdb2e6ee37d5,
         type: 3}
       propertyPath: InitialModule.startColor.minMaxState
-      value: 0
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6469675622019554815, guid: e50b6003d341a3043b25fdb2e6ee37d5,
+        type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 6469675622019554815, guid: e50b6003d341a3043b25fdb2e6ee37d5,
+        type: 3}
+      propertyPath: RotationModule.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6469675622019554815, guid: e50b6003d341a3043b25fdb2e6ee37d5,
+        type: 3}
+      propertyPath: RotationModule.curve.scalar
+      value: 0.034906585
+      objectReference: {fileID: 0}
+    - target: {fileID: 6469675622019554815, guid: e50b6003d341a3043b25fdb2e6ee37d5,
+        type: 3}
+      propertyPath: RotationModule.curve.minScalar
+      value: -0.034906585
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e50b6003d341a3043b25fdb2e6ee37d5, type: 3}
@@ -7602,7 +7627,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh122694
+  m_Name: pb_Mesh1249884
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -8127,8 +8152,13 @@ PrefabInstance:
     - target: {fileID: 6469675622019554813, guid: e50b6003d341a3043b25fdb2e6ee37d5,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -550
+      value: -1000
       objectReference: {fileID: 0}
+    - target: {fileID: 6469675622019554814, guid: e50b6003d341a3043b25fdb2e6ee37d5,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 6bd672cd86b9c2345839c39660a9a2e6, type: 2}
     - target: {fileID: 6469675622019554815, guid: e50b6003d341a3043b25fdb2e6ee37d5,
         type: 3}
       propertyPath: ShapeModule.type
@@ -8137,37 +8167,37 @@ PrefabInstance:
     - target: {fileID: 6469675622019554815, guid: e50b6003d341a3043b25fdb2e6ee37d5,
         type: 3}
       propertyPath: ShapeModule.m_Scale.x
-      value: 3000
+      value: 4000
       objectReference: {fileID: 0}
     - target: {fileID: 6469675622019554815, guid: e50b6003d341a3043b25fdb2e6ee37d5,
         type: 3}
       propertyPath: ShapeModule.m_Scale.z
-      value: 3000
+      value: 4000
       objectReference: {fileID: 0}
     - target: {fileID: 6469675622019554815, guid: e50b6003d341a3043b25fdb2e6ee37d5,
         type: 3}
       propertyPath: ShapeModule.m_Scale.y
-      value: 200
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6469675622019554815, guid: e50b6003d341a3043b25fdb2e6ee37d5,
         type: 3}
       propertyPath: InitialModule.startLifetime.scalar
-      value: 60
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 6469675622019554815, guid: e50b6003d341a3043b25fdb2e6ee37d5,
         type: 3}
       propertyPath: InitialModule.startLifetime.minScalar
-      value: 10
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 6469675622019554815, guid: e50b6003d341a3043b25fdb2e6ee37d5,
         type: 3}
       propertyPath: InitialModule.startSize.scalar
-      value: 250
+      value: 3000
       objectReference: {fileID: 0}
     - target: {fileID: 6469675622019554815, guid: e50b6003d341a3043b25fdb2e6ee37d5,
         type: 3}
       propertyPath: InitialModule.startSize.minScalar
-      value: 200
+      value: 2000
       objectReference: {fileID: 0}
     - target: {fileID: 6469675622019554815, guid: e50b6003d341a3043b25fdb2e6ee37d5,
         type: 3}
@@ -8209,6 +8239,26 @@ PrefabInstance:
       propertyPath: ShapeModule.radiusThickness
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6469675622019554815, guid: e50b6003d341a3043b25fdb2e6ee37d5,
+        type: 3}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 6469675622019554815, guid: e50b6003d341a3043b25fdb2e6ee37d5,
+        type: 3}
+      propertyPath: RotationModule.enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6469675622019554815, guid: e50b6003d341a3043b25fdb2e6ee37d5,
+        type: 3}
+      propertyPath: RotationModule.curve.scalar
+      value: 0.034906585
+      objectReference: {fileID: 0}
+    - target: {fileID: 6469675622019554815, guid: e50b6003d341a3043b25fdb2e6ee37d5,
+        type: 3}
+      propertyPath: RotationModule.curve.minScalar
+      value: -0.034906585
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e50b6003d341a3043b25fdb2e6ee37d5, type: 3}
 --- !u!43 &1782108145
@@ -8217,7 +8267,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh122822
+  m_Name: pb_Mesh1250012
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2
@@ -9325,7 +9375,7 @@ Mesh:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: pb_Mesh122666
+  m_Name: pb_Mesh1249856
   serializedVersion: 10
   m_SubMeshes:
   - serializedVersion: 2

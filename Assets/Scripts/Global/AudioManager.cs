@@ -42,6 +42,9 @@ public class AudioManager : MonoBehaviour {
     public AudioMixerGroup MixerBGMGroup { get; private set; }
     public bool SceneTransitionIsPlaying => sources[index_sceneTransition].isPlaying;
 
+    [SerializeField]
+    private AudioListener playerAudioListener = null;
+
     private void Awake() {
         sources = GetComponents<AudioSource>();
         MixerVoiceBeepsGroup = mixer.FindMatchingGroups("VoiceBeeps")[0];
@@ -79,6 +82,7 @@ public class AudioManager : MonoBehaviour {
         SetMasterPitch(1);
         sources[index_wind].volume = 0;
         sources[index_wind].pitch = 1;
+        playerAudioListener.enabled = true;
     }
 
     private void ClearAfterSceneChange(Scene scene, LoadSceneMode mode) {

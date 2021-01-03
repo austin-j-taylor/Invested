@@ -16,7 +16,28 @@ MonoBehaviour:
   challengeName: 
   challengeDescription: "Activate all the targets.\n\tHit the targets with projectiles
     (or yourself) to activate them."
+  recommendedIron: 1
+  recommendedSteel: 1
+  recommendedPewter: 0
+  recommendedZinc: 0
+  recommendedCoins: 0
   failureObjects: []
+--- !u!114 &5284754126177413964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5153924776600347779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6e4052f87a2b6f49bb700f47514b2d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnByDefault: 0
+  sources: []
+  connectedNodes: []
+  resetWhenNodeTurnsOn: 0
 --- !u!1001 &6344095539882979094
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -276,6 +297,12 @@ PrefabInstance:
 --- !u!1 &3072149844707733286 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8262057228006981680, guid: 9991b54b5541cc041bf4183450d9567e,
+    type: 3}
+  m_PrefabInstance: {fileID: 6344095539882979094}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5153924776600347779 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2273378832776186773, guid: 9991b54b5541cc041bf4183450d9567e,
     type: 3}
   m_PrefabInstance: {fileID: 6344095539882979094}
   m_PrefabAsset: {fileID: 0}
