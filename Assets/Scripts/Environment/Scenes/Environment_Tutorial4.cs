@@ -7,6 +7,15 @@ public class Environment_Tutorial4 : EnvironmentCinematic {
 
     private const int distanceFromEndToThrumming = 335;
 
+    [SerializeField]
+    private bool runCenimatic = false;
+    [SerializeField]
+    private GameObject cenimaticObjects = null;
+    [SerializeField]
+    private ParticleSystemFollowingPlayer clouds = null;
+    [SerializeField]
+    private Cinemachine.CinemachineVirtualCamera[] vcams = null;
+
     EnvironmentalTransitionManager musicManager;
     [SerializeField]
     private GateRising door1 = null, door2 = null, door3 = null;
@@ -14,23 +23,45 @@ public class Environment_Tutorial4 : EnvironmentCinematic {
     private HarmonyTarget harmonyTarget = null;
 
     void Start() {
-        Player.VoidHeight = -200;
-        musicManager = GetComponentInChildren<EnvironmentalTransitionManager>();
+        if (runCenimatic) {
+            //StartCoroutine(Cenimatic());
+        } else {
+            cenimaticObjects.SetActive(false);
+            Player.VoidHeight = -200;
+            musicManager = GetComponentInChildren<EnvironmentalTransitionManager>();
 
-        Player.CanControl = false;
-        Player.CanControlMovement = false;
+            Player.CanControl = false;
+            Player.CanControlMovement = false;
 
-        // Set cinemachine virtual camera properties
-        InitializeCinemachine();
-        // Set camera target position to be same as where we left of in tutorial (just a sine function of time)
-        vcam.transform.position = new Vector3(Mathf.Cos(Time.unscaledTime * Environment_TitleScreen.speedVert) * Environment_TitleScreen.speedAmp, (1 + Mathf.Sin(Time.unscaledTime * Environment_TitleScreen.speedVert)) * Environment_TitleScreen.speedAmp, Mathf.Sin(Time.unscaledTime * Environment_TitleScreen.speedVert) * Environment_TitleScreen.speedAmp);
-        // Make camera look at Player
-        vcam.LookAt = Player.PlayerInstance.transform;
+            // Set cinemachine virtual camera properties
+            InitializeCinemachine();
+            // Set camera target position to be same as where we left of in tutorial (just a sine function of time)
+            vcam.transform.position = new Vector3(Mathf.Cos(Time.unscaledTime * Environment_TitleScreen.speedVert) * Environment_TitleScreen.speedAmp, (1 + Mathf.Sin(Time.unscaledTime * Environment_TitleScreen.speedVert)) * Environment_TitleScreen.speedAmp, Mathf.Sin(Time.unscaledTime * Environment_TitleScreen.speedVert) * Environment_TitleScreen.speedAmp);
+            // Make camera look at Player
+            vcam.LookAt = Player.PlayerInstance.transform;
 
-        // Handle music
-        StartCoroutine(Play_music());
+            // Handle music
+            StartCoroutine(Play_music());
 
-        StartCoroutine(Procedure());
+            StartCoroutine(Procedure());
+        }
+    }
+
+    // Invoked by the Timeline for this scene to start the scripting aspect of the cenimatic
+    public void StartCenimatic() {
+        StartCoroutine(Cenimatic());
+    }
+    private IEnumerator Cenimatic() {
+        CameraController.ActiveCamera.GetComponent<AudioListener>().enabled = false;
+        HUD.DisableHUD();
+        clouds.SetFollowTarget(vcams[0].transform);
+        yield return new WaitForSeconds(5f);
+        clouds.SetFollowTarget(vcams[1].transform);
+        yield return new WaitForSeconds(5f);
+        clouds.SetFollowTarget(vcams[2].transform);
+        yield return new WaitForSeconds(5f);
+
+        GameManager.SceneTransitionManager.LoadScene(SceneSelectMenu.sceneTutorial2, false);
     }
 
     private IEnumerator Play_music() {

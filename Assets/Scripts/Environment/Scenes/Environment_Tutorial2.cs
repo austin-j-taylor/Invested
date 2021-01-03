@@ -12,23 +12,55 @@ public class Environment_Tutorial2 : EnvironmentCinematic {
 
     EnvironmentalTransitionManager musicManager;
 
+    [SerializeField]
+    private bool runCenimatic = false;
+    [SerializeField]
+    private GameObject cenimaticObjects = null;
+
     void Start() {
-        musicManager = GetComponentInChildren<EnvironmentalTransitionManager>();
+        if (runCenimatic) {
+            //StartCoroutine(Cenimatic());
+        } else {
+            cenimaticObjects.SetActive(false);
+            musicManager = GetComponentInChildren<EnvironmentalTransitionManager>();
 
-        Player.CanControl = false;
-        Player.CanControlMovement = false;
+            Player.CanControl = false;
+            Player.CanControlMovement = false;
 
-        // Set cinemachine virtual camera properties
-        InitializeCinemachine();
-        // Set camera target position to be same as where we left of in tutorial (just a sine function of time)
-        vcam.transform.position = new Vector3(Mathf.Cos(Time.unscaledTime * Environment_TitleScreen.speedVert) * Environment_TitleScreen.speedAmp, (1 + Mathf.Sin(Time.unscaledTime * Environment_TitleScreen.speedVert)) * Environment_TitleScreen.speedAmp, Mathf.Sin(Time.unscaledTime * Environment_TitleScreen.speedVert) * Environment_TitleScreen.speedAmp);
-        // Make camera look at Player
-        vcam.LookAt = Player.PlayerInstance.transform;
+            // Set cinemachine virtual camera properties
+            InitializeCinemachine();
+            // Set camera target position to be same as where we left of in tutorial (just a sine function of time)
+            vcam.transform.position = new Vector3(Mathf.Cos(Time.unscaledTime * Environment_TitleScreen.speedVert) * Environment_TitleScreen.speedAmp, (1 + Mathf.Sin(Time.unscaledTime * Environment_TitleScreen.speedVert)) * Environment_TitleScreen.speedAmp, Mathf.Sin(Time.unscaledTime * Environment_TitleScreen.speedVert) * Environment_TitleScreen.speedAmp);
+            // Make camera look at Player
+            vcam.LookAt = Player.PlayerInstance.transform;
 
-        // Handle music
-        StartCoroutine(Play_music());
+            // Handle music
+            StartCoroutine(Play_music());
 
-        StartCoroutine(Procedure());
+            StartCoroutine(Procedure());
+        }
+    }
+
+    // Invoked by the Timeline for this scene to start the scripting aspect of the cenimatic
+    public void StartCenimatic() {
+        StartCoroutine(Cenimatic());
+    }
+    private IEnumerator Cenimatic() {
+        CameraController.ActiveCamera.GetComponent<AudioListener>().enabled = false;
+        HUD.DisableHUD();
+        Player.PlayerInstance.transform.position = new Vector3(0, 16.26f, 205);
+        Player.PlayerPewter.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX;
+        Player.PlayerIronSteel.SteelReserve.enabled = true;
+        Player.PlayerIronSteel.BubbleOpen(false);
+        Player.PlayerPewter.ExternalMovementCommand = new Vector3(0, 0, 1);
+
+        yield return new WaitForSeconds(10);
+
+        CameraController.ActiveCamera.GetComponent<AudioListener>().enabled = true;
+        Player.PlayerPewter.ExternalMovementCommand = Vector3.zero;
+        Player.PlayerPewter.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+        runCenimatic = false;
+        Start();
     }
 
     private IEnumerator Play_music() {

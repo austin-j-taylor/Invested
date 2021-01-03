@@ -103,6 +103,15 @@ public class PlayerMovementController : AllomanticPewter {
             base.IsAnchoring = value;
         }
     }
+    public Vector3 ExternalMovementCommand {
+        get => externalMovementCommand;
+        set {
+            isExternallyMoved = value != Vector3.zero;
+            externalMovementCommand = value;
+        }
+    }
+    private Vector3 externalMovementCommand = Vector3.zero;
+    private bool isExternallyMoved = false;
     #endregion
 
     Vector3 lastInput = Vector3.zero; // The last horizontal/vertical movement command sent to the player
@@ -127,6 +136,7 @@ public class PlayerMovementController : AllomanticPewter {
         lastJumpTime = -1;
         lastWasSprintingOnGround = false;
         lastWasRollingOnGround = false;
+        ExternalMovementCommand = Vector3.zero;
         //rb.inertiaTensor = inertiaTensorRunning;
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
@@ -252,26 +262,30 @@ public class PlayerMovementController : AllomanticPewter {
     private void UpdateMovement() {
 
         // Handle all player movement control
-        if (Player.CanControl && Player.CanControlMovement) {
+        if (Player.CanControl && Player.CanControlMovement || isExternallyMoved) {
 
             // Convert user input to movement vector
             // If the control wheel is open, use the last input for movement
             Vector3 movement;
-            if (HUD.ControlWheelController.IsOpen) {
-                movement = lastInput;
+            if(isExternallyMoved) {
+                movement = externalMovementCommand;
             } else {
-                movement = new Vector3(Keybinds.Horizontal(), 0f, Keybinds.Vertical());
-                lastInput = movement;
-            }
+                if (HUD.ControlWheelController.IsOpen) {
+                    movement = lastInput;
+                } else {
+                    movement = new Vector3(Keybinds.Horizontal(), 0f, Keybinds.Vertical());
+                    lastInput = movement;
+                }
 
-            // If is unclamped and upside-down, keep movement in an intuitive direction for the player
-            // Rotate movement to be in direction of camera and clamp magnitude
-            if (SettingsMenu.settingsGameplay.cameraClamping == 0 && CameraController.UpsideDown) {
-                movement.x = -movement.x;
-                movement = CameraController.CameraDirection * Vector3.ClampMagnitude(movement, 1);
-                movement = -movement;
-            } else {
-                movement = CameraController.CameraDirection * Vector3.ClampMagnitude(movement, 1);
+                // If is unclamped and upside-down, keep movement in an intuitive direction for the player
+                // Rotate movement to be in direction of camera and clamp magnitude
+                if (SettingsMenu.settingsGameplay.cameraClamping == 0 && CameraController.UpsideDown) {
+                    movement.x = -movement.x;
+                    movement = CameraController.CameraDirection * Vector3.ClampMagnitude(movement, 1);
+                    movement = -movement;
+                } else {
+                    movement = CameraController.CameraDirection * Vector3.ClampMagnitude(movement, 1);
+                }
             }
 
             if (IsGrounded) {

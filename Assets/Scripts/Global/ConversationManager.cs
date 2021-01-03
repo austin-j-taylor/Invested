@@ -28,7 +28,9 @@ public class ConversationManager : MonoBehaviour {
         sceneConversations = new List<Conversation>();
     }
 
-    public void Clear() { }
+    public void Clear() {
+        HUD.ConversationHUDController.Clear();
+    }
 
     // When a scene is loaded, load the conversation data for that scene.
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode) {
