@@ -3,13 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [ExecuteInEditMode]
-public class PhysicsInEditor : MonoBehaviour
-{
+public class PhysicsInEditor : MonoBehaviour {
+
+    public GameObject objectsToSnap;
     // Update is called once per frame
     PhysicsScene sce;
-    void OnRenderObject() {
-        //DeleteOutOfRange();
-        //sce.Simulate(Time.fixedDeltaTime);
+
+    //void OnRenderObject() {
+    //    //DeleteOutOfRange();
+    //    //sce.Simulate(Time.fixedDeltaTime);
+    //}
+    //private void Start() {
+    //    Debug.Log("Thanos snaps");
+    //    //Snap();
+    //}
+
+    private void Snap() {
+        // Destroys half of the objects in objectstoSnap
+        Transform[] children = objectsToSnap.transform.GetComponentsInChildren<Transform>();
+        for(int i = 1; i < children.Length; i++) {
+            if (Random.value > 0.5f) {
+                //Debug.Log(children[i].transform.position, children[i]);
+                DestroyImmediate(children[i].gameObject);
+            }
+        }
     }
 
     private void DeleteOutOfRange() {
