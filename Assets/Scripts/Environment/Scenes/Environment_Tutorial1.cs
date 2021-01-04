@@ -48,6 +48,7 @@ public class Environment_Tutorial1 : EnvironmentCinematic {
     private IEnumerator Cenimatic() {
         CameraController.ActiveCamera.GetComponent<AudioListener>().enabled = false;
         GameManager.Canvas.Find("CinematicBlackScreen").GetComponent<Image>().enabled = true;
+        HUD.ConversationHUDController.gameObject.SetActive(true);
         HUD.DisableHUD();
         yield return new WaitForSeconds(1f);
         HUD.ConversationHUDController.GetComponent<CanvasGroup>().ignoreParentGroups = true;

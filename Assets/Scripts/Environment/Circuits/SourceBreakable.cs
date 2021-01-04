@@ -30,13 +30,13 @@ public class SourceBreakable : Source {
 
 
     protected override void Awake() {
-        base.Awake();
-
         anim = GetComponent<Animator>();
         AudioSource[] sources = GetComponents<AudioSource>();
         audioDestroying = sources[0];
         audioDestroyed = sources[1];
         audioRepairing = sources[2];
+
+        base.Awake();
     }
 
     private void Start() {
