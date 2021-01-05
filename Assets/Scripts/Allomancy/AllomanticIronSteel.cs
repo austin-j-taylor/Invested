@@ -762,6 +762,19 @@ public class AllomanticIronSteel : Allomancer {
             }
         }
     }
+    protected void InitBubble() {
+        BubbleMetalStatus = steel;
+        bubbleRenderer.material.color = AllomechanicalGlower.ColorSteelTransparent;
+        bubbleRenderer.material.SetInt("_Speed", -bubbleSpeed);
+        BubbleMetalStatus = steel;
+        BubbleClose();
+    }
+    /// <summary>
+    /// Opens the bubble with the most recent polarity.
+    /// </summary>
+    public void BubbleOpen() {
+        BubbleOpen(BubbleMetalStatus);
+    }
 
     /// <summary>
     /// Closes the Bubble.

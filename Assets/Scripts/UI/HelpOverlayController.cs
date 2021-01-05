@@ -194,7 +194,7 @@ public class HelpOverlayController : MonoBehaviour {
                 KeyControlWheel + " " + ControlWheel
             );
             if (Verbose && SettingsMenu.settingsGameplay.controlScheme != JSONSettings_Gameplay.Gamepad) {
-                builder.AppendLine(" • " + KeyManual + KeyArea + KeyBubble + KeyCoinshot + KeyThrowingMode + KeyDeselectAll + KeyStopBurning + " " + ControlWheel + " hotkeys");
+                builder.AppendLine(" • " + KeyManual + KeyArea + KeyBubble + KeyBubblePolarity + KeyCoinshot + KeyThrowingMode + KeyDeselectAll + KeyStopBurning + " " + ControlWheel + " hotkeys");
             }
         }
 

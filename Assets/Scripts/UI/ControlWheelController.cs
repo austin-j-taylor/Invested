@@ -14,7 +14,8 @@ public class ControlWheelController : MonoBehaviour {
     private const float angleStopBurning_Manual = 112.5f;
     private const float angleManual_Area = 67.5f;
     private const float angleArea_Bubble = 22.5f;
-    private const float angleBubble_Coinshot = -22.5f;
+    private const float angleBubble_BubblePolarity = -7.5f;
+    private const float angleBubblePolarity_Coinshot = -22.5f;
     private const float angleCoinshot_CoinSpray = -67.5f;
     private const float angleCoinSpray_CoinFull = -82.5f;
     private const float angleCoinFull_CoinSemi = -97.5f;
@@ -25,7 +26,7 @@ public class ControlWheelController : MonoBehaviour {
     private readonly Color colorSelectedSpoke = new Color(1, 1, 1, .5f);
     #endregion
 
-    enum Selection { Cancel, Manual, Area, Bubble, Coinshot, Coin_Spray, Coin_Full, Coin_Semi, DeselectAll, StopBurning };
+    enum Selection { Cancel, Manual, Area, Bubble, BubblePolarity, Coinshot, Coin_Spray, Coin_Full, Coin_Semi, DeselectAll, StopBurning };
     private enum LockedState { Unlocked, LockedFully, LockedToArea, LockedToBubble };
 
     private Image circle;
@@ -35,6 +36,7 @@ public class ControlWheelController : MonoBehaviour {
     private TextMeshProUGUI textManual;
     private TextMeshProUGUI textArea;
     private TextMeshProUGUI textBubble;
+    private TextMeshProUGUI textBubblePolarity;
     private TextMeshProUGUI textCoinshot;
 
     private Selection highlit; // the selection being hovered over
@@ -72,11 +74,13 @@ public class ControlWheelController : MonoBehaviour {
         textManual = transform.Find("Selections/Spokes/Spoke0/Text/Title/Description").GetComponent<TextMeshProUGUI>();
         textArea = transform.Find("Selections/Spokes/Spoke1/Text/Title/Description").GetComponent<TextMeshProUGUI>();
         textBubble = transform.Find("Selections/Spokes/Spoke2/Text/Title/Description").GetComponent<TextMeshProUGUI>();
+        textBubblePolarity = transform.Find("Selections/Spokes/Spoke2b/Text/Title/Description").GetComponent<TextMeshProUGUI>();
         textCoinshot = transform.Find("Selections/Spokes/Spoke3/Text/Title/Description").GetComponent<TextMeshProUGUI>();
         keys = new TextMeshProUGUI[] {
             transform.Find("Selections/Spokes/Spoke0/Text/Title/Key").GetComponent<TextMeshProUGUI>(),
             transform.Find("Selections/Spokes/Spoke1/Text/Title/Key").GetComponent<TextMeshProUGUI>(),
             transform.Find("Selections/Spokes/Spoke2/Text/Title/Key").GetComponent<TextMeshProUGUI>(),
+            transform.Find("Selections/Spokes/Spoke2b/Text/Title/Key").GetComponent<TextMeshProUGUI>(),
             transform.Find("Selections/Spokes/Spoke3/Text/Title/Key").GetComponent<TextMeshProUGUI>(),
             transform.Find("Selections/Spokes/Spoke4b/Text/Key").GetComponent<TextMeshProUGUI>(),
             transform.Find("Selections/Spokes/Spoke5_6/Text/Title/Key").GetComponent<TextMeshProUGUI>(),
@@ -112,6 +116,9 @@ public class ControlWheelController : MonoBehaviour {
                     ConfirmSelection();
                 } else if (Keybinds.ControlWheelBubble() && (lockedState == LockedState.LockedToBubble || lockedState == LockedState.Unlocked)) { // bad logic
                     SectorBubble();
+                    ConfirmSelection();
+                } else if (Keybinds.ControlWheelBubblePolarity() && (lockedState == LockedState.LockedToBubble || lockedState == LockedState.Unlocked)) { // bad logic
+                    SectorBubblePolarity();
                     ConfirmSelection();
                 } else if (Keybinds.ControlWheelCoinshot() && lockedState == LockedState.Unlocked) {
                     SectorCoinshot();
@@ -176,8 +183,10 @@ public class ControlWheelController : MonoBehaviour {
                             SectorManual();
                         } else if (angle > angleArea_Bubble) {
                             SectorArea();
-                        } else if (angle > angleBubble_Coinshot) {
+                        } else if (angle > angleBubble_BubblePolarity) {
                             SectorBubble();
+                        } else if (angle > angleBubblePolarity_Coinshot) {
+                            SectorBubblePolarity();
                         } else if (angle > angleCoinshot_CoinSpray) {
                             SectorCoinshot();
                         } else if (angle > angleCoinSpray_CoinFull) {
@@ -228,7 +237,12 @@ public class ControlWheelController : MonoBehaviour {
                 if (Player.PlayerIronSteel.BubbleIsOpen)
                     Player.PlayerIronSteel.BubbleClose();
                 else
-                    Player.PlayerIronSteel.BubbleOpen(false);
+                    Player.PlayerIronSteel.BubbleOpen();
+                break;
+            case Selection.BubblePolarity:
+                //selectedSpoke = highlit;
+                //Player.PlayerIronSteel.SetControlModeBubble();
+                Player.PlayerIronSteel.BubbleOpen(!Player.PlayerIronSteel.BubbleMetalStatus);
                 break;
             case Selection.Coinshot:
                 selectedSpoke = highlit;
@@ -283,6 +297,11 @@ public class ControlWheelController : MonoBehaviour {
         RefreshBubble();
         highlit = (lockedState == LockedState.LockedToBubble || lockedState == LockedState.Unlocked) ? Selection.Bubble : Selection.Cancel;
     }
+    private void SectorBubblePolarity() {
+        RefreshText();
+        RefreshBubble();
+        highlit = (lockedState == LockedState.LockedToBubble || lockedState == LockedState.Unlocked) ? Selection.BubblePolarity : Selection.Cancel;
+    }
     private void SectorCoinshot() {
         RefreshText();
         RefreshCoinshot();
@@ -309,7 +328,7 @@ public class ControlWheelController : MonoBehaviour {
             textArea.text = KeyPullPushAbridged + ": " + Pull_Push + "\nin an area in front of you\n\n\n";
             //textBubble.text = KeyPullPushAbridged + ": " + Pull_Push + "\nin a bubble around you\n\n"
             //+ "The bubble can stay open\nin other modes.\n";
-            textBubble.text = "Toggle a bubble\nto Push around you\n\n";
+            textBubble.text = "Toggle a bubble\nto " + Push_Pull + " around you\n";
         } else {
             textManual.text = KeyPullAbridged + ": " + Pull + "\non a single target\n\n\n";
             textArea.text = KeyPullAbridged + ": " + Pull + "\nin an area in front of you\n\n\n";
@@ -361,7 +380,9 @@ public class ControlWheelController : MonoBehaviour {
         }
     }
     private void RefreshBubble() {
-        //// assume we'll never have bubble without Pushing
+        // assume we'll never have bubble without Pushing
+        //textBubble.text = "Toggle a bubble\nto " + Push_Pull + " around you\n"
+                //+ KeyToggleBubblePolarity + ": polarity";
         //textBubble.text = KeyPullPushAbridged + ": " + Pull_Push + "\n"
         //        + KeyMark + ": toggle bubble\n"
         //        + KeyRadiusAbridged + ":size of bubble\n\n\n";
@@ -396,13 +417,13 @@ public class ControlWheelController : MonoBehaviour {
             }
         } else if (FlagsController.GetData("wheel_bubble")) {
             lockedState = LockedState.LockedToBubble;
-            for (int i = 0; i < 4; i++) {
+            for (int i = 0; i < 5; i++) {
                 spokes[i].gameObject.SetActive(true);
             }
-            for (int i = 4; i < 8; i++) {
+            for (int i = 5; i < 9; i++) {
                 spokes[i].gameObject.SetActive(false);
             }
-            for (int i = 8; i < spokes.Length; i++) {
+            for (int i = 9; i < spokes.Length; i++) {
                 spokes[i].gameObject.SetActive(true);
             }
         } else if (FlagsController.GetData("wheel_area")) {
@@ -410,10 +431,10 @@ public class ControlWheelController : MonoBehaviour {
             for (int i = 0; i < 3; i++) {
                 spokes[i].gameObject.SetActive(true);
             }
-            for (int i = 3; i < 8; i++) {
+            for (int i = 3; i < 9; i++) {
                 spokes[i].gameObject.SetActive(false);
             }
-            for (int i = 8; i < spokes.Length; i++) {
+            for (int i = 9; i < spokes.Length; i++) {
                 spokes[i].gameObject.SetActive(true);
             }
         } else {
@@ -430,10 +451,11 @@ public class ControlWheelController : MonoBehaviour {
         keys[0].SetText(KeyManual);
         keys[1].SetText(KeyArea);
         keys[2].SetText(KeyBubble);
-        keys[3].SetText(KeyCoinshot);
-        keys[4].SetText(KeyThrowingMode);
-        keys[5].SetText(KeyDeselectAll);
-        keys[6].SetText(KeyStopBurning);
+        keys[3].SetText(KeyBubblePolarity);
+        keys[4].SetText(KeyCoinshot);
+        keys[5].SetText(KeyThrowingMode);
+        keys[6].SetText(KeyDeselectAll);
+        keys[7].SetText(KeyStopBurning);
     }
     #endregion
 }

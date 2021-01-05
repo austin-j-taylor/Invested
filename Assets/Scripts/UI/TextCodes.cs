@@ -18,6 +18,7 @@ public class TextCodes : MonoBehaviour {
     public const string s_Use_ = "Use ";
     public const string s_Tap_ = "Tap ";
     public const string s_Scroll_ = "Scroll ";
+    public const string s_Double_tap = "Double-tap ";
     #endregion
 
     #region colors
@@ -114,6 +115,7 @@ public class TextCodes : MonoBehaviour {
     public static string DPadUpDown => "<sprite name=gamepad_dpad_ud>";
     public static string DPadLeftRight => "<sprite name=gamepad_dpad_lr>";
     public static string DPadRight => "<sprite name=gamepad_dpad_r>";
+    public static string DPadLeft => "<sprite name=gamepad_dpad_l>";
     public static string Back => "<sprite name=gamepad_back>";
     public static string Start => "<sprite name=gamepad_start>";
     public static string A => "<sprite name=gamepad_a>";
@@ -145,6 +147,7 @@ public class TextCodes : MonoBehaviour {
     public static string H => "<sprite name=h>";
     public static string C => "<sprite name=c>";
     public static string Z => "<sprite name=z>";
+    public static string V => "<sprite name=v>";
     public static string L => "<sprite name=l>";
     public static string F1 => "<sprite name=f1>";
     public static string F5 => "<sprite name=f5>";
@@ -314,6 +317,7 @@ public class TextCodes : MonoBehaviour {
     public static string KeyManual => SettingsMenu.settingsGameplay.UsingGamepad ? "" : Numeric1;
     public static string KeyArea => SettingsMenu.settingsGameplay.UsingGamepad ? "" : Numeric2;
     public static string KeyBubble => SettingsMenu.settingsGameplay.UsingGamepad ? "" : Numeric3;
+    public static string KeyBubblePolarity => SettingsMenu.settingsGameplay.UsingGamepad ? "" : V;
     public static string KeyCoinshot => SettingsMenu.settingsGameplay.UsingGamepad ? "" : Numeric4;
     public static string KeyThrowingMode => SettingsMenu.settingsGameplay.UsingGamepad ? "" : C;
     public static string KeyDeselectAll => SettingsMenu.settingsGameplay.UsingGamepad ? "" : Z;

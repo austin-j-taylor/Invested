@@ -21,6 +21,7 @@ public class Keybinds : MonoBehaviour {
     private static bool lastWasPulling = false;
     private static bool lastWasPushing = false;
     private static bool lastWasDPadRight = false;
+    private static bool lastWasDPadLeft = false;
 
     // These will eventually be accessability settings
     private static bool setting_toggle_ZincTime => SettingsMenu.settingsGameplay.UsingGamepad;
@@ -43,6 +44,7 @@ public class Keybinds : MonoBehaviour {
         lastWasPulling = IronPulling();
         lastWasPushing = SteelPushing();
         lastWasDPadRight = Input.GetAxis("GamepadDPadX") > dpadDeadband;
+        lastWasDPadLeft = Input.GetAxis("GamepadDPadX") < -dpadDeadband;
     }
     public void ClearBeforeSceneChange(Scene scene) {
         toggled_Zinctime = false;
@@ -399,6 +401,13 @@ public class Keybinds : MonoBehaviour {
             return false;
         } else {
             return Input.GetKeyDown(KeyCode.Alpha3);
+        }
+    }
+    public static bool ControlWheelBubblePolarity() {
+        if(SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) {
+            return false;
+        } else {
+            return Input.GetKeyDown(KeyCode.V);
         }
     }
     public static bool ControlWheelCoinshot() {

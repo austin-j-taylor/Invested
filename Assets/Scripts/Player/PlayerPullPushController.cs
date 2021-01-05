@@ -88,11 +88,11 @@ public class PlayerPullPushController : AllomanticIronSteel {
     protected override void Awake() {
         base.Awake();
 
-        BubbleMetalStatus = iron;
         PullTargets.Size = TargetArray.smallArrayCapacity;
         PushTargets.Size = TargetArray.smallArrayCapacity;
         bubbleRenderer = transform.Find("BubbleRange").GetComponent<Renderer>();
         BubbleTargets = new TargetArray(TargetArray.largeArrayCapacity);
+        InitBubble();
     }
     protected override void InitArrays() {
         PullTargets = new TargetArray(TargetArray.largeArrayCapacity);
