@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,6 +19,7 @@ public class ArticlesMenu : Menu {
     private GameObject textBackground;
     private Image articleImage;
     private Button backButton;
+    private Scrollbar scrollbar;
 
     void Awake() {
         Transform articles = transform.Find("Articles");
@@ -25,6 +27,7 @@ public class ArticlesMenu : Menu {
         articleImage = transform.Find("Content/Image").GetComponent<Image>();
         backButton = transform.Find("Back").GetComponent<Button>();
         textBackground = transform.Find("TextWindow").gameObject;
+        scrollbar = GetComponentInChildren<Scrollbar>();
         articleText = transform.Find("TextWindow/Template/Viewport/Text").GetComponent<TextMeshProUGUI>();
         for (int i = 0; i < articleTexts.Length; i++)
             articleTexts[i].enabled = false;
@@ -47,6 +50,13 @@ public class ArticlesMenu : Menu {
             base.Close();
             GameManager.MenusController.mainMenu.titleScreen.Open();
         }
+    }
+
+    private void LoadNewDirective() {
+        articleImage.gameObject.SetActive(false);
+        tooltip.text = "";
+        textBackground.SetActive(true);
+        scrollbar.value = 1;
     }
 
     private void OnClickedBack() {
@@ -74,17 +84,11 @@ public class ArticlesMenu : Menu {
             "spirit: ORCHARD-MAGNESIUM-REED";
     }
     public void OnEnteredDirectives532() {
-        articleImage.gameObject.SetActive(false);
-        tooltip.text = "";
-        textBackground.SetActive(true);
-
+        LoadNewDirective();
         articleText.text = articleTexts[index_532].text;
     }
     public void OnEnteredDirectives612() {
-        articleImage.gameObject.SetActive(false);
-        tooltip.text = "";
-        textBackground.SetActive(true);
-
+        LoadNewDirective();
         articleText.text = articleTexts[index_614].text;
     }
 }

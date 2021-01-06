@@ -23,7 +23,6 @@ public class Prop : MonoBehaviour {
     private void Awake() {
         rb = GetComponent<Rigidbody>();
         sound = gameObject.AddComponent<AudioSource>();
-        sound.outputAudioMixerGroup = GameManager.AudioManager.MixerEffectsGroup;
         sound.playOnAwake = false;
         sound.spatialBlend = 1;
 
@@ -50,6 +49,9 @@ public class Prop : MonoBehaviour {
                 expFactor = expFactorCoin;
                 break;
         }
+    }
+    private void Start() {
+        sound.outputAudioMixerGroup = GameManager.AudioManager.MixerEffectsGroup;
     }
 
     /// <summary>
