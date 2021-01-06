@@ -60,31 +60,7 @@ public class HarmonyTarget : MonoBehaviour {
 
         playerHasEntered = false;
         controllingPlayer = false;
-        switch (numSpikes) {
-            case 0:
-                spikeLeft.GetComponent<Renderer>().enabled = false;
-                spikeCenter.GetComponent<Renderer>().enabled = false;
-                spikeRight.GetComponent<Renderer>().enabled = false;
-                break;
-            case 1:
-                spikeLeft.GetComponent<Renderer>().enabled = true;
-                spikeCenter.GetComponent<Renderer>().enabled = false;
-                spikeRight.GetComponent<Renderer>().enabled = false;
-                anim.SetInteger("SpikeCount", numSpikes);
-                break;
-            case 2:
-                spikeLeft.GetComponent<Renderer>().enabled = true;
-                spikeCenter.GetComponent<Renderer>().enabled = false;
-                spikeRight.GetComponent<Renderer>().enabled = true;
-                anim.SetInteger("SpikeCount", numSpikes);
-                break;
-            default:
-                spikeLeft.GetComponent<Renderer>().enabled = true;
-                spikeCenter.GetComponent<Renderer>().enabled = true;
-                spikeRight.GetComponent<Renderer>().enabled = true;
-                anim.SetInteger("SpikeCount", numSpikes);
-                break;
-        }
+        RefreshSpikeCount();
         zeroRotation = transform.rotation;
     }
 
@@ -192,16 +168,24 @@ public class HarmonyTarget : MonoBehaviour {
         Destroy(harmonySphere.gameObject);
     }
 
-    public void AddSpike() {
-        if (numSpikes == 0) {
-            spikeLeft.GetComponent<Renderer>().enabled = true;
-        } else if (numSpikes == 1) {
-            spikeRight.GetComponent<Renderer>().enabled = true;
-        } else {
-            spikeCenter.GetComponent<Renderer>().enabled = true;
-        }
+    /// <summary>
+    /// Adds a spike to the harmony target.
+    /// </summary>
+    /// <param name="hidden">if hidden, the harmony target won't visually show the spike until RefreshSpikeCount is called.</param>
+    public void AddSpike(bool hidden = true) {
         numSpikes++;
         anim.SetInteger("SpikeCount", numSpikes);
+        if (!hidden)
+            RefreshSpikeCount();
+    }
+    /// <summary>
+    /// Visually update the harmony target to reflect the current number of spikes
+    /// </summary>
+    public void RefreshSpikeCount() {
+        spikeLeft.GetComponent<Renderer>().enabled = numSpikes >= 1;
+        spikeCenter.GetComponent<Renderer>().enabled = numSpikes >= 3;
+        spikeRight.GetComponent<Renderer>().enabled = numSpikes >= 2;
+
     }
 
     public Vector3 GetNextSpikePosition() {

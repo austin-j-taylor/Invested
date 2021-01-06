@@ -10,7 +10,7 @@ public class AudioManager : MonoBehaviour {
 
     #region constants
     // "Default" audio levels for each volume mix
-    private const float default_master = 2, default_music = 0.2f, default_effects = 0.75f, default_voice = 0.1f;
+    private const float default_master = 2, default_music = 0.3f, default_effects = 1f, default_voice = 0.15f;
     // Indexes for the audisources attached to the audimanager
     // Each audiosource may be hot-swapped to different tracks on the fly that are mutually exclusive
     private const int index_shared = 0, // shared by all one-shot sound effects that are short enough to not worry about stacking

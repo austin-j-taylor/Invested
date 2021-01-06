@@ -34,6 +34,7 @@ public class ChallengesManager : MonoBehaviour {
     }
 
     private IEnumerator MoveSpikeToTarget(SpikeSpline spline, GameObject spike) {
+        harmonyTarget.AddSpike(true);
 
         float progress = 0;
         // Spike starts at where it is now
@@ -54,7 +55,7 @@ public class ChallengesManager : MonoBehaviour {
             yield return null;
         }
         spike.SetActive(false);
-        harmonyTarget.AddSpike();
+        harmonyTarget.RefreshSpikeCount();
     }
 
     private void CleanupChallenges() {
