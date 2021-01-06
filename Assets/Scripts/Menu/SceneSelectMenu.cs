@@ -14,20 +14,19 @@ public class SceneSelectMenu : Menu {
     // Scene build indices
     public const int sceneMain = 0,
         sceneTitleScreen = 1,
-        sceneMARL1 = 2,
-        sceneLuthadel = 3,
-        sceneShootingGrounds = 4,
-        sceneSandbox = 5,
-        sceneSouthernMountains = 6,
-        sceneSeaOfMetal = 7,
-        sceneStorms = 8,
-        sceneSimulationDuel = 9,
-        sceneSimulationWall = 10,
-        sceneSimulationGround = 11,
-        sceneTutorial1 = 12,
-        sceneTutorial2 = 13,
-        sceneTutorial3 = 14,
-        sceneTutorial4 = 15;
+        sceneLuthadel = 2,
+        sceneShootingGrounds = 3,
+        sceneSandbox = 4,
+        sceneSouthernMountains = 5,
+        sceneSeaOfMetal = 6,
+        sceneStorms = 7,
+        sceneSimulationDuel = 8,
+        sceneSimulationWall = 9,
+        sceneSimulationGround = 10,
+        sceneTutorial1 = 11,
+        sceneTutorial2 = 12,
+        sceneTutorial3 = 13,
+        sceneTutorial4 = 14;
     #endregion
 
     public static bool IsTutorial(int sceneIndex) {
@@ -183,7 +182,7 @@ public class SceneSelectMenu : Menu {
         GameManager.SceneTransitionManager.LoadScene(scene);
     }
     private void OnClickedlevelMARL1Button() {
-        LoadSceneFromClick(sceneMARL1);
+        //LoadSceneFromClick(sceneMARL1);
     }
     private void OnClickedlevelMARL2Button() {
         //LoadSceneFromClick(sceneMARL2);

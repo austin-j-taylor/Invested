@@ -25,6 +25,7 @@ public class MessageOverlayCinematic : MonoBehaviour {
 
     public void Clear() {
         messageText.text = string.Empty;
+        anim.SetBool("IsVisible", false);
     }
 
     public void SetText(string text) {
