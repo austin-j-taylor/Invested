@@ -1,35 +1,31 @@
 # Invested
 ![](demoImage.png)
-Invested is a physics simulation and game made in the Unity engine. It is a personal interpretation and emulation of the physics of Allomancy, a magic system from the novel "Mistborn" by Brandon Sanderson.
+Invested is a physics and game made in the Unity engine. It implements Allomancy a magic system from the novel "Mistborn" by Brandon Sanderson that involves Pushing and Pulling on nearby metal objects.
 
-Here are some videos of the game. Many more can by found [here.](https://gfycat.com/@Artemos)
-- [Overview](https://gfycat.com/boldenchantedamethystgemclam)
-- [Traversing Luthadel](https://gfycat.com/insecuredifficultdodo)
-- [Aerial combat](https://gfycat.com/soupyelegantlark)
-- [Throwing coins](https://gfycat.com/complicatedregularangelwingmussel)
-- [Zinc time](https://gfycat.com/hauntingfalseindigobunting)
+[![](https://img.youtube.com/vi/FfPo7ZneHHc/0.jpg)](https://www.youtube.com/watch?v=FfPo7ZneHHc)
+
 
 ## Downloads
-- [Windows](https://www.dropbox.com/s/6o152qparaoede7/Invested.zip?dl=1)
+See releases: https://github.com/austin-j-taylor/Invested/releases/latest
 
 ### Recent changes
 
-Version 1.2.1 (July 2019)
-- Added zinc peripheral
-	- Hold 'Tab' to rev the zinc peripheral, accelerating the sphere's processing speed
-	- Time slows around you for up to 8 seconds
-- Improved controls	
-	- Added Vacuous Pushing/Pulling
-		- When no Push/Pull targets are selected, trying to Push/Pull will simply act on whatever target you're looking at
-	- Changed target deselection keybind (was 'Tab', is now 'R')
-	- Changed gamepad controls
-		- Toggle Zinc Time is Left Joystick Click
-		- Walk/Anchor self is Right Joystick Click
-		- Toggle coinshot mode is now Back
-		- Toggle help overlay is now unbound (must be toggled through Settings)
-	- Using the Push/Pull keys while not burning will start burning iron/steel
-	- Updated Tutorial to reflect control changes
-- Added Articles section for in-world explanations of game mechanics
+Version 1.3 (January 2021)
+- New mechanics
+	- Added Area and Bubble modes for Pushing and Pulling
+	- Added Spray and Full Auto modes for throwing coins
+	- Added Control Wheel
+	- Reworked controls
+- New levels
+	- 4 new linear levels that teach how to use these powers
+	- 2 new sandbox levels
+	- Completely reworked Luthadel, which has Day and Night variants
+	- Added Challenges (Time trials, shoot the targets) to sandbox levels
+- UI
+	- Reworked help overlay and other HUD elements
+	- Sound and music
+- Many new settings, including graphics and video settings
+- Many other little changes and improvements
 
 ## Acknowledgments
 Here is a (non-exhaustive) list of the assets this Unity project uses:
@@ -52,4 +48,4 @@ Here is a collection of art and other fanworks I liked or used as references for
 ### Special Thanks
 - Pagerunner, Argent, Jofwu, and other many other members of the 17th Shard community for discussions on the physics of Allomancy
 - Arthur Llorens for ideas and valuable discussions on game design
-- Brandon Sanderson for creating these books. I am not affiliated with Brandon Sanderson; this is project made purely out of passion for the cosmere, open-source and free for anyone to play. Based on Brandon's [knowledge base articles](https://faq.brandonsanderson.com/article-categories/films-games-other/) and the fact that I'm not commercializing this project, I believe I won't be forced to take it down. At worst, I'll have to remove all references to the cosmere and make this an independent work.
+- Brandon Sanderson for creating these books. I am not affiliated with Brandon Sanderson; this is project made purely out of passion for the cosmere, open-source and free for anyone to play. Based on Brandon's [knowledge base articles](https://faq.brandonsanderson.com/article-categories/films-games-other/) and the fact that I'm not commercializing this project, I don't expect I'll have to take it down.
