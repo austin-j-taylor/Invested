@@ -1,6 +1,7 @@
 # Invested
 ![](demoImage.png)
-Invested is a physics and game made in the Unity engine. It implements Allomancy a magic system from the novel "Mistborn" by Brandon Sanderson that involves Pushing and Pulling on nearby metal objects.
+
+Invested is a physics game made in the Unity engine. It implements Allomancy, a magic system from the novel "Mistborn" by Brandon Sanderson that involves Pushing and Pulling on nearby metal objects.
 
 [![](https://img.youtube.com/vi/FfPo7ZneHHc/0.jpg)](https://www.youtube.com/watch?v=FfPo7ZneHHc)
 
