@@ -121,7 +121,7 @@ public class Environment_Tutorial1 : EnvironmentCinematic {
         while (!Player.PlayerIronSteel.IsBurning) {
             yield return null;
         }
-        HUD.MessageOverlayCinematic.FadeOutInto("Look at a " + LightBlue("blue line") + " and " + HowToPull + " to " + Pull + ".");
+        HUD.MessageOverlayCinematic.FadeOutInto("Look at a " + LightBlue("metal") + " and " + HowToPull + " to " + Pull + ".");
 
         while (!Player.PlayerIronSteel.HasPullTarget) {
             yield return null;

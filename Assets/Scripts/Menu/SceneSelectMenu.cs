@@ -125,6 +125,7 @@ public class SceneSelectMenu : Menu {
         backButton.onClick.AddListener(OnClickedBack);
 
         HighlitButton = tutorial1Button;
+        SceneManager.sceneLoaded += ClearAfterSceneChange;
     }
     private void Start() {
         Refresh();
@@ -164,6 +165,11 @@ public class SceneSelectMenu : Menu {
         // Set the little "Completed" symbol next to each level to be enabled/disabled
         for (int i = 0; i < buttons.Length; i++) {
             buttons[i].CheckCompleted();
+        }
+    }
+    private void ClearAfterSceneChange(Scene scene, LoadSceneMode mode) {
+        if (mode == LoadSceneMode.Single) {
+            Refresh();
         }
     }
     #endregion

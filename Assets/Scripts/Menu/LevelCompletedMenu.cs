@@ -38,7 +38,6 @@ public class LevelCompletedMenu : Menu {
     private void ClickReturn() {
         GameManager.SceneTransitionManager.LoadScene(SceneSelectMenu.sceneTitleScreen);
         gameObject.SetActive(false);
-        GameManager.MenusController.mainMenu.sceneSelectMenu.Open();
     }
 
     public void OpenScreen(HarmonyTarget target) {

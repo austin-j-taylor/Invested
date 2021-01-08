@@ -185,7 +185,7 @@ public class HarmonyTarget : MonoBehaviour {
         spikeLeft.GetComponent<Renderer>().enabled = numSpikes >= 1;
         spikeCenter.GetComponent<Renderer>().enabled = numSpikes >= 3;
         spikeRight.GetComponent<Renderer>().enabled = numSpikes >= 2;
-
+        anim.SetInteger("SpikeCount", numSpikes);
     }
 
     public Vector3 GetNextSpikePosition() {
