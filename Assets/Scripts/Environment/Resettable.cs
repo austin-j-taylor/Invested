@@ -63,7 +63,6 @@ public class Resettable : Node {
             childrenRigidbodies[i].angularVelocity = Vector3.zero;
         }
         for (int i = 0; i < childrenPowered.Length; i++) {
-            Debug.Log(initialPowereds[i]);
             childrenPowered[i].On = initialPowereds[i];
         }
     }

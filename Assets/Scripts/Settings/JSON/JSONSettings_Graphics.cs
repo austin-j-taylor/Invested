@@ -22,6 +22,7 @@ public class JSONSettings_Graphics : JSONSettings {
     public int aberration;
     public int vignetteZinc;
     public int clouds;
+    public float cloudParticleCount;
 
     protected override void Awake() {
         ConfigFileName = Path.Combine(Application.persistentDataPath, "Data", "Config", "config_Graphics.json");
@@ -32,5 +33,6 @@ public class JSONSettings_Graphics : JSONSettings {
     /// </summary>
     public override void SetSettingsWhenChanged() {
         GraphicsController.SetQualityLevel(quality);
+        GameManager.CloudsManager.SetParticleCount((int)cloudParticleCount);
     }
 }

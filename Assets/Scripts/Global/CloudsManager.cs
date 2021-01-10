@@ -13,6 +13,7 @@ public class CloudsManager : MonoBehaviour {
     private float volumetricMaxDensity; // used for fading between densities
     private float currentDensity = 1;
     private float simpleMaxDensity = 1;
+    private int simpleMaxParticles = 0;
     private bool sceneUsesClouds, simpleUsesFog; // simpleUsesFog is true if the simple clouds use fog. It's ignored by volumetric clouds, which have their own fog options.
 
     private void Awake() {
@@ -46,11 +47,9 @@ public class CloudsManager : MonoBehaviour {
     public void SetClouds(bool enable) {
         if (sceneUsesClouds) {
             if (enable) { // volumetric
-                if (sceneUsesClouds) {
-                    cloudsVolumetric.enabled = true;
-                    cloudsSimple.gameObject.SetActive(false);
-                    RenderSettings.fog = false;
-                }
+                cloudsVolumetric.enabled = true;
+                cloudsSimple.gameObject.SetActive(false);
+                RenderSettings.fog = false;
             } else { // simple
                 cloudsVolumetric.enabled = false;
                 cloudsSimple.gameObject.SetActive(true);
@@ -114,7 +113,7 @@ public class CloudsManager : MonoBehaviour {
         cloudsVolumetric.enabled = GraphicsController.CloudsEnabled;
         cloudsVolumetric.Awake();
 
-        otherVolumetric.enabled = false;
+        otherVolumetric.gameObject.SetActive(false);
 
         volumetricMaxDensity = cloudsVolumetric.densityMultiplier;
 
@@ -122,7 +121,20 @@ public class CloudsManager : MonoBehaviour {
         cloudsSimple = otherSimple;
         ParticleSystemRenderer rend = cloudsSimple.GetComponent<ParticleSystemRenderer>();
         simpleMaxDensity = rend.material.color.a;
+        ParticleSystem.MainModule main = cloudsSimple.main;
+        main.maxParticles = simpleMaxParticles;
         cloudsSimple.gameObject.SetActive(!GraphicsController.CloudsEnabled);
+    }
+
+    /// <summary>
+    /// Sets the number of particles that can appear during simple clouds.
+    /// </summary>
+    public void SetParticleCount(int count) {
+        simpleMaxParticles = count;
+        if(cloudsSimple) {
+            ParticleSystem.MainModule main = cloudsSimple.main;
+            main.maxParticles = simpleMaxParticles;
+        }
     }
     #endregion
 
