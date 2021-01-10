@@ -26,8 +26,16 @@ public class JSONSettings_Graphics : JSONSettings {
 
     protected override void Awake() {
         ConfigFileName = Path.Combine(Application.persistentDataPath, "Data", "Config", "config_Graphics.json");
-        base.Awake();
+        // Quick and dirty fix to add new settings to old config files
+        settings = GetComponentsInChildren<Setting>();
+        ResetToDefaults(false, false);
+        LoadSettings(false);
+        //base.Awake();
+
+        Debug.Log("Loading: " + cloudParticleCount);
+        SaveSettings();
     }
+
     /// <summary>
     /// Manually apply certain setting effects when they are changed
     /// </summary>

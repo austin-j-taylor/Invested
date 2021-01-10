@@ -12,7 +12,7 @@ public abstract class JSONSettings : MonoBehaviour {
     protected string ConfigFileName = ""; // assigned in overriden Awake
     protected virtual string DefaultConfigFileName => "";
 
-    Setting[] settings;
+    protected Setting[] settings;
 
     protected virtual void Awake() {
         settings = GetComponentsInChildren<Setting>();
@@ -75,7 +75,7 @@ public abstract class JSONSettings : MonoBehaviour {
     /// Reset these settings to their default values.
     /// </summary>
     /// <param name="saveAfterResetting">If false, this will skip saving the newly reset settings after loading</param>
-    public void ResetToDefaults(bool saveAfterResetting = true) {
+    public void ResetToDefaults(bool saveAfterResetting = true, bool refreshSettings = true) {
         try {
             StreamReader reader = new StreamReader(DefaultConfigFileName, true);
 
@@ -85,7 +85,8 @@ public abstract class JSONSettings : MonoBehaviour {
             JsonUtility.FromJsonOverwrite(jSONText, this);
             if(saveAfterResetting)
                 SaveSettings();
-            RefreshSettings();
+            if(refreshSettings)
+                RefreshSettings();
         } catch (DirectoryNotFoundException e) {
             Debug.LogError(e.Message);
         }
