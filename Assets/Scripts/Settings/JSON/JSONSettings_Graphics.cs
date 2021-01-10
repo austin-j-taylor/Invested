@@ -32,7 +32,6 @@ public class JSONSettings_Graphics : JSONSettings {
         LoadSettings(false);
         //base.Awake();
 
-        Debug.Log("Loading: " + cloudParticleCount);
         SaveSettings();
     }
 
@@ -41,6 +40,6 @@ public class JSONSettings_Graphics : JSONSettings {
     /// </summary>
     public override void SetSettingsWhenChanged() {
         GraphicsController.SetQualityLevel(quality);
-        GameManager.CloudsManager.SetParticleCount((int)cloudParticleCount);
+        GameManager.CloudsManager.SetParticleCount(cloudParticleCount);
     }
 }

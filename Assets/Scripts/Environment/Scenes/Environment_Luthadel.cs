@@ -50,6 +50,8 @@ public class Environment_Luthadel : Environment {
             //RenderSettings.fogColor = Color.black;
             //RenderSettings.fogDensity = 0.002f;
             GameManager.CloudsManager.SetCloudData(dayCloudsVolumetric, dayCloudsSimple, false);
+            dayCloudsSimple.Stop();
+            dayCloudsSimple.Play();
         } else {
             RenderSettings.skybox = nightSkyBox;
             RenderSettings.sun = nightDirectionalLight;
@@ -57,6 +59,8 @@ public class Environment_Luthadel : Environment {
             RenderSettings.fogColor = new Color(0.6140263f, 0.7088344f, 0.8301887f);
             RenderSettings.fogDensity = 0.01f;
             GameManager.CloudsManager.SetCloudData(nightCloudsVolumetric, nightCloudsSimple, true);
+            nightCloudsSimple.Stop();
+            nightCloudsSimple.Play();
         }
     }
 }

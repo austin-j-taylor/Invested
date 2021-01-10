@@ -13,7 +13,8 @@ public class CloudsManager : MonoBehaviour {
     private float volumetricMaxDensity; // used for fading between densities
     private float currentDensity = 1;
     private float simpleMaxDensity = 1;
-    private int simpleMaxParticles = 0;
+    private int simpleMaxParticlesCount = 0;
+    private float simpleMaxParticlesMultiplier = 0;
     private bool sceneUsesClouds, simpleUsesFog; // simpleUsesFog is true if the simple clouds use fog. It's ignored by volumetric clouds, which have their own fog options.
 
     private void Awake() {
@@ -122,18 +123,21 @@ public class CloudsManager : MonoBehaviour {
         ParticleSystemRenderer rend = cloudsSimple.GetComponent<ParticleSystemRenderer>();
         simpleMaxDensity = rend.material.color.a;
         ParticleSystem.MainModule main = cloudsSimple.main;
-        main.maxParticles = simpleMaxParticles;
+        simpleMaxParticlesCount = main.maxParticles;
+        main.maxParticles = (int)(simpleMaxParticlesMultiplier * simpleMaxParticlesCount);
         cloudsSimple.gameObject.SetActive(!GraphicsController.CloudsEnabled);
     }
 
     /// <summary>
-    /// Sets the number of particles that can appear during simple clouds.
+    /// Sets the multiplier for the count of particles that can appear during simple clouds.
     /// </summary>
-    public void SetParticleCount(int count) {
-        simpleMaxParticles = count;
+    public void SetParticleCount(float multiplier) {
+        simpleMaxParticlesMultiplier = multiplier;
         if(cloudsSimple) {
             ParticleSystem.MainModule main = cloudsSimple.main;
-            main.maxParticles = simpleMaxParticles;
+            main.maxParticles = (int)(simpleMaxParticlesMultiplier * simpleMaxParticlesCount);
+            cloudsSimple.Stop();
+            cloudsSimple.Play();
         }
     }
     #endregion
