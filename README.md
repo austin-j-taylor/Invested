@@ -11,6 +11,9 @@ See releases: https://github.com/austin-j-taylor/Invested/releases/latest
 
 ### Recent changes
 
+Version 1.3.1
+- Minor performance improvements
+
 Version 1.3 (January 2021)
 - New mechanics
 	- Added Area and Bubble modes for Pushing and Pulling
