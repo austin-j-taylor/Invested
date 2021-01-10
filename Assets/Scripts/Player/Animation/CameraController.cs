@@ -65,6 +65,7 @@ public class CameraController : MonoBehaviour {
         Cinemachine = ActiveCamera.GetComponent<CinemachineBrain>();
         CinemachineThirdPersonCamera = CameraPositionTarget.GetComponentInChildren<CinemachineVirtualCamera>();
         SceneManager.sceneLoaded += ClearAfterSceneChange;
+        SceneManager.sceneUnloaded += ClearBeforeSceneChange;
     }
 
     public static void Clear() {
@@ -90,6 +91,9 @@ public class CameraController : MonoBehaviour {
                 ActiveCamera.clearFlags = CameraClearFlags.Skybox;
             }
         }
+    }
+    public void ClearBeforeSceneChange(Scene scene) {
+        StopAllCoroutines();
     }
     #region updatingCamera
     private void LateUpdate() {

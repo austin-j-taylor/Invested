@@ -13,6 +13,7 @@ public class Environment_TitleScreen : EnvironmentCinematic {
         InitializeCinemachine();
         vcam.LookAt = Player.PlayerInstance.transform;
 
+        GameManager.SetCameraState(GameManager.GameCameraState.Cutscene);
         HUD.DisableHUD();
         Magnetic[] pulls = transform.Find("Magnetics").GetComponentsInChildren<Magnetic>();
         Magnetic[] pushes = transform.Find("MagneticsPush").GetComponentsInChildren<Magnetic>();

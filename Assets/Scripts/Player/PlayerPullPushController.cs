@@ -850,7 +850,7 @@ public class PlayerPullPushController : AllomanticIronSteel {
     private Vector3 CenterOfBlueLine(Vector3 direction) {
         // If the player is in first person view and looking up, move the endpoint of the blue lines so they don't clip into the camera.
         Vector3 offset = Vector3.zero;
-        if (CameraController.Pitch < 60 && CameraController.IsFirstPerson) {
+        if (CameraController.Pitch < 60 && CameraController.IsFirstPerson && GameManager.CameraState == GameManager.GameCameraState.Standard) {
             offset = direction;
             offset.y = 0;
             offset = offset.normalized;
