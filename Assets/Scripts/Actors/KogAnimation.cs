@@ -12,7 +12,7 @@ public class KogAnimation : MonoBehaviour {
     private Transform target = null;
     [SerializeField]
     private Transform hand = null;
-    //public Transform pole = null;
+    public Transform pole = null;
 
     public State state;
 
@@ -30,25 +30,24 @@ public class KogAnimation : MonoBehaviour {
         }
     }
 
-    void Update() {
-        switch (state) {
-            case State.Reaching:
-                // Transition: If the Sphere is close to the hand
-                if ((Player.PlayerInstance.transform.position - hand.position).sqrMagnitude < zeroThresholdSqr) {
-                    state = State.Throwing;
-                    anim.SetBool("Throwing", true);
-                }
-                break;
-            case State.Throwing:
-                // For no...
-                if (Keybinds.JumpDown()) {
-                    state = State.Reaching;
-                    anim.SetBool("Throwing", false);
-                }
-                break;
-        }
-
-    }
+    //void Update() {
+    //    switch (state) {
+    //        case State.Reaching:
+    //            // Transition: If the Sphere is close to the hand
+    //            if ((Player.PlayerInstance.transform.position - hand.position).sqrMagnitude < zeroThresholdSqr) {
+    //                state = State.Throwing;
+    //                anim.SetBool("Throwing", true);
+    //            }
+    //            break;
+    //        case State.Throwing:
+    //            // For no...
+    //            if (Keybinds.JumpDown()) {
+    //                state = State.Reaching;
+    //                anim.SetBool("Throwing", false);
+    //            }
+    //            break;
+    //    }
+    //}
 
     //a callback for calculating IK
     void OnAnimatorIK() {
@@ -72,13 +71,13 @@ public class KogAnimation : MonoBehaviour {
                         // set pole position to be to the right of the KOLOSS
 
                         anim.SetIKPositionWeight(AvatarIKGoal.RightHand, 1);
-                        anim.SetIKHintPositionWeight(AvatarIKHint.RightElbow, 1);
                         //anim.SetIKRotationWeight(AvatarIKGoal.RightHand, 1);
                         anim.SetIKPosition(AvatarIKGoal.RightHand, target.position);
-                        //if (pole) {
-                        //    pole.position = Vector3.Cross((target.position - transform.position).normalized, Vector3.up) + target.position;
-                        //    anim.SetIKHintPosition(AvatarIKHint.RightElbow, pole.position);
-                        //}
+                        if (pole) {
+                            pole.position = -Vector3.Cross((target.position - transform.position).normalized, Vector3.up) + target.position;
+                            anim.SetIKHintPosition(AvatarIKHint.RightElbow, pole.position);
+                            anim.SetIKHintPositionWeight(AvatarIKHint.RightElbow, 1);
+                        }
                         //anim.SetIKRotation(AvatarIKGoal.RightHand, target.rotation);
                     }
 
