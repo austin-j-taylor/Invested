@@ -56,7 +56,7 @@ public class CrosshairController : MonoBehaviour {
         // screenPercentage: % of the vertical screen occupied.
         // i.e. if screenPercentage = 25%, then the middle 1/4 of the screen is occupied.
         // The Circle takes up 1080 * 25% * sqrt(2) = 678.82250, which is at 25% when radius = .5.
-        float radius = screenPercentage / PlayerPullPushController.maxAreaRadius / 2;
+        float radius = screenPercentage / PrimaPullPushController.maxAreaRadius / 2;
 
         circle.material.SetFloat("_Radius", radius);
     }

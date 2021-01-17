@@ -12,7 +12,7 @@ using Unity.Collections;
 /// Controls the blue metal lines that point from the player to nearby metals.
 /// Controls the means through which the player selects Pull/PushTargets.
 /// </summary>
-public class PlayerPullPushController : AllomanticIronSteel {
+public class PrimaPullPushController : AllomanticIronSteel {
 
     #region constants
     // Button-press time constants

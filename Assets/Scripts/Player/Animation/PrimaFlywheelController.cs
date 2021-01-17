@@ -9,7 +9,7 @@ using UnityEngine;
  *  
  *  Also, spin the wheels a bit while burning pewter.
  */
-public class PlayerFlywheelController : MonoBehaviour {
+public class PrimaFlywheelController : MonoBehaviour {
 
     private const int speedFactor = 20;
     private const int pewterSpinFactor = 20;

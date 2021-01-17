@@ -4,7 +4,7 @@ using System.Collections;
 /// <summary>
 /// Controls all aspects of Allomantic Pewter.
 /// Controls the particle system associated with using pewter.
-/// Player-specific pewter management is in PlayerMovementController.
+/// Player-specific pewter management is in PrimaMovementController.
 /// Shielding from damage is controlled in PewterEntity.
 /// </summary>
 [RequireComponent(typeof(Rigidbody))]
@@ -132,7 +132,7 @@ public class AllomanticPewter : Allomancer {
      * Causes the shield to light up.
      */
     private IEnumerator Burst(Vector3 sourceLocationLocal, double totalMass, float maxTime) {
-        Player.PlayerAudioController.Play_pewter_burst();
+        Player.PrimaAudioController.Play_pewter_burst();
 
         // Light up the shield:
         // get closest point on mesh where that happens (for now, assume it's a sphere w/ radius .5)

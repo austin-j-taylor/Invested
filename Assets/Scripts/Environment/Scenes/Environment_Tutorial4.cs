@@ -104,7 +104,7 @@ public class Environment_Tutorial4 : EnvironmentCinematic {
             yield return null;
         }
         HUD.MessageOverlayCinematic.FadeOutInto("Open the " + ControlWheel + " and choose " + CoinshotMode + ".");
-        while (Player.PlayerIronSteel.Mode != PlayerPullPushController.ControlMode.Coinshot) {
+        while (Player.PlayerIronSteel.Mode != PrimaPullPushController.ControlMode.Coinshot) {
             yield return null;
         }
         HUD.MessageOverlayCinematic.FadeOutInto("In " + CoinshotMode + ", " + HowToPull + " to throw " + O_Coins);

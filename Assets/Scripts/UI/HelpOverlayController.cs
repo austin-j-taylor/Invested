@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Text;
 using static TextCodes;
-using static PlayerPullPushController;
+using static PrimaPullPushController;
 using TMPro;
 
 /// <summary>

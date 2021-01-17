@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// Controls player Pewter, movement, jumping, and gravity.
 /// </summary>
-public class PlayerMovementController : AllomanticPewter {
+public class PrimaMovementController : AllomanticPewter {
 
     #region constants
     private const float shortHopThreshold = .075f;
@@ -73,7 +73,7 @@ public class PlayerMovementController : AllomanticPewter {
     private Vector3 lastFrom = Vector3.zero;
     private float lastDeltaW = 0;
 
-    private PlayerGroundedChecker groundedChecker;
+    private PrimaGroundedChecker groundedChecker;
     private PIDController_Vector3 pidSpeed;
     private PhysicMaterial physicsMaterial;
 
@@ -85,9 +85,9 @@ public class PlayerMovementController : AllomanticPewter {
         get => base.IsSprinting;
         protected set {
             if (IsSprinting && !value && !IsAnchoring) {
-                Player.PlayerAudioController.Stop_pewter();
+                Player.PrimaAudioController.Stop_pewter();
             } else if (value) {
-                Player.PlayerAudioController.Play_pewter();
+                Player.PrimaAudioController.Play_pewter();
             }
             base.IsSprinting = value;
         }
@@ -96,9 +96,9 @@ public class PlayerMovementController : AllomanticPewter {
         get => base.IsAnchoring;
         protected set {
             if (IsAnchoring && !value && !IsSprinting) {
-                Player.PlayerAudioController.Stop_pewter();
+                Player.PrimaAudioController.Stop_pewter();
             } else if (value) {
-                Player.PlayerAudioController.Play_pewter();
+                Player.PrimaAudioController.Play_pewter();
             }
             base.IsAnchoring = value;
         }
@@ -123,7 +123,7 @@ public class PlayerMovementController : AllomanticPewter {
     #region clearing
     protected override void Awake() {
         base.Awake();
-        groundedChecker = transform.GetComponentInChildren<PlayerGroundedChecker>();
+        groundedChecker = transform.GetComponentInChildren<PrimaGroundedChecker>();
         pidSpeed = gameObject.AddComponent<PIDController_Vector3>();
         pidSpeed.SetParams(25, 0, 0, 50);
         //rb.maxAngularVelocity = maxRollingAngularSpeed;
@@ -163,13 +163,13 @@ public class PlayerMovementController : AllomanticPewter {
                         IsSprinting = true;
                         IsAnchoring = false;
                         rb.inertiaTensor = new Vector3(momentOfInertiaMagnitude, momentOfInertiaMagnitude, momentOfInertiaMagnitude);
-                        Player.PlayerFlywheelController.Retract();
+                        Player.PrimaFlywheelController.Retract();
                     } else if (!Keybinds.Walk() || !PewterReserve.HasMass) {
                         // stop anchoring
                         GamepadController.SetRumbleLeft(0);
                         IsAnchoring = false;
                         rb.inertiaTensor = new Vector3(momentOfInertiaMagnitude, momentOfInertiaMagnitude, momentOfInertiaMagnitude);
-                        Player.PlayerFlywheelController.Retract();
+                        Player.PrimaFlywheelController.Retract();
                     } // continue walking
                 } else if (IsSprinting) {
                     // was sprinting
@@ -195,7 +195,7 @@ public class PlayerMovementController : AllomanticPewter {
                     } else if (Keybinds.Walk() && PewterReserve.HasMass) {
                         // start walking
                         rb.inertiaTensor = new Vector3(momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking);
-                        Player.PlayerFlywheelController.Extend();
+                        Player.PrimaFlywheelController.Extend();
                         IsAnchoring = true;
                     } else { // continue rolling
                     }
@@ -203,7 +203,7 @@ public class PlayerMovementController : AllomanticPewter {
                 // Check if jumping
                 if (IsGrounded && Keybinds.JumpDown()) {
                     // Queue a jump for the next FixedUpdate
-                    // Actual jumping done in FixedUpdate to stay in sync with PlayerGroundedChecker
+                    // Actual jumping done in FixedUpdate to stay in sync with PrimaGroundedChecker
                     jumpQueued = true;
                 }
             } else {
@@ -411,7 +411,7 @@ public class PlayerMovementController : AllomanticPewter {
                 // Apply torque to player
                 rb.AddTorque(torque, ForceMode.Acceleration);
                 // Spin flywheels to match movement
-                Player.PlayerFlywheelController.SpinToTorque(torque);
+                Player.PrimaFlywheelController.SpinToTorque(torque);
                 // Apply a small amount of the movement force to player for tighter controls & air movement
                 rb.AddForce((CameraController.UpsideDown ? -movement : movement) * airControlFactor * rollingAcceleration, ForceMode.Acceleration);
 
@@ -422,16 +422,16 @@ public class PlayerMovementController : AllomanticPewter {
             }
             // Play rolling audio
             if (!lastWasRollingOnGround && IsGrounded/* && movement.sqrMagnitude > 0*/) {
-                Player.PlayerAudioController.Play_rolling();
+                Player.PrimaAudioController.Play_rolling();
                 lastWasRollingOnGround = true;
             } else if (lastWasRollingOnGround && (!IsGrounded/* || movement.sqrMagnitude == 0*/)) {
-                Player.PlayerAudioController.Stop_rolling();
+                Player.PrimaAudioController.Stop_rolling();
                 lastWasRollingOnGround = false;
             }
         } else {
             rb.drag = SettingsMenu.settingsWorld.playerAirResistance * dragNoControl;
             if (lastWasRollingOnGround) {
-                Player.PlayerAudioController.Stop_rolling();
+                Player.PrimaAudioController.Stop_rolling();
                 lastWasRollingOnGround = false;
             }
         }

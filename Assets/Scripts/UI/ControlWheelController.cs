@@ -339,19 +339,19 @@ public class ControlWheelController : MonoBehaviour {
         textCoinshot.text = KeyPullAbridged + ": throw and " + Push + " " + O_Coin + "\n\n\n\n\n";
         // The active mode gets the verbose text as well
         switch (Player.PlayerIronSteel.Mode) {
-            case PlayerPullPushController.ControlMode.Coinshot: // fall through
+            case PrimaPullPushController.ControlMode.Coinshot: // fall through
                 textCenter.text = "";
                 RefreshCoinshot();
                 break;
-            case PlayerPullPushController.ControlMode.Manual:
+            case PrimaPullPushController.ControlMode.Manual:
                 textCenter.text = "";
                 RefreshManual();
                 break;
-            case PlayerPullPushController.ControlMode.Area:
+            case PrimaPullPushController.ControlMode.Area:
                 textCenter.text = KeyRadiusAbridged + ":\n Area radius";
                 RefreshArea();
                 break;
-            case PlayerPullPushController.ControlMode.Bubble:
+            case PrimaPullPushController.ControlMode.Bubble:
                 textCenter.text = KeyRadiusAbridged + ":\nBubble radius";
                 RefreshBubble();
                 break;

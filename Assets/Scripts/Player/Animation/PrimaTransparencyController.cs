@@ -5,7 +5,7 @@ using UnityEngine;
 /*
  * Makes the player's body appear transparent when the camera is looking at it/near it.
  */
-public class PlayerTransparencyController : MonoBehaviour {
+public class PrimaTransparencyController : MonoBehaviour {
 
     private const float distanceThreshold = 2;
     private const float distanceThresholdInvisible = 0;//.5f;

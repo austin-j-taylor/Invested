@@ -4,11 +4,9 @@ using System.Collections;
 /// <summary>
 /// Handles sounds that the player creates.
 /// </summary>
-public class PlayerAudioController : MonoBehaviour {
+public class PrimaAudioController : MonoBehaviour {
 
     private const float rollVelocityFactor = 10, rollLerpFactor = 20, rollVolumeVactor = 4;
-
-    public AudioListener Listener { get; private set; }
 
     private AudioSource player_pewter_burst = null,
                 player_pewter_intro = null,
@@ -19,7 +17,6 @@ public class PlayerAudioController : MonoBehaviour {
 
     #region clearing
     void Start() {
-        Listener = GetComponent<AudioListener>();
         AudioSource[] sources = GetComponents<AudioSource>();
         player_pewter_burst = sources[0];
         player_pewter_intro = sources[1];

@@ -24,7 +24,7 @@ public class ThrowingAmmoMeter : MonoBehaviour {
             timeLastChanged = Time.time;
         }
 
-        if (Player.PlayerIronSteel.Mode == PlayerPullPushController.ControlMode.Coinshot) {
+        if (Player.PlayerIronSteel.Mode == PrimaPullPushController.ControlMode.Coinshot) {
             anim.SetBool("IsVisible", true);
         } else {
             anim.SetBool("IsVisible", Time.time - timeLastChanged < timeToFade);

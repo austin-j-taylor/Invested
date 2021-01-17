@@ -88,11 +88,11 @@ public class NonPlayerPushPullController : AllomanticIronSteel {
 
         //allomanticForce -= (allomancer.MaxRange == 0 ? SettingsMenu.settingsAllomancy.metalDetectionThreshold : allomancer.MaxRange); // blue metal lines will fade to a luminocity of 0 when the force is on the edge of the threshold
 
-        float closeness = Mathf.Exp(-PlayerPullPushController.blueLineChangeFactor * Mathf.Pow(1 / allomanticForce, PlayerPullPushController.blueLineBrightnessFactor));
+        float closeness = Mathf.Exp(-PrimaPullPushController.blueLineChangeFactor * Mathf.Pow(1 / allomanticForce, PrimaPullPushController.blueLineBrightnessFactor));
 
         line.gameObject.SetActive(true);
-        line.LightSaberFactor = Mathf.Exp(-target.LastMaxPossibleAllomanticForce.magnitude * percentage / PlayerPullPushController.lightSaberConstant);
-        line.LineColor = pulling ? new Color(0, closeness * Magnetic.lowLineColor, closeness * Magnetic.highLineColor, 1) : PlayerPullPushController.targetedRedLine * closeness;
-        line.SetStartAndEndAndWidth(target.CenterOfMass, CenterOfMass, target.Charge * PlayerPullPushController.blueLineWidthFactor);
+        line.LightSaberFactor = Mathf.Exp(-target.LastMaxPossibleAllomanticForce.magnitude * percentage / PrimaPullPushController.lightSaberConstant);
+        line.LineColor = pulling ? new Color(0, closeness * Magnetic.lowLineColor, closeness * Magnetic.highLineColor, 1) : PrimaPullPushController.targetedRedLine * closeness;
+        line.SetStartAndEndAndWidth(target.CenterOfMass, CenterOfMass, target.Charge * PrimaPullPushController.blueLineWidthFactor);
     }
 }

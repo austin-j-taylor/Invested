@@ -24,13 +24,13 @@ public class Player : PewterEntity {
 
     // Player components that need to be referenced elsewhere
     public static Player PlayerInstance { get; private set; }
-    public static PlayerAudioController PlayerAudioController { get; private set; }
-    public static PlayerPullPushController PlayerIronSteel { get; private set; }
-    public static PlayerMovementController PlayerPewter { get; private set; }
-    public static PlayerFlywheelController PlayerFlywheelController { get; private set; }
+    public static PrimaAudioController PrimaAudioController { get; private set; }
+    public static PrimaPullPushController PlayerIronSteel { get; private set; }
+    public static PrimaMovementController PlayerPewter { get; private set; }
+    public static PrimaFlywheelController PrimaFlywheelController { get; private set; }
     public static Magnetic PlayerMagnetic { get; private set; }
     public static FeruchemicalZinc PlayerZinc { get; set; }
-    public static PlayerTransparencyController PlayerTransparancy { get; set; }
+    public static PrimaTransparencyController PlayerTransparancy { get; set; }
     public static VoiceBeeper PlayerVoiceBeeper { get; set; }
     public static AllomechanicalGlower PlayerGlower { get; set; }
 
@@ -87,13 +87,13 @@ public class Player : PewterEntity {
         smokeMaterial = GetComponentInChildren<ParticleSystemRenderer>().material;
 
         PlayerInstance = this;
-        PlayerAudioController = GetComponentInChildren<PlayerAudioController>();
-        PlayerIronSteel = GetComponentInChildren<PlayerPullPushController>();
-        PlayerPewter = GetComponentInChildren<PlayerMovementController>();
-        PlayerFlywheelController = GetComponentInChildren<PlayerFlywheelController>();
+        PrimaAudioController = GetComponentInChildren<PrimaAudioController>();
+        PlayerIronSteel = GetComponentInChildren<PrimaPullPushController>();
+        PlayerPewter = GetComponentInChildren<PrimaMovementController>();
+        PrimaFlywheelController = GetComponentInChildren<PrimaFlywheelController>();
         PlayerMagnetic = GetComponentInChildren<Magnetic>();
         PlayerZinc = GetComponent<FeruchemicalZinc>();
-        PlayerTransparancy = GetComponentInChildren<PlayerTransparencyController>();
+        PlayerTransparancy = GetComponentInChildren<PrimaTransparencyController>();
         PlayerVoiceBeeper = GetComponentInChildren<VoiceBeeper>();
         PlayerGlower = GetComponentInChildren<AllomechanicalGlower>();
         Health = 100;
@@ -123,7 +123,7 @@ public class Player : PewterEntity {
                         bool firing = false;
                         if (Keybinds.WithdrawCoinDown() || Keybinds.TossCoinDown())
                             firing = true;
-                        if (PlayerIronSteel.Mode == PlayerPullPushController.ControlMode.Coinshot) {
+                        if (PlayerIronSteel.Mode == PrimaPullPushController.ControlMode.Coinshot) {
                             if (!PlayerIronSteel.HasPullTarget) {
                                 if (Keybinds.PullDown() || (CoinThrowingMode == CoinMode.Full && Keybinds.IronPulling())) {
                                     firing = true;
@@ -186,7 +186,7 @@ public class Player : PewterEntity {
     /// <param name="scene">the scene that we are leaving</param>
     public void ClearPlayerBeforeSceneChange(Scene scene) {
         PlayerGlower.Clear();
-        PlayerFlywheelController.Clear();
+        PrimaFlywheelController.Clear();
         PlayerIronSteel.StopBurning(false);
         PlayerIronSteel.Clear();
         PlayerPewter.Clear();
@@ -207,7 +207,7 @@ public class Player : PewterEntity {
     private void ClearPlayerAfterSceneChange(Scene scene, LoadSceneMode mode) {
         if (mode == LoadSceneMode.Single) { // Not loading all of the scenes, as it does at startup
             playerState = PlayerState.Normal;
-            PlayerAudioController.Clear();
+            PrimaAudioController.Clear();
             PlayerIronSteel.Clear();
 
             ResetFrameMaterial();

@@ -2,15 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/*
- * 
- * 
- *      
- */
 /// <summary>
 /// Every frame, checks if the player is touching a collider (i.e. is able to jump, either from the ground or off of a wall).
 /// </summary>
-public class PlayerGroundedChecker : MonoBehaviour {
+public class PrimaGroundedChecker : MonoBehaviour {
 
     private const float feetRange = 0.10f;
     private readonly Vector3 feetOffset = new Vector3(0, -.25f, 0);
