@@ -88,7 +88,8 @@ public class GameManager : MonoBehaviour {
     }
 
     private void Start() {
-        SceneManager.LoadScene(SceneSelectMenu.sceneTitleScreen);
+        if(GetComponent<SpecialStartupCommands>().RunCommands())
+            SceneManager.LoadScene(SceneSelectMenu.sceneTitleScreen);
     }
 
     /// <summary>

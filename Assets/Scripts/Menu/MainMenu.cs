@@ -19,8 +19,7 @@ public class MainMenu : Menu {
     [HideInInspector]
     public ArticlesMenu articlesMenu;
 
-    [SerializeField]
-    public GameObject splashScreen = null;
+    public SplashScreen splashScreen = null;
 
     #region clearing
     private void Awake() {
@@ -30,15 +29,11 @@ public class MainMenu : Menu {
         sceneSelectMenu = GetComponentInChildren<SceneSelectMenu>();
         articlesMenu = GetComponentInChildren<ArticlesMenu>();
 
-        // Show the spash screen
-        splashScreen.GetComponent<Image>().enabled = true;
-
         SceneManager.sceneLoaded += ClearAfterSceneChange;
     }
 
     private void Start() {
-        // Hide the spash screen
-        splashScreen.GetComponent<Image>().enabled = false;
+        splashScreen.Hide();
         Reset();
     }
     private void ClearAfterSceneChange(Scene scene, LoadSceneMode mode) {
