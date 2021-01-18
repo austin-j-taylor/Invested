@@ -81,7 +81,6 @@ public class KogMovementController : MonoBehaviour {
 
         if (Player.CanControl && Player.CanControlMovement) {
 
-            Debug.Log(groundedChecker.IsGrounded);
             if (IsGrounded) {
                 // if a Jump is queued
                 if (jumpQueued) {
@@ -209,7 +208,6 @@ public class KogMovementController : MonoBehaviour {
             feedback.y = 0;
             Vector3 output = pidSpeed.Step(feedback, target);
             rb.AddForce(output, ForceMode.Acceleration);
-            Debug.Log(output);
         }
     }
     #endregion

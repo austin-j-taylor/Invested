@@ -20,7 +20,7 @@ public class Kog : Actor {
     protected override void Awake() {
         KogInstance = this;
         Type = ActorType.Kog;
-        RespawnHeightOffset = 3;
+        RespawnHeightOffset = -0.26f;
         CameraScale = 3;
         CameraOffsetThirdPerson = 4.5f;
         CameraOffsetFirstPerson = 4;
@@ -38,6 +38,7 @@ public class Kog : Actor {
 
     public void ClearKogBeforeSceneChange(Scene scene) {
         MovementController.Clear();
+        kogAnimation.Clear();
     }
 
     /// <summary>
@@ -46,6 +47,5 @@ public class Kog : Actor {
     /// <param name="scene">the scene that will be entered</param>
     /// <param name="mode">the sceme loading mode</param>
     private void ClearKogAfterSceneChange(Scene scene, LoadSceneMode mode) {
-
     }
 }
