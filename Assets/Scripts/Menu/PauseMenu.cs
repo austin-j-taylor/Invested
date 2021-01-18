@@ -59,7 +59,7 @@ public class PauseMenu : Menu {
         HUD.DisableHUD();
 
         // Update blue lines for this frame
-        Player.PlayerIronSteel.UpdateBlueLines();
+        Prima.PrimaInstance.ActorIronSteel.UpdateBlueLines();
         
         switch (GameManager.CameraState) {
             case GameManager.GameCameraState.Standard:

@@ -19,15 +19,15 @@ public class MetalReserveMeters : MonoBehaviour {
     private void Awake() {
         //iron = transform.Find("Iron").gameObject.AddComponent<MetalReserveElement>();
         //iron.metalColor = new Color(0, .5f, 1);
-        //iron.reserve = Player.PlayerIronSteel.IronReserve;
+        //iron.reserve = Prima.PrimaInstance.ActorIronSteel.IronReserve;
 
         //steel = transform.Find("Steel").gameObject.AddComponent<MetalReserveElement>();
         //steel.metalColor = new Color(1, 0, 0);
-        //steel.reserve = Player.PlayerIronSteel.SteelReserve;
+        //steel.reserve = Prima.PrimaInstance.ActorIronSteel.SteelReserve;
 
         pewter = transform.Find("Pewter").gameObject.AddComponent<MetalReserveElement>();
         pewter.metalColor = new Color(1, 0, 0);
-        pewter.reserve = Player.PlayerPewter.PewterReserve;
+        pewter.reserve = Prima.PlayerPewter.PewterReserve;
     }
 
     private void LateUpdate() {

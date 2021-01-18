@@ -125,8 +125,8 @@ public class PrimaAudioController : MonoBehaviour {
     #endregion
     private void ScaleRollToSpeed() {
         // Make pitch and volume of the rolling a function of the player's speed
-        if (Time.timeScale > 0 && Player.PlayerPewter.IsGrounded) {
-            float velocity = Player.PlayerIronSteel.rb.velocity.magnitude;
+        if (Time.timeScale > 0 && Prima.PlayerPewter.IsGrounded) {
+            float velocity = Prima.PrimaInstance.ActorIronSteel.rb.velocity.magnitude;
             float factor = Mathf.Exp(-rollVelocityFactor / velocity);
             player_rolling_loop.volume = Mathf.Lerp(player_rolling_loop.volume, factor * rollVolumeVactor, Time.deltaTime * rollLerpFactor);
             player_rolling_loop.pitch = Mathf.Lerp(player_rolling_loop.pitch, 1 + factor, Time.deltaTime * rollLerpFactor);

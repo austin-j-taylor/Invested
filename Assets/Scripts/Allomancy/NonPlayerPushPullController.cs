@@ -53,13 +53,13 @@ public class NonPlayerPushPullController : AllomanticIronSteel {
         if (!GameManager.MenusController.pauseMenu.IsOpen) {
             for (int i = 0; i < TargetArray.smallArrayCapacity; i++) {
                 // Non-existent target, disable blue line
-                //if (PullTargets[i] != Player.PlayerMagnetic || !IronPulling) {
+                //if (PullTargets[i] != Prima.PlayerMagnetic || !IronPulling) {
                 if (i >= PullTargets.Count || !IronPulling) {
                     pullLines[i].gameObject.SetActive(false);
                 } else {
                     UpdateLines(true, i);
                 }
-                //if (PushTargets[i] != Player.PlayerMagnetic || !SteelPushing) {
+                //if (PushTargets[i] != Prima.PlayerMagnetic || !SteelPushing) {
                 if (i >= PushTargets.Count || !SteelPushing) {
                     pushLines[i].gameObject.SetActive(false);
                 } else {

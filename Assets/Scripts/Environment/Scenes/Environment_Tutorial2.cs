@@ -50,10 +50,10 @@ public class Environment_Tutorial2 : EnvironmentCinematic {
         HUD.DisableHUD();
         HUD.ConversationHUDController.gameObject.SetActive(false);
         Player.PlayerInstance.transform.position = new Vector3(0, 16.26f, 230);
-        Player.PlayerPewter.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX;
-        Player.PlayerIronSteel.SteelReserve.enabled = true;
-        Player.PlayerIronSteel.BubbleOpen(false);
-        Player.PlayerPewter.ExternalMovementCommand = new Vector3(0, 0, 1);
+        Prima.PlayerPewter.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionX;
+        Prima.PrimaInstance.ActorIronSteel.SteelReserve.enabled = true;
+        Prima.PrimaInstance.ActorIronSteel.BubbleOpen(false);
+        Prima.PlayerPewter.ExternalMovementCommand = new Vector3(0, 0, 1);
 
         yield return new WaitForSeconds(15);
         HUD.ConversationHUDController.gameObject.SetActive(true);
@@ -89,7 +89,7 @@ public class Environment_Tutorial2 : EnvironmentCinematic {
         FlagsController.SetFlag("pwr_steel");
         HUD.MessageOverlayCinematic.FadeIn(HowToPush + " to " + Push + ".");
 
-        while (!Player.PlayerIronSteel.HasPushTarget) {
+        while (!Prima.PrimaInstance.ActorIronSteel.HasPushTarget) {
             yield return null;
         }
         HUD.MessageOverlayCinematic.FadeOut();

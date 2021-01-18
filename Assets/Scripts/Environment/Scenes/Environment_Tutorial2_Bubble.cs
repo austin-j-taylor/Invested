@@ -9,7 +9,7 @@ public class Environment_Tutorial2_Bubble : EnvironmentWithTriggers {
             yield return null;
         FlagsController.SetFlag("wheel_bubble");
         HUD.MessageOverlayCinematic.FadeIn("Open the " + ControlWheel + " and choose " + BubbleMode + " to Push on all nearby metals.");
-        while (!Player.PlayerIronSteel.BubbleIsOpen)
+        while (!Prima.PrimaInstance.ActorIronSteel.BubbleIsOpen)
             yield return null;
         HUD.MessageOverlayCinematic.FadeOut();
     }

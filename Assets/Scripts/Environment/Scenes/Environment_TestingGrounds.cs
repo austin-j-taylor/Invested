@@ -15,7 +15,7 @@ public class Environment_TestingGrounds : EnvironmentCinematic {
     }
 
     protected override IEnumerator Trigger0() {
-        if (!Player.PlayerIronSteel.SteelReserve.IsEnabled && !triggered) {
+        if (!Prima.PrimaInstance.ActorIronSteel.SteelReserve.IsEnabled && !triggered) {
             //challengeToQuit.LeaveChallenge();
 
             //GameManager.ConversationManager.StartConversation("DIFFICULT");

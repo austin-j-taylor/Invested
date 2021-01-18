@@ -39,17 +39,17 @@ public class Elevator : Interfaceable {
     protected override void StartInterfacing() {
         rb.isKinematic = false;
         rb.velocity = Vector3.zero;
-        Player.PlayerIronSteel.rb.velocity = Vector3.zero;
-        Player.PlayerIronSteel.Clear();
-        Player.PlayerIronSteel.Strength = 1000;
-        Player.PlayerIronSteel.StartBurning();
-        Player.PlayerIronSteel.AddPushTarget(floorAnchor);
-        Player.PlayerIronSteel.AddPullTarget(thisMagnetic);
-        Player.PlayerIronSteel.AddPullTarget(ceilingAnchor);
-        //Player.PlayerIronSteel.AddPullTarget(thisMagnetic);
+        Prima.PrimaInstance.ActorIronSteel.rb.velocity = Vector3.zero;
+        Prima.PrimaInstance.ActorIronSteel.Clear();
+        Prima.PrimaInstance.ActorIronSteel.Strength = 1000;
+        Prima.PrimaInstance.ActorIronSteel.StartBurning();
+        Prima.PrimaInstance.ActorIronSteel.AddPushTarget(floorAnchor);
+        Prima.PrimaInstance.ActorIronSteel.AddPullTarget(thisMagnetic);
+        Prima.PrimaInstance.ActorIronSteel.AddPullTarget(ceilingAnchor);
+        //Prima.PrimaInstance.ActorIronSteel.AddPullTarget(thisMagnetic);
         CameraController.SetCinemachineCamera(vcam);
-        Player.PlayerIronSteel.ExternalControl = true;
-        Player.PlayerIronSteel.rb.angularVelocity = Vector3.zero;
+        Prima.PrimaInstance.ActorIronSteel.ExternalControl = true;
+        Prima.PrimaInstance.ActorIronSteel.rb.angularVelocity = Vector3.zero;
         offset = transform.position - Player.PlayerInstance.transform.position;
         anim.SetTrigger("flickerOn");
 
@@ -60,47 +60,47 @@ public class Elevator : Interfaceable {
 
         //pc.constraintActive = true;
         //rb.isKinematic = true;
-        Player.PlayerIronSteel.rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePosition & ~RigidbodyConstraints.FreezePositionY;
+        Prima.PrimaInstance.ActorIronSteel.rb.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePosition & ~RigidbodyConstraints.FreezePositionY;
         //thisMagnetic.gameObject.SetActive(false);
     }
     protected override void StopInterfacing() {
         rb.isKinematic = true;
         Player.CanControl = true;
-        Player.PlayerIronSteel.StopBurning();
-        Player.PlayerIronSteel.Strength = 1;
+        Prima.PrimaInstance.ActorIronSteel.StopBurning();
+        Prima.PrimaInstance.ActorIronSteel.Strength = 1;
         CameraController.DisableCinemachineCamera(vcam);
-        Player.PlayerIronSteel.ExternalControl = false;
+        Prima.PrimaInstance.ActorIronSteel.ExternalControl = false;
         anim.SetTrigger("turnOff");
         //pc.constraintActive = false;
         //rb.isKinematic = false;
-        Player.PlayerIronSteel.rb.constraints = RigidbodyConstraints.None;
+        Prima.PrimaInstance.ActorIronSteel.rb.constraints = RigidbodyConstraints.None;
         //thisMagnetic.gameObject.SetActive(true);
     }
     protected override void FixedUpdateInterfacing() {
-        Player.PlayerIronSteel.IronPulling = true;
-        Player.PlayerIronSteel.SteelPushing = true;
+        Prima.PrimaInstance.ActorIronSteel.IronPulling = true;
+        Prima.PrimaInstance.ActorIronSteel.SteelPushing = true;
 
         if (Keybinds.SteelPushing()) { // go up
-            Player.PlayerIronSteel.ExternalCommand = 2 * -Physics.gravity.y * ((Player.PlayerIronSteel.Mass));
+            Prima.PrimaInstance.ActorIronSteel.ExternalCommand = 2 * -Physics.gravity.y * ((Prima.PrimaInstance.ActorIronSteel.Mass));
         } else if (Keybinds.IronPulling()) { // go down
-            Player.PlayerIronSteel.ExternalCommand = 0;// -Physics.gravity.y * ((Player.PlayerIronSteel.Mass + rb.mass));
+            Prima.PrimaInstance.ActorIronSteel.ExternalCommand = 0;// -Physics.gravity.y * ((Prima.PrimaInstance.ActorIronSteel.Mass + rb.mass));
         } else { // balance
             //float speed = rb.velocity.y;
             //float direction = Mathf.Sign(speed);
             //speed = Mathf.Abs(speed);
             //speed = 1 - Mathf.Exp(-speed / 5);
             //float factor = 1 - direction * speed;
-            //Player.PlayerIronSteel.ExternalCommand = factor * -Physics.gravity.y * ((Player.PlayerIronSteel.Mass + rb.mass));
+            //Prima.PrimaInstance.ActorIronSteel.ExternalCommand = factor * -Physics.gravity.y * ((Prima.PrimaInstance.ActorIronSteel.Mass + rb.mass));
             //Debug.Log("raw:" + rb.velocity);
             //Debug.Log("Speed:" + speed);
             //Debug.Log("facto:" + factor);
-            Player.PlayerIronSteel.ExternalCommand = 1 * -Physics.gravity.y * ((Player.PlayerIronSteel.Mass));
+            Prima.PrimaInstance.ActorIronSteel.ExternalCommand = 1 * -Physics.gravity.y * ((Prima.PrimaInstance.ActorIronSteel.Mass));
 
         }
 
-        //Debug.Log("Wanted: " + Player.PlayerIronSteel.ExternalCommand);
-        //Debug.Log("Have  : " + Player.PlayerIronSteel.LastMaximumNetForce.magnitude);
-        //Debug.Log("Net force: " + Player.PlayerIronSteel.LastNetForceOnAllomancer);
+        //Debug.Log("Wanted: " + Prima.PrimaInstance.ActorIronSteel.ExternalCommand);
+        //Debug.Log("Have  : " + Prima.PrimaInstance.ActorIronSteel.LastMaximumNetForce.magnitude);
+        //Debug.Log("Net force: " + Prima.PrimaInstance.ActorIronSteel.LastNetForceOnAllomancer);
     }
     protected override void UpdateInterfacing() {
         if (Keybinds.Jump())
@@ -112,7 +112,7 @@ public class Elevator : Interfaceable {
             Vector3 temp = transform.position;
             temp.y = Player.PlayerInstance.transform.position.y + offset.y;
             transform.position = temp;
-            rb.velocity = Player.PlayerIronSteel.rb.velocity;
+            rb.velocity = Prima.PrimaInstance.ActorIronSteel.rb.velocity;
         }
     }
 
@@ -186,9 +186,9 @@ public class Elevator : Interfaceable {
     }
 
     private float getPercentage(float speed) {
-        Debug.Log("Wanted: " + ((rb.mass + Player.PlayerIronSteel.Mass) * (1 + speed) * -Physics.gravity.y));
-        Debug.Log("Have  : " + Player.PlayerIronSteel.LastMaximumNetForce.magnitude);
-        Debug.Log("Net force: " + Player.PlayerIronSteel.LastAllomanticForce);
-        return ((rb.mass + Player.PlayerIronSteel.Mass) * (1 + speed) * -Physics.gravity.y) / Player.PlayerIronSteel.LastMaximumNetForce.magnitude;
+        Debug.Log("Wanted: " + ((rb.mass + Prima.PrimaInstance.ActorIronSteel.Mass) * (1 + speed) * -Physics.gravity.y));
+        Debug.Log("Have  : " + Prima.PrimaInstance.ActorIronSteel.LastMaximumNetForce.magnitude);
+        Debug.Log("Net force: " + Prima.PrimaInstance.ActorIronSteel.LastAllomanticForce);
+        return ((rb.mass + Prima.PrimaInstance.ActorIronSteel.Mass) * (1 + speed) * -Physics.gravity.y) / Prima.PrimaInstance.ActorIronSteel.LastMaximumNetForce.magnitude;
     }
 }

@@ -66,7 +66,7 @@
 //                        break;
 //                    }
 //                case Action.StartBurningIronSteel: {
-//                        while (!Player.PlayerIronSteel.IsBurning) {
+//                        while (!Prima.PrimaInstance.ActorIronSteel.IsBurning) {
 //                            yield return null;
 //                        }
 //                        break;
@@ -106,26 +106,26 @@
 //                        break;
 //                    }
 //                case Action.ChangeNumberOfTargets: {
-//                        while (Player.PlayerIronSteel.PullTargets.Size == 1) {
+//                        while (Prima.PrimaInstance.ActorIronSteel.PullTargets.Size == 1) {
 //                            yield return null;
 //                        }
 //                        break;
 //                    }
 //                case Action.ChangeBurnPercentage: {
-//                        while (Player.PlayerIronSteel.IronBurnPercentageTarget > .99f && Player.PlayerIronSteel.SteelBurnPercentageTarget > .99f) {
+//                        while (Prima.PrimaInstance.ActorIronSteel.IronBurnPercentageTarget > .99f && Prima.PrimaInstance.ActorIronSteel.SteelBurnPercentageTarget > .99f) {
 //                            yield return null;
 //                        }
 //                        break;
 //                    }
 //                case Action.StopBurningIronSteel: {
-//                        while (Player.PlayerIronSteel.IsBurning) {
+//                        while (Prima.PrimaInstance.ActorIronSteel.IsBurning) {
 //                            yield return null;
 //                        }
 //                        Close();
 //                        break;
 //                    }
 //                case Action.CollectCoin: {
-//                        while (Player.PlayerInstance.CoinHand.Pouch.Count == 0) {
+//                        while (Prima.PrimaInstance.CoinHand.Pouch.Count == 0) {
 //                            yield return null;
 //                        }
 //                        break;
@@ -150,7 +150,7 @@
 //                        break;
 //                    }
 //                case Action.BurnPewter: {
-//                        while (!Player.PlayerPewter.IsSprinting) {
+//                        while (!Prima.PlayerPewter.IsSprinting) {
 //                            yield return null;
 //                        }
 //                        break;

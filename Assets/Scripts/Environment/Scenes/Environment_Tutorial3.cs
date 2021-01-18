@@ -54,7 +54,7 @@ public class Environment_Tutorial3 : EnvironmentCinematic {
 
         HUD.MessageOverlayCinematic.FadeIn(HowToSprint + " to burn " + Pewter + " to " + Sprint + " faster and " + PewterJump + " further.");
 
-        while (!Player.PlayerPewter.IsSprinting) {
+        while (!Prima.PlayerPewter.IsSprinting) {
             yield return null;
         }
         yield return new WaitForSeconds(2);
@@ -65,7 +65,7 @@ public class Environment_Tutorial3 : EnvironmentCinematic {
             yield return null;
         HUD.MessageOverlayCinematic.FadeIn(HowToAnchor + " to burn " + Pewter + " to " + PewterWhite("anchor") + " yourself and carefully " + PewterWhite("balance") + ".");
 
-        while (!Player.PlayerPewter.IsAnchoring) {
+        while (!Prima.PlayerPewter.IsAnchoring) {
             yield return null;
         }
         yield return new WaitForSeconds(2);

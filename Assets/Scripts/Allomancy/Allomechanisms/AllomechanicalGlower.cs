@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Controls the glowing elements of Prima.
+/// </summary>
 public class AllomechanicalGlower : MonoBehaviour {
 
     private const int intensity = 2;
@@ -39,27 +42,27 @@ public class AllomechanicalGlower : MonoBehaviour {
 
     void LateUpdate() {
         if (!GameManager.MenusController.pauseMenu.IsOpen && !isOverridden) {
-            if (Player.PlayerIronSteel.IronPulling) {
+            if (Prima.PrimaInstance.ActorIronSteel.IronPulling) {
                 foreach (Renderer rend in irons) {
-                    EnableEmission(rend.material, ColorIron, 1 + 2 * Player.PlayerIronSteel.IronBurnPercentageTarget);
+                    EnableEmission(rend.material, ColorIron, 1 + 2 * Prima.PrimaInstance.ActorIronSteel.IronBurnPercentageTarget);
                 }
             } else {
                 foreach (Renderer rend in irons) {
                     DisableEmission(rend.material);
                 }
             }
-            if (Player.PlayerIronSteel.SteelPushing) {
+            if (Prima.PrimaInstance.ActorIronSteel.SteelPushing) {
                 foreach (Renderer rend in steels) {
-                    EnableEmission(rend.material, ColorSteel, 1 + 2 * Player.PlayerIronSteel.SteelBurnPercentageTarget);
+                    EnableEmission(rend.material, ColorSteel, 1 + 2 * Prima.PrimaInstance.ActorIronSteel.SteelBurnPercentageTarget);
                 }
             } else {
                 foreach (Renderer rend in steels) {
                     DisableEmission(rend.material);
                 }
             }
-            if (Player.PlayerPewter.IsBurning) {
+            if (Prima.PlayerPewter.IsBurning) {
                 foreach (Renderer rend in pewters) {
-                    EnableEmission(rend.material, ColorPewter, 1 + -4 * (float)Player.PlayerPewter.PewterReserve.Rate);
+                    EnableEmission(rend.material, ColorPewter, 1 + -4 * (float)Prima.PlayerPewter.PewterReserve.Rate);
                 }
             } else {
                 foreach (Renderer rend in pewters) {

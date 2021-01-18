@@ -74,15 +74,15 @@ public class Vials : MonoBehaviour {
             Collider other = collision.collider;
             if (!other.isTrigger && other.CompareTag("Player")) {
                 if (fillIron) {
-                    Player.PlayerIronSteel.IronReserve.Fill(volume, persistent ? volume : 0);
+                    Prima.PrimaInstance.ActorIronSteel.IronReserve.Fill(volume, persistent ? volume : 0);
                     HUD.MetalReserveMeters.AlertIron();
                 }
                 if (fillSteel) {
-                    Player.PlayerIronSteel.SteelReserve.Fill(volume, persistent ? volume : 0);
+                    Prima.PrimaInstance.ActorIronSteel.SteelReserve.Fill(volume, persistent ? volume : 0);
                     HUD.MetalReserveMeters.AlertSteel();
                 }
                 if (fillPewter) {
-                    Player.PlayerPewter.PewterReserve.Fill(volume, persistent ? volume : 0);
+                    Prima.PlayerPewter.PewterReserve.Fill(volume, persistent ? volume : 0);
                     HUD.MetalReserveMeters.AlertPewter();
                 }
 

@@ -63,12 +63,12 @@ public class TargetOverlayController : MonoBehaviour {
     /// </summary>
     public void HardRefresh() {
         SoftRefresh();
-        for (int i = Player.PlayerIronSteel.PullTargets.Count; i < TargetArray.largeArrayCapacity; i++) {
+        for (int i = Prima.PrimaInstance.ActorIronSteel.PullTargets.Count; i < TargetArray.largeArrayCapacity; i++) {
             pullTargetsSumForce[i].gameObject.SetActive(false);
             pullTargetsActualForce[i].gameObject.SetActive(false);
         }
 
-        for (int i = Player.PlayerIronSteel.PushTargets.Count; i < TargetArray.largeArrayCapacity; i++) {
+        for (int i = Prima.PrimaInstance.ActorIronSteel.PushTargets.Count; i < TargetArray.largeArrayCapacity; i++) {
             pushTargetsSumForce[i].gameObject.SetActive(false);
             pushTargetsActualForce[i].gameObject.SetActive(false);
         }
@@ -80,17 +80,17 @@ public class TargetOverlayController : MonoBehaviour {
     public void SoftRefresh() {
         if (HUD.IsOpen) {
             if (SettingsMenu.settingsInterface.hudForces == 1) {
-                SoftRefreshTargets(Player.PlayerIronSteel.PullTargets, pullTargetsActualForce, pullTargetsSumForce, SettingsMenu.settingsInterface.forceComplexity == 1);
-                SoftRefreshTargets(Player.PlayerIronSteel.PushTargets, pushTargetsActualForce, pushTargetsSumForce, SettingsMenu.settingsInterface.forceComplexity == 1);
+                SoftRefreshTargets(Prima.PrimaInstance.ActorIronSteel.PullTargets, pullTargetsActualForce, pullTargetsSumForce, SettingsMenu.settingsInterface.forceComplexity == 1);
+                SoftRefreshTargets(Prima.PrimaInstance.ActorIronSteel.PushTargets, pushTargetsActualForce, pushTargetsSumForce, SettingsMenu.settingsInterface.forceComplexity == 1);
             }
             // If the target is highlighted and on screen, display mass
             if (SettingsMenu.settingsInterface.hudMasses == 1) {
-                //if (Player.PlayerIronSteel.HasHighlightedTarget) {
+                //if (Prima.PrimaInstance.ActorIronSteel.HasHighlightedTarget) {
                 //    //Vector3 heightToTop = Vector3.zero;
-                //    //heightToTop.y = Player.PlayerIronSteel.HighlightedTarget.ColliderBodyBoundsSizeY / 2f;
+                //    //heightToTop.y = Prima.PrimaInstance.ActorIronSteel.HighlightedTarget.ColliderBodyBoundsSizeY / 2f;
 
-                //    //highlightedTargetMass.text = HUD.MassString(Player.PlayerIronSteel.HighlightedTarget.MagneticMass);
-                //    //highlightedTargetMass.transform.position = CameraController.ActiveCamera.WorldToScreenPoint(Player.PlayerIronSteel.HighlightedTarget.transform.position + heightToTop) + new Vector3(0, pixelDelta);
+                //    //highlightedTargetMass.text = HUD.MassString(Prima.PrimaInstance.ActorIronSteel.HighlightedTarget.MagneticMass);
+                //    //highlightedTargetMass.transform.position = CameraController.ActiveCamera.WorldToScreenPoint(Prima.PrimaInstance.ActorIronSteel.HighlightedTarget.transform.position + heightToTop) + new Vector3(0, pixelDelta);
                 //} else { // Target is not highlighted or is not on screen, hide mass label
                 //    highlightedTargetMass.text = "";
                 //}
@@ -107,19 +107,19 @@ public class TargetOverlayController : MonoBehaviour {
             //    highlightedTargetMass.text = "";
             //}
             if (SettingsMenu.settingsInterface.forceComplexity == 0 && SettingsMenu.settingsInterface.hudForces == 1) {
-                for (int i = 0; i < Player.PlayerIronSteel.PullTargets.Count; i++) {
+                for (int i = 0; i < Prima.PrimaInstance.ActorIronSteel.PullTargets.Count; i++) {
                     pullTargetsSumForce[i].gameObject.SetActive(false);
                 }
-                for (int i = 0; i < Player.PlayerIronSteel.PushTargets.Count; i++) {
+                for (int i = 0; i < Prima.PrimaInstance.ActorIronSteel.PushTargets.Count; i++) {
                     pushTargetsSumForce[i].gameObject.SetActive(false);
                 }
             } else {
                 if (SettingsMenu.settingsInterface.hudForces == 0) {
-                    for (int i = 0; i < Player.PlayerIronSteel.PullTargets.Count; i++) {
+                    for (int i = 0; i < Prima.PrimaInstance.ActorIronSteel.PullTargets.Count; i++) {
                         pullTargetsSumForce[i].gameObject.SetActive(false);
                         pullTargetsActualForce[i].gameObject.SetActive(false);
                     }
-                    for (int i = 0; i < Player.PlayerIronSteel.PushTargets.Count; i++) {
+                    for (int i = 0; i < Prima.PrimaInstance.ActorIronSteel.PushTargets.Count; i++) {
                         pushTargetsSumForce[i].gameObject.SetActive(false);
                         pushTargetsActualForce[i].gameObject.SetActive(false);
                     }

@@ -71,11 +71,11 @@ public class SpikePit : MonoBehaviour {
             // Executes during Rising. Face the Spike towards the player, vertically.
             if (facingPlayer) {
                 // Rotate Target towards Player
-                Vector3 distancetoPlayer = spike.CenterOfMass- Player.PlayerIronSteel.CenterOfMass;
+                Vector3 distancetoPlayer = spike.CenterOfMass- Prima.PrimaInstance.ActorIronSteel.CenterOfMass;
                 float angle = 180 - Mathf.Atan2(distancetoPlayer.x, distancetoPlayer.z) * Mathf.Rad2Deg;
 
-                //Vector3 newRotation = Quaternion.LookRotation(Player.PlayerIronSteel.CenterOfMass - spikeTarget.position).eulerAngles;
-                //Vector3 newRotation = Quaternion.Slerp(spikeTarget.rotation, Quaternion.LookRotation(Player.PlayerIronSteel.CenterOfMass - spikeTarget.position), slerpConstantPlayer * Time.deltaTime).eulerAngles;
+                //Vector3 newRotation = Quaternion.LookRotation(Prima.PrimaInstance.ActorIronSteel.CenterOfMass - spikeTarget.position).eulerAngles;
+                //Vector3 newRotation = Quaternion.Slerp(spikeTarget.rotation, Quaternion.LookRotation(Prima.PrimaInstance.ActorIronSteel.CenterOfMass - spikeTarget.position), slerpConstantPlayer * Time.deltaTime).eulerAngles;
                 Vector3 newRotation;
                 newRotation.z = angle;
                 newRotation.x = 90;
@@ -88,15 +88,15 @@ public class SpikePit : MonoBehaviour {
 
             // Executes after Rising. The spike angles itself with the spike towards the player. Once the angle is somewhat low, it begins Pulling on the player. 
             if (tracingPlayer) {
-                Quaternion newRotation = Quaternion.Slerp(spike.transform.rotation, Quaternion.LookRotation(Player.PlayerIronSteel.CenterOfMass - spike.CenterOfMass), slerpConstantPlayer * Time.deltaTime * slerpTime);
+                Quaternion newRotation = Quaternion.Slerp(spike.transform.rotation, Quaternion.LookRotation(Prima.PrimaInstance.ActorIronSteel.CenterOfMass - spike.CenterOfMass), slerpConstantPlayer * Time.deltaTime * slerpTime);
                 slerpTime = slerpTimeChargeupPlayer * (Mathf.Exp(-Time.time + startTime) + Time.time - startTime + 1);
                 spike.transform.rotation = newRotation;
                 //spike.transform.position = spikeTarget.transform.position;
 
-                float angle = Quaternion.Angle(Quaternion.LookRotation(Player.PlayerIronSteel.CenterOfMass - spike.CenterOfMass), newRotation);
+                float angle = Quaternion.Angle(Quaternion.LookRotation(Prima.PrimaInstance.ActorIronSteel.CenterOfMass - spike.CenterOfMass), newRotation);
                 if (angle < anglePullThreshold && spike.PullTargets.Count == 0) {
                     // add player as a pull target
-                    spike.AddPullTarget(Player.PlayerMagnetic);
+                    spike.AddPullTarget(Prima.PlayerMagnetic);
                     spike.IronPulling = true;
                     spike.IronBurnPercentageTarget = pullPercentage;
                     spike.PullTargets.MaxRange = -1;
@@ -118,10 +118,10 @@ public class SpikePit : MonoBehaviour {
             // The Spike begins chasing the player as it Pulls on the player.
             if (chasingPlayer) {
 
-                Quaternion newRotation = Quaternion.LookRotation(Player.PlayerIronSteel.CenterOfMass - spike.CenterOfMass);
+                Quaternion newRotation = Quaternion.LookRotation(Prima.PrimaInstance.ActorIronSteel.CenterOfMass - spike.CenterOfMass);
                 spike.transform.rotation = newRotation;
 
-                if ((Player.PlayerIronSteel.CenterOfMass - spike.CenterOfMass).magnitude < distanceThresholdSpiking) {
+                if ((Prima.PrimaInstance.ActorIronSteel.CenterOfMass - spike.CenterOfMass).magnitude < distanceThresholdSpiking) {
                     chasingPlayer = false;
                     spikingPlayer = true;
 
@@ -133,10 +133,10 @@ public class SpikePit : MonoBehaviour {
             // The spike has touched the player. Freeze the player and keep pulling the spike into them.
             if(spikingPlayer) {
 
-                //Quaternion newRotation = Quaternion.LookRotation(Player.PlayerIronSteel.CenterOfMass - spike.CenterOfMass);
+                //Quaternion newRotation = Quaternion.LookRotation(Prima.PrimaInstance.ActorIronSteel.CenterOfMass - spike.CenterOfMass);
                 //spike.transform.rotation = newRotation;
 
-                if ((Player.PlayerIronSteel.CenterOfMass - spike.CenterOfMass).magnitude < distanceThresholdEqual) {
+                if ((Prima.PrimaInstance.ActorIronSteel.CenterOfMass - spike.CenterOfMass).magnitude < distanceThresholdEqual) {
                     spikingPlayer = false;
                     tracingPath = true;
 
@@ -194,7 +194,7 @@ public class SpikePit : MonoBehaviour {
                     progress = 0;
 
                     Player.CanControl = true;
-                    Player.PlayerIronSteel.StopBurning();
+                    Prima.PrimaInstance.ActorIronSteel.StopBurning();
 
                     Player.PlayerInstance.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
                     Player.PlayerInstance.transform.SetParent(EventSystem.current.transform);
@@ -204,7 +204,7 @@ public class SpikePit : MonoBehaviour {
                     spikeRb.velocity = -splineDragging.GetVelocity(1);
                     spikeRb.transform.position -= splineDragging.GetVelocity(1) * Time.fixedDeltaTime;
 
-                    spike.AddPushTarget(Player.PlayerMagnetic);
+                    spike.AddPushTarget(Prima.PlayerMagnetic);
                     spike.SteelPushing = true;
                     spike.SteelBurnPercentageTarget = .5f;
                     spike.PushTargets.MaxRange = 3;
@@ -213,13 +213,13 @@ public class SpikePit : MonoBehaviour {
 
             // Pushing the player off of the Spike.
             if (releasingPlayer) {
-                if ((Player.PlayerIronSteel.CenterOfMass - spike.CenterOfMass).sqrMagnitude > .01) {
-                    Quaternion newRotation = Quaternion.LookRotation(Player.PlayerIronSteel.CenterOfMass - spike.CenterOfMass);
+                if ((Prima.PrimaInstance.ActorIronSteel.CenterOfMass - spike.CenterOfMass).sqrMagnitude > .01) {
+                    Quaternion newRotation = Quaternion.LookRotation(Prima.PrimaInstance.ActorIronSteel.CenterOfMass - spike.CenterOfMass);
                     //Quaternion newRotation = Quaternion.LookRotation(-spikeRb.velocity);
                     spike.transform.rotation = newRotation;
                 }
 
-                if ((spike.CenterOfMass - Player.PlayerIronSteel.CenterOfMass).magnitude > distanceThresholdReturn) {
+                if ((spike.CenterOfMass - Prima.PrimaInstance.ActorIronSteel.CenterOfMass).magnitude > distanceThresholdReturn) {
                     releasingPlayer = false;
                     returningHome = true;
 
@@ -270,7 +270,7 @@ public class SpikePit : MonoBehaviour {
     private void FixedUpdate() {
         if (chasingPlayer || spikingPlayer) { // Make spike only every travel directly towards player
             Vector3 vel = spikeRb.velocity;
-            vel = Vector3.Project(vel, (Player.PlayerIronSteel.CenterOfMass - spike.CenterOfMass).normalized);
+            vel = Vector3.Project(vel, (Prima.PrimaInstance.ActorIronSteel.CenterOfMass - spike.CenterOfMass).normalized);
             spikeRb.velocity = vel;
         }
     }

@@ -26,7 +26,7 @@ public class Environment_Tutorial1 : EnvironmentCinematic {
             Player.CanControl = false;
             Player.CanControlMovement = false;
             if (!FlagsController.GetData("pwr_steel"))
-                Player.PlayerIronSteel.IronReserve.IsEnabled = false; // Skip restricting iron if they've already got steel
+                Prima.PrimaInstance.ActorIronSteel.IronReserve.IsEnabled = false; // Skip restricting iron if they've already got steel
 
             // Set cinemachine virtual camera properties
             InitializeCinemachine();
@@ -78,7 +78,7 @@ public class Environment_Tutorial1 : EnvironmentCinematic {
             vcam.enabled = false;
             yield return new WaitForSeconds(2);
         } else {
-            Player.PlayerIronSteel.IronReserve.IsEnabled = true;
+            Prima.PrimaInstance.ActorIronSteel.IronReserve.IsEnabled = true;
         }
         CameraController.DisableCinemachineCamera(vcam);
         Player.CanControl = true;
@@ -116,14 +116,14 @@ public class Environment_Tutorial1 : EnvironmentCinematic {
         GameManager.ConversationManager.StartConversation("THINK2");
         while (HUD.ConversationHUDController.IsOpen)
             yield return null;
-        Player.PlayerIronSteel.IronReserve.IsEnabled = true;
+        Prima.PrimaInstance.ActorIronSteel.IronReserve.IsEnabled = true;
         HUD.MessageOverlayCinematic.FadeIn(HowToStartBurningIron + " to start burning " + Iron + ".");
-        while (!Player.PlayerIronSteel.IsBurning) {
+        while (!Prima.PrimaInstance.ActorIronSteel.IsBurning) {
             yield return null;
         }
         HUD.MessageOverlayCinematic.FadeOutInto("Look at a " + LightBlue("metal") + " and " + HowToPull + " to " + Pull + ".");
 
-        while (!Player.PlayerIronSteel.HasPullTarget) {
+        while (!Prima.PrimaInstance.ActorIronSteel.HasPullTarget) {
             yield return null;
         }
         HUD.MessageOverlayCinematic.FadeOut();

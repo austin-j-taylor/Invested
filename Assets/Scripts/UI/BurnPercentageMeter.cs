@@ -50,7 +50,7 @@ public class BurnPercentageMeter : MonoBehaviour {
     /// <param name="rateAlternate">the percentage of the force for steel</param>
     /// <param name="targetForce">the desired force for Magnitude mode</param>
     public void SetBurnRateMeterForceMagnitude(Vector3 allomanticForce, Vector3 normalForce, float rate, float rateAlternate, float targetForce) {
-        playerInputText.text = HUD.ForceString(targetForce, Player.PlayerIronSteel.Mass);
+        playerInputText.text = HUD.ForceString(targetForce, Prima.PrimaInstance.ActorIronSteel.Mass);
 
         SetActualForceText((allomanticForce + normalForce).magnitude);
         SetSumForceText(allomanticForce, normalForce);
@@ -78,7 +78,7 @@ public class BurnPercentageMeter : MonoBehaviour {
     /// </summary>
     /// <param name="forceActual">the force to set it to</param>
     private void SetActualForceText(float forceActual) {
-        actualForceText.text = HUD.ForceString(forceActual, Player.PlayerIronSteel.Mass);
+        actualForceText.text = HUD.ForceString(forceActual, Prima.PrimaInstance.ActorIronSteel.Mass);
     }
 
     /// <summary>
@@ -90,7 +90,7 @@ public class BurnPercentageMeter : MonoBehaviour {
         if (SettingsMenu.settingsInterface.forceComplexity == 1) {
             float allomanticMagnitude = allomanticForce.magnitude;
             float normalMagnitude = normalForce.magnitude;
-            sumForceText.text = HUD.AllomanticSumString(allomanticForce, normalForce, Player.PlayerIronSteel.Mass);
+            sumForceText.text = HUD.AllomanticSumString(allomanticForce, normalForce, Prima.PrimaInstance.ActorIronSteel.Mass);
         }
     }
     #endregion

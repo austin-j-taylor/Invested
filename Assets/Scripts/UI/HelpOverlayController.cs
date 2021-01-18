@@ -37,32 +37,32 @@ public class HelpOverlayController : MonoBehaviour {
     private void Update() {
         if (IsOpen) {
             // Update the text if a change in players' abilites has occured
-            if (last_SteelEnabled != Player.PlayerIronSteel.SteelReserve.IsEnabled) {
-                last_SteelEnabled = Player.PlayerIronSteel.SteelReserve.IsEnabled;
+            if (last_SteelEnabled != Prima.PrimaInstance.ActorIronSteel.SteelReserve.IsEnabled) {
+                last_SteelEnabled = Prima.PrimaInstance.ActorIronSteel.SteelReserve.IsEnabled;
                 UpdateText();
             }
-            if (last_IronEnabled != Player.PlayerIronSteel.IronReserve.IsEnabled) {
-                last_IronEnabled = Player.PlayerIronSteel.IronReserve.IsEnabled;
+            if (last_IronEnabled != Prima.PrimaInstance.ActorIronSteel.IronReserve.IsEnabled) {
+                last_IronEnabled = Prima.PrimaInstance.ActorIronSteel.IronReserve.IsEnabled;
                 UpdateText();
             }
             if (last_ControlWheel != !HUD.ControlWheelController.IsLocked()) {
                 last_ControlWheel = !HUD.ControlWheelController.IsLocked();
                 UpdateText();
             }
-            if (last_PewterEnabled != Player.PlayerPewter.PewterReserve.IsEnabled) {
-                last_PewterEnabled = Player.PlayerPewter.PewterReserve.IsEnabled;
+            if (last_PewterEnabled != Prima.PlayerPewter.PewterReserve.IsEnabled) {
+                last_PewterEnabled = Prima.PlayerPewter.PewterReserve.IsEnabled;
                 UpdateText();
             }
             if (last_Zinc != Player.CanControlZinc) {
                 last_Zinc = Player.CanControlZinc;
                 UpdateText();
             }
-            if (last_Coins != (Player.CanThrowCoins && Player.PlayerInstance.CoinHand.Pouch.Count > 0)) {
-                last_Coins = Player.CanThrowCoins && Player.PlayerInstance.CoinHand.Pouch.Count > 0;
+            if (last_Coins != (Player.CanThrowCoins && Prima.PrimaInstance.CoinHand.Pouch.Count > 0)) {
+                last_Coins = Player.CanThrowCoins && Prima.PrimaInstance.CoinHand.Pouch.Count > 0;
                 UpdateText();
             }
-            if (last_Mode != Player.PlayerIronSteel.Mode) {
-                last_Mode = Player.PlayerIronSteel.Mode;
+            if (last_Mode != Prima.PrimaInstance.ActorIronSteel.Mode) {
+                last_Mode = Prima.PrimaInstance.ActorIronSteel.Mode;
                 UpdateText();
             }
         }

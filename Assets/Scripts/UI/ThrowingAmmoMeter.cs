@@ -20,19 +20,19 @@ public class ThrowingAmmoMeter : MonoBehaviour {
 
     private void LateUpdate() {
 
-        if (lastCount != Player.PlayerInstance.CoinHand.Pouch.Count) {
+        if (lastCount != Prima.PrimaInstance.CoinHand.Pouch.Count) {
             timeLastChanged = Time.time;
         }
 
-        if (Player.PlayerIronSteel.Mode == PrimaPullPushController.ControlMode.Coinshot) {
+        if (Player.CurrentActor.ActorIronSteel.Mode == PrimaPullPushController.ControlMode.Coinshot) {
             anim.SetBool("IsVisible", true);
         } else {
             anim.SetBool("IsVisible", Time.time - timeLastChanged < timeToFade);
         }
 
-        coinCountText.text = Player.PlayerInstance.CoinHand.Pouch.Count.ToString();
+        coinCountText.text = Prima.PrimaInstance.CoinHand.Pouch.Count.ToString();
 
-        lastCount = Player.PlayerInstance.CoinHand.Pouch.Count;
+        lastCount = Prima.PrimaInstance.CoinHand.Pouch.Count;
     }
 
     public void Clear() {
@@ -42,16 +42,16 @@ public class ThrowingAmmoMeter : MonoBehaviour {
         anim.Play("MetalReserve_Invisible", anim.GetLayerIndex("Visibility"));
     }
 
-    public void Alert(Player.CoinMode mode) {
+    public void Alert(Prima.CoinMode mode) {
         timeLastChanged = Time.time;
         switch (mode) {
-            case Player.CoinMode.Semi:
+            case Prima.CoinMode.Semi:
                 anim.Play("ThrowableAmmo_Semi", anim.GetLayerIndex("Image"));
                 break;
-            case Player.CoinMode.Full:
+            case Prima.CoinMode.Full:
                 anim.Play("ThrowableAmmo_Full", anim.GetLayerIndex("Image"));
                 break;
-            case Player.CoinMode.Spray:
+            case Prima.CoinMode.Spray:
                 anim.Play("ThrowableAmmo_Spray", anim.GetLayerIndex("Image"));
                 break;
         }

@@ -113,7 +113,7 @@ public class ConversationHUDController : MonoBehaviour {
         StringBuilder parsed = new StringBuilder();
         StringBuilder currentLineParsed = new StringBuilder();
         Style currentStyle = Style.Clear;
-        VoiceBeeper currentSpeaker = Player.PlayerVoiceBeeper;
+        VoiceBeeper currentSpeaker = Player.CurrentActor.ActorVoiceBeeper;
         string currentSpeakerString = "";
 
         // For each character in the conversation:
@@ -132,7 +132,7 @@ public class ConversationHUDController : MonoBehaviour {
                             break;
                         case 'p': // the Sphere/Prima
                             headerText.text = Color_Prima("Prima");
-                            currentSpeaker = Player.PlayerVoiceBeeper;
+                            currentSpeaker = Player.CurrentActor.ActorVoiceBeeper;
                             break;
                         case 'k': // the KOLOSS
                             headerText.text = Color_Kog("Kog");
@@ -154,7 +154,7 @@ public class ConversationHUDController : MonoBehaviour {
                             break;
                         case '?': // ???
                             headerText.text = Color_Prima("???");
-                            currentSpeaker = Player.PlayerVoiceBeeper;
+                            currentSpeaker = Player.CurrentActor.ActorVoiceBeeper;
                             break;
                         default:
                             Debug.LogError("Failed to parse convesation text in " + currentConversation.key + ": " + currentConversation.content + ": invalid speaker");

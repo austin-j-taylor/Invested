@@ -45,10 +45,10 @@ public class PrimaFlywheelController : MonoBehaviour {
 
     private void FixedUpdate() {
         if (!GameManager.MenusController.pauseMenu.IsOpen) {
-            if (Player.PlayerPewter.IsBurning) {
-                AddAngleX(pewterSpinFactor * -(float)Player.PlayerPewter.PewterReserve.Rate);
-                AddAngleY(pewterSpinFactor * -(float)Player.PlayerPewter.PewterReserve.Rate);
-                AddAngleZ(pewterSpinFactor * -(float)Player.PlayerPewter.PewterReserve.Rate);
+            if (Prima.PlayerPewter.IsBurning) {
+                AddAngleX(pewterSpinFactor * -(float)Prima.PlayerPewter.PewterReserve.Rate);
+                AddAngleY(pewterSpinFactor * -(float)Prima.PlayerPewter.PewterReserve.Rate);
+                AddAngleZ(pewterSpinFactor * -(float)Prima.PlayerPewter.PewterReserve.Rate);
             }
         }
     }

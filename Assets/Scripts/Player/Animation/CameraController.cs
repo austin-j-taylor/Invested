@@ -72,10 +72,10 @@ public class CameraController : MonoBehaviour {
         lastCameraDistance = 0;
         ActiveCamera.transform.localPosition = Vector3.zero;
         ActiveCamera.transform.localRotation = Quaternion.identity;
-        Player.PlayerTransparancy.SetOverrideHidden(IsFirstPerson);
+        Prima.PlayerTransparancy.SetOverrideHidden(IsFirstPerson);
 
-        if (Player.PlayerIronSteel.IsBurning) // Update blue lines when the camera is reset
-            Player.PlayerIronSteel.UpdateBlueLines();
+        if (Prima.PrimaInstance.ActorIronSteel.IsBurning) // Update blue lines when the camera is reset
+            Prima.PrimaInstance.ActorIronSteel.UpdateBlueLines();
         UpdateCamera();
     }
     private void ClearAfterSceneChange(Scene scene, LoadSceneMode mode) {
@@ -163,7 +163,7 @@ public class CameraController : MonoBehaviour {
             // If the player is moving quickly, the camera stretches outwards.
             float cameraDistance = -SettingsMenu.settingsGameplay.cameraDistance;
             if (SettingsMenu.settingsGraphics.velocityZoom == 1) {
-                cameraDistance = (2 - Mathf.Exp(Player.PlayerIronSteel.rb.velocity.sqrMagnitude / stretchingVelocityFactor)) * cameraDistance;
+                cameraDistance = (2 - Mathf.Exp(Prima.PrimaInstance.ActorIronSteel.rb.velocity.sqrMagnitude / stretchingVelocityFactor)) * cameraDistance;
                 if (lastCameraDistance != 0)
                     cameraDistance = Mathf.Lerp(lastCameraDistance, cameraDistance, Time.deltaTime * cameraStretchingLerpFactor);
             }
@@ -355,7 +355,7 @@ public class CameraController : MonoBehaviour {
 
     #region cameraControls
     public static void SetCinemachineCamera(CinemachineVirtualCamera vcam) {
-        Player.PlayerTransparancy.SetOverrideHidden(false);
+        Prima.PlayerTransparancy.SetOverrideHidden(false);
         GameManager.SetCameraState(GameManager.GameCameraState.Cutscene);
         vcam.enabled = true;
 
@@ -369,7 +369,7 @@ public class CameraController : MonoBehaviour {
         yield return null;
         while (Cinemachine.IsBlending)
             yield return null;
-        Player.PlayerTransparancy.SetOverrideHidden(IsFirstPerson);
+        Prima.PlayerTransparancy.SetOverrideHidden(IsFirstPerson);
         GameManager.SetCameraState(GameManager.GameCameraState.Standard);
     }
 
@@ -387,14 +387,14 @@ public class CameraController : MonoBehaviour {
     public void SetThirdPerson() {
         CameraPositionTarget.transform.SetParent(CameraLookAtTarget);
         if (GameManager.CameraState == GameManager.GameCameraState.Standard) {
-            Player.PlayerTransparancy.SetOverrideHidden(false);
+            Prima.PlayerTransparancy.SetOverrideHidden(false);
             Clear();
         }
     }
     public void SetFirstPerson() {
         CameraPositionTarget.transform.SetParent(CameraLookAtTarget.Find("FirstPersonTarget"));
         if (GameManager.CameraState == GameManager.GameCameraState.Standard) {
-            Player.PlayerTransparancy.SetOverrideHidden(true);
+            Prima.PlayerTransparancy.SetOverrideHidden(true);
             Clear();
         }
     }

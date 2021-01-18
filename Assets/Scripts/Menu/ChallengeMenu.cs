@@ -44,19 +44,19 @@ public class ChallengeMenu : MonoBehaviour {
         StringBuilder builder = new StringBuilder();
         builder.AppendLine("Recommended powers:");
         if (challenge.recommendedIron) {
-            if (Player.PlayerIronSteel.IronReserve.IsEnabled)
+            if (Prima.PrimaInstance.ActorIronSteel.IronReserve.IsEnabled)
                 builder.AppendLine(" • " + TextCodes.Iron_proper);
             else
                 builder.AppendLine(" • " + TextCodes.MidBlue("<Not yet remembered>"));
         }
         if (challenge.recommendedSteel) {
-            if (Player.PlayerIronSteel.SteelReserve.IsEnabled)
+            if (Prima.PrimaInstance.ActorIronSteel.SteelReserve.IsEnabled)
                 builder.AppendLine(" • " + TextCodes.Steel_proper);
             else
                 builder.AppendLine(" • " + TextCodes.Red("<Not yet remembered>"));
         }
         if (challenge.recommendedPewter) {
-            if (Player.PlayerPewter.PewterReserve.IsEnabled)
+            if (Prima.PlayerPewter.PewterReserve.IsEnabled)
                 builder.AppendLine(" • " + TextCodes.Pewter_proper);
             else
                 builder.AppendLine(" • " + TextCodes.PewterWhite("<Not yet remembered>"));

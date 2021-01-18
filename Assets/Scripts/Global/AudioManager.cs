@@ -63,8 +63,8 @@ public class AudioManager : MonoBehaviour {
     private void Update() {
         // Make pitch and volume of the wind sfx a function of the player's speed
         if (Player.PlayerInstance.isActiveAndEnabled && Time.timeScale > 0) {
-            float velocity = Player.PlayerIronSteel.rb.velocity.magnitude;
-            if (velocity > velocityThreshold && !Player.PlayerPewter.IsGrounded) {
+            float velocity = Prima.PrimaInstance.ActorIronSteel.rb.velocity.magnitude;
+            if (velocity > velocityThreshold && !Prima.PlayerPewter.IsGrounded) {
                 float factor = Mathf.Exp(-windVelocityFactor / (velocity - velocityThreshold));
                 sources[index_wind].volume = Mathf.Lerp(sources[index_wind].volume, factor * windVolumeVactor, Time.deltaTime * windLerpFactor);
                 sources[index_wind].pitch = Mathf.Lerp(sources[index_wind].pitch, 1 + factor, Time.deltaTime * windLerpFactor);

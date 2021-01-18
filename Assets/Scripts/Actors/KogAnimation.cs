@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static KogActor;
+using static Kog;
 
 // Scripted animation for Kog
 public class KogAnimation : MonoBehaviour {
@@ -23,31 +23,31 @@ public class KogAnimation : MonoBehaviour {
         target = Player.PlayerInstance.transform;
         //state = State.Resting;
 
-        switch(state) {
+        switch (state) {
             case State.Meditating:
                 anim.Play("Armature|Meditating");
                 break;
         }
     }
 
-    //void Update() {
-    //    switch (state) {
-    //        case State.Reaching:
-    //            // Transition: If the Sphere is close to the hand
-    //            if ((Player.PlayerInstance.transform.position - hand.position).sqrMagnitude < zeroThresholdSqr) {
-    //                state = State.Throwing;
-    //                anim.SetBool("Throwing", true);
-    //            }
-    //            break;
-    //        case State.Throwing:
-    //            // For no...
-    //            if (Keybinds.JumpDown()) {
-    //                state = State.Reaching;
-    //                anim.SetBool("Throwing", false);
-    //            }
-    //            break;
-    //    }
-    //}
+    void Update() {
+        switch (state) {
+            case State.Reaching:
+                // Transition: If the Sphere is close to the hand
+                if ((Player.PlayerInstance.transform.position - hand.position).sqrMagnitude < zeroThresholdSqr) {
+                    state = State.Throwing;
+                    anim.SetBool("Throwing", true);
+                }
+                break;
+            case State.Throwing:
+                // For no...
+                if (Keybinds.JumpDown()) {
+                    state = State.Reaching;
+                    anim.SetBool("Throwing", false);
+                }
+                break;
+        }
+    }
 
     //a callback for calculating IK
     void OnAnimatorIK() {

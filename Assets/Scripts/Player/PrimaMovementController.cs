@@ -85,9 +85,9 @@ public class PrimaMovementController : AllomanticPewter {
         get => base.IsSprinting;
         protected set {
             if (IsSprinting && !value && !IsAnchoring) {
-                Player.PrimaAudioController.Stop_pewter();
+                Prima.PrimaAudioController.Stop_pewter();
             } else if (value) {
-                Player.PrimaAudioController.Play_pewter();
+                Prima.PrimaAudioController.Play_pewter();
             }
             base.IsSprinting = value;
         }
@@ -96,9 +96,9 @@ public class PrimaMovementController : AllomanticPewter {
         get => base.IsAnchoring;
         protected set {
             if (IsAnchoring && !value && !IsSprinting) {
-                Player.PrimaAudioController.Stop_pewter();
+                Prima.PrimaAudioController.Stop_pewter();
             } else if (value) {
-                Player.PrimaAudioController.Play_pewter();
+                Prima.PrimaAudioController.Play_pewter();
             }
             base.IsAnchoring = value;
         }
@@ -163,13 +163,13 @@ public class PrimaMovementController : AllomanticPewter {
                         IsSprinting = true;
                         IsAnchoring = false;
                         rb.inertiaTensor = new Vector3(momentOfInertiaMagnitude, momentOfInertiaMagnitude, momentOfInertiaMagnitude);
-                        Player.PrimaFlywheelController.Retract();
+                        Prima.PrimaFlywheelController.Retract();
                     } else if (!Keybinds.Walk() || !PewterReserve.HasMass) {
                         // stop anchoring
                         GamepadController.SetRumbleLeft(0);
                         IsAnchoring = false;
                         rb.inertiaTensor = new Vector3(momentOfInertiaMagnitude, momentOfInertiaMagnitude, momentOfInertiaMagnitude);
-                        Player.PrimaFlywheelController.Retract();
+                        Prima.PrimaFlywheelController.Retract();
                     } // continue walking
                 } else if (IsSprinting) {
                     // was sprinting
@@ -195,7 +195,7 @@ public class PrimaMovementController : AllomanticPewter {
                     } else if (Keybinds.Walk() && PewterReserve.HasMass) {
                         // start walking
                         rb.inertiaTensor = new Vector3(momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking, momentOfInertiaMagnitudeWalking);
-                        Player.PrimaFlywheelController.Extend();
+                        Prima.PrimaFlywheelController.Extend();
                         IsAnchoring = true;
                     } else { // continue rolling
                     }
@@ -221,9 +221,9 @@ public class PrimaMovementController : AllomanticPewter {
         // When the sphere is swinging through the air, rotate the player body to give the effect
         // that the player is physically swinging through the air, connected to the target by something like a rope.
         // Uses a simple Proportional error controller on the angle between the player and the target to get the effect.
-        if (Player.PlayerIronSteel.PushingOrPulling) {
+        if (Prima.PrimaInstance.ActorIronSteel.PushingOrPulling) {
             // Get the angle between the player and the target
-            Vector3 targetPosition = transform.position + Player.PlayerIronSteel.LastNetForceOnAllomancer;
+            Vector3 targetPosition = transform.position + Prima.PrimaInstance.ActorIronSteel.LastNetForceOnAllomancer;
             Vector3 to = transform.position - targetPosition;
             Vector3 from;
             Debug.DrawRay(transform.position, to, Color.yellow);
@@ -337,7 +337,7 @@ public class PrimaMovementController : AllomanticPewter {
                 }
 
                 // If moving or pushing or pulling, apply weaker drag
-                if (movement.sqrMagnitude > 0 || Player.PlayerIronSteel.IronPulling || Player.PlayerIronSteel.SteelPushing) {
+                if (movement.sqrMagnitude > 0 || Prima.PrimaInstance.ActorIronSteel.IronPulling || Prima.PrimaInstance.ActorIronSteel.SteelPushing) {
                     // You: "why use ints to represent binary values that should be represented by booleans"
                     // Me, an intellectual:
                     rb.drag = SettingsMenu.settingsWorld.playerAirResistance * dragAirborneLinear;
@@ -399,7 +399,7 @@ public class PrimaMovementController : AllomanticPewter {
 
                 Vector3 feedback = rb.angularVelocity;
                 // Also: add Force acting on the player from its Pushes/Pulls as desired movement
-                Vector3 target = torque * (IsSprinting ? targetSprintingSpeedRadial : targetRollingSpeedRadial)/* + Vector3.Cross(Vector3.up, Player.PlayerIronSteel.LastNetForceOnAllomancer)*/;
+                Vector3 target = torque * (IsSprinting ? targetSprintingSpeedRadial : targetRollingSpeedRadial)/* + Vector3.Cross(Vector3.up, Prima.PrimaInstance.ActorIronSteel.LastNetForceOnAllomancer)*/;
 
                 torque = pidSpeed.Step(feedback, target);
                 //Debug.Log("speed    : " + rb.velocity.magnitude);
@@ -411,7 +411,7 @@ public class PrimaMovementController : AllomanticPewter {
                 // Apply torque to player
                 rb.AddTorque(torque, ForceMode.Acceleration);
                 // Spin flywheels to match movement
-                Player.PrimaFlywheelController.SpinToTorque(torque);
+                Prima.PrimaFlywheelController.SpinToTorque(torque);
                 // Apply a small amount of the movement force to player for tighter controls & air movement
                 rb.AddForce((CameraController.UpsideDown ? -movement : movement) * airControlFactor * rollingAcceleration, ForceMode.Acceleration);
 
@@ -422,16 +422,16 @@ public class PrimaMovementController : AllomanticPewter {
             }
             // Play rolling audio
             if (!lastWasRollingOnGround && IsGrounded/* && movement.sqrMagnitude > 0*/) {
-                Player.PrimaAudioController.Play_rolling();
+                Prima.PrimaAudioController.Play_rolling();
                 lastWasRollingOnGround = true;
             } else if (lastWasRollingOnGround && (!IsGrounded/* || movement.sqrMagnitude == 0*/)) {
-                Player.PrimaAudioController.Stop_rolling();
+                Prima.PrimaAudioController.Stop_rolling();
                 lastWasRollingOnGround = false;
             }
         } else {
             rb.drag = SettingsMenu.settingsWorld.playerAirResistance * dragNoControl;
             if (lastWasRollingOnGround) {
-                Player.PrimaAudioController.Stop_rolling();
+                Prima.PrimaAudioController.Stop_rolling();
                 lastWasRollingOnGround = false;
             }
         }
@@ -450,4 +450,13 @@ public class PrimaMovementController : AllomanticPewter {
         rb.useGravity = false;
         invertGravity = true;
     }
+
+    #region pewter
+
+    protected override IEnumerator Burst(Vector3 sourceLocationLocal, double totalMass, float maxTime) {
+        Prima.PrimaAudioController.Play_pewter_burst();
+
+        return base.Burst(sourceLocationLocal, totalMass, maxTime);
+    }
+    #endregion
 }

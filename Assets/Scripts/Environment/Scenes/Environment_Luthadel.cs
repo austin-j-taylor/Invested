@@ -33,7 +33,7 @@ public class Environment_Luthadel : Environment {
         GetComponent<AudioSource>().Play();
 
         Player.FeelingScale = .75f;
-        Player.PlayerInstance.SetSmokeMaterial(Material_smokeMaterial);
+        Prima.PrimaInstance.SetSmokeMaterial(Material_smokeMaterial);
 
         // Enable/disable objects and set other style properties depending on the time of day
         for (int i = 0; i < dayObjects.Length; i++) {

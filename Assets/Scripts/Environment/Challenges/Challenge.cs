@@ -81,7 +81,7 @@ public class Challenge : MonoBehaviour {
         spike.transform.rotation = spikeStartRotation;
         GameManager.SetPlayState(GameManager.GamePlayState.Challenge);
         // Move player to start and set camera rotation
-        Player.PlayerPewter.Clear();
+        Prima.PlayerPewter.Clear();
         Player.PlayerInstance.transform.position = startPosition.position;
         CameraController.Clear();
         CameraController.SetRotation(startPosition.eulerAngles);

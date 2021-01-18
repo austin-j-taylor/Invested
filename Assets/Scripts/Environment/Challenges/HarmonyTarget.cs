@@ -93,14 +93,14 @@ public class HarmonyTarget : MonoBehaviour {
             }
         } else if (controllingPlayer) {
             // Pull player towards center of Harmony Target
-            Vector3 distance = Player.PlayerIronSteel.CenterOfMass - inner.position;
-            Player.PlayerIronSteel.GetComponent<Rigidbody>().AddForce(-forceConstantClose * distance, ForceMode.Force);
+            Vector3 distance = Prima.PrimaInstance.ActorIronSteel.CenterOfMass - inner.position;
+            Prima.PrimaInstance.ActorIronSteel.GetComponent<Rigidbody>().AddForce(-forceConstantClose * distance, ForceMode.Force);
             Vector3 pos = cameraPositionTarget.position;
             pos.y = cameraLookAtTarget.position.y;
             cameraPositionTarget.position = pos;
 
             // So the light from the sphere doesn't flicker around the player's body
-            harmonySphere.position = Player.PlayerIronSteel.CenterOfMass;
+            harmonySphere.position = Prima.PrimaInstance.ActorIronSteel.CenterOfMass;
         }
     }
 
@@ -108,11 +108,11 @@ public class HarmonyTarget : MonoBehaviour {
         playerHasEntered = true;
         controllingPlayer = true;
         Player.CanControl = false;
-        Player.PlayerIronSteel.StopBurning();
+        Prima.PrimaInstance.ActorIronSteel.StopBurning();
         harmonySphere.GetComponent<Collider>().enabled = false;
         anim.SetTrigger("PlayerHasEntered");
 
-        //Player.PlayerIronSteel.StopBurning();
+        //Prima.PrimaInstance.ActorIronSteel.StopBurning();
         Player.PlayerInstance.GetComponent<Rigidbody>().useGravity = false;
         CameraController.SetCinemachineCamera(vcam);
         if (!Unlocked)
@@ -123,7 +123,7 @@ public class HarmonyTarget : MonoBehaviour {
         HUD.MessageOverlayCinematic.FadeInFor(spikesLeft + " Spike" + (spikesLeft == 1 ? " remains" : "s remain"), 3);
     }
     private void EndAnimation() {
-        Player.PlayerInstance.SetFrameMaterial(GameManager.Material_MARLmetal_lit);
+        Prima.PrimaInstance.SetFrameMaterial(GameManager.Material_MARLmetal_lit);
         //Player.PlayerInstance.GetComponentInChildren<MeshRenderer>().material = harmonySphere.GetComponent<Renderer>().material;
         foreach (Renderer renderer in symbolRenderers)
             renderer.material = GameManager.Material_MARLmetal_lit;

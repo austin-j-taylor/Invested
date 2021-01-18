@@ -3,39 +3,23 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
-/// Controls all general aspects of the Player not covered by the sub-Player______ scripts
+/// Controls all general aspects of the Player, including swapping control between Kog and Prima
 /// </summary>
-public class Player : PewterEntity {
+public class Player : MonoBehaviour {
 
     #region constants
-    private const float coinCooldownThreshold = 1f / 10;
-    private const float zincTimeCoinThrowModifier = 2; // throw coins faster while in zinc time
     private const float defaultVoidHeight = -50; // Voiding out - if the player falls beneath voidHeight, respawn.
     public const float respawnTime = 1.25f; // Time between reaching the void and teleporting back to the respawn point
     #endregion
 
     #region properties
-    public enum CoinMode { Semi, Full, Spray };
     public enum PlayerState { Normal, Respawning };
-
-    //private Animator animator;
-    private Material frameMaterial, smokeMaterial;
-    private Renderer playerFrame;
 
     // Player components that need to be referenced elsewhere
     public static Player PlayerInstance { get; private set; }
-    public static PrimaAudioController PrimaAudioController { get; private set; }
-    public static PrimaPullPushController PlayerIronSteel { get; private set; }
-    public static PrimaMovementController PlayerPewter { get; private set; }
-    public static PrimaFlywheelController PrimaFlywheelController { get; private set; }
-    public static Magnetic PlayerMagnetic { get; private set; }
     public static FeruchemicalZinc PlayerZinc { get; set; }
-    public static PrimaTransparencyController PlayerTransparancy { get; set; }
-    public static VoiceBeeper PlayerVoiceBeeper { get; set; }
-    public static AllomechanicalGlower PlayerGlower { get; set; }
+    public static Actor CurrentActor { get; set; }
 
-    public Hand CoinHand { get; private set; }
-    public CoinMode CoinThrowingMode { get; set; }
     public PlayerState playerState { get; set; }
     public Transform RespawnPoint { get; set; }
 
@@ -47,7 +31,7 @@ public class Player : PewterEntity {
         set {
             canControl = value;
             if (!value) {
-                PlayerIronSteel.StopBurning();
+                CurrentActor.ActorIronSteel.StopBurning();
             }
         }
     }
@@ -55,6 +39,7 @@ public class Player : PewterEntity {
     public static bool CanControlZinc { get; set; }
     public static bool CanControlMovement { get; set; }
     public static bool CanThrowCoins { get; set; }
+    public static bool IsPrima => CurrentActor.GetType() == typeof(Prima);
 
     // Some scenes (Storms, Sea of Metal) should feel larger than other scenes (Luthadel, MARL).
     // This is done by increasing camera distance and Allomantic strength.
@@ -65,40 +50,19 @@ public class Player : PewterEntity {
         }
         set {
             feelingScale = value;
-            PlayerIronSteel.Strength = value;
+            CurrentActor.ActorIronSteel.Strength = value;
         }
     }
     // Some scenes also set the void height
     public static float VoidHeight { get; set; }
     #endregion
 
-    private float coinCooldownTimer = 0;
 
-    protected override void Awake() {
-        base.Awake();
-        //animator = GetComponent<Animator>();
-
-        foreach (Renderer rend in GetComponentsInChildren<Renderer>()) {
-            if (rend.CompareTag("PlayerFrame")) {
-                playerFrame = rend;
-                frameMaterial = playerFrame.material;
-            }
-        }
-        smokeMaterial = GetComponentInChildren<ParticleSystemRenderer>().material;
-
+    void Awake() {
         PlayerInstance = this;
-        PrimaAudioController = GetComponentInChildren<PrimaAudioController>();
-        PlayerIronSteel = GetComponentInChildren<PrimaPullPushController>();
-        PlayerPewter = GetComponentInChildren<PrimaMovementController>();
-        PrimaFlywheelController = GetComponentInChildren<PrimaFlywheelController>();
-        PlayerMagnetic = GetComponentInChildren<Magnetic>();
         PlayerZinc = GetComponent<FeruchemicalZinc>();
-        PlayerTransparancy = GetComponentInChildren<PrimaTransparencyController>();
-        PlayerVoiceBeeper = GetComponentInChildren<VoiceBeeper>();
-        PlayerGlower = GetComponentInChildren<AllomechanicalGlower>();
-        Health = 100;
-        CoinThrowingMode = CoinMode.Semi;
-        CoinHand = GetComponentInChildren<Hand>();
+        CurrentActor = Prima.PrimaInstance;
+
         SceneManager.sceneLoaded += ClearPlayerAfterSceneChange;
         SceneManager.sceneUnloaded += ClearPlayerBeforeSceneChange;
     }
@@ -106,65 +70,12 @@ public class Player : PewterEntity {
     #region updates
     void Update() {
         // Handle "Voiding out" if the player falls too far into the "void"
-        if (transform.position.y < VoidHeight) {
+        if (CurrentActor.transform.position.y < VoidHeight) {
             Respawn();
-        }
-
-        if (CanControl) {
-            // Coin management
-            if (CanThrowCoins) {
-                // If releasing the "throw coin" button, remove all vacuous coin targets
-                if (Keybinds.WithdrawCoinUp()) {
-                    PlayerIronSteel.RemoveAllCoins();
-                } else if (!CoinHand.Pouch.IsEmpty) {
-                    // For throwing coins
-                    if (coinCooldownTimer > coinCooldownThreshold) {
-                        // TODO: simplify logic. just like this for thinking
-                        bool firing = false;
-                        if (Keybinds.WithdrawCoinDown() || Keybinds.TossCoinDown())
-                            firing = true;
-                        if (PlayerIronSteel.Mode == PrimaPullPushController.ControlMode.Coinshot) {
-                            if (!PlayerIronSteel.HasPullTarget) {
-                                if (Keybinds.PullDown() || (CoinThrowingMode == CoinMode.Full && Keybinds.IronPulling())) {
-                                    firing = true;
-                                }
-                            }
-                        } else {
-                            if (CoinThrowingMode == CoinMode.Full && Keybinds.WithdrawCoin()) {
-                                firing = true;
-                            }
-                        }
-
-                        if (firing) {
-                            coinCooldownTimer = 0;
-                            // Anchoring: pressing key will toss coin
-                            // Not anchoring: pressing key will add coin as Vacuous Push Target and Push on it
-                            if (CoinThrowingMode == CoinMode.Spray) {
-                                Coin[] coins = CoinHand.WithdrawCoinSprayToHand(false);
-                                if (!Keybinds.TossCoinCondition()) {
-                                    PlayerIronSteel.RemoveAllCoins();
-                                    for (int i = 0; i < Hand.spraySize; i++)
-                                        PlayerIronSteel.AddPushTarget(coins[i], false, true);
-                                }
-                                //PlayerIronSteel.AddPushTarget(coins[i], false, !Keybinds.MultipleMarks());
-                            } else {
-                                Coin coin = CoinHand.WithdrawCoinToHand(false);
-                                if (!Keybinds.TossCoinCondition()) {
-                                    PlayerIronSteel.RemoveAllCoins();
-                                    PlayerIronSteel.AddPushTarget(coin, false, true);
-                                }
-                                //PlayerIronSteel.AddPushTarget(coin, false, !Keybinds.MultipleMarks());
-                            }
-                        }
-                    } else {
-                        coinCooldownTimer += Time.deltaTime * (PlayerZinc.InZincTime ? 2 : 1); // throw coins 
-                    }
-                }
-            }
         }
     }
 
-    protected override void LateUpdate() {
+    private void LateUpdate() {
         // Displaying Help Overlay
         if (Keybinds.ToggleHelpOverlay()) {
             HUD.HelpOverlayController.Toggle();
@@ -185,13 +96,7 @@ public class Player : PewterEntity {
     /// </summary>
     /// <param name="scene">the scene that we are leaving</param>
     public void ClearPlayerBeforeSceneChange(Scene scene) {
-        PlayerGlower.Clear();
-        PrimaFlywheelController.Clear();
-        PlayerIronSteel.StopBurning(false);
-        PlayerIronSteel.Clear();
-        PlayerPewter.Clear();
         PlayerZinc.Clear();
-        PlayerTransparancy.Clear();
         FeelingScale = 1;
         VoidHeight = defaultVoidHeight;
 
@@ -207,37 +112,11 @@ public class Player : PewterEntity {
     private void ClearPlayerAfterSceneChange(Scene scene, LoadSceneMode mode) {
         if (mode == LoadSceneMode.Single) { // Not loading all of the scenes, as it does at startup
             playerState = PlayerState.Normal;
-            PrimaAudioController.Clear();
-            PlayerIronSteel.Clear();
 
-            ResetFrameMaterial();
-            SetSmokeMaterial(smokeMaterial);
-
-            if (scene.buildIndex == SceneSelectMenu.sceneTitleScreen) {
-                CanControl = false;
-                CanPause = false;
-                transform.position = GameObject.FindGameObjectWithTag("PlayerSpawn").transform.position;
-                PlayerIronSteel.IronReserve.IsEnabled = true;
-            } else {
-                CanPause = true;
-                CanControl = true;
-                CanControlMovement = true;
-
-                // Set unlocked abilities
-                PlayerIronSteel.IronReserve.IsEnabled = true;
-                PlayerIronSteel.SteelReserve.IsEnabled = FlagsController.GetData("pwr_steel");
-                PlayerPewter.PewterReserve.IsEnabled = FlagsController.GetData("pwr_pewter");
-                CanControlZinc = FlagsController.GetData("pwr_zinc");
-                CanThrowCoins = FlagsController.GetData("pwr_coins");
-                if (CanThrowCoins) {
-                    CoinHand.Pouch.Fill();
-                } else {
-                    CoinHand.Pouch.Clear();
-                }
-
+            if (scene.buildIndex != SceneSelectMenu.sceneTitleScreen) {
                 GameObject spawn = GameObject.FindGameObjectWithTag("PlayerSpawn");
                 if (spawn && CameraController.ActiveCamera) { // if CameraController.Awake has been called
-                    transform.position = spawn.transform.position;
+                    CurrentActor.transform.position = spawn.transform.position + new Vector3(0, CurrentActor.RespawnHeightOffset, 0);
                     //transform.rotation = spawn.transform.rotation;
                     if (scene.buildIndex != SceneSelectMenu.sceneMain) {
                         CameraController.SetRotation(spawn.transform.eulerAngles);
@@ -253,8 +132,7 @@ public class Player : PewterEntity {
     /// Special collisions for player
     /// </summary>
     /// <param name="collision">the collision</param>
-    protected override void OnCollisionEnter(Collision collision) {
-        base.OnCollisionEnter(collision);
+    private void OnCollisionEnter(Collision collision) {
         // During challenges, check for The Floor Is Lava
         if (GameManager.PlayState == GameManager.GamePlayState.Challenge) {
             if (collision.transform.CompareTag("ChallengeFailure")) {
@@ -277,8 +155,8 @@ public class Player : PewterEntity {
         CanControlMovement = false;
         CanPause = false;
         yield return new WaitForSecondsRealtime(respawnTime);
-        transform.position = RespawnPoint.position;
-        PlayerPewter.Clear();
+        CurrentActor.transform.position = RespawnPoint.position;
+        CurrentActor.RespawnClear();
         CameraController.Clear();
         CameraController.SetRotation(RespawnPoint.eulerAngles);
         CanControlMovement = true;
@@ -287,24 +165,6 @@ public class Player : PewterEntity {
     }
     #endregion
 
-    /// <summary>
-    /// Sets the player body's outer frame material
-    /// </summary>
-    /// <param name="mat">the new material</param>
-    public void SetFrameMaterial(Material mat) {
-        playerFrame.GetComponent<Renderer>().material = mat;
-    }
-    public void ResetFrameMaterial() {
-        playerFrame.GetComponent<Renderer>().material = frameMaterial;
-    }
-
-    /// <summary>
-    /// Sets the material of the smoke particles that appear during collisions
-    /// </summary>
-    /// <param name="mat">the new material</param>
-    public void SetSmokeMaterial(Material mat) {
-        GetComponentInChildren<ParticleSystemRenderer>().material = mat;
-    }
 
     /// <summary>
     /// Used by Triggers to check if they collided with the player

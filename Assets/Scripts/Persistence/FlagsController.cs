@@ -92,10 +92,10 @@ public class FlagsController : MonoBehaviour {
         // When ability flags are set, the corresponding power should be immediately unlocked.
         switch (name) {
             case "pwr_steel":
-                Player.PlayerIronSteel.SteelReserve.IsEnabled = true;
+                Prima.PrimaInstance.ActorIronSteel.SteelReserve.IsEnabled = true;
                 break;
             case "pwr_pewter":
-                Player.PlayerPewter.PewterReserve.IsEnabled = true;
+                Prima.PlayerPewter.PewterReserve.IsEnabled = true;
                 break;
             case "pwr_zinc":
                 Player.CanControlZinc = true;

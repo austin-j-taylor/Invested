@@ -113,12 +113,12 @@ public class Coin : Magnetic {
     /// <param name="other"></param>
     private void OnTriggerStay(Collider other) {
         if (other.CompareTag("PlayerBody") &&
-                    //Keybinds.IronPulling() && (!Player.PlayerIronSteel.HasPullTarget || Player.PlayerIronSteel.PullTargets.IsTarget(this))) {
-                    (Keybinds.IronPulling() || Player.PlayerIronSteel.BubbleIsOpen && Player.PlayerIronSteel.BubbleMetalStatus == AllomanticIronSteel.iron)) {
+                    //Keybinds.IronPulling() && (!Prima.PrimaInstance.ActorIronSteel.HasPullTarget || Prima.PrimaInstance.ActorIronSteel.PullTargets.IsTarget(this))) {
+                    (Keybinds.IronPulling() || Prima.PrimaInstance.ActorIronSteel.BubbleIsOpen && Prima.PrimaInstance.ActorIronSteel.BubbleMetalStatus == AllomanticIronSteel.iron)) {
             // Make sure there's not a wall between the coin and the player
             Vector3 direction = other.transform.position - transform.position;
             if (!Physics.Raycast(transform.position, direction, direction.magnitude, GameManager.Layer_IgnoreCamera))
-                BeCaughtByAllomancer(other.transform.parent.GetComponent<Player>());
+                BeCaughtByAllomancer(other.transform.parent.GetComponent<Prima>());
         }
     }
     #endregion
@@ -201,7 +201,7 @@ public class Coin : Magnetic {
     }
     #endregion
 
-    private void BeCaughtByAllomancer(Player player) {
+    private void BeCaughtByAllomancer(Prima player) {
         player.CoinHand.CatchCoin(this);
         HUD.TargetOverlayController.HardRefresh();
     }

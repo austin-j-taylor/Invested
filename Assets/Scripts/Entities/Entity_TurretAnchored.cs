@@ -53,7 +53,7 @@ public class Entity_TurretAnchored : NonPlayerPushPullController {
         SteelReserve.IsEndless = false;
 
         target = Player.PlayerInstance.transform;
-        targetRb = Player.PlayerIronSteel.rb;
+        targetRb = Prima.PrimaInstance.ActorIronSteel.rb;
     }
 
     protected override void FixedUpdate() {

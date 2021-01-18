@@ -76,7 +76,7 @@ public class HUD : MonoBehaviour {
         } else {
             fPSText.text = "";
         }
-        if (Player.PlayerIronSteel.IsBurning) {
+        if (Prima.PrimaInstance.ActorIronSteel.IsBurning) {
             TargetOverlayController.SoftRefresh();
         }
     }

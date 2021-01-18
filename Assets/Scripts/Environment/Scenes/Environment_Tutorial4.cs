@@ -91,9 +91,9 @@ public class Environment_Tutorial4 : EnvironmentCinematic {
         FlagsController.SetFlag("pwr_coins");
         while (HUD.ConversationHUDController.IsOpen)
             yield return null;
-        if(Player.PlayerInstance.CoinHand.Pouch.Count == 0) {
+        if(Prima.PrimaInstance.CoinHand.Pouch.Count == 0) {
             HUD.MessageOverlayCinematic.FadeIn(HowToPull + " near " + O_Coins + " to pick them up.");
-            while (Player.PlayerInstance.CoinHand.Pouch.Count == 0)
+            while (Prima.PrimaInstance.CoinHand.Pouch.Count == 0)
                 yield return null;
 
             HUD.MessageOverlayCinematic.FadeOut();
@@ -104,7 +104,7 @@ public class Environment_Tutorial4 : EnvironmentCinematic {
             yield return null;
         }
         HUD.MessageOverlayCinematic.FadeOutInto("Open the " + ControlWheel + " and choose " + CoinshotMode + ".");
-        while (Player.PlayerIronSteel.Mode != PrimaPullPushController.ControlMode.Coinshot) {
+        while (Prima.PrimaInstance.ActorIronSteel.Mode != PrimaPullPushController.ControlMode.Coinshot) {
             yield return null;
         }
         HUD.MessageOverlayCinematic.FadeOutInto("In " + CoinshotMode + ", " + HowToPull + " to throw " + O_Coins);

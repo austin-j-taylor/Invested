@@ -50,7 +50,7 @@ public class FeruchemicalZinc : MonoBehaviour {
         if (!GameManager.MenusController.pauseMenu.IsOpen) {
             if (InZincTime) {
                 // In Zinc Time
-                Player.PlayerIronSteel.BlueLinesBrightnessModifier = Mathf.Lerp(Player.PlayerIronSteel.BlueLinesBrightnessModifier, blueLinesMaxBrightness, blueLinesBrightnessLerp * Time.deltaTime);
+                Prima.PrimaInstance.ActorIronSteel.BlueLinesBrightnessModifier = Mathf.Lerp(Prima.PrimaInstance.ActorIronSteel.BlueLinesBrightnessModifier, blueLinesMaxBrightness, blueLinesBrightnessLerp * Time.deltaTime);
                 Rate = -Time.deltaTime / slowPercent / maxTime;
                 Reserve += Rate;
                 if (Reserve < 0) {
@@ -93,7 +93,7 @@ public class FeruchemicalZinc : MonoBehaviour {
                         Rate = 0;
                     }
                 }
-                Player.PlayerIronSteel.BlueLinesBrightnessModifier = Mathf.Lerp(Player.PlayerIronSteel.BlueLinesBrightnessModifier, 1, blueLinesBrightnessLerp * Time.deltaTime);
+                Prima.PrimaInstance.ActorIronSteel.BlueLinesBrightnessModifier = Mathf.Lerp(Prima.PrimaInstance.ActorIronSteel.BlueLinesBrightnessModifier, 1, blueLinesBrightnessLerp * Time.deltaTime);
 
                 if ((Keybinds.ZincTimeDown() || Keybinds.ControlWheelDown()) && Reserve > 0 && Player.CanControl && Player.CanControlZinc) {
                     // Enter zinc time

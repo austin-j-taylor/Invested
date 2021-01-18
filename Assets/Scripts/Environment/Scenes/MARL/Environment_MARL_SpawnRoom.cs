@@ -14,9 +14,9 @@ public class Environment_MARL_SpawnRoom : Environment {
         Player.CanControl = false;
         Player.CanControlMovement = false;
         Player.CanControlZinc = false;
-        Player.PlayerInstance.CoinHand.Pouch.Clear();
-        Player.PlayerIronSteel.SteelReserve.IsEnabled = false;
-        Player.PlayerPewter.PewterReserve.IsEnabled = false;
+        Prima.PrimaInstance.CoinHand.Pouch.Clear();
+        Prima.PrimaInstance.ActorIronSteel.SteelReserve.IsEnabled = false;
+        Prima.PlayerPewter.PewterReserve.IsEnabled = false;
         StartCoroutine(Procedure());
     }
 
@@ -44,7 +44,7 @@ public class Environment_MARL_SpawnRoom : Environment {
 
         Player.CanControl = true;
 
-        while (!Player.PlayerIronSteel.IsBurning)
+        while (!Prima.PrimaInstance.ActorIronSteel.IsBurning)
             yield return null;
 
 
@@ -52,7 +52,7 @@ public class Environment_MARL_SpawnRoom : Environment {
         yield return new WaitForSeconds(3);
         HUD.MessageOverlayCinematic.Next(); // pull
 
-        while (!Player.PlayerIronSteel.IronPulling)
+        while (!Prima.PrimaInstance.ActorIronSteel.IronPulling)
             yield return null;
 
         HUD.MessageOverlayCinematic.FadeOut();

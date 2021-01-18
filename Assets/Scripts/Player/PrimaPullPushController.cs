@@ -736,7 +736,7 @@ public class PrimaPullPushController : AllomanticIronSteel {
 
         foreach (Magnetic target in GameManager.MagneticsInScene) {
 
-            if (target.isActiveAndEnabled && target != Player.PlayerMagnetic) {
+            if (target.isActiveAndEnabled && target != Prima.PlayerMagnetic) {
                 // skip this target completely if it is too far away
                 if ((target.CenterOfMass - transform.position).sqrMagnitude > distanceThresholdSqr) {
                     target.DisableBlueLine();

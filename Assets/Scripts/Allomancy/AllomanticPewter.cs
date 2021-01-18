@@ -131,8 +131,7 @@ public class AllomanticPewter : Allomancer {
      * 
      * Causes the shield to light up.
      */
-    private IEnumerator Burst(Vector3 sourceLocationLocal, double totalMass, float maxTime) {
-        Player.PrimaAudioController.Play_pewter_burst();
+    protected virtual IEnumerator Burst(Vector3 sourceLocationLocal, double totalMass, float maxTime) {
 
         // Light up the shield:
         // get closest point on mesh where that happens (for now, assume it's a sphere w/ radius .5)

@@ -30,9 +30,9 @@ public class ReloadStation : MonoBehaviour {
     private void OnTriggerStay(Collider other) {
         if (other.CompareTag("Player") && !other.isTrigger) {
             if (
-                    (!fillIron || Player.PlayerIronSteel.IronReserve.IsFullFuzzy) &&
-                    (!fillSteel || Player.PlayerIronSteel.SteelReserve.IsFullFuzzy) &&
-                    (!fillPewter || Player.PlayerPewter.PewterReserve.IsFullFuzzy)
+                    (!fillIron || Prima.PrimaInstance.ActorIronSteel.IronReserve.IsFullFuzzy) &&
+                    (!fillSteel || Prima.PrimaInstance.ActorIronSteel.SteelReserve.IsFullFuzzy) &&
+                    (!fillPewter || Prima.PlayerPewter.PewterReserve.IsFullFuzzy)
             ) {
                 if (anim) anim.SetBool("activated", false);
             } else {
@@ -40,11 +40,11 @@ public class ReloadStation : MonoBehaviour {
             }
 
             if (fillIron)
-                Player.PlayerIronSteel.IronReserve.Fill(refillAmount * Time.deltaTime, capacity);
+                Prima.PrimaInstance.ActorIronSteel.IronReserve.Fill(refillAmount * Time.deltaTime, capacity);
             if(fillSteel)
-                Player.PlayerIronSteel.SteelReserve.Fill(refillAmount * Time.deltaTime, capacity);
+                Prima.PrimaInstance.ActorIronSteel.SteelReserve.Fill(refillAmount * Time.deltaTime, capacity);
             if (fillPewter)
-                Player.PlayerPewter.PewterReserve.Fill(refillAmount * Time.deltaTime, capacity);
+                Prima.PlayerPewter.PewterReserve.Fill(refillAmount * Time.deltaTime, capacity);
         }
     }
 
