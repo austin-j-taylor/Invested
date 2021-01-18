@@ -27,6 +27,9 @@ public class KogAnimation : MonoBehaviour {
             case State.Meditating:
                 anim.Play("Armature|Meditating");
                 break;
+            case State.Idle:
+                anim.Play("Armature|T-Pose");
+                break;
         }
     }
 

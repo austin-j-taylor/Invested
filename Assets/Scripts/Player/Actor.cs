@@ -9,17 +9,18 @@ public class Actor : MonoBehaviour {
     public enum ActorType { Prima, Kog };
 
     // Assigned in child's Awake()
-    protected ActorType type;
+    public ActorType Type { get; protected set; }
     public float RespawnHeightOffset { get; protected set; }
+    public float CameraScale { get; protected set; }
+    public float CameraOffsetThirdPerson { get; protected set; }
+    public float CameraOffsetFirstPerson { get; protected set; }
 
     public PrimaPullPushController ActorIronSteel { get; private set; }
     public VoiceBeeper ActorVoiceBeeper { get; set; }
 
-
     protected virtual void Awake() {
         ActorIronSteel = GetComponentInChildren<PrimaPullPushController>();
         ActorVoiceBeeper = GetComponentInChildren<VoiceBeeper>();
-
 
         SceneManager.sceneLoaded += ClearActorAfterSceneChange;
     }

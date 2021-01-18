@@ -38,8 +38,11 @@ public class Prima : Actor {
 
     protected override void Awake() {
         PrimaInstance = this;
-        type = ActorType.Prima;
+        Type = ActorType.Prima;
         RespawnHeightOffset = 0;
+        CameraScale = 1;
+        CameraOffsetThirdPerson = 0;
+        CameraOffsetFirstPerson = 0;
 
         base.Awake();
 
@@ -60,6 +63,7 @@ public class Prima : Actor {
         PlayerGlower = GetComponentInChildren<AllomechanicalGlower>();
         CoinThrowingMode = CoinMode.Semi;
         CoinHand = GetComponentInChildren<Hand>();
+
         SceneManager.sceneLoaded += ClearPrimaAfterSceneChange;
         SceneManager.sceneUnloaded += ClearPrimaBeforeSceneChange;
     }

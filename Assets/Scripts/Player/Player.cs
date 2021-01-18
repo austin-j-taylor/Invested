@@ -57,7 +57,6 @@ public class Player : MonoBehaviour {
     public static float VoidHeight { get; set; }
     #endregion
 
-
     void Awake() {
         PlayerInstance = this;
         PlayerZinc = GetComponent<FeruchemicalZinc>();
@@ -65,6 +64,10 @@ public class Player : MonoBehaviour {
 
         SceneManager.sceneLoaded += ClearPlayerAfterSceneChange;
         SceneManager.sceneUnloaded += ClearPlayerBeforeSceneChange;
+    }
+
+    private void Start() {
+        SetActor(Kog.KogInstance);
     }
 
     #region updates
@@ -155,13 +158,31 @@ public class Player : MonoBehaviour {
         CanControlMovement = false;
         CanPause = false;
         yield return new WaitForSecondsRealtime(respawnTime);
-        CurrentActor.transform.position = RespawnPoint.position;
+        CurrentActor.transform.position = RespawnPoint.position + new Vector3(0, CurrentActor.RespawnHeightOffset, 0);
         CurrentActor.RespawnClear();
         CameraController.Clear();
         CameraController.SetRotation(RespawnPoint.eulerAngles);
         CanControlMovement = true;
         CanPause = true;
         playerState = PlayerState.Normal;
+    }
+
+    /// <summary>
+    /// Changes the actor to the new one.
+    /// </summary>
+    /// <param name="actor">The new actor</param>
+    public void SetActor(Actor actor) {
+        switch(actor.Type) {
+            case Actor.ActorType.Prima:
+                Prima.PrimaInstance.gameObject.SetActive(true);
+                Kog.KogInstance.gameObject.SetActive(false);
+                break;
+            case Actor.ActorType.Kog:
+                Kog.KogInstance.gameObject.SetActive(true);
+                Prima.PrimaInstance.gameObject.SetActive(false);
+                break;
+        }
+        CurrentActor = actor;
     }
     #endregion
 

@@ -57,7 +57,6 @@ public class CameraController : MonoBehaviour {
     void Awake() {
         instance = this;
         playerCameraController = transform;
-        playerBody = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
         CameraLookAtTarget = transform.Find("CameraLookAtTarget");
         CameraPositionTarget = CameraLookAtTarget.Find("CameraPositionTarget");
         ActiveCamera = CameraPositionTarget.Find("Camera").GetComponent<Camera>();
@@ -133,6 +132,8 @@ public class CameraController : MonoBehaviour {
 
     // Set camera position and rotation to follow the player for this frame.
     public static void UpdateCamera() {
+        playerBody = Player.CurrentActor.transform;
+
         CameraLookAtTarget.rotation = Quaternion.Euler(0, currentX, 0);
         if (GameManager.CameraState == GameManager.GameCameraState.Standard)
             CinemachineThirdPersonCamera.transform.localPosition = Vector3.zero;
@@ -153,17 +154,17 @@ public class CameraController : MonoBehaviour {
         //}
 
         if (IsFirstPerson) {
-            playerCameraController.position = playerBody.position + cameraControllerOffsetFirstPerson;
+            playerCameraController.position = playerBody.position + cameraControllerOffsetFirstPerson + new Vector3(0, Player.CurrentActor.CameraOffsetFirstPerson, 0);
             Vector3 wantedPosition = playerCameraController.position;
 
             CameraPositionTarget.transform.position = wantedPosition;
         } else {
-            playerCameraController.position = playerBody.position + cameraControllerOffsetThirdPerson;
+            playerCameraController.position = playerBody.position + cameraControllerOffsetThirdPerson + new Vector3(0, Player.CurrentActor.CameraOffsetThirdPerson, 0);
 
             // If the player is moving quickly, the camera stretches outwards.
             float cameraDistance = -SettingsMenu.settingsGameplay.cameraDistance;
             if (SettingsMenu.settingsGraphics.velocityZoom == 1) {
-                cameraDistance = (2 - Mathf.Exp(Prima.PrimaInstance.ActorIronSteel.rb.velocity.sqrMagnitude / stretchingVelocityFactor)) * cameraDistance;
+                cameraDistance = (2 - Mathf.Exp(Prima.PrimaInstance.ActorIronSteel.rb.velocity.sqrMagnitude / stretchingVelocityFactor)) * cameraDistance * Player.CurrentActor.CameraScale;
                 if (lastCameraDistance != 0)
                     cameraDistance = Mathf.Lerp(lastCameraDistance, cameraDistance, Time.deltaTime * cameraStretchingLerpFactor);
             }

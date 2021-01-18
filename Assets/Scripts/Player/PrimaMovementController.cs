@@ -8,7 +8,7 @@ using UnityEngine;
 public class PrimaMovementController : AllomanticPewter {
 
     #region constants
-    private const float shortHopThreshold = .075f;
+    public const float shortHopThreshold = .075f;
     public const float radius = .26f; // radius of the player sphere collider
     // Rolling
     public const float rollingAcceleration = 5f;
@@ -248,7 +248,7 @@ public class PrimaMovementController : AllomanticPewter {
             lastDeltaW = 0;
         }
 
-        // There's an option in the settings to invert gravity. Aplpy that here.
+        // There's an option in the settings to invert gravity. Apply that here.
         if (invertGravity) {
             rb.AddForce(-Physics.gravity, ForceMode.Acceleration);
         }
