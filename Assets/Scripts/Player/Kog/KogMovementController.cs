@@ -13,34 +13,33 @@ public class KogMovementController : MonoBehaviour {
     private float topSpeedSprinting = 12.5f;
     [SerializeField]
     private float topSpeedAnchored = 1.5f;
-    [SerializeField]
-    private float acceleration = 2.5f;
-    [SerializeField]
-    private float accelerationSprinting = 5f;
+    //[SerializeField]
+    //private float acceleration = 2.5f;
+    //[SerializeField]
+    //private float accelerationSprinting = 5f;
 
-    [SerializeField]
-    private float rotationalTopSpeed = 5;
-    [SerializeField]
-    private float rotationalAcceleration = 2.5f;
+    //[SerializeField]
+    //private float rotationalTopSpeed = 5;
+    //[SerializeField]
+    //private float rotationalAcceleration = 2.5f;
 
     [SerializeField]
     private float jumpHeight = 900;
 
     [SerializeField]
-    private float speed_P = 10, speed_mD = 50;
+    private float speed_P = 10, speed_mD = 50, orientation_P = 10;
     #endregion
 
     #region properties
     private WalkingState state;
-    public bool IsGrounded {
-        get => groundedChecker.IsGrounded;
-    }
+    public bool IsGrounded => Kog.KogInstance.KogAnimationController.IsGrounded;
     #endregion
 
-    private PrimaGroundedChecker groundedChecker;
     private Rigidbody rb;
     private Vector3 lastInput; // The last horizontal/vertical movement command sent to the player
     private PIDController_Vector3 pidSpeed;
+    private PIDController_float pidOrientation;
+    private Vector3 lastMoveDirection;
     private bool jumpQueued;
     private float lastJumpTime;
 
@@ -49,7 +48,8 @@ public class KogMovementController : MonoBehaviour {
         rb = GetComponent<Rigidbody>();
         pidSpeed = gameObject.AddComponent<PIDController_Vector3>();
         pidSpeed.SetParams(speed_P, 0, 0, speed_mD);
-        groundedChecker = transform.GetComponentInChildren<PrimaGroundedChecker>();
+        pidOrientation = gameObject.AddComponent<PIDController_float>();
+        pidOrientation.SetParams(orientation_P, 0, 0);
     }
 
     private void Start() {
@@ -59,6 +59,7 @@ public class KogMovementController : MonoBehaviour {
     public void Clear() {
         state = WalkingState.Idle;
         lastInput = Vector3.zero;
+        lastMoveDirection = transform.forward;
         jumpQueued = false;
         lastJumpTime = -1;
     }
@@ -87,16 +88,14 @@ public class KogMovementController : MonoBehaviour {
                     jumpQueued = false;
                     lastJumpTime = Time.unscaledTime;
 
-                    groundedChecker.UpdateStanding();
-                    Rigidbody targetRb = groundedChecker.StandingOnCollider.attachedRigidbody;
+                    Rigidbody targetRb = Kog.KogInstance.KogAnimationController.StandingOnRigidbody;
 
-                    Vector3 jumpForce = groundedChecker.Normal * jumpHeight;
+                    Vector3 jumpForce = Vector3.up * jumpHeight;
 
                     rb.AddForce(jumpForce, ForceMode.Impulse);
-                    Debug.Log(jumpForce);
                     // Apply force and torque to target
                     if (targetRb) {
-                        Vector3 radius = groundedChecker.Point - targetRb.worldCenterOfMass;
+                        Vector3 radius = Kog.KogInstance.KogAnimationController.StandingOnPoint - targetRb.worldCenterOfMass;
 
                         targetRb.AddForce(-jumpForce, ForceMode.Impulse);
                         targetRb.AddTorque(Vector3.Cross(radius, -jumpForce));
@@ -108,7 +107,7 @@ public class KogMovementController : MonoBehaviour {
               // Effectively, if you release the jump button within a short window of jumping,
               //  apply a small negative impulse to reduce the jump height.
             if (!Keybinds.Jump() && Time.unscaledTime - lastJumpTime < PrimaMovementController.shortHopThreshold) {
-                rb.AddForce(-groundedChecker.Normal * jumpHeight / 2, ForceMode.Impulse);
+                rb.AddForce(-Kog.KogInstance.KogAnimationController.StandingOnNormal * jumpHeight / 2, ForceMode.Impulse);
                 lastJumpTime = -1;
             }
 
@@ -185,7 +184,11 @@ public class KogMovementController : MonoBehaviour {
                     break;
             }
 
+            if(wantToMove)
+                lastMoveDirection = movement;
+
             pidSpeed.SetParams(speed_P, 0, 0, speed_mD);
+            pidOrientation.SetParams(orientation_P, 0, 0);
 
             Vector3 target = Vector3.zero;
             // Actions
@@ -208,6 +211,22 @@ public class KogMovementController : MonoBehaviour {
             feedback.y = 0;
             Vector3 output = pidSpeed.Step(feedback, target);
             rb.AddForce(output, ForceMode.Acceleration);
+
+            Kog.KogInstance.KogAnimationController.SetLegTarget(target);
+
+            if (!wantToMove) {
+                movement = lastMoveDirection;
+            }
+            float feedback_O = Mathf.Acos(Vector3.Dot(transform.forward, movement.normalized));
+            Vector3 cross = Vector3.Cross(transform.forward, movement.normalized);
+            feedback_O *= -Mathf.Sign(Vector3.Dot(Vector3.up, cross));
+            if (float.IsNaN(feedback_O))
+                feedback_O = 0;
+            float target_O = 0;
+            float output_O = pidOrientation.Step(feedback_O, target_O);
+            //Debug.Log(" movement: " + movement.normalized + " feedback: " + feedback_O + " error: " + (feedback_O - target_O) + " output: " + output_O);
+            rb.AddTorque(Vector3.up * output_O, ForceMode.Acceleration);
+            transform.localEulerAngles = new Vector3(0, transform.localEulerAngles.y, 0);
         }
     }
     #endregion

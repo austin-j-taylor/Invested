@@ -13,7 +13,7 @@ public class Kog : Actor {
     // State machine for Kog
     public enum State { Idle, Resting, Reaching, Throwing, Meditating };
 
-    private KogAnimation kogAnimation;
+    public KogAnimation KogAnimationController { get; private set; }
 
     public KogMovementController MovementController { get; private set; }
 
@@ -21,13 +21,13 @@ public class Kog : Actor {
         KogInstance = this;
         Type = ActorType.Kog;
         RespawnHeightOffset = -0.26f;
-        CameraScale = 3;
-        CameraOffsetThirdPerson = 4.5f;
-        CameraOffsetFirstPerson = 4;
+        CameraScale = 2f;
+        CameraOffsetThirdPerson = 2.5f;
+        CameraOffsetFirstPerson = 3.5f;
 
         base.Awake();
 
-        kogAnimation = GetComponentInChildren<KogAnimation>();
+        KogAnimationController = GetComponentInChildren<KogAnimation>();
         MovementController = GetComponent<KogMovementController>();
 
         gameObject.SetActive(false);
@@ -38,7 +38,7 @@ public class Kog : Actor {
 
     public void ClearKogBeforeSceneChange(Scene scene) {
         MovementController.Clear();
-        kogAnimation.Clear();
+        KogAnimationController.Clear();
     }
 
     /// <summary>

@@ -7,19 +7,29 @@ public class KogAnimation : MonoBehaviour {
 
     #region constants
     private const float zeroThresholdSqr = 0.05f * 0.05f;
-    private const float distanceForRaycast = 4;
+    private const float defaultRaycastDistance = 2;
     private const float radiusForRaycast = 0.125f;
-    public float distanceBetweenSteps = .25f;
+    public float defaultDistanceBetweenSteps = .25f;
     public float stepTime = 1f;
     public float stepHeight = .5f;
+    public float legForwardsFactor = 10;
     #endregion
 
-    [SerializeField]
-    private Transform target = null;
-    [SerializeField]
-    private Transform hand = null;
-    [SerializeField]
-    private Transform pole = null;
+    private enum GroundedState { Grounded, Airborne }
+
+    public bool IsGrounded => leftLeg.groundedState == GroundedState.Grounded || rightLeg.groundedState == GroundedState.Grounded;
+    public Rigidbody StandingOnRigidbody => leftLeg.standingOnRigidbody != null ? leftLeg.standingOnRigidbody : rightLeg.standingOnRigidbody;
+    public Vector3 StandingOnPoint => leftLeg.standingOnRigidbody != null ? leftLeg.standingOnPoint : rightLeg.standingOnPoint;
+    public Vector3 StandingOnNormal => leftLeg.standingOnRigidbody != null ? leftLeg.standingOnNormal : rightLeg.standingOnNormal;
+
+    private float distanceBetweenSteps = .25f;
+
+    //[SerializeField]
+    //private Transform target = null;
+    //[SerializeField]
+    //private Transform hand = null;
+    //[SerializeField]
+    //private Transform pole = null;
 
     private Animator anim;
     [SerializeField]
@@ -29,7 +39,6 @@ public class KogAnimation : MonoBehaviour {
 
     void Start() {
         anim = GetComponentInChildren<Animator>();
-        target = Player.PlayerInstance.transform;
 
         leftLeg.Initialize(this, rightLeg);
         rightLeg.Initialize(this, leftLeg);
@@ -47,19 +56,37 @@ public class KogAnimation : MonoBehaviour {
         rightLeg.LegUpdate();
     }
 
+    public void SetLegTarget(Vector3 movement) {
+        movement = (Vector3.down + movement / legForwardsFactor) * defaultRaycastDistance;
+        float length = movement.magnitude;
+        movement.Normalize();
+        leftLeg.raycastDirection = movement;
+        rightLeg.raycastDirection = movement;
+        leftLeg.raycastDistance = length;
+        rightLeg.raycastDistance = length;
+
+        distanceBetweenSteps = defaultDistanceBetweenSteps * length;
+    }
+
     [System.Serializable]
     private class Leg {
 
-        private enum WalkingState { Idle, Stepping }
+        public enum WalkingState { Idle, Stepping }
 
-        private WalkingState state = WalkingState.Idle;
+        public WalkingState state = WalkingState.Idle;
+        public GroundedState groundedState = GroundedState.Grounded;
+        public Rigidbody standingOnRigidbody = null;
+        public Vector3 standingOnPoint = Vector3.zero;
+        public Vector3 standingOnNormal = Vector3.zero;
+        public Vector3 raycastDirection = Vector3.zero;
+        public float raycastDistance = defaultRaycastDistance;
 
         [SerializeField]
-        public Transform foot;
+        public Transform foot = null;
         [SerializeField]
-        public Transform footTarget;
+        public Transform footTarget = null;
         [SerializeField]
-        public Transform footRaycastSource;
+        public Transform footRaycastSource = null;
 
         public KogAnimation parent;
         private Leg otherLeg;
@@ -67,8 +94,8 @@ public class KogAnimation : MonoBehaviour {
         private Quaternion footAnchorRotation, footLastAnchorRotation = Quaternion.identity, footNextAnchorRotation = Quaternion.identity;
         private Vector3 footRestRotation;
 
-        public float currentDistance = 0;
-        public float tInStep = 0;
+        private float currentDistance = 0;
+        private float tInStep = 0;
 
         public void Initialize(KogAnimation parent, Leg otherLeg) {
             this.parent = parent;
@@ -89,9 +116,12 @@ public class KogAnimation : MonoBehaviour {
 
             switch (state) {
                 case WalkingState.Idle:
-                    // Left foot
-                    if (Physics.SphereCast(footRaycastSource.position, radiusForRaycast, Vector3.down, out RaycastHit hit, distanceForRaycast, GameManager.Layer_IgnorePlayer)) {
-                        Debug.DrawLine(footRaycastSource.position, hit.point, Color.red);
+                    if (Physics.SphereCast(footRaycastSource.position, radiusForRaycast, raycastDirection, out RaycastHit hit, raycastDistance, GameManager.Layer_IgnorePlayer)) {
+                        groundedState = GroundedState.Grounded;
+                        standingOnRigidbody = hit.rigidbody;
+                        standingOnPoint = hit.point;
+                        standingOnNormal = hit.normal;
+                        Debug.DrawLine(footRaycastSource.position, footRaycastSource.position + raycastDirection, Color.red);
 
                         currentDistance = (foot.transform.position - hit.point).magnitude;
                         if (currentDistance > parent.distanceBetweenSteps && otherLeg.state == WalkingState.Idle) {
@@ -101,18 +131,26 @@ public class KogAnimation : MonoBehaviour {
                             state = WalkingState.Stepping;
                             tInStep = 0;
                         }
+                    } else {
+                        groundedState = GroundedState.Airborne;
+                        standingOnRigidbody = null;
                     }
                     break;
                 case WalkingState.Stepping:
                     // Get new leg anchor target
-                    if (Physics.SphereCast(footRaycastSource.position, radiusForRaycast, Vector3.down, out hit, distanceForRaycast, GameManager.Layer_IgnorePlayer)) {
-                        Debug.DrawLine(footRaycastSource.position, hit.point, Color.red);
+                    if (Physics.SphereCast(footRaycastSource.position, radiusForRaycast, raycastDirection, out hit, raycastDistance, GameManager.Layer_IgnorePlayer)) {
+                        groundedState = GroundedState.Grounded;
+                        standingOnRigidbody = hit.rigidbody;
+                        standingOnPoint = hit.point;
+                        standingOnNormal = hit.normal;
+                        Debug.DrawLine(footRaycastSource.position, footRaycastSource.position + raycastDirection, Color.yellow);
 
                         footNextAnchor = hit.point;
                         footNextAnchorRotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * parent.transform.rotation * Quaternion.Euler(footRestRotation);
-                        //footNextAnchorRotation = parent.transform.rotation * Quaternion.Euler(footNextNormal);
-                        //footNextAnchorRotation = Quaternion.LookRotation(footNextNormal);
                         currentDistance = (foot.transform.position - hit.point).magnitude;
+                    } else {
+                        groundedState = GroundedState.Airborne;
+                        standingOnRigidbody = null;
                     }
 
                     // Set leg position along parabola between anchors
