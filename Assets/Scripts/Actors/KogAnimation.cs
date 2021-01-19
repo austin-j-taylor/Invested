@@ -8,6 +8,7 @@ public class KogAnimation : MonoBehaviour {
     #region constants
     private const float zeroThresholdSqr = 0.05f * 0.05f;
     private const float distanceForRaycast = 4;
+    private const float radiusForRaycast = 0.125f;
     public float distanceBetweenSteps = .25f;
     public float stepTime = 1f;
     public float stepHeight = .5f;
@@ -89,16 +90,14 @@ public class KogAnimation : MonoBehaviour {
             switch (state) {
                 case WalkingState.Idle:
                     // Left foot
-                    if (Physics.Raycast(footRaycastSource.position, Vector3.down, out RaycastHit hit, distanceForRaycast, GameManager.Layer_IgnorePlayer)) {
+                    if (Physics.SphereCast(footRaycastSource.position, radiusForRaycast, Vector3.down, out RaycastHit hit, distanceForRaycast, GameManager.Layer_IgnorePlayer)) {
                         Debug.DrawLine(footRaycastSource.position, hit.point, Color.red);
 
                         currentDistance = (foot.transform.position - hit.point).magnitude;
                         if (currentDistance > parent.distanceBetweenSteps && otherLeg.state == WalkingState.Idle) {
                             // Take a step
                             footLastAnchor = footTarget.position;
-                            footNextAnchor = hit.point;
                             footLastAnchorRotation = footTarget.rotation;
-                            footNextAnchorRotation = parent.transform.rotation * Quaternion.Euler(footRestRotation);
                             state = WalkingState.Stepping;
                             tInStep = 0;
                         }
@@ -106,11 +105,13 @@ public class KogAnimation : MonoBehaviour {
                     break;
                 case WalkingState.Stepping:
                     // Get new leg anchor target
-                    if (Physics.Raycast(footRaycastSource.position, Vector3.down, out hit, distanceForRaycast, GameManager.Layer_IgnorePlayer)) {
+                    if (Physics.SphereCast(footRaycastSource.position, radiusForRaycast, Vector3.down, out hit, distanceForRaycast, GameManager.Layer_IgnorePlayer)) {
                         Debug.DrawLine(footRaycastSource.position, hit.point, Color.red);
 
                         footNextAnchor = hit.point;
-                        footNextAnchorRotation = parent.transform.rotation * Quaternion.Euler(footRestRotation);
+                        footNextAnchorRotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * parent.transform.rotation * Quaternion.Euler(footRestRotation);
+                        //footNextAnchorRotation = parent.transform.rotation * Quaternion.Euler(footNextNormal);
+                        //footNextAnchorRotation = Quaternion.LookRotation(footNextNormal);
                         currentDistance = (foot.transform.position - hit.point).magnitude;
                     }
 
@@ -131,7 +132,7 @@ public class KogAnimation : MonoBehaviour {
                         Vector3 pos = footLastAnchor + tInStep * (footNextAnchor - footLastAnchor);
                         pos.y += y;
                         footAnchor = pos;
-                        footAnchorRotation = Quaternion.Lerp(footLastAnchorRotation, footNextAnchorRotation, tInStep);
+                        footAnchorRotation = Quaternion.Slerp(footLastAnchorRotation, footNextAnchorRotation, tInStep);
                     }
                     break;
             }
