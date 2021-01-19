@@ -13,6 +13,7 @@ public class KogAnimation : MonoBehaviour {
     public float stepTime = 1f;
     public float stepHeight = .5f;
     public float legForwardsFactor = 10;
+    public float stepMovementLerpFactor = 10;
     #endregion
 
     private enum GroundedState { Grounded, Airborne }
@@ -87,6 +88,8 @@ public class KogAnimation : MonoBehaviour {
         public Transform footTarget = null;
         [SerializeField]
         public Transform footRaycastSource = null;
+        [SerializeField]
+        public Transform debugBall_HitPoint = null, debugBall_currentAnchor = null;
 
         public KogAnimation parent;
         private Leg otherLeg;
@@ -121,19 +124,26 @@ public class KogAnimation : MonoBehaviour {
                         standingOnRigidbody = hit.rigidbody;
                         standingOnPoint = hit.point;
                         standingOnNormal = hit.normal;
-                        Debug.DrawLine(footRaycastSource.position, footRaycastSource.position + raycastDirection, Color.red);
+                        Debug.DrawLine(footRaycastSource.position, footRaycastSource.position + raycastDirection * raycastDistance, Color.red);
+                        debugBall_HitPoint.gameObject.SetActive(true);
+                        debugBall_currentAnchor.gameObject.SetActive(true);
+                        debugBall_HitPoint.position = hit.point;
+                        debugBall_currentAnchor.position = hit.point;
 
                         currentDistance = (foot.transform.position - hit.point).magnitude;
                         if (currentDistance > parent.distanceBetweenSteps && otherLeg.state == WalkingState.Idle) {
                             // Take a step
                             footLastAnchor = footTarget.position;
                             footLastAnchorRotation = footTarget.rotation;
+                            footNextAnchor = hit.point;
                             state = WalkingState.Stepping;
                             tInStep = 0;
                         }
                     } else {
                         groundedState = GroundedState.Airborne;
                         standingOnRigidbody = null;
+                        debugBall_HitPoint.gameObject.SetActive(false);
+                        debugBall_currentAnchor.gameObject.SetActive(false);
                     }
                     break;
                 case WalkingState.Stepping:
@@ -143,14 +153,26 @@ public class KogAnimation : MonoBehaviour {
                         standingOnRigidbody = hit.rigidbody;
                         standingOnPoint = hit.point;
                         standingOnNormal = hit.normal;
-                        Debug.DrawLine(footRaycastSource.position, footRaycastSource.position + raycastDirection, Color.yellow);
 
-                        footNextAnchor = hit.point;
-                        footNextAnchorRotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * parent.transform.rotation * Quaternion.Euler(footRestRotation);
+                        //footNextAnchor = hit.point;
+                        footNextAnchor = Vector3.Lerp(footNextAnchor, hit.point, Time.deltaTime * parent.stepMovementLerpFactor);
+                        Quaternion targetRotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * parent.transform.rotation * Quaternion.Euler(footRestRotation);
+                        footNextAnchorRotation = Quaternion.Slerp(footNextAnchorRotation, targetRotation, Time.deltaTime * parent.stepMovementLerpFactor);
                         currentDistance = (foot.transform.position - hit.point).magnitude;
+
+                        // Debug
+                        Debug.DrawLine(footRaycastSource.position, footRaycastSource.position + raycastDirection * raycastDistance, Color.yellow);
+                        debugBall_HitPoint.gameObject.SetActive(true);
+                        debugBall_currentAnchor.gameObject.SetActive(true);
+                        debugBall_HitPoint.position = hit.point;
+                        debugBall_HitPoint.rotation = targetRotation;
+                        debugBall_currentAnchor.position = footNextAnchor;
+                        debugBall_currentAnchor.rotation = footNextAnchorRotation;
                     } else {
                         groundedState = GroundedState.Airborne;
                         standingOnRigidbody = null;
+                        debugBall_HitPoint.gameObject.SetActive(false);
+                        debugBall_currentAnchor.gameObject.SetActive(false);
                     }
 
                     // Set leg position along parabola between anchors

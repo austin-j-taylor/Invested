@@ -47,6 +47,7 @@
   <PropertyGroup>
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <UnityProjectGenerator>Package</UnityProjectGenerator>
+    <UnityProjectGeneratorVersion>2.0.5</UnityProjectGeneratorVersion>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>2020.1.2f1</UnityVersion>
@@ -77,6 +78,7 @@
     <Compile Include="Assets\Imports\SebLague-Clouds\Scripts\Clouds\CloudNoise.cs" />
     <Compile Include="Assets\Imports\PostProcessing\Runtime\COMPONENTS\BuiltinDebugViewsComponent.cs" />
     <Compile Include="Assets\Scripts\Settings\JSON\JSONSettings_World.cs" />
+    <Compile Include="Assets\Scripts\Player\Actor.cs" />
     <Compile Include="Assets\Scripts\Settings\JSON\JSONSettings_Video.cs" />
     <Compile Include="Assets\Scripts\Global\ConversationManager.cs" />
     <Compile Include="Assets\Scripts\Simulations\Simulation_coinGround.cs" />
@@ -103,6 +105,7 @@
     <Compile Include="Assets\Scripts\Environment\Challenges\Challenge_BreakTargets.cs" />
     <Compile Include="Assets\Scripts\Allomancy\NonPlayerPushPullController.cs" />
     <Compile Include="Assets\Scripts\Environment\Circuits\TargetRing.cs" />
+    <Compile Include="Assets\Scripts\UI\SplashScreen.cs" />
     <Compile Include="Assets\Imports\PostProcessing\Runtime\Attributes\TrackballAttribute.cs" />
     <Compile Include="Assets\Imports\PostProcessing\Runtime\PostProcessingModel.cs" />
     <Compile Include="Assets\Scripts\Environment\SpikeSpline.cs" />
@@ -133,6 +136,7 @@
     <Compile Include="Assets\Scripts\Player\Animation\CameraController.cs" />
     <Compile Include="Assets\Scripts\Environment\Circuits\FacilityDoor.cs" />
     <Compile Include="Assets\Scripts\Magnetics\Coin.cs" />
+    <Compile Include="Assets\Scripts\Player\Prima.cs" />
     <Compile Include="Assets\Scripts\UI\ConsoleController.cs" />
     <Compile Include="Assets\Scripts\Simulations\HUDSimulations.cs" />
     <Compile Include="Assets\Imports\PostProcessing\Runtime\PostProcessingContext.cs" />
@@ -151,6 +155,7 @@
     <Compile Include="Assets\Scripts\Environment\EnvironmentWithTriggers.cs" />
     <Compile Include="Assets\Scripts\Entities\VoiceBeeper.cs" />
     <Compile Include="Assets\Imports\SebLague-Clouds\Scripts\Test\Container Ray\RayStepVis.cs" />
+    <Compile Include="Assets\Scripts\Player\Kog\KogAudioController.cs" />
     <Compile Include="Assets\Scripts\Menu\TitleScreen.cs" />
     <Compile Include="Assets\Scripts\Environment\Challenges\TimeTrialRing.cs" />
     <Compile Include="Assets\Imports\SebLague-Clouds\Scripts\Test\PlaneAnimation.cs" />
@@ -309,11 +314,7 @@
     <Compile Include="Assets\Imports\SebLague-Clouds\Scripts\Clouds\Noise\WorleyNoiseSettings.cs" />
     <Compile Include="Assets\Scripts\Environment\SpikeSplineFollower.cs" />
     <Compile Include="Assets\Imports\SebLague-Clouds\Scripts\Test\Simplex\SimplexMaster.cs" />
-    <Compile Include="Assets\Scripts\UI\SplashScreen.cs" />
-    <Compile Include="Assets\Scripts\Player\Prima.cs" />
-    <Compile Include="Assets\Scripts\Player\Actor.cs" />
     <Compile Include="Assets\Scripts\Player\Kog\KogMovementController.cs" />
-    <Compile Include="Assets\Scripts\Player\Kog\KogAudioController.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
@@ -975,9 +976,6 @@
     <Reference Include="Unity.Burst">
       <HintPath>Library\ScriptAssemblies\Unity.Burst.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.VSCode.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.VSCode.Editor.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.ProBuilder">
       <HintPath>Library\ScriptAssemblies\Unity.ProBuilder.dll</HintPath>
     </Reference>
@@ -1002,29 +1000,17 @@
     <Reference Include="Unity.Timeline">
       <HintPath>Library\ScriptAssemblies\Unity.Timeline.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.XR.LegacyInputHelpers">
-      <HintPath>Library\ScriptAssemblies\UnityEngine.XR.LegacyInputHelpers.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Mathematics">
       <HintPath>Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
     </Reference>
     <Reference Include="Unity.2D.Sprite.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.2D.Tilemap.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.2D.Tilemap.Editor.dll</HintPath>
-    </Reference>
     <Reference Include="Unity.Animation.Rigging.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.Animation.Rigging.Editor.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEditor.SpatialTracking">
-      <HintPath>Library\ScriptAssemblies\UnityEditor.SpatialTracking.dll</HintPath>
-    </Reference>
     <Reference Include="com.unity.cinemachine.editor">
       <HintPath>Library\ScriptAssemblies\com.unity.cinemachine.editor.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.SpatialTracking">
-      <HintPath>Library\ScriptAssemblies\UnityEngine.SpatialTracking.dll</HintPath>
     </Reference>
     <Reference Include="Unity.VisualStudio.Editor">
       <HintPath>Library\ScriptAssemblies\Unity.VisualStudio.Editor.dll</HintPath>
@@ -1037,9 +1023,6 @@
     </Reference>
     <Reference Include="Unity.TextMeshPro">
       <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEditor.XR.LegacyInputHelpers">
-      <HintPath>Library\ScriptAssemblies\UnityEditor.XR.LegacyInputHelpers.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.UI">
       <HintPath>Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
