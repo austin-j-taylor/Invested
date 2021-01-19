@@ -190,8 +190,9 @@ public class KogMovementController : MonoBehaviour {
             pidSpeed.SetParams(speed_P, 0, 0, speed_mD);
             pidOrientation.SetParams(orientation_P, 0, 0);
 
+            // PID control for speed 
             Vector3 target = Vector3.zero;
-            // Actions
+            // Scale target speed with sprinting, etc.
             switch (state) {
                 case WalkingState.Idle:
                     //target = Vector3.zero;
@@ -212,13 +213,15 @@ public class KogMovementController : MonoBehaviour {
             Vector3 output = pidSpeed.Step(feedback, target);
             rb.AddForce(output, ForceMode.Acceleration);
 
-            Kog.KogInstance.KogAnimationController.SetLegTarget(target);
+            Kog.KogInstance.KogAnimationController.SetLegTarget(target, feedback.magnitude);
 
+            // PID control for orientation
             if (!wantToMove) {
                 movement = lastMoveDirection;
             }
-            float feedback_O = Mathf.Acos(Vector3.Dot(transform.forward, movement.normalized));
-            Vector3 cross = Vector3.Cross(transform.forward, movement.normalized);
+            Vector3 normalizedMovement = movement.normalized;
+            float feedback_O = Mathf.Acos(Vector3.Dot(transform.forward, normalizedMovement));
+            Vector3 cross = Vector3.Cross(transform.forward, normalizedMovement);
             feedback_O *= -Mathf.Sign(Vector3.Dot(Vector3.up, cross));
             if (float.IsNaN(feedback_O))
                 feedback_O = 0;

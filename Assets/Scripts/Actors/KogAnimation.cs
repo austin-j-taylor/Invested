@@ -7,13 +7,16 @@ public class KogAnimation : MonoBehaviour {
 
     #region constants
     private const float zeroThresholdSqr = 0.05f * 0.05f;
-    private const float defaultRaycastDistance = 2;
     private const float radiusForRaycast = 0.125f;
+    public float crouchingMax = 0.035f;
+    public float crouchingLegSpreadMax = 0.25f;
+    public float defaultRaycastDistance = 2;
     public float defaultDistanceBetweenSteps = .25f;
-    public float stepTime = 1f;
+    public float stepTime = 0.4f;
     public float stepHeight = .5f;
     public float legForwardsFactor = 10;
     public float stepMovementLerpFactor = 10;
+    public float armHeight = 1.25f;
     #endregion
 
     private enum GroundedState { Grounded, Airborne }
@@ -33,18 +36,28 @@ public class KogAnimation : MonoBehaviour {
     //private Transform pole = null;
 
     private Animator anim;
+    [SerializeField, Range(0.0f, 1.0f)]
+    private float crouching = 0;
     [SerializeField]
     private Leg leftLeg = null;
     [SerializeField]
     private Leg rightLeg = null;
+    [SerializeField]
+    private Arm leftArm = null;
+    [SerializeField]
+    private Arm rightArm = null;
+    [SerializeField]
+    private Transform waist = null;
 
     void Start() {
         anim = GetComponentInChildren<Animator>();
 
         leftLeg.Initialize(this, rightLeg);
         rightLeg.Initialize(this, leftLeg);
+        leftArm.Initialize(this, leftLeg);
+        rightArm.Initialize(this, rightLeg);
 
-        anim.Play("Armature|I-Pose");
+        //anim.Play("Armature|I-Pose");
     }
 
     public void Clear() {
@@ -55,14 +68,19 @@ public class KogAnimation : MonoBehaviour {
     private void OnAnimatorMove() {
         leftLeg.LegUpdate();
         rightLeg.LegUpdate();
+        leftArm.ArmUpdate();
+        rightArm.ArmUpdate();
     }
 
-    public void SetLegTarget(Vector3 movement) {
-        movement = (Vector3.down + movement / legForwardsFactor) * defaultRaycastDistance;
-        float length = movement.magnitude;
-        movement.Normalize();
-        leftLeg.raycastDirection = movement;
-        rightLeg.raycastDirection = movement;
+    public void SetLegTarget(Vector3 movement, float currentSpeed) {
+        Vector3 crouchSpread = waist.right * crouchingLegSpreadMax * crouching;
+        Vector3 legForwardsMovement = Vector3.down + movement / legForwardsFactor;
+        Vector3 leftMove = (-crouchSpread + legForwardsMovement) * defaultRaycastDistance;
+        Vector3 rightMove = (crouchSpread + legForwardsMovement) * defaultRaycastDistance;
+
+        float length = leftMove.magnitude;
+        leftLeg.raycastDirection = leftMove.normalized;
+        rightLeg.raycastDirection = rightMove.normalized;
         leftLeg.raycastDistance = length;
         rightLeg.raycastDistance = length;
 
@@ -80,33 +98,38 @@ public class KogAnimation : MonoBehaviour {
         public Vector3 standingOnPoint = Vector3.zero;
         public Vector3 standingOnNormal = Vector3.zero;
         public Vector3 raycastDirection = Vector3.zero;
-        public float raycastDistance = defaultRaycastDistance;
+        public float raycastDistance;
 
         [SerializeField]
-        public Transform foot = null;
+        public Transform foot = null, thigh = null;
         [SerializeField]
         public Transform footTarget = null;
         [SerializeField]
         public Transform footRaycastSource = null;
         [SerializeField]
+        public Transform footCollider = null;
+        [SerializeField]
         public Transform debugBall_HitPoint = null, debugBall_currentAnchor = null;
 
-        public KogAnimation parent;
+        private KogAnimation parent;
         private Leg otherLeg;
         private Vector3 footAnchor = Vector3.zero, footLastAnchor = Vector3.zero, footNextAnchor = Vector3.zero;
         private Quaternion footAnchorRotation, footLastAnchorRotation = Quaternion.identity, footNextAnchorRotation = Quaternion.identity;
         private Vector3 footRestRotation;
+        private Vector3 footColliderPosition;
 
         private float currentDistance = 0;
         private float tInStep = 0;
 
         public void Initialize(KogAnimation parent, Leg otherLeg) {
-            this.parent = parent;
             this.otherLeg = otherLeg;
+            this.parent = parent;
+            raycastDistance = parent.defaultRaycastDistance;
 
             footAnchor = footTarget.position;
             footAnchorRotation = footTarget.rotation;
             footRestRotation = footTarget.localRotation.eulerAngles;
+            footColliderPosition = footCollider.localPosition;
         }
 
         public void Clear() {
@@ -114,6 +137,7 @@ public class KogAnimation : MonoBehaviour {
         }
 
         public void LegUpdate() {
+            footCollider.localPosition = footColliderPosition + new Vector3(0, -parent.crouchingMax * parent.crouching, 0);
             footTarget.position = footAnchor;
             footTarget.rotation = footAnchorRotation;
 
@@ -156,7 +180,7 @@ public class KogAnimation : MonoBehaviour {
 
                         //footNextAnchor = hit.point;
                         footNextAnchor = Vector3.Lerp(footNextAnchor, hit.point, Time.deltaTime * parent.stepMovementLerpFactor);
-                        Quaternion targetRotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * parent.transform.rotation * Quaternion.Euler(footRestRotation);
+                        Quaternion targetRotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * parent.waist.rotation * Quaternion.Euler(footRestRotation);
                         footNextAnchorRotation = Quaternion.Slerp(footNextAnchorRotation, targetRotation, Time.deltaTime * parent.stepMovementLerpFactor);
                         currentDistance = (foot.transform.position - hit.point).magnitude;
 
@@ -196,6 +220,44 @@ public class KogAnimation : MonoBehaviour {
                     }
                     break;
             }
+        }
+
+        /// <summary>
+        /// Gets the angle between the waist and the foot, where 0 degrees would be the leg directly beneath the waist
+        /// </summary>
+        /// <returns>the angle</returns>
+        public float GetAngle() {
+            float x = foot.position.y - thigh.position.y;
+
+
+            Vector3 V = foot.position - thigh.position;
+            V = Vector3.Project(V, parent.waist.forward);
+            V.y = 0;
+            float y = V.magnitude * Mathf.Sign(Vector3.Dot(V, parent.waist.forward));
+            float angle = Mathf.Atan2(y, -x) * Mathf.Rad2Deg;
+            //Debug.Log(angle + ", " + V + "," + x );
+            return angle;
+        }
+    }
+
+    [System.Serializable]
+    private class Arm {
+
+        private KogAnimation parent;
+
+        [SerializeField]
+        private Transform shoulder = null, forearm = null, handAnchor = null;
+
+        private Leg leg;
+
+        public void Initialize(KogAnimation parent, Leg leg) {
+            this.parent = parent;
+            this.leg = leg;
+        }
+
+        public void ArmUpdate() {
+            handAnchor.position = shoulder.position + Quaternion.AngleAxis(leg.GetAngle(), parent.waist.right) * Vector3.down * parent.armHeight;
+            handAnchor.rotation = forearm.rotation;
         }
     }
 }
