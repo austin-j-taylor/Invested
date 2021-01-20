@@ -56,10 +56,19 @@ ModelImporter:
     motionNodeName: 
     rigImportErrors: 
     rigImportWarnings: "Avatar Rig Configuration mis-match. Bone length in configuration
-      does not match position in animation file:\n\t'Foot.L' : position error = 24.871338
-      mm\n\t'Foot.R' : position error = 24.872301 mm\n"
+      does not match position in animation file:\n\t'Calf.L' : position error = 8.450201
+      mm\n\t'Foot.L' : position error = 16.556479 mm\n\t'Calf.R' : position error
+      = 8.449417 mm\n\t'Foot.R' : position error = 16.557503 mm\n"
     animationImportErrors: 
-    animationImportWarnings: 
+    animationImportWarnings: "\nClip 'Armature|Meditating' has import animation warnings
+      that might lower retargeting quality:\nNote: Activate translation DOF on avatar
+      to improve retargeting quality.\n\t'Foot.R' has scale animation that will be
+      discarded.\n\nClip 'Armature|Throwing' has import animation warnings that might
+      lower retargeting quality:\nNote: Activate translation DOF on avatar to improve
+      retargeting quality.\n\t'Thigh.L' has scale animation that will be discarded.\n\t'Calf.L'
+      has scale animation that will be discarded.\n\t'Foot.L' has scale animation
+      that will be discarded.\n\t'Thigh.R' has scale animation that will be discarded.\n\t'Foot.R'
+      has scale animation that will be discarded.\n"
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
@@ -113,7 +122,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0

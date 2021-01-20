@@ -216,14 +216,8 @@ public class KogMovementController : MonoBehaviour {
             if (!wantToMove) {
                 movement = lastMoveDirection;
             }
-            Vector3 normalizedMovement = movement.normalized;
-            float feedback_O = Mathf.Acos(Vector3.Dot(transform.forward, normalizedMovement));
-            Vector3 cross = Vector3.Cross(transform.forward, normalizedMovement);
-            feedback_O *= -Mathf.Sign(Vector3.Dot(Vector3.up, cross));
-            if (float.IsNaN(feedback_O))
-                feedback_O = 0;
-            float target_O = 0;
-            float output_O = pidOrientation.Step(feedback_O, target_O);
+            float feedback_O = IMath.AngleBetween_Signed(transform.forward, movement, Vector3.up, true);
+            float output_O = pidOrientation.Step(feedback_O, 0);
             //Debug.Log(" movement: " + movement.normalized + " feedback: " + feedback_O + " error: " + (feedback_O - target_O) + " output: " + output_O);
             rb.AddTorque(Vector3.up * output_O, ForceMode.Acceleration);
             transform.localEulerAngles = new Vector3(0, transform.localEulerAngles.y, 0);

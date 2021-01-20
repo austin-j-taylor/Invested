@@ -12,6 +12,7 @@ public class KogAnimation : MonoBehaviour {
     #region constants
     private const float zeroThresholdSqr = 0.05f * 0.05f;
     private const float radiusForRaycast = 0.125f;
+    public float waistLegRotationFactor = 0.5f;
     public float waistReactionTime = 1;
     public float leaningMax = 25f;
     public float crouchingMax = 0.035f;
@@ -35,6 +36,7 @@ public class KogAnimation : MonoBehaviour {
     public Vector3 StandingOnNormal => leftLeg.standingOnRigidbody != null ? leftLeg.standingOnNormal : rightLeg.standingOnNormal;
 
     private float distanceBetweenSteps = .25f;
+    private Quaternion leftShoulderRestRotation, rightShoulderRestRotation;
 
     //[SerializeField]
     //private Transform target = null;
@@ -56,7 +58,7 @@ public class KogAnimation : MonoBehaviour {
     [SerializeField]
     private Arm rightArm = null;
     [SerializeField]
-    private Transform waist = null, waistAnchor = null;
+    private Transform waist = null, waistAnchor = null, head = null, headAnchor = null, shoulderLeft = null, shoulderLeftAnchor = null, shoulderRight = null, shoulderRightAnchor = null;
     [SerializeField]
     private CapsuleCollider bodyCollider = null;
     [SerializeField]
@@ -65,6 +67,9 @@ public class KogAnimation : MonoBehaviour {
     void Start() {
         anim = GetComponentInChildren<Animator>();
         rb = GetComponentInParent<Rigidbody>();
+
+        leftShoulderRestRotation = shoulderLeft.rotation;
+        rightShoulderRestRotation = shoulderRight.rotation;
 
         leftLeg.Initialize(this, rightLeg);
         rightLeg.Initialize(this, leftLeg);
@@ -91,8 +96,20 @@ public class KogAnimation : MonoBehaviour {
         else if (ratio < 0.05f)
             movement = Vector3.forward;
         Vector3 cross = Vector3.Cross(transform.up, movement);
-        waistAnchor.rotation = Quaternion.Slerp(waistAnchor.rotation, waist.parent.rotation * Quaternion.AngleAxis(ratio * leaningMax + crouching * crouchingLeanMax, cross), 1 - Mathf.Exp(-waistReactionTime * Time.deltaTime));
-        Debug.Log(movement.magnitude + ", " + ratio + ", " + ratio * leaningMax);
+        Quaternion waistRotationFromSpeed = Quaternion.AngleAxis(ratio * leaningMax + crouching * crouchingLeanMax, cross);
+
+        // Rotate the waist to reflect the positions of the legs and feet.
+        // The angle formed by the feet should be opposite of the angle formed by the waist.
+        float angle = IMath.AngleBetween_Signed(rightLeg.foot.position - leftLeg.foot.position, waist.parent.right, transform.up, false) * Mathf.Rad2Deg * waistLegRotationFactor;
+        Quaternion waistRotationFromLegs = Quaternion.AngleAxis(angle, transform.up);
+        // Apply the final rotation
+        Quaternion desiredWaistRotation = waist.parent.rotation * waistRotationFromSpeed * waistRotationFromLegs;
+        waistAnchor.rotation = Quaternion.Slerp(waistAnchor.rotation, desiredWaistRotation, 1 - Mathf.Exp(-waistReactionTime * Time.deltaTime));
+        // Also rotate the shoulders or torso to oppose that
+        //shoulderLeftAnchor.rotation = shoulderLeft.parent.rotation * leftShoulderRestRotation * waistRotationFromLegs;
+        //shoulderRightAnchor.rotation = shoulderRight.parent.rotation * rightShoulderRestRotation * waistRotationFromLegs;
+
+        // Rotate the head to face forwards
 
         // Crouching
         bodyCollider.transform.localPosition = new Vector3(0, crouching * crouchingMax, 0);
