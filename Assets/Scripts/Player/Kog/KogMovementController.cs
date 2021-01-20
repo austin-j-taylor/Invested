@@ -7,12 +7,9 @@ public class KogMovementController : MonoBehaviour {
     private enum WalkingState { Idle, Walking, Sprinting, Anchored };
 
     #region constants
-    [SerializeField]
-    private float topSpeed = 5;
-    [SerializeField]
-    private float topSpeedSprinting = 12.5f;
-    [SerializeField]
-    private float topSpeedAnchored = 1.5f;
+    public const float topSpeed = 5;
+    public const float topSpeedSprinting = 12.5f;
+    public const float topSpeedAnchored = 2;
     //[SerializeField]
     //private float acceleration = 2.5f;
     //[SerializeField]

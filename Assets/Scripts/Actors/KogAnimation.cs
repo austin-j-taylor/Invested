@@ -12,7 +12,10 @@ public class KogAnimation : MonoBehaviour {
     #region constants
     private const float zeroThresholdSqr = 0.05f * 0.05f;
     private const float radiusForRaycast = 0.125f;
+    public float waistReactionTime = 1;
+    public float leaningMax = 25f;
     public float crouchingMax = 0.035f;
+    public float crouchingLeanMax = 25f;
     public float crouchingLegSpreadMax = 0.25f;
     public float defaultRaycastDistance = 2;
     public float defaultDistanceBetweenSteps = .25f;
@@ -41,6 +44,7 @@ public class KogAnimation : MonoBehaviour {
     //private Transform pole = null;
 
     private Animator anim;
+    private Rigidbody rb;
     [SerializeField, Range(0.0f, 1.0f)]
     private float crouching = 0;
     [SerializeField]
@@ -52,10 +56,15 @@ public class KogAnimation : MonoBehaviour {
     [SerializeField]
     private Arm rightArm = null;
     [SerializeField]
-    private Transform waist = null;
+    private Transform waist = null, waistAnchor = null;
+    [SerializeField]
+    private CapsuleCollider bodyCollider = null;
+    [SerializeField]
+    private SphereCollider lifterCollider = null;
 
     void Start() {
         anim = GetComponentInChildren<Animator>();
+        rb = GetComponentInParent<Rigidbody>();
 
         leftLeg.Initialize(this, rightLeg);
         rightLeg.Initialize(this, leftLeg);
@@ -71,10 +80,47 @@ public class KogAnimation : MonoBehaviour {
     }
 
     private void OnAnimatorMove() {
+
+        // Rotate the waist to reflect the current velocity, like you're leaning into the movement
+        Vector3 movement = rb.velocity;
+        movement = waist.parent.InverseTransformDirection(movement);
+        movement.y = 0;
+        float ratio = movement.magnitude / KogMovementController.topSpeedSprinting;
+        if (ratio > 1)
+            ratio = 1;
+        else if (ratio < 0.05f)
+            movement = Vector3.forward;
+        Vector3 cross = Vector3.Cross(transform.up, movement);
+        waistAnchor.rotation = Quaternion.Slerp(waistAnchor.rotation, waist.parent.rotation * Quaternion.AngleAxis(ratio * leaningMax + crouching * crouchingLeanMax, cross), 1 - Mathf.Exp(-waistReactionTime * Time.deltaTime));
+        Debug.Log(movement.magnitude + ", " + ratio + ", " + ratio * leaningMax);
+
+        // Crouching
+        bodyCollider.transform.localPosition = new Vector3(0, crouching * crouchingMax, 0);
+
         leftLeg.LegUpdate();
         rightLeg.LegUpdate();
         leftArm.ArmUpdate();
         rightArm.ArmUpdate();
+
+        //// Lower the lifter to keep both Idle feet where their anchors are
+        //// Set the lifter's position to be at the same height as the heighest Idle foot.
+        //Vector3 pos = transform.position;
+
+        //float heighest = 0;
+        //if (leftLeg.state == Leg.WalkingState.Idle) {
+        //    float height = Vector3.Distance(leftLeg.foot.position, leftLeg.footAnchor);
+        //    Debug.Log("Left leg height: " + height);
+        //    if (height > heighest)
+        //        heighest = height;
+        //}
+        //if (rightLeg.state == Leg.WalkingState.Idle) {
+        //    float height = Vector3.Distance(rightLeg.foot.position, rightLeg.footAnchor);
+        //    Debug.Log("Right leg height: " + height);
+        //    if (height > heighest)
+        //        heighest = height;
+        //}
+        //pos.y += lifterCollider.radius - heighest;
+        //lifterCollider.transform.position = pos;
     }
 
     public void SetLegTarget(Vector3 movement, float currentSpeed) {
@@ -125,7 +171,7 @@ public class KogAnimation : MonoBehaviour {
 
         private KogAnimation parent;
         private Leg otherLeg;
-        private Vector3 footAnchor = Vector3.zero, footLastAnchor = Vector3.zero, footNextAnchor = Vector3.zero;
+        public Vector3 footAnchor = Vector3.zero, footLastAnchor = Vector3.zero, footNextAnchor = Vector3.zero;
         private Quaternion footAnchorRotation, footLastAnchorRotation, footNextAnchorRotation;
         private Quaternion anchorRestLocalRotation;
         private Quaternion footRestLocalRotation;
