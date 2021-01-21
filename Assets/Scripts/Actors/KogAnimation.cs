@@ -18,6 +18,7 @@ public class KogAnimation : MonoBehaviour {
     public float crouchingMax = 0.035f;
     public float crouchingLeanMax = 25f;
     public float crouchingLegSpreadMax = 0.25f;
+    public float sprintingCrouchMax = 0.5f;
     public float defaultRaycastDistance = 2;
     public float defaultDistanceBetweenSteps = .25f;
     public float defaultStepTime = 0.3f;
@@ -90,13 +91,13 @@ public class KogAnimation : MonoBehaviour {
         Vector3 movement = rb.velocity;
         movement = waist.parent.InverseTransformDirection(movement);
         movement.y = 0;
-        float ratio = movement.magnitude / KogMovementController.topSpeedSprinting;
-        if (ratio > 1)
-            ratio = 1;
-        else if (ratio < 0.05f)
+        float speedRatio = movement.magnitude / KogMovementController.topSpeedSprinting;
+        if (speedRatio > 1)
+            speedRatio = 1;
+        else if (speedRatio < 0.05f)
             movement = Vector3.forward;
         Vector3 cross = Vector3.Cross(transform.up, movement);
-        Quaternion waistRotationFromSpeed = Quaternion.AngleAxis(ratio * leaningMax + crouching * crouchingLeanMax, cross);
+        Quaternion waistRotationFromSpeed = Quaternion.AngleAxis(speedRatio * leaningMax + crouching * crouchingLeanMax, cross);
 
         // Rotate the waist to reflect the positions of the legs and feet.
         // The angle formed by the feet should be opposite of the angle formed by the waist.
@@ -112,7 +113,8 @@ public class KogAnimation : MonoBehaviour {
         // Rotate the head to face forwards
 
         // Crouching
-        bodyCollider.transform.localPosition = new Vector3(0, crouching * crouchingMax, 0);
+        //crouching = speedRatio;
+        bodyCollider.transform.localPosition = new Vector3(0, crouching * crouchingMax + speedRatio * sprintingCrouchMax, 0);
 
         leftLeg.LegUpdate();
         rightLeg.LegUpdate();
