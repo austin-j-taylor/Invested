@@ -40,6 +40,12 @@ public class KogAnimation : MonoBehaviour {
     public float distance_h = -0.65f;
     public float distance_a = 2.35f;
     public float distance_b = -0.1f;
+    public float armY_a = 0.000304f;
+    public float armY_b = 1;
+    public float armY_c = -0.593f;
+    public float armX_d = -0.00009f;
+    public float armX_f = -45;
+    public float armX_g = 0.5f;
     #endregion
 
     private enum GroundedState { Grounded, Airborne }
@@ -141,7 +147,7 @@ public class KogAnimation : MonoBehaviour {
         distanceBetweenSteps = distance_h * (speedRatio - distance_a) * (speedRatio - distance_b);
 
 
-        Debug.Log("speed: " + speedRatio + ", " + stepTime + ", distance: " + distanceBetweenSteps);
+        //Debug.Log("speed: " + speedRatio + ", " + stepTime + ", distance: " + distanceBetweenSteps);
     }
 
     private void OnAnimatorMove() {
@@ -363,7 +369,7 @@ public class KogAnimation : MonoBehaviour {
                         if (calfAngle > 180)
                             calfAngle -= 360;
                         bool isStretched = calfAngle < 0.01f;
-                        Debug.Log("Stretched:  " + isStretched +  ", "  + calf.localEulerAngles.x, foot.gameObject);
+                        //Debug.Log("Stretched:  " + isStretched +  ", "  + calf.localEulerAngles.x, foot.gameObject);
                         if (currentDistance > parent.distanceBetweenSteps && (otherLeg.state == WalkingState.Support || parent.IsSprinting && isStretched)) {
                             // Take a step. The Last anchor are where the foot is now. The Next anchor are where the desired foot position is now.
                             footLastAnchor = footTarget.position;
@@ -465,7 +471,7 @@ public class KogAnimation : MonoBehaviour {
         /// <summary>
         /// Gets the angle between the waist and the foot, where 0 degrees would be the leg directly beneath the waist
         /// </summary>
-        /// <returns>the angle</returns>
+        /// <returns>the angle in degrees</returns>
         public float GetAngle() {
             float x = foot.position.y - thigh.position.y;
 
@@ -486,7 +492,7 @@ public class KogAnimation : MonoBehaviour {
         private KogAnimation parent;
 
         [SerializeField]
-        public Transform shoulder = null, forearm = null, handAnchor = null, handAnchorPole = null;
+        public Transform shoulder = null, forearm = null, upperarm = null, handAnchor = null, handAnchorPole = null;
 
         private Leg leg;
 
@@ -494,10 +500,19 @@ public class KogAnimation : MonoBehaviour {
             this.parent = parent;
             this.leg = leg;
         }
-
         public void ArmUpdate() {
-            handAnchor.position = shoulder.position + Quaternion.AngleAxis(leg.GetAngle(), parent.waist.right) * Vector3.down * parent.armHeight;
+            //handAnchor.position = shoulder.position + Quaternion.AngleAxis(leg.GetAngle(), parent.waist.right) * Vector3.down * parent.armHeight;
+
+            // Position arm such that:
+            // the hand anchor follows a 3D parobolic arc around the body that is a function of the leg angle
+            // The length of the arm depends on the speed (higher speed = closer handAnchor)
+            float t = leg.GetAngle();
+            float X = parent.armX_d * (t - parent.armX_f) * (t - parent.armX_f) + parent.armX_g;
+            float Y = parent.armY_a * (t - parent.armY_b) * (t - parent.armY_b) + parent.armY_c;
+            float Z = parent.armHeight * Mathf.Sin(leg.GetAngle() * Mathf.Deg2Rad);
+            handAnchor.position = upperarm.transform.position + parent.waist.TransformDirection(new Vector3(X, Y, Z));
             handAnchor.rotation = forearm.rotation;
+            Debug.Log("Angle: " + t + " XYZ: "+  new Vector3(X, Y, Z));
         }
     }
 }
