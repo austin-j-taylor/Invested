@@ -13,9 +13,8 @@ public class Kog : Actor {
     // State machine for Kog
     public enum State { Idle, Resting, Reaching, Throwing, Meditating };
 
-    public KogAnimation KogAnimationController { get; private set; }
-
-    public KogMovementController MovementController { get; private set; }
+    public static KogAnimation KogAnimationController { get; private set; }
+    public static KogMovementController MovementController { get; private set; }
 
     protected override void Awake() {
         KogInstance = this;

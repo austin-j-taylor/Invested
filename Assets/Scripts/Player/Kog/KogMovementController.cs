@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class KogMovementController : MonoBehaviour {
 
-    private enum WalkingState { Idle, Walking, Sprinting, Anchored };
+    public enum WalkingState { Idle, Walking, Sprinting, Anchored };
 
     #region constants
-    public const float topSpeed = 5;
-    public const float topSpeedSprinting = 12.5f;
-    public const float topSpeedAnchored = 2;
+    public float topSpeed = 3.5f;
+    public float topSpeedSprinting = 12.5f;
+    public float topSpeedAnchored = 2;
     //[SerializeField]
     //private float acceleration = 2.5f;
     //[SerializeField]
@@ -28,8 +28,8 @@ public class KogMovementController : MonoBehaviour {
     #endregion
 
     #region properties
-    private WalkingState state;
-    public bool IsGrounded => Kog.KogInstance.KogAnimationController.IsGrounded;
+    public WalkingState State { get; private set; }
+    public bool IsGrounded => Kog.KogAnimationController.IsGrounded;
     #endregion
 
     private Rigidbody rb;
@@ -54,7 +54,7 @@ public class KogMovementController : MonoBehaviour {
     }
 
     public void Clear() {
-        state = WalkingState.Idle;
+        State = WalkingState.Idle;
         lastInput = Vector3.zero;
         lastMoveDirection = transform.forward;
         jumpQueued = false;
@@ -85,14 +85,14 @@ public class KogMovementController : MonoBehaviour {
                     jumpQueued = false;
                     lastJumpTime = Time.unscaledTime;
 
-                    Rigidbody targetRb = Kog.KogInstance.KogAnimationController.StandingOnRigidbody;
+                    Rigidbody targetRb = Kog.KogAnimationController.StandingOnRigidbody;
 
                     Vector3 jumpForce = Vector3.up * jumpHeight;
 
                     rb.AddForce(jumpForce, ForceMode.Impulse);
                     // Apply force and torque to target
                     if (targetRb) {
-                        Vector3 radius = Kog.KogInstance.KogAnimationController.StandingOnPoint - targetRb.worldCenterOfMass;
+                        Vector3 radius = Kog.KogAnimationController.StandingOnPoint - targetRb.worldCenterOfMass;
 
                         targetRb.AddForce(-jumpForce, ForceMode.Impulse);
                         targetRb.AddTorque(Vector3.Cross(radius, -jumpForce));
@@ -104,7 +104,7 @@ public class KogMovementController : MonoBehaviour {
               // Effectively, if you release the jump button within a short window of jumping,
               //  apply a small negative impulse to reduce the jump height.
             if (!Keybinds.Jump() && Time.unscaledTime - lastJumpTime < PrimaMovementController.shortHopThreshold) {
-                rb.AddForce(-Kog.KogInstance.KogAnimationController.StandingOnNormal * jumpHeight / 2, ForceMode.Impulse);
+                rb.AddForce(-Kog.KogAnimationController.StandingOnNormal * jumpHeight / 2, ForceMode.Impulse);
                 lastJumpTime = -1;
             }
 
@@ -132,51 +132,57 @@ public class KogMovementController : MonoBehaviour {
             bool wantToMove = movement.sqrMagnitude > 0;
 
             // Transitions
-            switch (state) {
+            switch (State) {
                 case WalkingState.Idle:
                     if (wantToMove) {
                         if (Keybinds.Sprint()) {
-                            state = WalkingState.Sprinting;
+                            State = WalkingState.Sprinting;
                         } else if (Keybinds.Walk()) {
-                            state = WalkingState.Anchored;
+                            State = WalkingState.Anchored;
                         } else {
-                            state = WalkingState.Walking;
+                            State = WalkingState.Walking;
+                        }
+                    } else {
+                        if (Keybinds.Walk()) {
+                            State = WalkingState.Anchored;
                         }
                     }
                     break;
                 case WalkingState.Walking:
                     if (wantToMove) {
                         if (Keybinds.Sprint()) {
-                            state = WalkingState.Sprinting;
+                            State = WalkingState.Sprinting;
                         } else if (Keybinds.Walk()) {
-                            state = WalkingState.Anchored;
+                            State = WalkingState.Anchored;
                         }
                     } else {
-                        state = WalkingState.Idle;
+                        State = WalkingState.Idle;
                     }
                     break;
                 case WalkingState.Sprinting:
                     if (wantToMove) {
                         if (Keybinds.Walk()) {
-                            state = WalkingState.Anchored;
+                            State = WalkingState.Anchored;
                         } else if (!Keybinds.Sprint()) {
-                            state = WalkingState.Walking;
+                            State = WalkingState.Walking;
                         }
                     } else {
-                        state = WalkingState.Idle;
+                        State = WalkingState.Idle;
                     }
                     break;
                 case WalkingState.Anchored:
                     if (wantToMove) {
                         if (!Keybinds.Walk()) {
                             if (Keybinds.Sprint()) {
-                                state = WalkingState.Sprinting;
+                                State = WalkingState.Sprinting;
                             } else {
-                                state = WalkingState.Walking;
+                                State = WalkingState.Walking;
                             }
                         }
                     } else {
-                        state = WalkingState.Idle;
+                        if (!Keybinds.Walk()) {
+                            State = WalkingState.Idle;
+                        }
                     }
                     break;
             }
@@ -190,7 +196,7 @@ public class KogMovementController : MonoBehaviour {
             // PID control for speed 
             Vector3 target = Vector3.zero;
             // Scale target speed with sprinting, etc.
-            switch (state) {
+            switch (State) {
                 case WalkingState.Idle:
                     //target = Vector3.zero;
                     break;
@@ -210,7 +216,7 @@ public class KogMovementController : MonoBehaviour {
             Vector3 output = pidSpeed.Step(feedback, target);
             rb.AddForce(output, ForceMode.Acceleration);
 
-            Kog.KogInstance.KogAnimationController.SetLegTarget(target, feedback.magnitude);
+            Kog.KogAnimationController.SetLegTarget(target, feedback.magnitude);
 
             // PID control for orientation
             if (!wantToMove) {
