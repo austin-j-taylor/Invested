@@ -17,16 +17,18 @@ public class KogAnimation : MonoBehaviour {
     public float waistBobMax = 0.2f, waistBobLegAngleMax = 90, waistBobLerp = 12, waistFallLerp = 10;
     public float leaningMax = 25f;
     public float crouchingMax = 0.035f;
+    public float crouchingStepHeight = 0.1f;
     public float movingLeanMax = 15f;
     public float movingSpeedCrouchMax = .4f;
     public float crouchingLegSpreadMax = 0.25f, crouchingLegPoleSpreadMax = 0.5f;
     public float sprintingCrouchMax = 0.5f;
     public float sprintingCrouchLerp = 10;
     public float sprintingSpeedRatioThreshold = 0.5f;
+    public float sprintingStepHeightFactor = 0.25f;
     public float defaultRaycastDistance = 2;
     public float defaultDistanceBetweenSteps = .25f, distancePerStepSpeedFactor = 0.25f;
     public float defaultStepTime = 0.3f, stepTimeSpeedFactor = 2;
-    public float stepHeight = .5f;
+    public float defaultStepHeight = .5f;
     public float legForwardsFactor = 0.1f;
     public float stepToTargetPositonDelta = 10;
     public float stepToTargetRotationLerpFactor = 10;
@@ -54,7 +56,7 @@ public class KogAnimation : MonoBehaviour {
     private Vector3 waistRestPosition;
     private float legRestLength;
 
-    public float currentSpeed, stepTime, speedRatio;
+    public float currentSpeed, stepTime, speedRatio, stepHeight;
     public float distanceBetweenSteps = .25f;
     private float speedForCrouching;
 
@@ -143,23 +145,28 @@ public class KogAnimation : MonoBehaviour {
     }
 
     private void OnAnimatorMove() {
-
-        // Set crouching amount
-        if (Kog.MovementController.State == KogMovementController.WalkingState.Anchored)
-            crouching = movingSpeedCrouchMax;
-        else
-            crouching = 0;
-
-
-        // Rotate the waist to reflect the current velocity, like you're leaning into the movement
+        // Get the current movement relative to the the body's forward direction
         Vector3 movement = rb.velocity;
         movement = waist.parent.InverseTransformDirection(movement);
         movement.y = 0;
+
+        // Get the current speed ratio (0 for not moving, 1 for max speed)
         float speedRatio = movement.magnitude / TopSpeed;
         if (speedRatio > 1)
             speedRatio = 1;
         else if (speedRatio < 0.05f)
             movement = Vector3.forward;
+
+        // Set crouching amount and step height
+        if (Kog.MovementController.State == KogMovementController.WalkingState.Anchored) {
+            crouching = movingSpeedCrouchMax;
+            stepHeight = crouchingStepHeight;
+        } else {
+            crouching = 0;
+            stepHeight = defaultStepHeight + speedRatio * sprintingStepHeightFactor;
+        }
+
+        // Rotate the waist to reflect the current velocity, like you're leaning into the movement
         Vector3 cross = Vector3.Cross(transform.up, movement);
         Quaternion waistRotationFromSpeed = Quaternion.AngleAxis(speedRatio * leaningMax + crouching * movingLeanMax, cross);
 
@@ -346,16 +353,17 @@ public class KogAnimation : MonoBehaviour {
                         standingOnRigidbody = hit.rigidbody;
                         standingOnPoint = hit.point;
                         standingOnNormal = hit.normal;
-                        Debug.DrawLine(footRaycastSource.position, footRaycastSource.position + raycastDirection * raycastDistance, Color.red);
-                        debugBall_HitPoint.gameObject.SetActive(true);
-                        debugBall_currentAnchor.gameObject.SetActive(true);
-                        debugBall_HitPoint.position = hit.point;
-                        debugBall_currentAnchor.position = footAnchor;
 
                         // The foot is too far from its desired foot position. Start a step.
                         // Keep one foot supporting at all times - unless moving quickly and this leg has reached the end of its propulsion (i.e. is stretched)
-                        currentDistance = (foot.transform.position - hit.point).magnitude;
-                        bool isStretched = parent.legRestLength - Vector3.Distance(thigh.position, foot.position) < 0.01f;
+                        Vector3 hitToFoot = foot.position - hit.point;
+                        hitToFoot.y = 0;
+                        currentDistance = hitToFoot.magnitude;
+                        float calfAngle = calf.localEulerAngles.x;
+                        if (calfAngle > 180)
+                            calfAngle -= 360;
+                        bool isStretched = calfAngle < 0.01f;
+                        Debug.Log("Stretched:  " + isStretched +  ", "  + calf.localEulerAngles.x, foot.gameObject);
                         if (currentDistance > parent.distanceBetweenSteps && (otherLeg.state == WalkingState.Support || parent.IsSprinting && isStretched)) {
                             // Take a step. The Last anchor are where the foot is now. The Next anchor are where the desired foot position is now.
                             footLastAnchor = footTarget.position;
@@ -364,6 +372,14 @@ public class KogAnimation : MonoBehaviour {
                             state = WalkingState.Floating;
                             tInStep = 0;
                         }
+
+                        // Debug
+                        Debug.DrawLine(footRaycastSource.position, footRaycastSource.position + raycastDirection * raycastDistance, Color.red);
+                        debugBall_HitPoint.gameObject.SetActive(true);
+                        debugBall_currentAnchor.gameObject.SetActive(true);
+                        debugBall_HitPoint.position = hit.point;
+                        debugBall_currentAnchor.position = footAnchor;
+                        Debug.DrawLine(hit.point, hit.point + hitToFoot.normalized * parent.distanceBetweenSteps);
                     } else {
                         // The foot is too far from the ground. It is considered airborne
 
@@ -393,7 +409,9 @@ public class KogAnimation : MonoBehaviour {
                         Quaternion targetRotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * parent.transform.rotation * anchorRestLocalRotation;
                         // Lerp the old foot desired rotation to the new desired rotation.
                         footNextAnchorRotation = Quaternion.Slerp(footNextAnchorRotation, targetRotation, Time.deltaTime * parent.stepToTargetRotationLerpFactor);
-                        currentDistance = (foot.transform.position - hit.point).magnitude;
+                        Vector3 hitToFoot = foot.position - hit.point;
+                        hitToFoot.y = 0;
+                        currentDistance = hitToFoot.magnitude;
 
                         // Debug
                         Debug.DrawLine(footRaycastSource.position, footRaycastSource.position + raycastDirection * raycastDistance, Color.yellow);
@@ -403,6 +421,8 @@ public class KogAnimation : MonoBehaviour {
                         debugBall_HitPoint.rotation = targetRotation;
                         debugBall_currentAnchor.position = footNextAnchor;
                         debugBall_currentAnchor.rotation = footNextAnchorRotation;
+                        Debug.DrawLine(hit.point, hit.point + hitToFoot.normalized * parent.distanceBetweenSteps);
+
                     } else {
                         // A new desired position couldn't be found. Keep moving towards the old one.
                         groundedState = GroundedState.Airborne;
