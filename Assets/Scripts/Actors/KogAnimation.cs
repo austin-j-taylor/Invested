@@ -46,6 +46,12 @@ public class KogAnimation : MonoBehaviour {
     public float armX_d = -0.00009f;
     public float armX_f = -45;
     public float armX_g = 0.5f;
+    public float armPoleX_h = 0;
+    public float armPoleX_j = 0;
+    public float armPoleY_k = -0.01f;
+    public float armPoleY_l = 0.45f;
+    public float armPoleZ_m = .03f;
+    public float armPoleZ_n = 0;
     #endregion
 
     private enum GroundedState { Grounded, Airborne }
@@ -263,8 +269,8 @@ public class KogAnimation : MonoBehaviour {
 
         leftLeg.LegUpdate();
         rightLeg.LegUpdate();
-        leftArm.ArmUpdate();
-        rightArm.ArmUpdate();
+        leftArm.ArmUpdate(armHeight, armY_a, armY_b, armY_c, -armX_d, armX_f, -armX_g, -armPoleX_h, armPoleX_j, armPoleY_k, armPoleY_l, armPoleZ_m, armPoleZ_n, waist);
+        rightArm.ArmUpdate(armHeight, armY_a, armY_b, armY_c, armX_d, armX_f, armX_g, armPoleX_h, armPoleX_j, armPoleY_k, armPoleY_l, armPoleZ_m, armPoleZ_n, waist);
 
         //// Lower the lifter to keep both Idle feet where their anchors are
         //// Set the lifter's position to be at the same height as the heighest Idle foot.
@@ -489,29 +495,32 @@ public class KogAnimation : MonoBehaviour {
     [System.Serializable]
     private class Arm {
 
-        private KogAnimation parent;
-
         [SerializeField]
         public Transform shoulder = null, forearm = null, upperarm = null, handAnchor = null, handAnchorPole = null;
 
         private Leg leg;
 
         public void Initialize(KogAnimation parent, Leg leg) {
-            this.parent = parent;
             this.leg = leg;
         }
-        public void ArmUpdate() {
-            //handAnchor.position = shoulder.position + Quaternion.AngleAxis(leg.GetAngle(), parent.waist.right) * Vector3.down * parent.armHeight;
+        public void ArmUpdate(float armHeight, float Y_a, float Y_b, float Y_c, float X_d, float X_f, float X_g, float h, float j, float k, float l, float m, float n, Transform waist) {
+            //handAnchor.position = shoulder.position + Quaternion.AngleAxis(leg.GetAngle(), parent.waist.right) * Vector3.down * Height;
 
             // Position arm such that:
             // the hand anchor follows a 3D parobolic arc around the body that is a function of the leg angle
             // The length of the arm depends on the speed (higher speed = closer handAnchor)
             float t = leg.GetAngle();
-            float X = parent.armX_d * (t - parent.armX_f) * (t - parent.armX_f) + parent.armX_g;
-            float Y = parent.armY_a * (t - parent.armY_b) * (t - parent.armY_b) + parent.armY_c;
-            float Z = parent.armHeight * Mathf.Sin(leg.GetAngle() * Mathf.Deg2Rad);
-            handAnchor.position = upperarm.transform.position + parent.waist.TransformDirection(new Vector3(X, Y, Z));
+            float X = X_d * (t - X_f) * (t - X_f) + X_g;
+            float Y = Y_a * (t - Y_b) * (t - Y_b) + Y_c;
+            float Z = armHeight * Mathf.Sin(-leg.GetAngle() * Mathf.Deg2Rad);
+            handAnchor.position = upperarm.transform.position + waist.TransformDirection(new Vector3(X, Y, Z));
             handAnchor.rotation = forearm.rotation;
+
+            X = h * (t - j);
+            Y = k * (t - l);
+            Z = -m * (t - n);
+            handAnchorPole.position = upperarm.transform.position + waist.parent.TransformDirection(new Vector3(X, Y, Z));
+
             Debug.Log("Angle: " + t + " XYZ: "+  new Vector3(X, Y, Z));
         }
     }
