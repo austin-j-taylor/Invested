@@ -12,6 +12,7 @@ public class KogAnimation : MonoBehaviour {
     #region constants
     private const float zeroThresholdSqr = 0.05f * 0.05f;
     private const float radiusForRaycast = 0.125f;
+    public float headReactionTime = 1;
     public float waistLegRotationFactor = 0.5f;
     public float waistReactionTime = 1;
     public float waistBobMax = 0.2f, waistBobLegAngleMax = 90, waistBobLerp = 12, waistFallLerp = 10;
@@ -52,6 +53,7 @@ public class KogAnimation : MonoBehaviour {
     public float armPoleY_l = 0.45f;
     public float armPoleZ_m = .03f;
     public float armPoleZ_n = 0;
+    public float headMinX = -40, headMaxX = 25, headMinY = -60, headMaxY = 60, headMinZ = -20, headMaxZ = 20;
     #endregion
 
     private enum GroundedState { Grounded, Airborne }
@@ -63,6 +65,7 @@ public class KogAnimation : MonoBehaviour {
 
     private bool IsSprinting => speedRatio > sprintingSpeedRatioThreshold;
     private float TopSpeed => Kog.MovementController.topSpeedSprinting;
+
 
     private Quaternion leftShoulderRestRotation, rightShoulderRestRotation;
     private Vector3 waistRestPosition;
@@ -97,6 +100,7 @@ public class KogAnimation : MonoBehaviour {
     private CapsuleCollider bodyCollider = null;
     [SerializeField]
     private SphereCollider lifterCollider = null;
+    private Vector3 headLookAtTarget = Vector3.zero;
 
     void Start() {
         anim = GetComponentInChildren<Animator>();
@@ -154,6 +158,38 @@ public class KogAnimation : MonoBehaviour {
 
 
         //Debug.Log("speed: " + speedRatio + ", " + stepTime + ", distance: " + distanceBetweenSteps);
+
+        // set head target to be in front of movement
+        if (movement.sqrMagnitude > 0f) {
+            headLookAtTarget = head.position + movement.normalized * 10;
+        }
+    }
+
+    private void TrackHead() {
+        Vector3 towardHeadTarget = headLookAtTarget - head.position;
+
+        head.localRotation = Quaternion.identity;
+        Vector3 localLookDirection = head.InverseTransformDirection(towardHeadTarget);
+
+        Quaternion localLookRotation = Quaternion.LookRotation(localLookDirection, transform.up);
+
+        // Limit the angle of rotation
+        Vector3 eulers = localLookRotation.eulerAngles;
+        if (eulers.x > 180)
+            eulers.x -= 360;
+        if (eulers.y > 180)
+            eulers.y -= 360;
+        if (eulers.z > 180)
+            eulers.z -= 360;
+        eulers.x = Mathf.Clamp(eulers.x, headMinX, headMaxX);
+        eulers.y = Mathf.Clamp(eulers.y, headMinY, headMaxY);
+        eulers.z = Mathf.Clamp(eulers.z, headMinZ, headMaxZ);
+
+        localLookRotation = Quaternion.Euler(eulers);
+
+        Quaternion targetRotation = head.parent.rotation * localLookRotation;
+
+        headAnchor.rotation = Quaternion.Slerp(headAnchor.rotation, targetRotation, 1 - Mathf.Exp(-headReactionTime * Time.deltaTime));
     }
 
     private void OnAnimatorMove() {
@@ -256,12 +292,12 @@ public class KogAnimation : MonoBehaviour {
             height = -height * Time.deltaTime * waistFallLerp;
         }
         */
-        Vector3 pos = waist.position;
-        float height = 0;
+        //Vector3 pos = waistRestPosition;
+        //float height = 0;
 
-        waistBobAmount = 0;
-        pos.y = Mathf.Lerp(pos.y, pos.y + waistBobAmount + height, Time.deltaTime * waistBobLerp);
-        waistAnchor.position = pos;
+        //pos.y = pos.y + waistBobAmount;
+        //pos.y = Mathf.Lerp(pos.y, pos.y + waistBobAmount + height, Time.deltaTime * waistBobLerp);
+        //waistAnchor.localPosition = pos;
         // Crouching
         //crouching = speedRatio;
         speedForCrouching = Mathf.Lerp(speedForCrouching, speedRatio * sprintingCrouchMax, Time.deltaTime * sprintingCrouchLerp);
@@ -271,6 +307,8 @@ public class KogAnimation : MonoBehaviour {
         rightLeg.LegUpdate();
         leftArm.ArmUpdate(armHeight, armY_a, armY_b, armY_c, -armX_d, armX_f, -armX_g, -armPoleX_h, armPoleX_j, armPoleY_k, armPoleY_l, armPoleZ_m, armPoleZ_n, waist);
         rightArm.ArmUpdate(armHeight, armY_a, armY_b, armY_c, armX_d, armX_f, armX_g, armPoleX_h, armPoleX_j, armPoleY_k, armPoleY_l, armPoleZ_m, armPoleZ_n, waist);
+
+        TrackHead();
 
         //// Lower the lifter to keep both Idle feet where their anchors are
         //// Set the lifter's position to be at the same height as the heighest Idle foot.
@@ -521,7 +559,7 @@ public class KogAnimation : MonoBehaviour {
             Z = -m * (t - n);
             handAnchorPole.position = upperarm.transform.position + waist.parent.TransformDirection(new Vector3(X, Y, Z));
 
-            Debug.Log("Angle: " + t + " XYZ: "+  new Vector3(X, Y, Z));
+            //Debug.Log("Angle: " + t + " XYZ: "+  new Vector3(X, Y, Z));
         }
     }
 }

@@ -69,13 +69,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 112443843}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -3.0330869e-25, z: -1.3877788e-17, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 859469492}
-  m_Father: {fileID: 1028408452}
-  m_RootOrder: 0
+  m_Father: {fileID: 2106331473}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &112443845
 MonoBehaviour:
@@ -221,7 +221,7 @@ Transform:
   - {fileID: 230265498}
   - {fileID: 2197342072861179650}
   m_Father: {fileID: 1028408452}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &486386004
 MonoBehaviour:
@@ -737,7 +737,7 @@ Transform:
   - {fileID: 934877590}
   - {fileID: 5491475142990771743}
   m_Father: {fileID: 1028408452}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &962572328
 MonoBehaviour:
@@ -793,7 +793,6 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 112443844}
   - {fileID: 2106331473}
   - {fileID: 1675492294}
   - {fileID: 486386003}
@@ -998,7 +997,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1028408452}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1254998141
 GameObject:
@@ -1103,7 +1102,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1028408452}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1336447392
 GameObject:
@@ -1133,7 +1132,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1028408452}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1428425390
 GameObject:
@@ -1211,7 +1210,7 @@ Transform:
   - {fileID: 1254998142}
   - {fileID: 5034817150435570776}
   m_Father: {fileID: 1028408452}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1675492295
 MonoBehaviour:
@@ -1311,7 +1310,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1028408452}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2104625500
 GameObject:
@@ -1344,7 +1343,7 @@ Transform:
   - {fileID: 473411805}
   - {fileID: 8927121612782547102}
   m_Father: {fileID: 1028408452}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2104625502
 MonoBehaviour:
@@ -1401,8 +1400,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 787745643}
+  - {fileID: 112443844}
   m_Father: {fileID: 1028408452}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2106331474
 MonoBehaviour:
@@ -1719,20 +1719,64 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b136c49d8592e0b45abebd9e126cdf80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  headReactionTime: 1
   waistLegRotationFactor: 0.4
   waistReactionTime: 10
+  waistBobMax: 0.2
+  waistBobLegAngleMax: 90
+  waistBobLerp: 12
+  waistFallLerp: 10
   leaningMax: 15
   crouchingMax: 0.6
-  crouchingLeanMax: 15
+  crouchingStepHeight: 0.1
+  movingLeanMax: 15
+  movingSpeedCrouchMax: 0.4
   crouchingLegSpreadMax: 0.4
+  crouchingLegPoleSpreadMax: 0.5
+  sprintingCrouchMax: 0.5
+  sprintingCrouchLerp: 10
+  sprintingSpeedRatioThreshold: 0.5
+  sprintingStepHeightFactor: 0.25
   defaultRaycastDistance: 2
   defaultDistanceBetweenSteps: 0.25
+  distancePerStepSpeedFactor: 0.25
   defaultStepTime: 0.35
-  stepHeight: 0.5
+  stepTimeSpeedFactor: 2
+  defaultStepHeight: 0.5
   legForwardsFactor: 0.055
   stepToTargetPositonDelta: 5
   stepToTargetRotationLerpFactor: 15
   armHeight: 1.5
+  stepTime_h: 1.27
+  stepTime_a: -0.05
+  stepTime_b: 1.5
+  stepTime_c: 1.93
+  distance_h: -0.65
+  distance_a: 2.35
+  distance_b: -0.1
+  armY_a: 0.000304
+  armY_b: 1
+  armY_c: -0.593
+  armX_d: -0.00009
+  armX_f: -45
+  armX_g: 0.5
+  armPoleX_h: 0
+  armPoleX_j: 0
+  armPoleY_k: -0.01
+  armPoleY_l: 0.45
+  armPoleZ_m: 0.03
+  armPoleZ_n: 0
+  headMinX: -40
+  headMaxX: 25
+  headMinY: -60
+  headMaxY: 60
+  headMinZ: -20
+  headMaxZ: 20
+  currentSpeed: 0
+  stepTime: 0
+  speedRatio: 0
+  stepHeight: 0.5
+  distanceBetweenSteps: 0.25
   crouching: 0
   leftLeg:
     state: 0
@@ -1742,12 +1786,11 @@ MonoBehaviour:
     standingOnNormal: {x: 0, y: 0, z: 0}
     raycastDirection: {x: 0, y: 0, z: 0}
     raycastDistance: 0
-    currentSpeed: 0
-    stepTime: 0
     foot: {fileID: 8366462787857729179}
     thigh: {fileID: 6950664665272443522}
     calf: {fileID: 258405876367024203}
     footTarget: {fileID: 1254998142}
+    footTargetPole: {fileID: 0}
     footRaycastSource: {fileID: 6950664665272443522}
     footCollider: {fileID: 2145472507}
     debugBall_HitPoint: {fileID: 1316253409}
@@ -1755,6 +1798,7 @@ MonoBehaviour:
     footAnchor: {x: 0, y: 0, z: 0}
     footLastAnchor: {x: 0, y: 0, z: 0}
     footNextAnchor: {x: 0, y: 0, z: 0}
+    footPoleRestLocalPosition: {x: 0, y: 0, z: 0}
   rightLeg:
     state: 0
     groundedState: 0
@@ -1763,12 +1807,11 @@ MonoBehaviour:
     standingOnNormal: {x: 0, y: 0, z: 0}
     raycastDirection: {x: 0, y: 0, z: 0}
     raycastDistance: 0
-    currentSpeed: 0
-    stepTime: 0
     foot: {fileID: 3330881027124657620}
     thigh: {fileID: 135373439740926560}
     calf: {fileID: 976346608820121344}
     footTarget: {fileID: 230265498}
+    footTargetPole: {fileID: 0}
     footRaycastSource: {fileID: 135373439740926560}
     footCollider: {fileID: 109471357}
     debugBall_HitPoint: {fileID: 1253354453}
@@ -1776,24 +1819,26 @@ MonoBehaviour:
     footAnchor: {x: 0, y: 0, z: 0}
     footLastAnchor: {x: 0, y: 0, z: 0}
     footNextAnchor: {x: 0, y: 0, z: 0}
+    footPoleRestLocalPosition: {x: 0, y: 0, z: 0}
   leftArm:
     shoulder: {fileID: 940409124938697745}
     forearm: {fileID: 540990508228090354}
+    upperarm: {fileID: 0}
     handAnchor: {fileID: 473411805}
+    handAnchorPole: {fileID: 0}
   rightArm:
     shoulder: {fileID: 4380467952244314739}
     forearm: {fileID: 2139424958146564598}
+    upperarm: {fileID: 0}
     handAnchor: {fileID: 934877590}
+    handAnchorPole: {fileID: 0}
   waist: {fileID: 742122348778726323}
   waistAnchor: {fileID: 787745643}
   head: {fileID: 7449396461450657588}
   headAnchor: {fileID: 859469492}
-  shoulderLeft: {fileID: 940409124938697745}
-  shoulderLeftAnchor: {fileID: 0}
-  shoulderRight: {fileID: 4380467952244314739}
-  shoulderRightAnchor: {fileID: 0}
   bodyCollider: {fileID: 1177797493}
   lifterCollider: {fileID: 1827492857}
+  headLookAtTarget: {fileID: 0}
 --- !u!1 &4220345534192578572
 GameObject:
   m_ObjectHideFlags: 0
@@ -2568,6 +2613,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfdb26ffb8b250b439dc4386bcf206b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  topSpeed: 3.5
+  topSpeedSprinting: 12.5
+  topSpeedAnchored: 2
   jumpHeight: 2500
   speed_P: 10
   speed_mD: 50
