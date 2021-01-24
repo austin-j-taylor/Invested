@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations.Rigging;
 
 /// <summary>
 /// Controls the scripted/procedural animation for Kog.
@@ -12,6 +13,7 @@ public class KogAnimation : MonoBehaviour {
     #region constants
     private const float zeroThresholdSqr = 0.05f * 0.05f;
     private const float radiusForRaycast = 0.125f;
+    public float keyframeToScriptingTime = 1, scriptingToKeyframeTime = 1;
     public float headReactionTime = 1;
     public float waistLegRotationFactor = 0.5f;
     public float waistReactionTime = 1;
@@ -57,6 +59,8 @@ public class KogAnimation : MonoBehaviour {
     #endregion
 
 
+    private enum AnimationState { Keyframed, Blending, Scripted }
+
     public bool IsGrounded => leftLeg.walkingState != Leg.WalkingState.Airborne || rightLeg.walkingState != Leg.WalkingState.Airborne;
     public Rigidbody StandingOnRigidbody => leftLeg.standingOnRigidbody != null ? leftLeg.standingOnRigidbody : rightLeg.standingOnRigidbody;
     public Vector3 StandingOnPoint => leftLeg.standingOnRigidbody != null ? leftLeg.standingOnPoint : rightLeg.standingOnPoint;
@@ -70,6 +74,7 @@ public class KogAnimation : MonoBehaviour {
     private Vector3 waistRestPosition;
     private float legRestLength;
 
+    private AnimationState animationState;
     public float currentSpeed, stepTime, speedRatio, stepHeight;
     public float distanceBetweenSteps = .25f;
     private float speedForCrouching;
@@ -85,6 +90,8 @@ public class KogAnimation : MonoBehaviour {
     private Rigidbody rb;
     [SerializeField, Range(0.0f, 1.0f)]
     private float crouching = 0;
+    [SerializeField]
+    private Rig rig = null;
     [SerializeField]
     private Leg leftLeg = null;
     [SerializeField]
@@ -105,6 +112,8 @@ public class KogAnimation : MonoBehaviour {
         anim = GetComponentInChildren<Animator>();
         rb = GetComponentInParent<Rigidbody>();
 
+        animationState = AnimationState.Keyframed;
+        rig.weight = 0;
         waistRestPosition = waist.localPosition;
         leftShoulderRestRotation = leftArm.shoulder.rotation;
         rightShoulderRestRotation = rightArm.shoulder.rotation;
@@ -122,6 +131,44 @@ public class KogAnimation : MonoBehaviour {
         leftLeg.Clear();
         rightLeg.Clear();
         speedForCrouching = 0;
+    }
+
+    private void Update() {
+        // Blend between keyframed and scripted animations, depending on different factors
+        switch (animationState) {
+            case AnimationState.Keyframed:
+                if (Kog.MovementController.State == KogMovementController.WalkingState.Anchored
+                    || speedRatio > 0) {
+                    animationState = AnimationState.Blending;
+                }
+                break;
+            case AnimationState.Blending:
+                // Increase or decrease the current weight of all scripted animation controllers
+                // towards scripted or keyframed animations
+                if (Kog.MovementController.State == KogMovementController.WalkingState.Anchored
+                    || speedRatio > 0) {
+                    rig.weight += Time.deltaTime / keyframeToScriptingTime;
+                    // If at 0% or 100%, enter that state
+                    if (rig.weight >= 1) {
+                        rig.weight = 1;
+                        animationState = AnimationState.Scripted;
+                    }
+                } else {
+                    rig.weight -= Time.deltaTime / scriptingToKeyframeTime;
+                    if (rig.weight <= 0) {
+                        rig.weight = 0;
+                        animationState = AnimationState.Keyframed;
+                    }
+                }
+
+                break;
+            case AnimationState.Scripted:
+                if (Kog.MovementController.State == KogMovementController.WalkingState.Idle
+                    && speedRatio == 0) {
+                    animationState = AnimationState.Blending;
+                }
+                break;
+        }
     }
 
     public void SetLegTarget(Vector3 movement, float currentSpeed) {
@@ -531,7 +578,7 @@ public class KogAnimation : MonoBehaviour {
                     //if (dir.magnitude > delta)
                     //    footNextAnchor = footNextAnchor + dir.normalized * Time.deltaTime * parent.stepToTargetPositonDelta;
                     //else
-                        footNextAnchor = hit.point;
+                    footNextAnchor = hit.point;
                     // Calculate the foot rotation for the new ground normal.
                     targetRotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * parent.transform.rotation * anchorRestLocalRotation;
                     // Lerp the old foot desired rotation to the new desired rotation.
