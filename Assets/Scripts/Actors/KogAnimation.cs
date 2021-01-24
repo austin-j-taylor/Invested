@@ -15,7 +15,7 @@ public class KogAnimation : MonoBehaviour {
     public float headReactionTime = 1;
     public float waistLegRotationFactor = 0.5f;
     public float waistReactionTime = 1;
-    public float waistBobMax = 0.2f, waistBobLegAngleMax = 90, waistBobLerp = 12, waistFallLerp = 10;
+    public float waistBobMax = 0.2f, waistBobLegAngleMax = 90, waistBobLerp = 12, waistBobSpeedFactor = .2f, waistFallLerp = 10;
     public float leaningMax = 25f;
     public float crouchingMax = 0.035f;
     public float crouchingStepHeight = 0.1f;
@@ -26,7 +26,6 @@ public class KogAnimation : MonoBehaviour {
     public float sprintingCrouchLerp = 10;
     public float sprintingSpeedRatioThreshold = 0.5f;
     public float sprintingStepHeightFactor = 0.25f;
-    public float defaultRaycastDistance = 2;
     public float defaultDistanceBetweenSteps = .25f, distancePerStepSpeedFactor = 0.25f;
     public float defaultStepTime = 0.3f, stepTimeSpeedFactor = 2;
     public float defaultStepHeight = .5f;
@@ -34,6 +33,7 @@ public class KogAnimation : MonoBehaviour {
     public float stepToTargetPositonDelta = 10;
     public float stepToTargetRotationLerpFactor = 10;
     public float armHeight = 1.25f;
+    public float airborneLegDistance = 1.25f;
     public float stepTime_h = 1.27f;
     public float stepTime_a = -0.05f;
     public float stepTime_b = 1.5f;
@@ -56,14 +56,13 @@ public class KogAnimation : MonoBehaviour {
     public float headMinX = -40, headMaxX = 25, headMinY = -60, headMaxY = 60, headMinZ = -20, headMaxZ = 20;
     #endregion
 
-    private enum GroundedState { Grounded, Airborne }
 
-    public bool IsGrounded => leftLeg.groundedState == GroundedState.Grounded || rightLeg.groundedState == GroundedState.Grounded;
+    public bool IsGrounded => leftLeg.walkingState != Leg.WalkingState.Airborne || rightLeg.walkingState != Leg.WalkingState.Airborne;
     public Rigidbody StandingOnRigidbody => leftLeg.standingOnRigidbody != null ? leftLeg.standingOnRigidbody : rightLeg.standingOnRigidbody;
     public Vector3 StandingOnPoint => leftLeg.standingOnRigidbody != null ? leftLeg.standingOnPoint : rightLeg.standingOnPoint;
     public Vector3 StandingOnNormal => leftLeg.standingOnRigidbody != null ? leftLeg.standingOnNormal : rightLeg.standingOnNormal;
 
-    private bool IsSprinting => speedRatio > sprintingSpeedRatioThreshold;
+    private bool IsRunning => speedRatio > sprintingSpeedRatioThreshold;
     private float TopSpeed => Kog.MovementController.topSpeedSprinting;
 
 
@@ -111,8 +110,8 @@ public class KogAnimation : MonoBehaviour {
         rightShoulderRestRotation = rightArm.shoulder.rotation;
         legRestLength = Vector3.Distance(leftLeg.foot.position, leftLeg.thigh.position);
 
-        leftLeg.Initialize(this, rightLeg);
-        rightLeg.Initialize(this, leftLeg);
+        leftLeg.Initialize(this, rightLeg, true);
+        rightLeg.Initialize(this, leftLeg, false);
         leftArm.Initialize(this, leftLeg);
         rightArm.Initialize(this, rightLeg);
 
@@ -132,9 +131,9 @@ public class KogAnimation : MonoBehaviour {
 
 
         Vector3 crouchSpread = waist.right * crouchingLegSpreadMax * crouching;
-        Vector3 legForwardsMovement = Vector3.down + movement * legForwardsFactor;
-        Vector3 leftMove = (-crouchSpread + legForwardsMovement) * defaultRaycastDistance;
-        Vector3 rightMove = (crouchSpread + legForwardsMovement) * defaultRaycastDistance;
+        Vector3 legForwardsMovement = Vector3.down * legRestLength + movement * legForwardsFactor;
+        Vector3 leftMove = legForwardsMovement - crouchSpread;
+        Vector3 rightMove = legForwardsMovement + crouchSpread;
 
         float legPoleOffset = crouching * crouchingLegPoleSpreadMax;
         Vector3 leftLegPoleOffset = leftLeg.footPoleRestLocalPosition + Vector3.left * legPoleOffset;
@@ -142,11 +141,10 @@ public class KogAnimation : MonoBehaviour {
         leftLeg.footTargetPole.localPosition = leftLegPoleOffset;
         rightLeg.footTargetPole.localPosition = rightLegPoleOffset;
 
-        float length = leftMove.magnitude;
         leftLeg.raycastDirection = leftMove.normalized;
         rightLeg.raycastDirection = rightMove.normalized;
-        leftLeg.raycastDistance = length;
-        rightLeg.raycastDistance = length;
+        leftLeg.raycastDistance = leftMove.magnitude;
+        rightLeg.raycastDistance = rightMove.magnitude;
         this.currentSpeed = currentSpeed;
 
         //stepTime = defaultStepTime + speedRatio * stepTimeSpeedFactor;
@@ -229,7 +227,7 @@ public class KogAnimation : MonoBehaviour {
         //leftArm.shoulderAnchor.rotation = leftArm.shoulder.parent.rotation * leftShoulderRestRotation * waistRotationFromLegs;
         //rightArm.shoulderAnchor.rotation = rightArm.shoulder.parent.rotation * rightShoulderRestRotation * waistRotationFromLegs;
 
-        // Set the height of the waist so that the whole body bobs with your leg movement
+        // Set the height of the waist so that the whole body bobs with your leg movement, bobbing more at higher speed
         // get the angle of the leg that's the most bent
         float legAngle = waistBobLegAngleMax;
         float leftAngle = leftLeg.calf.localEulerAngles.x;
@@ -243,7 +241,7 @@ public class KogAnimation : MonoBehaviour {
         if (rightAngle < legAngle)
             legAngle = rightAngle;
         //Debug.Log(legAngle + "   left: " + legAngle + " right: " + rightAngle);
-        float waistBobAmount = -legAngle / waistBobLegAngleMax * waistBobMax;
+        float waistBobAmount = -legAngle / waistBobLegAngleMax * (waistBobMax + speedRatio * waistBobSpeedFactor);
 
         //// Lower the waist if a foot could be touching its anchor but it is too far vertically
         //float footToAnchorHeightLeft = Vector3.Distance(leftLeg.foot.position, leftLeg.footAnchor);
@@ -264,7 +262,7 @@ public class KogAnimation : MonoBehaviour {
         /*
         float legMaxLength = legRestLength * (1 - crouching * .5f);
         float height = 0;
-        if (leftLeg.state == Leg.WalkingState.Support && leftLeg.groundedState == GroundedState.Grounded) {
+        if (leftLeg.walkingState == Leg.WalkingState.Support && leftLeg.groundedState == GroundedState.Grounded) {
             Vector3 leftThighToFoot = leftLeg.foot.position - leftLeg.thigh.position;
             if (Physics.Raycast(leftLeg.thigh.position, leftThighToFoot, out RaycastHit hit, 1000, GameManager.Layer_IgnorePlayer)) {
 
@@ -275,7 +273,7 @@ public class KogAnimation : MonoBehaviour {
             }
         }
 
-        if (rightLeg.state == Leg.WalkingState.Support && rightLeg.groundedState == GroundedState.Grounded) {
+        if (rightLeg.walkingState == Leg.WalkingState.Support && rightLeg.groundedState == GroundedState.Grounded) {
             Vector3 rightThighToFoot = rightLeg.foot.position - rightLeg.thigh.position;
             if (Physics.Raycast(rightLeg.thigh.position, rightThighToFoot, out RaycastHit hit, 1000, GameManager.Layer_IgnorePlayer)) {
 
@@ -292,12 +290,12 @@ public class KogAnimation : MonoBehaviour {
             height = -height * Time.deltaTime * waistFallLerp;
         }
         */
-        //Vector3 pos = waistRestPosition;
+        Vector3 pos = waistRestPosition;
         //float height = 0;
-
-        //pos.y = pos.y + waistBobAmount;
+        //Debug.Log(waistBobAmount);
+        pos.y = pos.y + waistBobAmount;
         //pos.y = Mathf.Lerp(pos.y, pos.y + waistBobAmount + height, Time.deltaTime * waistBobLerp);
-        //waistAnchor.localPosition = pos;
+        waistAnchor.position = Vector3.Lerp(waistAnchor.position, waist.parent.position + pos, Time.deltaTime * waistBobLerp); ;
         // Crouching
         //crouching = speedRatio;
         speedForCrouching = Mathf.Lerp(speedForCrouching, speedRatio * sprintingCrouchMax, Time.deltaTime * sprintingCrouchLerp);
@@ -305,8 +303,8 @@ public class KogAnimation : MonoBehaviour {
 
         leftLeg.LegUpdate();
         rightLeg.LegUpdate();
-        leftArm.ArmUpdate(armHeight, armY_a, armY_b, armY_c, -armX_d, armX_f, -armX_g, -armPoleX_h, armPoleX_j, armPoleY_k, armPoleY_l, armPoleZ_m, armPoleZ_n, waist);
-        rightArm.ArmUpdate(armHeight, armY_a, armY_b, armY_c, armX_d, armX_f, armX_g, armPoleX_h, armPoleX_j, armPoleY_k, armPoleY_l, armPoleZ_m, armPoleZ_n, waist);
+        leftArm.ArmUpdate(armHeight, speedRatio, armY_a, armY_b, armY_c, -armX_d, armX_f, -armX_g, -armPoleX_h, armPoleX_j, armPoleY_k, armPoleY_l, armPoleZ_m, armPoleZ_n, waist);
+        rightArm.ArmUpdate(armHeight, speedRatio, armY_a, armY_b, armY_c, armX_d, armX_f, armX_g, armPoleX_h, armPoleX_j, armPoleY_k, armPoleY_l, armPoleZ_m, armPoleZ_n, waist);
 
         TrackHead();
 
@@ -315,13 +313,13 @@ public class KogAnimation : MonoBehaviour {
         //Vector3 pos = transform.position;
 
         //float heighest = 0;
-        //if (leftLeg.state == Leg.WalkingState.Support) {
+        //if (leftLeg.walkingState == Leg.WalkingState.Support) {
         //    float height = Vector3.Distance(leftLeg.foot.position, leftLeg.footAnchor);
         //    Debug.Log("Left leg height: " + height);
         //    if (height > heighest)
         //        heighest = height;
         //}
-        //if (rightLeg.state == Leg.WalkingState.Support) {
+        //if (rightLeg.walkingState == Leg.WalkingState.Support) {
         //    float height = Vector3.Distance(rightLeg.foot.position, rightLeg.footAnchor);
         //    Debug.Log("Right leg height: " + height);
         //    if (height > heighest)
@@ -334,10 +332,11 @@ public class KogAnimation : MonoBehaviour {
     [System.Serializable]
     private class Leg {
 
-        public enum WalkingState { Support, Floating }
+        public enum WalkingState { Support, Floating, Airborne }
+        //public enum GroundedState { Grounded, Airborne }
 
-        public WalkingState state = WalkingState.Support;
-        public GroundedState groundedState = GroundedState.Grounded;
+        public WalkingState walkingState = WalkingState.Support;
+        //public GroundedState groundedState = GroundedState.Grounded;
         public Rigidbody standingOnRigidbody = null;
         public Vector3 standingOnPoint = Vector3.zero;
         public Vector3 standingOnNormal = Vector3.zero;
@@ -355,10 +354,11 @@ public class KogAnimation : MonoBehaviour {
         [SerializeField]
         public Transform debugBall_HitPoint = null, debugBall_currentAnchor = null;
 
-        private bool AnchorOutOfRange => (foot.position - footAnchor).magnitude> 0.05f;
+        private bool AnchorOutOfRange => (foot.position - footAnchor).magnitude > 0.05f;
 
         private KogAnimation parent;
         private Leg otherLeg;
+        private bool isLeft;
         public Vector3 footAnchor = Vector3.zero, footLastAnchor = Vector3.zero, footNextAnchor = Vector3.zero;
         private Quaternion footAnchorRotation, footLastAnchorRotation, footNextAnchorRotation;
         private Quaternion anchorRestLocalRotation;
@@ -366,13 +366,12 @@ public class KogAnimation : MonoBehaviour {
         private Vector3 footColliderPosition;
         public Vector3 footPoleRestLocalPosition;
 
-        private float currentDistance = 0;
         private float tInStep = 0;
 
-        public void Initialize(KogAnimation parent, Leg otherLeg) {
+        public void Initialize(KogAnimation parent, Leg otherLeg, bool isLeft) {
             this.otherLeg = otherLeg;
             this.parent = parent;
-            raycastDistance = parent.defaultRaycastDistance;
+            this.isLeft = isLeft;
 
             footAnchor = footTarget.position;
             footAnchorRotation = footTarget.rotation;
@@ -385,114 +384,178 @@ public class KogAnimation : MonoBehaviour {
         }
 
         public void Clear() {
-            state = WalkingState.Support;
+            walkingState = WalkingState.Support;
         }
 
         public void LegUpdate() {
             footCollider.localPosition = footColliderPosition + new Vector3(0, -parent.crouchingMax * parent.crouching, 0);
-            footTarget.position = footAnchor;
-            footTarget.rotation = footAnchorRotation;
 
-            switch (state) {
+            switch (walkingState) {
                 case WalkingState.Support:
                     // Foot is stationary, not having made a step.
                     if (Physics.SphereCast(footRaycastSource.position, radiusForRaycast, raycastDirection, out RaycastHit hit, raycastDistance, GameManager.Layer_IgnorePlayer)) {
                         // The desired foot position exists on the ground.
 
-                        groundedState = GroundedState.Grounded;
                         standingOnRigidbody = hit.rigidbody;
                         standingOnPoint = hit.point;
                         standingOnNormal = hit.normal;
-
-                        // The foot is too far from its desired foot position. Start a step.
-                        // Keep one foot supporting at all times - unless moving quickly and this leg has reached the end of its propulsion (i.e. is stretched)
-                        Vector3 hitToFoot = foot.position - hit.point;
-                        hitToFoot.y = 0;
-                        currentDistance = hitToFoot.magnitude;
-                        float calfAngle = calf.localEulerAngles.x;
-                        if (calfAngle > 180)
-                            calfAngle -= 360;
-                        bool isStretched = calfAngle < 0.01f;
-                        //Debug.Log("Stretched:  " + isStretched +  ", "  + calf.localEulerAngles.x, foot.gameObject);
-                        if (currentDistance > parent.distanceBetweenSteps && (otherLeg.state == WalkingState.Support || parent.IsSprinting && isStretched)) {
-                            // Take a step. The Last anchor are where the foot is now. The Next anchor are where the desired foot position is now.
-                            footLastAnchor = footTarget.position;
-                            footLastAnchorRotation = footTarget.rotation;
-                            footNextAnchor = hit.point;
-                            state = WalkingState.Floating;
-                            tInStep = 0;
-                        }
-
-                        // Debug
-                        Debug.DrawLine(footRaycastSource.position, footRaycastSource.position + raycastDirection * raycastDistance, Color.red);
-                        debugBall_HitPoint.gameObject.SetActive(true);
-                        debugBall_currentAnchor.gameObject.SetActive(true);
-                        debugBall_HitPoint.position = hit.point;
-                        debugBall_currentAnchor.position = footAnchor;
-                        Debug.DrawLine(hit.point, hit.point + hitToFoot.normalized * parent.distanceBetweenSteps);
                     } else {
-                        // The foot is too far from the ground. It is considered airborne
+                        // The foot is too far from the ground, even though it should be supporting. It is considered airborne
+                        // Take a step towards a where the foot would go if there were ground there.
 
-                        groundedState = GroundedState.Airborne;
+                        walkingState = WalkingState.Airborne;
                         standingOnRigidbody = null;
-                        debugBall_HitPoint.gameObject.SetActive(false);
-                        debugBall_currentAnchor.gameObject.SetActive(false);
+                        hit.point = footRaycastSource.position + raycastDirection * parent.airborneLegDistance;
                     }
+
+                    // The foot is too far from its desired foot position. Start a step.
+                    // Keep one foot supporting at all times - unless moving quickly and this leg has reached the end of its propulsion (i.e. is stretched)
+                    Vector3 hitToFoot = foot.position - hit.point;
+                    hitToFoot.y = 0;
+                    float calfAngle = calf.localEulerAngles.x;
+                    if (calfAngle > 180)
+                        calfAngle -= 360;
+                    bool isStretched = calfAngle < 0.01f;
+                    //Debug.Log("Stretched:  " + isStretched +  ", "  + calf.localEulerAngles.x, foot.gameObject);
+                    if (hitToFoot.magnitude > parent.distanceBetweenSteps
+                                && (otherLeg.walkingState == WalkingState.Support || parent.IsRunning && isStretched)
+                    ) {
+                        // Take a step. The Last anchor are where the foot is now. The Next anchor are where the desired foot position is now.
+                        footLastAnchor = footTarget.position;
+                        footLastAnchorRotation = footTarget.rotation;
+                        footNextAnchor = hit.point;
+                        walkingState = WalkingState.Floating;
+                        tInStep = 0;
+                    }
+
+                    // Debug
+                    Debug.DrawLine(footRaycastSource.position, footRaycastSource.position + raycastDirection * raycastDistance, Color.red);
+                    debugBall_HitPoint.gameObject.SetActive(true);
+                    debugBall_currentAnchor.gameObject.SetActive(true);
+                    debugBall_HitPoint.position = hit.point;
+                    debugBall_currentAnchor.position = footAnchor;
+                    Debug.DrawLine(hit.point, hit.point + hitToFoot.normalized * parent.distanceBetweenSteps);
+
                     break;
                 case WalkingState.Floating:
                     // The foot is currently mid-step.
                     if (Physics.SphereCast(footRaycastSource.position, radiusForRaycast, raycastDirection, out hit, raycastDistance, GameManager.Layer_IgnorePlayer)) {
                         // The desired foot position still exists. Update where the foot's moving to reflect this new desired position.
-                        groundedState = GroundedState.Grounded;
                         standingOnRigidbody = hit.rigidbody;
                         standingOnPoint = hit.point;
                         standingOnNormal = hit.normal;
-
-                        // Lerp the old foot anchor to the new one.
-                        Vector3 dir = hit.point - footNextAnchor;
-                        float delta = Time.deltaTime * parent.stepToTargetPositonDelta;
-                        if (dir.magnitude > delta)
-                            footNextAnchor = footNextAnchor + dir.normalized * Time.deltaTime * parent.stepToTargetPositonDelta;
-                        else
-                            footNextAnchor = hit.point;
-                        // Calculate the foot rotation for the new ground normal.
-                        Quaternion targetRotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * parent.transform.rotation * anchorRestLocalRotation;
-                        // Lerp the old foot desired rotation to the new desired rotation.
-                        footNextAnchorRotation = Quaternion.Slerp(footNextAnchorRotation, targetRotation, Time.deltaTime * parent.stepToTargetRotationLerpFactor);
-                        Vector3 hitToFoot = foot.position - hit.point;
-                        hitToFoot.y = 0;
-                        currentDistance = hitToFoot.magnitude;
-
-                        // Debug
-                        Debug.DrawLine(footRaycastSource.position, footRaycastSource.position + raycastDirection * raycastDistance, Color.yellow);
-                        debugBall_HitPoint.gameObject.SetActive(true);
-                        debugBall_currentAnchor.gameObject.SetActive(true);
-                        debugBall_HitPoint.position = hit.point;
-                        debugBall_HitPoint.rotation = targetRotation;
-                        debugBall_currentAnchor.position = footNextAnchor;
-                        debugBall_currentAnchor.rotation = footNextAnchorRotation;
-                        Debug.DrawLine(hit.point, hit.point + hitToFoot.normalized * parent.distanceBetweenSteps);
-
                     } else {
-                        // A new desired position couldn't be found. Keep moving towards the old one.
-                        groundedState = GroundedState.Airborne;
+                        // Now is airborner
+                        walkingState = WalkingState.Airborne;
                         standingOnRigidbody = null;
-                        debugBall_HitPoint.gameObject.SetActive(false);
-                        debugBall_currentAnchor.gameObject.SetActive(false);
+                        hit.point = footRaycastSource.position + raycastDirection * parent.airborneLegDistance;
                     }
 
-                    // Set leg position along parabola between anchors
-                    //if (currentDistance > parent.distanceBetweenSteps) {
-                    //    tInStep += Time.deltaTime / stepTime * currentDistance / parent.distanceBetweenSteps;
-                    //} else {
+                    // Lerp the old foot anchor to the new one.
+                    Vector3 dir = hit.point - footNextAnchor;
+                    float delta = Time.deltaTime * parent.stepToTargetPositonDelta;
+                    if (dir.magnitude > delta)
+                        footNextAnchor = footNextAnchor + dir.normalized * Time.deltaTime * parent.stepToTargetPositonDelta;
+                    else
+                        footNextAnchor = hit.point;
+                    // Calculate the foot rotation for the new ground normal.
+                    Quaternion targetRotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * parent.transform.rotation * anchorRestLocalRotation;
+                    // Lerp the old foot desired rotation to the new desired rotation.
+                    footNextAnchorRotation = Quaternion.Slerp(footNextAnchorRotation, targetRotation, Time.deltaTime * parent.stepToTargetRotationLerpFactor);
+                    hitToFoot = foot.position - hit.point;
+                    hitToFoot.y = 0;
+
+                    // Debug
+                    Debug.DrawLine(footRaycastSource.position, footRaycastSource.position + raycastDirection * raycastDistance, Color.yellow);
+                    debugBall_HitPoint.gameObject.SetActive(true);
+                    debugBall_currentAnchor.gameObject.SetActive(true);
+                    debugBall_HitPoint.position = hit.point;
+                    debugBall_HitPoint.rotation = targetRotation;
+                    debugBall_currentAnchor.position = footNextAnchor;
+                    debugBall_currentAnchor.rotation = footNextAnchorRotation;
+                    Debug.DrawLine(hit.point, hit.point + hitToFoot.normalized * parent.distanceBetweenSteps);
+
+
                     tInStep += Time.deltaTime / parent.stepTime;
-                    //}
 
                     if (tInStep >= 1) {
                         // Done stepping
+                        // If the foot would be in the air, maintain this position untila foot position could be found
                         footAnchor = footNextAnchor;
                         footAnchorRotation = footNextAnchorRotation;
-                        state = WalkingState.Support;
+                        walkingState = WalkingState.Support;
+                    } else {
+                        float y = Mathf.Sqrt((-2 * (tInStep - 0.5f) * (tInStep - 0.5f) + 0.5f) * 2);
+
+                        Vector3 pos = footLastAnchor + tInStep * (footNextAnchor - footLastAnchor);
+                        pos.y += y * parent.stepHeight;
+                        // Set the foot anchor position to be along that parabola
+                        footAnchor = pos;
+                        // Set the foot to rotate side-to-side such that it starts facing where it did when last touching the ground
+                        // and it will face where it should when it lands on the ground...
+                        Quaternion floorFootRotation = Quaternion.Slerp(footLastAnchorRotation, footNextAnchorRotation, tInStep);
+                        // ...and set the foot's pitch such that it's flat when on the ground but kicks off when in the air
+                        y = Mathf.Sqrt(y);
+                        footAnchorRotation = Quaternion.Slerp(floorFootRotation, calf.rotation * footRestLocalRotation, y);
+                        //Debug.Log(calf.rotation +", " + footAnchorRotation  + ", " + floorFootRotation +", " + legRotation);
+                    }
+                    break;
+
+                case WalkingState.Airborne:
+                    // The leg is airborne, falling through the air.
+                    // If the other leg isn't leading yet, set this leg to lead, meaning it will move in front to brace for the landing.
+                    // If this leg isn't leading, keep it closer to the back.
+
+                    if (Physics.SphereCast(footRaycastSource.position, radiusForRaycast, raycastDirection, out hit, raycastDistance, GameManager.Layer_IgnorePlayer)) {
+                        // The ground is close. move foot anchor towards it until we've landed.
+
+                        // (tried doing this with the above spherecast distance but it was pretty inconsistent...
+                        if (Physics.Raycast(foot.position, Vector3.down, out RaycastHit footHit, 1000, GameManager.Layer_IgnorePlayer)) {
+
+                            if (footHit.distance < 0.02f) {
+                                footAnchor = footNextAnchor;
+                                footAnchorRotation = footNextAnchorRotation;
+                                walkingState = WalkingState.Support;
+                            }
+                        }
+
+                    } else {
+                        // Still airborne
+                        standingOnRigidbody = null;
+                        hit.point = footRaycastSource.position + raycastDirection * parent.airborneLegDistance;
+                    }
+
+                    // Lerp the old foot anchor to the new one.
+                    //dir = hit.point - footNextAnchor;
+                    //delta = Time.deltaTime * parent.stepToTargetPositonDelta;
+                    //if (dir.magnitude > delta)
+                    //    footNextAnchor = footNextAnchor + dir.normalized * Time.deltaTime * parent.stepToTargetPositonDelta;
+                    //else
+                        footNextAnchor = hit.point;
+                    // Calculate the foot rotation for the new ground normal.
+                    targetRotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * parent.transform.rotation * anchorRestLocalRotation;
+                    // Lerp the old foot desired rotation to the new desired rotation.
+                    footNextAnchorRotation = Quaternion.Slerp(footNextAnchorRotation, targetRotation, Time.deltaTime * parent.stepToTargetRotationLerpFactor);
+                    hitToFoot = foot.position - hit.point;
+                    hitToFoot.y = 0;
+
+                    // Debug
+                    Debug.DrawLine(footRaycastSource.position, footRaycastSource.position + raycastDirection * raycastDistance, Color.yellow);
+                    debugBall_HitPoint.gameObject.SetActive(true);
+                    debugBall_currentAnchor.gameObject.SetActive(true);
+                    debugBall_HitPoint.position = hit.point;
+                    debugBall_HitPoint.rotation = targetRotation;
+                    debugBall_currentAnchor.position = footNextAnchor;
+                    debugBall_currentAnchor.rotation = footNextAnchorRotation;
+                    Debug.DrawLine(hit.point, hit.point + hitToFoot.normalized * parent.distanceBetweenSteps);
+
+                    tInStep += Time.deltaTime / parent.stepTime;
+
+                    if (tInStep >= 1) {
+                        // Done stepping
+                        // If the foot would be in the air, maintain this position until a foot position could be found
+                        footAnchor = footNextAnchor;
+                        footAnchorRotation = footNextAnchorRotation;
                     } else {
                         float y = Mathf.Sqrt((-2 * (tInStep - 0.5f) * (tInStep - 0.5f) + 0.5f) * 2);
 
@@ -510,6 +573,8 @@ public class KogAnimation : MonoBehaviour {
                     }
                     break;
             }
+            footTarget.position = footAnchor;
+            footTarget.rotation = footAnchorRotation;
         }
 
         /// <summary>
@@ -541,7 +606,7 @@ public class KogAnimation : MonoBehaviour {
         public void Initialize(KogAnimation parent, Leg leg) {
             this.leg = leg;
         }
-        public void ArmUpdate(float armHeight, float Y_a, float Y_b, float Y_c, float X_d, float X_f, float X_g, float h, float j, float k, float l, float m, float n, Transform waist) {
+        public void ArmUpdate(float armHeight, float speedRatio, float Y_a, float Y_b, float Y_c, float X_d, float X_f, float X_g, float h, float j, float k, float l, float m, float n, Transform waist) {
             //handAnchor.position = shoulder.position + Quaternion.AngleAxis(leg.GetAngle(), parent.waist.right) * Vector3.down * Height;
 
             // Position arm such that:
@@ -549,17 +614,19 @@ public class KogAnimation : MonoBehaviour {
             // The length of the arm depends on the speed (higher speed = closer handAnchor)
             float t = leg.GetAngle();
             float X = X_d * (t - X_f) * (t - X_f) + X_g;
-            float Y = Y_a * (t - Y_b) * (t - Y_b) + Y_c;
+            float Y = Y_a * (t - Y_b) * (t - Y_b) + Y_c + (-armHeight - Y_c) * (1 - speedRatio); // When speed is 0, the arm should hang at armHeight
             float Z = armHeight * Mathf.Sin(-leg.GetAngle() * Mathf.Deg2Rad);
             handAnchor.position = upperarm.transform.position + waist.TransformDirection(new Vector3(X, Y, Z));
             handAnchor.rotation = forearm.rotation;
+
+            //Debug.Log("Angle: " + t + " XYZ: " + new Vector3(X, Y, Z));
 
             X = h * (t - j);
             Y = k * (t - l);
             Z = -m * (t - n);
             handAnchorPole.position = upperarm.transform.position + waist.parent.TransformDirection(new Vector3(X, Y, Z));
 
-            //Debug.Log("Angle: " + t + " XYZ: "+  new Vector3(X, Y, Z));
+
         }
     }
 }
