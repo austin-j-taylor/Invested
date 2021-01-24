@@ -10,55 +10,6 @@ using UnityEngine.Animations.Rigging;
 /// </summary>
 public class KogAnimation : MonoBehaviour {
 
-    #region constants
-    private const float zeroThresholdSqr = 0.05f * 0.05f;
-    private const float radiusForRaycast = 0.125f;
-    public float keyframeToScriptingTime = 1, scriptingToKeyframeTime = 1;
-    public float headReactionTime = 1;
-    public float waistLegRotationFactor = 0.5f;
-    public float waistReactionTime = 1;
-    public float waistBobMax = 0.2f, waistBobLegAngleMax = 90, waistBobLerp = 12, waistBobSpeedFactor = .2f, waistFallLerp = 10;
-    public float leaningMax = 25f;
-    public float crouchingMax = 0.035f;
-    public float crouchingStepHeight = 0.1f;
-    public float movingLeanMax = 15f;
-    public float movingSpeedCrouchMax = .4f;
-    public float crouchingLegSpreadMax = 0.25f, crouchingLegPoleSpreadMax = 0.5f;
-    public float sprintingCrouchMax = 0.5f;
-    public float sprintingCrouchLerp = 10;
-    public float sprintingSpeedRatioThreshold = 0.5f;
-    public float sprintingStepHeightFactor = 0.25f;
-    public float defaultDistanceBetweenSteps = .25f, distancePerStepSpeedFactor = 0.25f;
-    public float defaultStepTime = 0.3f, stepTimeSpeedFactor = 2;
-    public float defaultStepHeight = .5f;
-    public float legForwardsFactor = 0.1f;
-    public float stepToTargetPositonDelta = 10;
-    public float stepToTargetRotationLerpFactor = 10;
-    public float armHeight = 1.25f;
-    public float airborneLegDistance = 1.25f;
-    public float stepTime_h = 1.27f;
-    public float stepTime_a = -0.05f;
-    public float stepTime_b = 1.5f;
-    public float stepTime_c = 1.93f;
-    public float distance_h = -0.65f;
-    public float distance_a = 2.35f;
-    public float distance_b = -0.1f;
-    public float armY_a = 0.000304f;
-    public float armY_b = 1;
-    public float armY_c = -0.593f;
-    public float armX_d = -0.00009f;
-    public float armX_f = -45;
-    public float armX_g = 0.5f;
-    public float armPoleX_h = 0;
-    public float armPoleX_j = 0;
-    public float armPoleY_k = -0.01f;
-    public float armPoleY_l = 0.45f;
-    public float armPoleZ_m = .03f;
-    public float armPoleZ_n = 0;
-    public float headMinX = -40, headMaxX = 25, headMinY = -60, headMaxY = 60, headMinZ = -20, headMaxZ = 20;
-    #endregion
-
-
     private enum AnimationState { Keyframed, Blending, Scripted }
 
     public bool IsGrounded => leftLeg.walkingState != Leg.WalkingState.Airborne || rightLeg.walkingState != Leg.WalkingState.Airborne;
@@ -66,7 +17,7 @@ public class KogAnimation : MonoBehaviour {
     public Vector3 StandingOnPoint => leftLeg.standingOnRigidbody != null ? leftLeg.standingOnPoint : rightLeg.standingOnPoint;
     public Vector3 StandingOnNormal => leftLeg.standingOnRigidbody != null ? leftLeg.standingOnNormal : rightLeg.standingOnNormal;
 
-    private bool IsRunning => speedRatio > sprintingSpeedRatioThreshold;
+    private bool IsRunning => speedRatio > kogAnimation_SO.Sprint_speedRatioThreshold;
     private float TopSpeed => Kog.MovementController.topSpeedSprinting;
 
 
@@ -88,6 +39,8 @@ public class KogAnimation : MonoBehaviour {
 
     private Animator anim;
     private Rigidbody rb;
+    [SerializeField]
+    private KogAnimation_SO kogAnimation_SO;
     [SerializeField, Range(0.0f, 1.0f)]
     private float crouching = 0;
     [SerializeField]
@@ -119,10 +72,10 @@ public class KogAnimation : MonoBehaviour {
         rightShoulderRestRotation = rightArm.shoulder.rotation;
         legRestLength = Vector3.Distance(leftLeg.foot.position, leftLeg.thigh.position);
 
-        leftLeg.Initialize(this, rightLeg, true);
-        rightLeg.Initialize(this, leftLeg, false);
-        leftArm.Initialize(this, leftLeg);
-        rightArm.Initialize(this, rightLeg);
+        leftLeg.Initialize(this, kogAnimation_SO, rightLeg, true);
+        rightLeg.Initialize(this, kogAnimation_SO, leftLeg, false);
+        leftArm.Initialize(kogAnimation_SO, leftLeg, true);
+        rightArm.Initialize(kogAnimation_SO, rightLeg, false);
 
         //anim.Play("Armature|I-Pose");
     }
@@ -147,14 +100,14 @@ public class KogAnimation : MonoBehaviour {
                 // towards scripted or keyframed animations
                 if (Kog.MovementController.State == KogMovementController.WalkingState.Anchored
                     || speedRatio > 0) {
-                    rig.weight += Time.deltaTime / keyframeToScriptingTime;
+                    rig.weight += Time.deltaTime / kogAnimation_SO.KeyframeToScriptingTime;
                     // If at 0% or 100%, enter that state
                     if (rig.weight >= 1) {
                         rig.weight = 1;
                         animationState = AnimationState.Scripted;
                     }
                 } else {
-                    rig.weight -= Time.deltaTime / scriptingToKeyframeTime;
+                    rig.weight -= Time.deltaTime / kogAnimation_SO.ScriptingToKeyframeTime;
                     if (rig.weight <= 0) {
                         rig.weight = 0;
                         animationState = AnimationState.Keyframed;
@@ -177,12 +130,12 @@ public class KogAnimation : MonoBehaviour {
             speedRatio = 0;
 
 
-        Vector3 crouchSpread = waist.right * crouchingLegSpreadMax * crouching;
-        Vector3 legForwardsMovement = Vector3.down * legRestLength + movement * legForwardsFactor;
+        Vector3 crouchSpread = waist.right * kogAnimation_SO.Crouch_legSpreadMax * crouching;
+        Vector3 legForwardsMovement = Vector3.down * legRestLength + movement * kogAnimation_SO.Leg_forwards_withSpeed;
         Vector3 leftMove = legForwardsMovement - crouchSpread;
         Vector3 rightMove = legForwardsMovement + crouchSpread;
 
-        float legPoleOffset = crouching * crouchingLegPoleSpreadMax;
+        float legPoleOffset = crouching * kogAnimation_SO.Crouch_LegPoleSpreadMax;
         Vector3 leftLegPoleOffset = leftLeg.footPoleRestLocalPosition + Vector3.left * legPoleOffset;
         Vector3 rightLegPoleOffset = rightLeg.footPoleRestLocalPosition + Vector3.right * legPoleOffset;
         leftLeg.footTargetPole.localPosition = leftLegPoleOffset;
@@ -194,12 +147,12 @@ public class KogAnimation : MonoBehaviour {
         rightLeg.raycastDistance = rightMove.magnitude;
         this.currentSpeed = currentSpeed;
 
-        //stepTime = defaultStepTime + speedRatio * stepTimeSpeedFactor;
+        //stepTime = step_defaultTime + speedRatio * step_time_withSpeed;
 
-        distanceBetweenSteps = defaultDistanceBetweenSteps + (speedRatio * distancePerStepSpeedFactor);
+        distanceBetweenSteps = kogAnimation_SO.Step_defaultDistance + (speedRatio * kogAnimation_SO.Step_distance_withSpeed);
 
-        stepTime = stepTime_h * (speedRatio - stepTime_a) * (speedRatio - stepTime_b) * (speedRatio - stepTime_c);
-        distanceBetweenSteps = distance_h * (speedRatio - distance_a) * (speedRatio - distance_b);
+        stepTime = kogAnimation_SO.StepTime_h * (speedRatio - kogAnimation_SO.StepTime_a) * (speedRatio - kogAnimation_SO.StepTime_b) * (speedRatio - kogAnimation_SO.StepTime_c);
+        distanceBetweenSteps = kogAnimation_SO.Distance_h * (speedRatio - kogAnimation_SO.Distance_a) * (speedRatio - kogAnimation_SO.Distance_b);
 
 
         //Debug.Log("speed: " + speedRatio + ", " + stepTime + ", distance: " + distanceBetweenSteps);
@@ -226,15 +179,15 @@ public class KogAnimation : MonoBehaviour {
             eulers.y -= 360;
         if (eulers.z > 180)
             eulers.z -= 360;
-        eulers.x = Mathf.Clamp(eulers.x, headMinX, headMaxX);
-        eulers.y = Mathf.Clamp(eulers.y, headMinY, headMaxY);
-        eulers.z = Mathf.Clamp(eulers.z, headMinZ, headMaxZ);
+        eulers.x = Mathf.Clamp(eulers.x, kogAnimation_SO.HeadMinX, kogAnimation_SO.HeadMaxX);
+        eulers.y = Mathf.Clamp(eulers.y, kogAnimation_SO.HeadMinY, kogAnimation_SO.HeadMaxY);
+        eulers.z = Mathf.Clamp(eulers.z, kogAnimation_SO.HeadMinZ, kogAnimation_SO.HeadMaxZ);
 
         localLookRotation = Quaternion.Euler(eulers);
 
         Quaternion targetRotation = head.parent.rotation * localLookRotation;
 
-        headAnchor.rotation = Quaternion.Slerp(headAnchor.rotation, targetRotation, 1 - Mathf.Exp(-headReactionTime * Time.deltaTime));
+        headAnchor.rotation = Quaternion.Slerp(headAnchor.rotation, targetRotation, 1 - Mathf.Exp(-kogAnimation_SO.Head_lookAt_lerp * Time.deltaTime));
     }
 
     private void OnAnimatorMove() {
@@ -252,31 +205,31 @@ public class KogAnimation : MonoBehaviour {
 
         // Set crouching amount and step height
         if (Kog.MovementController.State == KogMovementController.WalkingState.Anchored) {
-            crouching = movingSpeedCrouchMax;
-            stepHeight = crouchingStepHeight;
+            crouching = kogAnimation_SO.Crouch_anchored_amount;
+            stepHeight = kogAnimation_SO.Crouch_anchored_stepHeight;
         } else {
             crouching = 0;
-            stepHeight = defaultStepHeight + speedRatio * sprintingStepHeightFactor;
+            stepHeight = kogAnimation_SO.Step_defaultHeight + speedRatio * kogAnimation_SO.Move_height_withSpeed;
         }
 
         // Rotate the waist to reflect the current velocity, like you're leaning into the movement
         Vector3 cross = Vector3.Cross(transform.up, movement);
-        Quaternion waistRotationFromSpeed = Quaternion.AngleAxis(speedRatio * leaningMax + crouching * movingLeanMax, cross);
+        Quaternion waistRotationFromSpeed = Quaternion.AngleAxis(speedRatio * kogAnimation_SO.Waist_lean_withSpeed + crouching * kogAnimation_SO.Waist_lean_withCrouch, cross);
 
         // Rotate the waist to reflect the positions of the legs and feet.
         // The angle formed by the feet should be opposite of the angle formed by the waist.
-        float feetAngle = IMath.AngleBetween_Signed(rightLeg.foot.position - leftLeg.foot.position, waist.parent.right, transform.up, false) * Mathf.Rad2Deg * waistLegRotationFactor;
+        float feetAngle = IMath.AngleBetween_Signed(rightLeg.foot.position - leftLeg.foot.position, waist.parent.right, transform.up, false) * Mathf.Rad2Deg * kogAnimation_SO.Waist_rotate_withLegAngle;
         Quaternion waistRotationFromLegs = Quaternion.AngleAxis(feetAngle, transform.up);
         // Apply the final rotation
         Quaternion desiredWaistRotation = waist.parent.rotation * waistRotationFromSpeed * waistRotationFromLegs;
-        waistAnchor.rotation = Quaternion.Slerp(waistAnchor.rotation, desiredWaistRotation, 1 - Mathf.Exp(-waistReactionTime * Time.deltaTime));
+        waistAnchor.rotation = Quaternion.Slerp(waistAnchor.rotation, desiredWaistRotation, 1 - Mathf.Exp(-kogAnimation_SO.Waist_rotate_lerp * Time.deltaTime));
         // Also rotate the shoulders or torso to oppose that
         //leftArm.shoulderAnchor.rotation = leftArm.shoulder.parent.rotation * leftShoulderRestRotation * waistRotationFromLegs;
         //rightArm.shoulderAnchor.rotation = rightArm.shoulder.parent.rotation * rightShoulderRestRotation * waistRotationFromLegs;
 
         // Set the height of the waist so that the whole body bobs with your leg movement, bobbing more at higher speed
         // get the angle of the leg that's the most bent
-        float legAngle = waistBobLegAngleMax;
+        float legAngle = kogAnimation_SO.Waist_bob_legAngleMax;
         float leftAngle = leftLeg.calf.localEulerAngles.x;
         float rightAngle = rightLeg.calf.localEulerAngles.x;
         if (leftAngle > 180)
@@ -288,7 +241,7 @@ public class KogAnimation : MonoBehaviour {
         if (rightAngle < legAngle)
             legAngle = rightAngle;
         //Debug.Log(legAngle + "   left: " + legAngle + " right: " + rightAngle);
-        float waistBobAmount = -legAngle / waistBobLegAngleMax * (waistBobMax + speedRatio * waistBobSpeedFactor);
+        float waistBobAmount = -legAngle / kogAnimation_SO.Waist_bob_legAngleMax * (kogAnimation_SO.Waist_bob + speedRatio * kogAnimation_SO.Waist_bob_withSpeed);
 
         //// Lower the waist if a foot could be touching its anchor but it is too far vertically
         //float footToAnchorHeightLeft = Vector3.Distance(leftLeg.foot.position, leftLeg.footAnchor);
@@ -300,7 +253,7 @@ public class KogAnimation : MonoBehaviour {
         //}
         //Debug.Log(footToAnchorHeight);
         ////Debug.Log("Waist old height " + pos.y);
-        ////pos.y = Mathf.Lerp(pos.y, pos.y + waistBobAmount, Time.deltaTime * waistBobLerp);
+        ////pos.y = Mathf.Lerp(pos.y, pos.y + waistBobAmount, Time.deltaTime * waist_bob_lerp);
         //pos.y = pos.y - footToAnchorHeight;
         ////waistAnchor.transform.position = pos;
         ////Debug.Log("Waist new height " + waistAnchor.transform.position.y);
@@ -334,24 +287,24 @@ public class KogAnimation : MonoBehaviour {
         height = Mathf.Clamp(height, -legMaxLength / 2, legMaxLength / 2);
         
         if (height != 0) {
-            height = -height * Time.deltaTime * waistFallLerp;
+            height = -height * Time.deltaTime * waist_fall_lerp;
         }
         */
         Vector3 pos = waistRestPosition;
         //float height = 0;
         //Debug.Log(waistBobAmount);
         pos.y = pos.y + waistBobAmount;
-        //pos.y = Mathf.Lerp(pos.y, pos.y + waistBobAmount + height, Time.deltaTime * waistBobLerp);
-        waistAnchor.position = Vector3.Lerp(waistAnchor.position, waist.parent.position + pos, Time.deltaTime * waistBobLerp); ;
+        //pos.y = Mathf.Lerp(pos.y, pos.y + waistBobAmount + height, Time.deltaTime * waist_bob_lerp);
+        waistAnchor.position = Vector3.Lerp(waistAnchor.position, waist.parent.position + pos, Time.deltaTime * kogAnimation_SO.Waist_bob_lerp); ;
         // Crouching
         //crouching = speedRatio;
-        speedForCrouching = Mathf.Lerp(speedForCrouching, speedRatio * sprintingCrouchMax, Time.deltaTime * sprintingCrouchLerp);
-        bodyCollider.transform.localPosition = new Vector3(0, crouching * crouchingMax + speedForCrouching, 0);
+        speedForCrouching = Mathf.Lerp(speedForCrouching, speedRatio * kogAnimation_SO.Move_crouch_withSpeed, Time.deltaTime * kogAnimation_SO.Move_crouch_lerp);
+        bodyCollider.transform.localPosition = new Vector3(0, crouching * kogAnimation_SO.Crouch_max + speedForCrouching, 0);
 
         leftLeg.LegUpdate();
         rightLeg.LegUpdate();
-        leftArm.ArmUpdate(armHeight, speedRatio, armY_a, armY_b, armY_c, -armX_d, armX_f, -armX_g, -armPoleX_h, armPoleX_j, armPoleY_k, armPoleY_l, armPoleZ_m, armPoleZ_n, waist);
-        rightArm.ArmUpdate(armHeight, speedRatio, armY_a, armY_b, armY_c, armX_d, armX_f, armX_g, armPoleX_h, armPoleX_j, armPoleY_k, armPoleY_l, armPoleZ_m, armPoleZ_n, waist);
+        leftArm.ArmUpdate(speedRatio, waist);
+        rightArm.ArmUpdate(speedRatio, waist);
 
         TrackHead();
 
@@ -404,6 +357,7 @@ public class KogAnimation : MonoBehaviour {
         private bool AnchorOutOfRange => (foot.position - footAnchor).magnitude > 0.05f;
 
         private KogAnimation parent;
+        private KogAnimation_SO kogAnimation_SO;
         private Leg otherLeg;
         private bool isLeft;
         public Vector3 footAnchor = Vector3.zero, footLastAnchor = Vector3.zero, footNextAnchor = Vector3.zero;
@@ -415,9 +369,10 @@ public class KogAnimation : MonoBehaviour {
 
         private float tInStep = 0;
 
-        public void Initialize(KogAnimation parent, Leg otherLeg, bool isLeft) {
-            this.otherLeg = otherLeg;
+        public void Initialize(KogAnimation parent, KogAnimation_SO kogAnimation_SO, Leg otherLeg, bool isLeft) {
             this.parent = parent;
+            this.kogAnimation_SO = kogAnimation_SO;
+            this.otherLeg = otherLeg;
             this.isLeft = isLeft;
 
             footAnchor = footTarget.position;
@@ -435,12 +390,12 @@ public class KogAnimation : MonoBehaviour {
         }
 
         public void LegUpdate() {
-            footCollider.localPosition = footColliderPosition + new Vector3(0, -parent.crouchingMax * parent.crouching, 0);
+            footCollider.localPosition = footColliderPosition + new Vector3(0, -kogAnimation_SO.Crouch_max * parent.crouching, 0);
 
             switch (walkingState) {
                 case WalkingState.Support:
                     // Foot is stationary, not having made a step.
-                    if (Physics.SphereCast(footRaycastSource.position, radiusForRaycast, raycastDirection, out RaycastHit hit, raycastDistance, GameManager.Layer_IgnorePlayer)) {
+                    if (Physics.SphereCast(footRaycastSource.position, kogAnimation_SO.Leg_raycast_radius, raycastDirection, out RaycastHit hit, raycastDistance, GameManager.Layer_IgnorePlayer)) {
                         // The desired foot position exists on the ground.
 
                         standingOnRigidbody = hit.rigidbody;
@@ -452,7 +407,7 @@ public class KogAnimation : MonoBehaviour {
 
                         walkingState = WalkingState.Airborne;
                         standingOnRigidbody = null;
-                        hit.point = footRaycastSource.position + raycastDirection * parent.airborneLegDistance;
+                        hit.point = footRaycastSource.position + raycastDirection * kogAnimation_SO.Leg_airborne_length;
                     }
 
                     // The foot is too far from its desired foot position. Start a step.
@@ -486,7 +441,7 @@ public class KogAnimation : MonoBehaviour {
                     break;
                 case WalkingState.Floating:
                     // The foot is currently mid-step.
-                    if (Physics.SphereCast(footRaycastSource.position, radiusForRaycast, raycastDirection, out hit, raycastDistance, GameManager.Layer_IgnorePlayer)) {
+                    if (Physics.SphereCast(footRaycastSource.position, kogAnimation_SO.Leg_raycast_radius, raycastDirection, out hit, raycastDistance, GameManager.Layer_IgnorePlayer)) {
                         // The desired foot position still exists. Update where the foot's moving to reflect this new desired position.
                         standingOnRigidbody = hit.rigidbody;
                         standingOnPoint = hit.point;
@@ -495,20 +450,20 @@ public class KogAnimation : MonoBehaviour {
                         // Now is airborner
                         walkingState = WalkingState.Airborne;
                         standingOnRigidbody = null;
-                        hit.point = footRaycastSource.position + raycastDirection * parent.airborneLegDistance;
+                        hit.point = footRaycastSource.position + raycastDirection * kogAnimation_SO.Leg_airborne_length;
                     }
 
                     // Lerp the old foot anchor to the new one.
                     Vector3 dir = hit.point - footNextAnchor;
-                    float delta = Time.deltaTime * parent.stepToTargetPositonDelta;
+                    float delta = Time.deltaTime * kogAnimation_SO.Step_ToTarget_Delta;
                     if (dir.magnitude > delta)
-                        footNextAnchor = footNextAnchor + dir.normalized * Time.deltaTime * parent.stepToTargetPositonDelta;
+                        footNextAnchor = footNextAnchor + dir.normalized * Time.deltaTime * kogAnimation_SO.Step_ToTarget_Delta;
                     else
                         footNextAnchor = hit.point;
                     // Calculate the foot rotation for the new ground normal.
                     Quaternion targetRotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * parent.transform.rotation * anchorRestLocalRotation;
                     // Lerp the old foot desired rotation to the new desired rotation.
-                    footNextAnchorRotation = Quaternion.Slerp(footNextAnchorRotation, targetRotation, Time.deltaTime * parent.stepToTargetRotationLerpFactor);
+                    footNextAnchorRotation = Quaternion.Slerp(footNextAnchorRotation, targetRotation, Time.deltaTime * kogAnimation_SO.Step_ToTargetRotation_lerp);
                     hitToFoot = foot.position - hit.point;
                     hitToFoot.y = 0;
 
@@ -553,7 +508,7 @@ public class KogAnimation : MonoBehaviour {
                     // If the other leg isn't leading yet, set this leg to lead, meaning it will move in front to brace for the landing.
                     // If this leg isn't leading, keep it closer to the back.
 
-                    if (Physics.SphereCast(footRaycastSource.position, radiusForRaycast, raycastDirection, out hit, raycastDistance, GameManager.Layer_IgnorePlayer)) {
+                    if (Physics.SphereCast(footRaycastSource.position, kogAnimation_SO.Leg_raycast_radius, raycastDirection, out hit, raycastDistance, GameManager.Layer_IgnorePlayer)) {
                         // The ground is close. move foot anchor towards it until we've landed.
 
                         // (tried doing this with the above spherecast distance but it was pretty inconsistent...
@@ -569,20 +524,20 @@ public class KogAnimation : MonoBehaviour {
                     } else {
                         // Still airborne
                         standingOnRigidbody = null;
-                        hit.point = footRaycastSource.position + raycastDirection * parent.airborneLegDistance;
+                        hit.point = footRaycastSource.position + raycastDirection * kogAnimation_SO.Leg_airborne_length;
                     }
 
                     // Lerp the old foot anchor to the new one.
                     //dir = hit.point - footNextAnchor;
-                    //delta = Time.deltaTime * parent.stepToTargetPositonDelta;
+                    //delta = Time.deltaTime * parent.step_ToTarget_Delta;
                     //if (dir.magnitude > delta)
-                    //    footNextAnchor = footNextAnchor + dir.normalized * Time.deltaTime * parent.stepToTargetPositonDelta;
+                    //    footNextAnchor = footNextAnchor + dir.normalized * Time.deltaTime * parent.step_ToTarget_Delta;
                     //else
                     footNextAnchor = hit.point;
                     // Calculate the foot rotation for the new ground normal.
                     targetRotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * parent.transform.rotation * anchorRestLocalRotation;
                     // Lerp the old foot desired rotation to the new desired rotation.
-                    footNextAnchorRotation = Quaternion.Slerp(footNextAnchorRotation, targetRotation, Time.deltaTime * parent.stepToTargetRotationLerpFactor);
+                    footNextAnchorRotation = Quaternion.Slerp(footNextAnchorRotation, targetRotation, Time.deltaTime * kogAnimation_SO.Step_ToTargetRotation_lerp);
                     hitToFoot = foot.position - hit.point;
                     hitToFoot.y = 0;
 
@@ -648,21 +603,42 @@ public class KogAnimation : MonoBehaviour {
         [SerializeField]
         public Transform shoulder = null, forearm = null, upperarm = null, handAnchor = null, handAnchorPole = null;
 
+        private KogAnimation_SO kogAnimation_SO;
         private Leg leg;
+        private bool isLeft;
 
-        public void Initialize(KogAnimation parent, Leg leg) {
+        public void Initialize(KogAnimation_SO kogAnimation_SO, Leg leg, bool isLeft) {
             this.leg = leg;
+            this.isLeft = isLeft;
+            this.kogAnimation_SO = kogAnimation_SO;
         }
-        public void ArmUpdate(float armHeight, float speedRatio, float Y_a, float Y_b, float Y_c, float X_d, float X_f, float X_g, float h, float j, float k, float l, float m, float n, Transform waist) {
+        public void ArmUpdate(float speedRatio, Transform waist) {
             //handAnchor.position = shoulder.position + Quaternion.AngleAxis(leg.GetAngle(), parent.waist.right) * Vector3.down * Height;
-
+            float X_d = kogAnimation_SO.ArmX_d;
+            float X_f = kogAnimation_SO.ArmX_f;
+            float X_g = kogAnimation_SO.ArmX_g;
+            float Y_a = kogAnimation_SO.ArmY_a;
+            float Y_b = kogAnimation_SO.ArmY_b;
+            float Y_c = kogAnimation_SO.ArmY_c;
+            float Z_o = kogAnimation_SO.ArmZ_o;
+            float h = kogAnimation_SO.ArmPoleX_h;
+            float j = kogAnimation_SO.ArmPoleX_j;
+            float k = kogAnimation_SO.ArmPoleY_k;
+            float l = kogAnimation_SO.ArmPoleY_l;
+            float m = kogAnimation_SO.ArmPoleZ_m;
+            float n = kogAnimation_SO.ArmPoleZ_n;
+            if (isLeft) {
+                X_d = -X_d;
+                X_g = -X_g;
+                h = -h;
+            }
             // Position arm such that:
             // the hand anchor follows a 3D parobolic arc around the body that is a function of the leg angle
             // The length of the arm depends on the speed (higher speed = closer handAnchor)
             float t = leg.GetAngle();
             float X = X_d * (t - X_f) * (t - X_f) + X_g;
-            float Y = Y_a * (t - Y_b) * (t - Y_b) + Y_c + (-armHeight - Y_c) * (1 - speedRatio); // When speed is 0, the arm should hang at armHeight
-            float Z = armHeight * Mathf.Sin(-leg.GetAngle() * Mathf.Deg2Rad);
+            float Y = Y_a * (t - Y_b) * (t - Y_b) + Y_c + (-kogAnimation_SO.ArmHeight - Y_c) * (1 - speedRatio); // When speed is 0, the arm should hang at armHeight
+            float Z = Z_o * kogAnimation_SO.ArmHeight * Mathf.Sin(-leg.GetAngle() * Mathf.Deg2Rad);
             handAnchor.position = upperarm.transform.position + waist.TransformDirection(new Vector3(X, Y, Z));
             handAnchor.rotation = forearm.rotation;
 
@@ -672,8 +648,6 @@ public class KogAnimation : MonoBehaviour {
             Y = k * (t - l);
             Z = -m * (t - n);
             handAnchorPole.position = upperarm.transform.position + waist.parent.TransformDirection(new Vector3(X, Y, Z));
-
-
         }
     }
 }
