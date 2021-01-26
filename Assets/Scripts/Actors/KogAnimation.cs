@@ -18,6 +18,7 @@ public class KogAnimation : MonoBehaviour {
     public Vector3 StandingOnNormal => leftLeg.standingOnRigidbody != null ? leftLeg.standingOnNormal : rightLeg.standingOnNormal;
 
     private bool IsRunning => speedRatio > kogAnimation_SO.Sprint_speedRatioThreshold;
+    private bool IsMovingOrTurning => speedRatio > 0 || rb.angularVelocity.magnitude > 0.08f;
     private float TopSpeed => Kog.MovementController.topSpeedSprinting;
 
 
@@ -99,7 +100,7 @@ public class KogAnimation : MonoBehaviour {
                 // Increase or decrease the current weight of all scripted animation controllers
                 // towards scripted or keyframed animations
                 if (Kog.MovementController.State == KogMovementController.WalkingState.Anchored
-                    || speedRatio > 0) {
+                    || IsMovingOrTurning) {
                     rig.weight += Time.deltaTime / kogAnimation_SO.KeyframeToScriptingTime;
                     // If at 0% or 100%, enter that state
                     if (rig.weight >= 1) {
@@ -117,7 +118,7 @@ public class KogAnimation : MonoBehaviour {
                 break;
             case AnimationState.Scripted:
                 if (Kog.MovementController.State == KogMovementController.WalkingState.Idle
-                    && speedRatio == 0) {
+                    && IsMovingOrTurning) {
                     animationState = AnimationState.Blending;
                 }
                 break;
