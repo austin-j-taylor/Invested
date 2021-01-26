@@ -29,7 +29,7 @@ public class KogAnimation_SO : ScriptableObject {
     [SerializeField] private float head_lookAt_lerp = 5;
     [SerializeField] private float headMinX = -40, headMaxX = 25, headMinY = -60, headMaxY = 60, headMinZ = -20, headMaxZ = 20;
     // Waist
-    [SerializeField] private float waist_lean_withSpeed = 15f;
+    [SerializeField] private float waist_lean_withSpeed = 15f, waist_lean_withSprinting = 20f;
     [SerializeField] private float waist_lean_withCrouch = 15f;
     [SerializeField] private float waist_rotate_withLegAngle = 0.2f;
     [SerializeField] private float waist_rotate_lerp = 10;
@@ -38,6 +38,7 @@ public class KogAnimation_SO : ScriptableObject {
     [SerializeField] private float leg_forwards_withSpeed = 0.08f;
     [SerializeField] private float leg_raycast_radius = 0.125f;
     [SerializeField] private float leg_airborne_length = 1.25f;
+    [SerializeField] private float leg_kickoff_tInStep = 0.7f;
     // Arm
     [SerializeField] private float armHeight = 1.65f;
     [SerializeField] private float armY_a = 0.000304f, armY_b = 1, armY_c = -0.903f, armX_d = -0.00009f, armX_f = 45, armX_g = 0.3f, armZ_o = 0.8f;
@@ -78,6 +79,7 @@ public class KogAnimation_SO : ScriptableObject {
     public float HeadMinZ => headMinZ;
     public float HeadMaxZ => headMaxZ;
     public float Waist_lean_withSpeed => waist_lean_withSpeed;
+    public float Waist_lean_withSprinting => waist_lean_withSprinting;
     public float Waist_lean_withCrouch => waist_lean_withCrouch;
     public float Waist_rotate_withLegAngle => waist_rotate_withLegAngle;
     public float Waist_rotate_lerp => waist_rotate_lerp;
@@ -89,6 +91,7 @@ public class KogAnimation_SO : ScriptableObject {
     public float Leg_forwards_withSpeed => leg_forwards_withSpeed;
     public float Leg_raycast_radius => leg_raycast_radius;
     public float Leg_airborne_length => leg_airborne_length;
+    public float Leg_kickoff_tInStep => leg_kickoff_tInStep;
     public float ArmHeight => armHeight;
     public float ArmY_a => armY_a;
     public float ArmY_b => armY_b;

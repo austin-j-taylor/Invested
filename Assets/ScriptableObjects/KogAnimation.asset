@@ -44,7 +44,8 @@ MonoBehaviour:
   headMaxY: 60
   headMinZ: -20
   headMaxZ: 20
-  waist_lean_withSpeed: 15
+  waist_lean_withSpeed: 10
+  waist_lean_withSprinting: 10
   waist_lean_withCrouch: 15
   waist_rotate_withLegAngle: 0.2
   waist_rotate_lerp: 10
@@ -56,6 +57,7 @@ MonoBehaviour:
   leg_forwards_withSpeed: 0.08
   leg_raycast_radius: 0.125
   leg_airborne_length: 1.25
+  leg_kickoff_tInStep: 0.7
   armHeight: 1.65
   armY_a: 0.000304
   armY_b: 1

@@ -40,7 +40,7 @@ public class KogAnimation : MonoBehaviour {
     private Animator anim;
     private Rigidbody rb;
     [SerializeField]
-    private KogAnimation_SO kogAnimation_SO;
+    private KogAnimation_SO kogAnimation_SO = null;
     [SerializeField, Range(0.0f, 1.0f)]
     private float crouching = 0;
     [SerializeField]
@@ -214,7 +214,10 @@ public class KogAnimation : MonoBehaviour {
 
         // Rotate the waist to reflect the current velocity, like you're leaning into the movement
         Vector3 cross = Vector3.Cross(transform.up, movement);
-        Quaternion waistRotationFromSpeed = Quaternion.AngleAxis(speedRatio * kogAnimation_SO.Waist_lean_withSpeed + crouching * kogAnimation_SO.Waist_lean_withCrouch, cross);
+        float waistDownAngle = speedRatio * kogAnimation_SO.Waist_lean_withSpeed + crouching * kogAnimation_SO.Waist_lean_withCrouch;
+        if (Kog.MovementController.State == KogMovementController.WalkingState.Sprinting)
+            waistDownAngle += kogAnimation_SO.Waist_lean_withSprinting;
+        Quaternion waistRotationFromSpeed = Quaternion.AngleAxis(waistDownAngle, cross);
 
         // Rotate the waist to reflect the positions of the legs and feet.
         // The angle formed by the feet should be opposite of the angle formed by the waist.
@@ -242,6 +245,7 @@ public class KogAnimation : MonoBehaviour {
             legAngle = rightAngle;
         //Debug.Log(legAngle + "   left: " + legAngle + " right: " + rightAngle);
         float waistBobAmount = -legAngle / kogAnimation_SO.Waist_bob_legAngleMax * (kogAnimation_SO.Waist_bob + speedRatio * kogAnimation_SO.Waist_bob_withSpeed);
+
 
         //// Lower the waist if a foot could be touching its anchor but it is too far vertically
         //float footToAnchorHeightLeft = Vector3.Distance(leftLeg.foot.position, leftLeg.footAnchor);
@@ -420,7 +424,7 @@ public class KogAnimation : MonoBehaviour {
                     bool isStretched = calfAngle < 0.01f;
                     //Debug.Log("Stretched:  " + isStretched +  ", "  + calf.localEulerAngles.x, foot.gameObject);
                     if (hitToFoot.magnitude > parent.distanceBetweenSteps
-                                && (otherLeg.walkingState == WalkingState.Support || parent.IsRunning && isStretched)
+                                && (otherLeg.walkingState == WalkingState.Support || parent.IsRunning && isStretched && otherLeg.tInStep > kogAnimation_SO.Leg_kickoff_tInStep)
                     ) {
                         // Take a step. The Last anchor are where the foot is now. The Next anchor are where the desired foot position is now.
                         footLastAnchor = footTarget.position;
