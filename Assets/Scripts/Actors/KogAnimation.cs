@@ -222,8 +222,9 @@ public class KogAnimation : MonoBehaviour {
 
         // Rotate the waist to reflect the positions of the legs and feet.
         // The angle formed by the feet should be opposite of the angle formed by the waist.
-        float feetAngle = IMath.AngleBetween_Signed(rightLeg.foot.position - leftLeg.foot.position, waist.parent.right, transform.up, false) * Mathf.Rad2Deg * kogAnimation_SO.Waist_rotate_withLegAngle;
-        Quaternion waistRotationFromLegs = Quaternion.AngleAxis(feetAngle, transform.up);
+        float feetAngle = IMath.AngleBetween_Signed(rightLeg.foot.position - leftLeg.foot.position, waist.parent.right, transform.up, false) * Mathf.Rad2Deg;
+        Quaternion waistRotationFromLegs = Quaternion.AngleAxis(feetAngle * kogAnimation_SO.Waist_rotate_withLegAngleYaw, Vector3.up);
+        waistRotationFromLegs *= Quaternion.AngleAxis(feetAngle * kogAnimation_SO.Waist_rotate_withLegAngleRoll_withSpeed * speedRatio, Vector3.forward);
         // Apply the final rotation
         Quaternion desiredWaistRotation = waist.parent.rotation * waistRotationFromSpeed * waistRotationFromLegs;
         waistAnchor.rotation = Quaternion.Slerp(waistAnchor.rotation, desiredWaistRotation, 1 - Mathf.Exp(-kogAnimation_SO.Waist_rotate_lerp * Time.deltaTime));

@@ -31,7 +31,8 @@ public class KogAnimation_SO : ScriptableObject {
     // Waist
     [SerializeField] private float waist_lean_withSpeed = 15f, waist_lean_withSprinting = 20f;
     [SerializeField] private float waist_lean_withCrouch = 15f;
-    [SerializeField] private float waist_rotate_withLegAngle = 0.2f;
+    [SerializeField] private float waist_rotate_withLegAngleYaw = 0.2f;
+    [SerializeField] private float waist_rotate_withLegAngleRoll_withSpeed = .2f;
     [SerializeField] private float waist_rotate_lerp = 10;
     [SerializeField] private float waist_bob = 0.2f, waist_bob_legAngleMax = 90, waist_bob_lerp = 9, waist_bob_withSpeed = .2f, waist_fall_lerp = 10;
     // Leg
@@ -81,7 +82,8 @@ public class KogAnimation_SO : ScriptableObject {
     public float Waist_lean_withSpeed => waist_lean_withSpeed;
     public float Waist_lean_withSprinting => waist_lean_withSprinting;
     public float Waist_lean_withCrouch => waist_lean_withCrouch;
-    public float Waist_rotate_withLegAngle => waist_rotate_withLegAngle;
+    public float Waist_rotate_withLegAngleYaw => waist_rotate_withLegAngleYaw;
+    public float Waist_rotate_withLegAngleRoll_withSpeed => waist_rotate_withLegAngleRoll_withSpeed;
     public float Waist_rotate_lerp => waist_rotate_lerp;
     public float Waist_bob => waist_bob;
     public float Waist_bob_legAngleMax => waist_bob_legAngleMax;
