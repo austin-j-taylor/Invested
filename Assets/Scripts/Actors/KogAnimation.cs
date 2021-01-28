@@ -30,6 +30,7 @@ public class KogAnimation : MonoBehaviour {
     public float currentSpeed, stepTime, speedRatio, stepHeight;
     public float distanceBetweenSteps = .25f;
     private float speedForCrouching;
+    private float rigWeight;
 
     //[SerializeField]
     //private Transform target = null;
@@ -45,7 +46,11 @@ public class KogAnimation : MonoBehaviour {
     [SerializeField, Range(0.0f, 1.0f)]
     private float crouching = 0;
     [SerializeField]
-    private Rig rig = null;
+    private TwoBoneIKConstraint[] constraintsIK = null;
+    [SerializeField]
+    private MultiParentConstraint[] constraintsParents = null;
+    [SerializeField]
+    private MultiParentConstraint constraintHead = null;
     [SerializeField]
     private Leg leftLeg = null;
     [SerializeField]
@@ -67,7 +72,8 @@ public class KogAnimation : MonoBehaviour {
         rb = GetComponentInParent<Rigidbody>();
 
         animationState = AnimationState.Keyframed;
-        rig.weight = 0;
+        rigWeight = 0;
+        SetConstraintWeights(rigWeight);
         waistRestPosition = waist.localPosition;
         leftShoulderRestRotation = leftArm.shoulder.rotation;
         rightShoulderRestRotation = rightArm.shoulder.rotation;
@@ -101,18 +107,20 @@ public class KogAnimation : MonoBehaviour {
                 // towards scripted or keyframed animations
                 if (Kog.MovementController.State == KogMovementController.WalkingState.Anchored
                     || IsMovingOrTurning) {
-                    rig.weight += Time.deltaTime / kogAnimation_SO.KeyframeToScriptingTime;
+                    rigWeight += Time.deltaTime / kogAnimation_SO.KeyframeToScriptingTime;
                     // If at 0% or 100%, enter that state
-                    if (rig.weight >= 1) {
-                        rig.weight = 1;
+                    if (rigWeight >= 1) {
+                        rigWeight = 1;
                         animationState = AnimationState.Scripted;
                     }
+                    SetConstraintWeights(rigWeight);
                 } else {
-                    rig.weight -= Time.deltaTime / kogAnimation_SO.ScriptingToKeyframeTime;
-                    if (rig.weight <= 0) {
-                        rig.weight = 0;
+                    rigWeight -= Time.deltaTime / kogAnimation_SO.ScriptingToKeyframeTime;
+                    if (rigWeight <= 0) {
+                        rigWeight = 0;
                         animationState = AnimationState.Keyframed;
                     }
+                    SetConstraintWeights(rigWeight);
                 }
 
                 break;
@@ -158,8 +166,10 @@ public class KogAnimation : MonoBehaviour {
 
         //Debug.Log("speed: " + speedRatio + ", " + stepTime + ", distance: " + distanceBetweenSteps);
 
-        // set head target to be in front of movement
-        if (movement.sqrMagnitude > 0f) {
+        // set head target to be in front of movement if not burning metals
+        if(Kog.KogInstance.ActorIronSteel.IsBurning) {
+            headLookAtTarget = head.position + CameraController.ActiveCamera.transform.forward * 10;
+        } else if (movement.sqrMagnitude > 0f) {
             headLookAtTarget = head.position + movement.normalized * 10;
         }
     }
@@ -333,6 +343,19 @@ public class KogAnimation : MonoBehaviour {
         //}
         //pos.y += lifterCollider.radius - heighest;
         //lifterCollider.transform.position = pos;
+    }
+
+    /// <summary>
+    /// Sets the constraints for the arms, legs, waist, etc. to blend with idle animations.
+    /// The head weight should be handled a little differently.
+    /// </summary>
+    /// <param name="weight">the weight for the constraints</param>
+    private void SetConstraintWeights(float weight) {
+        foreach (MultiParentConstraint constraint in constraintsParents)
+            constraint.weight = weight;
+        foreach (TwoBoneIKConstraint constraint in constraintsIK)
+            constraint.weight = weight;
+        constraintHead.weight = weight;
     }
 
     [System.Serializable]
@@ -632,6 +655,7 @@ public class KogAnimation : MonoBehaviour {
             this.isLeft = isLeft;
             this.kogAnimation_SO = kogAnimation_SO;
         }
+
         public void ArmUpdate(float speedRatio, Transform waist) {
             //handAnchor.position = shoulder.position + Quaternion.AngleAxis(leg.GetAngle(), parent.waist.right) * Vector3.down * Height;
             float X_d = kogAnimation_SO.ArmX_d;
