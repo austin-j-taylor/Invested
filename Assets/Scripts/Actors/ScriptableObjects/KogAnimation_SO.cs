@@ -39,7 +39,7 @@ public class KogAnimation_SO : ScriptableObject {
     [SerializeField] private float leg_forwards_withSpeed = 0.08f;
     [SerializeField] private float leg_raycast_radius = 0.125f;
     [SerializeField] private float leg_airborne_length = 1.25f;
-    [SerializeField] private float leg_kickoff_tInStep = 0.7f;
+    [SerializeField] private float leg_tInStep_threshold = 0.25f;
     // Arm
     [SerializeField] private float armHeight = 1.65f;
     [SerializeField] private float armY_a = 0.000304f, armY_b = 1, armY_c = -0.903f, armX_d = -0.00009f, armX_f = 45, armX_g = 0.3f, armZ_o = 0.8f;
@@ -93,7 +93,7 @@ public class KogAnimation_SO : ScriptableObject {
     public float Leg_forwards_withSpeed => leg_forwards_withSpeed;
     public float Leg_raycast_radius => leg_raycast_radius;
     public float Leg_airborne_length => leg_airborne_length;
-    public float Leg_kickoff_tInStep => leg_kickoff_tInStep;
+    public float Leg_tInStep_threshold => leg_tInStep_threshold;
     public float ArmHeight => armHeight;
     public float ArmY_a => armY_a;
     public float ArmY_b => armY_b;

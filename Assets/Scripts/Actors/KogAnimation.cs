@@ -373,7 +373,7 @@ public class KogAnimation : MonoBehaviour {
         private Vector3 footColliderPosition;
         public Vector3 footPoleRestLocalPosition;
 
-        private float tInStep = 0;
+        public float tInStep = 0;
 
         public void Initialize(KogAnimation parent, KogAnimation_SO kogAnimation_SO, Leg otherLeg, bool isLeft) {
             this.parent = parent;
@@ -426,7 +426,7 @@ public class KogAnimation : MonoBehaviour {
                     bool isStretched = calfAngle < 0.01f;
                     //Debug.Log("Stretched:  " + isStretched +  ", "  + calf.localEulerAngles.x, foot.gameObject);
                     if (hitToFoot.magnitude > parent.distanceBetweenSteps
-                                && (otherLeg.walkingState == WalkingState.Support || parent.IsRunning && isStretched && otherLeg.tInStep > kogAnimation_SO.Leg_kickoff_tInStep)
+                                && (otherLeg.walkingState == WalkingState.Support || parent.IsRunning && isStretched)
                     ) {
                         // Take a step. The Last anchor are where the foot is now. The Next anchor are where the desired foot position is now.
                         footLastAnchor = footTarget.position;
@@ -434,8 +434,12 @@ public class KogAnimation : MonoBehaviour {
                         footNextAnchor = hit.point;
                         walkingState = WalkingState.Floating;
                         tInStep = 0;
+                    } else {
+                        // Continue holding support position
+                        tInStep += Time.deltaTime / parent.stepTime;
                     }
-
+                    
+                    tInStep += Time.deltaTime / parent.stepTime;
                     // Debug
                     Debug.DrawLine(footRaycastSource.position, footRaycastSource.position + raycastDirection * raycastDistance, Color.red);
                     debugBall_HitPoint.gameObject.SetActive(true);
@@ -485,8 +489,15 @@ public class KogAnimation : MonoBehaviour {
 
 
                     tInStep += Time.deltaTime / parent.stepTime;
+                    float diff =  tInStep - otherLeg.tInStep;
+                    if(0 < diff && diff < kogAnimation_SO.Leg_tInStep_threshold) {
+                        // Legs are out of sync
+                        // Speed up this leg
+                        tInStep += Time.deltaTime / parent.stepTime;
+                    }
 
                     if (tInStep >= 1) {
+                        tInStep = 1;
                         // Done stepping
                         // If the foot would be in the air, maintain this position untila foot position could be found
                         footAnchor = footNextAnchor;
@@ -560,6 +571,7 @@ public class KogAnimation : MonoBehaviour {
                     tInStep += Time.deltaTime / parent.stepTime;
 
                     if (tInStep >= 1) {
+                        tInStep = 1;
                         // Done stepping
                         // If the foot would be in the air, maintain this position until a foot position could be found
                         footAnchor = footNextAnchor;

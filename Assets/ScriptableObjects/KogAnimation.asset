@@ -29,7 +29,7 @@ MonoBehaviour:
   distance_a: 2.9
   distance_b: -0.05
   sprint_speedRatioThreshold: 0.5
-  move_crouch_withSpeed: 0.3
+  move_crouch_withSpeed: 0.1
   move_crouch_lerp: 10
   move_height_withSpeed: 0.1
   crouch_max: 0.6
@@ -47,7 +47,8 @@ MonoBehaviour:
   waist_lean_withSpeed: 10
   waist_lean_withSprinting: 10
   waist_lean_withCrouch: 15
-  waist_rotate_withLegAngle: 0.2
+  waist_rotate_withLegAngleYaw: 0.1
+  waist_rotate_withLegAngleRoll_withSpeed: 0.1
   waist_rotate_lerp: 10
   waist_bob: 0.2
   waist_bob_legAngleMax: 90
@@ -57,18 +58,18 @@ MonoBehaviour:
   leg_forwards_withSpeed: 0.08
   leg_raycast_radius: 0.125
   leg_airborne_length: 1.25
-  leg_kickoff_tInStep: 0.7
+  leg_tInStep_threshold: 0.75
   armHeight: 1.65
-  armY_a: 0.000304
+  armY_a: 0.0002
   armY_b: 1
   armY_c: -0.903
-  armX_d: -0.00009
+  armX_d: -0.00006
   armX_f: 45
   armX_g: 0.3
   armZ_o: 0.6
-  armPoleX_h: -0.01
+  armPoleX_h: -0.004
   armPoleX_j: 65
   armPoleY_k: 0.03
   armPoleY_l: 20.8
-  armPoleZ_m: 0.04
+  armPoleZ_m: 0.03
   armPoleZ_n: -21.74

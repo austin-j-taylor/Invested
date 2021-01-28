@@ -9,7 +9,8 @@ public class FeruchemicalZinc : MonoBehaviour {
     // intensity formula constants
     private const float a = 2f, b = 42, c = 0.67f, d = 11f, f = 2.4f, g = 72f, h = 50;
     // The maximum time that zinc will slow down for
-    private const float maxTime = 10, recoveryFactor = .001f;
+    private const float maxTime = 100, recoveryFactor = .001f;
+    //private const float maxTime = 10, recoveryFactor = .001f;
     // the time scale that zinc slows time down to
     // interestingly, 1/8 is about the same that in-world speed bubbles slow time down by (Alloy of Law, 2 minutes into about 15s)
     private const float slowPercent = 1 / 8f;
