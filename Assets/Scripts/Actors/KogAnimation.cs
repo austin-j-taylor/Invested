@@ -457,7 +457,7 @@ public class KogAnimation : MonoBehaviour {
                         standingOnPoint = hit.point;
                         standingOnNormal = hit.normal;
                     } else {
-                        // Now is airborner
+                        // Now is airborne
                         walkingState = WalkingState.Airborne;
                         standingOnRigidbody = null;
                         hit.point = footRaycastSource.position + raycastDirection * kogAnimation_SO.Leg_airborne_length;
@@ -503,6 +503,7 @@ public class KogAnimation : MonoBehaviour {
                         footAnchor = footNextAnchor;
                         footAnchorRotation = footNextAnchorRotation;
                         walkingState = WalkingState.Support;
+                        Kog.AudioController.Play_footstep(isLeft, parent.speedRatio);
                     } else {
                         float y = Mathf.Sqrt((-2 * (tInStep - 0.5f) * (tInStep - 0.5f) + 0.5f) * 2);
 
@@ -535,6 +536,7 @@ public class KogAnimation : MonoBehaviour {
                                 footAnchor = footNextAnchor;
                                 footAnchorRotation = footNextAnchorRotation;
                                 walkingState = WalkingState.Support;
+                                Kog.AudioController.Play_footstep(isLeft, parent.speedRatio);
                             }
                         }
 

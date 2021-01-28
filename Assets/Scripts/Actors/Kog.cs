@@ -13,6 +13,7 @@ public class Kog : Actor {
     // State machine for Kog
     public enum State { Idle, Resting, Reaching, Throwing, Meditating };
 
+    public static KogAudioController AudioController { get; private set; }
     public static KogAnimation KogAnimationController { get; private set; }
     public static KogMovementController MovementController { get; private set; }
 
@@ -26,6 +27,7 @@ public class Kog : Actor {
 
         base.Awake();
 
+        AudioController = GetComponentInChildren<KogAudioController>();
         KogAnimationController = GetComponentInChildren<KogAnimation>();
         MovementController = GetComponent<KogMovementController>();
 
@@ -36,6 +38,7 @@ public class Kog : Actor {
     }
 
     public void ClearKogBeforeSceneChange(Scene scene) {
+        AudioController.Clear();
         MovementController.Clear();
         KogAnimationController.Clear();
     }
