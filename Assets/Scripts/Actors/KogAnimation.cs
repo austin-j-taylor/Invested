@@ -21,7 +21,6 @@ public class KogAnimation : MonoBehaviour {
     private bool IsMovingOrTurning => speedRatio > 0 || rb.angularVelocity.magnitude > 0.08f;
     private float TopSpeed => Kog.MovementController.topSpeedSprinting;
 
-
     private Quaternion leftShoulderRestRotation, rightShoulderRestRotation;
     private Vector3 waistRestPosition;
     private float legRestLength;
@@ -65,7 +64,7 @@ public class KogAnimation : MonoBehaviour {
     private CapsuleCollider bodyCollider = null;
     [SerializeField]
     private SphereCollider lifterCollider = null;
-    private Vector3 headLookAtTarget = Vector3.zero;
+    private Vector3 headLookAtTarget = Vector3.zero, bodyLookAtTarget = Vector3.zero;
 
     void Start() {
         anim = GetComponentInChildren<Animator>();
@@ -163,15 +162,18 @@ public class KogAnimation : MonoBehaviour {
         stepTime = kogAnimation_SO.StepTime_h * (speedRatio - kogAnimation_SO.StepTime_a) * (speedRatio - kogAnimation_SO.StepTime_b) * (speedRatio - kogAnimation_SO.StepTime_c);
         distanceBetweenSteps = kogAnimation_SO.Distance_h * (speedRatio - kogAnimation_SO.Distance_a) * (speedRatio - kogAnimation_SO.Distance_b);
 
+    }
 
-        //Debug.Log("speed: " + speedRatio + ", " + stepTime + ", distance: " + distanceBetweenSteps);
-
-        // set head target to be in front of movement if not burning metals
-        if(Kog.KogInstance.ActorIronSteel.IsBurning) {
-            headLookAtTarget = head.position + CameraController.ActiveCamera.transform.forward * 10;
-        } else if (movement.sqrMagnitude > 0f) {
-            headLookAtTarget = head.position + movement.normalized * 10;
-        }
+    /// <summary>
+    /// Sets the target for the head to look at.
+    /// </summary>
+    /// <param name="target">the position for the head to look at</param>
+    /// <param name="local">is the position in the head's local space?</param>
+    public void SetHeadLookAtTarget(Vector3 target, bool local) {
+        if (local)
+            headLookAtTarget = target + head.position;
+        else
+            headLookAtTarget = target;
     }
 
     private void TrackHead() {
@@ -315,7 +317,7 @@ public class KogAnimation : MonoBehaviour {
         // Crouching
         //crouching = speedRatio;
         speedForCrouching = Mathf.Lerp(speedForCrouching, speedRatio * kogAnimation_SO.Move_crouch_withSpeed, Time.deltaTime * kogAnimation_SO.Move_crouch_lerp);
-        bodyCollider.transform.localPosition = new Vector3(0, crouching * kogAnimation_SO.Crouch_max + speedForCrouching, 0);
+        lifterCollider.transform.localPosition = new Vector3(0, crouching * kogAnimation_SO.Crouch_max + speedForCrouching, 0);
 
         leftLeg.LegUpdate();
         rightLeg.LegUpdate();

@@ -18,11 +18,11 @@ public class CameraController : MonoBehaviour {
     [SerializeField]
     private float cinemachineKog_Distance_Idle = 2.25f;
     [SerializeField]
-    private float cinemachineKog_Distance_Prepared = 1.34f;
+    private float cinemachineKog_Distance_Close = 1.34f;
     [SerializeField]
-    private Vector3 cinemachineKog_Offset_Idle = new Vector3(2.06f, -0.72f, 0);
+    private Vector3 cinemachineKog_Offset_Idle = new Vector3(2.63f, -0.33f, 0);
     [SerializeField]
-    private Vector3 cinemachineKog_Offset_Prepared = new Vector3(2.63f, -0.17f, 0);
+    private Vector3 cinemachineKog_Offset_Close = new Vector3(2.63f, -0.17f, 0);
     #endregion
 
     #region properties
@@ -185,10 +185,10 @@ public class CameraController : MonoBehaviour {
                 case Actor.ActorType.Kog:
                     // Depending on state, camera acts differently
                     // Idle: Standing still, moving, anchored, sprinting
-                    // Prepared: Burning Iron/steel
+                    // Close: Burning Iron/steel
                     //      head looks towards crosshairs
                     //      offset?
-                    instance.kogCameraController.Update(instance.cinemachineKog_Distance_Idle, instance.cinemachineKog_Distance_Prepared, instance.cinemachineKog_Offset_Idle, instance.cinemachineKog_Offset_Prepared);
+                    instance.kogCameraController.Update(instance.cinemachineKog_Distance_Idle, instance.cinemachineKog_Distance_Close, instance.cinemachineKog_Offset_Idle, instance.cinemachineKog_Offset_Close);
 
                     cameraDistance *= instance.kogCameraController.Distance;
                     playerCameraController.position += ActiveCamera.transform.TransformVector(instance.kogCameraController.Offset);
@@ -382,7 +382,7 @@ public class CameraController : MonoBehaviour {
         [SerializeField]
         private float blendTime = 1;
 
-        public enum CameraState { Idle, Blending, Prepared };
+        public enum CameraState { Idle, Blending, Close };
 
         public CameraState State { get; private set; }
         public float Distance { get; private set; }
@@ -391,7 +391,7 @@ public class CameraController : MonoBehaviour {
         [SerializeField]
         private float t = 0;
 
-        public void Update(float distance_Idle, float distance_Prepared, Vector3 offset_Idle, Vector3 offset_Prepared) {
+        public void Update(float distance_Idle, float distance_Close, Vector3 offset_Idle, Vector3 offset_Close) {
             // Change state
             switch(State) {
                 case CameraState.Idle:
@@ -404,14 +404,14 @@ public class CameraController : MonoBehaviour {
                     if (Kog.KogInstance.ActorIronSteel.IsBurning) {
                         t += Time.deltaTime / blendTime;
                         if (t >= 1)
-                            State = CameraState.Prepared;
+                            State = CameraState.Close;
                     } else {
                         t -= Time.deltaTime / blendTime;
                         if (t <= 0)
                             State = CameraState.Idle;
                     }
                     break;
-                case CameraState.Prepared:
+                case CameraState.Close:
                     if (!Kog.KogInstance.ActorIronSteel.IsBurning) {
                         State = CameraState.Blending;
                         t = 1;
@@ -426,12 +426,12 @@ public class CameraController : MonoBehaviour {
                     Offset = offset_Idle;
                     break;
                 case CameraState.Blending:
-                    Distance = Mathf.SmoothStep(distance_Idle, distance_Prepared, t);
-                    Offset = offset_Idle +  Mathf.SmoothStep(0, 1, t) * (offset_Prepared - offset_Idle);
+                    Distance = Mathf.SmoothStep(distance_Idle, distance_Close, t);
+                    Offset = offset_Idle +  Mathf.SmoothStep(0, 1, t) * (offset_Close - offset_Idle);
                     break;
-                case CameraState.Prepared:
-                    Distance = distance_Prepared;
-                    Offset = offset_Prepared;
+                case CameraState.Close:
+                    Distance = distance_Close;
+                    Offset = offset_Close;
                     break;
             }
         }

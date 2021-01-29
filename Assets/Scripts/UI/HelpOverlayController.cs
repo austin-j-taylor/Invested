@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Text;
 using static TextCodes;
-using static PrimaPullPushController;
+using static ActorPullPushController;
 using TMPro;
 
 /// <summary>
@@ -160,29 +160,6 @@ public class HelpOverlayController : MonoBehaviour {
                         builder.AppendLine(
                             " • " + KeyPullStrength + " " + Pull + " strength\n" +
                             " • " + KeyRadiusAbridged + " size of area"
-                        );
-                    }
-                }
-                break;
-            case ControlMode.Bubble:
-                if (last_SteelEnabled) {
-                    builder.AppendLine(
-                        KeyPullPushAbridged + " " + Pull_Push + '\n' +
-                        " • " + KeyMark + " Toggle bubble"
-                    );
-                    builder.AppendLine(
-                        " • " + KeyPushPullStrength  + " " + Push_Pull + " strength\n" +
-                        " • " + KeyRadiusAbridged + " size of bubble"
-                    );
-                } else {
-                    if (last_IronEnabled) {
-                        builder.AppendLine(
-                            KeyPullAbridged + " " + Pull + '\n' +
-                            " • " + KeyMark + " toggle bubble"
-                        );
-                        builder.AppendLine(
-                            " • " + KeyPullStrength + " " + Pull + " strength\n" +
-                            " • " + KeyRadiusAbridged + " size of bubble"
                         );
                     }
                 }

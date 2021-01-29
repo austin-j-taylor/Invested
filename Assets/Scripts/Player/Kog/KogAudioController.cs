@@ -11,7 +11,7 @@ public class KogAudioController : MonoBehaviour {
     private AudioSource player_foot_left = null, player_foot_right = null;
 
     #region clearing
-    void Start() {
+    void Awake() {
         AudioSource[] sources = GetComponents<AudioSource>();
         player_foot_left = sources[0];
         player_foot_right = sources[1];

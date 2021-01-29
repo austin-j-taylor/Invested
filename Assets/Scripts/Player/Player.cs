@@ -57,6 +57,9 @@ public class Player : MonoBehaviour {
     public static float VoidHeight { get; set; }
     #endregion
 
+    [SerializeField]
+    private Actor.ActorType startupActor = Actor.ActorType.Prima;
+
     void Awake() {
         PlayerInstance = this;
         PlayerZinc = GetComponent<FeruchemicalZinc>();
@@ -67,7 +70,14 @@ public class Player : MonoBehaviour {
     }
 
     private void Start() {
-        SetActor(Kog.KogInstance);
+        switch(startupActor) {
+            case Actor.ActorType.Prima:
+                SetActor(Prima.PrimaInstance);
+                break;
+            case Actor.ActorType.Kog:
+                SetActor(Kog.KogInstance);
+                break;
+        }
     }
 
     #region updates

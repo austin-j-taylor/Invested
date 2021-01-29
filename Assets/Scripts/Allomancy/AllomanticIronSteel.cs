@@ -48,6 +48,12 @@ public class AllomanticIronSteel : Allomancer {
     }
 
     #region macroProperties
+    public bool PushingOrPullingOnTarget => PushingOrPulling && (HasPushTarget || HasPullTarget);
+    public bool PushingOrPulling {
+        get {
+            return IronPulling || SteelPushing || BubbleIsOpen;
+        }
+    }
     public bool PullingOnPullTargets {
         get {
             return IronPulling && PullTargets.Count != 0;
@@ -142,11 +148,6 @@ public class AllomanticIronSteel : Allomancer {
     private bool lastWasPushing = false;
     public bool IronPulling { get; set; }
     public bool SteelPushing { get; set; }
-    public bool PushingOrPulling {
-        get {
-            return IronPulling || SteelPushing || BubbleIsOpen;
-        }
-    }
     // Bubble control
     public bool BubbleIsOpen { get; private set; } // true when the bubble is open at all
     public bool BubbleMetalStatus { get; protected set; } // true for iron, false for steel
@@ -678,13 +679,14 @@ public class AllomanticIronSteel : Allomancer {
     /// </summary>
     /// <param name="startIron"></param>
     /// <returns>true if not already burning metals and successfully started burning, false otherwise</returns>
-    public virtual bool StartBurning(bool startIron) {
+    public virtual bool StartBurning(bool startIron = iron) {
         if (IsBurning || startIron && !HasIron || !startIron && !HasSteel)
             return false;
         IsBurning = true;
         // Set burn percentages to a low burn
         IronBurnPercentageTarget = .1f;
         SteelBurnPercentageTarget = .1f;
+        BubbleBurnPercentageTarget = 1;
         if (bubbleKeepOpen) {
             BubbleOpen(BubbleMetalStatus);
         }
@@ -710,6 +712,7 @@ public class AllomanticIronSteel : Allomancer {
             }
             IronBurnPercentageTarget = 0;
             SteelBurnPercentageTarget = 0;
+            BubbleBurnPercentageTarget = 0;
             IsBurning = false;
             lastWasPulling = false;
             lastWasPushing = false;

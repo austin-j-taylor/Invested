@@ -30,10 +30,12 @@ public class KogMovementController : MonoBehaviour {
     #region properties
     public WalkingState State { get; private set; }
     public bool IsGrounded => Kog.KogAnimationController.IsGrounded;
+    public Vector3 Movement { get; private set; } = Vector3.zero;
     #endregion
 
     private Rigidbody rb;
     private Vector3 lastInput; // The last horizontal/vertical movement command sent to the player
+    private Vector3 bodyLookAtDirection;
     private PIDController_Vector3 pidSpeed;
     private PIDController_float pidOrientation;
     private Vector3 lastMoveDirection;
@@ -56,6 +58,7 @@ public class KogMovementController : MonoBehaviour {
     public void Clear() {
         State = WalkingState.Idle;
         lastInput = Vector3.zero;
+        bodyLookAtDirection = transform.forward;
         lastMoveDirection = transform.forward;
         jumpQueued = false;
         lastJumpTime = -1;
@@ -111,25 +114,24 @@ public class KogMovementController : MonoBehaviour {
 
             // Convert user input to movement vector
             // If the control wheel is open, use the last input for movement
-
-            Vector3 movement;
+            
             if (HUD.ControlWheelController.IsOpen) {
-                movement = lastInput;
+                Movement = lastInput;
             } else {
-                movement = new Vector3(Keybinds.Horizontal(), 0f, Keybinds.Vertical());
-                lastInput = movement;
+                Movement = new Vector3(Keybinds.Horizontal(), 0f, Keybinds.Vertical());
+                lastInput = Movement;
             }
 
             // If is unclamped and upside-down, keep movement in an intuitive direction for the player
             // Rotate movement to be in direction of camera and clamp magnitude
             if (SettingsMenu.settingsGameplay.cameraClamping == 0 && CameraController.UpsideDown) {
-                movement.x = -movement.x;
-                movement = CameraController.CameraDirection * Vector3.ClampMagnitude(movement, 1);
-                movement = -movement;
+                Vector3 mov = Movement;
+                mov.x = -Movement.x;
+                Movement = -(CameraController.CameraDirection * Vector3.ClampMagnitude(mov, 1));
             } else {
-                movement = CameraController.CameraDirection * Vector3.ClampMagnitude(movement, 1);
+                Movement = CameraController.CameraDirection * Vector3.ClampMagnitude(Movement, 1);
             }
-            bool wantToMove = movement.sqrMagnitude > 0;
+            bool wantToMove = Movement.sqrMagnitude > 0;
 
             // Transitions
             switch (State) {
@@ -188,7 +190,7 @@ public class KogMovementController : MonoBehaviour {
             }
 
             if(wantToMove)
-                lastMoveDirection = movement;
+                lastMoveDirection = Movement;
 
             pidSpeed.SetParams(speed_P, 0, 0, speed_mD);
             pidOrientation.SetParams(orientation_P, 0, 0);
@@ -201,13 +203,13 @@ public class KogMovementController : MonoBehaviour {
                     //target = Vector3.zero;
                     break;
                 case WalkingState.Walking:
-                    target = movement * topSpeed;
+                    target = Movement * topSpeed;
                     break;
                 case WalkingState.Sprinting:
-                    target = movement * topSpeedSprinting;
+                    target = Movement * topSpeedSprinting;
                     break;
                 case WalkingState.Anchored:
-                    target = movement * topSpeedAnchored;
+                    target = Movement * topSpeedAnchored;
                     break;
             }
 
@@ -219,16 +221,20 @@ public class KogMovementController : MonoBehaviour {
             Kog.KogAnimationController.SetLegTarget(target, feedback.magnitude);
 
             // PID control for orientation
-            if (!wantToMove) {
-                movement = lastMoveDirection;
-            }
-            float feedback_O = IMath.AngleBetween_Signed(transform.forward, movement, Vector3.up, true);
+            float feedback_O = IMath.AngleBetween_Signed(transform.forward, bodyLookAtDirection, Vector3.up, true);
             float output_O = pidOrientation.Step(feedback_O, 0);
-            //Debug.Log(" movement: " + movement.normalized + " feedback: " + feedback_O + " error: " + (feedback_O - target_O) + " output: " + output_O);
+            //Debug.Log(" movement: " + Movement.normalized + " feedback: " + feedback_O + " error: " + (feedback_O - target_O) + " output: " + output_O);
             rb.AddTorque(Vector3.up * output_O, ForceMode.Acceleration);
             transform.localEulerAngles = new Vector3(0, transform.localEulerAngles.y, 0);
         }
     }
     #endregion
 
+    /// <summary>
+    /// Sets the target position for the body to face.
+    /// </summary>
+    /// <param name="target">the target position</param>
+    public void SetBodyLookAtTarget(Vector3 target) {
+        bodyLookAtDirection = target;
+    }
 }

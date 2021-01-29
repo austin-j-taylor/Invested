@@ -351,10 +351,6 @@ public class ControlWheelController : MonoBehaviour {
                 textCenter.text = KeyRadiusAbridged + ":\n Area radius";
                 RefreshArea();
                 break;
-            case PrimaPullPushController.ControlMode.Bubble:
-                textCenter.text = KeyRadiusAbridged + ":\nBubble radius";
-                RefreshBubble();
-                break;
         }
     }
     private void RefreshManual() {

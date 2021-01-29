@@ -21,6 +21,8 @@ public class FeruchemicalZinc : MonoBehaviour {
     #endregion
 
     public bool InZincTime { get; private set; }
+    public float BlueLinesBrightnessModifier { get; set; }
+
     private bool recovering;
     private float timeSpentRecovering;
     private double startReserve; // the reserve that the player last entered zinc time at
@@ -35,6 +37,7 @@ public class FeruchemicalZinc : MonoBehaviour {
 
     public void Clear() {
         InZincTime = false;
+        BlueLinesBrightnessModifier = 1;
         recovering = false;
         timeSpentRecovering = 0;
         Reserve = 1;
@@ -51,7 +54,7 @@ public class FeruchemicalZinc : MonoBehaviour {
         if (!GameManager.MenusController.pauseMenu.IsOpen) {
             if (InZincTime) {
                 // In Zinc Time
-                Prima.PrimaInstance.ActorIronSteel.BlueLinesBrightnessModifier = Mathf.Lerp(Prima.PrimaInstance.ActorIronSteel.BlueLinesBrightnessModifier, blueLinesMaxBrightness, blueLinesBrightnessLerp * Time.deltaTime);
+                BlueLinesBrightnessModifier = Mathf.Lerp(BlueLinesBrightnessModifier, blueLinesMaxBrightness, blueLinesBrightnessLerp * Time.deltaTime);
                 Rate = -Time.deltaTime / slowPercent / maxTime;
                 Reserve += Rate;
                 if (Reserve < 0) {
@@ -94,7 +97,7 @@ public class FeruchemicalZinc : MonoBehaviour {
                         Rate = 0;
                     }
                 }
-                Prima.PrimaInstance.ActorIronSteel.BlueLinesBrightnessModifier = Mathf.Lerp(Prima.PrimaInstance.ActorIronSteel.BlueLinesBrightnessModifier, 1, blueLinesBrightnessLerp * Time.deltaTime);
+                BlueLinesBrightnessModifier = Mathf.Lerp(BlueLinesBrightnessModifier, 1, blueLinesBrightnessLerp * Time.deltaTime);
 
                 if ((Keybinds.ZincTimeDown() || Keybinds.ControlWheelDown()) && Reserve > 0 && Player.CanControl && Player.CanControlZinc) {
                     // Enter zinc time
