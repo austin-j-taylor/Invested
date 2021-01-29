@@ -20,10 +20,8 @@ public class KogPullPushController : ActorPullPushController {
 
     public enum PullpushMode { Idle, Burning, Pullpushing, Active }
 
-    [SerializeField]
-    private PullpushMode combatMode;
-
-
+    public PullpushMode State { get; private set; }
+    
     [SerializeField]
     private Transform boneCenterOfMass = null;
 
@@ -32,44 +30,44 @@ public class KogPullPushController : ActorPullPushController {
     protected override void Awake() {
         base.Awake();
 
-        combatMode = PullpushMode.Idle;
+        State = PullpushMode.Idle;
         timeInActive = 0;
     }
 
     private void Update() {
         // Transitions
-        switch (combatMode) {
+        switch (State) {
             case PullpushMode.Idle:
                 if (IsBurning)
-                    combatMode = PullpushMode.Burning;
+                    State = PullpushMode.Burning;
                 break;
             case PullpushMode.Burning:
                 if (!IsBurning)
-                    combatMode = PullpushMode.Idle;
+                    State = PullpushMode.Idle;
                 else if (PushingOrPullingOnTarget)
-                    combatMode = PullpushMode.Pullpushing;
+                    State = PullpushMode.Pullpushing;
                 break;
             case PullpushMode.Pullpushing:
                 if (!PushingOrPullingOnTarget) {
-                    combatMode = PullpushMode.Active;
+                    State = PullpushMode.Active;
                     timeInActive = 0;
                 }
                 break;
             case PullpushMode.Active:
                 if (!IsBurning)
-                    combatMode = PullpushMode.Idle;
+                    State = PullpushMode.Idle;
                 else if (PushingOrPullingOnTarget)
-                    combatMode = PullpushMode.Pullpushing;
+                    State = PullpushMode.Pullpushing;
                 else {
                     timeInActive += Time.deltaTime;
                     if (timeInActive > timeInActiveMax)
-                        combatMode = PullpushMode.Burning;
+                        State = PullpushMode.Burning;
                 }
                 break;
         }
         // Actions
 
-        switch (combatMode) {
+        switch (State) {
             case PullpushMode.Idle:
                 if(Kog.MovementController.Movement.sqrMagnitude > 0) {
                     Kog.KogAnimationController.SetHeadLookAtTarget(Kog.MovementController.Movement.normalized * 10, true);

@@ -44,6 +44,7 @@ public class KogAnimation_SO : ScriptableObject {
     [SerializeField] private float armHeight = 1.65f;
     [SerializeField] private float armY_a = 0.000304f, armY_b = 1, armY_c = -0.903f, armX_d = -0.00009f, armX_f = 45, armX_g = 0.3f, armZ_o = 0.8f;
     [SerializeField] private float armPoleX_h = -0.01f, armPoleX_j = 65, armPoleY_k = 0.03f, armPoleY_l = 20.8f, armPoleZ_m = 0.04f, armPoleZ_n = -21.74f;
+    [SerializeField] private float arm_constraint_weight_combat = 0.3f;
 
 
 
@@ -108,4 +109,5 @@ public class KogAnimation_SO : ScriptableObject {
     public float ArmPoleY_l => armPoleY_l;
     public float ArmPoleZ_m => armPoleZ_m;
     public float ArmPoleZ_n => armPoleZ_n;
+    public float Arm_constraint_weight_combat => arm_constraint_weight_combat;
 }
