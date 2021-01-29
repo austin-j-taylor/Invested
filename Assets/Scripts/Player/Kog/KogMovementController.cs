@@ -221,7 +221,7 @@ public class KogMovementController : MonoBehaviour {
             Kog.KogAnimationController.SetLegTarget(target, feedback.magnitude);
 
             // PID control for orientation
-            float feedback_O = IMath.AngleBetween_Signed(transform.forward, bodyLookAtDirection, Vector3.up, true);
+            float feedback_O = IMath.AngleBetween_Signed(transform.forward, bodyLookAtDirection, Vector3.up, false);
             float output_O = pidOrientation.Step(feedback_O, 0);
             //Debug.Log(" movement: " + Movement.normalized + " feedback: " + feedback_O + " error: " + (feedback_O - target_O) + " output: " + output_O);
             rb.AddTorque(Vector3.up * output_O, ForceMode.Acceleration);

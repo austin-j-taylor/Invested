@@ -21,6 +21,7 @@ public class KogPullPushController : ActorPullPushController {
     public enum PullpushMode { Idle, Burning, Pullpushing, Active }
 
     public PullpushMode State { get; private set; }
+    public Magnetic MainTarget => HasPullTarget ? PullTargets[0] : HasPushTarget ? PushTargets[0] : null;
     
     [SerializeField]
     private Transform boneCenterOfMass = null;

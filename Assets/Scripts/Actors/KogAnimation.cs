@@ -829,7 +829,7 @@ private class Arm {
                 handAnchor.position = upperarm.transform.position + Vector3.Slerp(waist.TransformDirection(new Vector3(X, Y, Z)), CameraController.ActiveCamera.transform.forward.normalized * armLength, tInReach);
                 break;
             case State.Reaching:
-                handAnchor.position = upperarm.transform.position + CameraController.ActiveCamera.transform.forward.normalized * armLength;
+                handAnchor.position = upperarm.transform.position + (Kog.IronSteel.MainTarget.transform.position - upperarm.transform.position).normalized * armLength;
                 break;
         }
     }
