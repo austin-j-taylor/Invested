@@ -35,9 +35,9 @@ public class Simulation_duel : Simulation {
         //allomancers[7].Strength = 1.2f;
         //allomancers[8].Strength = 1.2f;
 
-        allomancers[1].Strength = 1.5f;
-        allomancers[7].Strength = 1.5f;
-        allomancers[9].Strength = 1.5f;
+        allomancers[1].BaseStrength = 1.5f;
+        allomancers[7].BaseStrength = 1.5f;
+        allomancers[9].BaseStrength = 1.5f;
     }
 
     protected override void Update() {

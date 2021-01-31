@@ -50,7 +50,7 @@ public class Player : MonoBehaviour {
         }
         set {
             feelingScale = value;
-            CurrentActor.ActorIronSteel.Strength = value;
+            CurrentActor.ActorIronSteel.StrengthModifier = value;
         }
     }
     // Some scenes also set the void height
@@ -181,6 +181,7 @@ public class Player : MonoBehaviour {
                 break;
         }
         CurrentActor = actor;
+        actor.ActorIronSteel.StrengthModifier = feelingScale;
     }
     #endregion
 

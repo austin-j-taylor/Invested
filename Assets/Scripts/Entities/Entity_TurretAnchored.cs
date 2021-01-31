@@ -59,7 +59,7 @@ public class Entity_TurretAnchored : NonPlayerPushPullController {
     protected override void FixedUpdate() {
         SteelReserve.Capacity = steelReserveCapacity;
         PushTargets.MaxRange = maxPushRange;
-        Strength = strength;
+        BaseStrength = strength;
 
         switch (currentState) {
             case State.Sleeping:

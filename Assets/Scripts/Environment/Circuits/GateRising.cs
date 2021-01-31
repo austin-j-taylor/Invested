@@ -24,7 +24,7 @@ public class GateRising : Powered {
         allomancer.AddPushTarget(target);
         allomancer.SteelPushing = true;
         allomancer.SteelBurnPercentageTarget = 1;
-        allomancer.Strength = 50;
+        allomancer.BaseStrength = 50;
         allomancer.gameObject.GetComponent<Renderer>().materials[1].CopyPropertiesFromMaterial(GameManager.Material_Steel_lit);
 
         float distance = (allomancer.transform.position - target.transform.position).sqrMagnitude;

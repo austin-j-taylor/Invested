@@ -161,7 +161,9 @@ public class AllomanticIronSteel : Allomancer {
     public bool ExternalControl { get; set; } = false;
     public float ExternalCommand { get; set; }
 
-    public float Strength { get; set; } = 1; // Allomantic Strength
+    public float BaseStrength { get; set; } = 1;
+    public float Strength => BaseStrength * StrengthModifier;  // Allomantic Strength
+    public float StrengthModifier { get; set; } = 1; // Another factor for Allomantic Strength
     protected float Charge { get; set; } // Allomantic Charge
     public Vector3 CenterOfMass {
         get {
@@ -186,6 +188,7 @@ public class AllomanticIronSteel : Allomancer {
     protected virtual void Awake() {
         rb = GetComponent<Rigidbody>();
         Charge = Mathf.Pow(Mass, chargePower);
+        StrengthModifier = 1;
         IronReserve = gameObject.AddComponent<MetalReserve>();
         SteelReserve = gameObject.AddComponent<MetalReserve>();
         IronReserve.IsEndless = true;
@@ -211,6 +214,7 @@ public class AllomanticIronSteel : Allomancer {
         LastMaximumNetForce = Vector3.zero;
         ExternalControl = false;
         ExternalCommand = 0;
+        StrengthModifier = 1;
     }
     #endregion
 

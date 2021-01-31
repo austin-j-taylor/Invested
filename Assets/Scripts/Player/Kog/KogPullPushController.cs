@@ -16,6 +16,7 @@ public class KogPullPushController : ActorPullPushController {
 
     #region constants
     private const float timeInActiveMax = 3;
+    private const float kogAllomanticStrength = 5;
     #endregion
 
     public enum PullpushMode { Idle, Burning, Pullpushing, Active }
@@ -31,6 +32,7 @@ public class KogPullPushController : ActorPullPushController {
     protected override void Awake() {
         base.Awake();
 
+        BaseStrength = kogAllomanticStrength;
         State = PullpushMode.Idle;
         timeInActive = 0;
     }

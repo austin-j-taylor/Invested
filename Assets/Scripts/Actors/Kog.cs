@@ -19,6 +19,11 @@ public class Kog : Actor {
     public static KogMovementController MovementController { get; private set; }
 
     protected override void Awake() {
+        IronSteel = GetComponent<KogPullPushController>();
+        AudioController = GetComponentInChildren<KogAudioController>();
+        KogAnimationController = GetComponentInChildren<KogAnimation>();
+        MovementController = GetComponent<KogMovementController>();
+
         KogInstance = this;
         Type = ActorType.Kog;
         RespawnHeightOffset = -0.26f;
@@ -28,10 +33,6 @@ public class Kog : Actor {
 
         base.Awake();
 
-        IronSteel = GetComponent<KogPullPushController>();
-        AudioController = GetComponentInChildren<KogAudioController>();
-        KogAnimationController = GetComponentInChildren<KogAnimation>();
-        MovementController = GetComponent<KogMovementController>();
 
         gameObject.SetActive(false);
 

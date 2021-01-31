@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -55,7 +56,6 @@ public class ActorPullPushController : AllomanticIronSteel {
     #region clearing
     public override void Clear() {
         StopBurning();
-        Strength = 1;
         Mode = ControlMode.Manual;
         removedTarget = null;
         base.Clear();

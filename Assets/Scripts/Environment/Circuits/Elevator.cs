@@ -41,7 +41,7 @@ public class Elevator : Interfaceable {
         rb.velocity = Vector3.zero;
         Prima.PrimaInstance.ActorIronSteel.rb.velocity = Vector3.zero;
         Prima.PrimaInstance.ActorIronSteel.Clear();
-        Prima.PrimaInstance.ActorIronSteel.Strength = 1000;
+        Prima.PrimaInstance.ActorIronSteel.BaseStrength = 1000;
         Prima.PrimaInstance.ActorIronSteel.StartBurning();
         Prima.PrimaInstance.ActorIronSteel.AddPushTarget(floorAnchor);
         Prima.PrimaInstance.ActorIronSteel.AddPullTarget(thisMagnetic);
@@ -67,7 +67,7 @@ public class Elevator : Interfaceable {
         rb.isKinematic = true;
         Player.CanControl = true;
         Prima.PrimaInstance.ActorIronSteel.StopBurning();
-        Prima.PrimaInstance.ActorIronSteel.Strength = 1;
+        Prima.PrimaInstance.ActorIronSteel.BaseStrength = 1;
         CameraController.DisableCinemachineCamera(vcam);
         Prima.PrimaInstance.ActorIronSteel.ExternalControl = false;
         anim.SetTrigger("turnOff");
