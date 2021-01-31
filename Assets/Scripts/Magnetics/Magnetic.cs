@@ -303,7 +303,7 @@ public class Magnetic : MonoBehaviour {
     /// <param name="lsf">the "light saber factor", or the white core of the line</param>
     /// <param name="color">the line's color</param>
     public void SetBlueLine(Vector3 endPos, float width, float lsf, Color color) {
-        if (blueLine) {
+        if (blueLine && enabled) {
             blueLine.gameObject.SetActive(true);
             blueLine.SetStartAndEndAndWidth(CenterOfMass, endPos, width);
             if (lightSaberFactor != 0 || lsf != 0) {
@@ -311,13 +311,6 @@ public class Magnetic : MonoBehaviour {
                 blueLine.LightSaberFactor = lightSaberFactor;
             }
             blueLine.LineColor = color;
-        } else {
-            Debug.Log("Null: " + gameObject);
-            Debug.Log("equa: " + (gameObject == Player.PlayerInstance.gameObject));
-            Debug.Log("Null: " + name);
-            Debug.Log("Null: " + tag);
-            Debug.Log("Null: " + blueLine);
-            Debug.Log("Null: " + GameManager.MagneticsInScene.Contains(this));
         }
     }
 

@@ -27,7 +27,6 @@ public class Prima : Actor {
     public static PrimaMovementController PlayerPewter { get; private set; }
     public static PrimaFlywheelController PrimaFlywheelController { get; private set; }
     public static Magnetic PlayerMagnetic { get; private set; }
-    public static PrimaTransparencyController PlayerTransparancy { get; set; }
     public static AllomechanicalGlower PlayerGlower { get; set; }
 
     public Hand CoinHand { get; private set; }
@@ -59,7 +58,6 @@ public class Prima : Actor {
         PlayerPewter = GetComponentInChildren<PrimaMovementController>();
         PrimaFlywheelController = GetComponentInChildren<PrimaFlywheelController>();
         PlayerMagnetic = GetComponentInChildren<Magnetic>();
-        PlayerTransparancy = GetComponentInChildren<PrimaTransparencyController>();
         PlayerGlower = GetComponentInChildren<AllomechanicalGlower>();
         CoinThrowingMode = CoinMode.Semi;
         CoinHand = GetComponentInChildren<Hand>();
@@ -136,7 +134,6 @@ public class Prima : Actor {
         ActorIronSteel.StopBurning(false);
         ActorIronSteel.Clear();
         PlayerPewter.Clear();
-        PlayerTransparancy.Clear();
     }
 
     /// <summary>

@@ -85,7 +85,7 @@ public class CameraController : MonoBehaviour {
         lastCameraDistance = 0;
         ActiveCamera.transform.localPosition = Vector3.zero;
         ActiveCamera.transform.localRotation = Quaternion.identity;
-        Prima.PlayerTransparancy.SetOverrideHidden(IsFirstPerson);
+        Player.CurrentActor.Transparancy.SetOverrideHidden(IsFirstPerson);
 
         if (Player.CurrentActor.ActorIronSteel.IsBurning) // Update blue lines when the camera is reset
             Player.CurrentActor.ActorIronSteel.UpdateBlueLines();
@@ -322,7 +322,7 @@ public class CameraController : MonoBehaviour {
 
     #region cameraControls
     public static void SetCinemachineCamera(CinemachineVirtualCamera vcam) {
-        Prima.PlayerTransparancy.SetOverrideHidden(false);
+        Player.CurrentActor.Transparancy.SetOverrideHidden(false);
         GameManager.SetCameraState(GameManager.GameCameraState.Cutscene);
         vcam.enabled = true;
 
@@ -336,7 +336,7 @@ public class CameraController : MonoBehaviour {
         yield return null;
         while (Cinemachine.IsBlending)
             yield return null;
-        Prima.PlayerTransparancy.SetOverrideHidden(IsFirstPerson);
+        Player.CurrentActor.Transparancy.SetOverrideHidden(IsFirstPerson);
         GameManager.SetCameraState(GameManager.GameCameraState.Standard);
     }
 
@@ -354,14 +354,14 @@ public class CameraController : MonoBehaviour {
     public void SetThirdPerson() {
         CameraPositionTarget.transform.SetParent(CameraLookAtTarget);
         if (GameManager.CameraState == GameManager.GameCameraState.Standard) {
-            Prima.PlayerTransparancy.SetOverrideHidden(false);
+            Player.CurrentActor.Transparancy.SetOverrideHidden(false);
             Clear();
         }
     }
     public void SetFirstPerson() {
         CameraPositionTarget.transform.SetParent(CameraLookAtTarget.Find("FirstPersonTarget"));
         if (GameManager.CameraState == GameManager.GameCameraState.Standard) {
-            Prima.PlayerTransparancy.SetOverrideHidden(true);
+            Player.CurrentActor.Transparancy.SetOverrideHidden(true);
             Clear();
         }
     }

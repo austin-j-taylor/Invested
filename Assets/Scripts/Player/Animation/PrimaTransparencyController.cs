@@ -2,20 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/*
- * Makes the player's body appear transparent when the camera is looking at it/near it.
- */
-public class PrimaTransparencyController : MonoBehaviour {
+public class PrimaTransparencyController : ActorTransparencyController {
 
     private const float distanceThreshold = 2;
     private const float distanceThresholdInvisible = 0;//.5f;
     private const float lookAtTransparency = .15f;
 
-    private Renderer[] rends;
-    private bool isOpaque, overrideHidden = false, isHidden = false;
-
     private Renderer transluscentPlayerCase;
     private float playerCaseMaxTransluscency;
+
 
     void Awake() {
         rends = GetComponentsInChildren<MeshRenderer>();
@@ -27,6 +22,7 @@ public class PrimaTransparencyController : MonoBehaviour {
         }
         SetAllOpaque();
     }
+
 
     void LateUpdate() {
         // Player is always visible if the Camera is doing something cinematic
@@ -58,16 +54,6 @@ public class PrimaTransparencyController : MonoBehaviour {
         } else {
             SetAllOpaque();
         }
-
-    }
-
-    public void Clear() {
-        //if(SettingsMenu.settingsData.cameraFirstPerson == 0) {
-        //    SetOverrideHidden(false);
-        //} else {
-        //    SetOverrideHidden(true);
-        //}
-        //LateUpdate();
     }
 
     // Set the rendering mode to Fade, and set the transparency to percent
@@ -134,18 +120,6 @@ public class PrimaTransparencyController : MonoBehaviour {
         }
     }
 
-    public void SetOverrideHidden(bool hidden) {
-        if (hidden != overrideHidden) {
-            overrideHidden = hidden;
-            isHidden = hidden;
-            foreach (Renderer rend in rends) {
-                if (rend) {
-                    rend.enabled = !hidden;
-                }
-            }
-        }
-    }
-
     private void SetHidden(bool hidden) {
         if (!overrideHidden) { // do nothing if we should always be hidden
             if (hidden != isHidden) {
@@ -158,4 +132,5 @@ public class PrimaTransparencyController : MonoBehaviour {
             }
         }
     }
+
 }

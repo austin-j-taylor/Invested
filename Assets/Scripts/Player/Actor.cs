@@ -16,11 +16,13 @@ public class Actor : MonoBehaviour {
     public float CameraOffsetFirstPerson { get; protected set; }
 
     public ActorPullPushController ActorIronSteel { get; private set; }
+    public ActorTransparencyController Transparancy { get; set; }
     public VoiceBeeper ActorVoiceBeeper { get; set; }
 
     protected virtual void Awake() {
         ActorIronSteel = GetComponentInChildren<ActorPullPushController>();
         ActorVoiceBeeper = GetComponentInChildren<VoiceBeeper>();
+        Transparancy = GetComponentInChildren<ActorTransparencyController>();
 
         SceneManager.sceneLoaded += ClearActorAfterSceneChange;
     }
