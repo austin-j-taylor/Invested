@@ -222,7 +222,7 @@ public class KogMovementController : MonoBehaviour {
 
             // PID control for orientation
             float feedback_O = IMath.AngleBetween_Signed(transform.forward, bodyLookAtDirection, Vector3.up, false);
-            float output_O = pidOrientation.Step(feedback_O, 0);
+            float output_O = pidOrientation.Step(feedback_O, 0) / Time.fixedDeltaTime;
             //Debug.Log(" movement: " + Movement.normalized + " feedback: " + feedback_O + " error: " + (feedback_O - target_O) + " output: " + output_O);
             rb.AddTorque(Vector3.up * output_O, ForceMode.Acceleration);
             transform.localEulerAngles = new Vector3(0, transform.localEulerAngles.y, 0);
