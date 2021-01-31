@@ -16,7 +16,7 @@ public class PrimaAudioController : MonoBehaviour {
     private Coroutine coroutine_pewter, coroutine_rolling;
 
     #region clearing
-    void Start() {
+    void Awake() {
         AudioSource[] sources = GetComponents<AudioSource>();
         player_pewter_burst = sources[0];
         player_pewter_intro = sources[1];

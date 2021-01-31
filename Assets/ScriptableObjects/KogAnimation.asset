@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc8d9076a9795b34185547d7f90a0eed, type: 3}
   m_Name: KogAnimation
   m_EditorClassIdentifier: 
-  keyframeToScriptingTime: 0.25
-  scriptingToKeyframeTime: 1
+  weight_toMoving_lerp: 4
+  weight_toIdle_lerp: 1
+  weight_toCombat_lerp: 4
   step_ToTarget_Delta: 12
   step_ToTargetRotation_lerp: 15
   step_defaultDistance: 0.2
@@ -68,9 +69,9 @@ MonoBehaviour:
   armX_g: 0.3
   armZ_o: 0.6
   armPoleX_h: -0.004
-  armPoleX_j: 65
-  armPoleY_k: 0.03
+  armPoleX_j: 93.8
+  armPoleY_k: 0.01
   armPoleY_l: 20.8
   armPoleZ_m: 0.03
-  armPoleZ_n: -21.74
+  armPoleZ_n: -59.2
   arm_constraint_weight_combat: 0.5

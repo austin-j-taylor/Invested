@@ -225,28 +225,28 @@ public class ControlWheelController : MonoBehaviour {
                 break;
             case Selection.Manual:
                 selectedSpoke = highlit;
-                Prima.PrimaInstance.ActorIronSteel.SetControlModeManual();
+                Player.CurrentActor.ActorIronSteel.SetControlModeManual();
                 break;
             case Selection.Area:
                 selectedSpoke = highlit;
-                Prima.PrimaInstance.ActorIronSteel.SetControlModeArea();
+                Player.CurrentActor.ActorIronSteel.SetControlModeArea();
                 break;
             case Selection.Bubble:
                 //selectedSpoke = highlit;
-                //Prima.PrimaInstance.ActorIronSteel.SetControlModeBubble();
-                if (Prima.PrimaInstance.ActorIronSteel.BubbleIsOpen)
-                    Prima.PrimaInstance.ActorIronSteel.BubbleClose();
+                //Player.CurrentActor.ActorIronSteel.SetControlModeBubble();
+                if (Player.CurrentActor.ActorIronSteel.BubbleIsOpen)
+                    Player.CurrentActor.ActorIronSteel.BubbleClose();
                 else
-                    Prima.PrimaInstance.ActorIronSteel.BubbleOpen();
+                    Player.CurrentActor.ActorIronSteel.BubbleOpen();
                 break;
             case Selection.BubblePolarity:
                 //selectedSpoke = highlit;
-                //Prima.PrimaInstance.ActorIronSteel.SetControlModeBubble();
-                Prima.PrimaInstance.ActorIronSteel.BubbleOpen(!Prima.PrimaInstance.ActorIronSteel.BubbleMetalStatus);
+                //Player.CurrentActor.ActorIronSteel.SetControlModeBubble();
+                Player.CurrentActor.ActorIronSteel.BubbleOpen(!Player.CurrentActor.ActorIronSteel.BubbleMetalStatus);
                 break;
             case Selection.Coinshot:
                 selectedSpoke = highlit;
-                Prima.PrimaInstance.ActorIronSteel.SetControlModeCoinshot();
+                Player.CurrentActor.ActorIronSteel.SetControlModeCoinshot();
                 break;
             case Selection.Coin_Spray:
                 selectedCoin = highlit;
@@ -264,10 +264,10 @@ public class ControlWheelController : MonoBehaviour {
                 HUD.ThrowingAmmoMeter.Alert(Prima.CoinMode.Semi);
                 break;
             case Selection.DeselectAll:
-                Prima.PrimaInstance.ActorIronSteel.RemoveAllTargets();
+                Player.CurrentActor.ActorIronSteel.RemoveAllTargets();
                 break;
             case Selection.StopBurning:
-                Prima.PrimaInstance.ActorIronSteel.StopBurning();
+                Player.CurrentActor.ActorIronSteel.StopBurning();
                 break;
         }
         RefreshSpokes();
@@ -323,7 +323,7 @@ public class ControlWheelController : MonoBehaviour {
 
     #region refreshing
     public void RefreshText() {
-        if (Prima.PrimaInstance.ActorIronSteel.SteelReserve.IsEnabled) {
+        if (Player.CurrentActor.ActorIronSteel.SteelReserve.IsEnabled) {
             textManual.text = KeyPullPushAbridged + ": " + Pull_Push + "\non a single target\n\n\n";
             textArea.text = KeyPullPushAbridged + ": " + Pull_Push + "\nin an area in front of you\n\n\n";
             //textBubble.text = KeyPullPushAbridged + ": " + Pull_Push + "\nin a bubble around you\n\n"
@@ -338,7 +338,7 @@ public class ControlWheelController : MonoBehaviour {
         }
         textCoinshot.text = KeyPullAbridged + ": throw and " + Push + " " + O_Coin + "\n\n\n\n\n";
         // The active mode gets the verbose text as well
-        switch (Prima.PrimaInstance.ActorIronSteel.Mode) {
+        switch (Player.CurrentActor.ActorIronSteel.Mode) {
             case PrimaPullPushController.ControlMode.Coinshot: // fall through
                 textCenter.text = "";
                 RefreshCoinshot();
@@ -354,7 +354,7 @@ public class ControlWheelController : MonoBehaviour {
         }
     }
     private void RefreshManual() {
-        if (Prima.PrimaInstance.ActorIronSteel.SteelReserve.IsEnabled) {
+        if (Player.CurrentActor.ActorIronSteel.SteelReserve.IsEnabled) {
             textManual.text = KeyPullPushAbridged + ": " + Pull_Push + "\n"
                 + KeyMark + ": Mark target\n"
                 + HowToMultiMark + ":" + "\nMark multiple\n";
@@ -365,7 +365,7 @@ public class ControlWheelController : MonoBehaviour {
         }
     }
     private void RefreshArea() {
-        if (Prima.PrimaInstance.ActorIronSteel.SteelReserve.IsEnabled) {
+        if (Player.CurrentActor.ActorIronSteel.SteelReserve.IsEnabled) {
             textArea.text = KeyPullPushAbridged + ": " + Pull_Push + "\n"
                     + KeyMark + ": Mark targets\n"
                     + KeyRadiusAbridged + ": size of area\n\n\n";

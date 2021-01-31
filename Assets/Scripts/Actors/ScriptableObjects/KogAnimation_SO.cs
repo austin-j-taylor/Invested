@@ -5,8 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "KogAnimation", menuName = "ScriptableObjects/KogAnimationScriptableObject")]
 public class KogAnimation_SO : ScriptableObject {
 
-    // Keyframe
-    [SerializeField] private float keyframeToScriptingTime = .25f, scriptingToKeyframeTime = 1;
+    // Rig weights
+    [SerializeField] private float weight_toMoving_lerp = 4, weight_toIdle_lerp = 1, weight_toCombat_lerp = 4;
     // Stepping
     [SerializeField] private float step_ToTarget_Delta = 12;
     [SerializeField] private float step_ToTargetRotation_lerp = 15;
@@ -48,8 +48,9 @@ public class KogAnimation_SO : ScriptableObject {
 
 
 
-    public float KeyframeToScriptingTime => keyframeToScriptingTime;
-    public float ScriptingToKeyframeTime => scriptingToKeyframeTime;
+    public float Weight_toMoving_lerp => weight_toMoving_lerp;
+    public float Weight_toIdle_lerp => weight_toIdle_lerp;
+    public float Weight_toCombat_lerp => weight_toCombat_lerp;
     public float Step_ToTarget_Delta => step_ToTarget_Delta;
     public float Step_ToTargetRotation_lerp => step_ToTargetRotation_lerp;
     public float Step_defaultDistance => step_defaultDistance;

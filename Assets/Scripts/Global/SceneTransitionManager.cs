@@ -12,8 +12,8 @@ public class SceneTransitionManager : MonoBehaviour {
         Player.PlayerInstance.transform.parent = EventSystem.current.transform; // make sure the player is in the DontDestroyOnLoad scene
 
         if (withMistyTransition) {
-            if (Player.PlayerInstance.playerState == Player.PlayerState.Normal) {
-                Player.PlayerInstance.playerState = Player.PlayerState.Respawning;
+            if (Player.PlayerInstance.respawnState == Player.PlayerRespawnState.Normal) {
+                Player.PlayerInstance.respawnState = Player.PlayerRespawnState.Respawning;
                 HUD.LoadingFadeController.Enshroud();
                 HUD.DisableHUD();
                 Player.CanPause = false;
@@ -28,7 +28,7 @@ public class SceneTransitionManager : MonoBehaviour {
     private IEnumerator LoadSceneTransition(int scene) {
         yield return new WaitForSecondsRealtime(wipeTime);
         SceneManager.LoadScene(scene);
-        Player.PlayerInstance.playerState = Player.PlayerState.Normal;
+        Player.PlayerInstance.respawnState = Player.PlayerRespawnState.Normal;
     }
     public void ReloadScene() {
         LoadScene(SceneManager.GetActiveScene().buildIndex);

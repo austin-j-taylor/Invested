@@ -231,10 +231,17 @@ public class KogMovementController : MonoBehaviour {
     #endregion
 
     /// <summary>
-    /// Sets the target position for the body to face.
+    /// Sets the target global position for the body to face.
     /// </summary>
     /// <param name="target">the target position</param>
-    public void SetBodyLookAtTarget(Vector3 target) {
+    public void SetBodyLookAtPosition(Vector3 target) {
+        bodyLookAtDirection = target - transform.position;
+    }
+    /// <summary>
+    /// Sets a target global direction for the body to face.
+    /// </summary>
+    /// <param name="target">the target position</param>
+    public void SetBodyLookAtDirection(Vector3 target) {
         bodyLookAtDirection = target;
     }
 }

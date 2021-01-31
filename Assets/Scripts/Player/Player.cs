@@ -13,14 +13,14 @@ public class Player : MonoBehaviour {
     #endregion
 
     #region properties
-    public enum PlayerState { Normal, Respawning };
+    public enum PlayerRespawnState { Normal, Respawning };
 
     // Player components that need to be referenced elsewhere
     public static Player PlayerInstance { get; private set; }
     public static FeruchemicalZinc PlayerZinc { get; set; }
     public static Actor CurrentActor { get; set; }
 
-    public PlayerState playerState { get; set; }
+    public PlayerRespawnState respawnState { get; set; }
     public Transform RespawnPoint { get; set; }
 
     private static bool canControl;
@@ -57,8 +57,6 @@ public class Player : MonoBehaviour {
     public static float VoidHeight { get; set; }
     #endregion
 
-    [SerializeField]
-    private Actor.ActorType startupActor = Actor.ActorType.Prima;
 
     void Awake() {
         PlayerInstance = this;
@@ -69,16 +67,6 @@ public class Player : MonoBehaviour {
         SceneManager.sceneUnloaded += ClearPlayerBeforeSceneChange;
     }
 
-    private void Start() {
-        switch(startupActor) {
-            case Actor.ActorType.Prima:
-                SetActor(Prima.PrimaInstance);
-                break;
-            case Actor.ActorType.Kog:
-                SetActor(Kog.KogInstance);
-                break;
-        }
-    }
 
     #region updates
     void Update() {
@@ -124,7 +112,7 @@ public class Player : MonoBehaviour {
     /// <param name="mode">the sceme loading mode</param>
     private void ClearPlayerAfterSceneChange(Scene scene, LoadSceneMode mode) {
         if (mode == LoadSceneMode.Single) { // Not loading all of the scenes, as it does at startup
-            playerState = PlayerState.Normal;
+            respawnState = PlayerRespawnState.Normal;
 
             if (scene.buildIndex != SceneSelectMenu.sceneTitleScreen) {
                 GameObject spawn = GameObject.FindGameObjectWithTag("PlayerSpawn");
@@ -158,8 +146,8 @@ public class Player : MonoBehaviour {
     /// Resets the player and returns them to their respawn point
     /// </summary>
     public void Respawn() {
-        if (RespawnPoint && playerState == PlayerState.Normal) {
-            playerState = PlayerState.Respawning;
+        if (RespawnPoint && respawnState == PlayerRespawnState.Normal) {
+            respawnState = PlayerRespawnState.Respawning;
             StartCoroutine(RespawnRoutine());
         }
     }
@@ -174,7 +162,7 @@ public class Player : MonoBehaviour {
         CameraController.SetRotation(RespawnPoint.eulerAngles);
         CanControlMovement = true;
         CanPause = true;
-        playerState = PlayerState.Normal;
+        respawnState = PlayerRespawnState.Normal;
     }
 
     /// <summary>

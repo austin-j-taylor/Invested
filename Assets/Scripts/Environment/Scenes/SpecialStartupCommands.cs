@@ -15,7 +15,9 @@ public class SpecialStartupCommands : MonoBehaviour {
 
     [SerializeField]
     private StartupScene startupScene = StartupScene.None;
-    
+    [SerializeField]
+    private Actor.ActorType startupActor = Actor.ActorType.Prima;
+
     /// <summary>
     /// Runs the startup commands.
     /// Returns true if the game starts on the title screen.
@@ -31,6 +33,14 @@ public class SpecialStartupCommands : MonoBehaviour {
                     scene = SceneSelectMenu.sceneSandbox;
                     break;
                 default:
+                    break;
+            }
+            switch (startupActor) {
+                case Actor.ActorType.Prima:
+                    Player.PlayerInstance.SetActor(Prima.PrimaInstance);
+                    break;
+                case Actor.ActorType.Kog:
+                    Player.PlayerInstance.SetActor(Kog.KogInstance);
                     break;
             }
         }

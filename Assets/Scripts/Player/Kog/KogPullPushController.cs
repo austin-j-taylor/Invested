@@ -72,24 +72,34 @@ public class KogPullPushController : ActorPullPushController {
             case PullpushMode.Idle:
                 if(Kog.MovementController.Movement.sqrMagnitude > 0) {
                     Kog.KogAnimationController.SetHeadLookAtTarget(Kog.MovementController.Movement.normalized * 10, true);
-                    Kog.MovementController.SetBodyLookAtTarget(Kog.MovementController.Movement);
+                    Kog.MovementController.SetBodyLookAtDirection(Kog.MovementController.Movement);
                 } else {
                     Kog.KogAnimationController.SetHeadLookAtTarget(transform.forward, true);
                 }
                 break;
             case PullpushMode.Burning:
-                if (Kog.MovementController.Movement.sqrMagnitude > 0) {
-                    Kog.MovementController.SetBodyLookAtTarget(Kog.MovementController.Movement);
+                if (MainTarget != null) {
+                    Kog.KogAnimationController.SetHeadLookAtTarget(MainTarget.transform.position, false);
+                    Kog.MovementController.SetBodyLookAtPosition(MainTarget.transform.position);
+                } else {
+                    Kog.KogAnimationController.SetHeadLookAtTarget(CameraController.ActiveCamera.transform.forward * 10, true);
+                    if (Kog.MovementController.Movement.sqrMagnitude > 0) {
+                        Kog.MovementController.SetBodyLookAtDirection(Kog.MovementController.Movement);
+                    }
                 }
-                Kog.KogAnimationController.SetHeadLookAtTarget(CameraController.ActiveCamera.transform.forward * 10, true);
                 break;
             case PullpushMode.Pullpushing:
-                Kog.MovementController.SetBodyLookAtTarget(CameraController.ActiveCamera.transform.forward);
-                Kog.KogAnimationController.SetHeadLookAtTarget(CameraController.ActiveCamera.transform.forward * 10, true);
+                Kog.KogAnimationController.SetHeadLookAtTarget(MainTarget.transform.position, false);
+                Kog.MovementController.SetBodyLookAtPosition(MainTarget.transform.position);
                 break;
             case PullpushMode.Active:
-                Kog.MovementController.SetBodyLookAtTarget(CameraController.ActiveCamera.transform.forward);
-                Kog.KogAnimationController.SetHeadLookAtTarget(CameraController.ActiveCamera.transform.forward * 10, true);
+                if (MainTarget != null) {
+                    Kog.KogAnimationController.SetHeadLookAtTarget(MainTarget.transform.position, false);
+                    Kog.MovementController.SetBodyLookAtPosition(MainTarget.transform.position);
+                } else {
+                    Kog.KogAnimationController.SetHeadLookAtTarget(CameraController.ActiveCamera.transform.forward * 10, true);
+                    Kog.MovementController.SetBodyLookAtDirection(CameraController.ActiveCamera.transform.forward);
+                }
                 break;
         }
 

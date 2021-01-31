@@ -31,7 +31,7 @@ public class PrimaFlywheelController : MonoBehaviour {
     private bool extended;
 
 
-    private void Start() {
+    private void Awake() {
         anim = GetComponentInParent<Animator>();
 
         Transform wheels = transform.Find("Wheels");

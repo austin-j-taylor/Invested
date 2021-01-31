@@ -74,6 +74,9 @@ public class KogAnimation : MonoBehaviour {
 
         animationState = AnimationState.Idle;
         rigWeight = 0;
+        constraintWaist.weight = 0;
+        constraintHandLeft.weight = 0;
+        constraintHandRight.weight = 0;
         waistRestPosition = waist.localPosition;
         leftShoulderRestRotation = leftArm.shoulder.rotation;
         rightShoulderRestRotation = rightArm.shoulder.rotation;
@@ -101,6 +104,7 @@ public class KogAnimation : MonoBehaviour {
                 if(Kog.IronSteel.State == KogPullPushController.PullpushMode.Pullpushing) {
                     animationState = AnimationState.Pullpushing;
                 } else if (Kog.MovementController.State == KogMovementController.WalkingState.Anchored
+                    || Kog.IronSteel.State != KogPullPushController.PullpushMode.Idle
                     || IsMovingOrTurning) {
                     animationState = AnimationState.Moving;
                 }
@@ -109,6 +113,7 @@ public class KogAnimation : MonoBehaviour {
                 if (Kog.IronSteel.State == KogPullPushController.PullpushMode.Pullpushing) {
                     animationState = AnimationState.Pullpushing;
                 } else if (Kog.MovementController.State == KogMovementController.WalkingState.Idle
+                    && Kog.IronSteel.State == KogPullPushController.PullpushMode.Idle
                     && !IsMovingOrTurning) {
                     animationState = AnimationState.Idle;
                 }
@@ -131,51 +136,45 @@ public class KogAnimation : MonoBehaviour {
         anim.SetBool("Idle", Kog.IronSteel.State == KogPullPushController.PullpushMode.Idle);
         anim.SetBool("Pullpushing", Kog.IronSteel.State == KogPullPushController.PullpushMode.Pullpushing);
         if (animationState == AnimationState.Idle) {
-            if (rigWeight <= 0) {
-                rigWeight = 0;
-            } else {
-                rigWeight -= Time.deltaTime / kogAnimation_SO.ScriptingToKeyframeTime;
-            }
+            rigWeight = Mathf.Lerp(rigWeight, 0, Time.deltaTime * kogAnimation_SO.Weight_toIdle_lerp);
         } else {
-            if (rigWeight >= 1) {
-                rigWeight = 1;
-            } else {
-                rigWeight += Time.deltaTime / kogAnimation_SO.KeyframeToScriptingTime;
-            }
+            rigWeight = Mathf.Lerp(rigWeight, 1, Time.deltaTime * kogAnimation_SO.Weight_toMoving_lerp);
         }
 
+        // Feet and head share the same weight
+        // waist and hands may be different at any given time
         switch (animationState) {
             case AnimationState.Idle:
                 constraintHead.weight = rigWeight;
                 constraintFootLeft.weight = rigWeight;
                 constraintFootRight.weight = rigWeight;
-                constraintWaist.weight = rigWeight;
-                constraintHandLeft.weight = rigWeight;
-                constraintHandRight.weight = rigWeight;
+                constraintWaist.weight = Mathf.Lerp(constraintWaist.weight, 0, Time.deltaTime * kogAnimation_SO.Weight_toIdle_lerp);
+                constraintHandLeft.weight = Mathf.Lerp(constraintHandLeft.weight, 0, Time.deltaTime * kogAnimation_SO.Weight_toIdle_lerp);
+                constraintHandRight.weight = Mathf.Lerp(constraintHandRight.weight, 0, Time.deltaTime * kogAnimation_SO.Weight_toIdle_lerp);
                 break;
             case AnimationState.Moving:
                 constraintHead.weight = rigWeight;
                 constraintFootLeft.weight = rigWeight;
                 constraintFootRight.weight = rigWeight;
-                constraintWaist.weight = rigWeight;
-                constraintHandLeft.weight = rigWeight;
-                constraintHandRight.weight = rigWeight;
+                constraintWaist.weight = Mathf.Lerp(constraintWaist.weight, 1, Time.deltaTime * kogAnimation_SO.Weight_toMoving_lerp);
+                constraintHandLeft.weight = Mathf.Lerp(constraintHandLeft.weight, 1, Time.deltaTime * kogAnimation_SO.Weight_toMoving_lerp);
+                constraintHandRight.weight = Mathf.Lerp(constraintHandRight.weight, 1, Time.deltaTime * kogAnimation_SO.Weight_toMoving_lerp);
                 break;
             case AnimationState.Active:
                 constraintHead.weight = rigWeight;
                 constraintFootLeft.weight = rigWeight;
                 constraintFootRight.weight = rigWeight;
-                constraintWaist.weight = kogAnimation_SO.Arm_constraint_weight_combat;
-                constraintHandLeft.weight = kogAnimation_SO.Arm_constraint_weight_combat;
-                constraintHandRight.weight = kogAnimation_SO.Arm_constraint_weight_combat;
+                constraintWaist.weight = Mathf.Lerp(constraintWaist.weight, kogAnimation_SO.Arm_constraint_weight_combat, Time.deltaTime * kogAnimation_SO.Weight_toCombat_lerp);
+                constraintHandLeft.weight = Mathf.Lerp(constraintHandLeft.weight, kogAnimation_SO.Arm_constraint_weight_combat, Time.deltaTime * kogAnimation_SO.Weight_toCombat_lerp);
+                constraintHandRight.weight = Mathf.Lerp(constraintHandRight.weight, kogAnimation_SO.Arm_constraint_weight_combat, Time.deltaTime * kogAnimation_SO.Weight_toCombat_lerp);
                 break;
             case AnimationState.Pullpushing:
                 constraintHead.weight = rigWeight;
                 constraintFootLeft.weight = rigWeight;
                 constraintFootRight.weight = rigWeight;
-                constraintWaist.weight = kogAnimation_SO.Arm_constraint_weight_combat;
-                constraintHandLeft.weight = kogAnimation_SO.Arm_constraint_weight_combat;
-                constraintHandRight.weight = kogAnimation_SO.Arm_constraint_weight_combat;
+                constraintWaist.weight = Mathf.Lerp(constraintWaist.weight, kogAnimation_SO.Arm_constraint_weight_combat, Time.deltaTime * kogAnimation_SO.Weight_toCombat_lerp);
+                constraintHandLeft.weight = Mathf.Lerp(constraintHandLeft.weight, kogAnimation_SO.Arm_constraint_weight_combat, Time.deltaTime * kogAnimation_SO.Weight_toCombat_lerp);
+                constraintHandRight.weight = Mathf.Lerp(constraintHandRight.weight, 1, Time.deltaTime * kogAnimation_SO.Weight_toCombat_lerp);
                 break;
         }
     }
