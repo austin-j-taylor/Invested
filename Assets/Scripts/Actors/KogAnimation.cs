@@ -828,11 +828,15 @@ public class KogAnimation : MonoBehaviour {
                     handAnchorPole.position = upperarm.transform.position + waist.parent.TransformDirection(new Vector3(Xp, Yp, Zp));
                     break;
                 case State.IdleToReaching:
-                    Vector3 handAnchorLerp = upperarm.transform.position + Vector3.Slerp(waist.TransformDirection(new Vector3(X, Y, Z)), (lastReachTargetPosition - upperarm.transform.position).normalized * armLength, tInReach);
+                    Vector3 toTarget = lastReachTargetPosition - upperarm.transform.position;
+                    float distance = toTarget.magnitude;
+                    Vector3 handAnchorLerp = upperarm.transform.position + Vector3.Slerp(waist.TransformDirection(new Vector3(X, Y, Z)), Vector3.ClampMagnitude(toTarget / distance * armLength, distance), tInReach);
                     handAnchor.position = Vector3.Slerp(handAnchor.position, handAnchorLerp, Time.deltaTime * kogAnimation_SO.Arm_reachingToMetal_lerp);
                     break;
                 case State.Reaching:
-                    handAnchorLerp = upperarm.transform.position + (lastReachTargetPosition - upperarm.transform.position).normalized * armLength;
+                    toTarget = lastReachTargetPosition - upperarm.transform.position;
+                    distance = toTarget.magnitude;
+                    handAnchorLerp = upperarm.transform.position + Vector3.ClampMagnitude(toTarget / distance * armLength, distance);
                     handAnchor.position = Vector3.Slerp(handAnchor.position, handAnchorLerp, Time.deltaTime * kogAnimation_SO.Arm_reachingToMetal_lerp);
                     break;
             }

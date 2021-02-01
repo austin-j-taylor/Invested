@@ -17,12 +17,14 @@ public class Kog : Actor {
     public static KogAudioController AudioController { get; private set; }
     public static KogAnimation KogAnimationController { get; private set; }
     public static KogMovementController MovementController { get; private set; }
+    public static KogHandController HandController { get; private set; }
 
     protected override void Awake() {
         IronSteel = GetComponent<KogPullPushController>();
         AudioController = GetComponentInChildren<KogAudioController>();
         KogAnimationController = GetComponentInChildren<KogAnimation>();
         MovementController = GetComponent<KogMovementController>();
+        HandController = GetComponentInChildren<KogHandController>();
 
         KogInstance = this;
         Type = ActorType.Kog;
@@ -44,6 +46,7 @@ public class Kog : Actor {
         AudioController.Clear();
         MovementController.Clear();
         KogAnimationController.Clear();
+        HandController.Clear();
     }
 
     /// <summary>

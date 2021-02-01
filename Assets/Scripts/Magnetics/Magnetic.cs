@@ -37,7 +37,7 @@ public class Magnetic : MonoBehaviour {
     #endregion
 
     #region properties
-    protected Rigidbody Rb { get; set; }
+    public Rigidbody Rb { get; protected set; }
     public bool IsStatic { get; protected set; }
     public bool HasColliders { get; private set; }
     public bool HasRenderer { get; private set; }
