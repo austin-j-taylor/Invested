@@ -168,13 +168,17 @@ public class AllomanticIronSteel : Allomancer {
     public Vector3 CenterOfMass {
         get {
             if (cachedCenterOfMassTime != Time.unscaledTime) {
-                cachedCenterOfMass = transform.TransformPoint(rb.centerOfMass);
+                if (CustomCenterOfAllomancy == null)
+                    cachedCenterOfMass = transform.TransformPoint(rb.centerOfMass);
+                else
+                    cachedCenterOfMass = CustomCenterOfAllomancy.position;
                 cachedCenterOfMassTime = Time.unscaledTime;
             }
             return cachedCenterOfMass;
         }
     }
     private Vector3 cachedCenterOfMass;
+    public Transform CustomCenterOfAllomancy { get; set; } = null; // if not null, the blue lines and forces lead to here.
     private float cachedCenterOfMassTime = -1;
 
     public float Mass {
@@ -215,6 +219,7 @@ public class AllomanticIronSteel : Allomancer {
         ExternalControl = false;
         ExternalCommand = 0;
         StrengthModifier = 1;
+        CustomCenterOfAllomancy = null;
     }
     #endregion
 
@@ -805,6 +810,8 @@ public class AllomanticIronSteel : Allomancer {
         float scale = visualRadius * 2;
         bubbleRenderer.transform.localScale = new Vector3(scale, scale, scale);
     }
+
+
     #endregion
 
     #region targetManipulation

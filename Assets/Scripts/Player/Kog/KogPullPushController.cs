@@ -26,12 +26,15 @@ public class KogPullPushController : ActorPullPushController {
     
     [SerializeField]
     private Transform boneCenterOfMass = null;
+    [SerializeField]
+    private Transform boneHand = null;
 
     private float timeInActive;
 
     protected override void Awake() {
         base.Awake();
 
+        CustomCenterOfAllomancy = boneCenterOfMass;
         BaseStrength = kogAllomanticStrength;
         State = PullpushMode.Idle;
         timeInActive = 0;
@@ -72,7 +75,8 @@ public class KogPullPushController : ActorPullPushController {
 
         switch (State) {
             case PullpushMode.Idle:
-                if(Kog.MovementController.Movement.sqrMagnitude > 0) {
+                CustomCenterOfAllomancy = boneCenterOfMass;
+                if (Kog.MovementController.Movement.sqrMagnitude > 0) {
                     Kog.KogAnimationController.SetHeadLookAtTarget(Kog.MovementController.Movement.normalized * 10, true);
                     Kog.MovementController.SetBodyLookAtDirection(Kog.MovementController.Movement);
                 } else {
@@ -80,6 +84,7 @@ public class KogPullPushController : ActorPullPushController {
                 }
                 break;
             case PullpushMode.Burning:
+                CustomCenterOfAllomancy = boneCenterOfMass;
                 if (MainTarget != null) {
                     Kog.KogAnimationController.SetHeadLookAtTarget(MainTarget.transform.position, false);
                     Kog.MovementController.SetBodyLookAtPosition(MainTarget.transform.position);
@@ -91,10 +96,12 @@ public class KogPullPushController : ActorPullPushController {
                 }
                 break;
             case PullpushMode.Pullpushing:
+                CustomCenterOfAllomancy = boneHand;
                 Kog.KogAnimationController.SetHeadLookAtTarget(MainTarget.transform.position, false);
                 Kog.MovementController.SetBodyLookAtPosition(MainTarget.transform.position);
                 break;
             case PullpushMode.Active:
+                CustomCenterOfAllomancy = boneHand;
                 if (MainTarget != null) {
                     Kog.KogAnimationController.SetHeadLookAtTarget(MainTarget.transform.position, false);
                     Kog.MovementController.SetBodyLookAtPosition(MainTarget.transform.position);
@@ -108,9 +115,5 @@ public class KogPullPushController : ActorPullPushController {
         // Set body look-at target to be
         // in front of movement if not pushpulling
 
-    }
-
-    protected override Vector3 CenterOfBlueLine(Vector3 direction) {
-        return boneCenterOfMass.position;
     }
 }
