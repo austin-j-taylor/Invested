@@ -10,6 +10,8 @@ public class KogMovementController : MonoBehaviour {
     public float topSpeed = 3.5f;
     public float topSpeedSprinting = 12.5f;
     public float topSpeedAnchored = 2;
+    private const float airControlFactorSpeed = .1f;
+    private const float airControlFactorOrentation = .4f;
     //[SerializeField]
     //private float acceleration = 2.5f;
     //[SerializeField]
@@ -216,6 +218,8 @@ public class KogMovementController : MonoBehaviour {
             Vector3 feedback = rb.velocity;
             feedback.y = 0;
             Vector3 output = pidSpeed.Step(feedback, target);
+            if (!IsGrounded)
+                output *= airControlFactorSpeed;
             rb.AddForce(output, ForceMode.Acceleration);
 
             Kog.KogAnimationController.SetLegTarget(target, feedback.magnitude);
@@ -223,6 +227,9 @@ public class KogMovementController : MonoBehaviour {
             // PID control for orientation
             float feedback_O = IMath.AngleBetween_Signed(transform.forward, bodyLookAtDirection, Vector3.up, false);
             float output_O = pidOrientation.Step(feedback_O, 0) / Time.fixedDeltaTime;
+            if (!IsGrounded)
+                output_O *= airControlFactorOrentation;
+
             //Debug.Log(" movement: " + Movement.normalized + " feedback: " + feedback_O + " error: " + (feedback_O - target_O) + " output: " + output_O);
             rb.AddTorque(Vector3.up * output_O, ForceMode.Acceleration);
             transform.localEulerAngles = new Vector3(0, transform.localEulerAngles.y, 0);

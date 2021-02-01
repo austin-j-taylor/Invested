@@ -93,7 +93,7 @@ public class ActorPullPushController : AllomanticIronSteel {
     /// Update blue lines pointing to nearby metals.
     /// Read inputs for marking targets.
     /// </summary>
-    protected virtual void LateUpdate() {
+    protected virtual void Update() {
         if (!GameManager.MenusController.pauseMenu.IsOpen) {
             if (IsBurning) {
                 if (!ExternalControl && Player.CanControl) {
@@ -558,19 +558,21 @@ public class ActorPullPushController : AllomanticIronSteel {
     /// </summary>
     /// <param name="clearTargets">Also remove marked push/pull targets</param>
     public override void StopBurning(bool clearTargets = true) {
-        base.StopBurning(clearTargets);
-        IronPulling = false;
-        SteelPushing = false;
-        steelBurnPercentageLerp = 0;
-        ironBurnPercentageLerp = 0;
-        IronPassiveBurn = 0;
-        SteelPassiveBurn = 0;
-        forceMagnitudeTarget = 0;
-        GamepadController.SetRumble(0, 0);
-        DisableRenderingBlueLines();
+        if(IsBurning) {
+            base.StopBurning(clearTargets);
+            IronPulling = false;
+            SteelPushing = false;
+            steelBurnPercentageLerp = 0;
+            ironBurnPercentageLerp = 0;
+            IronPassiveBurn = 0;
+            SteelPassiveBurn = 0;
+            forceMagnitudeTarget = 0;
+            GamepadController.SetRumble(0, 0);
+            DisableRenderingBlueLines();
 
-        HUD.Crosshair.SetManual();
-        RefreshHUD();
+            HUD.Crosshair.SetManual();
+            RefreshHUD();
+        }
     }
     #endregion
 

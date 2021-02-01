@@ -60,7 +60,7 @@ public class KogHandController : MonoBehaviour {
     private void Grab(Magnetic target) {
 
         Vector3 relativeVelocity = Vector3.Project(rb.velocity - target.Rb.velocity, target.transform.position - grabber.position);
-        Debug.Log("Caught at " + relativeVelocity.magnitude + ", momentum: " + relativeVelocity.magnitude * target.Rb.mass);
+        //Debug.Log("Caught at " + relativeVelocity.magnitude + ", momentum: " + relativeVelocity.magnitude * target.Rb.mass);
         currentTarget = target;
     }
 

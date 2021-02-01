@@ -10,10 +10,10 @@ public class CrosshairController : MonoBehaviour {
 
     // positions in the hairs array
     private const int top = 0, left = 1, bottom = 2, right = 3, size = 4;
-    private const float alphaHigh = .75f, alphaLow = .25f;
+    private const float alphaHigh = .75f, alphaLow = .25f, alphaMedium = 0.5f;
 
     private Image circle;
-    private Color blueColor, goldColor = HUD.goldColor;
+    private Color blueColor, hairsColor, goldColor = HUD.goldColor;
     private Image[] hairs;
     private Image[] fills;
     private Transform hairsHeader;
@@ -39,10 +39,27 @@ public class CrosshairController : MonoBehaviour {
         circle.material = Instantiate(circle.material);
 
         blueColor = fills[top].color;
+        hairsColor = hairs[top].color;
     }
 
     public void Clear() {
         SetFillPercent(0);
+        circle.material.SetFloat("_RatioLow", 1);
+    }
+
+    public void Hide() {
+        hairsColor.a = 0;
+        for (int i = 0; i < size; i++) {
+            hairs[i].color = hairsColor;
+        }
+    }
+
+    public void Show() {
+        StopAllCoroutines();
+        hairsColor.a = alphaMedium;
+        for (int i = 0; i < size; i++) {
+            hairs[i].color = hairsColor;
+        }
     }
 
     public void SetFillPercent(float rate) {
@@ -64,7 +81,7 @@ public class CrosshairController : MonoBehaviour {
     #region crosshairModes
     // Sets the crosshairs for the "Manual" control mode
     public void SetManual() {
-        StopAllCoroutines();
+        Show();
         //circle.gameObject.SetActive(false);
         blueColor.a = alphaHigh;
         hairsHeader.gameObject.SetActive(true);
@@ -75,7 +92,7 @@ public class CrosshairController : MonoBehaviour {
     }
     // Sets the crosshairs for the "Area" control mode
     public void SetArea() {
-        StopAllCoroutines();
+        Show();
         //circle.gameObject.SetActive(true);
         hairsHeader.gameObject.SetActive(false);
         StartCoroutine(LerpToCircleRatio(.66666f));
@@ -83,7 +100,7 @@ public class CrosshairController : MonoBehaviour {
         circle.material.SetColor("_Color", blueColor);
     }
     public void SetBubble() {
-        StopAllCoroutines();
+        Show();
         //circle.gameObject.SetActive(true);
         hairsHeader.gameObject.SetActive(false);
         blueColor.a = alphaLow;
@@ -91,7 +108,7 @@ public class CrosshairController : MonoBehaviour {
         StartCoroutine(LerpToCircleRatio(0));
     }
     public void SetCoinshot() {
-        StopAllCoroutines();
+        Show();
         //circle.gameObject.SetActive(false);
         hairsHeader.gameObject.SetActive(true);
         for (int i = 0; i < size; i++) {

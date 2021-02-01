@@ -36,38 +36,40 @@ public class KogPullPushController : ActorPullPushController {
 
         CustomCenterOfAllomancy = boneCenterOfMass;
         BaseStrength = kogAllomanticStrength;
-        State = PullpushMode.Idle;
         timeInActive = 0;
     }
+    private void Start() {
+        State_ToIdle();
+    }
 
-    private void Update() {
+    protected override void Update() {
+        base.Update();
         // Transitions
         switch (State) {
             case PullpushMode.Idle:
                 if (IsBurning)
-                    State = PullpushMode.Burning;
+                    State_ToBurning();
                 break;
             case PullpushMode.Burning:
                 if (!IsBurning)
-                    State = PullpushMode.Idle;
+                    State_ToIdle();
                 else if (PushingOrPullingOnTarget)
-                    State = PullpushMode.Pullpushing;
+                    State_ToPullpushing();
                 break;
             case PullpushMode.Pullpushing:
                 if (!PushingOrPullingOnTarget) {
-                    State = PullpushMode.Active;
-                    timeInActive = 0;
+                    State_ToActive();
                 }
                 break;
             case PullpushMode.Active:
                 if (!IsBurning)
-                    State = PullpushMode.Idle;
+                    State_ToIdle();
                 else if (PushingOrPullingOnTarget)
-                    State = PullpushMode.Pullpushing;
+                    State_ToPullpushing();
                 else {
                     timeInActive += Time.deltaTime;
                     if (timeInActive > timeInActiveMax)
-                        State = PullpushMode.Burning;
+                        State_ToBurning();
                 }
                 break;
         }
@@ -84,7 +86,6 @@ public class KogPullPushController : ActorPullPushController {
                 }
                 break;
             case PullpushMode.Burning:
-                CustomCenterOfAllomancy = boneCenterOfMass;
                 if (MainTarget != null) {
                     Kog.KogAnimationController.SetHeadLookAtTarget(MainTarget.transform.position, false);
                     Kog.MovementController.SetBodyLookAtPosition(MainTarget.transform.position);
@@ -96,12 +97,10 @@ public class KogPullPushController : ActorPullPushController {
                 }
                 break;
             case PullpushMode.Pullpushing:
-                CustomCenterOfAllomancy = boneHand;
                 Kog.KogAnimationController.SetHeadLookAtTarget(MainTarget.transform.position, false);
                 Kog.MovementController.SetBodyLookAtPosition(MainTarget.transform.position);
                 break;
             case PullpushMode.Active:
-                CustomCenterOfAllomancy = boneHand;
                 if (MainTarget != null) {
                     Kog.KogAnimationController.SetHeadLookAtTarget(MainTarget.transform.position, false);
                     Kog.MovementController.SetBodyLookAtPosition(MainTarget.transform.position);
@@ -115,5 +114,24 @@ public class KogPullPushController : ActorPullPushController {
         // Set body look-at target to be
         // in front of movement if not pushpulling
 
+    }
+    private void State_ToIdle() {
+        State = PullpushMode.Idle;
+        HUD.Crosshair.Hide();
+        CustomCenterOfAllomancy = boneCenterOfMass;
+    }
+    private void State_ToBurning() {
+        CustomCenterOfAllomancy = boneCenterOfMass;
+        State = PullpushMode.Burning;
+
+    }
+    private void State_ToPullpushing() {
+        State = PullpushMode.Pullpushing;
+        CustomCenterOfAllomancy = boneHand;
+    }
+    private void State_ToActive() {
+        State = PullpushMode.Active;
+        CustomCenterOfAllomancy = boneHand;
+        timeInActive = 0;
     }
 }
