@@ -29,4 +29,18 @@ public static class IMath {
         return angle;
     }
 
+    /// <summary>
+    /// Lerps from a to b by t. If the difference between a and b is less than the threshold, just return b.
+    /// </summary>
+    /// <param name="a">from</param>
+    /// <param name="b">to</param>
+    /// <param name="t">the 't'</param>
+    /// <param name="threshold">the threshold between a and b</param>
+    /// <returns>The lerp</returns>
+    public static float FuzzyLerp(float a, float b, float t, float threshold = 0.001f) {
+        if (Mathf.Abs(a - b) < threshold)
+            return b;
+        else
+            return Mathf.Lerp(a, b, t);
+    }
 }

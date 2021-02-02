@@ -19,7 +19,7 @@ public class KogPullPushController : ActorPullPushController {
     private const float kogAllomanticStrength = 2;
     #endregion
 
-    public enum PullpushMode { Idle, Burning, Pullpushing, Active }
+    public enum PullpushMode { Idle, Burning, Pullpushing, Active, Caught }
 
     public PullpushMode State { get; private set; }
     public Magnetic MainTarget => HasPullTarget ? PullTargets[0] : HasPushTarget ? PushTargets[0] : null;
@@ -59,6 +59,8 @@ public class KogPullPushController : ActorPullPushController {
             case PullpushMode.Pullpushing:
                 if (!PushingOrPullingOnTarget) {
                     State_ToActive();
+                } else if(Kog.HandController.State == KogHandController.GrabState.Grabbed) {
+                    State_ToCaught();
                 }
                 break;
             case PullpushMode.Active:
@@ -70,6 +72,16 @@ public class KogPullPushController : ActorPullPushController {
                     timeInActive += Time.deltaTime;
                     if (timeInActive > timeInActiveMax)
                         State_ToBurning();
+                }
+                break;
+            case PullpushMode.Caught:
+                if (!IsBurning) {
+                    Kog.HandController.Release();
+                    State_ToIdle();
+                } else if(SteelPushing) {
+                    PushTargets.Clear();
+                    PushTargets.AddTarget(Kog.HandController.Release(), true);
+                    State_ToPullpushing();
                 }
                 break;
         }
@@ -109,6 +121,10 @@ public class KogPullPushController : ActorPullPushController {
                     Kog.MovementController.SetBodyLookAtDirection(CameraController.ActiveCamera.transform.forward);
                 }
                 break;
+            case PullpushMode.Caught:
+                Kog.KogAnimationController.SetHeadLookAtTarget(CameraController.ActiveCamera.transform.forward * 10, true);
+                Kog.MovementController.SetBodyLookAtDirection(CameraController.ActiveCamera.transform.forward);
+                break;
         }
 
         // Set body look-at target to be
@@ -133,5 +149,9 @@ public class KogPullPushController : ActorPullPushController {
         State = PullpushMode.Active;
         CustomCenterOfAllomancy = boneHand;
         timeInActive = 0;
+    }
+    private void State_ToCaught() {
+        State = PullpushMode.Caught;
+        CustomCenterOfAllomancy = boneHand;
     }
 }

@@ -10,12 +10,12 @@ public class KogHandController : MonoBehaviour {
     private const float grabberRadius = 0.25f;
     #endregion
 
-    private enum State { Empty, Grabbed };
+    public enum GrabState { Empty, Grabbed };
 
     [SerializeField, Range(0.0f, 1.0f)]
     private float speed = 1;
 
-    private State state;
+    public GrabState State;
     private Rigidbody rb;
     [SerializeField]
     private Transform grabber = null;
@@ -28,24 +28,23 @@ public class KogHandController : MonoBehaviour {
 
     public void Clear() {
         currentTarget = null;
-        state = State.Empty;
+        State = GrabState.Empty;
     }
 
-    private void Update() {
-        switch (state) {
-            case State.Empty:
+    private void LateUpdate() {
+        switch (State) {
+            case GrabState.Empty:
                 break;
-            case State.Grabbed:
-                if(currentTarget == null || !currentTarget.isActiveAndEnabled)
+            case GrabState.Grabbed:
+                if(currentTarget == null || !currentTarget.isActiveAndEnabled) {
                     Release();
-                Release();
-                state = State.Empty;
+                }
                 break;
         }
     }
 
     private void OnCollisionEnter(Collision collision) {
-        if (Kog.IronSteel.State == KogPullPushController.PullpushMode.Pullpushing && state == State.Empty) {
+        if (Kog.IronSteel.State == KogPullPushController.PullpushMode.Pullpushing && State == GrabState.Empty) {
             if (collision.rigidbody != null) {
                 if (Vector3.Distance(grabber.position, collision.GetContact(0).point) < grabberRadius) {
                     Magnetic magnetic = collision.gameObject.GetComponent<Magnetic>();
@@ -60,11 +59,20 @@ public class KogHandController : MonoBehaviour {
     private void Grab(Magnetic target) {
 
         Vector3 relativeVelocity = Vector3.Project(rb.velocity - target.Rb.velocity, target.transform.position - grabber.position);
-        //Debug.Log("Caught at " + relativeVelocity.magnitude + ", momentum: " + relativeVelocity.magnitude * target.Rb.mass);
+        Debug.Log("Caught at " + relativeVelocity.magnitude + ", momentum: " + relativeVelocity.magnitude * target.Rb.mass);
         currentTarget = target;
+        State = GrabState.Grabbed;
     }
 
-    private void Release() {
+    /// <summary>
+    /// Release the target and return the target that was released.
+    /// </summary>
+    /// <returns></returns>
+    public Magnetic Release() {
+        Magnetic target = currentTarget;
         currentTarget = null;
+        State = GrabState.Empty;
+        Debug.Log("Released");
+        return target;
     }
 }

@@ -10,7 +10,7 @@ using UnityEngine.Animations.Rigging;
 /// </summary>
 public class KogAnimation : MonoBehaviour {
 
-    private enum AnimationState { Idle, Moving, Active, Pullpushing }
+    private enum AnimationState { Idle, Moving, Active, Pullpushing, Caught }
 
     public bool IsGrounded => leftLeg.walkingState != Leg.WalkingState.Airborne || rightLeg.walkingState != Leg.WalkingState.Airborne;
     public Rigidbody StandingOnRigidbody => leftLeg.standingOnRigidbody != null ? leftLeg.standingOnRigidbody : rightLeg.standingOnRigidbody;
@@ -97,7 +97,7 @@ public class KogAnimation : MonoBehaviour {
         speedForCrouching = 0;
     }
 
-    private void Update() {
+    private void LateUpdate() {
         // Transitions
         switch (animationState) {
             case AnimationState.Idle:
@@ -126,8 +126,21 @@ public class KogAnimation : MonoBehaviour {
                 }
                 break;
             case AnimationState.Pullpushing:
-                if (Kog.IronSteel.State != KogPullPushController.PullpushMode.Pullpushing) {
+                if (Kog.IronSteel.State == KogPullPushController.PullpushMode.Caught) {
+                    // Grabbed an object, so trigger that animation.
+                    anim.SetTrigger("Catch");
+                    animationState = AnimationState.Caught;
+                } else if (Kog.IronSteel.State != KogPullPushController.PullpushMode.Pullpushing) {
                     animationState = AnimationState.Active;
+                }
+                break;
+            case AnimationState.Caught:
+                if(Kog.IronSteel.State == KogPullPushController.PullpushMode.Idle) {
+                    anim.SetTrigger("Drop");
+                    animationState = AnimationState.Idle;
+                } else if(Kog.IronSteel.State != KogPullPushController.PullpushMode.Caught) {
+                    anim.SetTrigger("Throw");
+                    animationState = AnimationState.Pullpushing;
                 }
                 break;
         }
@@ -136,9 +149,9 @@ public class KogAnimation : MonoBehaviour {
         anim.SetBool("Idle", Kog.IronSteel.State == KogPullPushController.PullpushMode.Idle);
         anim.SetBool("Pullpushing", Kog.IronSteel.State == KogPullPushController.PullpushMode.Pullpushing);
         if (animationState == AnimationState.Idle) {
-            rigWeight = Mathf.Lerp(rigWeight, 0, Time.deltaTime * kogAnimation_SO.Weight_toIdle_lerp);
+            rigWeight = IMath.FuzzyLerp(rigWeight, 0, Time.deltaTime * kogAnimation_SO.Weight_toIdle_lerp);
         } else {
-            rigWeight = Mathf.Lerp(rigWeight, 1, Time.deltaTime * kogAnimation_SO.Weight_toMoving_lerp);
+            rigWeight = IMath.FuzzyLerp(rigWeight, 1, Time.deltaTime * kogAnimation_SO.Weight_toMoving_lerp);
         }
 
         // Feet and head share the same weight
@@ -148,37 +161,47 @@ public class KogAnimation : MonoBehaviour {
                 constraintHead.weight = rigWeight;
                 constraintFootLeft.weight = rigWeight;
                 constraintFootRight.weight = rigWeight;
-                constraintWaist.weight = Mathf.Lerp(constraintWaist.weight, 0, Time.deltaTime * kogAnimation_SO.Weight_toIdle_lerp);
-                constraintHandLeft.weight = Mathf.Lerp(constraintHandLeft.weight, 0, Time.deltaTime * kogAnimation_SO.Weight_toIdle_lerp);
-                constraintHandRight.weight = Mathf.Lerp(constraintHandRight.weight, 0, Time.deltaTime * kogAnimation_SO.Weight_toIdle_lerp);
+                constraintWaist.weight = IMath.FuzzyLerp(constraintWaist.weight, 0, Time.deltaTime * kogAnimation_SO.Weight_toIdle_lerp);
+                constraintHandLeft.weight = IMath.FuzzyLerp(constraintHandLeft.weight, 0, Time.deltaTime * kogAnimation_SO.Weight_toIdle_lerp);
+                constraintHandRight.weight = IMath.FuzzyLerp(constraintHandRight.weight, 0, Time.deltaTime * kogAnimation_SO.Weight_toIdle_lerp);
                 break;
             case AnimationState.Moving:
                 constraintHead.weight = rigWeight;
                 constraintFootLeft.weight = rigWeight;
                 constraintFootRight.weight = rigWeight;
-                constraintWaist.weight = Mathf.Lerp(constraintWaist.weight, 1, Time.deltaTime * kogAnimation_SO.Weight_toMoving_lerp);
-                constraintHandLeft.weight = Mathf.Lerp(constraintHandLeft.weight, 1, Time.deltaTime * kogAnimation_SO.Weight_toMoving_lerp);
-                constraintHandRight.weight = Mathf.Lerp(constraintHandRight.weight, 1, Time.deltaTime * kogAnimation_SO.Weight_toMoving_lerp);
+                constraintWaist.weight = IMath.FuzzyLerp(constraintWaist.weight, 1, Time.deltaTime * kogAnimation_SO.Weight_toMoving_lerp);
+                constraintHandLeft.weight = IMath.FuzzyLerp(constraintHandLeft.weight, 1, Time.deltaTime * kogAnimation_SO.Weight_toMoving_lerp);
+                constraintHandRight.weight = IMath.FuzzyLerp(constraintHandRight.weight, 1, Time.deltaTime * kogAnimation_SO.Weight_toMoving_lerp);
                 break;
             case AnimationState.Active:
                 constraintHead.weight = rigWeight;
                 constraintFootLeft.weight = rigWeight;
                 constraintFootRight.weight = rigWeight;
-                constraintWaist.weight = Mathf.Lerp(constraintWaist.weight, kogAnimation_SO.Arm_constraint_weight_combat, Time.deltaTime * kogAnimation_SO.Weight_toCombat_lerp);
-                constraintHandLeft.weight = Mathf.Lerp(constraintHandLeft.weight, kogAnimation_SO.Arm_constraint_weight_combat, Time.deltaTime * kogAnimation_SO.Weight_toCombat_lerp);
-                constraintHandRight.weight = Mathf.Lerp(constraintHandRight.weight, kogAnimation_SO.Arm_constraint_weight_combat, Time.deltaTime * kogAnimation_SO.Weight_toCombat_lerp);
+                constraintWaist.weight = IMath.FuzzyLerp(constraintWaist.weight, 1, Time.deltaTime * kogAnimation_SO.Weight_toMoving_lerp);
+                constraintHandLeft.weight = IMath.FuzzyLerp(constraintHandLeft.weight, 1, Time.deltaTime * kogAnimation_SO.Weight_toMoving_lerp);
+                constraintHandRight.weight = IMath.FuzzyLerp(constraintHandRight.weight, 1, Time.deltaTime * kogAnimation_SO.Weight_toMoving_lerp);
+                //constraintWaist.weight = IMath.FuzzyLerp(constraintWaist.weight, kogAnimation_SO.Arm_constraint_weight_combat, Time.deltaTime * kogAnimation_SO.Weight_toCombat_lerp);
+                //constraintHandLeft.weight = IMath.FuzzyLerp(constraintHandLeft.weight, kogAnimation_SO.Arm_constraint_weight_combat, Time.deltaTime * kogAnimation_SO.Weight_toCombat_lerp);
+                //constraintHandRight.weight = IMath.FuzzyLerp(constraintHandRight.weight, kogAnimation_SO.Arm_constraint_weight_combat, Time.deltaTime * kogAnimation_SO.Weight_toCombat_lerp);
                 break;
             case AnimationState.Pullpushing:
                 constraintHead.weight = rigWeight;
                 constraintFootLeft.weight = rigWeight;
                 constraintFootRight.weight = rigWeight;
-                constraintWaist.weight = Mathf.Lerp(constraintWaist.weight, kogAnimation_SO.Arm_constraint_weight_combat, Time.deltaTime * kogAnimation_SO.Weight_toCombat_lerp);
-                constraintHandLeft.weight = Mathf.Lerp(constraintHandLeft.weight, kogAnimation_SO.Arm_constraint_weight_combat, Time.deltaTime * kogAnimation_SO.Weight_toCombat_lerp);
-                constraintHandRight.weight = Mathf.Lerp(constraintHandRight.weight, 1, Time.deltaTime * kogAnimation_SO.Weight_toCombat_lerp);
+                constraintWaist.weight = IMath.FuzzyLerp(constraintWaist.weight, kogAnimation_SO.Arm_constraint_weight_combat, Time.deltaTime * kogAnimation_SO.Weight_toCombat_lerp);
+                constraintHandLeft.weight = IMath.FuzzyLerp(constraintHandLeft.weight, kogAnimation_SO.Arm_constraint_weight_combat, Time.deltaTime * kogAnimation_SO.Weight_toCombat_lerp);
+                constraintHandRight.weight = IMath.FuzzyLerp(constraintHandRight.weight, 1, Time.deltaTime * kogAnimation_SO.Weight_toCombat_lerp);
+                break;
+            case AnimationState.Caught:
+                constraintHead.weight = rigWeight;
+                constraintFootLeft.weight = rigWeight;
+                constraintFootRight.weight = rigWeight;
+                constraintWaist.weight = IMath.FuzzyLerp(constraintWaist.weight, kogAnimation_SO.Arm_constraint_weight_caught, Time.deltaTime * kogAnimation_SO.Weight_toCatch_lerp);
+                constraintHandLeft.weight = IMath.FuzzyLerp(constraintHandLeft.weight, kogAnimation_SO.Arm_constraint_weight_caught, Time.deltaTime * kogAnimation_SO.Weight_toCatch_lerp);
+                constraintHandRight.weight = IMath.FuzzyLerp(constraintHandRight.weight, 0, Time.deltaTime * kogAnimation_SO.Weight_toCatch_lerp);
                 break;
         }
     }
-
     //private void Update() {
     //    // Blend between keyframed and scripted animations, depending on different factors
     //    switch (animationState) {
@@ -359,7 +382,7 @@ public class KogAnimation : MonoBehaviour {
         //}
         //Debug.Log(footToAnchorHeight);
         ////Debug.Log("Waist old height " + pos.y);
-        ////pos.y = Mathf.Lerp(pos.y, pos.y + waistBobAmount, Time.deltaTime * waist_bob_lerp);
+        ////pos.y = IMath.FuzzyLerp(pos.y, pos.y + waistBobAmount, Time.deltaTime * waist_bob_lerp);
         //pos.y = pos.y - footToAnchorHeight;
         ////waistAnchor.transform.position = pos;
         ////Debug.Log("Waist new height " + waistAnchor.transform.position.y);
@@ -400,11 +423,11 @@ public class KogAnimation : MonoBehaviour {
         //float height = 0;
         //Debug.Log(waistBobAmount);
         pos.y = pos.y + waistBobAmount;
-        //pos.y = Mathf.Lerp(pos.y, pos.y + waistBobAmount + height, Time.deltaTime * waist_bob_lerp);
+        //pos.y = IMath.FuzzyLerp(pos.y, pos.y + waistBobAmount + height, Time.deltaTime * waist_bob_lerp);
         waistAnchor.position = Vector3.Lerp(waistAnchor.position, waist.parent.position + pos, Time.deltaTime * kogAnimation_SO.Waist_bob_lerp); ;
         // Crouching
         //crouching = speedRatio;
-        speedForCrouching = Mathf.Lerp(speedForCrouching, speedRatio * kogAnimation_SO.Move_crouch_withSpeed, Time.deltaTime * kogAnimation_SO.Move_crouch_lerp);
+        speedForCrouching = IMath.FuzzyLerp(speedForCrouching, speedRatio * kogAnimation_SO.Move_crouch_withSpeed, Time.deltaTime * kogAnimation_SO.Move_crouch_lerp);
         lifterCollider.transform.localPosition = new Vector3(0, crouching * kogAnimation_SO.Crouch_max + speedForCrouching, 0);
 
         leftLeg.LegUpdate();

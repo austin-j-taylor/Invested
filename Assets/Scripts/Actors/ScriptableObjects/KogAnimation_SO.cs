@@ -6,7 +6,7 @@ using UnityEngine;
 public class KogAnimation_SO : ScriptableObject {
 
     // Rig weights
-    [SerializeField] private float weight_toMoving_lerp = 4, weight_toIdle_lerp = 1, weight_toCombat_lerp = 4;
+    [SerializeField] private float weight_toMoving_lerp = 4, weight_toIdle_lerp = 1, weight_toCombat_lerp = 4, weight_toCatch_lerp = 8;
     // Stepping
     [SerializeField] private float step_ToTarget_Delta = 12;
     [SerializeField] private float step_ToTargetRotation_lerp = 15;
@@ -44,7 +44,7 @@ public class KogAnimation_SO : ScriptableObject {
     [SerializeField] private float armHeight = 1.65f;
     [SerializeField] private float armY_a = 0.000304f, armY_b = 1, armY_c = -0.903f, armX_d = -0.00009f, armX_f = 45, armX_g = 0.3f, armZ_o = 0.8f;
     [SerializeField] private float armPoleX_h = -0.01f, armPoleX_j = 65, armPoleY_k = 0.03f, armPoleY_l = 20.8f, armPoleZ_m = 0.04f, armPoleZ_n = -21.74f;
-    [SerializeField] private float arm_constraint_weight_combat = 0.3f;
+    [SerializeField] private float arm_constraint_weight_combat = 0.5f, arm_constraint_weight_caught = 0.2f;
     [SerializeField] private float arm_reachingToMetal_lerp = 4;
 
 
@@ -52,6 +52,7 @@ public class KogAnimation_SO : ScriptableObject {
     public float Weight_toMoving_lerp => weight_toMoving_lerp;
     public float Weight_toIdle_lerp => weight_toIdle_lerp;
     public float Weight_toCombat_lerp => weight_toCombat_lerp;
+    public float Weight_toCatch_lerp => weight_toCatch_lerp;
     public float Step_ToTarget_Delta => step_ToTarget_Delta;
     public float Step_ToTargetRotation_lerp => step_ToTargetRotation_lerp;
     public float Step_defaultDistance => step_defaultDistance;
@@ -112,5 +113,6 @@ public class KogAnimation_SO : ScriptableObject {
     public float ArmPoleZ_m => armPoleZ_m;
     public float ArmPoleZ_n => armPoleZ_n;
     public float Arm_constraint_weight_combat => arm_constraint_weight_combat;
+    public float Arm_constraint_weight_caught => arm_constraint_weight_caught;
     public float Arm_reachingToMetal_lerp => arm_reachingToMetal_lerp;
 }
