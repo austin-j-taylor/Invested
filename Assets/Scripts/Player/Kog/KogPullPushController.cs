@@ -16,20 +16,22 @@ public class KogPullPushController : ActorPullPushController {
 
     #region constants
     private const float timeInActiveMax = 3;
+    [SerializeField]
+    private float timeInThrowingMax = 0.45f;
     private const float kogAllomanticStrength = 2;
     #endregion
 
-    public enum PullpushMode { Idle, Burning, Pullpushing, Active, Caught }
+    public enum PullpushMode { Idle, Burning, Pullpushing, Active, Caught, Throwing }
 
     public PullpushMode State { get; private set; }
     public Magnetic MainTarget => HasPullTarget ? PullTargets[0] : HasPushTarget ? PushTargets[0] : null;
-    
+
     [SerializeField]
     private Transform boneCenterOfMass = null;
     [SerializeField]
     private Transform boneHand = null;
 
-    private float timeInActive;
+    private float timeInActive, timeInThrowing;
 
     protected override void Awake() {
         base.Awake();
@@ -37,6 +39,7 @@ public class KogPullPushController : ActorPullPushController {
         CustomCenterOfAllomancy = boneCenterOfMass;
         BaseStrength = kogAllomanticStrength;
         timeInActive = 0;
+        timeInThrowing = 0;
     }
     private void Start() {
         State_ToIdle();
@@ -59,7 +62,7 @@ public class KogPullPushController : ActorPullPushController {
             case PullpushMode.Pullpushing:
                 if (!PushingOrPullingOnTarget) {
                     State_ToActive();
-                } else if(Kog.HandController.State == KogHandController.GrabState.Grabbed) {
+                } else if (Kog.HandController.State == KogHandController.GrabState.Grabbed) {
                     State_ToCaught();
                 }
                 break;
@@ -78,10 +81,22 @@ public class KogPullPushController : ActorPullPushController {
                 if (!IsBurning) {
                     Kog.HandController.Release();
                     State_ToIdle();
-                } else if(SteelPushing) {
+                } else if (SteelPushing) {
                     PushTargets.Clear();
-                    PushTargets.AddTarget(Kog.HandController.Release(), true);
-                    State_ToPullpushing();
+                    State_ToThrowing();
+                }
+                break;
+            case PullpushMode.Throwing:
+                if (!IsBurning) {
+                    Kog.HandController.Release();
+                    State_ToIdle();
+                } else {
+                    timeInThrowing += Time.deltaTime;
+                    if (timeInThrowing > timeInThrowingMax) {
+                        PushTargets.Clear();
+                        PushTargets.AddTarget(Kog.HandController.Release(), true);
+                        State_ToPullpushing();
+                    }
                 }
                 break;
         }
@@ -125,6 +140,10 @@ public class KogPullPushController : ActorPullPushController {
                 Kog.KogAnimationController.SetHeadLookAtTarget(CameraController.ActiveCamera.transform.forward * 10, true);
                 Kog.MovementController.SetBodyLookAtDirection(CameraController.ActiveCamera.transform.forward);
                 break;
+            case PullpushMode.Throwing:
+                Kog.KogAnimationController.SetHeadLookAtTarget(CameraController.ActiveCamera.transform.forward * 10, true);
+                Kog.MovementController.SetBodyLookAtDirection(CameraController.ActiveCamera.transform.forward);
+                break;
         }
 
         // Set body look-at target to be
@@ -153,5 +172,10 @@ public class KogPullPushController : ActorPullPushController {
     private void State_ToCaught() {
         State = PullpushMode.Caught;
         CustomCenterOfAllomancy = boneHand;
+    }
+    private void State_ToThrowing() {
+        State = PullpushMode.Throwing;
+        CustomCenterOfAllomancy = boneHand;
+        timeInThrowing = 0;
     }
 }

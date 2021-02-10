@@ -68,7 +68,7 @@
     <Compile Include="Assets\Imports\SebLague-Boids\Scripts\BoidHelper.cs" />
     <Compile Include="Assets\Imports\SebLague-Clouds\Scripts\Terrain\Scripts\TerrainGenerator.cs" />
     <Compile Include="Assets\Imports\SebLague-Clouds\Scripts\Test\Debug Viewer\Mesh Generators\SphereMesh.cs" />
-    <Compile Include="Assets\Scripts\Magnetics\Projectile.cs" />
+    <Compile Include="Assets\Scripts\Props\Magnetics\Projectile.cs" />
     <Compile Include="Assets\Imports\OutlineEffect\OutlineEffect.cs" />
     <Compile Include="Assets\Imports\SebLague-Clouds\Scripts\Test\Debug Viewer\Core\DebugViewer.cs" />
     <Compile Include="Assets\Scripts\Entities\Entity_TurretAnchored.cs" />
@@ -117,7 +117,7 @@
     <Compile Include="Assets\Imports\PostProcessing\Runtime\COMPONENTS\DitheringComponent.cs" />
     <Compile Include="Assets\Scripts\ControlSystems\PIDController_Float.cs" />
     <Compile Include="Assets\Scripts\Environment\Scenes\SpecialStartupCommands.cs" />
-    <Compile Include="Assets\Scripts\Magnetics\Magnetic.cs" />
+    <Compile Include="Assets\Scripts\Props\Magnetics\Magnetic.cs" />
     <Compile Include="Assets\Imports\VolumetricLines\Scripts\VolumetricLineVertexData.cs" />
     <Compile Include="Assets\Imports\SebLague-Clouds\Scripts\Test\Simplex\SimplexMaster2D.cs" />
     <Compile Include="Assets\Scripts\Menu\PauseMenu.cs" />
@@ -137,7 +137,7 @@
     <Compile Include="Assets\Scripts\Menu\SettingsMenu.cs" />
     <Compile Include="Assets\Scripts\Player\Animation\CameraController.cs" />
     <Compile Include="Assets\Scripts\Environment\Circuits\FacilityDoor.cs" />
-    <Compile Include="Assets\Scripts\Magnetics\Coin.cs" />
+    <Compile Include="Assets\Scripts\Props\Magnetics\Coin.cs" />
     <Compile Include="Assets\Scripts\Player\Prima.cs" />
     <Compile Include="Assets\Scripts\UI\ConsoleController.cs" />
     <Compile Include="Assets\Scripts\Simulations\HUDSimulations.cs" />
@@ -205,6 +205,7 @@
     <Compile Include="Assets\Imports\SebLague-Clouds\Scripts\Test\SimplexNoise.cs" />
     <Compile Include="Assets\Scripts\Global\Keybinds.cs" />
     <Compile Include="Assets\Scripts\UI\BurnPercentageMeter.cs" />
+    <Compile Include="Assets\Scripts\Player\Kog\KogHandController.cs" />
     <Compile Include="Assets\Imports\PostProcessing\Runtime\COMPONENTS\VignetteComponent.cs" />
     <Compile Include="Assets\Scripts\UI\ConversationHUDController.cs" />
     <Compile Include="Assets\Scripts\Environment\Challenges\Challenge_ReachGoal.cs" />
@@ -251,7 +252,7 @@
     <Compile Include="Assets\Imports\VolumetricLines\Scripts\VolumetricLineBehavior.cs" />
     <Compile Include="Assets\Scripts\Environment\Challenges\ChallengesManager.cs" />
     <Compile Include="Assets\Imports\PostProcessing\Runtime\COMPONENTS\FogComponent.cs" />
-    <Compile Include="Assets\Scripts\Magnetics\MagneticDense.cs" />
+    <Compile Include="Assets\Scripts\Props\Magnetics\MagneticDense.cs" />
     <Compile Include="Assets\Imports\PostProcessing\Runtime\PostProcessingProfile.cs" />
     <Compile Include="Assets\Scripts\Environment\Scenes\Environment_Tutorial1.cs" />
     <Compile Include="Assets\Imports\SebLague-Clouds\Scripts\Test\PerlinTileTest.cs" />
@@ -321,7 +322,7 @@
     <Compile Include="Assets\Scripts\Environment\SpikeSplineFollower.cs" />
     <Compile Include="Assets\Imports\SebLague-Clouds\Scripts\Test\Simplex\SimplexMaster.cs" />
     <Compile Include="Assets\Scripts\Player\Kog\KogMovementController.cs" />
-    <Compile Include="Assets\Scripts\Player\Kog\KogHandController.cs" />
+    <Compile Include="Assets\Scripts\Props\Magnetics\ScriptableObjects\Prop_SO.cs" />
   </ItemGroup>
   <ItemGroup>
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />

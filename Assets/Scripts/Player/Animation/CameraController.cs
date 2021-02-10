@@ -62,13 +62,12 @@ public class CameraController : MonoBehaviour {
     private static bool cameraIsLocked;
 
     [SerializeField]
-    private KogCameraController kogCameraController;
+    private KogCameraController kogCameraController = null;
     private CinemachineCameraOffset CameraOffset { get; set; }
     #endregion
 
     void Awake() {
         instance = this;
-        kogCameraController = new KogCameraController();
         playerCameraController = transform;
         CameraLookAtTarget = transform.Find("CameraLookAtTarget");
         CameraPositionTarget = CameraLookAtTarget.Find("CameraPositionTarget");
@@ -380,7 +379,7 @@ public class CameraController : MonoBehaviour {
     private class KogCameraController {
 
         [SerializeField]
-        private float blendTime = 1;
+        private float blendTime;
 
         public enum CameraState { Idle, Blending, Close };
 

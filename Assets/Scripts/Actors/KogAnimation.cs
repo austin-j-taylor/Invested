@@ -10,7 +10,7 @@ using UnityEngine.Animations.Rigging;
 /// </summary>
 public class KogAnimation : MonoBehaviour {
 
-    private enum AnimationState { Idle, Moving, Active, Pullpushing, Caught }
+    private enum AnimationState { Idle, Moving, Active, Pullpushing, Caught, Throwing }
 
     public bool IsGrounded => leftLeg.walkingState != Leg.WalkingState.Airborne || rightLeg.walkingState != Leg.WalkingState.Airborne;
     public Rigidbody StandingOnRigidbody => leftLeg.standingOnRigidbody != null ? leftLeg.standingOnRigidbody : rightLeg.standingOnRigidbody;
@@ -135,11 +135,16 @@ public class KogAnimation : MonoBehaviour {
                 }
                 break;
             case AnimationState.Caught:
-                if(Kog.IronSteel.State == KogPullPushController.PullpushMode.Idle) {
+                if (Kog.IronSteel.State == KogPullPushController.PullpushMode.Idle) {
                     anim.SetTrigger("Drop");
                     animationState = AnimationState.Idle;
-                } else if(Kog.IronSteel.State != KogPullPushController.PullpushMode.Caught) {
+                } else if (Kog.IronSteel.State != KogPullPushController.PullpushMode.Caught) {
                     anim.SetTrigger("Throw");
+                    animationState = AnimationState.Throwing;
+                }
+                break;
+            case AnimationState.Throwing:
+                if (Kog.IronSteel.State != KogPullPushController.PullpushMode.Throwing) {
                     animationState = AnimationState.Pullpushing;
                 }
                 break;
@@ -199,6 +204,14 @@ public class KogAnimation : MonoBehaviour {
                 constraintWaist.weight = IMath.FuzzyLerp(constraintWaist.weight, kogAnimation_SO.Arm_constraint_weight_caught, Time.deltaTime * kogAnimation_SO.Weight_toCatch_lerp);
                 constraintHandLeft.weight = IMath.FuzzyLerp(constraintHandLeft.weight, kogAnimation_SO.Arm_constraint_weight_caught, Time.deltaTime * kogAnimation_SO.Weight_toCatch_lerp);
                 constraintHandRight.weight = IMath.FuzzyLerp(constraintHandRight.weight, 0, Time.deltaTime * kogAnimation_SO.Weight_toCatch_lerp);
+                break;
+            case AnimationState.Throwing:
+                constraintHead.weight = rigWeight;
+                constraintFootLeft.weight = rigWeight;
+                constraintFootRight.weight = rigWeight;
+                constraintWaist.weight = IMath.FuzzyLerp(constraintWaist.weight, kogAnimation_SO.Arm_constraint_weight_combat, Time.deltaTime * kogAnimation_SO.Weight_toCombat_lerp);
+                constraintHandLeft.weight = IMath.FuzzyLerp(constraintHandLeft.weight, kogAnimation_SO.Arm_constraint_weight_combat, Time.deltaTime * kogAnimation_SO.Weight_toCombat_lerp);
+                constraintHandRight.weight = IMath.FuzzyLerp(constraintHandRight.weight, 1, Time.deltaTime * kogAnimation_SO.Weight_toCombat_lerp);
                 break;
         }
     }
@@ -800,13 +813,17 @@ public class KogAnimation : MonoBehaviour {
             // Transition
             switch (state) {
                 case State.Idle:
-                    if (!isLeft && Kog.IronSteel.State == KogPullPushController.PullpushMode.Pullpushing) {
+                    if (!isLeft && (Kog.IronSteel.State == KogPullPushController.PullpushMode.Pullpushing
+                            || Kog.IronSteel.State == KogPullPushController.PullpushMode.Caught
+                            || Kog.IronSteel.State == KogPullPushController.PullpushMode.Throwing)) {
                         state = State.IdleToReaching;
                         tInReach = 0;
                     }
                     break;
                 case State.IdleToReaching:
-                    if (Kog.IronSteel.State == KogPullPushController.PullpushMode.Pullpushing) {
+                    if (Kog.IronSteel.State == KogPullPushController.PullpushMode.Pullpushing
+                            || Kog.IronSteel.State == KogPullPushController.PullpushMode.Caught
+                            || Kog.IronSteel.State == KogPullPushController.PullpushMode.Throwing) {
                         tInReach += Time.deltaTime / tInReachMax;
                         if (tInReach >= 1) {
                             state = State.Reaching;
@@ -820,7 +837,9 @@ public class KogAnimation : MonoBehaviour {
 
                     break;
                 case State.Reaching:
-                    if (Kog.IronSteel.State != KogPullPushController.PullpushMode.Pullpushing) {
+                    if (Kog.IronSteel.State != KogPullPushController.PullpushMode.Pullpushing
+                        && Kog.IronSteel.State != KogPullPushController.PullpushMode.Caught
+                        && Kog.IronSteel.State != KogPullPushController.PullpushMode.Throwing) {
                         state = State.IdleToReaching;
                         tInReach = 1;
                     }
@@ -843,22 +862,31 @@ public class KogAnimation : MonoBehaviour {
             float Zp = -m * (t - n);
 
             // Action
-            if (Kog.IronSteel.MainTarget != null)
-                lastReachTargetPosition = Kog.IronSteel.MainTarget.transform.position;
+            Vector3 toTarget;
+            float distance = 1;
+            if (Kog.IronSteel.MainTarget != null) {
+                toTarget = Kog.IronSteel.MainTarget.transform.position - upperarm.transform.position;
+                distance = toTarget.magnitude;
+            } else {
+                // Rotate hand to look towards reticle target
+                if (Physics.Raycast(CameraController.ActiveCamera.transform.position, CameraController.ActiveCamera.transform.forward, out RaycastHit hit, 1000, GameManager.Layer_IgnorePlayer)) {
+                    toTarget = hit.point - upperarm.transform.position;
+                    distance = toTarget.magnitude;
+                } else {
+                    toTarget = CameraController.ActiveCamera.transform.forward;
+                }
+            }
+
             switch (state) {
                 case State.Idle:
                     handAnchor.position = upperarm.transform.position + waist.TransformDirection(new Vector3(X, Y, Z));
                     handAnchorPole.position = upperarm.transform.position + waist.parent.TransformDirection(new Vector3(Xp, Yp, Zp));
                     break;
                 case State.IdleToReaching:
-                    Vector3 toTarget = lastReachTargetPosition - upperarm.transform.position;
-                    float distance = toTarget.magnitude;
                     Vector3 handAnchorLerp = upperarm.transform.position + Vector3.Slerp(waist.TransformDirection(new Vector3(X, Y, Z)), Vector3.ClampMagnitude(toTarget / distance * armLength, distance), tInReach);
                     handAnchor.position = Vector3.Slerp(handAnchor.position, handAnchorLerp, Time.deltaTime * kogAnimation_SO.Arm_reachingToMetal_lerp);
                     break;
                 case State.Reaching:
-                    toTarget = lastReachTargetPosition - upperarm.transform.position;
-                    distance = toTarget.magnitude;
                     handAnchorLerp = upperarm.transform.position + Vector3.ClampMagnitude(toTarget / distance * armLength, distance);
                     handAnchor.position = Vector3.Slerp(handAnchor.position, handAnchorLerp, Time.deltaTime * kogAnimation_SO.Arm_reachingToMetal_lerp);
                     break;
