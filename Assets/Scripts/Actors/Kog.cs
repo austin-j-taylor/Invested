@@ -45,15 +45,16 @@ public class Kog : Actor {
     public void ClearKogBeforeSceneChange(Scene scene) {
         AudioController.Clear();
         MovementController.Clear();
-        KogAnimationController.Clear();
         HandController.Clear();
     }
-
     /// <summary>
     /// Reset certain values AFTER the player enters a new scene
     /// </summary>
     /// <param name="scene">the scene that will be entered</param>
     /// <param name="mode">the sceme loading mode</param>
     private void ClearKogAfterSceneChange(Scene scene, LoadSceneMode mode) {
+        if (mode == LoadSceneMode.Single) { // Not loading all of the scenes, as it does at startup
+            KogAnimationController.Clear();
+        }
     }
 }

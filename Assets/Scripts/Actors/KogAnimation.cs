@@ -456,10 +456,10 @@ public class KogAnimation : MonoBehaviour {
         heighest = -heighest;
         waistFallHeight = Mathf.Lerp(waistFallHeight, heighest, Time.deltaTime * kogAnimation_SO.Waist_bob_lerp);
 
-        Debug.Log(feetAngle);
         pos += waist.parent.rotation * new Vector3(-feetAngle * speedRatio / 90 * kogAnimation_SO.Waist_sway, 0, 0);
 
         pos.y = pos.y + waistBobAmount + waistFallHeight;
+        Debug.Log(heighest + ", " + waistFallHeight + "," + pos.y);
         //pos.y = IMath.FuzzyLerp(pos.y, pos.y + waistBobAmount + height, Time.deltaTime * waist_bob_lerp);
         waistAnchor.position = Vector3.Lerp(waistAnchor.position, waist.parent.position + pos, Time.deltaTime * kogAnimation_SO.Waist_bob_lerp);
         // Crouching
@@ -554,18 +554,22 @@ public class KogAnimation : MonoBehaviour {
             this.otherLeg = otherLeg;
             this.isLeft = isLeft;
 
-            footAnchor = footTarget.position;
-            footAnchorRotation = footTarget.rotation;
-            footLastAnchorRotation = footAnchorRotation;
-            footNextAnchorRotation = footAnchorRotation;
-            anchorRestLocalRotation = footTarget.localRotation;
             footRestLocalRotation = foot.localRotation;
-            footColliderPosition = footCollider.localPosition;
+            anchorRestLocalRotation = footTarget.localRotation;
             footPoleRestLocalPosition = footTargetPole.localPosition;
         }
 
         public void Clear() {
             walkingState = WalkingState.Support;
+
+            footTarget.position = foot.position;
+            footTarget.localRotation = anchorRestLocalRotation;
+
+            footAnchor = footTarget.position;
+            footAnchorRotation = footTarget.rotation;
+            footLastAnchorRotation = footAnchorRotation;
+            footNextAnchorRotation = footAnchorRotation;
+            footColliderPosition = footCollider.localPosition;
         }
 
         public void LegUpdate() {

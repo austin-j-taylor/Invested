@@ -26,7 +26,8 @@ public class SceneSelectMenu : Menu {
         sceneTutorial1 = 11,
         sceneTutorial2 = 12,
         sceneTutorial3 = 13,
-        sceneTutorial4 = 14;
+        sceneTutorial4 = 14,
+        sceneCombatGrounds = 15;
     #endregion
 
     public static bool IsTutorial(int sceneIndex) {
