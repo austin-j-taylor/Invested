@@ -34,7 +34,9 @@ public class KogAnimation_SO : ScriptableObject {
     [SerializeField] private float waist_rotate_withLegAngleYaw = 0.2f;
     [SerializeField] private float waist_rotate_withLegAngleRoll_withSpeed = .2f;
     [SerializeField] private float waist_rotate_lerp = 10;
+    [SerializeField] private float waist_sway = 10;
     [SerializeField] private float waist_bob = 0.2f, waist_bob_legAngleMax = 90, waist_bob_lerp = 9, waist_bob_withSpeed = .2f, waist_fall_lerp = 10;
+    [SerializeField] private float waist_constraint_weight_combat = 0.5f, waist_constraint_weight_caught = 0.2f;
     // Leg
     [SerializeField] private float leg_forwards_withSpeed = 0.08f;
     [SerializeField] private float leg_raycast_radius = 0.125f;
@@ -89,11 +91,14 @@ public class KogAnimation_SO : ScriptableObject {
     public float Waist_rotate_withLegAngleYaw => waist_rotate_withLegAngleYaw;
     public float Waist_rotate_withLegAngleRoll_withSpeed => waist_rotate_withLegAngleRoll_withSpeed;
     public float Waist_rotate_lerp => waist_rotate_lerp;
+    public float Waist_sway => waist_sway;
     public float Waist_bob => waist_bob;
     public float Waist_bob_legAngleMax => waist_bob_legAngleMax;
     public float Waist_bob_lerp => waist_bob_lerp;
     public float Waist_bob_withSpeed => waist_bob_withSpeed;
     public float Waist_fall_lerp => waist_fall_lerp;
+    public float Waist_constraint_weight_combat => waist_constraint_weight_combat;
+    public float Waist_constraint_weight_caught => waist_constraint_weight_caught;
     public float Leg_forwards_withSpeed => leg_forwards_withSpeed;
     public float Leg_raycast_radius => leg_raycast_radius;
     public float Leg_airborne_length => leg_airborne_length;

@@ -171,6 +171,7 @@ public class KogPullPushController : ActorPullPushController {
     }
     private void State_ToCaught() {
         State = PullpushMode.Caught;
+        PullTargets.Clear();
         CustomCenterOfAllomancy = boneHand;
     }
     private void State_ToThrowing() {

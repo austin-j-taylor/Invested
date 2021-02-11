@@ -30,6 +30,7 @@ public class KogAnimation : MonoBehaviour {
     private float currentSpeed, stepTime, speedRatio, stepHeight;
     private float distanceBetweenSteps = .25f;
     private float speedForCrouching;
+    private float waistFallHeight = 0;
     [SerializeField]
     private float rigWeight;
 
@@ -193,7 +194,7 @@ public class KogAnimation : MonoBehaviour {
                 constraintHead.weight = rigWeight;
                 constraintFootLeft.weight = rigWeight;
                 constraintFootRight.weight = rigWeight;
-                constraintWaist.weight = IMath.FuzzyLerp(constraintWaist.weight, kogAnimation_SO.Arm_constraint_weight_combat, Time.deltaTime * kogAnimation_SO.Weight_toCombat_lerp);
+                constraintWaist.weight = IMath.FuzzyLerp(constraintWaist.weight, kogAnimation_SO.Waist_constraint_weight_combat, Time.deltaTime * kogAnimation_SO.Weight_toCombat_lerp);
                 constraintHandLeft.weight = IMath.FuzzyLerp(constraintHandLeft.weight, kogAnimation_SO.Arm_constraint_weight_combat, Time.deltaTime * kogAnimation_SO.Weight_toCombat_lerp);
                 constraintHandRight.weight = IMath.FuzzyLerp(constraintHandRight.weight, 1, Time.deltaTime * kogAnimation_SO.Weight_toCombat_lerp);
                 break;
@@ -201,7 +202,7 @@ public class KogAnimation : MonoBehaviour {
                 constraintHead.weight = rigWeight;
                 constraintFootLeft.weight = rigWeight;
                 constraintFootRight.weight = rigWeight;
-                constraintWaist.weight = IMath.FuzzyLerp(constraintWaist.weight, kogAnimation_SO.Arm_constraint_weight_caught, Time.deltaTime * kogAnimation_SO.Weight_toCatch_lerp);
+                constraintWaist.weight = IMath.FuzzyLerp(constraintWaist.weight, kogAnimation_SO.Waist_constraint_weight_caught, Time.deltaTime * kogAnimation_SO.Weight_toCatch_lerp);
                 constraintHandLeft.weight = IMath.FuzzyLerp(constraintHandLeft.weight, kogAnimation_SO.Arm_constraint_weight_caught, Time.deltaTime * kogAnimation_SO.Weight_toCatch_lerp);
                 constraintHandRight.weight = IMath.FuzzyLerp(constraintHandRight.weight, 0, Time.deltaTime * kogAnimation_SO.Weight_toCatch_lerp);
                 break;
@@ -209,7 +210,7 @@ public class KogAnimation : MonoBehaviour {
                 constraintHead.weight = rigWeight;
                 constraintFootLeft.weight = rigWeight;
                 constraintFootRight.weight = rigWeight;
-                constraintWaist.weight = IMath.FuzzyLerp(constraintWaist.weight, kogAnimation_SO.Arm_constraint_weight_combat, Time.deltaTime * kogAnimation_SO.Weight_toCombat_lerp);
+                constraintWaist.weight = IMath.FuzzyLerp(constraintWaist.weight, kogAnimation_SO.Waist_constraint_weight_combat, Time.deltaTime * kogAnimation_SO.Weight_toCombat_lerp);
                 constraintHandLeft.weight = IMath.FuzzyLerp(constraintHandLeft.weight, kogAnimation_SO.Arm_constraint_weight_combat, Time.deltaTime * kogAnimation_SO.Weight_toCombat_lerp);
                 constraintHandRight.weight = IMath.FuzzyLerp(constraintHandRight.weight, 1, Time.deltaTime * kogAnimation_SO.Weight_toCombat_lerp);
                 break;
@@ -435,9 +436,32 @@ public class KogAnimation : MonoBehaviour {
         Vector3 pos = waistRestPosition;
         //float height = 0;
         //Debug.Log(waistBobAmount);
-        pos.y = pos.y + waistBobAmount;
+
+        // Lower the waist to keep both Idle feet where their anchors are
+        // move the waists's position to be at the same height as the heighest Idle foot.
+
+        float heighest = 0;
+        if (leftLeg.walkingState == Leg.WalkingState.Support) {
+            float height = Vector3.Distance(leftLeg.foot.position, leftLeg.footAnchor);
+            //Debug.Log("Left leg height: " + height);
+            if (height > heighest)
+                heighest = height;
+        }
+        if (rightLeg.walkingState == Leg.WalkingState.Support) {
+            float height = Vector3.Distance(rightLeg.foot.position, rightLeg.footAnchor);
+            //Debug.Log("Right leg height: " + height);
+            if (height > heighest)
+                heighest = height;
+        }
+        heighest = -heighest;
+        waistFallHeight = Mathf.Lerp(waistFallHeight, heighest, Time.deltaTime * kogAnimation_SO.Waist_bob_lerp);
+
+        Debug.Log(feetAngle);
+        pos += waist.parent.rotation * new Vector3(-feetAngle * speedRatio / 90 * kogAnimation_SO.Waist_sway, 0, 0);
+
+        pos.y = pos.y + waistBobAmount + waistFallHeight;
         //pos.y = IMath.FuzzyLerp(pos.y, pos.y + waistBobAmount + height, Time.deltaTime * waist_bob_lerp);
-        waistAnchor.position = Vector3.Lerp(waistAnchor.position, waist.parent.position + pos, Time.deltaTime * kogAnimation_SO.Waist_bob_lerp); ;
+        waistAnchor.position = Vector3.Lerp(waistAnchor.position, waist.parent.position + pos, Time.deltaTime * kogAnimation_SO.Waist_bob_lerp);
         // Crouching
         //crouching = speedRatio;
         speedForCrouching = IMath.FuzzyLerp(speedForCrouching, speedRatio * kogAnimation_SO.Move_crouch_withSpeed, Time.deltaTime * kogAnimation_SO.Move_crouch_lerp);
@@ -568,14 +592,15 @@ public class KogAnimation : MonoBehaviour {
                     // The foot is too far from its desired foot position. Start a step.
                     // Keep one foot supporting at all times - unless moving quickly and this leg has reached the end of its propulsion (i.e. is stretched)
                     Vector3 hitToFoot = foot.position - hit.point;
+                    float heightToFoot = hitToFoot.y;
                     hitToFoot.y = 0;
                     float calfAngle = calf.localEulerAngles.x;
                     if (calfAngle > 180)
                         calfAngle -= 360;
-                    bool isStretched = calfAngle < 0.01f;
+                    bool isStretched = calfAngle < 0.5f && heightToFoot > 0.04f;
                     //Debug.Log("Stretched:  " + isStretched +  ", "  + calf.localEulerAngles.x, foot.gameObject);
-                    if (hitToFoot.magnitude > parent.distanceBetweenSteps
-                                && (otherLeg.walkingState == WalkingState.Support || parent.IsRunning && isStretched)
+                    if ((hitToFoot.magnitude > parent.distanceBetweenSteps || isStretched)
+                                && (otherLeg.walkingState == WalkingState.Support || /*parent.IsRunning && */ isStretched)
                     ) {
                         // Take a step. The Last anchor are where the foot is now. The Next anchor are where the desired foot position is now.
                         footLastAnchor = footTarget.position;
@@ -681,7 +706,7 @@ public class KogAnimation : MonoBehaviour {
                         // (tried doing this with the above spherecast distance but it was pretty inconsistent...
                         if (Physics.Raycast(foot.position, Vector3.down, out RaycastHit footHit, 1000, GameManager.Layer_IgnorePlayer)) {
 
-                            if (footHit.distance < 0.02f) {
+                            if (footHit.distance < 0.2f) {
                                 footAnchor = footNextAnchor;
                                 footAnchorRotation = footNextAnchorRotation;
                                 walkingState = WalkingState.Support;

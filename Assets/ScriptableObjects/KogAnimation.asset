@@ -15,6 +15,7 @@ MonoBehaviour:
   weight_toMoving_lerp: 4
   weight_toIdle_lerp: 1
   weight_toCombat_lerp: 4
+  weight_toCatch_lerp: 8
   step_ToTarget_Delta: 12
   step_ToTargetRotation_lerp: 15
   step_defaultDistance: 0.2
@@ -51,11 +52,14 @@ MonoBehaviour:
   waist_rotate_withLegAngleYaw: 0.1
   waist_rotate_withLegAngleRoll_withSpeed: 0.1
   waist_rotate_lerp: 10
+  waist_sway: 0.09
   waist_bob: 0.2
   waist_bob_legAngleMax: 90
   waist_bob_lerp: 9
   waist_bob_withSpeed: 0.2
   waist_fall_lerp: 10
+  waist_constraint_weight_combat: 0.7
+  waist_constraint_weight_caught: 0.5
   leg_forwards_withSpeed: 0.08
   leg_raycast_radius: 0.125
   leg_airborne_length: 1.25
@@ -75,4 +79,5 @@ MonoBehaviour:
   armPoleZ_m: 0.03
   armPoleZ_n: -59.2
   arm_constraint_weight_combat: 0.5
+  arm_constraint_weight_caught: 0.2
   arm_reachingToMetal_lerp: 45
