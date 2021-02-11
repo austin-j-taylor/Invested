@@ -5,10 +5,28 @@ ModelImporter:
   internalIDToNameTable:
   - first:
       74: -623603649343465320
+    second: Dance
+  - first:
+      74: -623603649343465320
     second: Scene
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Glow
+    second: {fileID: 2100000, guid: b73354da5d8dda745a6c2024d75a5702, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Metal
+    second: {fileID: 2100000, guid: 5c22d95f7fef49a459c444310d58d34e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Rubber
+    second: {fileID: 2100000, guid: a85455e2610073e4491845d10592c031, type: 2}
   materials:
-    materialImportMode: 1
+    materialImportMode: 0
     materialName: 0
     materialSearch: 1
     materialLocation: 1
@@ -26,7 +44,7 @@ ModelImporter:
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
     importConstraints: 0
-    animationCompression: 1
+    animationCompression: 3
     animationRotationError: 0.5
     animationPositionError: 0.5
     animationScaleError: 0.5
@@ -41,17 +59,17 @@ ModelImporter:
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
-    sortHierarchyByName: 1
-    importVisibility: 1
-    importBlendShapes: 1
-    importCameras: 1
-    importLights: 1
+    sortHierarchyByName: 0
+    importVisibility: 0
+    importBlendShapes: 0
+    importCameras: 0
+    importLights: 0
     fileIdsGeneration: 2
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
     keepQuads: 0
-    weldVertices: 1
+    weldVertices: 0
     bakeAxisConversion: 0
     preserveHierarchy: 0
     skinWeightsMode: 0
@@ -69,18 +87,219 @@ ModelImporter:
     useFileScale: 1
   tangentSpace:
     normalSmoothAngle: 60
-    normalImportMode: 0
-    tangentImportMode: 3
+    normalImportMode: 2
+    tangentImportMode: 2
     normalCalculationMode: 4
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
-    blendShapeNormalImportMode: 1
+    blendShapeNormalImportMode: 2
     normalSmoothingSource: 0
   referencedClips: []
-  importAnimation: 1
+  importAnimation: 0
   humanDescription:
     serializedVersion: 3
     human: []
-    skeleton: []
+    skeleton:
+    - name: Waddler(Clone)
+      parentName: 
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Head
+      parentName: Waddler(Clone)
+      position: {x: -0, y: 2.079299, z: 0}
+      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cube
+      parentName: Waddler(Clone)
+      position: {x: 0.17692122, y: 1.5655869, z: 0}
+      rotation: {x: -0.68788576, y: -0.16374768, z: 0.16374768, w: 0.6878857}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Armature
+      parentName: Waddler(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071067}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Root
+      parentName: Armature
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.7071068, y: -0.00000011972088, z: 0.00000014436995, w: 0.7071067}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Root_end
+      parentName: Root
+      position: {x: -0, y: 0.16352288, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: leg.pole.L
+      parentName: Armature
+      position: {x: -1.0049299, y: 0, z: 0.9449846}
+      rotation: {x: 0.000000059604645, y: 0.00000017881393, z: -0.7071067, w: -0.7071068}
+      scale: {x: 0.99999964, y: 0.9999998, z: 0.9999999}
+    - name: leg.pole.L_end
+      parentName: leg.pole.L
+      position: {x: -0, y: 0.20900857, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: leg.target.L
+      parentName: Armature
+      position: {x: -0.50364125, y: 0.00000022869402, z: 0}
+      rotation: {x: 0.00000011920929, y: -0.000000059604645, z: -0.7071068, w: 0.70710677}
+      scale: {x: 0.9999998, y: 0.99999976, z: 1}
+    - name: Foot.L
+      parentName: leg.target.L
+      position: {x: 0.0000014328942, y: -0.00000011920936, z: -0.0000002682209}
+      rotation: {x: -0.000000023207171, y: 0.6190559, z: -0.7853469, w: -0.000000026091262}
+      scale: {x: 1.0000001, y: 1.0000001, z: 1.0000001}
+    - name: Foot.L_end
+      parentName: Foot.L
+      position: {x: -0, y: 0.082264304, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: leg.pole.R
+      parentName: Armature
+      position: {x: 1.0049299, y: 0, z: 0.9449846}
+      rotation: {x: 0.00000017881393, y: -0.000000059604645, z: -0.7071067, w: 0.7071068}
+      scale: {x: 0.9999997, y: 0.9999999, z: 0.99999994}
+    - name: leg.pole.R_end
+      parentName: leg.pole.R
+      position: {x: -0, y: 0.20900857, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: leg.target.R
+      parentName: Armature
+      position: {x: 0.50364125, y: 0.00000022869402, z: 0}
+      rotation: {x: 0.000000059604645, y: 0.00000017881393, z: -0.7071067, w: -0.7071068}
+      scale: {x: 0.9999997, y: 0.9999999, z: 0.99999994}
+    - name: Foot.R
+      parentName: leg.target.R
+      position: {x: -0.0000014533833, y: -0.00000011920936, z: -0.00000031292439}
+      rotation: {x: 0.000000056307073, y: -0.6190562, z: 0.78534675, w: -0.000000011133174}
+      scale: {x: 1.0000005, y: 1.0000005, z: 1.0000004}
+    - name: Foot.R_end
+      parentName: Foot.R
+      position: {x: -0, y: 0.082264245, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: leg.pole.G
+      parentName: Armature
+      position: {x: -0, y: 1.5512071, z: 0.94498456}
+      rotation: {x: 0.00000008940697, y: -0.00000018674044, z: 0.000000017429535,
+        w: 1}
+      scale: {x: 1, y: 0.9999999, z: 0.9999999}
+    - name: leg.pole.G_end
+      parentName: leg.pole.G
+      position: {x: -0, y: 0.20900846, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: leg.target.G
+      parentName: Armature
+      position: {x: -0.0000002295077, y: 1.0499183, z: 0}
+      rotation: {x: -0.00000018674044, y: -0.00000008940697, z: 1, w: -0.000000017429535}
+      scale: {x: 1.0000002, y: 0.9999999, z: 0.9999999}
+    - name: Foot.G
+      parentName: leg.target.G
+      position: {x: 0.0000002993089, y: 0.00000023841858, z: -0.00000010430813}
+      rotation: {x: -0, y: -0, z: -1, w: 7.0868536e-16}
+      scale: {x: 0.99999976, y: 0.99999964, z: 0.99999964}
+    - name: Foot.G_end
+      parentName: Foot.G
+      position: {x: -0, y: 0.082264304, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Waist
+      parentName: Armature
+      position: {x: -0, y: 0, z: 1.6586967}
+      rotation: {x: 0.7071068, y: -0.00000011972088, z: 0.00000014436995, w: 0.7071067}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Head 1
+      parentName: Waist
+      position: {x: -0, y: 0.099665165, z: 0}
+      rotation: {x: -0, y: -0.00000011920926, z: -1.4210855e-14, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Head_end
+      parentName: Head 1
+      position: {x: -0, y: 0.53446317, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Leg.L.001
+      parentName: Waist
+      position: {x: -0.18339144, y: 0.0068172216, z: -0.000000005892499}
+      rotation: {x: 0.5052065, y: -0.49473917, z: -0.505206, w: -0.49473882}
+      scale: {x: 0.9999893, y: 1.0000001, z: 1.0000002}
+    - name: Leg.L.002
+      parentName: Leg.L.001
+      position: {x: 3.5527137e-14, y: 0.61302775, z: 0.000000059604666}
+      rotation: {x: 0.010832537, y: -0.00043873396, z: -0.022409335, w: -0.9996901}
+      scale: {x: 1.0000006, y: 1.0000007, z: 1.0000001}
+    - name: Leg.L.003
+      parentName: Leg.L.002
+      position: {x: -4.656613e-10, y: 0.5294973, z: -0.0000000051104507}
+      rotation: {x: -0.03033051, y: -0.0028610812, z: -0.03792077, w: 0.99881625}
+      scale: {x: 1.0000006, y: 0.99999994, z: 1.0000008}
+    - name: Leg.L.004
+      parentName: Leg.L.003
+      position: {x: 0.000000001542503, y: 0.38001242, z: -0.00000008493225}
+      rotation: {x: -0.09733933, y: -0.0015092085, z: -0.016969973, w: 0.99510545}
+      scale: {x: 1.0000005, y: 1.0000025, z: 1.0000012}
+    - name: Leg.L.004_end
+      parentName: Leg.L.004
+      position: {x: -0, y: 0.1803824, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Leg.R.001
+      parentName: Waist
+      position: {x: 0.18339144, y: 0.0068172216, z: -0.000000005892499}
+      rotation: {x: 0.50520676, y: 0.494739, z: 0.50520617, w: -0.49473858}
+      scale: {x: 0.9999896, y: 1.0000007, z: 1.0000005}
+    - name: Leg.R.002
+      parentName: Leg.R.001
+      position: {x: -2.6645353e-14, y: 0.61302775, z: 0.00000011920929}
+      rotation: {x: -0.010832496, y: -0.00043855375, z: -0.022409357, w: 0.9996901}
+      scale: {x: 1.0000004, y: 1.0000002, z: 0.99999994}
+    - name: Leg.R.003
+      parentName: Leg.R.002
+      position: {x: -0.000000007450581, y: 0.52949744, z: -0.000000051653842}
+      rotation: {x: -0.03032988, y: 0.0028614826, z: 0.037920725, w: 0.99881625}
+      scale: {x: 1.0000001, y: 0.9999997, z: 1.0000006}
+    - name: Leg.R.004
+      parentName: Leg.R.003
+      position: {x: 0.0000000029976945, y: 0.38001227, z: -0.000000010142685}
+      rotation: {x: -0.09734045, y: 0.0015084789, z: 0.016970241, w: 0.9951053}
+      scale: {x: 0.9999997, y: 1.0000013, z: 1.0000005}
+    - name: Leg.R.004_end
+      parentName: Leg.R.004
+      position: {x: -0, y: 0.18038245, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Leg.G.001
+      parentName: Waist
+      position: {x: -0.000000014344232, y: 0.022259593, z: -0.29418796}
+      rotation: {x: 0.67811453, y: -0.1997829, z: 0.6783162, w: -0.20033658}
+      scale: {x: 1.0000004, y: 1.0000006, z: 1}
+    - name: Leg.G.002
+      parentName: Leg.G.001
+      position: {x: 0.00000017875725, y: 0.6536481, z: 0}
+      rotation: {x: -0.00055077666, y: -0.009548857, z: -0.035096604, w: 0.99933815}
+      scale: {x: 1.0000007, y: 1.0000008, z: 1.0000007}
+    - name: Leg.G.003
+      parentName: Leg.G.002
+      position: {x: 0.000000005908987, y: 0.627481, z: 0.0000000035506673}
+      rotation: {x: 0.0031911796, y: 0.05222406, z: -0.11896081, w: 0.99151945}
+      scale: {x: 1.0000004, y: 1.0000005, z: 1.0000001}
+    - name: Leg.G.004
+      parentName: Leg.G.003
+      position: {x: -0.00000004461981, y: 0.39462587, z: 3.4924597e-10}
+      rotation: {x: 0.012254478, y: 0.000015985217, z: -0.14405203, w: 0.98949426}
+      scale: {x: 1.0000008, y: 1.0000023, z: 1.0000007}
+    - name: Leg.G.004_end
+      parentName: Leg.G.004
+      position: {x: -0, y: 0.20154145, z: 0}
+      rotation: {x: 0, y: -0, z: -0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Cube.001
+      parentName: Waddler(Clone)
+      position: {x: -0, y: 1.5655869, z: -0.30374354}
+      rotation: {x: -0.37062162, y: 0.3706215, z: 0.6021958, w: 0.6021956}
+      scale: {x: 1, y: 1, z: 1}
     armTwist: 0.5
     foreArmTwist: 0.5
     upperLegTwist: 0.5
@@ -91,11 +310,11 @@ ModelImporter:
     globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
-    hasExtraRoot: 0
+    hasExtraRoot: 1
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   autoGenerateAvatarMappingIfUnspecified: 1
-  animationType: 2
+  animationType: 0
   humanoidOversampling: 1
   avatarSetup: 0
   additionalBone: 0

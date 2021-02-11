@@ -30,7 +30,6 @@ public class Magnetic : MonoBehaviour {
 
     #region fields
     protected bool thisFrameIsBeingPushPulled = false;
-    private Collider[] colliders;
     private Color[] defaultEmissionColor;
     private VolumetricLineBehavior blueLine;
     private float lightSaberFactor;
@@ -41,8 +40,8 @@ public class Magnetic : MonoBehaviour {
     #region properties
     public Rigidbody Rb { get; protected set; }
     public bool IsStatic { get; protected set; }
-    public Collider MainCollider => (HasColliders ? colliders[0] : null);
     public bool HasColliders { get; private set; }
+    public Collider[] Colliders { get; private set; }
     public bool HasRenderer { get; private set; }
     public virtual bool IsBeingPushPulled { get; protected set; } = false;
     public bool LastWasPulled { get; set; } = false;
@@ -60,7 +59,7 @@ public class Magnetic : MonoBehaviour {
     public Vector3 LastNetForceOnTarget => -LastAllomanticForce + LastAnchoredPushBoostFromAllomancer;
     public Vector3 LastAllomanticForceOnAllomancer => LastAllomanticForce;
     public Vector3 LastAllomanticForceOnTarget => -LastAllomanticForce;
-    public float ColliderBodyBoundsSizeY => HasColliders ? colliders[0].bounds.size.y : HasRenderer ? GetComponent<Renderer>().bounds.size.y : 0;
+    public float ColliderBodyBoundsSizeY => HasColliders ? Colliders[0].bounds.size.y : HasRenderer ? GetComponent<Renderer>().bounds.size.y : 0;
 
     public float Charge { get; private set; }
     // If this Magnetic is at the center of the screen, highlighted, ready to be targeted.
@@ -157,10 +156,14 @@ public class Magnetic : MonoBehaviour {
             blueLine = Instantiate(GameManager.MetalLineTemplate, GameManager.MetalLinesTransform);
             blueLine.gameObject.SetActive(false);
         }
-        colliders = GetComponentsInChildren<Collider>();
+        // Make sure to get all colliders in heirarchy
+        if(prop_SO && prop_SO.GetCollidersFromRigidbody)
+            Colliders = Rb.GetComponentsInChildren<Collider>();
+        else
+            Colliders = GetComponentsInChildren<Collider>();
         lightSaberFactor = 1;
         isHighlighted = false;
-        HasColliders = colliders.Length > 0;
+        HasColliders = Colliders.Length > 0;
         HasRenderer = GetComponent<Renderer>() != null;
 
         if (IsStatic) { // No RigidBody attached
@@ -172,15 +175,15 @@ public class Magnetic : MonoBehaviour {
             }
             if (HasColliders) {
                 if (calculateCOMFromColliders) {
-                    Vector3 centers = colliders[0].bounds.center;
+                    Vector3 centers = Colliders[0].bounds.center;
                     int triggerCount = 0;
-                    for (int i = 1; i < colliders.Length; i++) {
-                        if (!colliders[i].isTrigger)
-                            centers += colliders[i].bounds.center;
+                    for (int i = 1; i < Colliders.Length; i++) {
+                        if (!Colliders[i].isTrigger)
+                            centers += Colliders[i].bounds.center;
                         else
                             triggerCount++;
                     }
-                    centerOfMass = transform.InverseTransformPoint(centers / (colliders.Length - triggerCount));
+                    //centerOfMass = transform.InverseTransformPoint(centers / (Colliders.Length - triggerCount));
                     centerOfMass = transform.InverseTransformPoint(GetComponentInChildren<Renderer>().bounds.center);
                 } else {
                     centerOfMass = Vector3.zero;
@@ -191,7 +194,7 @@ public class Magnetic : MonoBehaviour {
             if (magneticMass == 0) {
                 magneticMass = netMass;
             }
-            if (colliders.Length == 1) {
+            if (Colliders.Length == 1) {
                 centerOfMass = Rb.centerOfMass;
             }
         }

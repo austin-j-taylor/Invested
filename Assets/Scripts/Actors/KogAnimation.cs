@@ -459,7 +459,7 @@ public class KogAnimation : MonoBehaviour {
         pos += waist.parent.rotation * new Vector3(-feetAngle * speedRatio / 90 * kogAnimation_SO.Waist_sway, 0, 0);
 
         pos.y = pos.y + waistBobAmount + waistFallHeight;
-        Debug.Log(heighest + ", " + waistFallHeight + "," + pos.y);
+
         //pos.y = IMath.FuzzyLerp(pos.y, pos.y + waistBobAmount + height, Time.deltaTime * waist_bob_lerp);
         waistAnchor.position = Vector3.Lerp(waistAnchor.position, waist.parent.position + pos, Time.deltaTime * kogAnimation_SO.Waist_bob_lerp);
         // Crouching
@@ -891,32 +891,40 @@ public class KogAnimation : MonoBehaviour {
             float Zp = -m * (t - n);
 
             // Action
-            Vector3 toTarget;
+            Vector3 toTarget = Vector3.zero;
             float distance = 1;
-            if (Kog.IronSteel.MainTarget != null) {
-                toTarget = Kog.IronSteel.MainTarget.transform.position - upperarm.transform.position;
-                distance = toTarget.magnitude;
-            } else {
-                // Rotate hand to look towards reticle target
-                if (Physics.Raycast(CameraController.ActiveCamera.transform.position, CameraController.ActiveCamera.transform.forward, out RaycastHit hit, 1000, GameManager.Layer_IgnorePlayer)) {
-                    toTarget = hit.point - upperarm.transform.position;
-                    distance = toTarget.magnitude;
+            if (!isLeft) {
+                if (Kog.IronSteel.MainTarget != null) {
+                    toTarget = Kog.IronSteel.MainTarget.transform.position - upperarm.transform.position;
                 } else {
-                    toTarget = CameraController.ActiveCamera.transform.forward;
+                    // Rotate hand to look towards reticle target
+                    if (Physics.Raycast(CameraController.ActiveCamera.transform.position, CameraController.ActiveCamera.transform.forward, out RaycastHit hit, 1000, GameManager.Layer_IgnorePlayer)) {
+                        // Aim at that point
+                        toTarget = hit.point - upperarm.transform.position;
+                    } else {
+                        // Aim at a point 20 units in front of the camera
+                        toTarget = (CameraController.ActiveCamera.transform.position + CameraController.ActiveCamera.transform.forward * 20) - upperarm.transform.position;
+                    }
                 }
+                distance = toTarget.magnitude;
             }
-
             switch (state) {
                 case State.Idle:
                     handAnchor.position = upperarm.transform.position + waist.TransformDirection(new Vector3(X, Y, Z));
                     handAnchorPole.position = upperarm.transform.position + waist.parent.TransformDirection(new Vector3(Xp, Yp, Zp));
                     break;
                 case State.IdleToReaching:
-                    Vector3 handAnchorLerp = upperarm.transform.position + Vector3.Slerp(waist.TransformDirection(new Vector3(X, Y, Z)), Vector3.ClampMagnitude(toTarget / distance * armLength, distance), tInReach);
+                    Vector3 handAnchorLerp = upperarm.transform.position + Vector3.Slerp(waist.TransformDirection(new Vector3(X, Y, Z)), Vector3.ClampMagnitude(toTarget / distance * armLength * 1.1f, distance), tInReach);
                     handAnchor.position = Vector3.Slerp(handAnchor.position, handAnchorLerp, Time.deltaTime * kogAnimation_SO.Arm_reachingToMetal_lerp);
                     break;
                 case State.Reaching:
-                    handAnchorLerp = upperarm.transform.position + Vector3.ClampMagnitude(toTarget / distance * armLength, distance);
+                    Magnetic trajectory = null;
+                    trajectory = Kog.HandController.GrabbedTarget;
+                    if (trajectory == null)
+                        trajectory = Kog.IronSteel.MainTarget;
+                    if (trajectory != null)
+                        Debug.DrawLine(Kog.IronSteel.CenterOfMass, (Kog.IronSteel.CenterOfMass + 30 * (trajectory.transform.position - Kog.IronSteel.CenterOfMass).normalized), Color.red);
+                    handAnchorLerp = upperarm.transform.position + Vector3.ClampMagnitude(toTarget / distance * armLength * 1.1f, distance);
                     handAnchor.position = Vector3.Slerp(handAnchor.position, handAnchorLerp, Time.deltaTime * kogAnimation_SO.Arm_reachingToMetal_lerp);
                     break;
             }

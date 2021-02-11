@@ -57,7 +57,6 @@ public class Player : MonoBehaviour {
     public static float VoidHeight { get; set; }
     #endregion
 
-
     void Awake() {
         PlayerInstance = this;
         PlayerZinc = GetComponent<FeruchemicalZinc>();
@@ -66,7 +65,6 @@ public class Player : MonoBehaviour {
         SceneManager.sceneLoaded += ClearPlayerAfterSceneChange;
         SceneManager.sceneUnloaded += ClearPlayerBeforeSceneChange;
     }
-
 
     #region updates
     void Update() {
@@ -103,6 +101,8 @@ public class Player : MonoBehaviour {
 
         // Disable the cloud controller
         CameraController.ActiveCamera.GetComponent<CloudMaster>().enabled = false;
+
+        Kog.KogInstance.ClearKogBeforeSceneChange(scene);
     }
 
     /// <summary>
@@ -127,6 +127,7 @@ public class Player : MonoBehaviour {
                 RespawnPoint = spawn.transform;
             }
         }
+        Kog.KogInstance.ClearKogAfterSceneChange(scene, mode);
     }
 
     /// <summary>

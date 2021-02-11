@@ -79,7 +79,7 @@ public class KogPullPushController : ActorPullPushController {
                 break;
             case PullpushMode.Caught:
                 if (!IsBurning) {
-                    Kog.HandController.Release();
+                    Kog.HandController.Drop();
                     State_ToIdle();
                 } else if (SteelPushing) {
                     PushTargets.Clear();

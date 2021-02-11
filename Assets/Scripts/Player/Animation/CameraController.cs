@@ -238,7 +238,7 @@ public class CameraController : MonoBehaviour {
                     Vector3[] originsPlayer = new Vector3[9];
                     for (int i = 0; i < 9; i++) {
                         originsPlayer[i] = destinationsCamera[i] + fromCameraToPlayer;
-                        Debug.DrawLine(originsPlayer[i], destinationsCamera[i], Color.gray);
+                        //Debug.DrawLine(originsPlayer[i], destinationsCamera[i], Color.gray);
                     }
 
                     int smallestIndex = -1;
@@ -249,7 +249,7 @@ public class CameraController : MonoBehaviour {
                     for (int i = 0; i < 9; i++) {
                         if (Physics.Raycast(originsPlayer[i], -fromCameraToPlayer, out RaycastHit hit, distanceFromCameraToPlayer, GameManager.Layer_IgnoreCamera)) {
                             float thisDistance = (hit.point - originsPlayer[i]).magnitude;
-                            Debug.DrawLine(originsPlayer[i], hit.point, Color.yellow);
+                            //Debug.DrawLine(originsPlayer[i], hit.point, Color.yellow);
                             if (thisDistance < smallestDistance) {
                                 smallestIndex = i;
                                 smallestHit = hit;
@@ -273,7 +273,7 @@ public class CameraController : MonoBehaviour {
                         }
 
                         playerCameraController.localScale = new Vector3(scale, scale, scale);
-                        Debug.DrawLine(originsPlayer[smallestIndex], smallestHit.point, Color.red);
+                        //Debug.DrawLine(originsPlayer[smallestIndex], smallestHit.point, Color.red);
 
                         // There is a small offset due to rescaling/rotation being relative to the CameraLookAtTarget, but the raycasts are to .25 above the player
                         // This brings the camera to be perfectly touching the smallest hit point
@@ -379,7 +379,7 @@ public class CameraController : MonoBehaviour {
     private class KogCameraController {
 
         [SerializeField]
-        private float blendTime;
+        private float blendTime = 0;
 
         public enum CameraState { Idle, Blending, Close };
 

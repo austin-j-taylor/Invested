@@ -35,11 +35,11 @@ public class Kog : Actor {
 
         base.Awake();
 
-
         gameObject.SetActive(false);
 
-        SceneManager.sceneLoaded += ClearKogAfterSceneChange;
-        SceneManager.sceneUnloaded += ClearKogBeforeSceneChange;
+        // Invoked by the Player to prevent race condition
+        //SceneManager.sceneLoaded += ClearKogAfterSceneChange;
+        //SceneManager.sceneUnloaded += ClearKogBeforeSceneChange;
     }
 
     public void ClearKogBeforeSceneChange(Scene scene) {
@@ -52,7 +52,7 @@ public class Kog : Actor {
     /// </summary>
     /// <param name="scene">the scene that will be entered</param>
     /// <param name="mode">the sceme loading mode</param>
-    private void ClearKogAfterSceneChange(Scene scene, LoadSceneMode mode) {
+    public void ClearKogAfterSceneChange(Scene scene, LoadSceneMode mode) {
         if (mode == LoadSceneMode.Single) { // Not loading all of the scenes, as it does at startup
             KogAnimationController.Clear();
         }
