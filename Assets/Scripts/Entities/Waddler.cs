@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations;
+using UnityEngine.AI;
 
 /// <summary>
 /// A 3-legged creature that picks up blocks and throws them at the player.
@@ -25,10 +26,11 @@ public class Waddler : Pacifiable {
     [SerializeField]
     private WaddlerState state;
     private NonPlayerPushPullController allomancer;
+    private NavMeshAgent agent;
     private ParentConstraint grabJoint;
     private ConstraintSource grabberConstraintSource;
     [SerializeField]
-    private Transform grabber = null;
+    private Transform grabber = null, eyes = null;
     [SerializeField]
     private Collider[] collidersToIgnore = null;
 
@@ -38,11 +40,13 @@ public class Waddler : Pacifiable {
     private void Awake() {
         allomancer = GetComponentInChildren<NonPlayerPushPullController>();
         rb = GetComponentInChildren<Rigidbody>();
+        agent = GetComponentInChildren<NavMeshAgent>();
         grabberConstraintSource = new ConstraintSource {
             sourceTransform = grabber,
             weight = 1
         };
         allomancer.CustomCenterOfAllomancy = grabber;
+        allomancer.BaseStrength = 2;
     }
 
     protected override void Start() {
@@ -61,9 +65,8 @@ public class Waddler : Pacifiable {
                 float closestDistance = radius_loseTarget + 10;
                 // Check those colliders. If any of them have CanBePickedUpByWaddler, pick it up.
                 for (int i = 0; i < possibleBlocks.Length; i++) {
-                    CanBePickedUpByWaddler canBePickedUp = possibleBlocks[i].GetComponent<CanBePickedUpByWaddler>();
-                    if (canBePickedUp != null) {
-                        possiblyClosestTarget = canBePickedUp.GetComponentInParent<Magnetic>();
+                    if (possibleBlocks[i].gameObject.layer == GameManager.Layer_PickupableByWaddler) {
+                        possiblyClosestTarget = possibleBlocks[i].GetComponentInParent<Magnetic>();
                         float possiblyClosestDistance = Vector3.Distance(transform.position, possiblyClosestTarget.transform.position);
                         if (target == null || possiblyClosestDistance < closestDistance) {
                             target = possiblyClosestTarget;
@@ -74,14 +77,16 @@ public class Waddler : Pacifiable {
                 if (target == null) {
                     Debug.Log("No target found");
                 } else {
-                    Debug.Log("Found block: ", target.gameObject);
                     state = WaddlerState.MovingToBlock;
+                    agent.isStopped = false;
+                    agent.SetDestination(target.transform.position);
                 }
                 break;
             case WaddlerState.MovingToBlock:
                 // Move towards the block
                 if(Vector3.Distance(transform.position, target.transform.position) < radius_stopMovingStartPickup) {
                     state = WaddlerState.PickingUp;
+                    agent.isStopped = true;
                     anim.SetTrigger("PickingUp");
                 }
                 break;
@@ -97,13 +102,20 @@ public class Waddler : Pacifiable {
             case WaddlerState.MovingToEnemy:
                 // The block is picked up. Move towards the enemy (the player).
                 // Start to throw the block at the enemy, if they are in range and in line of sight.
-                if (Vector3.Distance(transform.position, enemy.transform.position) < radius_throwAtEnemy) {
-                    state = WaddlerState.Throwing;
+                if (Vector3.Distance(transform.position, enemy.transform.position) < radius_throwAtEnemy
+                    && Physics.Raycast(eyes.position, (enemy.transform.position + enemy.Rb.centerOfMass - eyes.position), out RaycastHit hit, 1000)) {
+                    if(hit.rigidbody != null && hit.rigidbody == enemy.Rb) {
+                        agent.isStopped = true;
+                        state = WaddlerState.Throwing;
+                        anim.SetTrigger("Throw");
+                        Debug.Log("Hit!", hit.transform.gameObject);
+                    } else {
+
+                    }
                 }
                 break;
             case WaddlerState.Throwing:
                 // Transition occurs in "ThrowTarget".
-                anim.SetTrigger("Throw");
                 break;
         }
 
@@ -114,6 +126,8 @@ public class Waddler : Pacifiable {
                 anim.SetBool("Grabbed", false);
                 break;
             case WaddlerState.MovingToBlock:
+                agent.SetDestination(target.transform.position);
+                //Debug.Log(agent.isStopped + ", " + agent.destination + ", " + agent.desiredVelocity + ", " + agent.velocity);
                 anim.SetBool("Walking", true);
                 anim.SetBool("Grabbed", false);
                 break;
@@ -126,6 +140,8 @@ public class Waddler : Pacifiable {
                 anim.SetBool("Grabbed", false);
                 break;
             case WaddlerState.MovingToEnemy:
+                agent.SetDestination(enemy.transform.position);
+                //Debug.Log(agent.isStopped + ", " + agent.destination + ", " + agent.desiredVelocity + ", " + agent.velocity);
                 anim.SetBool("Walking", true);
                 anim.SetBool("Grabbed", true);
                 break;
@@ -145,16 +161,22 @@ public class Waddler : Pacifiable {
         }
     }
 
+    private void OnCollisionStay(Collision collision) {
+        OnCollisionEnter(collision);
+    }
     protected override void OnCollisionEnter(Collision collision) {
         base.OnCollisionEnter(collision);
 
         if (state == WaddlerState.Catching) {
             if (collision.rigidbody != null) {
-                if (collision.rigidbody == target.Rb) {
+                if (collision.gameObject.layer == GameManager.Layer_PickupableByWaddler) {
+                //if (collision.rigidbody == target.Rb) {
                     // Catch the target.
                     allomancer.StopBurning();
                     enemy = Player.CurrentActor;
                     state = WaddlerState.MovingToEnemy;
+                    agent.isStopped = false;
+                    agent.SetDestination(enemy.transform.position);
                     anim.SetTrigger("Caught");
 
                     target.Rb.isKinematic = true;

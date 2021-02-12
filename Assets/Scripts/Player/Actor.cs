@@ -15,6 +15,7 @@ public class Actor : MonoBehaviour {
     public float CameraOffsetThirdPerson { get; protected set; }
     public float CameraOffsetFirstPerson { get; protected set; }
 
+    public Rigidbody Rb => ActorIronSteel.rb;
     public ActorPullPushController ActorIronSteel { get; private set; }
     public ActorTransparencyController Transparancy { get; set; }
     public VoiceBeeper ActorVoiceBeeper { get; set; }

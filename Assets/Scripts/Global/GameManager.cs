@@ -46,6 +46,7 @@ public class GameManager : MonoBehaviour {
     // Masks that represent certain layers to ignore for Raycasting
     public static int Layer_IgnorePlayer { get; private set; }
     public static int Layer_IgnoreCamera { get; private set; }
+    public static int Layer_PickupableByWaddler { get; private set; }
     public static int Layer_BlueLines { get; private set; }
     public static int Layer_BlueLinesVisible { get; private set; }
     #endregion
@@ -74,8 +75,14 @@ public class GameManager : MonoBehaviour {
 
         Prefab_Coin = Resources.Load<Coin>("Objects/Imperial1-Boxing");
 
-        Layer_IgnorePlayer = ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ignore Player")));
-        Layer_IgnoreCamera = ~((1 << LayerMask.NameToLayer("Player")) | (1 << LayerMask.NameToLayer("Ignore Camera")) | (1 << LayerMask.NameToLayer("Ignore Player")) | (1 << LayerMask.NameToLayer("Coin")) | (1 << LayerMask.NameToLayer("Boid")));
+        int mask_player = 1 << LayerMask.NameToLayer("Player");
+        int mask_ignorePlayer = 1 << LayerMask.NameToLayer("Ignore Player");
+        int mask_ignoreCamera = 1 << LayerMask.NameToLayer("Ignore Camera");
+        int mask_pickupable = 1 << LayerMask.NameToLayer("Pickupable By Waddler");
+
+        Layer_IgnorePlayer = ~(mask_player | mask_ignorePlayer);
+        Layer_IgnoreCamera = ~(mask_player | mask_ignoreCamera | mask_ignorePlayer | mask_pickupable | (1 << LayerMask.NameToLayer("Coin")) | (1 << LayerMask.NameToLayer("Boid")));
+        Layer_PickupableByWaddler = LayerMask.NameToLayer("Pickupable By Waddler");
         Layer_BlueLines = LayerMask.NameToLayer("Blue Lines");
         Layer_BlueLinesVisible = LayerMask.NameToLayer("Blue Lines Visible");
 
