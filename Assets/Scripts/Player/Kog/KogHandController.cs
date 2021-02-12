@@ -67,7 +67,7 @@ public class KogHandController : MonoBehaviour {
         if (Kog.IronSteel.IronPulling && Kog.IronSteel.State == KogPullPushController.PullpushMode.Pullpushing && State == GrabState.Empty) {
             if (collision.rigidbody != null) {
                 if (Vector3.Distance(grabber.position, collision.GetContact(0).point) < grabberRadius) {
-                    if (collision.rigidbody != null && collision.rigidbody == Kog.IronSteel.MainTarget.Rb) {
+                    if (collision.rigidbody == Kog.IronSteel.MainTarget.Rb) {
                         Grab(Kog.IronSteel.MainTarget);
                     }
                 }
