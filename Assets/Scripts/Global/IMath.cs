@@ -43,4 +43,34 @@ public static class IMath {
         else
             return Mathf.Lerp(a, b, t);
     }
+
+    /// <summary>
+    /// Returns the taxi-cab distance between two points.
+    /// </summary>
+    public static float TaxiDistance(float x1, float y1, float x2, float y2) {
+        return Mathf.Abs(x2 - x1) + Mathf.Abs(y2 - y1);
+    }
+    /// <summary>
+    /// Returns the taxi-cab distance between two points.
+    /// </summary>
+    public static float TaxiDistance(Vector2 v1, Vector2 v2) {
+        return TaxiDistance(v1.x, v1.y, v2.x, v2.y);
+    }
+    /// <summary>
+    /// Returns the taxi-cab distance between two points, using their x and z components.
+    /// </summary>
+    public static float TaxiDistance(Vector3 v1, Vector3 v2) {
+        return TaxiDistance(v1.x, v1.z, v2.x, v2.z);
+    }
+
+    /// <summary>
+    /// Returns true if destination1 is closer to the source than destination2 by taxicab distance
+    /// </summary>
+    /// <param name="source">the source position</param>
+    /// <param name="destination1">the first destination to check</param>
+    /// <param name="destination2">the second destination to check</param>
+    /// <returns>true if source-to-destination1 is shorter than source-to-destination2</returns>
+    public static bool IsCloserTaxi(Vector3 source, Vector3 destination1, Vector3 destination2) {
+        return TaxiDistance(source, destination1) < TaxiDistance(source, destination2);
+    }
 }

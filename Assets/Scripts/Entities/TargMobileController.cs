@@ -5,9 +5,15 @@ using UnityEngine.AI;
 
 public class TargMobileController : Entity {
 
+    private Animator anim;
+
+    private void Awake() {
+        anim = GetComponentInChildren<Animator>();
+    }
+
     protected override void Start() {
         base.Start();
-       
+
         MaxHealth = 15;
     }
     void Update() {
@@ -23,7 +29,7 @@ public class TargMobileController : Entity {
                 anim.SetTrigger("Killed");
                 //rb.constraints = RigidbodyConstraints.None;
             } else {
-                    //rb.velocity = new Vector3(-5, 0, 0);
+                //rb.velocity = new Vector3(-5, 0, 0);
             }
         }
     }

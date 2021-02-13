@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour {
     public static AudioManager AudioManager { get; private set; }
     public static ConversationManager ConversationManager { get; private set; }
     public static SceneTransitionManager SceneTransitionManager { get; private set; }
+    public static PropsManager Props { get; private set; }
     public static GraphicsController GraphicsController { get; private set; }
     public static MenusController MenusController { get; private set; }
     public static CloudsManager CloudsManager { get; private set; }
@@ -61,6 +62,7 @@ public class GameManager : MonoBehaviour {
         ConversationManager = GetComponent<ConversationManager>();
         GraphicsController = GetComponent<GraphicsController>();
         SceneTransitionManager = GetComponent<SceneTransitionManager>();
+        Props = GetComponent<PropsManager>();
         MenusController = GetComponent<MenusController>();
         CloudsManager = GetComponent<CloudsManager>();
         MetalLinesTransform = transform.Find("MetalLines");
@@ -104,7 +106,7 @@ public class GameManager : MonoBehaviour {
     /// </summary>
     /// <param name="scene"></param>
     private void ClearBeforeSceneChange(Scene scene) {
-        MagneticsInScene = new List<Magnetic>();
+        MagneticsInScene.Clear();
         foreach (Transform child in MetalLinesTransform) {
             Destroy(child.gameObject);
         }

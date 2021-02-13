@@ -915,4 +915,10 @@ public class AllomanticIronSteel : Allomancer {
     }
     #endregion
 
+    public bool IsPullingOnTarget(Magnetic target) {
+        return PullingOnPullTargets && PullTargets.IsTarget(target) || PullingOnPushTargets && PushTargets.IsTarget(target);
+    }
+    public bool IsPushingOnTarget(Magnetic target) {
+        return PushingOnPullTargets && PushTargets.IsTarget(target) || PushingOnPushTargets && PushTargets.IsTarget(target);
+    }
 }

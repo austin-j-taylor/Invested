@@ -42,14 +42,12 @@ public class Entity : MonoBehaviour {
     //private float lastHitTime;
     protected bool isDead;
     protected BoxCollider[] hitboxes;
-    protected Animator anim;
     protected Rigidbody rb;
 
     private bool hitThisFrame;
 
     protected virtual void Start() {
         hitboxes = GetComponentsInChildren<BoxCollider>();
-        anim = GetComponentInChildren<Animator>();
         rb = GetComponentInChildren<Rigidbody>();
         isDead = false;
         hitThisFrame = false;

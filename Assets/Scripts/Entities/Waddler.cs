@@ -11,20 +11,25 @@ public class Waddler : Pacifiable {
 
     #region
     [SerializeField]
-    private float radius_loseTarget = 3;
+    private float radius_stopPickup = 3;
     [SerializeField]
     private float radius_stopMovingStartPickup = 2;
     [SerializeField]
     private float radius_throwAtEnemy = 15;
-    private const float timeInPickingUpMax = 2;
-    private const float perceptRange = 50;
+    [SerializeField]
+    private float radius_perception = 50;
+    [SerializeField]
+    private float angularSpeed_surprised = 20, angularSpeed_pickup = 10, angularSpeed_throwing = 20;
+    [SerializeField]
+    private float timeinPickupMax = 5;
+    private const float timeInSearchMax = 0.5f;
     private const float throwForce = 30;
     #endregion
 
-    private enum WaddlerState { Idle, MovingToBlock, PickingUp, Catching, MovingToEnemy, Throwing }
-
+    public enum WaddlerState { Idle, Suprised, GettingBlock, PickingUp, MovingToEnemy, AnchoredPull, AnchoredPush, Throwing }
     [SerializeField]
-    private WaddlerState state;
+    public WaddlerState State;
+    private WaddlerAnimation waddlerAnimation;
     private NonPlayerPushPullController allomancer;
     private NavMeshAgent agent;
     private ParentConstraint grabJoint;
@@ -34,11 +39,14 @@ public class Waddler : Pacifiable {
     [SerializeField]
     private Collider[] collidersToIgnore = null;
 
-    private Magnetic target = null;
+    private Magnetic targetBlock = null;
     private Actor enemy;
+
+    private float timeInSearch = 0, timeInPickup = 0;
 
     private void Awake() {
         allomancer = GetComponentInChildren<NonPlayerPushPullController>();
+        waddlerAnimation = GetComponentInChildren<WaddlerAnimation>();
         rb = GetComponentInChildren<Rigidbody>();
         agent = GetComponentInChildren<NavMeshAgent>();
         grabberConstraintSource = new ConstraintSource {
@@ -52,111 +60,181 @@ public class Waddler : Pacifiable {
     protected override void Start() {
         base.Start();
 
-        state = WaddlerState.Idle;
+        State = WaddlerState.Idle;
     }
 
     private void Update() {
-        // Transitions
-        switch (state) {
+        RaycastHit hit;
+
+        // Waddler state machine Transitions
+        switch (State) {
             case WaddlerState.Idle:
-                // Chose a block and move towards it.
-                Collider[] possibleBlocks = Physics.OverlapSphere(transform.position, perceptRange);
-                Magnetic possiblyClosestTarget = null;
-                float closestDistance = radius_loseTarget + 10;
-                // Check those colliders. If any of them have CanBePickedUpByWaddler, pick it up.
-                for (int i = 0; i < possibleBlocks.Length; i++) {
-                    if (possibleBlocks[i].gameObject.layer == GameManager.Layer_PickupableByWaddler) {
-                        possiblyClosestTarget = possibleBlocks[i].GetComponentInParent<Magnetic>();
-                        float possiblyClosestDistance = Vector3.Distance(transform.position, possiblyClosestTarget.transform.position);
-                        if (target == null || possiblyClosestDistance < closestDistance) {
-                            target = possiblyClosestTarget;
-                            closestDistance = possiblyClosestDistance;
-                        }
+                enemy = Player.CurrentActor;
+
+                // Wait until the player is in range and visible
+                if (IMath.TaxiDistance(Player.CurrentActor.transform.position, transform.position) < radius_perception) {
+                    if (CanSee(eyes, enemy.Rb, out hit)) {
+                        Debug.Log("Player seen! oh no!", gameObject);
+                        State_toSurprised();
                     }
                 }
-                if (target == null) {
-                    Debug.Log("No target found");
-                } else {
-                    state = WaddlerState.MovingToBlock;
-                    agent.isStopped = false;
-                    agent.SetDestination(target.transform.position);
-                }
                 break;
-            case WaddlerState.MovingToBlock:
-                // Move towards the block
-                if(Vector3.Distance(transform.position, target.transform.position) < radius_stopMovingStartPickup) {
-                    state = WaddlerState.PickingUp;
-                    agent.isStopped = true;
-                    anim.SetTrigger("PickingUp");
+            case WaddlerState.Suprised:
+                // Transition called by animation
+                break;
+            case WaddlerState.GettingBlock:
+                // If we have a target
+                if (targetBlock != null) {
+                    // Start picking up when the block's very close
+                    if (Vector3.Distance(transform.position, targetBlock.transform.position) < radius_stopMovingStartPickup) {
+                        State_toPickingUp();
+                    }
                 }
                 break;
             case WaddlerState.PickingUp:
                 // Stop moving, and start trying to pick up the block
-                // Wait for animation to call "PullOnTarget", when the transition happens
-                break;
-            case WaddlerState.Catching:
-                // Be pulling on the block.
+                // Wait for animation to call "Callback_PickingUp" to start pulling on the cube
+                // Wait for physics to call "OnCollisionEnter" to transition
                 // If the block gets knocked out of "range" or too much time has passed, give up.
-                // Transition happens in OnCollisionEnter.
+                if (timeInPickup >= timeinPickupMax || Vector3.Distance(transform.position, targetBlock.transform.position) > radius_stopPickup) {
+                    State_toGettingBlock();
+                } else {
+                    timeInPickup += Time.deltaTime;
+                }
                 break;
             case WaddlerState.MovingToEnemy:
                 // The block is picked up. Move towards the enemy (the player).
-                // Start to throw the block at the enemy, if they are in range and in line of sight.
-                if (Vector3.Distance(transform.position, enemy.transform.position) < radius_throwAtEnemy
-                    && Physics.Raycast(eyes.position, (enemy.transform.position + enemy.Rb.centerOfMass - eyes.position), out RaycastHit hit, 1000)) {
-                    if(hit.rigidbody != null && hit.rigidbody == enemy.Rb) {
-                        agent.isStopped = true;
-                        state = WaddlerState.Throwing;
-                        anim.SetTrigger("Throw");
-                        Debug.Log("Hit!", hit.transform.gameObject);
-                    } else {
-
+                // If the player starts Pushing or Pulling on the cube, the waddler stops moving and anchors itself.
+                if (targetBlock.IsBeingPushPulled && enemy.ActorIronSteel.IsPullingOnTarget(targetBlock)) {
+                    State_toAnchoredPull();
+                } else if (targetBlock.IsBeingPushPulled && enemy.ActorIronSteel.IsPushingOnTarget(targetBlock)) {
+                    State_toAnchoredPush();
+                } else {
+                    // Start to throw the block at the enemy, if they are in range and in line of sight.
+                    if (Vector3.Distance(transform.position, enemy.transform.position) < radius_throwAtEnemy
+                        && CanSee(eyes, enemy.Rb, out hit)) {
+                        Debug.Log("Throwing at player!", hit.transform.gameObject);
+                        State_toThrowing();
                     }
                 }
                 break;
+            case WaddlerState.AnchoredPull:
+                // Wait for player to stop pulling on the block
+                if (!(targetBlock.IsBeingPushPulled && enemy.ActorIronSteel.IsPullingOnTarget(targetBlock))) {
+                    State_toMovingToEnemy();
+                }
+                break;
+            case WaddlerState.AnchoredPush:
+                // Wait for player to stop pushing on the block
+                if (!(targetBlock.IsBeingPushPulled && enemy.ActorIronSteel.IsPushingOnTarget(targetBlock))) {
+                    State_toMovingToEnemy();
+                }
+                break;
             case WaddlerState.Throwing:
-                // Transition occurs in "ThrowTarget".
+                // Transition occurs in "Callback_Throwing"
                 break;
         }
 
         // Actions
-        switch (state) {
+        switch (State) {
             case WaddlerState.Idle:
-                anim.SetBool("Walking", false);
-                anim.SetBool("Grabbed", false);
                 break;
-            case WaddlerState.MovingToBlock:
-                agent.SetDestination(target.transform.position);
+            case WaddlerState.Suprised:
+                // turn to the player in shock!
+                Vector3 direction = enemy.transform.position - transform.position;
+                Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * angularSpeed_surprised);
+                break;
+            case WaddlerState.GettingBlock:
+
+                // Intermittently search for the best block to go towards
+                if (timeInSearch >= timeInSearchMax) {
+                    timeInSearch = 0;
+
+                    Magnetic oldTargetBlock = targetBlock;
+                    float oldRemainingDistance = targetBlock == null ? float.PositiveInfinity : IMath.TaxiDistance(transform.position, targetBlock.transform.position);
+                    Collider[] possibleBlocks = Physics.OverlapSphere(transform.position, radius_perception);
+
+                    //Debug.Log("Performing block search. Old target: " + oldTargetBlock + ", distance: " + oldRemainingDistance);
+
+                    // Check those colliders. If any of them are on the "can be picked up by a Waddler" layer, add them for consideration.
+                    for (int i = 0; i < possibleBlocks.Length; i++) {
+                        if (possibleBlocks[i].gameObject.layer == GameManager.Layer_PickupableByWaddler) {
+
+                            Magnetic currentTarget = possibleBlocks[i].GetComponentInParent<Magnetic>();
+                            if (currentTarget != null) {
+                                //Debug.Log("Checking cube", currentTarget.gameObject);
+                                // If this is the first block, we've seen, choose it.
+                                // If it has a closer path than the current path, and it's in line of sight, also choose it.
+
+                                //Debug.Log("Remaining distance: " + agent.remainingDistance);
+                                if(targetBlock == null || 
+                                        IMath.TaxiDistance(transform.position, currentTarget.transform.position) < oldRemainingDistance
+                                        && CanSee(eyes, currentTarget.Rb, out hit)) {
+                                    targetBlock = currentTarget;
+                                    //Debug.Log("New path to a new cube found: " + IMath.TaxiDistance(transform.position, currentTarget.transform.position) + " < " + oldRemainingDistance, targetBlock.gameObject);
+                                    oldTargetBlock = targetBlock;
+                                    oldRemainingDistance = IMath.TaxiDistance(transform.position, targetBlock.transform.position);
+                                }
+                            }
+                        }
+                    }
+
+                    if (oldTargetBlock != targetBlock) {
+                        Debug.Log("Target changed from " + (oldTargetBlock == null ? "null" : oldTargetBlock.name) + " to " + targetBlock.name, targetBlock.gameObject);
+                    } else {
+                        //Debug.Log("Kept old target.", targetBlock.gameObject);
+                    }
+                } else {
+                    timeInSearch += Time.deltaTime;
+                    // Follow same block as before, if it exists
+                }
+                if (targetBlock == null) {
+                    Debug.Log("No block found. Waddler won't move.", gameObject);
+                    agent.SetDestination(transform.position);
+                } else {
+                    agent.SetDestination(targetBlock.transform.position);
+                }
+
                 //Debug.Log(agent.isStopped + ", " + agent.destination + ", " + agent.desiredVelocity + ", " + agent.velocity);
-                anim.SetBool("Walking", true);
-                anim.SetBool("Grabbed", false);
                 break;
             case WaddlerState.PickingUp:
-                anim.SetBool("Walking", false);
-                anim.SetBool("Grabbed", false);
-                break;
-            case WaddlerState.Catching:
-                anim.SetBool("Walking", false);
-                anim.SetBool("Grabbed", false);
+                // rotate to be besides the block
+                direction = targetBlock.transform.position - transform.position;
+                lookRotation = Quaternion.AngleAxis(-90, transform.up) * Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * angularSpeed_pickup);
                 break;
             case WaddlerState.MovingToEnemy:
                 agent.SetDestination(enemy.transform.position);
                 //Debug.Log(agent.isStopped + ", " + agent.destination + ", " + agent.desiredVelocity + ", " + agent.velocity);
-                anim.SetBool("Walking", true);
-                anim.SetBool("Grabbed", true);
+                break;
+            case WaddlerState.AnchoredPull:
+                // Aim at the player
+                direction = enemy.transform.position - transform.position;
+                lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * angularSpeed_throwing);
+                break;
+            case WaddlerState.AnchoredPush:
+                // Aim at the player
+                direction = enemy.transform.position - transform.position;
+                lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * angularSpeed_throwing);
                 break;
             case WaddlerState.Throwing:
-                anim.SetBool("Walking", false);
-                anim.SetBool("Grabbed", true);
+                // Aim at the player
+                direction = enemy.transform.position - transform.position;
+                lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+                transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * angularSpeed_throwing);
                 break;
         }
+                Debug.Log(agent.isStopped);
     }
 
     private void FixedUpdate() {
-        if (state == WaddlerState.MovingToEnemy || state == WaddlerState.Throwing) {
+        if (State == WaddlerState.MovingToEnemy || State == WaddlerState.Throwing) {
             // definitely could be improved
             foreach (Collider col1 in collidersToIgnore)
-                foreach (Collider col2 in target.Colliders)
+                foreach (Collider col2 in targetBlock.Colliders)
                     Physics.IgnoreCollision(col1, col2, true);
         }
     }
@@ -167,59 +245,111 @@ public class Waddler : Pacifiable {
     protected override void OnCollisionEnter(Collision collision) {
         base.OnCollisionEnter(collision);
 
-        if (state == WaddlerState.Catching) {
+        if (State == WaddlerState.PickingUp && allomancer.IsBurning) {
             if (collision.rigidbody != null) {
                 if (collision.gameObject.layer == GameManager.Layer_PickupableByWaddler) {
-                //if (collision.rigidbody == target.Rb) {
-                    // Catch the target.
-                    allomancer.StopBurning();
-                    enemy = Player.CurrentActor;
-                    state = WaddlerState.MovingToEnemy;
-                    agent.isStopped = false;
-                    agent.SetDestination(enemy.transform.position);
-                    anim.SetTrigger("Caught");
+                    targetBlock = collision.gameObject.GetComponent<Magnetic>();
 
-                    target.Rb.isKinematic = true;
+                    // Grab onto the block
+                    Debug.Log("stoppedd  burnign");
+                    allomancer.StopBurning();
+                    targetBlock.Rb.isKinematic = true;
                     foreach (Collider col1 in collidersToIgnore)
-                        foreach (Collider col2 in target.Colliders)
+                        foreach (Collider col2 in targetBlock.Colliders)
                             Physics.IgnoreCollision(col1, col2, true);
-                    grabJoint = target.Rb.gameObject.AddComponent<ParentConstraint>();
+                    grabJoint = targetBlock.Rb.gameObject.AddComponent<ParentConstraint>();
                     grabJoint.AddSource(grabberConstraintSource);
-                    if (target.prop_SO != null) {
-                        grabJoint.SetTranslationOffset(0, new Vector3(0, target.prop_SO.Grab_pos_y, target.prop_SO.Grab_pos_z));
-                        grabJoint.SetRotationOffset(0, new Vector3(0, 0, target.prop_SO.Grab_rotation_z));
+                    if (targetBlock.prop_SO != null) {
+                        grabJoint.SetTranslationOffset(0, new Vector3(0, targetBlock.prop_SO.Grab_pos_y, targetBlock.prop_SO.Grab_pos_z));
+                        grabJoint.SetRotationOffset(0, new Vector3(0, 0, targetBlock.prop_SO.Grab_rotation_z));
                     }
                     grabJoint.constraintActive = true;
+
+                    State_toMovingToEnemy();
                 }
             }
         }
     }
 
     /// <summary>
-    /// Starts pulling on the target to pick up.
+    /// Called when the surprised animation is done.
     /// </summary>
-    public void PullOnTarget() {
-        allomancer.StartBurning();
-        allomancer.IronPulling = true;
-        allomancer.AddPullTarget(target);
-
-        state = WaddlerState.Catching;
+    public void Callback_Surprised() {
+        State_toGettingBlock();
     }
-    
+
+    /// <summary>
+    /// Starts pulling on the block to pick up.
+    /// </summary>
+    public void Callback_PickingUp() {
+        allomancer.StartBurning();
+        Debug.Log("starting  burnign");
+        allomancer.IronPulling = true;
+        allomancer.AddPullTarget(targetBlock.GetComponent<Magnetic>());
+    }
+
     /// <summary>
     /// Throws the held block.
     /// </summary>
-    public void ThrowTarget() {
+    public void Callback_Throwing() {
         Destroy(grabJoint);
-        target.Rb.isKinematic = false;
+        targetBlock.Rb.isKinematic = false;
         foreach (Collider col1 in collidersToIgnore)
-            foreach (Collider col2 in target.Colliders)
+            foreach (Collider col2 in targetBlock.Colliders)
                 Physics.IgnoreCollision(col1, col2, false);
 
-        target.Rb.AddForce(throwForce * (target.CenterOfMass - grabber.position).normalized, ForceMode.VelocityChange);
+        targetBlock.Rb.AddForce(throwForce * (targetBlock.CenterOfMass - grabber.position).normalized, ForceMode.VelocityChange);
+        targetBlock = null;
 
-        target = null;
 
-        state = WaddlerState.Idle;
+        State_toGettingBlock();
+    }
+
+    private void State_toIdle() {
+        State = WaddlerState.Idle;
+        waddlerAnimation.State_toIdle();
+    }
+    private void State_toSurprised() {
+
+        State = WaddlerState.Suprised;
+        waddlerAnimation.State_toSurprised();
+    }
+    private void State_toGettingBlock() {
+        timeInSearch = timeInSearchMax;
+        targetBlock = null;
+
+        State = WaddlerState.GettingBlock;
+        waddlerAnimation.State_toGettingBlock();
+    }
+    private void State_toPickingUp() {
+        agent.SetDestination(transform.position);
+        timeInPickup = 0;
+
+        State = WaddlerState.PickingUp;
+        waddlerAnimation.State_toPickingUp();
+    }
+    private void State_toMovingToEnemy() {
+        agent.SetDestination(enemy.transform.position);
+
+        State = WaddlerState.MovingToEnemy;
+        waddlerAnimation.State_toMovingToEnemy();
+    }
+    private void State_toAnchoredPull() {
+        agent.SetDestination(transform.position);
+
+        State = WaddlerState.AnchoredPull;
+        waddlerAnimation.State_toAnchoredPull();
+    }
+    private void State_toAnchoredPush() {
+        agent.SetDestination(transform.position);
+
+        State = WaddlerState.AnchoredPush;
+        waddlerAnimation.State_toAnchoredPush();
+    }
+    private void State_toThrowing() {
+        agent.SetDestination(transform.position);
+
+        State = WaddlerState.Throwing;
+        waddlerAnimation.State_toThrowing();
     }
 }
