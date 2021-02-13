@@ -26,7 +26,7 @@ public class Waddler : Pacifiable {
     private const float throwForce = 30;
     #endregion
 
-    public enum WaddlerState { Idle, Suprised, GettingBlock, PickingUp, MovingToEnemy, AnchoredPull, AnchoredPush, Throwing }
+    public enum WaddlerState { Idle, Suprised, GettingBlock, PickingUp, Caught, MovingToEnemy, AnchoredPull, AnchoredPush, Throwing, Thrown }
     [SerializeField]
     public WaddlerState State;
     private WaddlerAnimation waddlerAnimation;
@@ -102,6 +102,9 @@ public class Waddler : Pacifiable {
                     timeInPickup += Time.deltaTime;
                 }
                 break;
+            case WaddlerState.Caught:
+                // Transition in Callback_Caught
+                break;
             case WaddlerState.MovingToEnemy:
                 // The block is picked up. Move towards the enemy (the player).
                 // If the player starts Pushing or Pulling on the cube, the waddler stops moving and anchors itself.
@@ -113,7 +116,6 @@ public class Waddler : Pacifiable {
                     // Start to throw the block at the enemy, if they are in range and in line of sight.
                     if (Vector3.Distance(transform.position, enemy.transform.position) < radius_throwAtEnemy
                         && CanSee(eyes, enemy.Rb, out hit)) {
-                        Debug.Log("Throwing at player!", hit.transform.gameObject);
                         State_toThrowing();
                     }
                 }
@@ -132,6 +134,9 @@ public class Waddler : Pacifiable {
                 break;
             case WaddlerState.Throwing:
                 // Transition occurs in "Callback_Throwing"
+                break;
+            case WaddlerState.Thrown:
+                // Transition occurs in "Callback_Thrown"
                 break;
         }
 
@@ -168,7 +173,7 @@ public class Waddler : Pacifiable {
                                 // If it has a closer path than the current path, and it's in line of sight, also choose it.
 
                                 //Debug.Log("Remaining distance: " + agent.remainingDistance);
-                                if(targetBlock == null || 
+                                if (targetBlock == null ||
                                         IMath.TaxiDistance(transform.position, currentTarget.transform.position) < oldRemainingDistance
                                         && CanSee(eyes, currentTarget.Rb, out hit)) {
                                     targetBlock = currentTarget;
@@ -204,6 +209,8 @@ public class Waddler : Pacifiable {
                 lookRotation = Quaternion.AngleAxis(-90, transform.up) * Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
                 transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * angularSpeed_pickup);
                 break;
+            case WaddlerState.Caught:
+                break;
             case WaddlerState.MovingToEnemy:
                 agent.SetDestination(enemy.transform.position);
                 //Debug.Log(agent.isStopped + ", " + agent.destination + ", " + agent.desiredVelocity + ", " + agent.velocity);
@@ -226,8 +233,10 @@ public class Waddler : Pacifiable {
                 lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
                 transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * angularSpeed_throwing);
                 break;
+            case WaddlerState.Thrown:
+                break;
         }
-                Debug.Log(agent.isStopped);
+        Debug.Log(allomancer.IsBurning);
     }
 
     private void FixedUpdate() {
@@ -251,8 +260,6 @@ public class Waddler : Pacifiable {
                     targetBlock = collision.gameObject.GetComponent<Magnetic>();
 
                     // Grab onto the block
-                    Debug.Log("stoppedd  burnign");
-                    allomancer.StopBurning();
                     targetBlock.Rb.isKinematic = true;
                     foreach (Collider col1 in collidersToIgnore)
                         foreach (Collider col2 in targetBlock.Colliders)
@@ -265,7 +272,7 @@ public class Waddler : Pacifiable {
                     }
                     grabJoint.constraintActive = true;
 
-                    State_toMovingToEnemy();
+                    State_toCaught();
                 }
             }
         }
@@ -275,34 +282,57 @@ public class Waddler : Pacifiable {
     /// Called when the surprised animation is done.
     /// </summary>
     public void Callback_Surprised() {
-        State_toGettingBlock();
+        if (State == WaddlerState.Suprised) {
+            State_toGettingBlock();
+        }
     }
 
     /// <summary>
     /// Starts pulling on the block to pick up.
     /// </summary>
     public void Callback_PickingUp() {
-        allomancer.StartBurning();
-        Debug.Log("starting  burnign");
-        allomancer.IronPulling = true;
-        allomancer.AddPullTarget(targetBlock.GetComponent<Magnetic>());
+        if (State == WaddlerState.PickingUp) {
+            allomancer.StartBurning();
+            allomancer.IronPulling = true;
+            allomancer.AddPullTarget(targetBlock.GetComponent<Magnetic>());
+        }
+    }
+
+    /// <summary>
+    /// Start moving after the block is fully caught
+    /// </summary>
+    public void Callback_Caught() {
+        if (State == WaddlerState.Caught) {
+            State_toMovingToEnemy();
+        }
     }
 
     /// <summary>
     /// Throws the held block.
     /// </summary>
     public void Callback_Throwing() {
-        Destroy(grabJoint);
-        targetBlock.Rb.isKinematic = false;
-        foreach (Collider col1 in collidersToIgnore)
-            foreach (Collider col2 in targetBlock.Colliders)
-                Physics.IgnoreCollision(col1, col2, false);
+        if (State == WaddlerState.Throwing) {
+            Destroy(grabJoint);
+            targetBlock.Rb.isKinematic = false;
+            foreach (Collider col1 in collidersToIgnore)
+                foreach (Collider col2 in targetBlock.Colliders)
+                    Physics.IgnoreCollision(col1, col2, false);
 
-        targetBlock.Rb.AddForce(throwForce * (targetBlock.CenterOfMass - grabber.position).normalized, ForceMode.VelocityChange);
-        targetBlock = null;
+            targetBlock.Rb.AddForce(throwForce * (targetBlock.CenterOfMass - grabber.position).normalized, ForceMode.VelocityChange);
+            targetBlock = null;
 
 
-        State_toGettingBlock();
+            State_toThrown();
+        }
+    }
+
+    /// <summary>
+    /// Start moving after the block is fully thrown
+    /// </summary>
+    public void Callback_Thrown() {
+        if (State == WaddlerState.Thrown) {
+            State_toGettingBlock();
+        }
     }
 
     private void State_toIdle() {
@@ -315,6 +345,7 @@ public class Waddler : Pacifiable {
         waddlerAnimation.State_toSurprised();
     }
     private void State_toGettingBlock() {
+        allomancer.StopBurning();
         timeInSearch = timeInSearchMax;
         targetBlock = null;
 
@@ -327,6 +358,11 @@ public class Waddler : Pacifiable {
 
         State = WaddlerState.PickingUp;
         waddlerAnimation.State_toPickingUp();
+    }
+    private void State_toCaught() {
+        allomancer.StopBurning();
+        State = WaddlerState.Caught;
+        waddlerAnimation.State_toCaught();
     }
     private void State_toMovingToEnemy() {
         agent.SetDestination(enemy.transform.position);
@@ -351,5 +387,10 @@ public class Waddler : Pacifiable {
 
         State = WaddlerState.Throwing;
         waddlerAnimation.State_toThrowing();
+    }
+    private void State_toThrown() {
+
+        State = WaddlerState.Thrown;
+        waddlerAnimation.State_toThrown();
     }
 }

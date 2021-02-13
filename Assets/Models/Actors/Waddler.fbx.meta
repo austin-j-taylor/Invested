@@ -261,7 +261,15 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 1
+        functionName: Callback_Caught
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 45b46e1b9b9787e4b95b62d5f270d5f3,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
@@ -322,6 +330,14 @@ ModelImporter:
       events:
       - time: 0.456
         functionName: Callback_Throwing
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 45b46e1b9b9787e4b95b62d5f270d5f3,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 1
+        functionName: Callback_Thrown
         data: 
         objectReferenceParameter: {fileID: 11500000, guid: 45b46e1b9b9787e4b95b62d5f270d5f3,
           type: 3}

@@ -37,22 +37,25 @@ public class WaddlerAnimation : MonoBehaviour {
     public void State_toIdle() {
         anim.SetBool("Walking", false);
         anim.SetBool("Grabbed", false);
-
     }
     public void State_toSurprised() {
         anim.SetTrigger("Surprised");
     }
     public void State_toGettingBlock() {
+        anim.SetBool("PickingUp", false);
         anim.SetBool("Walking", true);
         anim.SetBool("Grabbed", false);
     }
     public void State_toPickingUp() {
-        anim.SetTrigger("PickingUp");
+        anim.SetBool("PickingUp", true);
         anim.SetBool("Walking", false);
         anim.SetBool("Grabbed", false);
     }
-    public void State_toMovingToEnemy() {
+    public void State_toCaught() {
         anim.SetTrigger("Caught");
+    }
+    public void State_toMovingToEnemy() {
+        anim.SetBool("PickingUp", false);
         anim.SetBool("Walking", true);
         anim.SetBool("Grabbed", true);
         anim.SetBool("Anchored Pull", false);
@@ -68,5 +71,8 @@ public class WaddlerAnimation : MonoBehaviour {
         anim.SetTrigger("Throw");
         anim.SetBool("Walking", false);
         anim.SetBool("Grabbed", true);
+    }
+    public void State_toThrown() {
+
     }
 }
