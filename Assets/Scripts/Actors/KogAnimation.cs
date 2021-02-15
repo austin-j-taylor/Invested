@@ -541,6 +541,7 @@ public class KogAnimation : MonoBehaviour {
         private KogAnimation_SO kogAnimation_SO;
         private Leg otherLeg;
         private bool isLeft;
+        private bool isLeadingAirborne = false;
         public Vector3 footAnchor = Vector3.zero, footLastAnchor = Vector3.zero, footNextAnchor = Vector3.zero;
         private Quaternion footAnchorRotation, footLastAnchorRotation, footNextAnchorRotation;
         private Quaternion anchorRestLocalRotation;
@@ -709,22 +710,43 @@ public class KogAnimation : MonoBehaviour {
                     if (Physics.SphereCast(footRaycastSource.position, kogAnimation_SO.Leg_raycast_radius, raycastDirection, out hit, raycastDistance, GameManager.Layer_IgnorePlayer)) {
                         // The ground is close. move foot anchor towards it until we've landed.
 
-                        // (tried doing this with the above spherecast distance but it was pretty inconsistent...
-                        if (Physics.Raycast(foot.position, Vector3.down, out RaycastHit footHit, 1000, GameManager.Layer_IgnorePlayer)) {
+                        //// (tried doing this with the above spherecast distance but it was pretty inconsistent...
+                        //if (Physics.Raycast(foot.position, Vector3.down, out RaycastHit footHit, 1000, GameManager.Layer_IgnorePlayer)) {
 
-                            if (footHit.distance < 0.2f) {
-                                footAnchor = footNextAnchor;
-                                footAnchorRotation = footNextAnchorRotation;
-                                walkingState = WalkingState.Support;
-                                Kog.AudioController.Play_footstep(isLeft, parent.speedRatio);
-                            }
+                        //    if (footHit.distance < 0.2f) {
+                        if(isLeadingAirborne) {
+                            footLastAnchor = footTarget.position;
+                            footLastAnchorRotation = footTarget.rotation;
+                            footAnchor = footNextAnchor;
+                            footAnchorRotation = footNextAnchorRotation;
+                            tInStep = 0;
+                            isLeadingAirborne = false;
+                        } else {
+                            footLastAnchor = footTarget.position;
+                            footLastAnchorRotation = footTarget.rotation;
+                            footAnchor = footNextAnchor;
+                            footAnchorRotation = footNextAnchorRotation;
+                            tInStep = 0.5f;
                         }
-
+                        walkingState = WalkingState.Floating;
+                        //    }
+                        //}
+                        //footNextAnchor = hit.point;
+                        //// Calculate the foot rotation for the new ground normal.
+                        //targetRotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * parent.transform.rotation * anchorRestLocalRotation;
                     } else {
                         // Still airborne
                         standingOnRigidbody = null;
-                        hit.point = footRaycastSource.position + raycastDirection * kogAnimation_SO.Leg_airborne_length;
+                        if (otherLeg.isLeadingAirborne) {
+                            // this leg is leading
+                            footNextAnchor = footRaycastSource.position + raycastDirection * kogAnimation_SO.Leg_airborne_length;
+                        } else {
+                            isLeadingAirborne = true;
+                            // this leg is lagging
+                            footNextAnchor = footRaycastSource.position + Quaternion.AngleAxis(60, parent.waist.right) * raycastDirection * kogAnimation_SO.Leg_airborne_length;
+                        }
                     }
+                    targetRotation = calf.rotation * footRestLocalRotation;
 
                     // Lerp the old foot anchor to the new one.
                     //dir = hit.point - footNextAnchor;
@@ -732,9 +754,6 @@ public class KogAnimation : MonoBehaviour {
                     //if (dir.magnitude > delta)
                     //    footNextAnchor = footNextAnchor + dir.normalized * Time.deltaTime * parent.step_ToTarget_Delta;
                     //else
-                    footNextAnchor = hit.point;
-                    // Calculate the foot rotation for the new ground normal.
-                    targetRotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * parent.transform.rotation * anchorRestLocalRotation;
                     // Lerp the old foot desired rotation to the new desired rotation.
                     footNextAnchorRotation = Quaternion.Slerp(footNextAnchorRotation, targetRotation, Time.deltaTime * kogAnimation_SO.Step_ToTargetRotation_lerp);
                     hitToFoot = foot.position - hit.point;
