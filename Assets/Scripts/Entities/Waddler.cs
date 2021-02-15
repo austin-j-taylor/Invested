@@ -47,7 +47,7 @@ public class Waddler : Pacifiable {
             if (targetBlock != null)
                 targetBlock.IsATarget = false;
             targetBlock = value;
-            if(value != null)
+            if (value != null)
                 value.IsATarget = true;
         }
     }
@@ -66,6 +66,8 @@ public class Waddler : Pacifiable {
         };
         allomancer.CustomCenterOfAllomancy = grabber;
         allomancer.BaseStrength = 3;
+
+        MaxHealth = 2;
     }
 
     protected override void Start() {
@@ -260,11 +262,38 @@ public class Waddler : Pacifiable {
     }
 
     private void OnCollisionStay(Collision collision) {
-        OnCollisionEnter(collision);
+        CatchTarget(collision);
     }
     protected override void OnCollisionEnter(Collision collision) {
-        base.OnCollisionEnter(collision);
 
+        // Check if we are picking up a block
+        if (!CatchTarget(collision)) {
+            base.OnCollisionEnter(collision);
+        }
+    }
+
+    public override void OnHit(Vector3 sourceLocation, float damage) {
+        base.OnHit(sourceLocation, damage);
+
+        if (!isDead) {
+            // Play "hit" animation
+            waddlerAnimation.OnHit();
+        }
+    }
+
+    protected override void Die() {
+        if (!isDead) {
+            // Play "die" animation. Get knocked down, then get back up, pacified.
+            waddlerAnimation.Die();
+
+            base.Die();
+        }
+    }
+
+    // Catch/pick up a block while colliding with it
+    // Return true if a block was grabbed
+    private bool CatchTarget(Collision collision) {
+        // Check if we are picking up a block
         if (State == WaddlerState.PickingUp && allomancer.IsBurning) {
             if (collision.rigidbody != null) {
                 if (collision.gameObject.layer == GameManager.Layer_PickupableByWaddler) {
@@ -284,10 +313,13 @@ public class Waddler : Pacifiable {
                     grabJoint.constraintActive = true;
 
                     State_toCaught();
+                    return true;
                 }
             }
         }
+        return false;
     }
+
 
     #region callbacks
     /// <summary>
@@ -346,7 +378,7 @@ public class Waddler : Pacifiable {
             State_toGettingBlock();
         }
     }
-#endregion
+    #endregion
 
     #region transitions
     private void State_toIdle() {
@@ -407,5 +439,5 @@ public class Waddler : Pacifiable {
         State = WaddlerState.Thrown;
         waddlerAnimation.State_toThrown();
     }
-#endregion
+    #endregion
 }

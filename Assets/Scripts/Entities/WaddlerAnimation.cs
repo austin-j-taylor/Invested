@@ -12,31 +12,21 @@ public class WaddlerAnimation : MonoBehaviour {
         waddler = GetComponent<Waddler>();
     }
 
-    //public void LateUpdate() {
-    //    // Actions
-    //    switch (waddler.State) {
-    //        case WaddlerState.Idle:
-    //            break;
-    //        case WaddlerState.Suprised:
-    //            break;
-    //        case WaddlerState.GettingBlock:
-    //            break;
-    //        case WaddlerState.PickingUp:
-    //            break;
-    //        case WaddlerState.AnchoredPull:
-    //            break;
-    //        case WaddlerState.AnchoredPush:
-    //            break;
-    //        case WaddlerState.MovingToEnemy:
-    //            break;
-    //        case WaddlerState.Throwing:
-    //            break;
-    //    }
-    //}
+    public void OnHit() {
+        anim.SetTrigger("OnHit");
+    }
 
+    public void Die() {
+        anim.SetTrigger("Die");
+    }
+
+    #region transitions
     public void State_toIdle() {
+        anim.SetBool("PickingUp", false);
         anim.SetBool("Walking", false);
         anim.SetBool("Grabbed", false);
+        anim.SetBool("Anchored Pull", false);
+        anim.SetBool("Anchored Push", false);
     }
     public void State_toSurprised() {
         anim.SetTrigger("Surprised");
@@ -75,4 +65,5 @@ public class WaddlerAnimation : MonoBehaviour {
     public void State_toThrown() {
 
     }
+    #endregion
 }

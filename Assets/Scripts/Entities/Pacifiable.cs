@@ -7,6 +7,29 @@ using UnityEngine;
 /// </summary>
 public class Pacifiable : Entity {
 
+    protected float Armor { get; set; } = 10;
+    protected float PacifyTime { get; set; } = 2;
+
+    protected override void OnCollisionEnter(Collision collision) {
+        Vector3 thisNormal = collision.GetContact(0).normal;
+        if (Vector3.Project(collision.relativeVelocity, thisNormal).sqrMagnitude > Armor * Armor) {
+            OnHit(collision.GetContact(0).point - transform.position, collision.impulse.magnitude);
+        }
+    }
+
+    public override void OnHit(Vector3 sourceLocation, float damage) {
+        Debug.Log("Hit: " + damage);
+        damage = 1;
+        base.OnHit(sourceLocation, damage);
+    }
+
+    protected override void Die() {
+        base.Die();
+
+        Debug.Log("Died");
+    }
+
+
     /// <summary>
     /// returns a RaycastHit object if this entity has line of sight with the target's center of mass.
     /// </summary>
