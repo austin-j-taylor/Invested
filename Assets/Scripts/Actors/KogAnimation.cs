@@ -440,21 +440,21 @@ public class KogAnimation : MonoBehaviour {
         // Lower the waist to keep both Idle feet where their anchors are
         // move the waists's position to be at the same height as the heighest Idle foot.
 
-        float heighest = 0;
-        if (leftLeg.walkingState == Leg.WalkingState.Support) {
-            float height = Vector3.Distance(leftLeg.foot.position, leftLeg.footAnchor);
-            //Debug.Log("Left leg height: " + height);
-            if (height > heighest)
-                heighest = height;
-        }
-        if (rightLeg.walkingState == Leg.WalkingState.Support) {
-            float height = Vector3.Distance(rightLeg.foot.position, rightLeg.footAnchor);
-            //Debug.Log("Right leg height: " + height);
-            if (height > heighest)
-                heighest = height;
-        }
-        heighest = -heighest;
-        waistFallHeight = Mathf.Lerp(waistFallHeight, heighest, Time.deltaTime * kogAnimation_SO.Waist_bob_lerp);
+        //float heighest = 0;
+        //if (leftLeg.walkingState == Leg.WalkingState.Support) {
+        //    float height = Vector3.Distance(leftLeg.foot.position, leftLeg.footAnchor);
+        //    //Debug.Log("Left leg height: " + height);
+        //    if (height > heighest)
+        //        heighest = height;
+        //}
+        //if (rightLeg.walkingState == Leg.WalkingState.Support) {
+        //    float height = Vector3.Distance(rightLeg.foot.position, rightLeg.footAnchor);
+        //    //Debug.Log("Right leg height: " + height);
+        //    if (height > heighest)
+        //        heighest = height;
+        //}
+        //heighest = -heighest;
+        //waistFallHeight = Mathf.Lerp(waistFallHeight, heighest, Time.deltaTime * kogAnimation_SO.Waist_bob_lerp);
 
         pos += waist.parent.rotation * new Vector3(-feetAngle * speedRatio / 90 * kogAnimation_SO.Waist_sway, 0, 0);
 

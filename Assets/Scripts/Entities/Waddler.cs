@@ -24,6 +24,7 @@ public class Waddler : Pacifiable {
     private float timeinPickupMax = 5;
     private const float timeInSearchMax = 0.5f;
     private const float throwForce = 30;
+    private const float aim_spherecastRadius = 1;
     #endregion
 
     public enum WaddlerState { Idle, Suprised, GettingBlock, PickingUp, Caught, MovingToEnemy, AnchoredPull, AnchoredPush, Throwing, Thrown }
@@ -54,7 +55,7 @@ public class Waddler : Pacifiable {
             weight = 1
         };
         allomancer.CustomCenterOfAllomancy = grabber;
-        allomancer.BaseStrength = 2;
+        allomancer.BaseStrength = 3;
     }
 
     protected override void Start() {
@@ -86,7 +87,9 @@ public class Waddler : Pacifiable {
                 // If we have a target
                 if (targetBlock != null) {
                     // Start picking up when the block's very close
-                    if (Vector3.Distance(transform.position, targetBlock.transform.position) < radius_stopMovingStartPickup) {
+                    Vector3 diff = transform.position - targetBlock.transform.position;
+                    diff.y = 0;
+                    if (diff.magnitude < radius_stopMovingStartPickup) {
                         State_toPickingUp();
                     }
                 }
@@ -115,7 +118,7 @@ public class Waddler : Pacifiable {
                 } else {
                     // Start to throw the block at the enemy, if they are in range and in line of sight.
                     if (Vector3.Distance(transform.position, enemy.transform.position) < radius_throwAtEnemy
-                        && CanSee(eyes, enemy.Rb, out hit)) {
+                        && CanSeeSpherecast(eyes, enemy.Rb, out hit, aim_spherecastRadius)) {
                         State_toThrowing();
                     }
                 }
@@ -236,7 +239,6 @@ public class Waddler : Pacifiable {
             case WaddlerState.Thrown:
                 break;
         }
-        Debug.Log(allomancer.IsBurning);
     }
 
     private void FixedUpdate() {
