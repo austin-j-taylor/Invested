@@ -16,22 +16,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1084746644
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 581845816268780450}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b083df3923656e4b8dbd2801b9ba592, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prop_SO: {fileID: 11400000, guid: 033711e2dd8b3c3488e2fbe2b2b42814, type: 2}
-  netMass: 0
-  magneticMass: 0
-  calculateCOMFromColliders: 0
 --- !u!114 &1020281283905662800
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45,6 +29,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundMaterial: 2
+--- !u!114 &4011271590047959598
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 581845816268780450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c87e38573e8cdf44b50b872bc041eda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prop_SO: {fileID: 11400000, guid: 033711e2dd8b3c3488e2fbe2b2b42814, type: 2}
+  netMass: 0
+  magneticMass: 0
+  calculateCOMFromColliders: 0
 --- !u!65 &1084746646
 BoxCollider:
   m_ObjectHideFlags: 0

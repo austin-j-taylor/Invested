@@ -9,24 +9,24 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class PropsManager : MonoBehaviour {
 
-    //public List<Crate> CratesInScene { get; private set; } = new List<Crate>();
+    public List<Crate> CratesInScene { get; private set; } = new List<Crate>();
 
-    //private void Awake() {
-    //    SceneManager.sceneUnloaded += ClearBeforeSceneChange;
-    //}
+    private void Awake() {
+        SceneManager.sceneUnloaded += ClearBeforeSceneChange;
+    }
 
-    ///// <summary>
-    ///// Called when exiting a scene
-    ///// </summary>
-    ///// <param name="scene"></param>
-    //private void ClearBeforeSceneChange(Scene scene) {
-    //    CratesInScene.Clear();
-    //}
+    /// <summary>
+    /// Called when exiting a scene
+    /// </summary>
+    /// <param name="scene"></param>
+    private void ClearBeforeSceneChange(Scene scene) {
+        CratesInScene.Clear();
+    }
 
-    //public void AddProp(Crate crate) {
-    //    CratesInScene.Add(crate);
-    //}
-    //public void RemoveProp(Crate crate) {
-    //    CratesInScene.Remove(crate);
-    //}
+    public void AddProp(Crate crate) {
+        CratesInScene.Add(crate);
+    }
+    public void RemoveProp(Crate crate) {
+        CratesInScene.Remove(crate);
+    }
 }
