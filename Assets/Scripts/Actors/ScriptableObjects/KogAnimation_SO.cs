@@ -24,6 +24,8 @@ public class KogAnimation_SO : ScriptableObject {
     [SerializeField] private float crouch_max = 0.6f;
     [SerializeField] private float crouch_anchored_amount = .4f;
     [SerializeField] private float crouch_anchored_stepHeight = 0.1f;
+    [SerializeField] private float crouch_anchored_stepDistance = 0.13f;
+    [SerializeField] private float crouch_anchored_stepTime = 0.06f;
     [SerializeField] private float crouch_legSpreadMax = 0.4f, crouch_LegPoleSpreadMax = 0.5f;
     // Head
     [SerializeField] private float head_lookAt_lerp = 5;
@@ -76,6 +78,8 @@ public class KogAnimation_SO : ScriptableObject {
     public float Crouch_max => crouch_max;
     public float Crouch_anchored_amount => crouch_anchored_amount;
     public float Crouch_anchored_stepHeight => crouch_anchored_stepHeight;
+    public float Crouch_anchored_stepDistance => crouch_anchored_stepDistance;
+    public float Crouch_anchored_stepTime => crouch_anchored_stepTime;
     public float Crouch_legSpreadMax => crouch_legSpreadMax;
     public float Crouch_LegPoleSpreadMax => crouch_LegPoleSpreadMax;
     public float Head_lookAt_lerp => head_lookAt_lerp;

@@ -65,5 +65,8 @@ public class WaddlerAnimation : MonoBehaviour {
     public void State_toThrown() {
 
     }
+    public void State_toPacified() {
+        anim.SetTrigger("Pacified");
+    }
     #endregion
 }

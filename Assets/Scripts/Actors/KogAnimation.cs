@@ -284,9 +284,19 @@ public class KogAnimation : MonoBehaviour {
 
         distanceBetweenSteps = kogAnimation_SO.Step_defaultDistance + (speedRatio * kogAnimation_SO.Step_distance_withSpeed);
 
-        stepTime = kogAnimation_SO.StepTime_h * (speedRatio - kogAnimation_SO.StepTime_a) * (speedRatio - kogAnimation_SO.StepTime_b) * (speedRatio - kogAnimation_SO.StepTime_c);
-        distanceBetweenSteps = kogAnimation_SO.Distance_h * (speedRatio - kogAnimation_SO.Distance_a) * (speedRatio - kogAnimation_SO.Distance_b);
 
+        // Set crouching amount and step height
+        if (Kog.MovementController.State == KogMovementController.WalkingState.Anchored) {
+            crouching = kogAnimation_SO.Crouch_anchored_amount;
+            stepHeight = kogAnimation_SO.Crouch_anchored_stepHeight;
+            distanceBetweenSteps = kogAnimation_SO.Crouch_anchored_stepDistance;
+            stepTime = kogAnimation_SO.Crouch_anchored_stepTime;
+        } else {
+            crouching = 0;
+            stepHeight = kogAnimation_SO.Step_defaultHeight + speedRatio * kogAnimation_SO.Move_height_withSpeed;
+            distanceBetweenSteps = kogAnimation_SO.Distance_h * (speedRatio - kogAnimation_SO.Distance_a) * (speedRatio - kogAnimation_SO.Distance_b);
+            stepTime = kogAnimation_SO.StepTime_h * (speedRatio - kogAnimation_SO.StepTime_a) * (speedRatio - kogAnimation_SO.StepTime_b) * (speedRatio - kogAnimation_SO.StepTime_c);
+        }
     }
 
     /// <summary>
@@ -341,14 +351,6 @@ public class KogAnimation : MonoBehaviour {
         else if (speedRatio < 0.05f)
             movement = Vector3.forward;
 
-        // Set crouching amount and step height
-        if (Kog.MovementController.State == KogMovementController.WalkingState.Anchored) {
-            crouching = kogAnimation_SO.Crouch_anchored_amount;
-            stepHeight = kogAnimation_SO.Crouch_anchored_stepHeight;
-        } else {
-            crouching = 0;
-            stepHeight = kogAnimation_SO.Step_defaultHeight + speedRatio * kogAnimation_SO.Move_height_withSpeed;
-        }
 
         // Rotate the waist to reflect the current velocity, like you're leaning into the movement
         Vector3 cross = Vector3.Cross(transform.up, movement);

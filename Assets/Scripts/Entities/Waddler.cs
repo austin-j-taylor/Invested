@@ -27,7 +27,7 @@ public class Waddler : Pacifiable {
     private const float aim_spherecastRadius = 1;
     #endregion
 
-    public enum WaddlerState { Idle, Suprised, GettingBlock, PickingUp, Caught, MovingToEnemy, AnchoredPull, AnchoredPush, Throwing, Thrown }
+    public enum WaddlerState { Idle, Suprised, GettingBlock, PickingUp, Caught, MovingToEnemy, AnchoredPull, AnchoredPush, Throwing, Thrown, Pacified }
     [SerializeField]
     public WaddlerState State;
     private WaddlerAnimation waddlerAnimation;
@@ -44,11 +44,21 @@ public class Waddler : Pacifiable {
     private Crate TargetBlock {
         get => targetBlock;
         set {
-            if (targetBlock != null)
+            if (targetBlock != null) {
+                if (grabJoint != null) {
+                    Destroy(grabJoint);
+                    targetBlock.Rb.isKinematic = false;
+                    foreach (Collider col1 in collidersToIgnore)
+                        foreach (Collider col2 in targetBlock.Colliders)
+                            Physics.IgnoreCollision(col1, col2, false);
+
+                }
                 targetBlock.IsATarget = false;
+            }
             targetBlock = value;
-            if (value != null)
+            if (value != null) {
                 value.IsATarget = true;
+            }
         }
     }
     private Actor enemy;
@@ -82,75 +92,109 @@ public class Waddler : Pacifiable {
         // Waddler state machine Transitions
         switch (State) {
             case WaddlerState.Idle:
-                enemy = Player.CurrentActor;
+                if (isDead)
+                    State_toPacified();
+                else {
+                    enemy = Player.CurrentActor;
 
-                // Wait until the player is in range and visible
-                if (IMath.TaxiDistance(Player.CurrentActor.transform.position, transform.position) < radius_perception) {
-                    if (CanSee(eyes, enemy.Rb, out hit)) {
-                        State_toSurprised();
+                    // Wait until the player is in range and visible
+                    if (IMath.TaxiDistance(Player.CurrentActor.transform.position, transform.position) < radius_perception) {
+                        if (CanSee(eyes, enemy.Rb, out hit)) {
+                            State_toSurprised();
+                        }
                     }
                 }
                 break;
             case WaddlerState.Suprised:
+                if (isDead)
+                    State_toPacified();
                 // Transition called by animation
                 break;
             case WaddlerState.GettingBlock:
-                // If we have a target
-                if (TargetBlock != null) {
-                    // Start picking up when the block's very close
-                    Vector3 diff = transform.position - TargetBlock.transform.position;
-                    diff.y = 0;
-                    if (diff.magnitude < radius_stopMovingStartPickup) {
-                        State_toPickingUp();
+                if (isDead)
+                    State_toPacified();
+                else {
+                    // If we have a target
+                    if (TargetBlock != null) {
+                        // Start picking up when the block's very close
+                        Vector3 diff = transform.position - TargetBlock.transform.position;
+                        diff.y = 0;
+                        if (diff.magnitude < radius_stopMovingStartPickup) {
+                            State_toPickingUp();
+                        }
                     }
                 }
                 break;
             case WaddlerState.PickingUp:
-                // Stop moving, and start trying to pick up the block
-                // Wait for animation to call "Callback_PickingUp" to start pulling on the cube
-                // Wait for physics to call "OnCollisionEnter" to transition
-                // If the block gets knocked out of "range" or too much time has passed, give up.
-                if (timeInPickup >= timeinPickupMax || Vector3.Distance(transform.position, TargetBlock.transform.position) > radius_stopPickup) {
-                    State_toGettingBlock();
-                } else {
-                    timeInPickup += Time.deltaTime;
+                if (isDead)
+                    State_toPacified();
+                else {
+                    // Stop moving, and start trying to pick up the block
+                    // Wait for animation to call "Callback_PickingUp" to start pulling on the cube
+                    // Wait for physics to call "OnCollisionEnter" to transition
+                    // If the block gets knocked out of "range" or too much time has passed, give up.
+                    if (timeInPickup >= timeinPickupMax || Vector3.Distance(transform.position, TargetBlock.transform.position) > radius_stopPickup) {
+                        State_toGettingBlock();
+                    } else {
+                        timeInPickup += Time.deltaTime;
+                    }
                 }
                 break;
             case WaddlerState.Caught:
+                if (isDead)
+                    State_toPacified();
                 // Transition in Callback_Caught
                 break;
             case WaddlerState.MovingToEnemy:
-                // The block is picked up. Move towards the enemy (the player).
-                // If the player starts Pushing or Pulling on the cube, the waddler stops moving and anchors itself.
-                if (TargetBlock.IsBeingPushPulled && enemy.ActorIronSteel.IsPullingOnTarget(TargetBlock)) {
-                    State_toAnchoredPull();
-                } else if (TargetBlock.IsBeingPushPulled && enemy.ActorIronSteel.IsPushingOnTarget(TargetBlock)) {
-                    State_toAnchoredPush();
-                } else {
-                    // Start to throw the block at the enemy, if they are in range and in line of sight.
-                    if (Vector3.Distance(transform.position, enemy.transform.position) < radius_throwAtEnemy
-                        && CanSeeSpherecast(eyes, enemy.Rb, out hit, aim_spherecastRadius)) {
-                        State_toThrowing();
+                if (isDead)
+                    State_toPacified();
+                else {
+                    // The block is picked up. Move towards the enemy (the player).
+                    // If the player starts Pushing or Pulling on the cube, the waddler stops moving and anchors itself.
+                    if (TargetBlock.IsBeingPushPulled && enemy.ActorIronSteel.IsPullingOnTarget(TargetBlock)) {
+                        State_toAnchoredPull();
+                    } else if (TargetBlock.IsBeingPushPulled && enemy.ActorIronSteel.IsPushingOnTarget(TargetBlock)) {
+                        State_toAnchoredPush();
+                    } else {
+                        // Start to throw the block at the enemy, if they are in range and in line of sight.
+                        if (Vector3.Distance(transform.position, enemy.transform.position) < radius_throwAtEnemy
+                            && CanSeeSpherecast(eyes, enemy.Rb, out hit, aim_spherecastRadius)) {
+                            State_toThrowing();
+                        }
                     }
                 }
                 break;
             case WaddlerState.AnchoredPull:
-                // Wait for player to stop pulling on the block
-                if (!(TargetBlock.IsBeingPushPulled && enemy.ActorIronSteel.IsPullingOnTarget(TargetBlock))) {
-                    State_toMovingToEnemy();
+                if (isDead)
+                    State_toPacified();
+                else {
+                    // Wait for player to stop pulling on the block
+                    if (!(TargetBlock.IsBeingPushPulled && enemy.ActorIronSteel.IsPullingOnTarget(TargetBlock))) {
+                        State_toMovingToEnemy();
+                    }
                 }
                 break;
             case WaddlerState.AnchoredPush:
-                // Wait for player to stop pushing on the block
-                if (!(TargetBlock.IsBeingPushPulled && enemy.ActorIronSteel.IsPushingOnTarget(TargetBlock))) {
-                    State_toMovingToEnemy();
+                if (isDead)
+                    State_toPacified();
+                else {
+                    // Wait for player to stop pushing on the block
+                    if (!(TargetBlock.IsBeingPushPulled && enemy.ActorIronSteel.IsPushingOnTarget(TargetBlock))) {
+                        State_toMovingToEnemy();
+                    }
                 }
                 break;
             case WaddlerState.Throwing:
+                if (isDead)
+                    State_toPacified();
                 // Transition occurs in "Callback_Throwing"
                 break;
             case WaddlerState.Thrown:
+                if (isDead)
+                    State_toPacified();
                 // Transition occurs in "Callback_Thrown"
+                break;
+            case WaddlerState.Pacified:
                 break;
         }
 
@@ -248,6 +292,8 @@ public class Waddler : Pacifiable {
                 transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * angularSpeed_throwing);
                 break;
             case WaddlerState.Thrown:
+                break;
+            case WaddlerState.Pacified:
                 break;
         }
     }
@@ -356,15 +402,9 @@ public class Waddler : Pacifiable {
     /// </summary>
     public void Callback_Throwing() {
         if (State == WaddlerState.Throwing) {
-            Destroy(grabJoint);
-            TargetBlock.Rb.isKinematic = false;
-            foreach (Collider col1 in collidersToIgnore)
-                foreach (Collider col2 in TargetBlock.Colliders)
-                    Physics.IgnoreCollision(col1, col2, false);
-
-            TargetBlock.Rb.AddForce(throwForce * (TargetBlock.CenterOfMass - grabber.position).normalized, ForceMode.VelocityChange);
+            Crate oldTarget = targetBlock;
             TargetBlock = null;
-
+            oldTarget.Rb.AddForce(throwForce * (oldTarget.CenterOfMass - grabber.position).normalized, ForceMode.VelocityChange);
 
             State_toThrown();
         }
@@ -438,6 +478,14 @@ public class Waddler : Pacifiable {
 
         State = WaddlerState.Thrown;
         waddlerAnimation.State_toThrown();
+    }
+    private void State_toPacified() {
+        allomancer.StopBurning();
+        agent.SetDestination(transform.position);
+        TargetBlock = null;
+
+        State = WaddlerState.Pacified;
+        waddlerAnimation.State_toPacified();
     }
     #endregion
 }

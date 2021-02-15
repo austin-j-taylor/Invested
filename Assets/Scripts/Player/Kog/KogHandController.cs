@@ -63,6 +63,9 @@ public class KogHandController : MonoBehaviour {
         }
     }
 
+    private void OnCollisionStay(Collision collision) {
+        OnCollisionEnter(collision);
+    }
     private void OnCollisionEnter(Collision collision) {
         if (Kog.IronSteel.IronPulling && Kog.IronSteel.State == KogPullPushController.PullpushMode.Pullpushing && State == GrabState.Empty) {
             if (collision.rigidbody != null) {
