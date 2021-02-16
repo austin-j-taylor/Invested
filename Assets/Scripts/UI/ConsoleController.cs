@@ -18,19 +18,21 @@ public class ConsoleController : MonoBehaviour {
 
     private string lastSpeaker = "";
     private bool justPartitioned = true;
-    TextMeshProUGUI contents;
+    TextMeshProUGUI contents, previewText;
     StringBuilder builder;
     Scrollbar scrollbar;
 
     private Animator anim;
 
     void Awake() {
-        //previewText = transform.Find("ConsoleHeader/previewText").GetComponent<TextMeshProUGUI>();
+        previewText = transform.Find("PreviewText").GetComponent<TextMeshProUGUI>();
+        contents = transform.Find("Console/TextWindow/Template/Viewport/Contents").GetComponent<TextMeshProUGUI>();
+        scrollbar = transform.Find("Console/TextWindow/Template/Scrollbar").GetComponent<Scrollbar>();
         anim = GetComponent<Animator>();
 
         builder = new StringBuilder();
-        contents = transform.Find("LogWindow/Template/Viewport/LogText").GetComponent<TextMeshProUGUI>();
-        scrollbar = transform.Find("LogWindow/Template/Scrollbar").GetComponent<Scrollbar>();
+
+        contents.text = string.Empty;
     }
     public void Clear() {
         Close();
@@ -47,7 +49,8 @@ public class ConsoleController : MonoBehaviour {
     }
 
     public void Close() {
-        ClearLog();
+        //ClearLog();
+        previewText.text = string.Empty;
         anim.SetBool("IsOpen", false);
         IsOpen = false;
         if (!GameManager.MenusController.pauseMenu.IsOpen)
@@ -61,35 +64,24 @@ public class ConsoleController : MonoBehaviour {
             Open();
     }
 
-    public void ClearLog() {
-        StopAllCoroutines();
-    }
+    //public void ClearLog() {
+    //    StopAllCoroutines();
+    //}
 
-    // Log text to the console
-    public void Log(string text) {
-        //consoleText.text += text;
-    }
-    public void Log(char character) {
-        //consoleText.text += character;
-    }
-    public void LogLine(string text) {
-        //consoleText.text += text + System.Environment.NewLine;
-    }
+    //// Enters a "Response" that prints out over time
+    //public void TypeInLine(string text, Interfaceable interf) {
+    //    StartCoroutine(TypeInLineHelper(text, interf));
+    //}
 
-    // Enters a "Response" that prints out over time
-    public void TypeInLine(string text, Interfaceable interf) {
-        StartCoroutine(TypeInLineHelper(text, interf));
-    }
-
-    private IEnumerator TypeInLineHelper(string text, Interfaceable interf) {
-        for (int i = 0; i < text.Length; i++) {
-            Log(text[i]);
-            yield return new WaitForSeconds(typingSpeed);
-        }
-        Log(System.Environment.NewLine);
-        yield return new WaitForSeconds(delayAfterEntry);
-        interf.ReceivedReply = true;
-    }
+    //private IEnumerator TypeInLineHelper(string text, Interfaceable interf) {
+    //    for (int i = 0; i < text.Length; i++) {
+    //        Log(text[i]);
+    //        yield return new WaitForSeconds(typingSpeed);
+    //    }
+    //    Log(System.Environment.NewLine);
+    //    yield return new WaitForSeconds(delayAfterEntry);
+    //    interf.ReceivedReply = true;
+    //}
 
     /// <summary>
     /// Logs a line to the Text Log under the given speaker
@@ -106,6 +98,8 @@ public class ConsoleController : MonoBehaviour {
         }
         builder.AppendLine(line);
         contents.text = builder.ToString();
+
+        previewText.text = line;
     }
     /// <summary>
     ///  Used to separate parts of the log, like ends of conversations.

@@ -100,7 +100,7 @@ public class Environment_Tutorial1 : EnvironmentCinematic {
         if (Player.CurrentActor.ActorIronSteel.rb.velocity.sqrMagnitude < .25f) {
             HUD.MessageOverlayCinematic.FadeIn(HowToMove + " to move.");
 
-            while (Player.PlayerInstance.GetComponent<Rigidbody>().velocity.sqrMagnitude < .25f)
+            while (Player.CurrentActor.Rb.velocity.sqrMagnitude < .25f)
                 yield return null;
 
             HUD.MessageOverlayCinematic.FadeOut();

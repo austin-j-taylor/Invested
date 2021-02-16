@@ -20,12 +20,15 @@ public class MenusController : MonoBehaviour {
         pauseMenu = GameManager.Canvas.GetComponentInChildren<PauseMenu>();
         settingsMenu = GameManager.Canvas.GetComponentInChildren<SettingsMenu>();
         mainMenu = GameManager.Canvas.GetComponentInChildren<MainMenu>();
+        mainMenu = GameManager.Canvas.GetComponentInChildren<MainMenu>();
     }
 
     // Close certain menus when they're open and the player hits Escape
     private void LateUpdate() {
         if (Keybinds.ExitMenu()) { // B or Escape
-            if(pauseMenu.IsOpen) {
+            if(HUD.ConsoleController.IsOpen) {
+                HUD.ConsoleController.Close();
+            } else if(pauseMenu.IsOpen) {
                 if (settingsMenu.IsOpen) {
                     settingsMenu.BackAndSaveSettings();
                     //if (settingsMenu.BackAndSaveSettings())
