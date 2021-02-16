@@ -55,7 +55,7 @@ public class PauseMenu : Menu {
         CameraController.UnlockCamera();
         Time.timeScale = 0f;
         GameManager.AudioManager.SetMasterPitch(0);
-        HUD.TextLogController.Close();
+        HUD.ConsoleController.Close();
         HUD.DisableHUD();
 
         // Update blue lines for this frame
@@ -121,7 +121,7 @@ public class PauseMenu : Menu {
 
     private void ClickTextLog() {
         Close();
-        HUD.TextLogController.Open();
+        HUD.ConsoleController.Open();
     }
 
     private void ClickReset() {

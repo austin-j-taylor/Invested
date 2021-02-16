@@ -79,8 +79,8 @@ public class Player : MonoBehaviour {
         if (Keybinds.ToggleHelpOverlay()) {
             HUD.HelpOverlayController.Toggle();
         }
-        if (!GameManager.MenusController.pauseMenu.IsOpen && Keybinds.ToggleTextLog()) {
-            HUD.TextLogController.Toggle();
+        if (!GameManager.MenusController.pauseMenu.IsOpen && Keybinds.ToggleConsole()) {
+            HUD.ConsoleController.Toggle();
         }
         // Changing perspective
         if (Keybinds.TogglePerspective()) {

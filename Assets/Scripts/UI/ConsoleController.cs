@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using TMPro;
+using System.Text;
 
 /// <summary>
 /// Controls the HUD element for the "Console" which the player uses to interact with Interfaceable circuit elements.
@@ -12,21 +14,23 @@ public class ConsoleController : MonoBehaviour {
 
     public bool IsOpen { get; private set; }
 
-    private Text headerTextLeft;
-    private Text headerTextRight;
-    private Text consoleTextLeft;
-    private Text consoleTextRight;
+    //private TextMeshProUGUI previewText;
+
+    private string lastSpeaker = "";
+    private bool justPartitioned = true;
+    TextMeshProUGUI contents;
+    StringBuilder builder;
+    Scrollbar scrollbar;
 
     private Animator anim;
 
-    private int lineCount;
-
     void Awake() {
-        headerTextLeft = transform.Find("ConsoleHeader/HeaderTextLeft").GetComponent<Text>();
-        consoleTextLeft = headerTextLeft.transform.Find("ConsoleTextLeft").GetComponentInChildren<Text>();
-        headerTextRight = transform.Find("ConsoleHeader/HeaderTextRight").GetComponent<Text>();
-        consoleTextRight = headerTextRight.transform.Find("ConsoleTextRight").GetComponentInChildren<Text>();
+        //previewText = transform.Find("ConsoleHeader/previewText").GetComponent<TextMeshProUGUI>();
         anim = GetComponent<Animator>();
+
+        builder = new StringBuilder();
+        contents = transform.Find("LogWindow/Template/Viewport/LogText").GetComponent<TextMeshProUGUI>();
+        scrollbar = transform.Find("LogWindow/Template/Scrollbar").GetComponent<Scrollbar>();
     }
     public void Clear() {
         Close();
@@ -38,39 +42,38 @@ public class ConsoleController : MonoBehaviour {
     public void Open() {
         anim.SetBool("IsOpen", true);
         IsOpen = true;
+        if (SettingsMenu.settingsGameplay.controlScheme != JSONSettings_Gameplay.Gamepad)
+            CameraController.UnlockCamera();
     }
 
     public void Close() {
         ClearLog();
         anim.SetBool("IsOpen", false);
         IsOpen = false;
+        if (!GameManager.MenusController.pauseMenu.IsOpen)
+            CameraController.LockCamera();
+    }
+
+    public void Toggle() {
+        if (IsOpen)
+            Close();
+        else
+            Open();
     }
 
     public void ClearLog() {
         StopAllCoroutines();
-        lineCount = 0;
-        headerTextLeft.text = "Console";
-        consoleTextLeft.text = string.Empty;
-        RefreshRightText();
     }
 
     // Log text to the console
     public void Log(string text) {
-        consoleTextLeft.text += text;
-        if (text.Contains(System.Environment.NewLine))
-            lineCount++;
-        RefreshRightText();
+        //consoleText.text += text;
     }
     public void Log(char character) {
-        consoleTextLeft.text += character;
-        if (character == System.Environment.NewLine[0]) // rip to your windows but i'm different
-            lineCount++;
-        RefreshRightText();
+        //consoleText.text += character;
     }
     public void LogLine(string text) {
-        consoleTextLeft.text += text + System.Environment.NewLine;
-        lineCount++;
-        RefreshRightText();
+        //consoleText.text += text + System.Environment.NewLine;
     }
 
     // Enters a "Response" that prints out over time
@@ -88,8 +91,32 @@ public class ConsoleController : MonoBehaviour {
         interf.ReceivedReply = true;
     }
 
-    private void RefreshRightText() {
-        headerTextRight.text = headerTextLeft.text.ToLower();
-        consoleTextRight.text = consoleTextLeft.text.ToLower();
+    /// <summary>
+    /// Logs a line to the Text Log under the given speaker
+    /// </summary>
+    public void LogLine(string speaker, string line) {
+        justPartitioned = false;
+        if (speaker != lastSpeaker) {
+            if (speaker != "") {
+                builder.Append("$ ");
+                builder.Append(speaker);
+                builder.Append(" > ");
+            }
+            lastSpeaker = speaker;
+        }
+        builder.AppendLine(line);
+        contents.text = builder.ToString();
+    }
+    /// <summary>
+    ///  Used to separate parts of the log, like ends of conversations.
+    /// </summary>
+    public void LogPartition() {
+        if (!justPartitioned) {
+            builder.AppendLine("/////////////////////////////////////////////////////");
+            lastSpeaker = "";
+            justPartitioned = true;
+
+            contents.text = builder.ToString();
+        }
     }
 }

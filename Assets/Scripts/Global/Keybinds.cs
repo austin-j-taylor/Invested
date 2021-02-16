@@ -317,12 +317,12 @@ public class Keybinds : MonoBehaviour {
         }
     }
 
-    public static bool ToggleTextLog() {
+    public static bool ToggleConsole() {
         if (SettingsMenu.settingsGameplay.UsingGamepad)
             //return Input.GetButtonDown("GamepadBack");
             return false;
         else
-            return Input.GetKeyDown(KeyCode.L);
+            return Input.GetKeyDown(KeyCode.L) || Input.GetKeyDown(KeyCode.Return);
     }
 
     public static bool ZincTimeDown() {

@@ -37,7 +37,6 @@ public class HUD : MonoBehaviour {
     public static HelpOverlayController HelpOverlayController { get; private set; }
     public static ConsoleController ConsoleController { get; private set; }
     public static ConversationHUDController ConversationHUDController { get; private set; }
-    public static TextLogController TextLogController { get; private set; }
     public static LoadingFadeController LoadingFadeController { get; private set; }
 
     void Awake() {
@@ -58,7 +57,6 @@ public class HUD : MonoBehaviour {
         ControlWheelController = GetComponentInChildren<ControlWheelController>();
         ConsoleController = GetComponentInChildren<ConsoleController>();
         ConversationHUDController = GetComponentInChildren<ConversationHUDController>();
-        TextLogController = GetComponentInChildren<TextLogController>();
         LoadingFadeController = GetComponentInChildren<LoadingFadeController>();
         SceneManager.sceneUnloaded += ClearHUDBeforeSceneChange;
         SceneManager.sceneLoaded += ClearAfterSceneChange;
@@ -90,7 +88,7 @@ public class HUD : MonoBehaviour {
     // Reset the hud when the scene unloads.
     public void ClearHUDBeforeSceneChange(Scene scene) {
         ResetHUD();
-        TextLogController.LogPartition();
+        ConsoleController.LogPartition();
     }
 
     // Make HUD elements visible
@@ -119,7 +117,6 @@ public class HUD : MonoBehaviour {
                 ControlWheelController.Clear();
                 ConsoleController.Clear();
                 ConversationHUDController.Clear();
-                TextLogController.Clear();
                 LoadingFadeController.Clear();
                 Crosshair.Clear();
                 anim.SetBool("ControlWheelVisible", false);

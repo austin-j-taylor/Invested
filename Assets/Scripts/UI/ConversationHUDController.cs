@@ -388,7 +388,7 @@ public class ConversationHUDController : MonoBehaviour {
                         yield return null;
                     }
                     // wipe the text on the screen and send it to the Text Log
-                    HUD.TextLogController.LogLine(currentSpeakerString, conversationText.text);
+                    HUD.ConsoleController.LogLine(currentSpeakerString, conversationText.text);
                     advanceSymbol.SetActive(false);
                     advanceText.text = "";
                     parsed.Clear();
@@ -398,7 +398,7 @@ public class ConversationHUDController : MonoBehaviour {
             }
         }
         // This conversation is over.
-        HUD.TextLogController.LogPartition();
+        HUD.ConsoleController.LogPartition();
         Close();
     }
 

@@ -30,7 +30,7 @@ public class MessageOverlayCinematic : MonoBehaviour {
 
     public void SetText(string text) {
         messageText.text = text;
-        HUD.TextLogController.LogLine("", text);
+        HUD.ConsoleController.LogLine("System", text);
     }
 
     // Fades newText into messageText on the screen.
