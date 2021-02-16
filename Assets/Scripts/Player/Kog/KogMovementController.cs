@@ -21,6 +21,8 @@ public class KogMovementController : MonoBehaviour {
     //private float rotationalTopSpeed = 5;
     //[SerializeField]
     //private float rotationalAcceleration = 2.5f;
+    [SerializeField]
+    private PhysicMaterial anchoredMaterial = null, movingMaterial = null;
 
     [SerializeField]
     private float jumpHeight = 900;
@@ -36,6 +38,8 @@ public class KogMovementController : MonoBehaviour {
     #endregion
 
     private Rigidbody rb;
+    [SerializeField]
+    private Collider bodyCollider = null, lifterCollider = null;
     private Vector3 lastInput; // The last horizontal/vertical movement command sent to the player
     private Vector3 bodyLookAtDirection;
     private PIDController_Vector3 pidSpeed;
@@ -190,12 +194,21 @@ public class KogMovementController : MonoBehaviour {
                     }
                     break;
             }
-
-            if(wantToMove)
+            // Actions
+            if(wantToMove) {
                 lastMoveDirection = Movement;
+                bodyCollider.material = movingMaterial;
+                lifterCollider.material = movingMaterial;
+            } else {
+                if (IsGrounded) {
+                    bodyCollider.material = anchoredMaterial;
+                    lifterCollider.material = anchoredMaterial;
+                } else {
+                    bodyCollider.material = movingMaterial;
+                    lifterCollider.material = movingMaterial;
+                }
+            }
 
-            pidSpeed.SetParams(speed_P, 0, 0, speed_mD);
-            pidOrientation.SetParams(orientation_P, 0, 0);
 
             // PID control for speed 
             Vector3 target = Vector3.zero;

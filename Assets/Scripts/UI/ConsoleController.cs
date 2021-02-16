@@ -88,14 +88,14 @@ public class ConsoleController : MonoBehaviour {
     /// </summary>
     public void LogLine(string speaker, string line) {
         justPartitioned = false;
-        if (speaker != lastSpeaker) {
-            if (speaker != "") {
-                builder.Append("$ ");
-                builder.Append(speaker);
-                builder.Append(" > ");
-            }
-            lastSpeaker = speaker;
+        //if (speaker != lastSpeaker) {
+        if (speaker != "") {
+            builder.Append("$ ");
+            builder.Append(speaker);
+            builder.Append(" > ");
         }
+        lastSpeaker = speaker;
+        //}
         builder.AppendLine(line);
         contents.text = builder.ToString();
 
