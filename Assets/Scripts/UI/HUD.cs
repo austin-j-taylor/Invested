@@ -31,6 +31,7 @@ public class HUD : MonoBehaviour {
     public static ZincMeterController ZincMeterController { get; private set; }
     public static ThrowingAmmoMeter ThrowingAmmoMeter { get; private set; }
     public static TargetOverlayController TargetOverlayController { get; private set; }
+    public static TargetEntityController TargetEntityController { get; private set; }
     public static ControlWheelController ControlWheelController { get; private set; }
     public static MessageOverlayDescriptive MessageOverlayDescriptive { get; private set; }
     public static MessageOverlayCinematic MessageOverlayCinematic { get; private set; }
@@ -48,6 +49,7 @@ public class HUD : MonoBehaviour {
         Crosshair = GetComponentInChildren<CrosshairController>();
         BurnPercentageMeter = GetComponentInChildren<BurnPercentageMeter>();
         TargetOverlayController = GetComponentInChildren<TargetOverlayController>();
+        TargetEntityController = GetComponentInChildren<TargetEntityController>();
         ThrowingAmmoMeter = GetComponentInChildren<ThrowingAmmoMeter>();
         MessageOverlayDescriptive = GetComponentInChildren<MessageOverlayDescriptive>();
         MessageOverlayCinematic = GetComponentInChildren<MessageOverlayCinematic>();
@@ -108,6 +110,7 @@ public class HUD : MonoBehaviour {
             if (BurnPercentageMeter) {
                 BurnPercentageMeter.Clear();
                 TargetOverlayController.Clear();
+                TargetEntityController.Clear();
                 ThrowingAmmoMeter.Clear();
                 MetalReserveMeters.Clear();
                 MessageOverlayDescriptive.Clear();

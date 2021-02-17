@@ -42,6 +42,7 @@ public class GameManager : MonoBehaviour {
     // Holds all Magnetics and Allomancers in scene
     public static List<Allomancer> Allomancers { get; private set; } = new List<Allomancer>();
     public static List<Magnetic> MagneticsInScene { get; private set; } = new List<Magnetic>();
+    public static List<Entity> EntitiesInScene { get; private set; } = new List<Entity>();
 
     #region layers
     // Masks that represent certain layers to ignore for Raycasting
@@ -107,6 +108,7 @@ public class GameManager : MonoBehaviour {
     /// <param name="scene"></param>
     private void ClearBeforeSceneChange(Scene scene) {
         MagneticsInScene.Clear();
+        EntitiesInScene.Clear();
         foreach (Transform child in MetalLinesTransform) {
             Destroy(child.gameObject);
         }

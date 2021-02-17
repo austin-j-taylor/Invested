@@ -18,7 +18,7 @@ public class TargMobileController : Entity {
     }
     void Update() {
         if (!isDead) {
-            if (rb.velocity.magnitude > .1f || true) {
+            if (Rb.velocity.magnitude > .1f || true) {
                 anim.SetBool("IsMoving", true);
             } else {
                 anim.SetBool("IsMoving", false);

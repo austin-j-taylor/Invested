@@ -68,7 +68,6 @@ public class Waddler : Pacifiable {
     private void Awake() {
         allomancer = GetComponentInChildren<NonPlayerPushPullController>();
         waddlerAnimation = GetComponentInChildren<WaddlerAnimation>();
-        rb = GetComponentInChildren<Rigidbody>();
         agent = GetComponentInChildren<NavMeshAgent>();
         grabberConstraintSource = new ConstraintSource {
             sourceTransform = grabber,
@@ -77,6 +76,7 @@ public class Waddler : Pacifiable {
         allomancer.CustomCenterOfAllomancy = grabber;
         allomancer.BaseStrength = 3;
 
+        Hostile = true;
         MaxHealth = 2;
     }
 
@@ -480,6 +480,7 @@ public class Waddler : Pacifiable {
         waddlerAnimation.State_toThrown();
     }
     private void State_toPacified() {
+        Hostile = false;
         allomancer.StopBurning();
         agent.SetDestination(transform.position);
         TargetBlock = null;

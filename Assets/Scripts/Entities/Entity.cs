@@ -37,18 +37,21 @@ public class Entity : MonoBehaviour {
                 maxHealth = 0;
         }
     }
+    public bool Hostile { get; protected set; } = false;
 
     //protected float hitstun;
     //private float lastHitTime;
     protected bool isDead;
     protected BoxCollider[] hitboxes;
-    protected Rigidbody rb;
+    public Rigidbody Rb { get; private set; }
+    // Does not account for the rotation of the object.
+    public Vector3 FuzzyGlobalCenterOfMass => Rb.transform.position + Rb.centerOfMass;
 
     private bool hitThisFrame;
 
     protected virtual void Start() {
         hitboxes = GetComponentsInChildren<BoxCollider>();
-        rb = GetComponentInChildren<Rigidbody>();
+        Rb = GetComponentInChildren<Rigidbody>();
         isDead = false;
         hitThisFrame = false;
         //hitstun = 0f;
@@ -78,5 +81,15 @@ public class Entity : MonoBehaviour {
 
     protected virtual void Die() {
         isDead = true;
+    }
+
+    private void OnDestroy() {
+        GameManager.EntitiesInScene.Remove(this);
+    }
+    private void OnDisable() {
+        GameManager.EntitiesInScene.Remove(this);
+    }
+    private void OnEnable() {
+        GameManager.EntitiesInScene.Add(this);
     }
 }
