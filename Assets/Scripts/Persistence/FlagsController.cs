@@ -102,15 +102,15 @@ public class FlagsController : MonoBehaviour {
                 break;
             case "pwr_coins":
                 Player.CanThrowCoins = true;
-                HUD.ControlWheelController.RefreshLocked();
+                HUD.ControlWheelController.RefreshOptions();
                 break;
             case "wheel_area":
                 Player.CanThrowCoins = true;
-                HUD.ControlWheelController.RefreshLocked();
+                HUD.ControlWheelController.RefreshOptions();
                 break;
             case "wheel_bubble":
                 Player.CanThrowCoins = true;
-                HUD.ControlWheelController.RefreshLocked();
+                HUD.ControlWheelController.RefreshOptions();
                 break;
         }
 
@@ -137,7 +137,7 @@ public class FlagsController : MonoBehaviour {
                 field.SetValue(instance, false);
         }
         instance.SaveJSON();
-        HUD.ControlWheelController.RefreshLocked();
+        HUD.ControlWheelController.RefreshOptions();
     }
     #endregion
 }

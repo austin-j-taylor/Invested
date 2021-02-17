@@ -152,13 +152,11 @@ public class KogPullPushController : ActorPullPushController {
     }
     private void State_ToIdle() {
         State = PullpushMode.Idle;
-        HUD.Crosshair.Hide();
         CustomCenterOfAllomancy = boneCenterOfMass;
     }
     private void State_ToBurning() {
         CustomCenterOfAllomancy = boneCenterOfMass;
         State = PullpushMode.Burning;
-
     }
     private void State_ToPullpushing() {
         State = PullpushMode.Pullpushing;

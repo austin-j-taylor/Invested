@@ -183,6 +183,7 @@ public class Player : MonoBehaviour {
         }
         CurrentActor = actor;
         actor.ActorIronSteel.StrengthModifier = feelingScale;
+        HUD.ControlWheelController.RefreshOptions();
     }
     #endregion
 

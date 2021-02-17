@@ -48,7 +48,7 @@ public class ActorPullPushController : AllomanticIronSteel {
     // These are displayed in the Burn Rate Meter
     private float ironBurnPercentageLerp = 0;
     private float steelBurnPercentageLerp = 0;
-    private float areaRadiusLerp = 0;
+    public float AreaRadiusLerp { get; private set; } = 0;
     // for Magnitude control style
     private float forceMagnitudeTarget = 600;
     #endregion
@@ -532,19 +532,7 @@ public class ActorPullPushController : AllomanticIronSteel {
         ironBurnPercentageLerp = 1;
         steelBurnPercentageLerp = 1;
 
-        switch (Mode) {
-            case ControlMode.Manual:
-                HUD.Crosshair.SetManual();
-                break;
-            case ControlMode.Coinshot:
-                HUD.Crosshair.SetCoinshot();
-                break;
-            case ControlMode.Area:
-                areaRadiusLerp = selectionAreaRadius;
-                HUD.Crosshair.SetCircleRadius(areaRadiusLerp);
-                HUD.Crosshair.SetArea();
-                break;
-        }
+        AreaRadiusLerp = selectionAreaRadius;
         forceMagnitudeTarget = 600;
         if (SettingsMenu.settingsGraphics.renderblueLines == 1)
             EnableRenderingBlueLines();
@@ -570,7 +558,6 @@ public class ActorPullPushController : AllomanticIronSteel {
             GamepadController.SetRumble(0, 0);
             DisableRenderingBlueLines();
 
-            HUD.Crosshair.SetManual();
             RefreshHUD();
         }
     }
@@ -958,12 +945,11 @@ public class ActorPullPushController : AllomanticIronSteel {
     /// </summary>
     /// <param name="targetRadius">the desired radius</param>
     private void LerpToAreaSize(float targetRadius) {
-        float diff = targetRadius - areaRadiusLerp;
+        float diff = targetRadius - AreaRadiusLerp;
         if (diff < 0)
             diff = -diff;
         if (diff > .001f) {
-            areaRadiusLerp = Mathf.Lerp(areaRadiusLerp, targetRadius, areaLerpConstant);
-            HUD.Crosshair.SetCircleRadius(areaRadiusLerp);
+            AreaRadiusLerp = Mathf.Lerp(AreaRadiusLerp, targetRadius, areaLerpConstant);
         }
     }
 
@@ -999,7 +985,6 @@ public class ActorPullPushController : AllomanticIronSteel {
             }
         } else {
             HUD.BurnPercentageMeter.Clear();
-            HUD.Crosshair.Clear();
         }
     }
 
@@ -1015,7 +1000,6 @@ public class ActorPullPushController : AllomanticIronSteel {
             }
         } else {
             HUD.BurnPercentageMeter.Clear();
-            HUD.Crosshair.Clear();
         }
         HUD.TargetOverlayController.Clear();
     }
@@ -1055,7 +1039,6 @@ public class ActorPullPushController : AllomanticIronSteel {
         Mode = ControlMode.Manual;
         PullTargets.Size = TargetArray.smallArrayCapacity;
         PushTargets.Size = TargetArray.smallArrayCapacity;
-        HUD.Crosshair.SetManual();
         HUD.BurnPercentageMeter.SetMetalLineCountTextManual();
         StartBurning();
     }
@@ -1067,8 +1050,7 @@ public class ActorPullPushController : AllomanticIronSteel {
         Mode = ControlMode.Area;
         PullTargets.Size = TargetArray.largeArrayCapacity;
         PushTargets.Size = TargetArray.largeArrayCapacity;
-        //areaRadiusLerp = 0;
-        HUD.Crosshair.SetArea();
+        //AreaRadiusLerp = 0;
         StartBurning();
     }
     public void SetControlModeCoinshot() {
@@ -1079,7 +1061,6 @@ public class ActorPullPushController : AllomanticIronSteel {
         Mode = ControlMode.Coinshot;
         PullTargets.Size = TargetArray.smallArrayCapacity;
         PushTargets.Size = TargetArray.smallArrayCapacity;
-        HUD.Crosshair.SetCoinshot();
         HUD.BurnPercentageMeter.SetMetalLineCountTextManual();
         StartBurning();
     }

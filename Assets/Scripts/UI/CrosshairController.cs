@@ -12,6 +12,9 @@ public class CrosshairController : MonoBehaviour {
     private const int top = 0, left = 1, bottom = 2, right = 3, size = 4;
     private const float alphaHigh = .75f, alphaLow = .25f, alphaMedium = 0.5f;
 
+    private enum CrosshairState { None, Manual, Area, Coinshot, StopBurning };
+
+    private CrosshairState state;
     private Image circle;
     private Color blueColor, hairsColor, goldColor = HUD.goldColor;
     private Image[] hairs;
@@ -40,47 +43,107 @@ public class CrosshairController : MonoBehaviour {
 
         blueColor = fills[top].color;
         hairsColor = hairs[top].color;
+
+        state = CrosshairState.None;
+        Hide();
     }
 
-    public void Clear() {
-        SetFillPercent(0);
-        circle.material.SetFloat("_RatioLow", 1);
-    }
+    private void LateUpdate() {
+        // Change crosshair to reflect current actor's control mode
+        switch (Player.CurrentActor.Type) {
+            case Actor.ActorType.Prima:
+                switch (state) {
+                    case CrosshairState.None:
+                        State_toManual();
+                        break;
+                    case CrosshairState.Manual:
+                        if (Player.CurrentActor.ActorIronSteel.IsBurning) {
+                            switch (Player.CurrentActor.ActorIronSteel.Mode) {
+                                case ActorPullPushController.ControlMode.Area:
+                                    State_toArea();
+                                    break;
+                                case ActorPullPushController.ControlMode.Coinshot:
+                                    State_toCoinshot();
+                                    break;
+                            }
+                        }
+                        break;
+                    case CrosshairState.Area:
+                        if (Player.CurrentActor.ActorIronSteel.IsBurning) {
+                            switch (Player.CurrentActor.ActorIronSteel.Mode) {
+                                case ActorPullPushController.ControlMode.Manual:
+                                    State_toManual();
+                                    break;
+                                case ActorPullPushController.ControlMode.Coinshot:
+                                    State_toCoinshot();
+                                    break;
+                            }
+                        } else {
+                            State_toStopBurning();
+                        }
+                        break;
+                    case CrosshairState.Coinshot:
+                        if (Player.CurrentActor.ActorIronSteel.IsBurning) {
+                            switch (Player.CurrentActor.ActorIronSteel.Mode) {
+                                case ActorPullPushController.ControlMode.Manual:
+                                    State_toManual();
+                                    break;
+                                case ActorPullPushController.ControlMode.Area:
+                                    State_toArea();
+                                    break;
+                            }
+                        } else {
+                            State_toStopBurning();
+                        }
+                        break;
+                    case CrosshairState.StopBurning:
+                        State_toManual();
+                        break;
+                }
+                break;
+            case Actor.ActorType.Kog:
+                switch (state) {
+                    case CrosshairState.None:
+                        break;
+                    case CrosshairState.Manual:
+                        State_toNone();
+                        break;
+                    case CrosshairState.Area:
+                        State_toNone();
+                        break;
+                    case CrosshairState.Coinshot:
+                        State_toNone();
+                        break;
+                    case CrosshairState.StopBurning:
+                        State_toManual();
+                        break;
+                }
+                break;
+        }
 
-    public void Hide() {
-        hairsColor.a = 0;
-        for (int i = 0; i < size; i++) {
-            hairs[i].color = hairsColor;
+        // Actions
+        switch (state) {
+            case CrosshairState.None:
+                break;
+            case CrosshairState.Manual:
+                SetFillPercent(Mathf.Max(Player.CurrentActor.ActorIronSteel.IronBurnPercentageTarget, Player.CurrentActor.ActorIronSteel.SteelBurnPercentageTarget));
+                break;
+            case CrosshairState.Area:
+                SetFillPercent(Mathf.Max(Player.CurrentActor.ActorIronSteel.IronBurnPercentageTarget, Player.CurrentActor.ActorIronSteel.SteelBurnPercentageTarget));
+                SetCircleRadius(Player.CurrentActor.ActorIronSteel.AreaRadiusLerp);
+                break;
+            case CrosshairState.Coinshot:
+                SetFillPercent(Mathf.Max(Player.CurrentActor.ActorIronSteel.IronBurnPercentageTarget, Player.CurrentActor.ActorIronSteel.SteelBurnPercentageTarget));
+                break;
         }
     }
 
-    public void Show() {
-        StopAllCoroutines();
-        hairsColor.a = alphaMedium;
-        for (int i = 0; i < size; i++) {
-            hairs[i].color = hairsColor;
-        }
+    #region transitions
+    private void State_toNone() {
+        Clear();
+        Hide();
     }
-
-    public void SetFillPercent(float rate) {
-        for (int i = 0; i < size; i++) {
-            fills[i].fillAmount = rate;
-        }
-        circle.material.SetFloat("_Fill", rate);
-    }
-
-    public void SetCircleRadius(float screenPercentage) {
-        // screenPercentage: % of the vertical screen occupied.
-        // i.e. if screenPercentage = 25%, then the middle 1/4 of the screen is occupied.
-        // The Circle takes up 1080 * 25% * sqrt(2) = 678.82250, which is at 25% when radius = .5.
-        float radius = screenPercentage / PrimaPullPushController.maxAreaRadius / 2;
-
-        circle.material.SetFloat("_Radius", radius);
-    }
-
-    #region crosshairModes
-    // Sets the crosshairs for the "Manual" control mode
-    public void SetManual() {
+    private void State_toManual() {
         Show();
         //circle.gameObject.SetActive(false);
         blueColor.a = alphaHigh;
@@ -89,25 +152,32 @@ public class CrosshairController : MonoBehaviour {
             fills[i].color = blueColor;
         }
         StartCoroutine(LerpToCircleRatio(1));
+
+        state = CrosshairState.Manual;
     }
-    // Sets the crosshairs for the "Area" control mode
-    public void SetArea() {
+    private void State_toArea() {
         Show();
         //circle.gameObject.SetActive(true);
         hairsHeader.gameObject.SetActive(false);
         StartCoroutine(LerpToCircleRatio(.66666f));
         blueColor.a = alphaHigh;
         circle.material.SetColor("_Color", blueColor);
+
+        state = CrosshairState.Area;
     }
-    public void SetBubble() {
-        Show();
-        //circle.gameObject.SetActive(true);
-        hairsHeader.gameObject.SetActive(false);
-        blueColor.a = alphaLow;
-        circle.material.SetColor("_Color", blueColor);
-        StartCoroutine(LerpToCircleRatio(0));
+    private void State_toStopBurning() {
+        Clear();
+        state = CrosshairState.StopBurning;
     }
-    public void SetCoinshot() {
+    //private void State_toBubble() {
+    //    Show();
+    //    //circle.gameObject.SetActive(true);
+    //    hairsHeader.gameObject.SetActive(false);
+    //    blueColor.a = alphaLow;
+    //    circle.material.SetColor("_Color", blueColor);
+    //    StartCoroutine(LerpToCircleRatio(0));
+    //}
+    private void State_toCoinshot() {
         Show();
         //circle.gameObject.SetActive(false);
         hairsHeader.gameObject.SetActive(true);
@@ -115,8 +185,46 @@ public class CrosshairController : MonoBehaviour {
             fills[i].color = goldColor;
         }
         StartCoroutine(LerpToCircleRatio(1));
+
+        state = CrosshairState.Coinshot;
     }
     #endregion
+
+    public void Clear() {
+        SetFillPercent(0);
+        circle.material.SetFloat("_RatioLow", 1);
+    }
+
+    private void Hide() {
+        hairsColor.a = 0;
+        for (int i = 0; i < size; i++) {
+            hairs[i].color = hairsColor;
+        }
+    }
+
+    private void Show() {
+        StopAllCoroutines();
+        hairsColor.a = alphaMedium;
+        for (int i = 0; i < size; i++) {
+            hairs[i].color = hairsColor;
+        }
+    }
+
+    private void SetFillPercent(float rate) {
+        for (int i = 0; i < size; i++) {
+            fills[i].fillAmount = rate;
+        }
+        circle.material.SetFloat("_Fill", rate);
+    }
+
+    private void SetCircleRadius(float screenPercentage) {
+        // screenPercentage: % of the vertical screen occupied.
+        // i.e. if screenPercentage = 25%, then the middle 1/4 of the screen is occupied.
+        // The Circle takes up 1080 * 25% * sqrt(2) = 678.82250, which is at 25% when radius = .5.
+        float radius = screenPercentage / PrimaPullPushController.maxAreaRadius / 2;
+
+        circle.material.SetFloat("_Radius", radius);
+    }
 
     private IEnumerator LerpToCircleRatio(float targetRatio) {
         float count = 0, ratio = circle.material.GetFloat("_RatioLow");

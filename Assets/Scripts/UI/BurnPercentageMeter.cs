@@ -54,7 +54,7 @@ public class BurnPercentageMeter : MonoBehaviour {
 
         SetActualForceText((allomanticForce + normalForce).magnitude);
         SetSumForceText(allomanticForce, normalForce);
-        SetFillPercent(rate, rateAlternate);
+        //SetFillPercent(rate, rateAlternate);
     }
 
     // 
@@ -70,7 +70,7 @@ public class BurnPercentageMeter : MonoBehaviour {
 
         SetActualForceText((allomanticForce + normalForce).magnitude);
         SetSumForceText(allomanticForce, normalForce);
-        SetFillPercent(rate, rateAlternate);
+        //SetFillPercent(rate, rateAlternate);
     }
 
     /// <summary>
@@ -95,9 +95,9 @@ public class BurnPercentageMeter : MonoBehaviour {
     }
     #endregion
 
-    private void SetFillPercent(float rate, float rateAlternate) {
-        HUD.Crosshair.SetFillPercent(Mathf.Max(rate, rateAlternate));
-    }
+    //private void SetFillPercent(float rate, float rateAlternate) {
+    //    HUD.Crosshair.SetFillPercent(Mathf.Max(rate, rateAlternate));
+    //}
 
     public void SetForceTextColorStrong() {
         actualForceText.color = HUD.strongBlue;

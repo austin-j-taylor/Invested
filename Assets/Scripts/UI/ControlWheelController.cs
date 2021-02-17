@@ -27,7 +27,7 @@ public class ControlWheelController : MonoBehaviour {
     #endregion
 
     enum Selection { Cancel, Manual, Area, Bubble, BubblePolarity, Coinshot, Coin_Spray, Coin_Full, Coin_Semi, DeselectAll, StopBurning };
-    private enum LockedState { Unlocked, LockedFully, LockedToArea, LockedToBubble };
+    private enum LockedState { Unlocked, LockedFully, LockedToArea, LockedToBubble, Kog };
 
     private Image circle;
     private Image[] spokes;
@@ -89,7 +89,7 @@ public class ControlWheelController : MonoBehaviour {
     }
 
     void Start() {
-        RefreshLocked(); // query Flags for how unlocked the wheel should be
+        RefreshOptions(); // query Flags for how unlocked the wheel should be
     }
 
     public void Clear() {
@@ -111,7 +111,7 @@ public class ControlWheelController : MonoBehaviour {
                 if (Keybinds.ControlWheelManual()) {
                     SectorManual();
                     ConfirmSelection();
-                } else if (Keybinds.ControlWheelArea() && lockedState != LockedState.LockedFully) {
+                } else if (Keybinds.ControlWheelArea() && (lockedState == LockedState.LockedToArea || lockedState == LockedState.LockedToBubble || lockedState == LockedState.Unlocked)) { // bad logic
                     SectorArea();
                     ConfirmSelection();
                 } else if (Keybinds.ControlWheelBubble() && (lockedState == LockedState.LockedToBubble || lockedState == LockedState.Unlocked)) { // bad logic
@@ -339,15 +339,15 @@ public class ControlWheelController : MonoBehaviour {
         textCoinshot.text = KeyPullAbridged + ": throw and " + Push + " " + O_Coin + "\n\n\n\n\n";
         // The active mode gets the verbose text as well
         switch (Player.CurrentActor.ActorIronSteel.Mode) {
-            case PrimaPullPushController.ControlMode.Coinshot: // fall through
+            case ActorPullPushController.ControlMode.Coinshot: // fall through
                 textCenter.text = "";
                 RefreshCoinshot();
                 break;
-            case PrimaPullPushController.ControlMode.Manual:
+            case ActorPullPushController.ControlMode.Manual:
                 textCenter.text = "";
                 RefreshManual();
                 break;
-            case PrimaPullPushController.ControlMode.Area:
+            case ActorPullPushController.ControlMode.Area:
                 textCenter.text = KeyRadiusAbridged + ":\n Area radius";
                 RefreshArea();
                 break;
@@ -404,40 +404,57 @@ public class ControlWheelController : MonoBehaviour {
         spokes[(int)highlit].color = colorHighlitSpoke;
     }
 
-    // Sets how many options are available on the control wheel, depending on what Flags are met
-    public void RefreshLocked() {
-        if (FlagsController.GetData("pwr_coins")) {
-            lockedState = LockedState.Unlocked;
-            for (int i = 0; i < spokes.Length; i++) {
-                spokes[i].gameObject.SetActive(true);
-            }
-        } else if (FlagsController.GetData("wheel_bubble")) {
-            lockedState = LockedState.LockedToBubble;
-            for (int i = 0; i < 5; i++) {
-                spokes[i].gameObject.SetActive(true);
-            }
-            for (int i = 5; i < 9; i++) {
-                spokes[i].gameObject.SetActive(false);
-            }
-            for (int i = 9; i < spokes.Length; i++) {
-                spokes[i].gameObject.SetActive(true);
-            }
-        } else if (FlagsController.GetData("wheel_area")) {
-            lockedState = LockedState.LockedToArea;
-            for (int i = 0; i < 3; i++) {
-                spokes[i].gameObject.SetActive(true);
-            }
-            for (int i = 3; i < 9; i++) {
-                spokes[i].gameObject.SetActive(false);
-            }
-            for (int i = 9; i < spokes.Length; i++) {
-                spokes[i].gameObject.SetActive(true);
-            }
-        } else {
-            lockedState = LockedState.LockedFully;
-            for (int i = 0; i < spokes.Length; i++) {
-                spokes[i].gameObject.SetActive(false);
-            }
+    // Sets how many options are available on the control wheel, depending on what Flags are met and what the current Actor is.
+    public void RefreshOptions() {
+
+        switch(Player.CurrentActor.Type) {
+            case Actor.ActorType.Prima:
+                if (FlagsController.GetData("pwr_coins")) {
+                    lockedState = LockedState.Unlocked;
+                    for (int i = 0; i < spokes.Length; i++) {
+                        spokes[i].gameObject.SetActive(true);
+                    }
+                } else if (FlagsController.GetData("wheel_bubble")) {
+                    lockedState = LockedState.LockedToBubble;
+                    for (int i = 0; i < 5; i++) {
+                        spokes[i].gameObject.SetActive(true);
+                    }
+                    for (int i = 5; i < 9; i++) {
+                        spokes[i].gameObject.SetActive(false);
+                    }
+                    for (int i = 9; i < spokes.Length; i++) {
+                        spokes[i].gameObject.SetActive(true);
+                    }
+                } else if (FlagsController.GetData("wheel_area")) {
+                    lockedState = LockedState.LockedToArea;
+                    for (int i = 0; i < 3; i++) {
+                        spokes[i].gameObject.SetActive(true);
+                    }
+                    for (int i = 3; i < 9; i++) {
+                        spokes[i].gameObject.SetActive(false);
+                    }
+                    for (int i = 9; i < spokes.Length; i++) {
+                        spokes[i].gameObject.SetActive(true);
+                    }
+                } else {
+                    lockedState = LockedState.LockedFully;
+                    for (int i = 0; i < spokes.Length; i++) {
+                        spokes[i].gameObject.SetActive(false);
+                    }
+                }
+                break;
+            case Actor.ActorType.Kog:
+                lockedState = LockedState.Kog;
+                for (int i = 0; i < 2; i++) {
+                    spokes[i].gameObject.SetActive(true);
+                }
+                for (int i = 2; i < 9; i++) {
+                    spokes[i].gameObject.SetActive(false);
+                }
+                for (int i = 9; i < spokes.Length; i++) {
+                    spokes[i].gameObject.SetActive(true);
+                }
+                break;
         }
     }
     /// <summary>
