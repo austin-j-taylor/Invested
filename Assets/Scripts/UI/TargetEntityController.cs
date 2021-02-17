@@ -16,7 +16,7 @@ public class TargetEntityController : MonoBehaviour {
     private Image reticle;
 
     // Use this for initialization
-    void Start() {
+    void Awake() {
         anim = GetComponent<Animator>();
         state = ControlState.None;
         reticle = transform.Find("reticle").GetComponent<Image>();

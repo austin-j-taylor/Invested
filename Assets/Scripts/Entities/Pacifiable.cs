@@ -18,15 +18,12 @@ public class Pacifiable : Entity {
     }
 
     public override void OnHit(Vector3 sourceLocation, float damage) {
-        Debug.Log("Hit: " + damage);
         damage = 1;
         base.OnHit(sourceLocation, damage);
     }
 
     protected override void Die() {
         base.Die();
-
-        Debug.Log("Died");
     }
 
 

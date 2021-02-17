@@ -45,6 +45,21 @@ MonoBehaviour:
   netMass: 0
   magneticMass: 0
   calculateCOMFromColliders: 0
+  IsATarget: 0
+--- !u!114 &8179244296772954602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6630262773751916005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbf3575480402db40813e763382412fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: 0
+  eraseRenderer: 0
 --- !u!65 &1084746646
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -165,6 +180,12 @@ PrefabInstance:
 --- !u!1 &581845816268780450 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: 95dac1b32db04fc4c94f08face3672ec,
+    type: 3}
+  m_PrefabInstance: {fileID: 8877382912701377195}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6630262773751916005 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -6399157241168359602, guid: 95dac1b32db04fc4c94f08face3672ec,
     type: 3}
   m_PrefabInstance: {fileID: 8877382912701377195}
   m_PrefabAsset: {fileID: 0}

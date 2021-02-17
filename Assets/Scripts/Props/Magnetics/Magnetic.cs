@@ -1,6 +1,7 @@
 //using cakeslice;
 using UnityEngine;
 using VolumetricLines;
+using cakeslice;
 
 /// <summary>
 /// An object can be Pushed or Pulled.
@@ -89,11 +90,13 @@ public class Magnetic : MonoBehaviour {
                 //            childMagnetics[i].material.SetColor("_EmissionColor", defaultEmissionColor[i]);
                 //    }
                 //}
-
+                if (outlineHighlight)
+                    outlineHighlight.enabled = value;
                 isHighlighted = value;
             }
         }
     }
+    private Outline outlineHighlight;
     /// <summary>
     /// NetMass and MagneticMass:  A person may weigh 60kg (RigidBody mass, NetMass) but only have 3kg worth of metal on them (MagneticMass)
     /// If the magneticMass field is left to be 0, then the object is considered to be wholly magnetic (i.e. a RigidBody mass of 60kg with 60kg worth of metal) and uses the RigidBody mass for the magnetic mass.
@@ -148,6 +151,9 @@ public class Magnetic : MonoBehaviour {
         //    childMagnetics = GetComponentsInChildren<Renderer>();
         //}
         //defaultEmissionColor = new Color[childMagnetics.Length];
+        outlineHighlight = GetComponentInChildren<Outline>();
+        if(outlineHighlight)
+            outlineHighlight.enabled = false;
         if (!IsStatic) { // assigned by MagneticDense
             Rb = GetComponentInParent<Rigidbody>();
             IsStatic = (Rb == null);
@@ -228,7 +234,6 @@ public class Magnetic : MonoBehaviour {
         LastMaxPossibleAllomanticForce = Vector3.zero;
         LastAnchoredPushBoostFromAllomancer = Vector3.zero;
         LastAnchoredPushBoostFromTarget = Vector3.zero;
-        IsHighlighted = false;
     }
 
     private void OnDestroy() {

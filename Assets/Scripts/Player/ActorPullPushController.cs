@@ -10,8 +10,8 @@ public class ActorPullPushController : AllomanticIronSteel {
     private const float timeToHoldDown = .5f;
     private const float timeDoubleTapWindow = .5f;
     // Blue Line constants
-    private const float lineWeightThreshold = 1;
-    private const float targetFocusOffScreenBound = .2f;      // Determines the luminosity of blue lines that are off-screen
+    protected const float lineWeightThreshold = 1;
+    protected const float targetFocusOffScreenBound = .2f;      // Determines the luminosity of blue lines that are off-screen
     public const float firstPersonWidthFactor = .2f;
     public const float blueLineWidthFactor = .02f;
     public const float blueLineChangeFactor = 1 / 4f;
@@ -41,7 +41,7 @@ public class ActorPullPushController : AllomanticIronSteel {
 
     public ControlMode Mode { get; private set; }
 
-    private Magnetic removedTarget; // When a target was just removed, keep track of it so we don't immediately select it again
+    protected Magnetic removedTarget; // When a target was just removed, keep track of it so we don't immediately select it again
     // radius for Area
     private float selectionAreaRadius = maxAreaRadius / 2;
     // Lerp goals for burn percentage targets
@@ -196,7 +196,7 @@ public class ActorPullPushController : AllomanticIronSteel {
     /// <summary>
     /// Updates the status of Pushing and Pulling from player input.
     /// </summary>
-    private void UpdatePushingPulling() {
+    protected virtual void UpdatePushingPulling() {
         bool pulling, pushing;
         bool keybindPulling = Keybinds.IronPulling();
         bool keybindPushing = Keybinds.SteelPushing() || Keybinds.WithdrawCoin(); // for Pushing on coins after tossing them
@@ -241,7 +241,7 @@ public class ActorPullPushController : AllomanticIronSteel {
     /// <summary>
     /// Searches for and Marks new targets depending on player input.
     /// </summary>
-    private void UpdateTargetSelection(bool keybindPullingDown, bool keybindPulling, bool keybindPushingDown, bool keybindPushing) {
+    protected virtual void UpdateTargetSelection(bool keybindPullingDown, bool keybindPulling, bool keybindPushingDown, bool keybindPushing) {
 
         // Check input for target selection
         bool markForPull = Keybinds.Select() && HasIron;
@@ -585,7 +585,7 @@ public class ActorPullPushController : AllomanticIronSteel {
     /// Find nearby metals for targeting and render blue lines pointing to them.
     /// </summary>
     /// <returns>The bullseye target, the list of targets in the area, the list of targets in the bubble</returns>
-    private (Magnetic, List<Magnetic>, List<Magnetic>) IronSteelSight() {
+    protected virtual (Magnetic, List<Magnetic>, List<Magnetic>) IronSteelSight() {
         Magnetic targetBullseye = null;
         List<Magnetic> newTargetsArea = new List<Magnetic>();
         List<Magnetic> newTargetsBubble = new List<Magnetic>();
@@ -681,7 +681,7 @@ public class ActorPullPushController : AllomanticIronSteel {
     /// <param name="radialDistance">the distance from the center of the screen to the target</param>
     /// <param name="linearDistance">the distance from the player to the target</param>
     /// <returns>the weight of the target (-1 if invalid, 1 for very valid)</returns>
-    private float SetLineProperties(Magnetic target, out float radialDistance, out float linearDistance) {
+    protected float SetLineProperties(Magnetic target, out float radialDistance, out float linearDistance) {
         Vector3 allomanticForceVector = CalculateAllomanticForce(target);
         float allomanticForce = allomanticForceVector.magnitude;
         // If using Percentage force mode, burn percentage affects your range for burning

@@ -53,7 +53,7 @@ public class KogHandController : MonoBehaviour {
             case GrabState.Empty:
                 break;
             case GrabState.Grabbed:
-                if (GrabbedTarget == null || !GrabbedTarget.isActiveAndEnabled) {
+                if (GrabbedTarget == null || !GrabbedTarget.gameObject.activeSelf) {
                     Release();
                 }
                 break;
@@ -81,7 +81,6 @@ public class KogHandController : MonoBehaviour {
                             (screenPosition.x) * (screenPosition.x) +
                             (screenPosition.y) * (screenPosition.y)
                         );
-                        Debug.Log("Distance: " + radialDistance, GameManager.EntitiesInScene[i].gameObject);
                         // If it's in front of the screen, close to the center of the screen, and closer than any other target
                         if(screenPosition.z > 0 &&
                                 radialDistance < maxSelectionRadius &&
@@ -130,6 +129,7 @@ public class KogHandController : MonoBehaviour {
         //Debug.Log("Caught at " + relativeVelocity.magnitude + ", momentum: " + relativeVelocity.magnitude * target.Rb.mass);
         GrabbedTarget = target;
         State = GrabState.Grabbed;
+        target.enabled = false;
         target.Rb.isKinematic = true;
         foreach (Collider col1 in collidersToIgnore)
             foreach (Collider col2 in target.Colliders)
@@ -166,6 +166,7 @@ public class KogHandController : MonoBehaviour {
         MarkedEntity = null;
         State = GrabState.Empty;
         Destroy(grabJoint);
+        target.enabled = true;
         target.Rb.isKinematic = false;
         //target.Rb.velocity = Vector3.zero;// rb.velocity;
         foreach (Collider col1 in collidersToIgnore)
