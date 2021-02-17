@@ -28,34 +28,46 @@ using System.Collections.Generic;
 
 namespace cakeslice
 {
-    //[RequireComponent(typeof(Renderer))]
-    public class Outline : MonoBehaviour
-    {
-        public Renderer Renderer { get; private set; }
+	[RequireComponent(typeof(Renderer))]
+	/* [ExecuteInEditMode] */
+	public class Outline : MonoBehaviour
+	{
+		public Renderer Renderer { get; private set; }
+		public SpriteRenderer SpriteRenderer { get; private set; }
+		public SkinnedMeshRenderer SkinnedMeshRenderer { get; private set; }
+		public MeshFilter MeshFilter { get; private set; }
 
-        public int color = 0;
-        public bool eraseRenderer = false;
+		public int color;
+		public bool eraseRenderer;
 
-        [HideInInspector]
-        public int originalLayer;
-        [HideInInspector]
-        public Material[] originalMaterials;
+		private void Awake()
+		{
+			Renderer = GetComponent<Renderer>();
+			SkinnedMeshRenderer = GetComponent<SkinnedMeshRenderer>();
+			SpriteRenderer = GetComponent<SpriteRenderer>();
+			MeshFilter = GetComponent<MeshFilter>();
+		}
 
-        private void Start()
-        {
-            Renderer = GetComponentInChildren<Renderer>();
-            if(!Renderer)
-            Debug.Log("NULL " + name);
-        }
+		void OnEnable()
+		{
+			OutlineEffect.Instance?.AddOutline(this);
+		}
 
-        public void Enable()
-        {
-            CameraController.ActiveCamera.GetComponent<OutlineEffect>().AddOutline(this);
-        }
+		void OnDisable()
+		{
+			OutlineEffect.Instance?.RemoveOutline(this);
+		}
 
-        public void Disable() {
-            if(CameraController.ActiveCamera)
-                CameraController.ActiveCamera.GetComponent<OutlineEffect>().RemoveOutline(this);
-        }
-    }
+		private Material[] _SharedMaterials;
+		public Material[] SharedMaterials
+		{
+			get
+			{
+				if (_SharedMaterials == null)
+					_SharedMaterials = Renderer.sharedMaterials;
+
+				return _SharedMaterials;
+			}
+		}
+	}
 }

@@ -41,9 +41,6 @@ Shader "Hidden/OutlineBufferEffect" {
 			"CanUseSpriteAtlas" = "True"
 		}
 
-		// Change this stuff in OutlineEffect.cs instead!
-		//ZWrite Off
-		//Blend One OneMinusSrcAlpha
 		Cull [_Culling]
 		Lighting Off
 			
@@ -77,10 +74,10 @@ Shader "Hidden/OutlineBufferEffect" {
 			fixed4 c = tex2D(_MainTex, IN.uv_MainTex);// * IN.color;
 			if (c.a < _OutlineAlphaCutoff) discard;
 
-			float alpha = c.a * 99999999;
-
+			/* float alpha = c.a * 99999999;
 			o.Albedo = _Color * alpha;
-			o.Alpha = alpha;
+			o.Alpha = alpha; */
+			o.Albedo = _Color;
 			o.Emission = o.Albedo;
 		}
 

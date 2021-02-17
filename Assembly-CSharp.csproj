@@ -70,7 +70,6 @@
     <Compile Include="Assets\Imports\SebLague-Clouds\Scripts\Test\Debug Viewer\Mesh Generators\SphereMesh.cs" />
     <Compile Include="Assets\Scripts\Props\Magnetics\Projectile.cs" />
     <Compile Include="Assets\Scripts\Entities\Pacifiable.cs" />
-    <Compile Include="Assets\Imports\OutlineEffect\OutlineEffect.cs" />
     <Compile Include="Assets\Imports\SebLague-Clouds\Scripts\Test\Debug Viewer\Core\DebugViewer.cs" />
     <Compile Include="Assets\Scripts\Entities\Entity_TurretAnchored.cs" />
     <Compile Include="Assets\Scripts\Menu\SceneSelectMenu.cs" />
@@ -125,7 +124,6 @@
     <Compile Include="Assets\Scripts\Menu\PauseMenu.cs" />
     <Compile Include="Assets\Scripts\Allomancy\Allomechanisms\SeekerCube.cs" />
     <Compile Include="Assets\Scripts\Environment\Collectables\TriggerBead.cs" />
-    <Compile Include="Assets\Imports\OutlineEffect\Outline.cs" />
     <Compile Include="Assets\Scripts\Environment\Scenes\Environment_Luthadel.cs" />
     <Compile Include="Assets\Scripts\Environment\Scenes\Environment_Tutorial1_Swinging.cs" />
     <Compile Include="Assets\Scripts\Simulations\Simulation_coinWall.cs" />
@@ -273,7 +271,6 @@
     <Compile Include="Assets\Imports\PostProcessing\Runtime\COMPONENTS\GrainComponent.cs" />
     <Compile Include="Assets\Imports\PostProcessing\Runtime\models\BloomModel.cs" />
     <Compile Include="Assets\Scripts\Environment\Collectables\TriggerBeadOverhead.cs" />
-    <Compile Include="Assets\Imports\OutlineEffect\LinkedSet.cs" />
     <Compile Include="Assets\Scripts\Global\CloudsManager.cs" />
     <Compile Include="Assets\Scripts\Environment\Scenes\Environment_Tutorial4.cs" />
     <Compile Include="Assets\Scripts\Global\TimeController.cs" />
@@ -369,7 +366,6 @@
      <None Include="Assets\Imports\PostProcessing\resources\Shaders\UberSecondPass.cginc" />
      <None Include="Assets\Imports\SebLague-Clouds\Scripts\Clouds\Shaders\CloudSky.shader" />
      <None Include="Assets\Imports\VolumetricLines\BuiltInRenderPipeline\Shaders\LineStrip-TextureAlphaBlended.shader" />
-     <None Include="Assets\Imports\OutlineEffect\resources\OutlineBufferShader.shader" />
      <None Include="Assets\Shaders\PewterShock.shader" />
      <None Include="Assets\Imports\VolumetricLines\BuiltInRenderPipeline\Shaders\SingleLine-TextureAdditive.shader" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface.shader" />
@@ -415,7 +411,6 @@
      <None Include="Assets\StreamingAssets\Data\Conversations\sandbox.txt" />
      <None Include="Assets\Imports\PostProcessing\resources\Shaders\Common.cginc" />
      <None Include="Assets\Imports\PostProcessing\Editor Resources\Monitors\VectorscopeRender.shader" />
-     <None Include="Assets\Imports\OutlineEffect\resources\OutlineShader.shader" />
      <None Include="Assets\Imports\PostProcessing\resources\Shaders\Bloom.shader" />
      <None Include="Assets\Imports\VolumetricLines\BuiltInRenderPipeline\Shaders\LineStrip-LightSaber.shader" />
      <None Include="Assets\Imports\PostProcessing\resources\Shaders\Uber.shader" />
@@ -1048,6 +1043,10 @@
     <ProjectReference Include="Whinarn.UnityMeshSimplifier.Editor.csproj">
       <Project>{D9E4931E-0FA1-EDA8-2F14-088EC878F36B}</Project>
       <Name>Whinarn.UnityMeshSimplifier.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="OEBIF.csproj">
+      <Project>{2046B142-8495-2FB4-F55C-F28871C28946}</Project>
+      <Name>OEBIF</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

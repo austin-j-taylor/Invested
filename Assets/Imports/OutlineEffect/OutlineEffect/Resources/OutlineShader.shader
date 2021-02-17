@@ -1,4 +1,4 @@
-// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
 
 /*
 //  Copyright (c) 2015 José Guerreiro. All rights reserved.
@@ -138,6 +138,8 @@ Shader "Hidden/OutlineEffect"
 			   	return o;
 			}
 
+			int _UseFillColor;
+			fixed4 _FillColor;
 			float _LineThicknessX;
 			float _LineThicknessY;
 			float _LineIntensity;
@@ -209,7 +211,12 @@ Shader "Hidden/OutlineEffect"
 					}
 
 					if (!outside)
-						outline *= _FillAmount;
+					{
+						if(_UseFillColor)
+							outline = _FillColor * _FillAmount;
+						else
+							outline *= _FillAmount;
+					}
 				}
 				else
 				{
@@ -234,9 +241,13 @@ Shader "Hidden/OutlineEffect"
 							originalPixel *= 1 - _LineColor3.a;
 						hasOutline = true;
 					}
-
 					if (!outside)
-						outline *= _FillAmount;
+					{
+						if(_UseFillColor)
+							outline = _FillColor * _FillAmount;
+						else
+							outline *= _FillAmount;
+					}
 				}					
 					
 				//return outlineSource;		

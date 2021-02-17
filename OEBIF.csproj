@@ -9,10 +9,10 @@
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <RootNamespace></RootNamespace>
-    <ProjectGuid>{780E9F3A-FF2E-71BC-028C-EBECC50FF336}</ProjectGuid>
+    <ProjectGuid>{2046B142-8495-2FB4-F55C-F28871C28946}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <AssemblyName>Assembly-CSharp-Editor</AssemblyName>
+    <AssemblyName>OEBIF</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <BaseDirectory>.</BaseDirectory>
@@ -26,7 +26,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <NoWarn>0169</NoWarn>
-    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -35,7 +35,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <NoWarn>0169</NoWarn>
-    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <NoConfig>true</NoConfig>
@@ -48,56 +48,19 @@
     <ProjectTypeGuids>{E097FAD1-6243-4DAD-9C02-E9B9EFC3FFC1};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <UnityProjectGenerator>Package</UnityProjectGenerator>
     <UnityProjectGeneratorVersion>2.0.5</UnityProjectGeneratorVersion>
-    <UnityProjectType>Editor:5</UnityProjectType>
+    <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>2020.1.2f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Assets\Imports\PostProcessing\Editor\models\BloomModelEditor.cs" />
-    <Compile Include="Assets\Imports\PostProcessing\Editor\Utils\EditorResources.cs" />
-    <Compile Include="Assets\Imports\PostProcessing\Editor\models\ChromaticAberrationEditor.cs" />
-    <Compile Include="Assets\Imports\PostProcessing\Editor\PostProcessingFactory.cs" />
-    <Compile Include="Assets\Imports\PostProcessing\Editor\models\ColorGradingModelEditor.cs" />
-    <Compile Include="Assets\Imports\PostProcessing\Editor\Utils\FxStyles.cs" />
-    <Compile Include="Assets\Imports\PostProcessing\Editor\PropertyDrawers\GetSetDrawer.cs" />
-    <Compile Include="Assets\Imports\PostProcessing\Editor\models\ScreenSpaceReflectionModelEditor.cs" />
-    <Compile Include="Assets\Imports\PostProcessing\Editor\PropertyDrawers\TrackballGroupDrawer.cs" />
-    <Compile Include="Assets\Imports\PostProcessing\Editor\Monitors\ParadeMonitor.cs" />
-    <Compile Include="Assets\Imports\PostProcessing\Editor\models\FogModelEditor.cs" />
-    <Compile Include="Assets\Imports\PostProcessing\Editor\models\DepthOfFieldModelEditor.cs" />
-    <Compile Include="Assets\Imports\SebLague-Clouds\Scripts\Terrain\Editor\MeshEditor.cs" />
-    <Compile Include="Assets\Imports\PostProcessing\Editor\PostProcessingModelEditor.cs" />
-    <Compile Include="Assets\Imports\PostProcessing\Editor\Utils\ReflectionUtils.cs" />
-    <Compile Include="Assets\Imports\PostProcessing\Editor\models\VignetteModelEditor.cs" />
-    <Compile Include="Assets\Scripts\Editor\WireEditor.cs" />
-    <Compile Include="Assets\Imports\PostProcessing\Editor\models\DitheringModelEditor.cs" />
-    <Compile Include="Assets\Imports\SebLague-Clouds\Scripts\Clouds\Editor\NoiseGenEditor.cs" />
-    <Compile Include="Assets\Imports\PostProcessing\Editor\PostProcessingBehaviourEditor.cs" />
-    <Compile Include="Assets\Imports\PostProcessing\Editor\models\DefaultPostFxModelEditor.cs" />
-    <Compile Include="Assets\Imports\SebLague-Clouds\Scripts\Clouds\Editor\WeatherMapEditor.cs" />
-    <Compile Include="Assets\Imports\PostProcessing\Editor\models\EyeAdaptationModelEditor.cs" />
-    <Compile Include="Assets\Imports\PostProcessing\Editor\PostProcessingInspector.cs" />
-    <Compile Include="Assets\Imports\SebLague-Clouds\Scripts\Clouds\Editor\CloudNoiseEditor.cs" />
-    <Compile Include="Assets\Imports\PostProcessing\Editor\PostProcessingMonitor.cs" />
-    <Compile Include="Assets\Editor\LuthadelMapGeneratorEditor.cs" />
-    <Compile Include="Assets\Imports\PostProcessing\Editor\Monitors\HistogramMonitor.cs" />
-    <Compile Include="Assets\Imports\PostProcessing\Editor\Attributes\PostProcessingModelEditorAttribute.cs" />
-    <Compile Include="Assets\Editor\Environment_LuthadelMapGenerator.cs" />
-    <Compile Include="Assets\Imports\PostProcessing\Editor\models\BuiltinDebugViewsEditor.cs" />
-    <Compile Include="Assets\Imports\PostProcessing\Editor\models\UserLutModelEditor.cs" />
-    <Compile Include="Assets\Scripts\Editor\BezierCurveEditor.cs" />
-    <Compile Include="Assets\Imports\SebLague-Clouds\Scripts\Clouds\Editor\ShaderEditorUtility.cs" />
-    <Compile Include="Assets\Imports\PostProcessing\Editor\models\MotionBlurModelEditor.cs" />
-    <Compile Include="Assets\Imports\PostProcessing\Editor\models\AmbientOcclusionModelEditor.cs" />
-    <Compile Include="Assets\Imports\PostProcessing\Editor\models\GrainModelEditor.cs" />
-    <Compile Include="Assets\Imports\PostProcessing\Editor\Monitors\WaveformMonitor.cs" />
-    <Compile Include="Assets\Imports\PostProcessing\Editor\PropertyDrawers\MinDrawer.cs" />
-    <Compile Include="Assets\Imports\PostProcessing\Editor\Utils\EditorGUIHelper.cs" />
-    <Compile Include="Assets\Imports\PostProcessing\Editor\models\AntialiasingModelEditor.cs" />
-    <Compile Include="Assets\Imports\PostProcessing\Editor\Monitors\VectorscopeMonitor.cs" />
-    <Compile Include="Assets\Imports\PostProcessing\Editor\Utils\CurveEditor.cs" />
+    <Compile Include="Assets\Imports\OutlineEffect\OutlineEffect\OutlineEffect.cs" />
+    <Compile Include="Assets\Imports\OutlineEffect\OutlineEffect\Outline.cs" />
+    <Compile Include="Assets\Imports\OutlineEffect\OutlineEffect\LinkedSet.cs" />
   </ItemGroup>
   <ItemGroup>
+     <None Include="Assets\Imports\OutlineEffect\OutlineEffect\Resources\OutlineBufferShader.shader" />
+     <None Include="Assets\Imports\OutlineEffect\OutlineEffect.asmdef" />
+     <None Include="Assets\Imports\OutlineEffect\OutlineEffect\Resources\OutlineShader.shader" />
     <Reference Include="UnityEngine">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2020.1.2f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
     </Reference>
@@ -304,9 +267,6 @@
     </Reference>
     <Reference Include="Unity.Burst.Unsafe">
       <HintPath>Library\PackageCache\com.unity.burst@1.2.0-preview.12\Unity.Burst.Unsafe.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>Library\PackageCache\com.unity.ext.nunit@1.0.0\net35\unity-custom\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2020.1.2f1\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\mscorlib.dll</HintPath>
@@ -653,90 +613,14 @@
     <Reference Include="System.Xml.XPath.XDocument">
       <HintPath>C:\Program Files\Unity\Hub\Editor\2020.1.2f1\Editor\Data\MonoBleedingEdge\lib\mono\4.7.1-api\Facades\System.Xml.XPath.XDocument.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEditor.TestRunner">
-      <HintPath>Library\ScriptAssemblies\UnityEditor.TestRunner.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.TestRunner">
-      <HintPath>Library\ScriptAssemblies\UnityEngine.TestRunner.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Timeline.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Timeline.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Cinemachine">
-      <HintPath>Library\ScriptAssemblies\Cinemachine.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Burst">
-      <HintPath>Library\ScriptAssemblies\Unity.Burst.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.ProBuilder">
-      <HintPath>Library\ScriptAssemblies\Unity.ProBuilder.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Burst.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Burst.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.ProBuilder.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.ProBuilder.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.ProBuilder.AssetIdRemapUtility">
-      <HintPath>Library\ScriptAssemblies\Unity.ProBuilder.AssetIdRemapUtility.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.TextMeshPro.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Animation.Rigging">
-      <HintPath>Library\ScriptAssemblies\Unity.Animation.Rigging.dll</HintPath>
+    <Reference Include="UnityEditor.UI">
+      <HintPath>Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>Library\ScriptAssemblies\UnityEngine.UI.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.Timeline">
-      <HintPath>Library\ScriptAssemblies\Unity.Timeline.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Mathematics">
-      <HintPath>Library\ScriptAssemblies\Unity.Mathematics.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.2D.Sprite.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.2D.Sprite.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Animation.Rigging.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Animation.Rigging.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="com.unity.cinemachine.editor">
-      <HintPath>Library\ScriptAssemblies\com.unity.cinemachine.editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.VisualStudio.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.VisualStudio.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.ProBuilder.AddOns.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.ProBuilder.AddOns.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.Mathematics.Editor">
-      <HintPath>Library\ScriptAssemblies\Unity.Mathematics.Editor.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.TextMeshPro">
-      <HintPath>Library\ScriptAssemblies\Unity.TextMeshPro.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEditor.UI">
-      <HintPath>Library\ScriptAssemblies\UnityEditor.UI.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="Assembly-CSharp.csproj">
-      <Project>{414D5E7D-B934-28C3-4938-9D9994508551}</Project>
-      <Name>Assembly-CSharp</Name>
-    </ProjectReference>
-    <ProjectReference Include="Whinarn.UnityMeshSimplifier.Runtime.csproj">
-      <Project>{59E4833E-F353-4CA9-88D6-F772EBD123E9}</Project>
-      <Name>Whinarn.UnityMeshSimplifier.Runtime</Name>
-    </ProjectReference>
-    <ProjectReference Include="Whinarn.UnityMeshSimplifier.Editor.csproj">
-      <Project>{D9E4931E-0FA1-EDA8-2F14-088EC878F36B}</Project>
-      <Name>Whinarn.UnityMeshSimplifier.Editor</Name>
-    </ProjectReference>
-    <ProjectReference Include="OEBIF.csproj">
-      <Project>{2046B142-8495-2FB4-F55C-F28871C28946}</Project>
-      <Name>OEBIF</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />
