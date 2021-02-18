@@ -8,12 +8,15 @@ using UnityEngine.UI;
 /// </summary>
 public class TargetEntityController : MonoBehaviour {
 
+    private const int offset = 42;
+
     private enum ControlState { None, Aiming };
 
     private Animator anim;
     private ControlState state;
 
     private Image reticle;
+    private Bounds lastMarkedBounds;
 
     // Use this for initialization
     void Awake() {
@@ -43,10 +46,20 @@ public class TargetEntityController : MonoBehaviour {
                 break;
             case ControlState.Aiming:
                 // Move the reticle to align with the target's transform
-                Vector3 newPos = CameraController.ActiveCamera.WorldToScreenPoint(Kog.HandController.MarkedEntity.FuzzyGlobalCenterOfMass);
-
-                reticle.rectTransform.position = newPos;
+                lastMarkedBounds = Kog.HandController.MarkedEntity.BoundingBox.bounds;
                 break;
+        }
+        if (reticle.color.a > 0.001f) {
+
+            Vector3 v_dx = CameraController.ActiveCamera.transform.right * lastMarkedBounds.size.x / 2f;
+            Vector3 v_dy = CameraController.ActiveCamera.transform.up * lastMarkedBounds.size.y / 2f;
+            Vector3 screen_center = CameraController.ActiveCamera.WorldToScreenPoint(lastMarkedBounds.center);
+            Vector3 screen_dx = CameraController.ActiveCamera.WorldToScreenPoint(lastMarkedBounds.center + v_dx) - screen_center;
+            Vector3 screen_dy = CameraController.ActiveCamera.WorldToScreenPoint(lastMarkedBounds.center + v_dy) - screen_center;
+            reticle.rectTransform.offsetMin = new Vector2(-screen_dx.x - offset, -screen_dy.y - offset);
+            reticle.rectTransform.offsetMax = new Vector2(screen_dx.x + offset, screen_dy.y + offset);
+            reticle.rectTransform.position = screen_center;
+            Debug.Log("transforming");
         }
     }
 

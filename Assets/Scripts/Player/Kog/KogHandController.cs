@@ -28,6 +28,7 @@ public class KogHandController : MonoBehaviour {
     [SerializeField]
     private Collider[] collidersToIgnore = null;
 
+    public Vector3 ReachLocation { get; private set; } = Vector3.zero;
     public Magnetic GrabbedTarget { get; private set; } = null;
     public Entity MarkedEntity { get; private set; } = null;
 
@@ -61,6 +62,19 @@ public class KogHandController : MonoBehaviour {
         //Actions
         switch (State) {
             case GrabState.Empty:
+                // Set reach target location: look towards the main Push/Pull target, or just in front
+                if(Kog.IronSteel.MainTarget == null) {
+                    // Rotate hand to look towards what the crosshairs are looking at
+                    if (Physics.Raycast(CameraController.ActiveCamera.transform.position, CameraController.ActiveCamera.transform.forward, out RaycastHit hit, 1000, GameManager.Layer_IgnorePlayer)) {
+                        // Aim at that point
+                        ReachLocation = hit.point;
+                    } else {
+                        // Aim at a point 20 units in front of the camera
+                        ReachLocation = CameraController.ActiveCamera.transform.position + CameraController.ActiveCamera.transform.forward * 20;
+                    }
+                } else {
+                    ReachLocation = Kog.IronSteel.MainTarget.transform.position;
+                }
                 break;
             case GrabState.Grabbed:
                 // Look for targets to lock on to.
@@ -92,8 +106,21 @@ public class KogHandController : MonoBehaviour {
                 }
                 // Lock on to that target.
                 MarkedEntity = closestHostile;
-                if (MarkedEntity)
-                    Debug.Log("Closest hostile: " + MarkedEntity, MarkedEntity.gameObject);
+
+                // Set reach location: aim towards the marked entity, or in front if there is none
+                if (MarkedEntity == null) {
+                    // Rotate hand to look towards what the crosshairs are looking at
+                    if (Physics.Raycast(CameraController.ActiveCamera.transform.position, CameraController.ActiveCamera.transform.forward, out RaycastHit hit, 1000, GameManager.Layer_IgnorePlayer)) {
+                        // Aim at that point
+                        ReachLocation = hit.point;
+                    } else {
+                        // Aim at a point 20 units in front of the camera
+                        ReachLocation = CameraController.ActiveCamera.transform.position + CameraController.ActiveCamera.transform.forward * 20;
+                    }
+                } else {
+                    ReachLocation = MarkedEntity.transform.position;
+                }
+
                 break;
         }
 

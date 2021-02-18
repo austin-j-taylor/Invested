@@ -915,18 +915,7 @@ public class KogAnimation : MonoBehaviour {
             Vector3 toTarget = Vector3.zero;
             float distance = 1;
             if (!isLeft) {
-                if (Kog.IronSteel.MainTarget != null) {
-                    toTarget = Kog.IronSteel.MainTarget.transform.position - upperarm.transform.position;
-                } else {
-                    // Rotate hand to look towards reticle target
-                    if (Physics.Raycast(CameraController.ActiveCamera.transform.position, CameraController.ActiveCamera.transform.forward, out RaycastHit hit, 1000, GameManager.Layer_IgnorePlayer)) {
-                        // Aim at that point
-                        toTarget = hit.point - upperarm.transform.position;
-                    } else {
-                        // Aim at a point 20 units in front of the camera
-                        toTarget = (CameraController.ActiveCamera.transform.position + CameraController.ActiveCamera.transform.forward * 20) - upperarm.transform.position;
-                    }
-                }
+                toTarget = Kog.HandController.ReachLocation - upperarm.transform.position;
                 distance = toTarget.magnitude;
             }
             switch (state) {
@@ -939,12 +928,14 @@ public class KogAnimation : MonoBehaviour {
                     handAnchor.position = Vector3.Slerp(handAnchor.position, handAnchorLerp, Time.deltaTime * kogAnimation_SO.Arm_reachingToMetal_lerp);
                     break;
                 case State.Reaching:
+                    /*
                     Magnetic trajectory = null;
                     trajectory = Kog.HandController.GrabbedTarget;
                     if (trajectory == null)
                         trajectory = Kog.IronSteel.MainTarget;
                     if (trajectory != null)
                         Debug.DrawLine(Kog.IronSteel.CenterOfMass, (Kog.IronSteel.CenterOfMass + 30 * (trajectory.transform.position - Kog.IronSteel.CenterOfMass).normalized), Color.red);
+                    */
                     handAnchorLerp = upperarm.transform.position + Vector3.ClampMagnitude(toTarget / distance * armLength * 1.1f, distance);
                     handAnchor.position = Vector3.Slerp(handAnchor.position, handAnchorLerp, Time.deltaTime * kogAnimation_SO.Arm_reachingToMetal_lerp);
                     break;

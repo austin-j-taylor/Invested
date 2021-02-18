@@ -46,12 +46,15 @@ public class Entity : MonoBehaviour {
     public Rigidbody Rb { get; private set; }
     // Does not account for the rotation of the object.
     public Vector3 FuzzyGlobalCenterOfMass => Rb.transform.position + Rb.centerOfMass;
+    // A trigger that encompasses this object. Its bounds define where the reticles go when targeting this.
+    public Collider BoundingBox { get; protected set; }
 
     private bool hitThisFrame;
 
     protected virtual void Start() {
         hitboxes = GetComponentsInChildren<BoxCollider>();
         Rb = GetComponentInChildren<Rigidbody>();
+        BoundingBox = transform.Find("BoundingBox").GetComponent<Collider>();
         isDead = false;
         hitThisFrame = false;
         //hitstun = 0f;
