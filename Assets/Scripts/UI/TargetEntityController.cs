@@ -8,67 +8,93 @@ using UnityEngine.UI;
 /// </summary>
 public class TargetEntityController : MonoBehaviour {
 
-    private const int offset = 42;
+    private const int reticle_offset = 42;
+    private const int bar_offset = 50;
+    private const int num_bars = 10;
 
-    private enum ControlState { None, Aiming };
+    private enum ReticleControlState { None, Aiming };
+
+    [SerializeField]
+    private TargetBar templateBar = null;
 
     private Animator anim;
-    private ControlState state;
+    private ReticleControlState state;
 
     private Image reticle;
     private Bounds lastMarkedBounds;
+    private TargetBar[] bars;
 
     // Use this for initialization
     void Awake() {
         anim = GetComponent<Animator>();
-        state = ControlState.None;
+        state = ReticleControlState.None;
         reticle = transform.Find("reticle").GetComponent<Image>();
+
+        bars = new TargetBar[num_bars];
+        for(int i = 0; i < num_bars; i++) {
+            bars[i] = Instantiate(templateBar, transform, false);
+            bars[i].Close();
+        }
     }
     public void Clear() {
         State_toNone();
     }
 
     private void LateUpdate() {
+        // RETICLE
         // Transition
         switch (state) {
-            case ControlState.None:
+            case ReticleControlState.None:
                 if (Kog.HandController.MarkedEntity != null)
                     State_toAiming();
                 break;
-            case ControlState.Aiming:
+            case ReticleControlState.Aiming:
                 if (Kog.HandController.MarkedEntity == null)
                     State_toNone();
                 break;
         }
         // Action
         switch (state) {
-            case ControlState.None:
+            case ReticleControlState.None:
                 break;
-            case ControlState.Aiming:
+            case ReticleControlState.Aiming:
                 // Move the reticle to align with the target's transform
                 lastMarkedBounds = Kog.HandController.MarkedEntity.BoundingBox.bounds;
                 break;
         }
         if (reticle.color.a > 0.001f) {
-
             Vector3 v_dx = CameraController.ActiveCamera.transform.right * lastMarkedBounds.size.x / 2f;
             Vector3 v_dy = CameraController.ActiveCamera.transform.up * lastMarkedBounds.size.y / 2f;
             Vector3 screen_center = CameraController.ActiveCamera.WorldToScreenPoint(lastMarkedBounds.center);
             Vector3 screen_dx = CameraController.ActiveCamera.WorldToScreenPoint(lastMarkedBounds.center + v_dx) - screen_center;
             Vector3 screen_dy = CameraController.ActiveCamera.WorldToScreenPoint(lastMarkedBounds.center + v_dy) - screen_center;
-            reticle.rectTransform.offsetMin = new Vector2(-screen_dx.x - offset, -screen_dy.y - offset);
-            reticle.rectTransform.offsetMax = new Vector2(screen_dx.x + offset, screen_dy.y + offset);
+            reticle.rectTransform.offsetMin = new Vector2(-screen_dx.x - reticle_offset, -screen_dy.y - reticle_offset);
+            reticle.rectTransform.offsetMax = new Vector2(screen_dx.x + reticle_offset, screen_dy.y + reticle_offset);
             reticle.rectTransform.position = screen_center;
-            Debug.Log("transforming");
+        }
+
+        // BARS
+        // Go over entities [in scene].
+        int i;
+        for(i = 0; i < GameManager.EntitiesInScene.Count && i < num_bars; i++) {
+            bars[i].Open();
+            Bounds bounds = GameManager.EntitiesInScene[i].BoundingBox.bounds;
+            Vector3 v_y = bounds.center + CameraController.ActiveCamera.transform.up * bounds.size.y / 2f;
+            Vector3 screen_y = CameraController.ActiveCamera.WorldToScreenPoint(v_y) + new Vector3(0, bar_offset, 0);
+            bars[i].transform.position = screen_y;
+        }
+        while(i < num_bars) {
+            bars[i].Close();
+            i++;
         }
     }
 
     private void State_toNone() {
         anim.SetBool("Aiming", false);
-        state = ControlState.None;
+        state = ReticleControlState.None;
     }
     private void State_toAiming() {
         anim.SetBool("Aiming", true);
-        state = ControlState.Aiming;
+        state = ReticleControlState.Aiming;
     }
 }
