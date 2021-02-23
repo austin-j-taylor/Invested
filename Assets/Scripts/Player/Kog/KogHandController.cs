@@ -12,7 +12,7 @@ public class KogHandController : MonoBehaviour {
     #region constants
     private const float grabberRadius = 0.25f;
     private const float throwForce = 10;
-    private const float maxSelectionRadius = 0.5f;
+    private const float maxSelectionRadius = 0.25f;
     #endregion
 
     public enum GrabState { Empty, Grabbed };
