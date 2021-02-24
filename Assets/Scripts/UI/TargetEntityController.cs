@@ -77,11 +77,20 @@ public class TargetEntityController : MonoBehaviour {
         // Go over entities [in scene].
         int i;
         for(i = 0; i < GameManager.EntitiesInScene.Count && i < num_bars; i++) {
-            bars[i].Open(GameManager.EntitiesInScene[i]);
             Bounds bounds = GameManager.EntitiesInScene[i].BoundingBox.bounds;
             Vector3 v_y = bounds.center + CameraController.ActiveCamera.transform.up * bounds.size.y / 2f;
             Vector3 screen_y = CameraController.ActiveCamera.WorldToScreenPoint(v_y) + new Vector3(0, bar_offset, 0);
-            bars[i].transform.position = screen_y;
+            if(screen_y.z < 0) {
+                // off screen
+                bars[i].transform.position = new Vector3(-100000, -100000, 0);
+            } else {
+                if(GameManager.EntitiesInScene[i].Hostile) {
+                    bars[i].Open(GameManager.EntitiesInScene[i]);
+                } else {
+                    bars[i].Close();
+                }
+                bars[i].transform.position = screen_y;
+            }
         }
         while(i < num_bars) {
             bars[i].Close();

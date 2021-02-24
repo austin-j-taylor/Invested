@@ -78,6 +78,7 @@ public class Waddler : Pacifiable {
 
         Hostile = true;
         MaxHealth = 2;
+        EntityName = "Walkydigit";
     }
 
     protected override void Start() {

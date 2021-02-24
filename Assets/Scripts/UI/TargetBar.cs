@@ -12,10 +12,14 @@ public class TargetBar : MonoBehaviour {
     // The entity that this bar is bound to
     private Entity currentEntity = null;
 
+    private TMPro.TextMeshProUGUI textName;
+    private Animator anim;
     private TargetBarIcon[] icons;
 
     private void Awake() {
+        anim = GetComponent<Animator>();
         icons = GetComponentsInChildren<TargetBarIcon>();
+        textName = GetComponentInChildren<TMPro.TextMeshProUGUI>();
     }
 
     public void LateUpdate() {
@@ -30,24 +34,26 @@ public class TargetBar : MonoBehaviour {
         if (newEntity != currentEntity) {
             // New entity. This bar should show the "opening" animation. Set the health counter icons.
             currentEntity = newEntity;
+            for (int i = 0; i < currentEntity.MaxHealth && i < maxPossibleHealth; i++) {
+                icons[i].anim.SetBool("Hit", false);
+                icons[i].anim.SetBool("Visible", false);
+            }
             StartCoroutine(OpenIcons());
-
+            anim.SetBool("Open", true);
+            textName.text = currentEntity.EntityName;
         }
     }
     public void Close() {
         currentEntity = null;
-        gameObject.SetActive(false);
-        for (int i = 0; i < maxPossibleHealth; i++) {
-            icons[i].anim.SetBool("Visible", false);
-            icons[i].anim.SetBool("Hit", false);
-        }
+        anim.SetBool("Open", false);
+        //gameObject.SetActive(false);
     }
 
     private IEnumerator OpenIcons() {
         for(int i = 0; i < currentEntity.MaxHealth && i < maxPossibleHealth; i++) {
             icons[i].anim.SetBool("Visible", true);
             icons[i].anim.SetBool("Hit", false);
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.15f);
         }
     }
 }

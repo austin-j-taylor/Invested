@@ -8,6 +8,7 @@ public class Entity : MonoBehaviour {
 
     protected const float fallDamageSquareSpeedThreshold = 150; // any fall speed above this -> painful
 
+    public string EntityName { get; protected set; } = "";
     private double health;
     private double maxHealth;
 
