@@ -7,9 +7,7 @@ using System.Collections;
  */
 
 [RequireComponent(typeof(Collider))]
-public class TriggerMessage : MonoBehaviour {
-
-    public IEnumerator routine = null;
+public class TriggerMessage : TriggerEnvironment {
 
     private void OnTriggerEnter(Collider other) {
         if (other.CompareTag("Player") && !other.isTrigger) {
