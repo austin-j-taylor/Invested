@@ -23,9 +23,11 @@ public class TargetBar : MonoBehaviour {
     }
 
     public void LateUpdate() {
-        // Set icons to match health of entity
-        for (int i = 0; i < currentEntity.MaxHealth && i < maxPossibleHealth; i++) {
-            icons[i].anim.SetBool("Hit", currentEntity.Health <= i);
+        if(currentEntity != null) {
+            // Set icons to match health of entity
+            for (int i = 0; i < currentEntity.MaxHealth && i < maxPossibleHealth; i++) {
+                icons[i].anim.SetBool("Hit", currentEntity.Health <= i);
+            }
         }
     }
     // Open the bar above the given entity
