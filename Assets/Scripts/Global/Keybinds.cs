@@ -359,6 +359,13 @@ public class Keybinds : MonoBehaviour {
             return Input.GetKey(KeyCode.Tab);
         }
     }
+    public static bool ChangeActorDown() {
+        if (SettingsMenu.settingsGameplay.controlScheme == JSONSettings_Gameplay.Gamepad) {
+            return false;
+        } else {
+            return Input.GetKeyDown(KeyCode.P);
+        }
+    }
 
     #region controlWheel
     public static bool ControlWheel() {

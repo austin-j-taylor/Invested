@@ -184,6 +184,11 @@ public class KogPullPushController : ActorPullPushController {
 
     // Modified child functions
 
+    public override void StopBurning(bool clearTargets = true) {
+        if (lastBullseyeTarget != null)
+            lastBullseyeTarget.IsHighlighted = false;
+        base.StopBurning(clearTargets);
+    }
     /// <summary>
     /// Updates the status of Pushing and Pulling from player input.
     /// </summary>

@@ -271,22 +271,30 @@ public class Waddler : Pacifiable {
             case WaddlerState.Caught:
                 break;
             case WaddlerState.MovingToEnemy:
+                if (!enemy.isActiveAndEnabled) // Change enemy if target is lost
+                    enemy = Player.CurrentActor;
                 agent.SetDestination(enemy.transform.position);
                 //Debug.Log(agent.isStopped + ", " + agent.destination + ", " + agent.desiredVelocity + ", " + agent.velocity);
                 break;
             case WaddlerState.AnchoredPull:
+                if (!enemy.isActiveAndEnabled) // Change enemy if target is lost
+                    enemy = Player.CurrentActor;
                 // Aim at the player
                 direction = enemy.transform.position - transform.position;
                 lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
                 transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * angularSpeed_throwing);
                 break;
             case WaddlerState.AnchoredPush:
+                if (!enemy.isActiveAndEnabled) // Change enemy if target is lost
+                    enemy = Player.CurrentActor;
                 // Aim at the player
                 direction = enemy.transform.position - transform.position;
                 lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
                 transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, Time.deltaTime * angularSpeed_throwing);
                 break;
             case WaddlerState.Throwing:
+                if (!enemy.isActiveAndEnabled) // Change enemy if target is lost
+                    enemy = Player.CurrentActor;
                 // Aim at the player
                 direction = enemy.transform.position - transform.position;
                 lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));

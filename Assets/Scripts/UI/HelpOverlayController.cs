@@ -79,7 +79,7 @@ public class HelpOverlayController : MonoBehaviour {
         if (Verbose) {
             builder.AppendLine(HowToHelpAbridged + " toggle this overlay (verbose)\n");
             builder.AppendLine(HowToPerspectiveAbridged + " change perspective");
-            builder.AppendLine(HowToTextLog + " view text log");
+            builder.AppendLine(HowToTextLog + " view Console");
         } else {
             builder.AppendLine(HowToHelpAbridged + " toggle this overlay (simple)\n");
         }
@@ -198,6 +198,9 @@ public class HelpOverlayController : MonoBehaviour {
                 builder.AppendLine(" • " + KeyJump + " + " + KeyThrow + " Throw " + O_Coin + " downwards, weighted by " + KeyMove +
                     "\n • " + KeyToss + " Toss without " + Pushing);
             }
+        }
+        if (Verbose && SettingsMenu.settingsGameplay.controlScheme != JSONSettings_Gameplay.Gamepad) {
+            builder.AppendLine(" • " + KeyChangeActor + " Change Actor");
         }
 
         HelpTextLeft.text = builder.ToString();

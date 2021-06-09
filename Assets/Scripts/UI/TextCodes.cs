@@ -149,6 +149,7 @@ public class TextCodes : MonoBehaviour {
     public static string Z => "<sprite name=z>";
     public static string V => "<sprite name=v>";
     public static string L => "<sprite name=l>";
+    public static string P => "<sprite name=p>";
     public static string F1 => "<sprite name=f1>";
     public static string F5 => "<sprite name=f5>";
     public static string Numeric1 => "<sprite name=key1>";
@@ -374,6 +375,7 @@ public class TextCodes : MonoBehaviour {
                 return LeftClick;
         }
     }
+    public static string KeyChangeActor => P;
 
 
     public static string HowToMultiMark_Pull => HowToAnchor + " + " + KeyMark_Pull;

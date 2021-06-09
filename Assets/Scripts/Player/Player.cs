@@ -86,6 +86,13 @@ public class Player : MonoBehaviour {
         if (Keybinds.TogglePerspective()) {
             CameraController.TogglePerspective();
         }
+        if(Keybinds.ChangeActorDown()) {
+            if(CurrentActor.Type == Actor.ActorType.Kog) {
+                SetActor(Prima.PrimaInstance);
+            } else {
+                SetActor(Kog.KogInstance);
+            }
+        }
     }
     #endregion
 
@@ -146,11 +153,12 @@ public class Player : MonoBehaviour {
     /// <summary>
     /// Resets the player and returns them to their respawn point
     /// </summary>
-    public void Respawn() {
+    public Coroutine Respawn() {
         if (RespawnPoint && respawnState == PlayerRespawnState.Normal) {
             respawnState = PlayerRespawnState.Respawning;
-            StartCoroutine(RespawnRoutine());
+            return StartCoroutine(RespawnRoutine());
         }
+        return null;
     }
     private IEnumerator RespawnRoutine() {
         HUD.LoadingFadeController.Enshroud();
@@ -171,7 +179,7 @@ public class Player : MonoBehaviour {
     /// </summary>
     /// <param name="actor">The new actor</param>
     public void SetActor(Actor actor) {
-        switch(actor.Type) {
+        switch (actor.Type) {
             case Actor.ActorType.Prima:
                 Prima.PrimaInstance.gameObject.SetActive(true);
                 Kog.KogInstance.gameObject.SetActive(false);
@@ -181,8 +189,17 @@ public class Player : MonoBehaviour {
                 Prima.PrimaInstance.gameObject.SetActive(false);
                 break;
         }
+        if(CurrentActor != null) {
+            CurrentActor.RespawnClear();
+        }
         CurrentActor = actor;
-        actor.ActorIronSteel.StrengthModifier = feelingScale;
+        CurrentActor.ActorIronSteel.StrengthModifier = feelingScale;
+        if (RespawnPoint) {
+            CurrentActor.transform.position = RespawnPoint.position + new Vector3(0, CurrentActor.RespawnHeightOffset, 0);
+            CameraController.SetRotation(RespawnPoint.eulerAngles);
+        }
+        CurrentActor.RespawnClear();
+        CameraController.Clear();
         HUD.ControlWheelController.RefreshOptions();
     }
     #endregion

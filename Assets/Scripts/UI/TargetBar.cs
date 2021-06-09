@@ -21,6 +21,13 @@ public class TargetBar : MonoBehaviour {
         icons = GetComponentsInChildren<TargetBarIcon>();
         textName = GetComponentInChildren<TMPro.TextMeshProUGUI>();
     }
+    public void Clear() {
+        Close();
+        StopAllCoroutines();
+        foreach (TargetBarIcon icon in icons) {
+            icon.anim.SetBool("Visible", false);
+        }
+    }
 
     public void LateUpdate() {
         if(currentEntity != null) {

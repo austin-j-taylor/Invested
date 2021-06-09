@@ -23,7 +23,6 @@ public class ConsoleController : MonoBehaviour {
     Scrollbar scrollbar;
 
     private Animator anim;
-
     void Awake() {
         previewText = transform.Find("PreviewText").GetComponent<TextMeshProUGUI>();
         contents = transform.Find("Console/TextWindow/Template/Viewport/Contents").GetComponent<TextMeshProUGUI>();
@@ -50,7 +49,7 @@ public class ConsoleController : MonoBehaviour {
 
     public void Close() {
         //ClearLog();
-        previewText.text = string.Empty;
+        //previewText.text = string.Empty;
         anim.SetBool("IsOpen", false);
         IsOpen = false;
         if (!GameManager.MenusController.pauseMenu.IsOpen)
@@ -99,7 +98,8 @@ public class ConsoleController : MonoBehaviour {
         builder.AppendLine(line);
         contents.text = builder.ToString();
 
-        previewText.text = line;
+        //previewText.text = line;
+        scrollbar.value = 0;
     }
     /// <summary>
     ///  Used to separate parts of the log, like ends of conversations.
