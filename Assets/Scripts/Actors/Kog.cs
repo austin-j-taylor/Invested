@@ -46,6 +46,7 @@ public class Kog : Actor {
         AudioController.Clear();
         MovementController.Clear();
         HandController.Clear();
+        IronSteel.Clear();
     }
     /// <summary>
     /// Reset certain values AFTER the player enters a new scene

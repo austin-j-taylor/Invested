@@ -15,7 +15,7 @@ public class KogHandController : MonoBehaviour {
     private const float maxSelectionRadius = 0.25f;
     #endregion
 
-    public enum GrabState { Empty, Grabbed };
+    public enum GrabState { Empty, Grabbed, LockedOn };
 
     [SerializeField, Range(0.0f, 1.0f)]
 
@@ -58,12 +58,19 @@ public class KogHandController : MonoBehaviour {
                     Release();
                 }
                 break;
+            case GrabState.LockedOn:
+                // Stay locked onto the current entity until target is released
+                if (!Kog.IronSteel.SteelPushing) {
+                    State = GrabState.Empty;
+                    MarkedEntity = null;
+                }
+                break;
         }
         //Actions
         switch (State) {
             case GrabState.Empty:
                 // Set reach target location: look towards the main Push/Pull target, or just in front
-                if(Kog.IronSteel.MainTarget == null) {
+                if (Kog.IronSteel.MainTarget == null) {
                     // Rotate hand to look towards what the crosshairs are looking at
                     if (Physics.Raycast(CameraController.ActiveCamera.transform.position, CameraController.ActiveCamera.transform.forward, out RaycastHit hit, 1000, GameManager.Layer_IgnorePlayer)) {
                         // Aim at that point
@@ -80,8 +87,8 @@ public class KogHandController : MonoBehaviour {
                 // Look for targets to lock on to.
                 Entity closestHostile = null;
                 float closestHostileRadius = float.PositiveInfinity;
-                for(int i = 0; i < GameManager.EntitiesInScene.Count; i++) {
-                    if(GameManager.EntitiesInScene[i].Hostile) {
+                for (int i = 0; i < GameManager.EntitiesInScene.Count; i++) {
+                    if (GameManager.EntitiesInScene[i].Hostile) {
 
                         // Get position on screen
                         Vector3 screenPosition = CameraController.ActiveCamera.WorldToViewportPoint(GameManager.EntitiesInScene[i].FuzzyGlobalCenterOfMass);
@@ -96,7 +103,7 @@ public class KogHandController : MonoBehaviour {
                             (screenPosition.y) * (screenPosition.y)
                         );
                         // If it's in front of the screen, close to the center of the screen, and closer than any other target
-                        if(screenPosition.z > 0 &&
+                        if (screenPosition.z > 0 &&
                                 radialDistance < maxSelectionRadius &&
                                 radialDistance < closestHostileRadius) {
                             closestHostile = GameManager.EntitiesInScene[i];
@@ -122,8 +129,11 @@ public class KogHandController : MonoBehaviour {
                 }
 
                 break;
+            case GrabState.LockedOn:
+                // Stay locked on to current marked entity while maintaining the Push
+                ReachLocation = Kog.IronSteel.MainTarget.transform.position;
+                break;
         }
-
     }
     // Keep the colliders for the held object and the body from interfering
     private void FixedUpdate() {
@@ -142,7 +152,7 @@ public class KogHandController : MonoBehaviour {
         if (Kog.IronSteel.IronPulling && Kog.IronSteel.State == KogPullPushController.PullpushMode.Pullpushing && State == GrabState.Empty) {
             if (collision.rigidbody != null) {
                 if (Vector3.Distance(grabber.position, collision.GetContact(0).point) < grabberRadius) {
-                    if (collision.rigidbody == Kog.IronSteel.MainTarget.Rb) {
+                    if (Kog.IronSteel.MainTarget && collision.rigidbody == Kog.IronSteel.MainTarget.Rb) {
                         Grab(Kog.IronSteel.MainTarget);
                     }
                 }
@@ -176,10 +186,9 @@ public class KogHandController : MonoBehaviour {
     /// </summary>
     /// <returns>the released target</returns>
     public Magnetic Release() {
-
         Magnetic target = Drop();
-        target.Rb.AddForce(throwForce * (target.CenterOfMass - grabber.position).normalized, ForceMode.VelocityChange);
-
+        //if (target != null)
+        //    target.Rb.AddForce(throwForce * (target.CenterOfMass - grabber.position).normalized, ForceMode.VelocityChange);
         return target;
     }
 
@@ -190,15 +199,21 @@ public class KogHandController : MonoBehaviour {
     public Magnetic Drop() {
         Magnetic target = GrabbedTarget;
         GrabbedTarget = null;
-        MarkedEntity = null;
-        State = GrabState.Empty;
+        if (Kog.IronSteel.SteelPushing) {
+            State = GrabState.LockedOn;
+        } else {
+            State = GrabState.Empty;
+            MarkedEntity = null;
+        }
         Destroy(grabJoint);
-        target.enabled = true;
-        target.Rb.isKinematic = false;
-        //target.Rb.velocity = Vector3.zero;// rb.velocity;
-        foreach (Collider col1 in collidersToIgnore)
-            foreach (Collider col2 in target.Colliders)
-                Physics.IgnoreCollision(col1, col2, false);
+        if (target != null) {
+            target.enabled = true;
+            target.Rb.isKinematic = false;
+            target.Rb.AddForce(rb.velocity - target.Rb.velocity, ForceMode.VelocityChange);
+            foreach (Collider col1 in collidersToIgnore)
+                foreach (Collider col2 in target.Colliders)
+                    Physics.IgnoreCollision(col1, col2, false);
+        }
         //Debug.Log("Released");
         return target;
     }

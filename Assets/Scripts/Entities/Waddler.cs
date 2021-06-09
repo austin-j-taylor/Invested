@@ -84,6 +84,7 @@ public class Waddler : Pacifiable {
     protected override void Start() {
         base.Start();
 
+        Rb.isKinematic = true;
         State = WaddlerState.Idle;
     }
 
@@ -158,13 +159,24 @@ public class Waddler : Pacifiable {
                         State_toAnchoredPush();
                     } else {
                         // Start to throw the block at the enemy, if they are in range and in line of sight.
-                        if (Vector3.Distance(transform.position, enemy.transform.position) < radius_throwAtEnemy
-                            && CanSeeSpherecast(eyes, enemy.Rb, out hit, aim_spherecastRadius)) {
-                            State_toThrowing();
+                        if (Vector3.Distance(transform.position, enemy.transform.position) < radius_throwAtEnemy) {
+                            switch (Player.CurrentActor.Type) {
+                                case Actor.ActorType.Prima:
+                                    if (CanSee(eyes, enemy.Rb, out hit)) {
+                                        State_toThrowing();
+                                    }
+                                    break;
+                                case Actor.ActorType.Kog:
+                                    if (CanSeeSpherecast(eyes, enemy.Rb, out hit, aim_spherecastRadius)) {
+                                        State_toThrowing();
+                                    }
+                                    break;
+                            }
                         }
                     }
                 }
                 break;
+
             case WaddlerState.AnchoredPull:
                 if (isDead)
                     State_toPacified();

@@ -711,7 +711,7 @@ public class AllomanticIronSteel : Allomancer {
     /// </summary>
     /// <param name="clearTargets">Also remove marked push/pull targets</param>
     public virtual void StopBurning(bool clearTargets = true) {
-        if (IsBurning) {
+        //if (IsBurning) {
             if (clearTargets) {
                 PullTargets.Clear();
                 PushTargets.Clear();
@@ -725,7 +725,7 @@ public class AllomanticIronSteel : Allomancer {
             IsBurning = false;
             lastWasPulling = false;
             lastWasPushing = false;
-        }
+        //}
     }
 
     /// <summary>

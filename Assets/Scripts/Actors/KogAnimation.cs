@@ -830,6 +830,7 @@ public class KogAnimation : MonoBehaviour {
         private KogAnimation_SO kogAnimation_SO;
         private Leg leg;
         private bool isLeft;
+        [SerializeField]
         private float tInReach = 0;
         private Vector3 lastReachTargetPosition = Vector3.zero;
 
@@ -926,6 +927,9 @@ public class KogAnimation : MonoBehaviour {
                 case State.IdleToReaching:
                     Vector3 handAnchorLerp = upperarm.transform.position + Vector3.Slerp(waist.TransformDirection(new Vector3(X, Y, Z)), Vector3.ClampMagnitude(toTarget / distance * armLength * 1.1f, distance), tInReach);
                     handAnchor.position = Vector3.Slerp(handAnchor.position, handAnchorLerp, Time.deltaTime * kogAnimation_SO.Arm_reachingToMetal_lerp);
+
+                    Vector3 handAnchorPoleLerp = upperarm.transform.position + Vector3.Slerp(waist.TransformDirection(new Vector3(Xp, Yp, Zp)), waist.TransformDirection(Vector3.right * 2), tInReach);
+                    handAnchorPole.position = Vector3.Slerp(handAnchorPole.position, handAnchorPoleLerp, Time.deltaTime * kogAnimation_SO.Arm_reachingToMetal_lerp);
                     break;
                 case State.Reaching:
                     /*
@@ -938,6 +942,9 @@ public class KogAnimation : MonoBehaviour {
                     */
                     handAnchorLerp = upperarm.transform.position + Vector3.ClampMagnitude(toTarget / distance * armLength * 1.1f, distance);
                     handAnchor.position = Vector3.Slerp(handAnchor.position, handAnchorLerp, Time.deltaTime * kogAnimation_SO.Arm_reachingToMetal_lerp);
+
+                    handAnchorPoleLerp = upperarm.transform.position + waist.TransformDirection(Vector3.right * 2);
+                    handAnchorPole.position = Vector3.Slerp(handAnchorPole.position, handAnchorPoleLerp, Time.deltaTime * kogAnimation_SO.Arm_reachingToMetal_lerp);
                     break;
             }
         }
