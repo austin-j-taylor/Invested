@@ -274,21 +274,19 @@ public class KogPullPushController : ActorPullPushController {
         (bullseyeTarget, newTargetsArea, newTargetsBubble) = IronSteelSight();
 
         // Highlight/unhighlight the centermost target
-        if (lastBullseyeTarget != null) {
-            if(PushingOrPullingOnTarget || bullseyeTarget == null) {
+        if (lastBullseyeTarget != null) { // Was looking at a target last time
+            if(PushingOrPullingOnTarget || bullseyeTarget == null || Kog.HandController.State == KogHandController.GrabState.Grabbed) { // Affecting the target, or not looking at the target, or holding a target
                 lastBullseyeTarget.IsHighlighted = false;
                 lastBullseyeTarget = null;
-            } else if(lastBullseyeTarget != bullseyeTarget) {
+            } else if(lastBullseyeTarget != bullseyeTarget) { // Changed the target she's looking at
                 lastBullseyeTarget.IsHighlighted = false;
                 bullseyeTarget.IsHighlighted = true;
                 lastBullseyeTarget = bullseyeTarget;
             }
-        } else {
-            if(!PushingOrPullingOnTarget) {
-                if(bullseyeTarget != null) {
-                    bullseyeTarget.IsHighlighted = true;
-                    lastBullseyeTarget = bullseyeTarget;
-                }
+        } else { // Was not looking at a target last time
+            if(!PushingOrPullingOnTarget && bullseyeTarget != null && Kog.HandController.State != KogHandController.GrabState.Grabbed) { // Not actively affecting the target, looking at a target, and not holding a target
+                bullseyeTarget.IsHighlighted = true;
+                lastBullseyeTarget = bullseyeTarget;
             }
         }
 
