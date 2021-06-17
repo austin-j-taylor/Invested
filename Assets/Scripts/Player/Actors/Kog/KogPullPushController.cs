@@ -20,10 +20,6 @@ public class KogPullPushController : ActorPullPushController {
     private float timeInThrowingMax = 0.45f;
     private const float kogAllomanticStrength = 2;
     private const float maxSelectionRadius = 0.5f;
-    [SerializeField]
-    private float targetPullingSpeed_P = 0.2f, targetPushingSpeed_P = 0.2f;
-    [SerializeField]
-    private float targetAimingVelocityFactor = 0.1f;
     #endregion
 
     public enum PullpushMode { Idle, Burning, Pullpushing, Active, Caught, Throwing }
@@ -36,16 +32,13 @@ public class KogPullPushController : ActorPullPushController {
     private Transform boneCenterOfMass = null;
     [SerializeField]
     private Transform boneHand = null;
+    [SerializeField]
+    private Magnetic leftHand = null, rightHand = null;
 
     private float timeInActive, timeInThrowing;
-    private PIDController_Vector3 pidPullVelocity, pidPushVelocity;
 
     protected override void Awake() {
         base.Awake();
-        pidPullVelocity = gameObject.AddComponent<PIDController_Vector3>();
-        pidPullVelocity.SetParams(targetPullingSpeed_P, 0, 0, 0);
-        pidPushVelocity = gameObject.AddComponent<PIDController_Vector3>();
-        pidPushVelocity.SetParams(targetPushingSpeed_P, 0, 0, 0);
 
         CustomCenterOfAllomancy = boneCenterOfMass;
         BaseStrength = kogAllomanticStrength;
@@ -138,35 +131,6 @@ public class KogPullPushController : ActorPullPushController {
             case PullpushMode.Pullpushing:
                 Kog.KogAnimationController.SetHeadLookAtTarget(MainTarget.transform.position, false);
                 Kog.MovementController.SetBodyLookAtPosition(MainTarget.transform.position);
-                if(IronPulling) {
-                    // Manipulate target's velocity to fly towards the hand
-                    if (!MainTarget.IsStatic) {
-                        pidPullVelocity.SetParams(targetPullingSpeed_P, 0, 0, 0);
-                        Vector3 target = Vector3.Project(MainTarget.Velocity, (MainTarget.CenterOfMass - (CenterOfMass + rb.velocity * targetAimingVelocityFactor)).normalized);
-                        Vector3 result = pidPullVelocity.Step(MainTarget.Velocity, target);
-                        MainTarget.Rb.AddForce(result, ForceMode.VelocityChange);
-                        //Debug.Log("Target speed: " + MainTarget.Velocity.magnitude + " = " + MainTarget.Velocity + " /// Projection: " + target.magnitude + " = " + target + " /// Result: " + result.magnitude + " = " + result);
-                    }
-                } else if(SteelPushing) {
-                    // Manipulate target's velocity to fly towards the enemy
-                    if (!MainTarget.IsStatic && Kog.HandController.MarkedEntity != null) {
-                        pidPushVelocity.SetParams(targetPushingSpeed_P, 0, 0, 0);
-                        Vector3 target = Vector3.Project(MainTarget.Velocity, (Kog.HandController.MarkedEntity.FuzzyGlobalCenterOfMass - MainTarget.CenterOfMass).normalized);
-                        Vector3 result = pidPushVelocity.Step(MainTarget.Velocity, target);
-                        MainTarget.Rb.AddForce(result, ForceMode.VelocityChange);
-                        Debug.DrawLine(MainTarget.CenterOfMass, Kog.HandController.MarkedEntity.FuzzyGlobalCenterOfMass);
-                        //Debug.Log("Target speed: " + MainTarget.Velocity.magnitude + " = " + MainTarget.Velocity + " /// Projection: " + target.magnitude + " = " + target + " /// Result: " + result.magnitude + " = " + result);
-                    } else {
-                        // If no enemy, just throw at where the camera's looking
-                        if(!MainTarget.IsStatic) {
-                            //pidPushVelocity.SetParams(targetPushingSpeed_P, 0, 0, 0);
-                            //Vector3 target = Vector3.Project(MainTarget.Velocity, ((CameraController.ActiveCamera.transform.position + 1000 * CameraController.ActiveCamera.transform.forward) - MainTarget.CenterOfMass).normalized);
-                            //Vector3 result = pidPushVelocity.Step(MainTarget.Velocity, target);
-                            //MainTarget.Rb.AddForce(result, ForceMode.VelocityChange);
-                            //Debug.DrawLine(MainTarget.CenterOfMass, (CameraController.ActiveCamera.transform.position + 1000 * CameraController.ActiveCamera.transform.forward));
-                        }
-                    }
-                }
                 break;
             case PullpushMode.Active:
                 if (MainTarget != null) {
@@ -298,8 +262,9 @@ public class KogPullPushController : ActorPullPushController {
         switch (Mode) {
             case ControlMode.Manual:
                 // set the bullseye target to be brighter
-                if (bullseyeTarget)
+                if (bullseyeTarget) {
                     bullseyeTarget.BrightenLine();
+                }
                 if (markForPullDown) {
                     // If there is no bullseye target, deselect all targets.
                     if (bullseyeTarget == null) {
@@ -430,8 +395,12 @@ public class KogPullPushController : ActorPullPushController {
         foreach (Magnetic target in GameManager.MagneticsInScene) {
 
             if (target.isActiveAndEnabled) {
-                // skip this target completely if it is too far away
-                if ((target.CenterOfMass - transform.position).sqrMagnitude > distanceThresholdSqr) {
+
+                if (target == leftHand || target == rightHand || target == Kog.HandController.GrabbedTarget) {
+                    // Skip this target if it should be skipped because it's part of Kog
+                    target.DisableBlueLine();
+                } else if ((target.CenterOfMass - transform.position).sqrMagnitude > distanceThresholdSqr) {
+                    // skip this target completely if it is too far away
                     target.DisableBlueLine();
                 } else {
                     float weight = SetLineProperties(target, out float radialDistance, out float linearDistance);
@@ -443,6 +412,13 @@ public class KogPullPushController : ActorPullPushController {
                         closestTargetRadius = radialDistance;
                     }
                 }
+            }
+        }
+        // If the player is directly looking at a magnetic's collider, use that for the bullseye isntead
+        if (Physics.Raycast(CameraController.ActiveCamera.transform.position, CameraController.ActiveCamera.transform.forward, out RaycastHit hit, 500, GameManager.Layer_IgnorePlayer)) {
+            Magnetic target = hit.collider.GetComponentInParent<Magnetic>();
+            if (target && target.isActiveAndEnabled && target.IsInRange(this, GreaterPassiveBurn)) {
+                closestTarget = target;
             }
         }
 

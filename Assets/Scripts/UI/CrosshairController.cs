@@ -12,10 +12,10 @@ public class CrosshairController : MonoBehaviour {
     private const int top = 0, left = 1, bottom = 2, right = 3, size = 4;
     private const float alphaHigh = .75f, alphaLow = .25f, alphaMedium = 0.5f;
 
-    private enum CrosshairState { None, Manual, Area, Coinshot, StopBurning };
+    private enum CrosshairState { None, Manual, Area, Coinshot, StopBurning, Kog };
 
     private CrosshairState state;
-    private Image circle;
+    private Image circle, kogCircle;
     private Color blueColor, hairsColor, goldColor = HUD.goldColor;
     private Image[] hairs;
     private Image[] fills;
@@ -23,6 +23,7 @@ public class CrosshairController : MonoBehaviour {
 
     void Awake() {
         circle = transform.Find("Circle").GetComponent<Image>();
+        kogCircle = transform.Find("KogCircle").GetComponent<Image>();
 
         hairsHeader = transform.Find("Hairs");
 
@@ -99,23 +100,32 @@ public class CrosshairController : MonoBehaviour {
                     case CrosshairState.StopBurning:
                         State_toManual();
                         break;
+                    case CrosshairState.Kog:
+                        State_toManual();
+                        break;
                 }
                 break;
             case Actor.ActorType.Kog:
                 switch (state) {
                     case CrosshairState.None:
+                        if(Kog.IronSteel.State == KogPullPushController.PullpushMode.Burning || Kog.IronSteel.State == KogPullPushController.PullpushMode.Active)
+                            State_toKog();
                         break;
                     case CrosshairState.Manual:
-                        State_toNone();
+                        State_toKog();
                         break;
                     case CrosshairState.Area:
-                        State_toNone();
+                        State_toKog();
                         break;
                     case CrosshairState.Coinshot:
-                        State_toNone();
+                        State_toKog();
                         break;
                     case CrosshairState.StopBurning:
-                        State_toManual();
+                        State_toKog();
+                        break;
+                    case CrosshairState.Kog:
+                        if (Kog.IronSteel.State != KogPullPushController.PullpushMode.Burning && Kog.IronSteel.State != KogPullPushController.PullpushMode.Active)
+                            State_toNone();
                         break;
                 }
                 break;
@@ -135,6 +145,8 @@ public class CrosshairController : MonoBehaviour {
             case CrosshairState.Coinshot:
                 SetFillPercent(Mathf.Max(Player.CurrentActor.ActorIronSteel.IronBurnPercentageTarget, Player.CurrentActor.ActorIronSteel.SteelBurnPercentageTarget));
                 break;
+            case CrosshairState.Kog:
+                break;
         }
     }
 
@@ -142,6 +154,8 @@ public class CrosshairController : MonoBehaviour {
     private void State_toNone() {
         Clear();
         Hide();
+
+        state = CrosshairState.None;
     }
     private void State_toManual() {
         Show();
@@ -188,11 +202,18 @@ public class CrosshairController : MonoBehaviour {
 
         state = CrosshairState.Coinshot;
     }
+    private void State_toKog() {
+        Clear();
+        kogCircle.enabled = true;
+
+        state = CrosshairState.Kog;
+    }
     #endregion
 
     public void Clear() {
         SetFillPercent(0);
         circle.material.SetFloat("_RatioLow", 1);
+        kogCircle.enabled = false;
     }
 
     private void Hide() {
@@ -203,6 +224,7 @@ public class CrosshairController : MonoBehaviour {
     }
 
     private void Show() {
+        kogCircle.enabled = false;
         StopAllCoroutines();
         hairsColor.a = alphaMedium;
         for (int i = 0; i < size; i++) {

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 /// <summary>
 /// Controls Kog grabbing and holding items pulled into her hand.
 /// Controls tracking of enemies to aim and throw objects at.
+/// Controls tweaking of projectile trajectorys to/from hand.
 /// </summary>
 public class KogHandController : MonoBehaviour {
 
@@ -13,6 +14,10 @@ public class KogHandController : MonoBehaviour {
     private const float grabberRadius = 0.25f;
     private const float throwForce = 10;
     private const float maxSelectionRadius = 0.25f;
+    [SerializeField]
+    private float targetPullingSpeed_P = 0.18f, targetPushingSpeed_P = 0.08f;
+    [SerializeField]
+    private float targetAimingVelocityFactor = 0.1f;
     #endregion
 
     public enum GrabState { Empty, Grabbed, LockedOn };
@@ -27,6 +32,8 @@ public class KogHandController : MonoBehaviour {
     private Transform grabber = null;
     [SerializeField]
     private Collider[] collidersToIgnore = null;
+    private int[] targetColliderLayers;
+    private PIDController_Vector3 pidPullVelocity, pidPushVelocity;
 
     public Vector3 ReachLocation { get; private set; } = Vector3.zero;
     public Magnetic GrabbedTarget { get; private set; } = null;
@@ -38,6 +45,10 @@ public class KogHandController : MonoBehaviour {
             sourceTransform = grabber,
             weight = 1
         };
+        pidPullVelocity = gameObject.AddComponent<PIDController_Vector3>();
+        pidPullVelocity.SetParams(targetPullingSpeed_P, 0, 0, 0);
+        pidPushVelocity = gameObject.AddComponent<PIDController_Vector3>();
+        pidPushVelocity.SetParams(targetPushingSpeed_P, 0, 0, 0);
     }
 
     public void Clear() {
@@ -54,7 +65,7 @@ public class KogHandController : MonoBehaviour {
             case GrabState.Empty:
                 break;
             case GrabState.Grabbed:
-                if (GrabbedTarget == null || !GrabbedTarget.gameObject.activeSelf) {
+                if (GrabbedTarget == null || !GrabbedTarget.gameObject.activeSelf || !GrabbedTarget.enabled) {
                     Release();
                 }
                 break;
@@ -135,13 +146,36 @@ public class KogHandController : MonoBehaviour {
                 break;
         }
     }
-    // Keep the colliders for the held object and the body from interfering
+
     private void FixedUpdate() {
-        if (State == GrabState.Grabbed) {
-            // definitely could be improved
-            foreach (Collider col1 in collidersToIgnore)
-                foreach (Collider col2 in GrabbedTarget.Colliders)
-                    Physics.IgnoreCollision(col1, col2, true);
+        switch (State) {
+            case GrabState.Empty:
+                // If she's Pulling on something towards her hand to catch it, tweak its trajectory to lead it towards the hand.
+                if (Kog.IronSteel.State == KogPullPushController.PullpushMode.Pullpushing && Kog.IronSteel.IronPulling && !Kog.IronSteel.MainTarget.IsStatic) {
+                    pidPullVelocity.SetParams(targetPullingSpeed_P, 0, 0, 0);
+                    Magnetic target = Kog.IronSteel.MainTarget;
+                    Vector3 pidTarget = Vector3.Project(target.Velocity, (target.CenterOfMass - (Kog.IronSteel.CenterOfMass + rb.velocity * targetAimingVelocityFactor)).normalized);
+                    Vector3 result = pidPullVelocity.Step(target.Velocity, pidTarget);
+                    target.Rb.AddForce(result, ForceMode.Acceleration);
+                }
+                break;
+            case GrabState.Grabbed:
+                // Keep the colliders for the held object and the body from interfering
+                // definitely could be improved
+                foreach (Collider col1 in collidersToIgnore)
+                    foreach (Collider col2 in GrabbedTarget.Colliders)
+                        Physics.IgnoreCollision(col1, col2, true);
+                break;
+            case GrabState.LockedOn:
+                // Manipulate target's velocity to fly towards the enemy
+                if (Kog.IronSteel.State == KogPullPushController.PullpushMode.Pullpushing && Kog.IronSteel.SteelPushing && !Kog.IronSteel.MainTarget.IsStatic && MarkedEntity != null) {
+                    pidPushVelocity.SetParams(targetPushingSpeed_P, 0, 0, 0);
+                    Magnetic target = Kog.IronSteel.MainTarget;
+                    Vector3 pidTarget = Vector3.Project(target.Velocity, (Kog.HandController.MarkedEntity.FuzzyGlobalCenterOfMass - target.CenterOfMass).normalized);
+                    Vector3 result = pidPushVelocity.Step(target.Velocity, pidTarget);
+                    target.Rb.AddForce(result, ForceMode.Acceleration);
+                }
+                break;
         }
     }
 
@@ -165,8 +199,13 @@ public class KogHandController : MonoBehaviour {
         Vector3 relativeVelocity = Vector3.Project(rb.velocity - target.Rb.velocity, target.transform.position - grabber.position);
         //Debug.Log("Caught at " + relativeVelocity.magnitude + ", momentum: " + relativeVelocity.magnitude * target.Rb.mass);
         GrabbedTarget = target;
+        targetColliderLayers = new int[target.Colliders.Length];
+        for(int i = 0; i < target.Colliders.Length; i++) {
+            targetColliderLayers[i] = target.Colliders[i].gameObject.layer;
+            target.Colliders[i].gameObject.layer = GameManager.Layer_InvisibleToEnemies;
+        }
         State = GrabState.Grabbed;
-        target.enabled = false;
+        //target.enabled = false;
         target.Rb.isKinematic = true;
         foreach (Collider col1 in collidersToIgnore)
             foreach (Collider col2 in target.Colliders)
@@ -207,8 +246,11 @@ public class KogHandController : MonoBehaviour {
         }
         Destroy(grabJoint);
         if (target != null) {
-            target.enabled = true;
+            //target.enabled = true;
             target.Rb.isKinematic = false;
+            for (int i = 0; i < target.Colliders.Length; i++) {
+                target.Colliders[i].gameObject.layer = targetColliderLayers[i];
+            }
             target.Rb.AddForce(rb.velocity - target.Rb.velocity, ForceMode.VelocityChange);
             foreach (Collider col1 in collidersToIgnore)
                 foreach (Collider col2 in target.Colliders)

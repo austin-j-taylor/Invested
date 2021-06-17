@@ -12,7 +12,7 @@ public class TargetEntityController : MonoBehaviour {
     private const int bar_offset = 50;
     private const int num_bars = 10;
 
-    private enum ReticleControlState { None, Aiming };
+    private enum ReticleControlState { None, Aiming, LockedOn };
 
     [SerializeField]
     private TargetBar templateBar = null;
@@ -53,6 +53,14 @@ public class TargetEntityController : MonoBehaviour {
             case ReticleControlState.Aiming:
                 if (Kog.HandController.MarkedEntity == null)
                     State_toNone();
+                else if(Kog.IronSteel.State == KogPullPushController.PullpushMode.Throwing)
+                    State_toLockedOn();
+                break;
+            case ReticleControlState.LockedOn:
+                if (Kog.HandController.MarkedEntity == null)
+                    State_toNone();
+                if (Kog.IronSteel.State != KogPullPushController.PullpushMode.Throwing && Kog.HandController.State != KogHandController.GrabState.LockedOn)
+                    State_toNone();
                 break;
         }
         // Action
@@ -60,8 +68,10 @@ public class TargetEntityController : MonoBehaviour {
             case ReticleControlState.None:
                 break;
             case ReticleControlState.Aiming:
+            case ReticleControlState.LockedOn:
                 // Move the reticle to align with the target's transform
                 lastMarkedBounds = Kog.HandController.MarkedEntity.BoundingBox.bounds;
+                anim.SetFloat("Locking On Time", Time.timeScale);
                 break;
         }
         if (reticle.color.a > 0.001f) {
@@ -104,10 +114,16 @@ public class TargetEntityController : MonoBehaviour {
 
     private void State_toNone() {
         anim.SetBool("Aiming", false);
+        anim.SetBool("Locked On", false);
         state = ReticleControlState.None;
     }
     private void State_toAiming() {
         anim.SetBool("Aiming", true);
+        anim.SetBool("Locked On", false);
         state = ReticleControlState.Aiming;
+    }
+    private void State_toLockedOn() {
+        anim.SetBool("Locked On", true);
+        state = ReticleControlState.LockedOn;
     }
 }

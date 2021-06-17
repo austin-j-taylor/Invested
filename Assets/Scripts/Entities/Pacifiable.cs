@@ -35,7 +35,7 @@ public class Pacifiable : Entity {
     /// <param name="hit">the raycast hit for the line-of-sight check</param>
     /// <returns>a RaycastHit if successfull, null if not.</returns>
     protected bool CanSee(Transform eyes, Rigidbody target, out RaycastHit hit) {
-        if (Physics.Raycast(eyes.position, (target.transform.position + target.centerOfMass - eyes.position), out hit)) {
+        if (Physics.Raycast(eyes.position, (target.transform.position + target.centerOfMass - eyes.position), out hit, Mathf.Infinity, ~(1 << GameManager.Layer_InvisibleToEnemies))) {
             if (hit.rigidbody != null && hit.rigidbody == target) {
                 return true;
             }
@@ -53,10 +53,10 @@ public class Pacifiable : Entity {
     /// <returns>a RaycastHit if successfull, null if not.</returns>
     protected bool CanSeeSpherecast(Transform eyes, Rigidbody target, out RaycastHit hit, float radius) {
         // Need to make sure there's not a wall immediately in front of the eyes that the spherecast would miss
-        if (Physics.Raycast(eyes.position, (target.transform.position + target.centerOfMass - eyes.position), out hit)) {
+        if (Physics.Raycast(eyes.position, (target.transform.position + target.centerOfMass - eyes.position), out hit, Mathf.Infinity, ~(1 << GameManager.Layer_InvisibleToEnemies))) {
             if (hit.rigidbody != null && hit.rigidbody == target) {
                 // Make sure there's a wide berth of space through which the target can be seen
-                if (Physics.SphereCast(eyes.position, radius, (target.transform.position + target.centerOfMass - eyes.position), out hit)) {
+                if (Physics.SphereCast(eyes.position, radius, (target.transform.position + target.centerOfMass - eyes.position), out hit, Mathf.Infinity, ~(1 << GameManager.Layer_InvisibleToEnemies))) {
                     if (hit.rigidbody != null && hit.rigidbody == target) {
                         return true;
                     }

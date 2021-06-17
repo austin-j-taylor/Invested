@@ -51,6 +51,7 @@ public class GameManager : MonoBehaviour {
     public static int Layer_PickupableByWaddler { get; private set; }
     public static int Layer_BlueLines { get; private set; }
     public static int Layer_BlueLinesVisible { get; private set; }
+    public static int Layer_InvisibleToEnemies { get; private set; }
     #endregion
 
     public static GameCameraState CameraState { get; private set; }
@@ -78,16 +79,20 @@ public class GameManager : MonoBehaviour {
 
         Prefab_Coin = Resources.Load<Coin>("Objects/Imperial1-Boxing");
 
+        int layer_invisibleToEnemies = LayerMask.NameToLayer("Invisible To Enemies");
+
         int mask_player = 1 << LayerMask.NameToLayer("Player");
         int mask_ignorePlayer = 1 << LayerMask.NameToLayer("Ignore Player");
         int mask_ignoreCamera = 1 << LayerMask.NameToLayer("Ignore Camera");
         int mask_pickupable = 1 << LayerMask.NameToLayer("Pickupable By Waddler");
+        int mask_invisibleToEnemies = 1 << layer_invisibleToEnemies;
 
         Layer_IgnorePlayer = ~(mask_player | mask_ignorePlayer);
-        Layer_IgnoreCamera = ~(mask_player | mask_ignoreCamera | mask_ignorePlayer | mask_pickupable | (1 << LayerMask.NameToLayer("Coin")) | (1 << LayerMask.NameToLayer("Boid")));
+        Layer_IgnoreCamera = ~(mask_player | mask_ignoreCamera | mask_ignorePlayer | mask_pickupable | mask_invisibleToEnemies | (1 << LayerMask.NameToLayer("Coin")) | (1 << LayerMask.NameToLayer("Boid")));
         Layer_PickupableByWaddler = LayerMask.NameToLayer("Pickupable By Waddler");
         Layer_BlueLines = LayerMask.NameToLayer("Blue Lines");
         Layer_BlueLinesVisible = LayerMask.NameToLayer("Blue Lines Visible");
+        Layer_InvisibleToEnemies = layer_invisibleToEnemies;
 
         CameraState = GameCameraState.Standard;
         PlayState = GamePlayState.Standard;
