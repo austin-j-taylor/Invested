@@ -67482,8 +67482,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1467272612}
   m_HandleRect: {fileID: 1467272611}
   m_Direction: 2
-  m_Value: 0.99999964
-  m_Size: 0.6316484
+  m_Value: 0.99999976
+  m_Size: 0.6313493
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -68559,7 +68559,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UseSpecialStartup: 1
   startupScene: 2
-  startupActor: 1
+  startupActor: 0
 --- !u!114 &2096097692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69739,7 +69739,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 10, y: 0}
+  m_AnchoredPosition: {x: 10, y: -0.000061035156}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &2122294108
@@ -71004,7 +71004,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.10166667, y: 0.56468815}
   m_AnchorMax: {x: 0.43833336, y: 0.9317798}
-  m_AnchoredPosition: {x: 8, y: 18.999878}
+  m_AnchoredPosition: {x: 8, y: 18.999847}
   m_SizeDelta: {x: 16, y: -348}
   m_Pivot: {x: 0.5, y: 0.50000006}
 --- !u!114 &3625173049941493233
@@ -71751,7 +71751,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.3325, y: 0}
   m_AnchorMax: {x: 0.66333336, y: 0.32842714}
-  m_AnchoredPosition: {x: 131.89, y: -115}
+  m_AnchoredPosition: {x: 131.89, y: -115.00012}
   m_SizeDelta: {x: -263.77502, y: -306}
   m_Pivot: {x: 0.5, y: 0.5000006}
 --- !u!1 &3625173050449885865
@@ -72852,7 +72852,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.3325, y: 0}
   m_AnchorMax: {x: 0.66333336, y: 0.32842714}
-  m_AnchoredPosition: {x: -131.20001, y: -116}
+  m_AnchoredPosition: {x: -131.20001, y: -116.00012}
   m_SizeDelta: {x: -252.47803, y: -306}
   m_Pivot: {x: 0.5, y: 0.5000006}
 --- !u!114 &3625173051225751410
@@ -73726,8 +73726,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 199364531239254143}
   m_HandleRect: {fileID: 6687227287598106728}
   m_Direction: 2
-  m_Value: 0.9999989
-  m_Size: 0.94162214
+  m_Value: 1.0000049
+  m_Size: 0.9408185
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -73778,6 +73778,16 @@ PrefabInstance:
       propertyPath: leftHand
       value: 
       objectReference: {fileID: 1982657385}
+    - target: {fileID: 3431374476370298651, guid: c4e3c611514c2604d9ee81f8ddf5fecd,
+        type: 3}
+      propertyPath: m_AABB.m_Center.z
+      value: 0.013858229
+      objectReference: {fileID: 0}
+    - target: {fileID: 3431374476370298651, guid: c4e3c611514c2604d9ee81f8ddf5fecd,
+        type: 3}
+      propertyPath: m_AABB.m_Extent.z
+      value: 0.29573575
+      objectReference: {fileID: 0}
     - target: {fileID: 7406773945755287964, guid: c4e3c611514c2604d9ee81f8ddf5fecd,
         type: 3}
       propertyPath: m_Name

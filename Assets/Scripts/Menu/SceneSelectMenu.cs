@@ -27,7 +27,8 @@ public class SceneSelectMenu : Menu {
         sceneTutorial2 = 12,
         sceneTutorial3 = 13,
         sceneTutorial4 = 14,
-        sceneCombatGrounds = 15;
+        sceneCombatGrounds = 15,
+        sceneMARL1 = 16;
     #endregion
 
     public static bool IsTutorial(int sceneIndex) {
@@ -148,7 +149,7 @@ public class SceneSelectMenu : Menu {
 
     public void Refresh() {
         // Lock levels when previous levels are not completed
-        //levelMARL1Button.interactable = FlagsController.GetData("completeTutorial1");
+        levelMARL1Button.interactable = FlagsController.GetData("completeTutorial4");
         //levelMARL2Button.interactable = FlagsController.GetData("completeTutorial2");
         //levelMARL3Button.interactable = FlagsController.GetData("completeTutorial3");
         //levelMARL4Button.interactable = FlagsController.GetData("completeTutorial4");
@@ -189,7 +190,7 @@ public class SceneSelectMenu : Menu {
         GameManager.SceneTransitionManager.LoadScene(scene);
     }
     private void OnClickedlevelMARL1Button() {
-        //LoadSceneFromClick(sceneMARL1);
+        LoadSceneFromClick(sceneMARL1);
     }
     private void OnClickedlevelMARL2Button() {
         //LoadSceneFromClick(sceneMARL2);

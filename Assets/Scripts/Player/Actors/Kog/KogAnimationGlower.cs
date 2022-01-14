@@ -21,8 +21,6 @@ public class KogAnimationGlower : MonoBehaviour {
 
     private void Awake() {
 
-        irons = transform.Find("Irons").GetComponentsInChildren<Renderer>();
-        steels = transform.Find("Steels").GetComponentsInChildren<Renderer>();
     }
 
     void LateUpdate() {
