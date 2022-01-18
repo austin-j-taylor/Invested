@@ -8,7 +8,7 @@ using System.Collections;
 /// </summary>
 public class SpecialStartupCommands : MonoBehaviour {
 
-    private enum StartupScene { None, Sandbox, CombatGrounds };
+    private enum StartupScene { None, Sandbox, CombatGrounds, MARL1 };
 
     [SerializeField]
     private bool UseSpecialStartup = false;
@@ -35,6 +35,10 @@ public class SpecialStartupCommands : MonoBehaviour {
                 case StartupScene.CombatGrounds:
                     ret = false;
                     scene = SceneSelectMenu.sceneCombatGrounds;
+                    break;
+                case StartupScene.MARL1:
+                    ret = false;
+                    scene = SceneSelectMenu.sceneMARL1;
                     break;
                 default:
                     break;
